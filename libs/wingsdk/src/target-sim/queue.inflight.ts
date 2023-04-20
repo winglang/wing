@@ -1,28 +1,33 @@
-import { ISimulatorResourceInstance } from "./resource";
+import { IEventPublisher } from "./event-mapping";
 import {
   QueueAttributes,
   QueueSchema,
   QueueSubscriber,
   QUEUE_TYPE,
+  EventSubscription,
+  FunctionHandle,
 } from "./schema-resources";
-import { IFunctionClient, IQueueClient } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing/simulator";
+import { IFunctionClient, IQueueClient, TraceType } from "../cloud";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
-export class Queue implements IQueueClient, ISimulatorResourceInstance {
+export class Queue
+  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
   private readonly context: ISimulatorContext;
+  private readonly timeout: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    for (const sub of props.subscribers ?? []) {
-      this.subscribers.push({ ...sub });
-    }
-
     if (props.initialMessages) {
       this.messages.push(...props.initialMessages);
     }
 
+    this.timeout = props.timeout;
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
     this.context = context;
   }
@@ -33,6 +38,17 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {
     clearInterval(this.intervalId);
+  }
+
+  public async addEventSubscription(
+    subscriber: FunctionHandle,
+    subscriptionProps: EventSubscription
+  ): Promise<void> {
+    const s = {
+      functionHandle: subscriber,
+      ...subscriptionProps,
+    } as QueueSubscriber;
+    this.subscribers.push(s);
   }
 
   public async push(message: string): Promise<void> {
@@ -92,7 +108,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
           timestamp: new Date().toISOString(),
         });
         void fnClient.invoke(JSON.stringify({ messages })).catch((err) => {
-          // If the function returns an error, put the message back on the queue
+          // If the function returns an error, put the message back on the queue after timeout period
           this.context.addTrace({
             data: {
               message: `Subscriber error - returning ${messages.length} messages to queue: ${err.message}`,
@@ -102,11 +118,36 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
             type: TraceType.RESOURCE,
             timestamp: new Date().toISOString(),
           });
-          this.messages.push(...messages);
+          void this.pushMessagesBackToQueue(messages).catch((requeueErr) => {
+            this.context.addTrace({
+              data: {
+                message: `Error pushing ${messages.length} messages back to queue: ${requeueErr.message}`,
+              },
+              sourcePath: this.context.resourcePath,
+              sourceType: QUEUE_TYPE,
+              type: TraceType.RESOURCE,
+              timestamp: new Date().toISOString(),
+            });
+          });
         });
         processedMessages = true;
       }
     } while (processedMessages);
+  }
+
+  public async pushMessagesBackToQueue(messages: Array<string>): Promise<void> {
+    setTimeout(() => {
+      this.messages.push(...messages);
+      this.context.addTrace({
+        data: {
+          message: `${messages.length} messages pushed back to queue after timeout.`,
+        },
+        sourcePath: this.context.resourcePath,
+        sourceType: QUEUE_TYPE,
+        type: TraceType.RESOURCE,
+        timestamp: new Date().toISOString(),
+      });
+    }, this.timeout * 1000);
   }
 }
 

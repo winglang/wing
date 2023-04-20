@@ -6,9 +6,11 @@ exports[`create a counter 1`] = `
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
@@ -24,22 +26,22 @@ exports[`create a counter 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_counter": {
           "attributes": {
@@ -71,14 +73,29 @@ exports[`create a counter 1`] = `
 `;
 
 exports[`dec 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Counter created.",
+  "Dec (amount=1).",
+  "Dec (amount=1).",
+  "Dec (amount=10).",
+  "Dec (amount=10).",
+  "wingsdk.cloud.Counter deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`dec 2`] = `
 {
   "simulator.json": {
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
@@ -94,22 +111,22 @@ exports[`dec 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_counter": {
           "attributes": {
@@ -141,14 +158,29 @@ exports[`dec 1`] = `
 `;
 
 exports[`inc 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Counter created.",
+  "Inc (amount=1).",
+  "Inc (amount=1).",
+  "Inc (amount=10).",
+  "Inc (amount=10).",
+  "wingsdk.cloud.Counter deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`inc 2`] = `
 {
   "simulator.json": {
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
@@ -164,22 +196,22 @@ exports[`inc 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_counter": {
           "attributes": {
@@ -211,14 +243,27 @@ exports[`inc 1`] = `
 `;
 
 exports[`reset with initial value 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Counter created.",
+  "Reset (value=123).",
+  "Peek (value=0).",
+  "wingsdk.cloud.Counter deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`reset with initial value 2`] = `
 {
   "simulator.json": {
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
@@ -234,22 +279,22 @@ exports[`reset with initial value 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_counter": {
           "attributes": {
@@ -281,14 +326,27 @@ exports[`reset with initial value 1`] = `
 `;
 
 exports[`reset without initial value 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Counter created.",
+  "Reset (value=0).",
+  "Peek (value=5).",
+  "wingsdk.cloud.Counter deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`reset without initial value 2`] = `
 {
   "simulator.json": {
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
@@ -304,22 +362,22 @@ exports[`reset without initial value 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_counter": {
           "attributes": {

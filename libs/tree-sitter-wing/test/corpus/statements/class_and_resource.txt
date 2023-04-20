@@ -17,7 +17,7 @@ class A {
     (class_definition
         name: (identifier)
         implementation: (class_implementation
-            (constructor
+            (initializer
                 parameter_list: (parameter_list)
                 block: (block))
             (inflight_method_definition
@@ -78,6 +78,7 @@ Resource definition
 
 resource A {
     init() {}
+    inflight init() {}
     preflight_func() {}
     async preflight_func() {}
     public preflight_func2() {}
@@ -95,9 +96,13 @@ resource A {
     (resource_definition
         name: (identifier)
         implementation: (resource_implementation
-            (constructor
+            (initializer
                 parameter_list: (parameter_list)
                 block: (block))
+            (initializer
+                parameter_list: (parameter_list)
+                block: (block)
+            )
             (method_definition
                 name: (identifier)
                 parameter_list: (parameter_list)

@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Resource } from "../core";
+import { App } from "../core";
+import { Resource } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -105,4 +106,57 @@ export interface IRedisClient {
    * @inflight
    */
   del(key: string): Promise<number>;
+}
+
+/**
+ * Base class for `Redis` Client.
+ */
+export abstract class RedisClientBase implements IRedisClient {
+  public abstract rawClient(): Promise<any>;
+  public abstract url(): Promise<string>;
+
+  public async set(key: string, value: string): Promise<void> {
+    let redis = await this.rawClient();
+    await redis.set(key, value);
+  }
+
+  public async get(key: string): Promise<string | undefined> {
+    let redis = await this.rawClient();
+    let result = await redis.get(key);
+    return result;
+  }
+
+  public async hset(
+    key: string,
+    field: string,
+    value: string
+  ): Promise<number> {
+    const redis = await this.rawClient();
+    const result = await redis.hset(key, field, value);
+    return result;
+  }
+
+  public async hget(key: string, field: string): Promise<string | undefined> {
+    const redis = await this.rawClient();
+    const result = await redis.hget(key, field);
+    return result;
+  }
+
+  public async sadd(key: string, value: string): Promise<number> {
+    const redis = await this.rawClient();
+    const result = await redis.sadd(key, value);
+    return result;
+  }
+
+  public async smembers(key: string): Promise<string[]> {
+    const redis = await this.rawClient();
+    const result = await redis.smembers(key);
+    return result ?? [];
+  }
+
+  public async del(key: string): Promise<number> {
+    const redis = await this.rawClient();
+    const result = await redis.del(key);
+    return result;
+  }
 }

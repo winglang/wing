@@ -1,17 +1,11 @@
 import { access, constants } from "fs";
+import { basename } from "path";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { Function } from "./function";
-import { IInflightHost, IResource, NodeJsCode, Resource } from "../core";
-
-/**
- * Produce a token that will be replaced with the handle of a resource
- * when the simulator is run. This can be inserted to an environment variable
- * so that the real value can be used by the function.
- */
-export function simulatorHandleToken(resource: IResource): string {
-  return `\${${resource.node.path}#attrs.handle}`;
-}
+import { simulatorHandleToken } from "./tokens";
+import { NodeJsCode } from "../core";
+import { IInflightHost, Resource } from "../std";
 
 /**
  * Check if a file exists for an specific path
@@ -33,14 +27,15 @@ export async function exists(filePath: string): Promise<boolean> {
 function makeEnvVarName(type: string, resource: IConstruct): string {
   return `${type
     .toUpperCase()
-    .replace(/\./g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
+    .replace(/[^A-Z]+/g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
 }
 
 export function bindSimulatorResource(
-  type: string,
+  filename: string,
   resource: Resource,
   host: IInflightHost
 ) {
+  const type = basename(filename).split(".")[0];
   if (!(host instanceof Function)) {
     throw new Error(
       `Resources of ${type} can only be bound by a sim.Function for now`
@@ -53,7 +48,8 @@ export function bindSimulatorResource(
   host.node.addDependency(resource);
 }
 
-export function makeSimulatorJsClient(type: string, resource: Resource) {
+export function makeSimulatorJsClient(filename: string, resource: Resource) {
+  const type = basename(filename).split(".")[0];
   const env = makeEnvVarName(type, resource);
   return NodeJsCode.fromInline(
     `(function(env) {

@@ -12,8 +12,8 @@ platforms in the cloud (such as containers, CI/CD pipelines or FaaS).
 Inflights can seamlessly interact with resources through the resource's inflight
 API.
 
-The following example shows how `my_inflight` is hosted inside a cloud function
-and puts an object inside a bucket:
+The following example shows an inflight which puts an object inside a bucket,
+hosted in a cloud function:
 
 ```js
 bring cloud;

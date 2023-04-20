@@ -3,6 +3,6 @@ bring cloud;
 let b = new cloud.Bucket();
 let q = new cloud.Queue();
 
-q.on_message(inflight (msg: str) => {
+q.add_consumer(inflight (msg: str) => {
   b.put("file.txt", msg);
 });

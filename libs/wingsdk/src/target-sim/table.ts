@@ -1,10 +1,11 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { TableSchema, TABLE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost } from "../std";
+import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.Table`.
@@ -30,14 +31,14 @@ export class Table extends cloud.Table implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("table", this, host);
+  public _bind(host: IInflightHost, ops: string[]): void {
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("table", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 }
 

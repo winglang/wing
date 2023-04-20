@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { ITableClient } from "../../src/cloud";
-import { SimApp } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 test("create a table", async () => {
   // GIVEN
@@ -70,14 +70,7 @@ test("insert row", async () => {
   });
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Table created.",
-    "insert row joe-id into the table my_insert_table.",
-    "wingsdk.cloud.Table deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
-
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -116,15 +109,7 @@ test("get row", async () => {
   });
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Table created.",
-    "insert row joe-id into the table my_get_table.",
-    "get row joe-id from table my_get_table.",
-    "wingsdk.cloud.Table deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
-
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -166,18 +151,7 @@ test("update row", async () => {
   });
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Table created.",
-    "insert row joe-id into the table my_update_table.",
-    "get row joe-id from table my_update_table.",
-    "get row joe-id from table my_update_table.",
-    "update row joe-id in table my_update_table.",
-    "get row joe-id from table my_update_table.",
-    "wingsdk.cloud.Table deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
-
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -218,15 +192,6 @@ test("list table", async () => {
   });
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Table created.",
-    "insert row joe-id into the table my_list_table.",
-    "insert row jane-id into the table my_list_table.",
-    "list all rows from table my_list_table.",
-    "wingsdk.cloud.Table deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
-
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });

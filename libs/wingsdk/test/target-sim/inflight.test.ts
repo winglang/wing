@@ -1,7 +1,8 @@
 import { test, expect } from "vitest";
 import { treeJsonOf } from "./util";
 import { Inflight } from "../../src/core";
-import { SimApp, Testing } from "../../src/testing";
+import { Testing } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `
 async handle(event) {

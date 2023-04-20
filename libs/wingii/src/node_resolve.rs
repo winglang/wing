@@ -11,8 +11,6 @@ use std::{
 
 use serde_json::Value;
 
-use crate::util::package_json::is_path_dependency;
-
 static ROOT: &str = "/";
 static NODE_EXTENSIONS: [&str; 3] = [".js", "json", ".node"];
 static NODE_MAIN_FIELDS: [&str; 1] = ["main"];
@@ -179,4 +177,10 @@ fn resolve_index(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
 /// Check if a string references a core module, such as "events"
 fn is_core_module(target: &str) -> bool {
 	NODE_BUILTINS.iter().any(|builtin| builtin == &target)
+}
+
+/// If the dependency looks like a path, return the path
+/// This means it starts with `./`, `../`, or `/`
+pub fn is_path_dependency(dependency_name: &str) -> bool {
+	dependency_name.starts_with("./") || dependency_name.starts_with("../") || dependency_name.starts_with("/")
 }

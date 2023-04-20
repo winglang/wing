@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
-import { SimApp } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 test("create a counter", async () => {
   // GIVEN
@@ -53,16 +53,7 @@ test("inc", async () => {
   expect(value3).toEqual(123 + 1 + 1 + 10);
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Counter created.",
-    "Inc (amount=1).",
-    "Inc (amount=1).",
-    "Inc (amount=10).",
-    "Inc (amount=10).",
-    "wingsdk.cloud.Counter deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -90,16 +81,7 @@ test("dec", async () => {
   expect(value3).toEqual(123 - 1 - 1 - 10);
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Counter created.",
-    "Dec (amount=1).",
-    "Dec (amount=1).",
-    "Dec (amount=10).",
-    "Dec (amount=10).",
-    "wingsdk.cloud.Counter deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -148,14 +130,7 @@ test("reset with initial value", async () => {
 
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Counter created.",
-    "Reset (value=123).",
-    "Peek (value=0).",
-    "wingsdk.cloud.Counter deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -174,14 +149,7 @@ test("reset without initial value", async () => {
 
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Counter created.",
-    "Reset (value=0).",
-    "Peek (value=5).",
-    "wingsdk.cloud.Counter deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 

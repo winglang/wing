@@ -1,16 +1,7 @@
-import { join } from "path";
 import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
-const JSII_DEPS = [
-  "constructs@~10.1.228",
-  "cdktf@0.15.2",
-  "@cdktf/provider-random@^5.0.0",
-  "@cdktf/provider-aws@^12.0.1",
-  "@cdktf/provider-azurerm@^5.0.1",
-  "@cdktf/provider-google@^5.0.2",
-  "aws-cdk-lib@^2.64.0",
-];
+const JSII_DEPS = ["constructs@~10.1.228"];
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
@@ -25,6 +16,12 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   bundledDeps: [
+    "cdktf@0.15.2",
+    "@cdktf/provider-random@^5.0.0",
+    "@cdktf/provider-aws@^12.0.1",
+    "@cdktf/provider-azurerm@^5.0.1",
+    "@cdktf/provider-google@^5.0.2",
+    "aws-cdk-lib@^2.64.0",
     // preflight dependencies
     "debug",
     "esbuild-wasm",
@@ -34,16 +31,18 @@ const project = new cdk.JsiiProject({
     // conflict with each other)
     "@aws-sdk/client-cloudwatch-logs@3.256.0",
     "@aws-sdk/client-dynamodb@3.256.0",
+    "@aws-sdk/client-elasticache@3.256.0",
     "@aws-sdk/util-dynamodb@3.256.0",
     "@aws-sdk/client-lambda@3.256.0",
     "@aws-sdk/client-s3@3.256.0",
+    "@aws-sdk/client-secrets-manager@3.256.0",
     "@aws-sdk/client-sqs@3.256.0",
     "@aws-sdk/client-sns@3.256.0",
     "@aws-sdk/types@3.254.0",
     "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
     // azure client dependencies
-    "@azure/storage-blob@12.12.0",
+    "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // simulator dependencies
@@ -52,6 +51,7 @@ const project = new cdk.JsiiProject({
     "uuid",
     // shared client dependencies
     "ioredis",
+    "vm2",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
@@ -59,17 +59,17 @@ const project = new cdk.JsiiProject({
     "@types/debug",
     "@types/fs-extra",
     "@types/tar",
-    // use older versions of these types to avoid conflicts with jsii
-    "@types/express@4.17.13",
-    "@types/express-serve-static-core@4.17.28",
+    "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
+    "fs-extra",
     "patch-package",
     "vitest",
     "@types/uuid",
     "@vitest/coverage-c8",
   ],
+  jest: false,
   prettier: true,
   npmignoreEnabled: false,
   minNodeVersion: "16.16.0",
@@ -78,6 +78,7 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
+  jsiiVersion: "~5.0.0",
 });
 
 project.eslint?.addPlugins("sort-exports");
@@ -92,27 +93,6 @@ project.eslint?.addOverride({
 project.deps.removeDependency("jsii-docgen");
 project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
 
-// tasks for locally testing the SDK without needing wing compiler
-project.addDevDeps("tsx");
-const sandboxDir = join("test", "sandbox");
-
-const sandboxSynth = project.addTask("sandbox:synth", {
-  exec: "tsx main.ts --tsconfig ../../tsconfig.dev.json",
-  cwd: sandboxDir,
-});
-
-const sandboxDeploy = project.addTask("sandbox:deploy", {
-  cwd: join("test", "sandbox", "target"),
-});
-sandboxDeploy.spawn(sandboxSynth);
-sandboxDeploy.exec("terraform init");
-sandboxDeploy.exec("terraform apply");
-
-const sandboxDestroy = project.addTask("sandbox:destroy", {
-  cwd: sandboxDir,
-});
-sandboxDestroy.exec("terraform destroy");
-
 // Set up the project so that:
 // 1. Preflight code is compiled with JSII
 // 2. Inflight and simulator code is compiled with TypeScript
@@ -122,21 +102,6 @@ sandboxDestroy.exec("terraform destroy");
 // const { BucketClient } = require("wingsdk/lib/aws/bucket.inflight");
 const pkgJson = project.tryFindObjectFile("package.json");
 pkgJson!.addOverride("jsii.excludeTypescript", ["src/**/*.inflight.ts"]);
-
-// By default, the TypeScript compiler will include all types from @types, even
-// if the package is not used anywhere in our source code (`/src`). This is
-// problematic because JSII is stuck on an older TypeScript version, and we only
-// want it to compile the types exported by index.ts.
-//
-// Let's ignore these types by default, and then explicitly include the ones we
-// need for JSII compilation to work. This is OK since we are compiling things
-// twice (once with JSII, and once with the latest version of TypeScript), and
-// any other type errors can be caught by the second compilation.
-//
-// See https://github.com/aws/jsii/issues/3741
-//
-// @example ["./node_modules/@types/some-dep"]
-pkgJson!.addOverride("jsii.tsc.types", []);
 
 const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
   obj: {
@@ -246,10 +211,10 @@ docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 
-// override default test timeout from 5s to 30s
+// set up vitest related config
+project.addGitIgnore("/coverage/");
 project.testTask.reset("vitest run --coverage --update --passWithNoTests");
-const testWatch = project.tasks.tryFind("test:watch")!;
-testWatch.reset();
+const testWatch = project.addTask("test:watch");
 testWatch.exec("vitest"); // Watch is default mode for vitest
 testWatch.description = "Run vitest in watch mode";
 project.testTask.spawn(project.eslint?.eslintTask!);

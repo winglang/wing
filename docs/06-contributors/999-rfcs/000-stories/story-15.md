@@ -66,7 +66,10 @@ resource TaskList impl ITaskList {
   _redis: redis.Redis;
   
   extern "./tasklist_helper.js" static inflight uuid(): str; 
-  
+  // Workaround for https://github.com/winglang/wing/issues/1669 - changed method to be non-static
+  extern "./tasklist_helper.js" inflight get_data(url: str): Json;
+  extern "./tasklist_helper.js" inflight create_regex(s: str): IMyRegExp;
+
   init() {
     this._redis = new redis.Redis();
   }
@@ -123,12 +126,9 @@ resource TaskList impl ITaskList {
       
 resource TaskListApi {
   api: cloud.Api;
-  task_list: ITaskList;
+  task_list: TaskList;
         
-  extern "./tasklist_helper.js" static inflight create_regex(s: str): IMyRegExp;
-  extern "./tasklist_helper.js" static inflight get_data(url: str): Json;
-        
-  init(task_list: ITaskList) {
+  init(task_list: TaskList) {
     this.task_list = task_list;
     this.api = new cloud.Api();
         
@@ -138,10 +138,11 @@ resource TaskListApi {
       // Easter Egg - if you add a todo with the single word "random" as the title, 
       //              the system will fetch a random task from the internet
       if title == "random" {
-        let data: Json = TaskListApi.get_data("https://www.boredapi.com/api/activity");
+        // Workaround for https://github.com/winglang/wing/issues/1969 - calling task_list directly instead of via `this.`
+        let data: Json = task_list.get_data("https://www.boredapi.com/api/activity");
         title = str.from_json(data.get("activity")); 
       } 
-      let id = this.task_list.add(title);
+      let id = task_list.add(title);
       return cloud.ApiResponse { status:201, body: id };
     });
         
@@ -149,16 +150,13 @@ resource TaskListApi {
       let vars = req.vars ?? Map<str>{};
       let body = req.body ?? EMPTY_JSON;
       let id = str.from_json(vars.get("id"));
-      if body.get("completed")? {
-        // `false` value of ?? expression is unreachable because of the above if statement
-        if bool.from_json(body.get("completed") ?? false) {
-          this.task_list.set_status(id, Status.COMPLETED);
-        } else {
-          this.task_list.set_status(id, Status.UNCOMPLETED);
-        }      
+      if bool.from_json(body.get("completed")) {
+        task_list.set_status(id, Status.COMPLETED);
+      } else {
+        task_list.set_status(id, Status.UNCOMPLETED);
       }
       try {
-        let title = this.task_list.get(id);
+        let title = task_list.get(id);
         return cloud.ApiResponse { status:200, body: title };
       } catch {
         return cloud.ApiResponse { status: 400 };
@@ -169,7 +167,7 @@ resource TaskListApi {
       let vars = req.vars ?? Map<str>{};
       let id = str.from_json(vars.get("id"));
       try {
-        let title = this.task_list.get(id);
+        let title = task_list.get(id);
         return cloud.ApiResponse { status:200, body: title };
       } catch {
         return cloud.ApiResponse { status: 400 };
@@ -180,7 +178,7 @@ resource TaskListApi {
       let vars = req.vars ?? Map<str>{};
       let id = str.from_json(vars.get("id"));
       try {
-        this.task_list.remove(id);
+        task_list.remove(id);
         return cloud.ApiResponse { status: 204 };
       } catch {
         return cloud.ApiResponse { status: 400 };
@@ -189,7 +187,7 @@ resource TaskListApi {
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = req.query.get("search");
-      let results = this.task_list.find(TaskListApi.create_regex(search));
+      let results = task_list.find(task_list.create_regex(search));
       return cloud.ApiResponse { status: 200, body: results };
     });
   }

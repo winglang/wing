@@ -2,7 +2,6 @@ import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
-import { Trace } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 
 test("onTrace", async () => {
@@ -16,7 +15,7 @@ test("onTrace", async () => {
   // WHEN
   const s = new testing.Simulator({ simfile });
   s.onTrace({
-    callback: (_trace: Trace) => {
+    callback: (_trace: cloud.Trace) => {
       numTraces++;
     },
   });
@@ -28,5 +27,5 @@ test("onTrace", async () => {
   await s.stop();
 
   // THEN
-  expect(numTraces).toEqual(5); // create resource, put operation, delete resource
+  expect(numTraces).toEqual(5); // create resources, put operation, delete resources
 });

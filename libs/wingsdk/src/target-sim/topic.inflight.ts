@@ -1,22 +1,27 @@
-import { ISimulatorResourceInstance } from "./resource";
+import { IEventPublisher } from "./event-mapping";
 import {
   TopicAttributes,
   TopicSchema,
   TopicSubscriber,
   TOPIC_TYPE,
+  EventSubscription,
+  FunctionHandle,
 } from "./schema-resources";
-import { IFunctionClient, ITopicClient } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing/simulator";
+import { IFunctionClient, ITopicClient, TraceType } from "../cloud";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
-export class Topic implements ITopicClient, ISimulatorResourceInstance {
+export class Topic
+  implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly subscribers = new Array<TopicSubscriber>();
   private readonly context: ISimulatorContext;
 
   constructor(props: TopicSchema["props"], context: ISimulatorContext) {
-    for (const sub of props.subscribers ?? []) {
-      this.subscribers.push({ ...sub });
-    }
     this.context = context;
+    props;
   }
 
   public async init(): Promise<TopicAttributes> {
@@ -57,6 +62,17 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
         });
       }));
     }
+  }
+
+  async addEventSubscription(
+    subscriber: FunctionHandle,
+    subscriptionProps: EventSubscription
+  ): Promise<void> {
+    let s = {
+      functionHandle: subscriber,
+      ...subscriptionProps,
+    } as TopicSubscriber;
+    this.subscribers.push(s);
   }
 
   async publish(message: string): Promise<void> {

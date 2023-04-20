@@ -14,6 +14,7 @@ environment:
 * [Node.js] v18 and npm v8
   * We recommend [volta] to manage node tools
 * [Rust]
+  * We recommend using [rustup] to manage your Rust installation
 * [AWS CLI]
   * Only needed for integration tests - make sure to do the setup part to create credentials
 * [Terraform CLI]
@@ -36,7 +37,6 @@ npm install
 npx nx <target> <project>
 # or
 npx nx <target> <project> -- <args>
-
 ```
 
 - `npx` can be omitted if [Nx] is installed globally
@@ -47,7 +47,8 @@ npx nx <target> <project> -- <args>
 
 [Nx]: https://nx.dev/
 [Node.js]: https://nodejs.org/en/
-[Rust]: https://www.rust-lang.org/tools/install
+[Rust]: https://www.rust-lang.org/
+[rustup]: https://rustup.rs/
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
 [volta]: https://volta.sh
@@ -197,3 +198,20 @@ npx nx dev vscode-wing
 ```
 
 To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.
+
+## 🧹 How do I lint my code?
+
+To lint Rust code, you can run the `lint` target on the `wingc` or `wingii` projects:
+
+```sh
+npx nx lint wingc
+```
+
+It's also possible to lint by running `cargo clippy` directly.
+
+Lastly you can show linting errors in your IDE by enabling the following setting in the rust-analyzer extension:
+
+```json
+// in your VS Code settings
+"rust-analyzer.check.command": "clippy",
+```

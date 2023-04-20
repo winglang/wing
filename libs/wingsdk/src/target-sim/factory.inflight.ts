@@ -1,25 +1,32 @@
 import { Api } from "./api.inflight";
 import { Bucket } from "./bucket.inflight";
 import { Counter } from "./counter.inflight";
+import { EventMapping } from "./event-mapping.inflight";
 import { Function } from "./function.inflight";
-import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
 import { Redis } from "./redis.inflight";
-import { ISimulatorResourceInstance } from "./resource";
 import {
   API_TYPE,
   BUCKET_TYPE,
   COUNTER_TYPE,
   FUNCTION_TYPE,
-  LOGGER_TYPE,
   QUEUE_TYPE,
   TABLE_TYPE,
+  TEST_RUNNER_TYPE,
   TOPIC_TYPE,
   REDIS_TYPE,
+  SECRET_TYPE,
+  EVENT_MAPPING_TYPE,
 } from "./schema-resources";
+import { Secret } from "./secret.inflight";
 import { Table } from "./table.inflight";
+import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";
-import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorFactory,
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**
@@ -43,18 +50,22 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Function(props, context);
       case QUEUE_TYPE:
         return new Queue(props, context);
-      case LOGGER_TYPE:
-        return new Logger(props, context);
       case COUNTER_TYPE:
         return new Counter(props, context);
       case TABLE_TYPE:
         return new Table(props, context);
       case TOPIC_TYPE:
         return new Topic(props, context);
+      case TEST_RUNNER_TYPE:
+        return new TestRunnerClient(props, context);
       case REDIS_TYPE:
         return new Redis(props, context);
+      case SECRET_TYPE:
+        return new Secret(props, context);
+      case EVENT_MAPPING_TYPE:
+        return new EventMapping(props, context);
       default:
-        throw new Error(`Type ${type} not implemented.`);
+        throw new Error(`Type ${type} not implemented by the simulator.`);
     }
   }
 }

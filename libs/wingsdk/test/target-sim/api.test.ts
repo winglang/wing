@@ -2,7 +2,8 @@ import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { SimApp, Simulator, Testing } from "../../src/testing";
+import { Simulator, Testing } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 // Handler that responds to a request with a fixed string
 const INFLIGHT_CODE = (body: string) =>
@@ -15,6 +16,8 @@ const INFLIGHT_CODE_ECHO_METHOD = `async handle(req) { return { status: 200, bod
 const INFLIGHT_CODE_ECHO_PATH = `async handle(req) { return { status: 200, body: req.path }; }`;
 // Handler that responds to a request with the request query params
 const INFLIGHT_CODE_ECHO_QUERY = `async handle(req) { return { status: 200, body: req.query }; }`;
+// Handler that responds to a request with the request params
+const INFLIGHT_CODE_ECHO_PARAMS = `async handle(req) { return { status: 200, body: req.vars ?? {} }; }`;
 // Handler that responds to a request with extra response headers
 const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
 
@@ -60,7 +63,35 @@ test("api with one GET route", async () => {
   await s.stop();
 
   expect(response.status).toEqual(200);
-  expect(await response.text()).toEqual(RESPONSE);
+  expect(await response.json()).toEqual(RESPONSE);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api with one GET route with request params", async () => {
+  // GIVEN
+  const ROUTE = "/users/{name}";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_PARAMS
+  );
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(`${apiUrl}/users/tsuf`, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.json()).toEqual({ name: "tsuf" });
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -115,12 +146,12 @@ test("api supports every method type", async () => {
   // THEN
   await s.stop();
 
-  await Promise.all(
-    zip(METHODS, responses).map(async ([method, response]) => {
-      expect(response.status).toEqual(200);
-      expect(await response.text()).toEqual(method === "HEAD" ? "" : method);
-    })
-  );
+  for (const [method, response] of zip(METHODS, responses)) {
+    expect(response.status).toEqual(200);
+    if (method !== "HEAD") {
+      expect(await response.json()).toEqual(method);
+    }
+  }
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -156,10 +187,10 @@ test("api with multiple methods on same route", async () => {
   await s.stop();
 
   expect(getResponse.status).toEqual(200);
-  expect(await getResponse.text()).toEqual(GET_RESPONSE);
+  expect(await getResponse.json()).toEqual(GET_RESPONSE);
 
   expect(postResponse.status).toEqual(200);
-  expect(await postResponse.text()).toEqual(POST_RESPONSE);
+  expect(await postResponse.json()).toEqual(POST_RESPONSE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -196,10 +227,10 @@ test("api with multiple routes", async () => {
   await s.stop();
 
   expect(response1.status).toEqual(200);
-  expect(await response1.text()).toEqual(RESPONSE1);
+  expect(await response1.json()).toEqual(RESPONSE1);
 
   expect(response2.status).toEqual(200);
-  expect(await response2.text()).toEqual(RESPONSE2);
+  expect(await response2.json()).toEqual(RESPONSE2);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -236,6 +267,35 @@ test("api with one POST route, with body", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("api with one POST route, with body urlencoded", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+  const REQUEST_BODY = { message: "hello world" };
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  api.post(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const params = new URLSearchParams(REQUEST_BODY);
+  const response = await fetch(apiUrl + ROUTE, {
+    method: "POST",
+    body: params,
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(await response.json()).toEqual(REQUEST_BODY);
+  expect(response.status).toEqual(200);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 test("api handler can read the request path", async () => {
   // GIVEN
   const ROUTE = "/hello";
@@ -254,7 +314,7 @@ test("api handler can read the request path", async () => {
   await s.stop();
 
   expect(response.status).toEqual(200);
-  expect(await response.text()).toEqual(ROUTE);
+  expect(await response.json()).toEqual(ROUTE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -324,6 +384,35 @@ test("api handler can set response headers", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api url can be used as environment variable", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const handler = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(req) { return process.env["API_URL"]; }`
+  );
+  cloud.Function._newFunction(app, "my_function", handler, {
+    env: {
+      API_URL: api.url,
+    },
+  });
+
+  // WHEN
+  const s = await app.startSimulator();
+  const fnEnvironmentValue =
+    s.getResourceConfig("/my_function").props.environmentVariables.API_URL;
+
+  const fnClient = s.getResource("/my_function") as cloud.IFunctionClient;
+  const response = await fnClient.invoke("");
+
+  // THEN
+  await s.stop();
+  expect(fnEnvironmentValue).toEqual("${root/my_api#attrs.url}");
+  expect(response.startsWith("http://")).toEqual(true);
 });
 
 function getApiUrl(s: Simulator, path: string): string {

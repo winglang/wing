@@ -7,13 +7,14 @@ import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-pub
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
 import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
 import {
   CaseConventions,
   NameOptions,
@@ -74,8 +75,11 @@ export class Bucket extends cloud.Bucket {
     // but we do not need to handle these cases since we are generating the
     // prefix only
 
+    const isTestEnvironment = App.of(this).isTestEnvironment;
+
     this.bucket = new S3Bucket(this, "Default", {
       bucketPrefix,
+      forceDestroy: isTestEnvironment ? true : false,
     });
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys
@@ -158,13 +162,13 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
     host.addPolicyStatements(
-      ...calculateBucketPermissions(this.bucket.arn, AwsTarget.TF_AWS, ops)
+      ...calculateBucketPermissions(this.bucket.arn, ops)
     );
 
     // The bucket name needs to be passed through an environment variable since

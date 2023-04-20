@@ -130,7 +130,7 @@ jobs:
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
-          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'pr/e2e-full') }}
+          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
         exclude:
           - runner: macos
             full_run: false
@@ -162,11 +162,13 @@ jobs:
             tools/hangar
             examples/tests/valid
             examples/tests/invalid
-          install-command: npm ci --ignore-scripts
+          install-command: npm ci
 
       - name: Run E2E Tests
         working-directory: tools/hangar
-        run: npm run test -- --shard=${{ matrix.shard }}
+        run: |
+          npm run test:generate
+          npm run test --shard=${{ matrix.shard }}
 
   quality-gate:
     name: Quality Gate
@@ -232,6 +234,13 @@ jobs:
       - name: Rename Docs
         run: mv docs "docs-${{ needs.build.outputs.version }}.tgz"
 
+      - name: Write Changelog
+        uses: DamianReeves/write-file-action@v1.2
+        with:
+          path: "CHANGELOG.md"
+          contents: ${{ needs.build.outputs.changelog }}
+          write-mode: overwrite
+
       - name: Compute Checksums
         run: |
           mkdir dist
@@ -240,7 +249,7 @@ jobs:
           mv ./*/*.wasm ./dist
           cd dist
 
-          echo '${{ needs.build.outputs.changelog }}' > ../CHANGELOG.md
+          echo '' >> ../CHANGELOG.md
           echo '### SHA-1 Checksums' >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md
           sha1sum --binary * >> ../CHANGELOG.md

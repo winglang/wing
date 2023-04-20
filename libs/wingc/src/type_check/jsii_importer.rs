@@ -4,21 +4,24 @@ use crate::{
 	diagnostic::{WingLocation, WingSpan},
 	type_check::{
 		self, symbol_env::StatementIdx, Class, FunctionSignature, Interface, Struct, SymbolKind, Type, TypeRef, Types,
-		WING_CONSTRUCTOR_NAME,
+		CLASS_INIT_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
-	WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
+	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_JSON, WINGSDK_MUT_JSON,
+	WINGSDK_RESOURCE,
 };
 use colored::Colorize;
-use serde_json::Value;
-use wingii::{fqn::FQN, jsii};
+use wingii::{
+	fqn::FQN,
+	jsii::{self, CollectionKind, PrimitiveType, TypeReference},
+	type_system::TypeSystem,
+};
 
 use super::{symbol_env::SymbolEnv, Enum, Namespace};
 
 trait JsiiInterface {
-	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
-	fn properties<'a>(&'a self) -> &'a Option<Vec<jsii::Property>>;
+	fn methods(&self) -> &Option<Vec<jsii::Method>>;
+	fn properties(&self) -> &Option<Vec<jsii::Property>>;
 }
 
 impl JsiiInterface for jsii::ClassType {
@@ -39,11 +42,9 @@ impl JsiiInterface for jsii::InterfaceType {
 	}
 }
 
-pub struct JsiiImporter<'a> {
-	/// An interface to access the types in the JSII library loaded with wingii.
-	jsii_types: &'a wingii::type_system::TypeSystem,
+pub struct JsiiImportSpec {
 	/// The assembly to import from the JSII library. This is typically the name of the NPM package.
-	assembly_name: &'a str,
+	pub assembly_name: String,
 	/// This is a namespace filter on the imported JSII assembly.
 	/// For example:
 	/// - ["cloud"] will only (publicly) import types prefixed with `cloud.` from the assembly
@@ -51,54 +52,46 @@ pub struct JsiiImporter<'a> {
 	/// - [] will import all types from the assembly
 	/// Note that other types might be still get implicitly imported
 	/// if they are referenced from a type in the specified `module_name`.
-	namespace_filter: &'a [String],
+	pub namespace_filter: Vec<String>,
 	/// The name to assign to the module in the Wing type system.
-	alias: &'a Symbol,
-	/// The wing type system: all imported types are added to `wing_types.libraries`.
-	wing_types: &'a mut Types,
+	pub alias: Symbol,
 	/// The index of the import statement that triggered this import. This is required so we'll know
 	/// later on if types defined by this import come before or after other statements in the code.
 	/// If type definitions in wing are always location agnostic this doesn't really matter and we
 	/// might be able to remove this.
-	import_statement_idx: usize,
-	/// The symbol environment to add imported symbols to. Note that all symbols will be added to
-	/// some `Namespace` under this `env`.
-	env: &'a mut SymbolEnv,
+	pub import_statement_idx: usize,
+}
+
+pub struct JsiiImporter<'a> {
+	jsii_spec: &'a JsiiImportSpec,
+
+	jsii_types: &'a TypeSystem,
+
+	/// The wing type system: all imported types are added to `wing_types.libraries`.
+	wing_types: &'a mut Types,
 }
 
 impl<'a> JsiiImporter<'a> {
-	pub fn new(
-		jsii_types: &'a wingii::type_system::TypeSystem,
-		assembly_name: &'a str,
-		namespace_filter: &'a [String],
-		alias: &'a Symbol,
-		wing_types: &'a mut Types,
-		import_statement_idx: usize,
-		env: &'a mut SymbolEnv,
-	) -> Self {
+	pub fn new(jsii_spec: &'a JsiiImportSpec, wing_types: &'a mut Types, jsii_types: &'a TypeSystem) -> Self {
 		Self {
-			jsii_types,
-			assembly_name,
-			namespace_filter,
-			alias,
+			jsii_spec,
 			wing_types,
-			import_statement_idx,
-			env,
+			jsii_types,
 		}
 	}
 
-	fn type_ref_to_wing_type(&mut self, jsii_type_ref: &jsii::TypeReference) -> TypeRef {
-		if let serde_json::Value::Object(obj) = jsii_type_ref {
-			if let Some(Value::String(primitive_name)) = obj.get("primitive") {
-				match primitive_name.as_str() {
-					"string" => self.wing_types.string(),
-					"number" => self.wing_types.number(),
-					"boolean" => self.wing_types.bool(),
-					"any" => self.wing_types.anything(),
-					"json" => self.wing_types.json(),
-					_ => panic!("TODO: handle primitive type {}", primitive_name),
-				}
-			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
+	fn type_ref_to_wing_type(&mut self, jsii_type_ref: &TypeReference) -> TypeRef {
+		match jsii_type_ref {
+			TypeReference::PrimitiveTypeReference(primitive_ref) => match primitive_ref.primitive {
+				PrimitiveType::String => self.wing_types.string(),
+				PrimitiveType::Number => self.wing_types.number(),
+				PrimitiveType::Boolean => self.wing_types.bool(),
+				PrimitiveType::Any => self.wing_types.anything(),
+				PrimitiveType::Json => self.wing_types.json(),
+				PrimitiveType::Date => self.wing_types.anything(), // TODO: https://github.com/winglang/wing/issues/2102
+			},
+			TypeReference::NamedTypeReference(named_ref) => {
+				let type_fqn = &named_ref.fqn;
 				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_INFLIGHT) {
 					self.wing_types.add_type(Type::Function(FunctionSignature {
 						this_type: Some(self.wing_types.anything()),
@@ -113,46 +106,30 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.json()
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_MUT_JSON) {
 					self.wing_types.mut_json()
-				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
-					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
-					self.wing_types.anything()
 				} else {
 					self.lookup_or_create_type(&FQN::from(type_fqn.as_str()))
 				}
-			} else if let Some(Value::Object(d)) = obj.get("collection") {
-				let collection_kind = d
-					.get("kind")
-					.expect("'kind' is required for collection types")
-					.as_str()
-					.expect("'kind' must be a string");
+			}
+			TypeReference::CollectionTypeReference(collection_ref) => {
+				let collection_kind = &collection_ref.collection.kind;
 
-				let element_type = d
-					.get("elementtype")
-					.expect("'elementtype' is required for collection types")
-					.as_object()
-					.expect("'elementtype' must be an object");
+				let element_type = &collection_ref.collection.elementtype;
 
-				let wing_type = self.type_ref_to_wing_type(&Value::Object(element_type.clone()));
+				let wing_type = self.type_ref_to_wing_type(element_type);
 
 				match collection_kind {
-					"array" => self.wing_types.add_type(Type::Array(wing_type)),
-					"map" => self.wing_types.add_type(Type::Map(wing_type)),
+					CollectionKind::Array => self.wing_types.add_type(Type::Array(wing_type)),
+					CollectionKind::Map => self.wing_types.add_type(Type::Map(wing_type)),
 					// set is intentionally left out, since in JSII “collection
 					// kind” is only either map or array.
-					_ => panic!("Unsupported collection kind '{}'", collection_kind),
 				}
-			} else if let Some(Value::Object(_)) = obj.get("union") {
-				// Wing does not support union types, so we'll model it the same way as if
-				// we saw an "any" in a JSII library
-				self.wing_types.anything()
-			} else {
-				panic!(
-					"Expected JSII type reference {:?} to be a collection, fqn or primitive",
-					jsii_type_ref
-				);
 			}
-		} else {
-			panic!("Expected JSII type reference {:?} to be an object", jsii_type_ref);
+			TypeReference::UnionTypeReference(..) =>
+			// Wing does not support union types, so we'll model it the same way as if
+			// we saw an "any" in a JSII library
+			{
+				self.wing_types.anything()
+			}
 		}
 	}
 
@@ -172,47 +149,41 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap()
 	}
 
-	fn import_type(&mut self, type_fqn: &FQN) {
-		// Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
-		if is_construct_base(&type_fqn) {
-			return;
-		}
-
+	pub fn import_type(&mut self, type_fqn: &FQN) -> bool {
 		self.setup_namespaces_for(&type_fqn);
 
-		// Hack: if the type is "constructs.IConstruct", we import it manually
-		// this is done so we can avoid loading the constructs module
-		if type_fqn.as_str() == CONSTRUCT_BASE_INTERFACE {
-			let symbol = Symbol::global(type_fqn.type_name());
-			self.register_jsii_type(&type_fqn, &symbol, self.wing_types.anything());
-			return;
+		let type_str = type_fqn.as_str();
+
+		// check if type is already imported
+		if self.wing_types.libraries.lookup_nested_str(type_str, None).is_ok() {
+			return true;
 		}
 
 		// Check if this is a JSII interface and import it if it is
 		let jsii_interface = self.jsii_types.find_interface(type_fqn);
 		if let Some(jsii_interface) = jsii_interface {
 			self.import_interface(jsii_interface);
-			return;
+			return true;
 		}
 
 		// Check if this is a JSII class and import it if it is
 		let jsii_class = self.jsii_types.find_class(type_fqn);
 		if let Some(jsii_class) = jsii_class {
 			self.import_class(jsii_class);
-			return;
+			return true;
 		}
 
 		// Check if this is a JSII enum and import it if it is
 		let jsii_enum = self.jsii_types.find_enum(type_fqn);
 		if let Some(jsii_enum) = jsii_enum {
 			self.import_enum(jsii_enum);
-			return;
+			return true;
 		}
 
-		panic!("Type {} was not found in the type system", type_fqn);
+		false
 	}
 
-	fn setup_namespaces_for(&mut self, type_name: &FQN) {
+	pub fn setup_namespaces_for(&mut self, type_name: &FQN) {
 		// First, create a namespace in the Wing type system (if there isn't one already) corresponding to the JSII assembly
 		// the type belongs to.
 		debug!("Setting up namespaces for {}", type_name);
@@ -232,7 +203,7 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
-				env: SymbolEnv::new(None, self.wing_types.void(), false, self.env.phase, 0),
+				env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
 			});
 			self
 				.wing_types
@@ -244,8 +215,6 @@ impl<'a> JsiiImporter<'a> {
 				)
 				.unwrap();
 		};
-
-		let flight = self.env.phase;
 
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
@@ -274,7 +243,13 @@ impl<'a> JsiiImporter<'a> {
 			} else {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					env: SymbolEnv::new(Some(parent_ns.env.get_ref()), self.wing_types.void(), false, flight, 0),
+					env: SymbolEnv::new(
+						Some(parent_ns.env.get_ref()),
+						self.wing_types.void(),
+						false,
+						Phase::Preflight,
+						0,
+					),
 				});
 				parent_ns
 					.env
@@ -342,20 +317,21 @@ impl<'a> JsiiImporter<'a> {
 			None,
 			self.wing_types.void(),
 			false,
-			self.env.phase,
-			self.import_statement_idx,
+			Phase::Preflight,
+			self.jsii_spec.import_statement_idx,
 		);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
 		let mut wing_type = match is_struct {
 			true => self.wing_types.add_type(Type::Struct(Struct {
 				name: new_type_symbol.clone(),
 				extends: extends.clone(),
+				should_case_convert_jsii: true,
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
 					false,
 					iface_env.phase,
-					self.import_statement_idx,
+					self.jsii_spec.import_statement_idx,
 				), // Dummy env, will be replaced below
 			})),
 			false => self.wing_types.add_type(Type::Interface(Interface {
@@ -366,7 +342,7 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void(),
 					false,
 					iface_env.phase,
-					self.import_statement_idx,
+					self.jsii_spec.import_statement_idx,
 				), // Dummy env, will be replaced below
 			})),
 		};
@@ -476,8 +452,7 @@ impl<'a> JsiiImporter<'a> {
 					js_override: m
 						.docs
 						.as_ref()
-						.map(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
-						.flatten()
+						.and_then(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
 						.flatten(),
 				}));
 				let name = camel_case_to_snake_case(&m.name);
@@ -514,7 +489,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-						SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), is_static, phase),
+						SymbolKind::make_variable(wing_type, !matches!(p.immutable, Some(true)), is_static, phase),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -547,8 +522,9 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn import_class(&mut self, jsii_class: &wingii::jsii::ClassType) {
-		let mut is_resource = false;
+	fn import_class(&mut self, jsii_class: &'a wingii::jsii::ClassType) {
+		let mut is_resource = is_construct_base(&FQN::from(jsii_class.fqn.as_str()));
+
 		let jsii_class_fqn = FQN::from(jsii_class.fqn.as_str());
 		debug!("Importing class {}", jsii_class_fqn.as_str().green());
 		let type_name = jsii_class_fqn.type_name();
@@ -556,41 +532,35 @@ impl<'a> JsiiImporter<'a> {
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
 			let base_class_fqn = FQN::from(base_class_fqn.as_str());
-			// Hack: if the base class name is a resource base then we treat this class as a resource and don't need to define its parent.
-			if is_construct_base(&base_class_fqn) {
-				is_resource = true;
-				None
+			let base_class_name = base_class_fqn.type_name();
+			let base_class_type = if let Ok(base_class_type) = self
+				.wing_types
+				.libraries
+				.lookup_nested_str(base_class_fqn.as_str(), None)
+			{
+				base_class_type
+					.as_type()
+					.expect("Base class name found but it's not a type")
 			} else {
-				let base_class_name = base_class_fqn.type_name();
-				let base_class_type = if let Ok(base_class_type) = self
+				// If the base class isn't defined yet then define it first (recursive call)
+				self.import_type(&base_class_fqn);
+				self
 					.wing_types
 					.libraries
-					.lookup_nested_str(base_class_fqn.as_str(), None)
-				{
-					base_class_type
-						.as_type()
-						.expect("Base class name found but it's not a type")
-				} else {
-					// If the base class isn't defined yet then define it first (recursive call)
-					self.import_type(&base_class_fqn);
-					self
-						.wing_types
-						.libraries
-						.lookup_nested_str(&base_class_fqn.as_str(), None)
-						.expect(&format!(
-							"Failed to define base class {} of {}",
-							base_class_name, type_name
-						))
-						.as_type()
-						.unwrap()
-				};
+					.lookup_nested_str(&base_class_fqn.as_str(), None)
+					.expect(&format!(
+						"Failed to define base class {} of {}",
+						base_class_name, type_name
+					))
+					.as_type()
+					.unwrap()
+			};
 
-				// Validate the base class is either a class or a resource
-				if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
-					panic!("Base class {} of {} is not a resource", base_class_name, type_name);
-				}
-				Some(base_class_type)
+			// Validate the base class is either a class or a resource
+			if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
+				panic!("Base class {} of {} is not a resource", base_class_name, type_name);
 			}
+			Some(base_class_type)
 		} else {
 			None
 		};
@@ -608,7 +578,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		let phase = if is_resource {
-			self.env.phase
+			Phase::Preflight
 		} else {
 			Phase::Independent
 		};
@@ -624,18 +594,16 @@ impl<'a> JsiiImporter<'a> {
 			// `@typeparam <types>` - where <types> is a comma separated list of type parameters, referencing a class in the same namespace
 			// e.g. `@typeparam T1, T2` - T1 and T2 are type parameters of the class and will be replaced with the actual types when the class is used
 			docs.custom.as_ref().and_then(|c| {
-				c.get("typeparam").and_then(|type_param_name| {
+				c.get("typeparam").map(|type_param_name| {
 					let args = type_param_name.split(",").map(|s| s.trim()).collect::<Vec<&str>>();
-					Some(
-						args
-							.iter()
-							.map(|a| {
-								self.lookup_or_create_type(&FQN::from(
-									format!("{}.{}", jsii_class_fqn.as_str_without_type_name(), a).as_str(),
-								))
-							})
-							.collect::<Vec<_>>(),
-					)
+					args
+						.iter()
+						.map(|a| {
+							self.lookup_or_create_type(&FQN::from(
+								format!("{}.{}", jsii_class_fqn.as_str_without_type_name(), a).as_str(),
+							))
+						})
+						.collect::<Vec<_>>()
 				})
 			})
 		});
@@ -702,7 +670,7 @@ impl<'a> JsiiImporter<'a> {
 				js_override: None,
 			}));
 			if let Err(e) = class_env.define(
-				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
+				&Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module),
 				SymbolKind::make_variable(method_sig, false, true, phase),
 				StatementIdx::Top,
 			) {
@@ -771,45 +739,68 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	pub fn import_to_env(&mut self) {
-		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
-
-		for type_fqn in assembly.types.as_ref().unwrap().keys() {
-			let type_fqn = FQN::from(type_fqn.as_str());
-
-			// Skip types outside the imported namespace
-			if !type_fqn.is_in_namespace(self.namespace_filter) {
-				debug!(
-					"Skipped importing {} (outside of namespace filter).",
-					type_fqn.as_str().blue()
-				);
-				continue;
+	/// Imports all types within a given submodule
+	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
+		let assembly = self.jsii_types.find_assembly(&self.jsii_spec.assembly_name).unwrap();
+		let start_string = format!("{}.{}", assembly.name, submodule);
+		assembly.types.as_ref().unwrap().keys().for_each(|type_fqn| {
+			if type_fqn.as_str().starts_with(&start_string) {
+				self.import_type(&FQN::from(type_fqn.as_str()));
 			}
+		});
+	}
 
-			// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
-			// and might have already defined the current type internally
-			if self
-				.wing_types
-				.libraries
-				.lookup_nested_str(type_fqn.as_str(), None)
-				.is_ok()
-			{
-				debug!("Already imported {}.", type_fqn.as_str().blue());
-				continue;
+	/// Imports submodules of the assembly, preparing each as an available namespace
+	pub fn import_submodules_to_env(&mut self, env: &mut SymbolEnv) {
+		let assembly = self
+			.jsii_types
+			.find_assembly(&self.jsii_spec.assembly_name)
+			.expect("Assembly not found");
+		if let Some(submodules) = assembly.submodules.as_ref() {
+			for type_fqn in submodules.keys() {
+				let fake_type = format!("{}.{}", type_fqn, "x");
+				let type_fqn = FQN::from(fake_type.as_str());
+
+				// Skip types outside the imported namespace
+				if !type_fqn.is_in_namespace(self.jsii_spec.namespace_filter.as_slice()) {
+					debug!(
+						"Skipped importing {} (outside of namespace filter).",
+						type_fqn.as_str().blue()
+					);
+					continue;
+				}
+
+				// Import type
+				self.setup_namespaces_for(&type_fqn);
 			}
+		} else {
+			// No submodules, so lets manually setup a root namespace for the module
 
-			debug!("Importing {}...", type_fqn.as_str().blue());
-
-			// Import type
-			self.import_type(&type_fqn);
+			// if the "libraries" environment already contains a namespace for this assembly
+			// we can skip this step
+			if self.wing_types.libraries.try_lookup(&assembly.name, None).is_none() {
+				let ns = self.wing_types.add_namespace(Namespace {
+					name: assembly.name.clone(),
+					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+				});
+				self
+					.wing_types
+					.libraries
+					.define(
+						&Symbol::global(assembly.name.clone()),
+						SymbolKind::Namespace(ns),
+						StatementIdx::Top,
+					)
+					.expect("Failed to define jsii root namespace");
+			}
 		}
 
 		// Create a symbol in the environment for the imported module
 		// For example, `bring cloud` will create a symbol named `cloud` in the environment
 		// that points to the `@winglang/sdk.cloud` NamespaceRef
-		let lookup_str = vec![self.assembly_name.to_string()]
+		let lookup_str = vec![self.jsii_spec.assembly_name.to_string()]
 			.iter()
-			.chain(self.namespace_filter)
+			.chain(self.jsii_spec.namespace_filter.iter())
 			.map(|x| x.as_str())
 			.collect::<Vec<_>>()
 			.join(".");
@@ -820,17 +811,22 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap()
 			.as_namespace_ref()
 			.unwrap();
-		self
-			.env
+
+		env
 			.define(
-				self.alias,
+				&self.jsii_spec.alias,
 				SymbolKind::Namespace(ns),
-				StatementIdx::Index(self.import_statement_idx),
+				StatementIdx::Index(self.jsii_spec.import_statement_idx),
 			)
 			.unwrap();
 	}
 
 	fn register_jsii_type(&mut self, fqn: &FQN, symbol: &Symbol, type_ref: TypeRef) {
+		// make this function idempotent
+		if self.wing_types.libraries.lookup_nested_str(fqn.as_str(), None).is_ok() {
+			return;
+		}
+
 		let mut ns = self
 			.wing_types
 			.libraries
@@ -858,9 +854,9 @@ fn extract_docstring_tag<'a>(docs: &'a Option<jsii::Docs>, arg: &str) -> Option<
 /// TODO: this is a temporary hack until we support interfaces.
 pub fn is_construct_base(fqn: &FQN) -> bool {
 	// We treat both CONSTRUCT_BASE_CLASS and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
-	// from `construct.Construct` and stuff derived `core.Resource` (which itself is derived from `constructs.Construct`).
-	// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
-	// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
+	// from `construct.Construct` and stuff derived `std.Resource` (which itself is derived from `constructs.Construct`).
+	// But since we don't support interfaces yet we can't import `std.Resource` so we just treat it as a base class.
+	// I'm also not sure we should ever import `std.Resource` because we might want to keep its internals hidden to the user:
 	// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
 	fqn.as_str() == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn.as_str() == CONSTRUCT_BASE_CLASS
 }

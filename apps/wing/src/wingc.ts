@@ -1,5 +1,5 @@
 import debug from "debug";
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
 import { resolve } from "path";
@@ -31,8 +31,8 @@ export interface WingCompilerLoadOptions {
    * The also represent mappings from the WASI instance's filesystem to the host filesystem. (map key -> value)
    *
    * The following directories are always preopened:
-   * - `/`
-   * - `@winglang/sdk` module directory
+   * - The `@winglang/sdk` module directory
+   * - All local and global node_modules directories (module.paths)
    *
    * @default - No additional preopens are added other than the above
    */
@@ -81,11 +81,17 @@ export async function load(options: WingCompilerLoadOptions) {
     resolve(require.resolve.call(null, "@winglang/sdk"), "../..");
 
   const preopens = {
-    "/": "/",
     // .jsii access
     [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
     ...(options.preopens ?? {}),
   } as Record<string, string>;
+
+  // preopen all existing global node_modules
+  for (const m of module.paths ?? []) {
+    if (existsSync(m)) {
+      preopens[m] = m;
+    }
+  }
 
   if (process.platform === "win32") {
     preopens["C:\\"] = "C:\\";
@@ -93,6 +99,11 @@ export async function load(options: WingCompilerLoadOptions) {
       delete preopens[key];
       preopens[normalPath(value)] = value;
     }
+  }
+
+  // for each provided preopen, add resolved paths in case any absolute paths are used
+  for (const [key, value] of Object.entries(preopens)) {
+    preopens[normalPath(resolve(key))] = value;
   }
 
   // check if running in browser
@@ -116,7 +127,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_notification: () => {},
+      send_notification: () => { },
     },
     ...(options.imports ?? {}),
   } as any;

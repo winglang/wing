@@ -113,8 +113,17 @@ pub enum TypeAnnotation {
 	MutMap(Box<TypeAnnotation>),
 	Set(Box<TypeAnnotation>),
 	MutSet(Box<TypeAnnotation>),
-	FunctionSignature(FunctionSignature),
+	Function(FunctionTypeAnnotation),
 	UserDefined(UserDefinedType),
+}
+
+/// Unlike a FunctionSignature, a FunctionTypeAnnotation doesn't include the names
+/// of parameters or whether they are reassignable.
+#[derive(Debug, Clone)]
+pub struct FunctionTypeAnnotation {
+	pub param_types: Vec<TypeAnnotation>,
+	pub return_type: Option<Box<TypeAnnotation>>,
+	pub phase: Phase,
 }
 
 // In the future this may be an enum for type-alias, class, etc. For now its just a nested name.
@@ -152,13 +161,13 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::MutMap(t) => write!(f, "MutMap<{}>", t),
 			TypeAnnotation::Set(t) => write!(f, "Set<{}>", t),
 			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
-			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
+			TypeAnnotation::Function(t) => write!(f, "{}", t),
 			TypeAnnotation::UserDefined(user_defined_type) => write!(f, "{}", user_defined_type),
 		}
 	}
 }
 
-impl Display for FunctionSignature {
+impl Display for FunctionTypeAnnotation {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let phase_str = match self.phase {
 			Phase::Inflight => "inflight ",
@@ -166,7 +175,7 @@ impl Display for FunctionSignature {
 			Phase::Independent => "",
 		};
 		let params_str = self
-			.parameters
+			.param_types
 			.iter()
 			.map(|a| format!("{}", a))
 			.collect::<Vec<String>>()
@@ -182,9 +191,26 @@ impl Display for FunctionSignature {
 
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
-	pub parameters: Vec<TypeAnnotation>,
+	pub parameters: Vec<FunctionParameter>,
 	pub return_type: Option<Box<TypeAnnotation>>,
 	pub phase: Phase,
+}
+
+impl FunctionSignature {
+	pub fn to_type_annotation(&self) -> TypeAnnotation {
+		TypeAnnotation::Function(FunctionTypeAnnotation {
+			param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
+			return_type: self.return_type.clone(),
+			phase: self.phase,
+		})
+	}
+}
+
+#[derive(Debug, Clone)]
+pub struct FunctionParameter {
+	pub name: Symbol,
+	pub type_annotation: TypeAnnotation,
+	pub reassignable: bool,
 }
 
 #[derive(Debug)]
@@ -195,11 +221,31 @@ pub enum FunctionBody {
 	External(String),
 }
 
+impl FunctionBody {
+	pub fn as_ref(&self) -> FunctionBodyRef {
+		match self {
+			FunctionBody::Statements(statements) => FunctionBodyRef::Statements(statements),
+			FunctionBody::External(external) => FunctionBodyRef::External(external),
+		}
+	}
+}
+
+pub enum FunctionBodyRef<'a> {
+	Statements(&'a Scope),
+	External(&'a String),
+}
+
+pub trait MethodLike<'a> {
+	fn body(&self) -> FunctionBodyRef;
+	fn parameters(&self) -> &Vec<FunctionParameter>;
+	fn signature(&self) -> &FunctionSignature;
+	fn is_static(&self) -> bool;
+	fn span(&self) -> WingSpan;
+}
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	/// List of names of function parameters and whether they are reassignable (`var`) or not.
-	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
 	/// The function implementation.
 	pub body: FunctionBody,
 	/// The function signature, including the return type.
@@ -213,16 +259,58 @@ pub struct FunctionDefinition {
 	pub captures: RefCell<Option<Captures>>,
 }
 
-#[derive(Debug)]
-pub struct Constructor {
-	/// List of names of constructor parameters and whether they are reassignable (`var`) or not.
-	pub parameters: Vec<(Symbol, bool)>,
+impl MethodLike<'_> for FunctionDefinition {
+	fn body(&self) -> FunctionBodyRef {
+		self.body.as_ref()
+	}
 
-	pub statements: Scope,
-	pub signature: FunctionSignature,
+	fn parameters(&self) -> &Vec<FunctionParameter> {
+		&self.signature.parameters
+	}
+
+	fn signature(&self) -> &FunctionSignature {
+		&self.signature
+	}
+
+	fn is_static(&self) -> bool {
+		self.is_static
+	}
+
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
 }
 
 #[derive(Debug)]
+pub struct Initializer {
+	pub signature: FunctionSignature,
+	pub statements: Scope,
+	pub span: WingSpan,
+}
+
+impl MethodLike<'_> for Initializer {
+	fn body(&self) -> FunctionBodyRef {
+		FunctionBodyRef::Statements(&self.statements)
+	}
+
+	fn parameters(&self) -> &Vec<FunctionParameter> {
+		&self.signature.parameters
+	}
+
+	fn signature(&self) -> &FunctionSignature {
+		&self.signature
+	}
+
+	fn is_static(&self) -> bool {
+		true
+	}
+
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+#[derive(Derivative, Debug)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
@@ -259,7 +347,8 @@ pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
-	pub constructor: Constructor,
+	pub initializer: Initializer,
+	pub inflight_initializer: Option<FunctionDefinition>,
 	pub parent: Option<UserDefinedType>,
 	pub implements: Vec<UserDefinedType>,
 	pub is_resource: bool,
@@ -301,19 +390,19 @@ pub enum StmtKind {
 	},
 	Break,
 	Continue,
+	Return(Option<Expr>),
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
 		value: Expr,
 	},
-	Return(Option<Expr>),
 	Scope(Scope),
 	Class(Class),
 	Interface(Interface),
 	Struct {
 		name: Symbol,
-		extends: Vec<Symbol>,
-		members: Vec<ClassField>,
+		extends: Vec<UserDefinedType>,
+		fields: Vec<StructField>,
 	},
 	Enum {
 		name: Symbol,
@@ -342,6 +431,12 @@ pub struct ClassField {
 }
 
 #[derive(Debug)]
+pub struct StructField {
+	pub name: Symbol,
+	pub member_type: TypeAnnotation,
+}
+
+#[derive(Debug)]
 pub enum ExprKind {
 	New {
 		class: TypeAnnotation,
@@ -350,6 +445,11 @@ pub enum ExprKind {
 		arg_list: ArgList,
 	},
 	Literal(Literal),
+	Range {
+		start: Box<Expr>,
+		inclusive: Option<bool>,
+		end: Box<Expr>,
+	},
 	Reference(Reference),
 	Call {
 		function: Box<Expr>,
@@ -389,9 +489,6 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
-	OptionalTest {
-		optional: Box<Expr>,
-	},
 }
 
 #[derive(Derivative)]
@@ -469,6 +566,7 @@ impl Scope {
 pub enum UnaryOperator {
 	Minus,
 	Not,
+	OptionalTest,
 }
 
 #[derive(Debug)]

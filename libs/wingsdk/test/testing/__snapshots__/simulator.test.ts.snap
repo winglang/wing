@@ -4,40 +4,26 @@ exports[`provides raw tree data 1`] = `
 {
   "tree": {
     "children": {
-      "WingLogger": {
+      "cloud.TestRunner": {
         "attributes": {
-          "wing:resource:connections": [
-            {
-              "direction": "inbound",
-              "implicit": true,
-              "relationship": "log",
-              "resource": "root/test",
-            },
-          ],
-          "wing:resource:stateful": true,
+          "wing:resource:connections": [],
+          "wing:resource:stateful": false,
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.1.245",
         },
         "display": {
-          "description": "A cloud logging facility",
+          "description": "A suite of APIs for running tests and collecting results.",
           "hidden": true,
-          "title": "Logger",
+          "title": "TestRunner",
         },
-        "id": "WingLogger",
-        "path": "root/WingLogger",
+        "id": "cloud.TestRunner",
+        "path": "root/cloud.TestRunner",
       },
       "test": {
         "attributes": {
-          "wing:resource:connections": [
-            {
-              "direction": "outbound",
-              "implicit": true,
-              "relationship": "log",
-              "resource": "root/WingLogger",
-            },
-          ],
+          "wing:resource:connections": [],
           "wing:resource:stateful": false,
         },
         "constructInfo": {
@@ -89,24 +75,6 @@ exports[`run all tests > single test 1`] = `
     "traces": [
       {
         "data": {
-          "message": "wingsdk.cloud.Logger created.",
-        },
-        "sourcePath": "root/WingLogger",
-        "sourceType": "wingsdk.cloud.Logger",
-        "timestamp": "<TIMESTAMP>",
-        "type": "resource",
-      },
-      {
-        "data": {
-          "message": "wingsdk.cloud.Function created.",
-        },
-        "sourcePath": "root/test",
-        "sourceType": "wingsdk.cloud.Function",
-        "timestamp": "<TIMESTAMP>",
-        "type": "resource",
-      },
-      {
-        "data": {
           "message": "hi",
         },
         "sourcePath": "root/test",
@@ -125,24 +93,6 @@ exports[`run all tests > single test 1`] = `
         "timestamp": "<TIMESTAMP>",
         "type": "resource",
       },
-      {
-        "data": {
-          "message": "wingsdk.cloud.Function deleted.",
-        },
-        "sourcePath": "root/test",
-        "sourceType": "wingsdk.cloud.Function",
-        "timestamp": "<TIMESTAMP>",
-        "type": "resource",
-      },
-      {
-        "data": {
-          "message": "wingsdk.cloud.Logger deleted.",
-        },
-        "sourcePath": "root/WingLogger",
-        "sourceType": "wingsdk.cloud.Logger",
-        "timestamp": "<TIMESTAMP>",
-        "type": "resource",
-      },
     ],
   },
 ]
@@ -154,24 +104,6 @@ exports[`run single test > happy path 1`] = `
   "pass": true,
   "path": "root/test",
   "traces": [
-    {
-      "data": {
-        "message": "wingsdk.cloud.Logger created.",
-      },
-      "sourcePath": "root/WingLogger",
-      "sourceType": "wingsdk.cloud.Logger",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
-    {
-      "data": {
-        "message": "wingsdk.cloud.Function created.",
-      },
-      "sourcePath": "root/test",
-      "sourceType": "wingsdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
     {
       "data": {
         "message": "hi",
@@ -192,24 +124,6 @@ exports[`run single test > happy path 1`] = `
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    {
-      "data": {
-        "message": "wingsdk.cloud.Function deleted.",
-      },
-      "sourcePath": "root/test",
-      "sourceType": "wingsdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
-    {
-      "data": {
-        "message": "wingsdk.cloud.Logger deleted.",
-      },
-      "sourcePath": "root/WingLogger",
-      "sourceType": "wingsdk.cloud.Logger",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
   ],
 }
 `;
@@ -217,37 +131,19 @@ exports[`run single test > happy path 1`] = `
 exports[`run single test > test failure 1`] = `
 {
   "error": "Error: test failed
-    at Handler.handle (evalmachine.<anonymous>:20:7)
-    at Object.exports.handler (evalmachine.<anonymous>:24:5)
-    at evalmachine.<anonymous>:26:9
-    at Script.runInContext (node:vm:141:12)
-    at Object.runInContext (node:vm:297:6)
 <sanitized>
-    at new Promise (<anonymous>)
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
 <sanitized>
 <sanitized>
 <sanitized>",
   "pass": false,
   "path": "root/test",
   "traces": [
-    {
-      "data": {
-        "message": "wingsdk.cloud.Logger created.",
-      },
-      "sourcePath": "root/WingLogger",
-      "sourceType": "wingsdk.cloud.Logger",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
-    {
-      "data": {
-        "message": "wingsdk.cloud.Function created.",
-      },
-      "sourcePath": "root/test",
-      "sourceType": "wingsdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
     {
       "data": {
         "message": "I am about to fail",
@@ -265,24 +161,6 @@ exports[`run single test > test failure 1`] = `
       },
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
-    {
-      "data": {
-        "message": "wingsdk.cloud.Function deleted.",
-      },
-      "sourcePath": "root/test",
-      "sourceType": "wingsdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
-    {
-      "data": {
-        "message": "wingsdk.cloud.Logger deleted.",
-      },
-      "sourcePath": "root/WingLogger",
-      "sourceType": "wingsdk.cloud.Logger",
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },

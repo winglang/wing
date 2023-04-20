@@ -5,7 +5,7 @@ import { runWingCommand } from "./utils";
 
 errorWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const args = ["test"];
+    const args = ["test", "-t", "sim"];
 
     const relativeWingFile = path.relative(
       tmpDir,

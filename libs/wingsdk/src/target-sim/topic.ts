@@ -1,16 +1,14 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
-import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
-import {
-  bindSimulatorResource,
-  makeSimulatorJsClient,
-  simulatorHandleToken,
-} from "./util";
+import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost, Resource } from "../std";
+import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**
@@ -19,11 +17,8 @@ import { convertBetweenHandlers } from "../utils/convert";
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements ISimulatorResource {
-  private readonly subscribers: TopicSubscriber[];
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
-
-    this.subscribers = [];
   }
 
   public onMessage(
@@ -46,13 +41,13 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       props
     );
 
-    this.node.addDependency(fn);
-
-    this.subscribers.push({
-      functionHandle: simulatorHandleToken(fn),
+    new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
+      subscriber: fn,
+      publisher: this,
+      subscriptionProps: {},
     });
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_message",
@@ -62,23 +57,21 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("topic", this, host);
+  public _bind(host: IInflightHost, ops: string[]): void {
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("topic", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 
   public toSimulator(): BaseResourceSchema {
     const schema: TopicSchema = {
       type: TOPIC_TYPE,
       path: this.node.path,
-      props: {
-        subscribers: this.subscribers,
-      },
+      props: {},
       attrs: {} as any,
     };
     return schema;

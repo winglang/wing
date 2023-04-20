@@ -1,13 +1,14 @@
 import { relative } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { FunctionSchema, FUNCTION_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { App } from "../core";
+import { IInflightHost } from "../std";
 import { Duration } from "../std/duration";
+import { BaseResourceSchema } from "../testing/simulator";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
   "WING_SIM_INFLIGHT_RESOURCE_PATH";
@@ -50,14 +51,14 @@ export class Function extends cloud.Function implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("function", this, host);
+  public _bind(host: IInflightHost, ops: string[]): void {
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("function", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 }
 

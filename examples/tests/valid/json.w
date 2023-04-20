@@ -76,3 +76,9 @@ let arr = Json [1, 2, b, "my", "shoe", 3, 4, [ "shut", "the", "door"]];
 assert(arr.get_at(0) == 1);
 assert(arr.get_at(2) == b);
 assert(arr.get_at(7).get_at(0) == "shut");
+
+// Nested Json with mixed Json and non-json literals
+Json {
+  a: Json [1, 2, "world"],
+  b: [1, 2, "world"], // Verify the type-checker knows we're still in a Json after handling `a` above
+};

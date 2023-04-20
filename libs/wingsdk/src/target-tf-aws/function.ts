@@ -4,13 +4,14 @@ import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
 import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
-import { BUCKET_PREFIX_OPTS } from "./bucket";
+import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { PolicyStatement } from "../shared-aws";
+import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 import { createBundle } from "../utils/bundling";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
@@ -23,6 +24,18 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 64,
   disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
 };
+
+/**
+ * Function network configuration
+ * used to hold data on subnets and security groups
+ * that should be used when a function is deployed within a VPC.
+ */
+export interface FunctionNetworkConfig {
+  /** list of subnets to attach on function */
+  readonly subnetIds: string[];
+  /** list of security groups to place function in */
+  readonly securityGroupIds: string[];
+}
 
 /**
  * options for granting invoke permissions to the current function
@@ -43,6 +56,9 @@ export class Function extends cloud.Function {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
+  private subnets?: Set<string>;
+  private securityGroups?: Set<string>;
+
   /**
    * Unqualified Function ARN
    * @returns Unqualified ARN of the function
@@ -76,9 +92,8 @@ export class Function extends cloud.Function {
     });
 
     // Create unique S3 bucket for hosting Lambda code
-    const bucket = new S3Bucket(this, "Code");
-    const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
-    bucket.bucketPrefix = bucketPrefix;
+    const app = App.of(this) as App;
+    const bucket = app.codeBucket;
 
     // Choose an object name so that:
     // - whenever code changes, the object name changes
@@ -115,24 +130,38 @@ export class Function extends cloud.Function {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
-          if ((this.policyStatements ?? []).length > 0) {
+          // If there are subnets to attach then the role needs to be able to
+          // create network interfaces
+          if ((this.subnets?.size ?? 0) !== 0) {
+            this.policyStatements?.push({
+              Effect: "Allow",
+              Action: [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+              ],
+              Resource: "*",
+            });
+          }
+          if ((this.policyStatements ?? []).length !== 0) {
             return JSON.stringify({
               Version: "2012-10-17",
               Statement: this.policyStatements,
             });
-          } else {
-            // policy must contain at least one statement, so include a no-op statement
-            return JSON.stringify({
-              Version: "2012-10-17",
-              Statement: [
-                {
-                  Effect: "Allow",
-                  Action: "none:null",
-                  Resource: "*",
-                },
-              ],
-            });
           }
+          // policy must contain at least one statement, so include a no-op statement
+          return JSON.stringify({
+            Version: "2012-10-17",
+            Statement: [
+              {
+                Effect: "Allow",
+                Action: "none:null",
+                Resource: "*",
+              },
+            ],
+          });
         },
       }),
     });
@@ -162,6 +191,16 @@ export class Function extends cloud.Function {
       runtime: "nodejs16.x",
       role: this.role.arn,
       publish: true,
+      vpcConfig: {
+        subnetIds: Lazy.listValue({
+          produce: () =>
+            this.subnets ? Array.from(this.subnets.values()) : [],
+        }),
+        securityGroupIds: Lazy.listValue({
+          produce: () =>
+            this.securityGroups ? Array.from(this.securityGroups.values()) : [],
+        }),
+      },
       environment: {
         variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
@@ -180,16 +219,15 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["lambda:InvokeFunction"],
-        resource: [`${this.function.arn}`],
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.function.arn}`],
       });
     }
 
@@ -211,6 +249,18 @@ export class Function extends cloud.Function {
   }
 
   /**
+   * Add VPC configurations to lambda function
+   */
+  public addNetworkConfig(vpcConfig: FunctionNetworkConfig) {
+    if (!this.subnets || !this.securityGroups) {
+      this.subnets = new Set();
+      this.securityGroups = new Set();
+    }
+    vpcConfig.subnetIds.forEach((subnet) => this.subnets!.add(subnet));
+    vpcConfig.securityGroupIds.forEach((sg) => this.securityGroups!.add(sg));
+  }
+
+  /**
    * Add a policy statement to the Lambda role.
    */
   public addPolicyStatements(...statements: PolicyStatement[]) {
@@ -221,13 +271,13 @@ export class Function extends cloud.Function {
       this.policyStatements = [];
     }
 
-    this.policyStatements.push(
-      ...statements.map((s) => ({
-        Action: s.action,
-        Resource: s.resource,
-        Effect: s.effect ?? "Allow",
-      }))
-    );
+    for (const statement of statements) {
+      this.policyStatements.push({
+        Action: statement.actions,
+        Resource: statement.resources,
+        Effect: statement.effect ?? "Allow",
+      });
+    }
   }
 
   /**
@@ -235,7 +285,7 @@ export class Function extends cloud.Function {
    * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
    */
   public addPermissionToInvoke(
-    source: core.Resource,
+    source: Resource,
     principal: string,
     sourceArn: string,
     options: FunctionPermissionsOptions = { qualifier: this.function.version }
@@ -261,18 +311,6 @@ export class Function extends cloud.Function {
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
-}
-
-/**
- * AWS IAM Policy Statement.
- */
-export interface PolicyStatement {
-  /** Actions */
-  readonly action?: string[];
-  /** Resources */
-  readonly resource?: string[] | string;
-  /** Effect ("Allow" or "Deny") */
-  readonly effect?: string;
 }
 
 Function._annotateInflight(cloud.FunctionInflightMethods.INVOKE, {});

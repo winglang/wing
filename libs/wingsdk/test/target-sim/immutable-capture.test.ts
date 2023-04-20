@@ -8,7 +8,7 @@ import {
   NodeJsCode,
 } from "../../src/core/inflight";
 import { Duration } from "../../src/std";
-import { SimApp } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 interface CaptureTest {
   bindings: InflightBindings;

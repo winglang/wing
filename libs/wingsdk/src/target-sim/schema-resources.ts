@@ -1,8 +1,12 @@
-import { BaseResourceAttributes, BaseResourceSchema } from "./schema";
 import { ColumnType, HttpMethod } from "../cloud";
+import {
+  BaseResourceAttributes,
+  BaseResourceSchema,
+} from "../testing/simulator";
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
+export const EVENT_MAPPING_TYPE = "wingsdk.sim.EventMapping";
 export const FUNCTION_TYPE = "wingsdk.cloud.Function";
 export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
@@ -10,9 +14,12 @@ export const COUNTER_TYPE = "wingsdk.cloud.Counter";
 export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
 export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
+export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
 export const REDIS_TYPE = "wingsdk.redis.Redis";
+export const SECRET_TYPE = "wingsdk.cloud.Secret";
 
 export type FunctionHandle = string;
+export type PublisherHandle = string;
 
 /** Schema for cloud.Api */
 export interface ApiSchema extends BaseResourceSchema {
@@ -62,20 +69,36 @@ export interface FunctionAttributes {}
 export interface QueueSchema extends BaseResourceSchema {
   readonly type: typeof QUEUE_TYPE;
   readonly props: {
-    /** How long a queue's consumers have to process a message, in milliseconds */
+    /** How long a queue's consumers have to process a message, in seconds */
     readonly timeout: number;
-    /** Function that should process queue messages. */
-    readonly subscribers: QueueSubscriber[];
     /** Initial messages to be pushed to the queue. */
     readonly initialMessages: string[];
   };
 }
 
+export interface EventSubscription {}
+
+/** Schema for sim.EventMapping */
+export interface EventMappingSchema extends BaseResourceSchema {
+  readonly type: typeof EVENT_MAPPING_TYPE;
+  readonly props: {
+    /** Function handle to call for subscriber */
+    subscriber: FunctionHandle;
+    /** Publisher handle of the event */
+    publisher: PublisherHandle;
+    /** Additional properties of event subscription */
+    subscriptionProps: EventSubscription;
+  };
+}
+
+/** Runtime attributes for cloud.EventMapping */
+export interface EventMappingAttributes {}
+
 /** Runtime attributes for cloud.Queue */
 export interface QueueAttributes {}
 
 /** Schema for cloud.Queue.props.subscribers */
-export interface QueueSubscriber {
+export interface QueueSubscriber extends EventSubscription {
   /** Function that should be called. */
   readonly functionHandle: FunctionHandle;
   /** Maximum number of messages that will be batched together to the subscriber. */
@@ -85,15 +108,13 @@ export interface QueueSubscriber {
 /** Schema for cloud.Topic */
 export interface TopicSchema extends BaseResourceSchema {
   readonly type: typeof TOPIC_TYPE;
-  readonly props: {
-    readonly subscribers: TopicSubscriber[];
-  };
+  readonly props: {};
 }
 
 /** Runtime attributes for cloud.Topic */
 export interface TopicAttributes {}
 
-export interface TopicSubscriber {
+export interface TopicSubscriber extends EventSubscription {
   /** Function that should be called */
   readonly functionHandle: FunctionHandle;
 }
@@ -147,6 +168,19 @@ export interface CounterSchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.Counter */
 export interface CounterAttributes {}
+
+/** Schema for cloud.TestRunner */
+export interface TestRunnerSchema extends BaseResourceSchema {
+  readonly type: typeof TEST_RUNNER_TYPE;
+  readonly props: {
+    /** A map from test functions to their handles. */
+    readonly tests: Record<string, FunctionHandle>;
+  };
+}
+
+/** Runtime attributes for cloud.TestRunner */
+export interface TestRunnerAttributes {}
+
 /** Schema for redis.Redis */
 export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_TYPE;
@@ -154,3 +188,15 @@ export interface RedisSchema extends BaseResourceSchema {
 }
 
 export interface RedisAttributes {}
+
+/** Schema for cloud.Secret */
+export interface SecretSchema extends BaseResourceSchema {
+  readonly type: typeof SECRET_TYPE;
+  readonly props: {
+    /** The name of the secret */
+    readonly name: string;
+  };
+}
+
+/** Runtime attributes for cloud.Secret */
+export interface SecretAttributes {}

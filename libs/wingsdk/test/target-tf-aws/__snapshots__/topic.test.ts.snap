@@ -2,6 +2,11 @@
 
 exports[`default topic behavior 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sns_topic\\": {
       \\"root_Topic_18CB51FA\\": {
@@ -46,23 +51,6 @@ exports[`default topic behavior 2`] = `
                 "id": "Topic",
                 "path": "root/Default/Topic",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -70,6 +58,33 @@ exports[`default topic behavior 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -109,6 +124,11 @@ exports[`default topic behavior 2`] = `
 
 exports[`replace invalid character from queue name 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sns_topic\\": {
       \\"root_TheSpectacularTopic_460D3DDF\\": {
@@ -153,23 +173,6 @@ exports[`replace invalid character from queue name 2`] = `
                 "id": "The%Spectacular@Topic",
                 "path": "root/Default/The%Spectacular@Topic",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -177,6 +180,33 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -216,6 +246,11 @@ exports[`replace invalid character from queue name 2`] = `
 
 exports[`topic name valid 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sns_topic\\": {
       \\"root_TheSpectacularTopic01_2487D43E\\": {
@@ -260,23 +295,6 @@ exports[`topic name valid 2`] = `
                 "id": "The-Spectacular_Topic-01",
                 "path": "root/Default/The-Spectacular_Topic-01",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -284,6 +302,33 @@ exports[`topic name valid 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -338,6 +383,11 @@ return class Handler {
 
 exports[`topic with subscriber function 2`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_TopicOnMessagec5395e41_IamRole_9BB6BE88\\": {
@@ -368,9 +418,13 @@ exports[`topic with subscriber function 2`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_TopicOnMessagec5395e41_IamRole_9BB6BE88.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_TopicOnMessagec5395e41_Code_97E7E354.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_TopicOnMessagec5395e41_S3Object_D172367F.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -382,13 +436,13 @@ exports[`topic with subscriber function 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_TopicOnMessagec5395e41_Code_97E7E354\\": {
-        \\"bucket_prefix\\": \\"code-c8092503-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_TopicOnMessagec5395e41_S3Object_D172367F\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_TopicOnMessagec5395e41_Code_97E7E354.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -417,6 +471,14 @@ exports[`topic with subscriber function 3`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -492,12 +554,6 @@ exports[`topic with subscriber function 3`] = `
                       "resource": "root/Default/Handler",
                     },
                     {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
-                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_message",
@@ -514,14 +570,6 @@ exports[`topic with subscriber function 3`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Topic-OnMessage-c5395e41/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -598,30 +646,6 @@ exports[`topic with subscriber function 3`] = `
                 "id": "Topic-OnMessageHandler-c5395e41",
                 "path": "root/Default/Topic-OnMessageHandler-c5395e41",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Topic-OnMessage-c5395e41",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -629,6 +653,33 @@ exports[`topic with subscriber function 3`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

@@ -1,0 +1,178 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`When creating a Redis resource > should create an elasticache cluster and required vpc networking resources 1`] = `
+"{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
+  \\"resource\\": {
+    \\"aws_eip\\": {
+      \\"root_EIP_ED59AD4B\\": {}
+    },
+    \\"aws_elasticache_cluster\\": {
+      \\"root_Redis_RedisCluster_4A66BDDD\\": {
+        \\"availability_zone\\": \\"\${aws_subnet.root_PrivateSubnet_8A5D9DDE.availability_zone}\\",
+        \\"cluster_id\\": \\"redis-c8cdb969\\",
+        \\"engine\\": \\"redis\\",
+        \\"engine_version\\": \\"6.2\\",
+        \\"node_type\\": \\"cache.t4g.small\\",
+        \\"num_cache_nodes\\": 1,
+        \\"parameter_group_name\\": \\"default.redis6.x\\",
+        \\"security_group_ids\\": [
+          \\"\${aws_security_group.root_Redis_securityGroup_1D7A26CB.id}\\"
+        ],
+        \\"subnet_group_name\\": \\"\${aws_elasticache_subnet_group.root_Redis_RedisSubnetGroup_CD9402AB.name}\\"
+      }
+    },
+    \\"aws_elasticache_subnet_group\\": {
+      \\"root_Redis_RedisSubnetGroup_CD9402AB\\": {
+        \\"name\\": \\"redis-c8cdb969-subnetGroup\\",
+        \\"subnet_ids\\": [
+          \\"\${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}\\"
+        ]
+      }
+    },
+    \\"aws_internet_gateway\\": {
+      \\"root_InternetGateway_8BBAF39E\\": {
+        \\"tags\\": {
+          \\"Name\\": \\"Default-c82bf964-internet-gateway\\"
+        },
+        \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
+      }
+    },
+    \\"aws_nat_gateway\\": {
+      \\"root_NATGateway_23214D12\\": {
+        \\"allocation_id\\": \\"\${aws_eip.root_EIP_ED59AD4B.id}\\",
+        \\"subnet_id\\": \\"\${aws_subnet.root_PublicSubnet_C9666BAA.id}\\",
+        \\"tags\\": {
+          \\"Name\\": \\"Default-c82bf964-nat-gateway\\"
+        }
+      }
+    },
+    \\"aws_route_table\\": {
+      \\"root_PrivateRouteTable_E7613E5F\\": {
+        \\"route\\": [
+          {
+            \\"carrier_gateway_id\\": null,
+            \\"cidr_block\\": \\"0.0.0.0/0\\",
+            \\"core_network_arn\\": null,
+            \\"destination_prefix_list_id\\": null,
+            \\"egress_only_gateway_id\\": null,
+            \\"gateway_id\\": null,
+            \\"instance_id\\": null,
+            \\"ipv6_cidr_block\\": null,
+            \\"local_gateway_id\\": null,
+            \\"nat_gateway_id\\": \\"\${aws_nat_gateway.root_NATGateway_23214D12.id}\\",
+            \\"network_interface_id\\": null,
+            \\"transit_gateway_id\\": null,
+            \\"vpc_endpoint_id\\": null,
+            \\"vpc_peering_connection_id\\": null
+          }
+        ],
+        \\"tags\\": {
+          \\"Name\\": \\"Default-c82bf964-private-route-table-1\\"
+        },
+        \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
+      },
+      \\"root_PublicRouteTable_36451040\\": {
+        \\"route\\": [
+          {
+            \\"carrier_gateway_id\\": null,
+            \\"cidr_block\\": \\"0.0.0.0/0\\",
+            \\"core_network_arn\\": null,
+            \\"destination_prefix_list_id\\": null,
+            \\"egress_only_gateway_id\\": null,
+            \\"gateway_id\\": \\"\${aws_internet_gateway.root_InternetGateway_8BBAF39E.id}\\",
+            \\"instance_id\\": null,
+            \\"ipv6_cidr_block\\": null,
+            \\"local_gateway_id\\": null,
+            \\"nat_gateway_id\\": null,
+            \\"network_interface_id\\": null,
+            \\"transit_gateway_id\\": null,
+            \\"vpc_endpoint_id\\": null,
+            \\"vpc_peering_connection_id\\": null
+          }
+        ],
+        \\"tags\\": {
+          \\"Name\\": \\"Default-c82bf964-public-route-table-1\\"
+        },
+        \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
+      }
+    },
+    \\"aws_route_table_association\\": {
+      \\"root_PrivateRouteTableAssociation_A90EF7F6\\": {
+        \\"route_table_id\\": \\"\${aws_route_table.root_PrivateRouteTable_E7613E5F.id}\\",
+        \\"subnet_id\\": \\"\${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}\\"
+      },
+      \\"root_PublicRouteTableAssociation_22B41679\\": {
+        \\"route_table_id\\": \\"\${aws_route_table.root_PublicRouteTable_36451040.id}\\",
+        \\"subnet_id\\": \\"\${aws_subnet.root_PublicSubnet_C9666BAA.id}\\"
+      }
+    },
+    \\"aws_security_group\\": {
+      \\"root_Redis_securityGroup_1D7A26CB\\": {
+        \\"egress\\": [
+          {
+            \\"cidr_blocks\\": [
+              \\"0.0.0.0/0\\"
+            ],
+            \\"description\\": null,
+            \\"from_port\\": 0,
+            \\"ipv6_cidr_blocks\\": null,
+            \\"prefix_list_ids\\": null,
+            \\"protocol\\": \\"-1\\",
+            \\"security_groups\\": null,
+            \\"self\\": null,
+            \\"to_port\\": 0
+          }
+        ],
+        \\"ingress\\": [
+          {
+            \\"cidr_blocks\\": [
+              \\"\${aws_subnet.root_PrivateSubnet_8A5D9DDE.cidr_block}\\"
+            ],
+            \\"description\\": null,
+            \\"from_port\\": 6379,
+            \\"ipv6_cidr_blocks\\": null,
+            \\"prefix_list_ids\\": null,
+            \\"protocol\\": \\"tcp\\",
+            \\"security_groups\\": null,
+            \\"self\\": true,
+            \\"to_port\\": 6379
+          }
+        ],
+        \\"name\\": \\"3542402a-securityGroup\\",
+        \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
+      }
+    },
+    \\"aws_subnet\\": {
+      \\"root_PrivateSubnet_8A5D9DDE\\": {
+        \\"cidr_block\\": \\"10.0.4.0/22\\",
+        \\"tags\\": {
+          \\"Name\\": \\"Default-c82bf964-private-subnet-1\\"
+        },
+        \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
+      },
+      \\"root_PublicSubnet_C9666BAA\\": {
+        \\"cidr_block\\": \\"10.0.0.0/24\\",
+        \\"tags\\": {
+          \\"Name\\": \\"Default-c82bf964-public-subnet-1\\"
+        },
+        \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
+      }
+    },
+    \\"aws_vpc\\": {
+      \\"root_VPC_15726F37\\": {
+        \\"cidr_block\\": \\"10.0.0.0/16\\",
+        \\"enable_dns_hostnames\\": true,
+        \\"enable_dns_support\\": true,
+        \\"tags\\": {
+          \\"Name\\": \\"Default-c82bf964-vpc\\"
+        }
+      }
+    }
+  }
+}"
+`;

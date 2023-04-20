@@ -1,8 +1,10 @@
-import { ISimulatorResourceInstance } from "./resource";
 import { TableAttributes, TableSchema } from "./schema-resources";
 import { ColumnType, ITableClient } from "../cloud";
 import { Json } from "../std";
-import { ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export class Table implements ITableClient, ISimulatorResourceInstance {
   private name: string;

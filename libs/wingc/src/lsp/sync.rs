@@ -1,4 +1,5 @@
 use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
+use wingii::type_system::TypeSystem;
 
 use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
@@ -30,6 +31,7 @@ thread_local! {
 	/// This means that it cannot reliably manage stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
 	pub static FILES: RefCell<HashMap<Url,FileData>> = RefCell::new(HashMap::new());
+	pub static JSII_TYPES: RefCell<TypeSystem> = RefCell::new(TypeSystem::new());
 }
 
 #[no_mangle]
@@ -42,13 +44,16 @@ pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
 	}
 }
 pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
-	FILES.with(|files| {
-		let uri = params.text_document.uri;
-		let uri_path = uri.to_file_path().unwrap();
-		let path = uri_path.to_str().unwrap();
-		let result = partial_compile(path, params.text_document.text.as_bytes());
-		send_diagnostics(&uri, &result.diagnostics);
-		files.borrow_mut().insert(uri, result);
+	JSII_TYPES.with(|jsii_types| {
+		FILES.with(|files| {
+			let uri = params.text_document.uri;
+			let uri_path = uri.to_file_path().unwrap();
+			let path = uri_path.to_str().unwrap();
+
+			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut jsii_types.borrow_mut());
+			send_diagnostics(&uri, &result.diagnostics);
+			files.borrow_mut().insert(uri, result);
+		});
 	});
 }
 
@@ -62,40 +67,45 @@ pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
 	}
 }
 pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
-	FILES.with(|files| {
-		let uri = params.text_document.uri;
-		let uri_path = uri.to_file_path().unwrap();
-		let path = uri_path.to_str().unwrap();
+	JSII_TYPES.with(|jsii_types| {
+		FILES.with(|files| {
+			let uri = params.text_document.uri;
+			let uri_path = uri.to_file_path().unwrap();
+			let path = uri_path.to_str().unwrap();
 
-		let result = partial_compile(path, params.content_changes[0].text.as_bytes());
-
-		send_diagnostics(&uri, &result.diagnostics);
-		files.borrow_mut().insert(uri, result);
-	});
+			let result = partial_compile(
+				path,
+				params.content_changes[0].text.as_bytes(),
+				&mut jsii_types.borrow_mut(),
+			);
+			send_diagnostics(&uri, &result.diagnostics);
+			files.borrow_mut().insert(uri, result);
+		});
+	})
 }
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
-fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
+fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) -> FileData {
 	let mut types = type_check::Types::new();
 
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
 
-	let tree = match parser.parse(&text[..], None) {
+	let tree = match parser.parse(text, None) {
 		Some(tree) => tree,
 		None => {
 			panic!("Failed parsing source file: {}", source_file);
 		}
 	};
 
-	let wing_parser = Parser::new(&text[..], source_file.to_string());
+	let wing_parser = Parser::new(text, source_file.to_string());
 
 	// Note: The scope is intentionally boxed here to force heap allocation
 	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
 	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
 
-	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
+	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
 
 	// Analyze inflight captures
 	let mut capture_visitor = CaptureVisitor::new();

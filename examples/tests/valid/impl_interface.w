@@ -1,13 +1,13 @@
 bring cloud;
 
-resource A impl cloud.IQueueOnMessageHandler {
+resource A impl cloud.IQueueAddConsumerHandler {
   init() {}
   inflight handle(msg: str) {
     return;
   }
 }
 
-let x: cloud.IQueueOnMessageHandler = new A();
+let x: cloud.IQueueAddConsumerHandler = new A();
 
 let y = inflight () => {
   x.handle("hello world!");

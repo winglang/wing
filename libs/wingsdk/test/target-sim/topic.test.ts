@@ -2,11 +2,12 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import * as testing from "../../src/testing";
-import { SimApp, Testing } from "../../src/testing";
+import { Testing } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 test("create a topic", async () => {
   // GIVEN
-  const app = new testing.SimApp();
+  const app = new SimApp();
   cloud.Topic._newTopic(app, "my_topic");
   const s = await app.startSimulator();
 
@@ -16,9 +17,7 @@ test("create a topic", async () => {
       handle: expect.any(String),
     },
     path: "root/my_topic",
-    props: {
-      subscribers: [],
-    },
+    props: {},
     type: "wingsdk.cloud.Topic",
   });
   await s.stop();
@@ -28,7 +27,7 @@ test("create a topic", async () => {
 
 test("topic publishes messages as they are received", async () => {
   // GIVEN
-  const app = new testing.SimApp();
+  const app = new SimApp();
   const handler = Testing.makeHandler(
     app,
     "Handler",
@@ -51,7 +50,7 @@ test("topic publishes messages as they are received", async () => {
 
 test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
-  const app = new testing.SimApp();
+  const app = new SimApp();
   const handler = Testing.makeHandler(
     app,
     "Handler1",

@@ -4,7 +4,7 @@ import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType, IBucketEventHandler } from "../../src/cloud";
 import { Inflight, NodeJsCode } from "../../src/core";
-import { SimApp } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 class InflightBucketEventHandler
   extends Inflight

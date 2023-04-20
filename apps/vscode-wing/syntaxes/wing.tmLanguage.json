@@ -121,15 +121,15 @@
         },
         {
           "name": "storage.modifier.wing",
-          "match": "\\b(inflight|preflight|var|let|protected|internal|static|extends|extern)\\b"
+          "match": "\\b(inflight|preflight|var|let|protected|internal|static|extends|impl|extern)\\b"
         },
         {
           "name": "storage.type.wing",
-          "match": "\\b(class|resource|struct|enum)\\b"
+          "match": "\\b(class|resource|struct|enum|interface)\\b"
         },
         {
           "name": "support.function.wing",
-          "match": "\\b(print|assert|throw|panic)\\b"
+          "match": "\\b(log|assert|throw|panic)\\b"
         }
       ]
     },

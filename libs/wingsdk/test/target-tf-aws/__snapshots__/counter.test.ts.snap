@@ -2,6 +2,11 @@
 
 exports[`counter name valid 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_TheAmazingCounter01_86E53E0B\\": {
@@ -54,23 +59,6 @@ exports[`counter name valid 2`] = `
                 "id": "The.Amazing-Counter_01",
                 "path": "root/Default/The.Amazing-Counter_01",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -78,6 +66,33 @@ exports[`counter name valid 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -117,6 +132,11 @@ exports[`counter name valid 2`] = `
 
 exports[`counter with initial value 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Counter_2358A01E\\": {
@@ -169,23 +189,6 @@ exports[`counter with initial value 2`] = `
                 "id": "Counter",
                 "path": "root/Default/Counter",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -193,6 +196,33 @@ exports[`counter with initial value 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -232,6 +262,11 @@ exports[`counter with initial value 2`] = `
 
 exports[`dec() policy statement 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Counter_2358A01E\\": {
@@ -253,7 +288,7 @@ exports[`dec() policy statement 1`] = `
     },
     \\"aws_iam_role_policy\\": {
       \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
@@ -276,19 +311,23 @@ exports[`dec() policy statement 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -305,6 +344,14 @@ exports[`dec() policy statement 2`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -347,12 +394,6 @@ exports[`dec() policy statement 2`] = `
                       "relationship": "dec",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -364,14 +405,6 @@ exports[`dec() policy statement 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -442,30 +475,6 @@ exports[`dec() policy statement 2`] = `
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -473,6 +482,33 @@ exports[`dec() policy statement 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -512,6 +548,11 @@ exports[`dec() policy statement 2`] = `
 
 exports[`default counter behavior 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Counter_2358A01E\\": {
@@ -550,6 +591,11 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 
 exports[`function with a counter binding 2`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Counter_2358A01E\\": {
@@ -571,7 +617,7 @@ exports[`function with a counter binding 2`] = `
     },
     \\"aws_iam_role_policy\\": {
       \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
@@ -594,19 +640,23 @@ exports[`function with a counter binding 2`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -623,6 +673,14 @@ exports[`function with a counter binding 3`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -665,12 +723,6 @@ exports[`function with a counter binding 3`] = `
                       "relationship": "inc",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -682,14 +734,6 @@ exports[`function with a counter binding 3`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -760,30 +804,6 @@ exports[`function with a counter binding 3`] = `
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -791,6 +811,33 @@ exports[`function with a counter binding 3`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -830,6 +877,11 @@ exports[`function with a counter binding 3`] = `
 
 exports[`inc() policy statement 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Counter_2358A01E\\": {
@@ -851,7 +903,7 @@ exports[`inc() policy statement 1`] = `
     },
     \\"aws_iam_role_policy\\": {
       \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
@@ -874,19 +926,23 @@ exports[`inc() policy statement 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -903,6 +959,14 @@ exports[`inc() policy statement 2`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -945,12 +1009,6 @@ exports[`inc() policy statement 2`] = `
                       "relationship": "inc",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -962,14 +1020,6 @@ exports[`inc() policy statement 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -1040,30 +1090,6 @@ exports[`inc() policy statement 2`] = `
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -1071,6 +1097,33 @@ exports[`inc() policy statement 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -1110,6 +1163,11 @@ exports[`inc() policy statement 2`] = `
 
 exports[`peek() policy statement 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Counter_2358A01E\\": {
@@ -1131,7 +1189,7 @@ exports[`peek() policy statement 1`] = `
     },
     \\"aws_iam_role_policy\\": {
       \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:GetItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:GetItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
@@ -1154,19 +1212,23 @@ exports[`peek() policy statement 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -1183,6 +1245,14 @@ exports[`peek() policy statement 2`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -1225,12 +1295,6 @@ exports[`peek() policy statement 2`] = `
                       "relationship": "peek",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -1242,14 +1306,6 @@ exports[`peek() policy statement 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -1320,30 +1376,6 @@ exports[`peek() policy statement 2`] = `
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -1351,6 +1383,33 @@ exports[`peek() policy statement 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -1390,6 +1449,11 @@ exports[`peek() policy statement 2`] = `
 
 exports[`replace invalid character from counter name 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_TheAmazingCounter01_CDE0F8E2\\": {
@@ -1442,23 +1506,6 @@ exports[`replace invalid character from counter name 2`] = `
                 "id": "The*Amazing%Counter@01",
                 "path": "root/Default/The*Amazing%Counter@01",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -1466,6 +1513,33 @@ exports[`replace invalid character from counter name 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -1505,6 +1579,11 @@ exports[`replace invalid character from counter name 2`] = `
 
 exports[`reset() policy statement 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Counter_2358A01E\\": {
@@ -1526,7 +1605,7 @@ exports[`reset() policy statement 1`] = `
     },
     \\"aws_iam_role_policy\\": {
       \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
@@ -1549,19 +1628,23 @@ exports[`reset() policy statement 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -1578,6 +1661,14 @@ exports[`reset() policy statement 2`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -1620,12 +1711,6 @@ exports[`reset() policy statement 2`] = `
                       "relationship": "reset",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -1637,14 +1722,6 @@ exports[`reset() policy statement 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -1715,30 +1792,6 @@ exports[`reset() policy statement 2`] = `
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -1746,6 +1799,33 @@ exports[`reset() policy statement 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

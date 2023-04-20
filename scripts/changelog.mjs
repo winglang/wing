@@ -3,6 +3,7 @@
 import * as changelogen from "changelogen";
 import * as semver from "semver";
 import { appendFileSync } from "fs";
+import { execSync } from "child_process";
 
 const inAction = process.env.GITHUB_ACTIONS === "true";
 
@@ -43,11 +44,16 @@ async function getData() {
     },
   });
 
-  const lastTag = await changelogen.getLastGitTag();
+  const lastTag = execSync("git tag --sort=committerdate | tail -1", { encoding: "utf8" }).trim();
   const lastVersion = lastTag.replace("v", "");
+
+  let currentRef =  await changelogen.getCurrentGitRef();
+  // if the current Ref is multiple lines (multiple tags), get the last (latest) one
+  currentRef = currentRef.split("\n").pop() ?? currentRef;
+
   const commits = await changelogen.getGitDiff(
     lastTag,
-    await changelogen.getCurrentGitRef()
+    currentRef
   );
 
   const parsed = changelogen.parseCommits(commits, config);

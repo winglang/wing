@@ -1,14 +1,11 @@
 import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
 import { join } from "path";
-import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
-import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { PluginManager } from "./plugin-manager";
-import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
-import { Logger } from "../cloud/logger";
+import { IResource } from "../std/resource";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -40,6 +37,12 @@ export interface AppProps {
    * @default - [] no plugins
    */
   readonly plugins?: string[];
+
+  /**
+   * Whether or not this app is being synthesized into a test environment.
+   * @default false
+   */
+  readonly isTestEnvironment?: boolean;
 }
 
 /**
@@ -62,9 +65,28 @@ export abstract class App extends Construct {
   }
 
   /**
+   * Loads the `App` class for the given target.
+   * @param target one of the supported targets
+   * @returns an `App` class constructor
+   */
+  public static for(target: string): any {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      return require(`../target-${target}/app`).App;
+    } catch {
+      throw new Error(`Unknown compilation target: "${target}"`);
+    }
+  }
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
+
+  /**
+   * Whether or not this app is being synthesized into a test environment.
+   */
+  public abstract readonly isTestEnvironment: boolean;
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit
@@ -159,6 +181,7 @@ export abstract class CdktfApp extends App {
    */
   public readonly terraformManifestPath: string;
   public readonly outdir: string;
+  public readonly isTestEnvironment: boolean;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
@@ -166,8 +189,6 @@ export abstract class CdktfApp extends App {
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
-  private awsRegionProvider?: DataAwsRegion;
-  private awsAccountIdProvider?: DataAwsCallerIdentity;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -180,7 +201,14 @@ export abstract class CdktfApp extends App {
 
     super(cdktfStack, "Default");
 
+    // TODO: allow the user to specify custom backends
+    // https://github.com/winglang/wing/issues/2003
+    new cdktf.LocalBackend(cdktfStack, {
+      path: "./terraform.tfstate",
+    });
+
     this.outdir = outdir;
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
@@ -206,29 +234,6 @@ export abstract class CdktfApp extends App {
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
     this.synthed = false;
-
-    // register a logger for this app.
-    Logger.register(this);
-  }
-
-  /**
-   * The AWS account ID of the App
-   */
-  public get accountId(): string {
-    if (!this.awsAccountIdProvider) {
-      this.awsAccountIdProvider = new DataAwsCallerIdentity(this, "account");
-    }
-    return this.awsAccountIdProvider.accountId;
-  }
-
-  /**
-   * The AWS region of the App
-   */
-  public get region(): string {
-    if (!this.awsRegionProvider) {
-      this.awsRegionProvider = new DataAwsRegion(this, "Region");
-    }
-    return this.awsRegionProvider.name;
   }
 
   /**

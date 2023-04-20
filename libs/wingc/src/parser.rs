@@ -7,9 +7,10 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
-	FunctionDefinition, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
+	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
+	UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -65,9 +66,9 @@ impl<'s> Parser<'s> {
 		scope
 	}
 
-	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
+	fn add_error<T>(&self, message: impl ToString, node: &Node) -> Result<T, ()> {
 		let diag = Diagnostic {
-			message,
+			message: message.to_string(),
 			span: Some(self.node_span(node)),
 			level: DiagnosticLevel::Error,
 		};
@@ -124,7 +125,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn node_symbol<'a>(&'a self, node: &Node) -> DiagnosticResult<Symbol> {
+	fn node_symbol(&self, node: &Node) -> DiagnosticResult<Symbol> {
 		let checked_node = self.check_error(*node, "symbol")?;
 		Ok(Symbol {
 			span: self.node_span(&checked_node),
@@ -145,7 +146,7 @@ impl<'s> Parser<'s> {
 			"hours" => Ok(Literal::Duration(
 				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
 			)),
-			"ERROR" => self.add_error(format!("Expected duration type"), &node),
+			"ERROR" => self.add_error("Expected duration type", &node),
 			other => self.report_unimplemented_grammar(other, "duration type", node),
 		}
 	}
@@ -160,7 +161,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_scope<'a>(&self, scope_node: &Node) -> Scope {
+	fn build_scope(&self, scope_node: &Node) -> Scope {
 		let mut cursor = scope_node.walk();
 
 		Scope {
@@ -196,7 +197,7 @@ impl<'s> Parser<'s> {
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
-			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
+			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
@@ -282,7 +283,7 @@ impl<'s> Parser<'s> {
 	fn build_break_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		if !*self.is_in_loop.borrow() {
 			return self.add_error::<StmtKind>(
-				format!("Expected break statement to be inside of a loop (while/for)"),
+				"Expected break statement to be inside of a loop (while/for)",
 				statement_node,
 			);
 		}
@@ -292,7 +293,7 @@ impl<'s> Parser<'s> {
 	fn build_continue_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		if !*self.is_in_loop.borrow() {
 			return self.add_error::<StmtKind>(
-				format!("Expected continue statement to be inside of a loop (while/for)"),
+				"Expected continue statement to be inside of a loop (while/for)",
 				statement_node,
 			);
 		}
@@ -341,22 +342,34 @@ impl<'s> Parser<'s> {
 		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
 			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
 			let type_ = &self.get_child_field(&field_node, "type")?;
-			let f = ClassField {
+			let f = StructField {
 				name: identifier,
 				member_type: self.build_type_annotation(&type_)?,
-				reassignable: false,
-				phase: Phase::Independent,
-				is_static: false,
 			};
 			members.push(f);
 		}
 
 		let mut extends = vec![];
 		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
-			extends.push(self.node_symbol(&super_node)?);
+			let super_type = self.build_type_annotation(&super_node)?;
+			match super_type {
+				TypeAnnotation::UserDefined(t) => {
+					extends.push(t);
+				}
+				_ => {
+					self.add_error::<Node>(
+						format!("Extended type must be a user defined type, found {}", super_type),
+						&super_node,
+					)?;
+				}
+			}
 		}
 
-		Ok(StmtKind::Struct { name, extends, members })
+		Ok(StmtKind::Struct {
+			name,
+			extends,
+			fields: members,
+		})
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
@@ -424,7 +437,8 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
-		let mut constructor = None;
+		let mut initializer = None;
+		let mut inflight_initializer = None;
 		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		for class_element in statement_node
 			.child_by_field_name("implementation")
@@ -456,9 +470,8 @@ impl<'s> Parser<'s> {
 					if is_static {
 						self.diagnostics.borrow_mut().push(Diagnostic {
 							level: DiagnosticLevel::Error,
-							message: format!(
-								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
-							),
+							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
+								.to_string(),
 							span: Some(self.node_span(&class_element)),
 						});
 					}
@@ -471,9 +484,7 @@ impl<'s> Parser<'s> {
 						phase: match class_element.child_by_field_name("phase_modifier") {
 							Some(n) => {
 								if !is_resource {
-									self
-										.add_error::<Node>(format!("Class cannot have inflight fields"), &n)
-										.err();
+									self.add_error::<Node>("Class cannot have inflight fields", &n).err();
 								}
 								Phase::Inflight
 							}
@@ -481,32 +492,65 @@ impl<'s> Parser<'s> {
 						},
 					})
 				}
-				("constructor", _) => {
-					if let Some(_) = constructor {
+				("initializer", _) => {
+					let is_inflight = class_element.child_by_field_name("inflight").is_some();
+					if initializer.is_some() && !is_inflight {
 						self
 							.add_error::<Node>(
-								format!("Multiple constructors defined in class {:?}", statement_node),
+								format!("Multiple initializers defined in class {}", name.name),
+								&class_element,
+							)
+							.err();
+					} else if inflight_initializer.is_some() && is_inflight {
+						self
+							.add_error::<Node>(
+								format!("Multiple inflight initializers defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
 					}
-					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
-					constructor = Some(Constructor {
-						parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
-						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
-						signature: FunctionSignature {
-							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-							return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
-								root: name.clone(),
-								fields: vec![],
-							}))),
-							phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
-						},
-					})
+					if !is_resource && is_inflight {
+						self
+							.add_error::<Node>("Class cannot have an inflight initializers", &class_element)
+							.err();
+					}
+					let parameters_node = class_element.child_by_field_name("parameter_list").unwrap();
+					let parameters = self.build_parameter_list(&parameters_node)?;
+					if !parameters.is_empty() && is_inflight {
+						self
+							.add_error::<Node>("Inflight initializers cannot have parameters", &parameters_node)
+							.err();
+					}
+					if is_inflight {
+						inflight_initializer = Some(FunctionDefinition {
+							body: FunctionBody::Statements(self.build_scope(&class_element.child_by_field_name("block").unwrap())),
+							signature: FunctionSignature {
+								parameters: vec![], // Inflight initializers cannot have parameters
+								return_type: None,
+								phase: Phase::Inflight,
+							},
+							is_static: false,
+							span: self.node_span(&class_element),
+							captures: RefCell::new(None),
+						})
+					} else {
+						initializer = Some(Initializer {
+							statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
+							signature: FunctionSignature {
+								parameters,
+								return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
+									root: name.clone(),
+									fields: vec![],
+								}))),
+								phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
+							},
+							span: self.node_span(&class_element),
+						})
+					}
 				}
 				("ERROR", _) => {
 					self
-						.add_error::<Node>(format!("Expected class element node"), &class_element)
+						.add_error::<Node>("Expected class element node", &class_element)
 						.err();
 				}
 				(other, _) => {
@@ -519,7 +563,7 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
-		if constructor.is_none() {
+		if initializer.is_none() {
 			self.add_error::<Node>(
 				format!(
 					"No constructor defined in {} {:?}",
@@ -579,8 +623,9 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			constructor: constructor.unwrap(),
+			initializer: initializer.unwrap(),
 			is_resource,
+			inflight_initializer,
 		}))
 	}
 
@@ -617,7 +662,7 @@ impl<'s> Parser<'s> {
 				}
 				"ERROR" => {
 					self
-						.add_error::<Node>(format!("Expected interface element node"), &interface_element)
+						.add_error::<Node>("Expected interface element node", &interface_element)
 						.err();
 				}
 				other => {
@@ -650,13 +695,14 @@ impl<'s> Parser<'s> {
 
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
 		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap())?;
+		let return_type = if let Some(rt) = func_sig_node.child_by_field_name("type") {
+			Some(Box::new(self.build_type_annotation(&rt)?))
+		} else {
+			None
+		};
 		Ok(FunctionSignature {
-			parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-			return_type: if let Some(rt) = func_sig_node.child_by_field_name("type") {
-				Some(Box::new(self.build_type_annotation(&rt)?))
-			} else {
-				None
-			},
+			parameters,
+			return_type,
 			phase,
 		})
 	}
@@ -666,8 +712,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
-
+		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
 			let node_text = &node_text[1..node_text.len() - 1];
@@ -677,17 +722,8 @@ impl<'s> Parser<'s> {
 		};
 
 		Ok(FunctionDefinition {
-			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 			body: statements,
-			signature: FunctionSignature {
-				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
-					Some(Box::new(self.build_type_annotation(&rt)?))
-				} else {
-					None
-				},
-				phase,
-			},
+			signature,
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
 			span: self.node_span(func_def_node),
@@ -699,7 +735,7 @@ impl<'s> Parser<'s> {
 	/// # Returns
 	/// A vector of tuples for each parameter in the list. The tuples are the name, type and a bool letting
 	/// us know whether the parameter is reassignable or not respectively.
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, TypeAnnotation, bool)>> {
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<FunctionParameter>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
@@ -707,11 +743,11 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			res.push((
-				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				self.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap())?,
-				parameter_definition_node.child_by_field_name("reassignable").is_some(),
-			))
+			res.push(FunctionParameter {
+				name: self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
+				type_annotation: self.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+				reassignable: parameter_definition_node.child_by_field_name("reassignable").is_some(),
+			});
 		}
 
 		Ok(res)
@@ -724,7 +760,7 @@ impl<'s> Parser<'s> {
 				"str" => Ok(TypeAnnotation::String),
 				"bool" => Ok(TypeAnnotation::Bool),
 				"duration" => Ok(TypeAnnotation::Duration),
-				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
+				"ERROR" => self.add_error("Expected builtin type", type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
@@ -735,15 +771,15 @@ impl<'s> Parser<'s> {
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
-				let parameters = param_type_list_node
+				let param_types = param_type_list_node
 					.named_children(&mut cursor)
 					.filter_map(|param_type| self.build_type_annotation(&param_type).ok())
 					.collect::<Vec<TypeAnnotation>>();
 				let return_type = type_node
 					.child_by_field_name("return_type")
 					.map(|n| Box::new(self.build_type_annotation(&n).unwrap()));
-				Ok(TypeAnnotation::FunctionSignature(FunctionSignature {
-					parameters,
+				Ok(TypeAnnotation::Function(FunctionTypeAnnotation {
+					param_types,
 					return_type,
 					phase: if type_node.child_by_field_name("inflight").is_some() {
 						Phase::Inflight
@@ -782,18 +818,18 @@ impl<'s> Parser<'s> {
 					"MutSet" => Ok(TypeAnnotation::MutSet(Box::new(
 						self.build_type_annotation(&element_type)?,
 					))),
-					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
+					"ERROR" => self.add_error("Expected builtin container type", type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
 			}
-			"ERROR" => self.add_error(format!("Expected type"), type_node),
+			"ERROR" => self.add_error("Expected type", type_node),
 			other => self.report_unimplemented_grammar(other, "type", type_node),
 		}
 	}
 
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
 		if nested_node.has_error() {
-			return self.add_error(format!("Syntax error"), &nested_node);
+			return self.add_error("Syntax error", &nested_node);
 		}
 		if let Some(property) = nested_node.child_by_field_name("property") {
 			let object_expr = self.get_child_field(nested_node, "object")?;
@@ -821,7 +857,7 @@ impl<'s> Parser<'s> {
 			})
 		} else {
 			self.add_error(
-				format!("Expected property"),
+				"Expected property",
 				&nested_node
 					.child(nested_node.child_count() - 1)
 					.expect("Nested identifier should have at least one child"),
@@ -863,7 +899,7 @@ impl<'s> Parser<'s> {
 			match child.kind() {
 				"positional_argument" => {
 					if seen_keyword_args {
-						self.add_error(format!("Positional arguments must come before named arguments"), &child)?;
+						self.add_error("Positional arguments must come before named arguments", &child)?;
 					}
 					pos_args.push(self.build_expression(&child)?);
 				}
@@ -872,13 +908,13 @@ impl<'s> Parser<'s> {
 					let arg_name_node = &child.named_child(0).unwrap();
 					let arg_name = self.node_symbol(arg_name_node)?;
 					if named_args.contains_key(&arg_name) {
-						_ = self.add_error::<ArgList>(format!("Duplicate argument name"), arg_name_node);
+						_ = self.add_error::<ArgList>("Duplicate argument name", arg_name_node);
 					} else {
 						named_args.insert(arg_name, self.build_expression(&child.named_child(1).unwrap())?);
 					}
 				}
 				"ERROR" => {
-					self.add_error::<ArgList>(format!("Invalid argument(s)"), &child)?;
+					self.add_error::<ArgList>("Invalid argument(s)", &child)?;
 				}
 				other => panic!("Unexpected argument type {} || {:#?}", other, child),
 			}
@@ -940,7 +976,7 @@ impl<'s> Parser<'s> {
 						"\\" => BinaryOperator::FloorDiv,
 						"**" => BinaryOperator::Power,
 						"??" => BinaryOperator::UnwrapOr,
-						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
+						"ERROR" => self.add_error::<BinaryOperator>("Expected binary operator", expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
 				},
@@ -951,7 +987,7 @@ impl<'s> Parser<'s> {
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 						"-" => UnaryOperator::Minus,
 						"!" => UnaryOperator::Not,
-						"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
+						"ERROR" => self.add_error::<UnaryOperator>("Expected unary operator", expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "unary operator", expression_node),
 					},
 					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
@@ -1016,7 +1052,33 @@ impl<'s> Parser<'s> {
 					))
 				}
 			}
-
+			"loop_range" => {
+				let inclusive = if expression_node.child_by_field_name("inclusive").is_some() {
+					Some(true)
+				} else {
+					Some(false)
+				};
+				Ok(Expr::new(
+					ExprKind::Range {
+						start: Box::new(
+							self.build_expression(
+								&expression_node
+									.child_by_field_name("start")
+									.expect("range expression should always include start"),
+							)?,
+						),
+						inclusive: inclusive,
+						end: Box::new(
+							self.build_expression(
+								&expression_node
+									.child_by_field_name("end")
+									.expect("range expression should always include end"),
+							)?,
+						),
+					},
+					expression_span,
+				))
+			}
 			"number" => Ok(Expr::new(
 				ExprKind::Literal(Literal::Number(
 					self.node_text(&expression_node).parse().expect("Number string"),
@@ -1027,7 +1089,7 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
-					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
+					"ERROR" => self.add_error::<bool>("Expected boolean literal", expression_node)?,
 					other => return self.report_unimplemented_grammar(other, "boolean literal", expression_node),
 				})),
 				expression_span,
@@ -1062,10 +1124,7 @@ impl<'s> Parser<'s> {
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
-			"pure_closure" => self.add_error(
-				format!("Pure phased anonymous closures not implemented yet"),
-				expression_node,
-			),
+			"pure_closure" => self.add_error("Pure phased anonymous closures not implemented yet", expression_node),
 			"array_literal" => {
 				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type_annotation(&type_node)?)
@@ -1179,8 +1238,9 @@ impl<'s> Parser<'s> {
 			"optional_test" => {
 				let expression = self.build_expression(&expression_node.named_child(0).unwrap());
 				Ok(Expr::new(
-					ExprKind::OptionalTest {
-						optional: Box::new(expression?),
+					ExprKind::Unary {
+						op: UnaryOperator::OptionalTest,
+						exp: Box::new(expression?),
 					},
 					expression_span,
 				))

@@ -2,17 +2,19 @@
 
 exports[`publishing messages to topic 1`] = `
 [
-  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
+  "wingsdk.sim.EventMapping created.",
   "wingsdk.cloud.Function created.",
   "Publish (message=ABC).",
   "Sending message (message=ABC, subscriber=sim-1).",
   "Invoke (payload=\\"ABC\\").",
   "Invoke (payload=\\"ABC\\").",
   "wingsdk.cloud.Function deleted.",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;

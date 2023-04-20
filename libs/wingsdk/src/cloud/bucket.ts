@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
-import { App, IResource, Resource } from "../core";
-import { Json } from "../std";
+import { App } from "../core";
+import { Json, IResource, Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**
@@ -39,7 +39,8 @@ export abstract class Bucket extends Resource {
     return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
   }
 
-  private readonly topics = new Map<BucketEventType, Topic>();
+  /** @internal */
+  protected readonly _topics = new Map<BucketEventType, Topic>();
   public readonly stateful = true;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
@@ -58,20 +59,6 @@ export abstract class Bucket extends Resource {
    * referencing a file from the local filesystem.
    */
   public abstract addObject(key: string, body: string): void;
-
-  /**
-   * Iterates over the topics and supply their sim handler
-   * @returns an object of Bucket event types (keys) and their topic handlers (values)
-   */
-  protected convertTopicsToHandles() {
-    const topicMap: Record<string, string> = {};
-
-    this.topics.forEach((value, key) => {
-      topicMap[key] = `\${${value.node.path}#attrs.handle}`;
-    });
-
-    return topicMap;
-  }
 
   /**
    * creates a topic for subscribing to notification events
@@ -101,10 +88,10 @@ export abstract class Bucket extends Resource {
    * @returns
    */
   private getTopic(actionType: BucketEventType): Topic {
-    if (!this.topics.has(actionType)) {
-      this.topics.set(actionType, this.createTopic(actionType));
+    if (!this._topics.has(actionType)) {
+      this._topics.set(actionType, this.createTopic(actionType));
     }
-    return this.topics.get(actionType) as Topic;
+    return this._topics.get(actionType) as Topic;
   }
 
   /**

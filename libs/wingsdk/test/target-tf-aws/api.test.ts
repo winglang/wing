@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import * as tfaws from "../../src/target-tf-aws";
-import { Api } from "../../src/target-tf-aws";
+import { Api, Function } from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOfCount } from "../util";
@@ -296,4 +296,25 @@ test("api with CONNECT route", () => {
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
   expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["connect"]);
   expect(apiSpec).toMatchSnapshot();
+});
+
+test("api url can be used as environment variable", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new Function(app, "Fn", handler, {
+    env: {
+      API_URL: api.url,
+    },
+  });
+
+  const output = app.synth();
+
+  // THEN
+  const tfConfig = JSON.parse(output);
+  expect(
+    tfConfig.resource.aws_lambda_function.root_Fn_2A5D440A.environment.variables
+      .API_URL
+  ).toEqual("${aws_api_gateway_stage.root_Api_api_stage_3E2E462A.invoke_url}");
 });

@@ -6,17 +6,18 @@ exports[`create a queue 1`] = `
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [],
-          "timeout": 30,
+          "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -26,22 +27,22 @@ exports[`create a queue 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_queue": {
           "attributes": {
@@ -72,36 +73,27 @@ exports[`create a queue 1`] = `
 }
 `;
 
-exports[`messages are requeued if the function fails 1`] = `
+exports[`messages are not requeued if the function fails before timeout 1`] = `
 [
-  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
+  "wingsdk.sim.EventMapping created.",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue: ERROR",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
-exports[`messages are requeued if the function fails 2`] = `
+exports[`messages are not requeued if the function fails before timeout 2`] = `
 {
-  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -123,18 +115,18 @@ async handle(message) {
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
-          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -145,15 +137,21 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
-            },
-          ],
-          "timeout": 30,
+          "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -168,7 +166,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -185,29 +183,22 @@ async handle(message) {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_queue-OnMessage-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_queue": {
           "attributes": {
@@ -215,11 +206,28 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_queue-QueueEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_queue-QueueEventMapping-e645076f",
+              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -232,7 +240,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -242,15 +250,9 @@ async handle(message) {
                 "resource": "root/Handler",
               },
               {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
-              {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -264,10 +266,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -279,8 +281,236 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`messages are requeued if the function fails after timeout 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Queue created.",
+  "wingsdk.sim.EventMapping created.",
+  "Push (message=BAD MESSAGE).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
+  "Subscriber error - returning 1 messages to queue: ERROR",
+  "1 messages pushed back to queue after timeout.",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
+  "Subscriber error - returning 1 messages to queue: ERROR",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`messages are requeued if the function fails after timeout 2`] = `
+{
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+    if (message === \\"BAD MESSAGE\\") {
+        throw new Error(\\"ERROR\\");
+    }
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue-AddConsumer-e645076f",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue",
+        "props": {
+          "initialMessages": [],
+          "timeout": 1,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_queue-AddConsumer-e645076f",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_queue": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_queue-QueueEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_queue-QueueEventMapping-e645076f",
+              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+        "my_queue-AddConsumer-e645076f": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "add_consumer",
+                "resource": "root/my_queue",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
+        },
+        "my_queue-AddConsumerHandler-e645076f": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "hidden": true,
+          },
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -297,7 +527,7 @@ async handle(message) {
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Queue created.",
   "Push (message=A).",
   "Push (message=B).",
@@ -305,7 +535,7 @@ exports[`queue batch size of 2, purge the queue 1`] = `
   "Purge ().",
   "ApproxSize ().",
   "wingsdk.cloud.Queue deleted.",
-  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
@@ -315,17 +545,18 @@ exports[`queue batch size of 2, purge the queue 2`] = `
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [],
-          "timeout": 30,
+          "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -335,22 +566,22 @@ exports[`queue batch size of 2, purge the queue 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_queue": {
           "attributes": {
@@ -383,31 +614,25 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 [
-  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
+  "wingsdk.sim.EventMapping created.",
   "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\").",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\").",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`queue with one subscriber, batch size of 5 2`] = `
 {
-  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -429,18 +654,18 @@ async handle(message) {
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
-          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -458,15 +683,21 @@ async handle(message) {
             "E",
             "F",
           ],
-          "subscribers": [
-            {
-              "batchSize": 5,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
-            },
-          ],
-          "timeout": 30,
+          "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 5,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -481,7 +712,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -498,29 +729,22 @@ async handle(message) {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_queue-OnMessage-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_queue": {
           "attributes": {
@@ -528,11 +752,28 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_queue-QueueEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_queue-QueueEventMapping-e645076f",
+              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -545,7 +786,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -555,15 +796,9 @@ async handle(message) {
                 "resource": "root/Handler",
               },
               {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
-              {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -577,10 +812,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -592,8 +827,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -610,33 +845,27 @@ async handle(message) {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 [
-  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
+  "wingsdk.sim.EventMapping created.",
   "Push (message=A).",
   "Push (message=B).",
   "Sending messages (messages=[\\"A\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\"]}\\").",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"B\\\\\\"]}\\").",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`queue with one subscriber, default batch size of 1 2`] = `
 {
-  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -658,18 +887,18 @@ async handle(message) {
     "resources": [
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
-          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -680,15 +909,21 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
-            },
-          ],
-          "timeout": 30,
+          "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -703,7 +938,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -720,29 +955,22 @@ async handle(message) {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
+        "cloud.TestRunner": {
           "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_queue-OnMessage-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
           "display": {
-            "description": "A cloud logging facility",
+            "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "title": "Logger",
+            "title": "TestRunner",
           },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_queue": {
           "attributes": {
@@ -750,11 +978,28 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_queue-QueueEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_queue-QueueEventMapping-e645076f",
+              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -767,7 +1012,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -777,15 +1022,9 @@ async handle(message) {
                 "resource": "root/Handler",
               },
               {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
-              {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -799,10 +1038,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -814,8 +1053,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {

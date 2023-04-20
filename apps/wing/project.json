@@ -11,6 +11,8 @@
       "dependsOn": [
         "^build"
       ],
+      "inputs": ["{workspaceRoot}/target/wasm32-wasi/debug/wingc.wasm", "{workspaceRoot}/target/wasm32-wasi/release/wingc.wasm"],
+      "outputs": ["{projectRoot}/wingc.wasm"],
       "options": {
         "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
         "cwd": "apps/wing"

@@ -1,22 +1,52 @@
 import { basename } from "path";
-import { compile, Target } from "./compile";
-import * as chalk from "chalk";
+import { compile, CompileOptions } from "./compile";
+import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
+import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
+import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";
+import * as cp from "child_process";
+import debug from "debug";
+import { promisify } from "util";
+import { withSpinner } from "../util";
 
-export async function test(entrypoints: string[]) {
+const log = debug("wing:test");
+
+const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
+
+/**
+ * Options for the `test` command.
+ */
+export interface TestOptions extends CompileOptions {}
+
+export async function test(entrypoints: string[], options: TestOptions) {
   for (const entrypoint of entrypoints) {
-    await testOne(entrypoint);
+    await testOne(entrypoint, options);
   }
 }
 
-async function testOne(entrypoint: string) {
-  const simdir = await compile(entrypoint, { target: Target.SIM });
-  
-  const s = new sdk.testing.Simulator({ simfile: simdir });
-  await s.start();
-  const results = await s.runAllTests();
-  await s.stop();
+async function testOne(entrypoint: string, options: TestOptions) {
+  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () => compile(entrypoint, {
+    ...options,
+    testing: true,
+  }));
 
+  switch (options.target) {
+    case "sim":
+      await testSimulator(synthDir);
+      break;
+    case "tf-aws":
+      await testTfAws(synthDir);
+      break;
+    default:
+      throw new Error(`unsupported target ${options.target}`);
+  }
+}
+
+/**
+ * Print out a test report to the console.
+ * @returns `true` if any tests failed, `false` otherwise.
+ */
+function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): boolean {
   // print report
   let hasFailures = false;
 
@@ -91,12 +121,160 @@ async function testOne(entrypoint: string) {
     }
   }
 
+  return hasFailures;
+};
+
+async function testSimulator(synthDir: string) {
+  const s = new sdk.testing.Simulator({ simfile: synthDir });
+  await s.start();
+
+  const testRunner = s.getResource("root/cloud.TestRunner") as ITestRunnerClient;
+  const tests = await testRunner.listTests();
+  const filteredTests = pickOneTestPerEnvironment(tests);
+  const results = new Array<sdk.cloud.TestResult>();
+
+  // TODO: run these tests in parallel
+  for (const path of filteredTests) {
+    results.push(await testRunner.runTest(path));
+  }
+
+  await s.stop();
+
+  const hasFailures = printTestReport(synthDir, results);
   if (hasFailures) {
     process.exit(1);
   }
 }
 
-function sortTests(a: sdk.testing.TestResult, b: sdk.testing.TestResult) {
+async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+  if (!isTerraformInstalled(synthDir)) {
+    throw new Error(
+      "Terraform is not installed. Please install Terraform to run tests in the cloud."
+    );
+  }
+
+  await withSpinner("terraform init", () => terraformInit(synthDir));
+
+  await checkTerraformStateIsEmpty(synthDir);
+
+  await withSpinner("terraform apply", () => terraformApply(synthDir));
+
+  const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+    const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+    const testRunner = new TfawsTestRunnerClient(testArns);
+
+    const tests = await testRunner.listTests();
+    return [testRunner, pickOneTestPerEnvironment(tests)];
+  });
+
+  const results = await withSpinner("Running tests...", async () => {
+    const results = new Array<sdk.cloud.TestResult>();
+    for (const path of tests) {
+      results.push(await testRunner.runTest(path));
+    }
+    return results;
+  });
+
+  const hasFailures = printTestReport(synthDir, results);
+
+  if (hasFailures) {
+    console.log("One or more tests failed. Cleaning up resources...");
+  }
+
+  await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
+
+  return results;
+}
+
+async function isTerraformInstalled(synthDir: string) {
+  const output = await execCapture("terraform version", { cwd: synthDir });
+  return output.startsWith("Terraform v");
+}
+
+async function checkTerraformStateIsEmpty(synthDir: string) {
+  try {
+    const output = await execCapture("terraform state list", { cwd: synthDir });
+    if (output.length > 0) {
+      throw new Error(
+        `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
+      );
+    }
+  } catch (err) {
+    if ((err as any).stderr.includes("No state file was found")) {
+      return;
+    }
+
+    // An unexpected error occurred, rethrow it
+    throw err;
+  }
+}
+
+async function terraformInit(synthDir: string) {
+  await execCapture("terraform init", { cwd: synthDir });
+}
+
+async function terraformApply(synthDir: string) {
+  await execCapture("terraform apply -auto-approve", { cwd: synthDir });
+}
+
+async function terraformDestroy(synthDir: string) {
+  await execCapture("terraform destroy -auto-approve", { cwd: synthDir });
+}
+
+async function terraformOutput(synthDir: string, name: string) {
+  const output = await execCapture("terraform output -json", { cwd: synthDir });
+  const parsed = JSON.parse(output);
+  if (!parsed[name]) {
+    throw new Error(`terraform output ${name} not found`);
+  }
+  return parsed[name].value;
+}
+
+function pickOneTestPerEnvironment(testPaths: string[]) {
+  // Given a list of test paths like so:
+  //
+  // root/Default/env0/a/b/test:test1
+  // root/Default/env0/d/e/f/test:test2
+  // root/Default/env0/g/test:test3
+  // root/Default/env1/a/b/test:test1
+  // root/Default/env1/d/e/f/test:test2
+  // root/Default/env1/g/test:test3
+  // root/Default/env2/a/b/test:test1
+  // root/Default/env2/d/e/f/test:test2
+  // root/Default/env2/g/test:test3
+  //
+  // This function returns a list of test paths which uses each test name
+  // exactly once and each "env" exactly once. In this case, the result would
+  // be:
+  //
+  // root/Default/env0/a/b/test:test1
+  // root/Default/env1/d/e/f/test:test2
+  // root/Default/env2/g/test:test3
+
+  const tests = new Map<string, string>();
+  const envs = new Set<string>();
+
+  for (const testPath of testPaths) {
+    const testSuffix = testPath.substring(testPath.indexOf('env') + 1); // "<env #>/<path to test>"
+    const env = testSuffix.substring(0, testSuffix.indexOf('/')); // "<env #>"
+    const test = testSuffix.substring(testSuffix.indexOf('/') + 1); // "<path to test>"
+
+    if (envs.has(env)) {
+      continue;
+    }
+
+    if (tests.has(test)) {
+      continue;
+    }
+
+    tests.set(test, testPath);
+    envs.add(env);
+  }
+
+  return Array.from(tests.values());
+}
+
+function sortTests(a: sdk.cloud.TestResult, b: sdk.cloud.TestResult) {
   if (a.pass && !b.pass) {
     return -1;
   }
@@ -104,4 +282,22 @@ function sortTests(a: sdk.testing.TestResult, b: sdk.testing.TestResult) {
     return 1;
   }
   return a.path.localeCompare(b.path);
+}
+
+const MAX_BUFFER = 10 * 1024 * 1024;
+
+/**
+ * Executes command and returns STDOUT. If the command fails (non-zero), throws an error.
+ */
+async function execCapture(command: string, options: { cwd: string }) {
+  log(command);
+  const exec = promisify(cp.exec);
+  const { stdout, stderr } = await exec(command, {
+    cwd: options.cwd,
+    maxBuffer: MAX_BUFFER,
+  });
+  if (stderr) {
+    throw new Error(stderr);
+  }
+  return stdout;
 }
