@@ -12,4 +12,6 @@ new cloud.Function(inflight () => {
   assert(counter.peek() == 12);
   counter.reset();
   assert(counter.peek() == 0);
+  counter.reset(88);
+  assert(counter.peek() == 88);
 }) as "test:reset";
