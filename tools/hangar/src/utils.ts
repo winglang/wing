@@ -63,15 +63,6 @@ export function tfResourcesOfCount(
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
-export function getSnapshotPath(
-  wingFile: string,
-  testCase: string,
-  target: string,
-  path: string
-) {
-  return join(snapshotDir, "test_corpus", wingFile, testCase, target, path);
-}
-
 export async function createMarkdownSnapshot(
   fileMap: Record<string, string>,
   wingFile: string,
