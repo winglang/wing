@@ -38,7 +38,7 @@ let post_handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
     };
   };
 
-  // responsible for the CORS
+  // responsible for the CORS - https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html
 let options_handler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
     return cloud.ApiResponse {
         headers: {
@@ -56,6 +56,8 @@ api.options("/users", options_handler);
 
 
 website.add_json("config.json", { apiUrl: api.url });
+
+
 
 
 
