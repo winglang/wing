@@ -1,5 +1,17 @@
 # [json.w](../../../../examples/tests/valid/json.w) | compile | tf-aws
 
+## clients/Foo.inflight.js
+```js
+class  Foo {
+  constructor({ _sum_str, stateful }) {
+    this._sum_str = _sum_str;
+    this.stateful = stateful;
+  }
+}
+exports.Foo = Foo;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -30,18 +42,6 @@
     ]
   }
 }
-```
-
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ _sum_str, stateful }) {
-    this._sum_str = _sum_str;
-    this.stateful = stateful;
-  }
-}
-exports.Foo = Foo;
-
 ```
 
 ## preflight.js

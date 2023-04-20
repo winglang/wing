@@ -189,15 +189,6 @@
 }
 ```
 
-## proc1/index.js
-```js
-async handle(message) {
-  const { bucket } = this;
-  (await bucket.put("wing.txt",`Hello, ${message}`));
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -238,6 +229,15 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle(message) {
+  const { bucket } = this;
+  (await bucket.put("wing.txt",`Hello, ${message}`));
+}
 
 ```
 

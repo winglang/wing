@@ -1,5 +1,19 @@
 # [api_path_vars.w](../../../../examples/tests/valid/api_path_vars.w) | compile | tf-aws
 
+## clients/Fetch.inflight.js
+```js
+class  Fetch {
+  constructor({ stateful }) {
+    this.stateful = stateful;
+  }
+  async get(url)  {
+    return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
+  }
+}
+exports.Fetch = Fetch;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -255,45 +269,6 @@
 }
 ```
 
-## proc2/index.js
-```js
-async handle() {
-  const { api, f } = this;
-  const username = "tsuf";
-  const res = (await f.get(`${api.url}/users/${username}`));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
-}
-
-```
-
-## clients/Fetch.inflight.js
-```js
-class  Fetch {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async get(url)  {
-    return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
-  }
-}
-exports.Fetch = Fetch;
-
-```
-
-## proc1/index.js
-```js
-async handle(req) {
-  const {  } = this;
-  const vars = (req.vars ?? Object.freeze({"name":""}));
-  return {
-  "body": Object.freeze({"user":(vars)["name"]}),
-  "status": 200,}
-  ;
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -365,6 +340,31 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle(req) {
+  const {  } = this;
+  const vars = (req.vars ?? Object.freeze({"name":""}));
+  return {
+  "body": Object.freeze({"user":(vars)["name"]}),
+  "status": 200,}
+  ;
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const { api, f } = this;
+  const username = "tsuf";
+  const res = (await f.get(`${api.url}/users/${username}`));
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
+}
 
 ```
 

@@ -185,26 +185,6 @@
 }
 ```
 
-## proc2/index.js
-```js
-async handle() {
-  const {  } = this;
-  {console.log("inflight log 2.1")};
-  {console.log("inflight log 2.2")};
-}
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const {  } = this;
-  {console.log("inflight log 1.1")};
-  {console.log("inflight log 1.2")};
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -246,6 +226,26 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle() {
+  const {  } = this;
+  {console.log("inflight log 1.1")};
+  {console.log("inflight log 1.2")};
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const {  } = this;
+  {console.log("inflight log 2.1")};
+  {console.log("inflight log 2.2")};
+}
 
 ```
 

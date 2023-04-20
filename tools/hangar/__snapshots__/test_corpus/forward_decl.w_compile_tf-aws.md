@@ -1,5 +1,17 @@
 # [forward_decl.w](../../../../examples/tests/valid/forward_decl.w) | compile | tf-aws
 
+## clients/R.inflight.js
+```js
+class  R {
+  constructor({ f, stateful }) {
+    this.f = f;
+    this.stateful = stateful;
+  }
+}
+exports.R = R;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -30,18 +42,6 @@
     ]
   }
 }
-```
-
-## clients/R.inflight.js
-```js
-class  R {
-  constructor({ f, stateful }) {
-    this.f = f;
-    this.stateful = stateful;
-  }
-}
-exports.R = R;
-
 ```
 
 ## preflight.js

@@ -197,24 +197,6 @@
 }
 ```
 
-## proc2/index.js
-```js
-async handle(s) {
-  const { str_to_str } = this;
-  (await str_to_str.invoke("one"));
-  {console.log((await str_to_str.invoke("two")))};
-}
-
-```
-
-## proc1/index.js
-```js
-async handle(s) {
-  const {  } = this;
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -260,6 +242,24 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle(s) {
+  const {  } = this;
+}
+
+```
+
+## proc2/index.js
+```js
+async handle(s) {
+  const { str_to_str } = this;
+  (await str_to_str.invoke("one"));
+  {console.log((await str_to_str.invoke("two")))};
+}
 
 ```
 

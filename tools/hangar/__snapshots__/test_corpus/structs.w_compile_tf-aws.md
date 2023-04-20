@@ -1,5 +1,22 @@
 # [structs.w](../../../../examples/tests/valid/structs.w) | compile | tf-aws
 
+## clients/Foo.inflight.js
+```js
+class  Foo {
+  constructor({ data, stateful }) {
+    this.data = data;
+    this.stateful = stateful;
+  }
+  async get_stuff()  {
+    {
+      return this.data.field0;
+    }
+  }
+}
+exports.Foo = Foo;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -30,23 +47,6 @@
     ]
   }
 }
-```
-
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ data, stateful }) {
-    this.data = data;
-    this.stateful = stateful;
-  }
-  async get_stuff()  {
-    {
-      return this.data.field0;
-    }
-  }
-}
-exports.Foo = Foo;
-
 ```
 
 ## preflight.js

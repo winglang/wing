@@ -1,5 +1,23 @@
 # [doubler.w](../../../../examples/tests/valid/doubler.w) | compile | tf-aws
 
+## clients/Doubler.inflight.js
+```js
+class  Doubler {
+  constructor({ func, stateful }) {
+    this.func = func;
+    this.stateful = stateful;
+  }
+  async invoke(message)  {
+    {
+      (await this.func.handle(message));
+      (await this.func.handle(message));
+    }
+  }
+}
+exports.Doubler = Doubler;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -30,33 +48,6 @@
     ]
   }
 }
-```
-
-## clients/Doubler.inflight.js
-```js
-class  Doubler {
-  constructor({ func, stateful }) {
-    this.func = func;
-    this.stateful = stateful;
-  }
-  async invoke(message)  {
-    {
-      (await this.func.handle(message));
-      (await this.func.handle(message));
-    }
-  }
-}
-exports.Doubler = Doubler;
-
-```
-
-## proc1/index.js
-```js
-async handle(m) {
-  const {  } = this;
-  return `Hello ${m}!`;
-}
-
 ```
 
 ## preflight.js
@@ -116,6 +107,15 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle(m) {
+  const {  } = this;
+  return `Hello ${m}!`;
+}
 
 ```
 

@@ -120,17 +120,6 @@
 }
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { s1, s2 } = this;
-  {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
-  {console.log((await (await s1.split(" ")).at(1)))};
-  {console.log((await s1.concat(s2)))};
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -189,6 +178,17 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle() {
+  const { s1, s2 } = this;
+  {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
+  {console.log((await (await s1.split(" ")).at(1)))};
+  {console.log((await s1.concat(s2)))};
+}
 
 ```
 

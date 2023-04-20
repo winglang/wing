@@ -1,5 +1,82 @@
 # [resource.w](../../../../examples/tests/valid/resource.w) | compile | tf-aws
 
+## clients/Bar.inflight.js
+```js
+class  Bar {
+  constructor({ b, foo, name, stateful }) {
+    this.b = b;
+    this.foo = foo;
+    this.name = name;
+    this.stateful = stateful;
+  }
+  async my_method()  {
+    {
+      (await this.foo.foo_inc());
+      (await this.b.put("foo",`counter is: ${(await this.foo.foo_get())}`));
+      return (await this.b.get("foo"));
+    }
+  }
+}
+exports.Bar = Bar;
+
+```
+
+## clients/BigPublisher.inflight.js
+```js
+class  BigPublisher {
+  constructor({ b, b2, q, t, stateful }) {
+    this.b = b;
+    this.b2 = b2;
+    this.q = q;
+    this.t = t;
+    this.stateful = stateful;
+  }
+  async publish(s)  {
+    {
+      (await this.t.publish(s));
+      (await this.q.push(s));
+      (await this.b2.put("foo",s));
+    }
+  }
+  async getObjectCount()  {
+    {
+      return (await this.b.list()).length;
+    }
+  }
+}
+exports.BigPublisher = BigPublisher;
+
+```
+
+## clients/Foo.inflight.js
+```js
+class  Foo {
+  constructor({ c, stateful }) {
+    this.c = c;
+    this.stateful = stateful;
+  }
+  async $inflight_init()  {
+    {
+      this.inflight_field = 123;
+      (await this.c.inc(110));
+      (await this.c.dec(10));
+    }
+  }
+  async foo_inc()  {
+    {
+      (await this.c.inc());
+    }
+  }
+  async foo_get()  {
+    {
+      return (await this.c.peek());
+    }
+  }
+}
+exports.Foo = Foo;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -675,132 +752,6 @@
 }
 ```
 
-## proc2/index.js
-```js
-async handle() {
-  const { this } = this;
-  (await this.b.put("foo2.txt","bar"));
-}
-
-```
-
-## clients/BigPublisher.inflight.js
-```js
-class  BigPublisher {
-  constructor({ b, b2, q, t, stateful }) {
-    this.b = b;
-    this.b2 = b2;
-    this.q = q;
-    this.t = t;
-    this.stateful = stateful;
-  }
-  async publish(s)  {
-    {
-      (await this.t.publish(s));
-      (await this.q.push(s));
-      (await this.b2.put("foo",s));
-    }
-  }
-  async getObjectCount()  {
-    {
-      return (await this.b.list()).length;
-    }
-  }
-}
-exports.BigPublisher = BigPublisher;
-
-```
-
-## clients/Bar.inflight.js
-```js
-class  Bar {
-  constructor({ b, foo, name, stateful }) {
-    this.b = b;
-    this.foo = foo;
-    this.name = name;
-    this.stateful = stateful;
-  }
-  async my_method()  {
-    {
-      (await this.foo.foo_inc());
-      (await this.b.put("foo",`counter is: ${(await this.foo.foo_get())}`));
-      return (await this.b.get("foo"));
-    }
-  }
-}
-exports.Bar = Bar;
-
-```
-
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ c, stateful }) {
-    this.c = c;
-    this.stateful = stateful;
-  }
-  async $inflight_init()  {
-    {
-      this.inflight_field = 123;
-      (await this.c.inc(110));
-      (await this.c.dec(10));
-    }
-  }
-  async foo_inc()  {
-    {
-      (await this.c.inc());
-    }
-  }
-  async foo_get()  {
-    {
-      return (await this.c.peek());
-    }
-  }
-}
-exports.Foo = Foo;
-
-```
-
-## proc5/index.js
-```js
-async handle() {
-  const { bigOlPublisher } = this;
-  (await bigOlPublisher.publish("foo"));
-  const count = (await bigOlPublisher.getObjectCount());
-}
-
-```
-
-## proc4/index.js
-```js
-async handle() {
-  const { bucket, res } = this;
-  const s = (await res.my_method());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflight_field === 123)'`)})((res.foo.inflight_field === 123))};
-}
-
-```
-
-## proc3/index.js
-```js
-async handle() {
-  const { this } = this;
-  (await this.q.push("foo"));
-}
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { this } = this;
-  (await this.b.put("foo1.txt","bar"));
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -972,6 +923,55 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle() {
+  const { this } = this;
+  (await this.b.put("foo1.txt","bar"));
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const { this } = this;
+  (await this.b.put("foo2.txt","bar"));
+}
+
+```
+
+## proc3/index.js
+```js
+async handle() {
+  const { this } = this;
+  (await this.q.push("foo"));
+}
+
+```
+
+## proc4/index.js
+```js
+async handle() {
+  const { bucket, res } = this;
+  const s = (await res.my_method());
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflight_field === 123)'`)})((res.foo.inflight_field === 123))};
+}
+
+```
+
+## proc5/index.js
+```js
+async handle() {
+  const { bigOlPublisher } = this;
+  (await bigOlPublisher.publish("foo"));
+  const count = (await bigOlPublisher.getObjectCount());
+}
 
 ```
 

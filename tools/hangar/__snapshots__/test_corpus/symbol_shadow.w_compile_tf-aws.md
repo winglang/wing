@@ -1,5 +1,16 @@
 # [symbol_shadow.w](../../../../examples/tests/valid/symbol_shadow.w) | compile | tf-aws
 
+## clients/A.inflight.js
+```js
+class  A {
+  constructor({ stateful }) {
+    this.stateful = stateful;
+  }
+}
+exports.A = A;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -315,54 +326,6 @@
 }
 ```
 
-## proc2/index.js
-```js
-async handle() {
-  const { s } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
-}
-
-```
-
-## clients/A.inflight.js
-```js
-class  A {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-}
-exports.A = A;
-
-```
-
-## proc4/index.js
-```js
-async handle() {
-  const {  } = this;
-  const s = "inside_inflight";
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inside_inflight")'`)})((s === "inside_inflight"))};
-}
-
-```
-
-## proc3/index.js
-```js
-async handle() {
-  const { s } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
-}
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { s } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -455,6 +418,43 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle() {
+  const { s } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const { s } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
+}
+
+```
+
+## proc3/index.js
+```js
+async handle() {
+  const { s } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
+}
+
+```
+
+## proc4/index.js
+```js
+async handle() {
+  const {  } = this;
+  const s = "inside_inflight";
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inside_inflight")'`)})((s === "inside_inflight"))};
+}
 
 ```
 

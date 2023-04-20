@@ -77,9 +77,12 @@ export async function createMarkdownSnapshot(
 
   let md = `# [${wingFile}](../../../../examples/tests/valid/${wingFile}) | ${testCase} | ${target}\n\n`;
 
-  for (const [path, content] of Object.entries(fileMap)) {
-    const extension = extname(path).replace(".", "");
-    md += `## ${path}\n\`\`\`${extension}\n${content}\n\`\`\`\n\n`;
+  const files = Object.keys(fileMap);
+  files.sort();
+
+  for (const file of files) {
+    const extension = extname(file).replace(".", "");
+    md += `## ${file}\n\`\`\`${extension}\n${fileMap[file]}\n\`\`\`\n\n`;
   }
 
   await expect(md).toMatchFileSnapshot(snapPath);

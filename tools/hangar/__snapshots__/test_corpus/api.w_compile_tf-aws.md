@@ -1,5 +1,23 @@
 # [api.w](../../../../examples/tests/valid/api.w) | compile | tf-aws
 
+## clients/Foo.inflight.js
+```js
+class  Foo {
+  constructor({ api, stateful }) {
+    this.api = api;
+    this.stateful = stateful;
+  }
+  async handle(message)  {
+    {
+      const url = this.api.url;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http://")'`)})(url.startsWith("http://"))};
+    }
+  }
+}
+exports.Foo = Foo;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -275,39 +293,6 @@
 }
 ```
 
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ api, stateful }) {
-    this.api = api;
-    this.stateful = stateful;
-  }
-  async handle(message)  {
-    {
-      const url = this.api.url;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http://")'`)})(url.startsWith("http://"))};
-    }
-  }
-}
-exports.Foo = Foo;
-
-```
-
-## proc1/index.js
-```js
-async handle(request) {
-  const { counter } = this;
-  const count = (await counter.inc());
-  const bodyResponse = Object.freeze({"count":count});
-  const resp = {
-  "body": bodyResponse,
-  "status": 200,}
-  ;
-  return resp;
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -373,6 +358,21 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle(request) {
+  const { counter } = this;
+  const count = (await counter.inc());
+  const bodyResponse = Object.freeze({"count":count});
+  const resp = {
+  "body": bodyResponse,
+  "status": 200,}
+  ;
+  return resp;
+}
 
 ```
 

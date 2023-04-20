@@ -1,5 +1,17 @@
 # [reassignment.w](../../../../examples/tests/valid/reassignment.w) | compile | tf-aws
 
+## clients/R.inflight.js
+```js
+class  R {
+  constructor({ f1, stateful }) {
+    this.f1 = f1;
+    this.stateful = stateful;
+  }
+}
+exports.R = R;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -30,18 +42,6 @@
     ]
   }
 }
-```
-
-## clients/R.inflight.js
-```js
-class  R {
-  constructor({ f1, stateful }) {
-    this.f1 = f1;
-    this.stateful = stateful;
-  }
-}
-exports.R = R;
-
 ```
 
 ## preflight.js

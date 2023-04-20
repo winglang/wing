@@ -1,5 +1,17 @@
 # [capture_resource_with_no_inflight.w](../../../../examples/tests/valid/capture_resource_with_no_inflight.w) | compile | tf-aws
 
+## clients/A.inflight.js
+```js
+class  A {
+  constructor({ field, stateful }) {
+    this.field = field;
+    this.stateful = stateful;
+  }
+}
+exports.A = A;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -120,27 +132,6 @@
 }
 ```
 
-## clients/A.inflight.js
-```js
-class  A {
-  constructor({ field, stateful }) {
-    this.field = field;
-    this.stateful = stateful;
-  }
-}
-exports.A = A;
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { a } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -202,6 +193,15 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle() {
+  const { a } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
+}
 
 ```
 

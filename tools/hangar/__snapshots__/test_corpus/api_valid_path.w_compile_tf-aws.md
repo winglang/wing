@@ -241,18 +241,6 @@
 }
 ```
 
-## proc1/index.js
-```js
-async handle(req) {
-  const {  } = this;
-  return {
-  "body": "ok",
-  "status": 200,}
-  ;
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -330,6 +318,18 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle(req) {
+  const {  } = this;
+  return {
+  "body": "ok",
+  "status": 200,}
+  ;
+}
 
 ```
 

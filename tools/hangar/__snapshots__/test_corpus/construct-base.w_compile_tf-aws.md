@@ -1,5 +1,16 @@
 # [construct-base.w](../../../../examples/tests/valid/construct-base.w) | compile | tf-aws
 
+## clients/WingResource.inflight.js
+```js
+class  WingResource {
+  constructor({ stateful }) {
+    this.stateful = stateful;
+  }
+}
+exports.WingResource = WingResource;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -42,17 +53,6 @@
     }
   }
 }
-```
-
-## clients/WingResource.inflight.js
-```js
-class  WingResource {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-}
-exports.WingResource = WingResource;
-
 ```
 
 ## preflight.js

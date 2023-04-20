@@ -1,53 +1,5 @@
 # [impl_interface.w](../../../../examples/tests/valid/impl_interface.w) | compile | tf-aws
 
-## main.tf.json
-```json
-{
-  "//": {
-    "metadata": {
-      "backend": "local",
-      "stackName": "root",
-      "version": "0.15.2"
-    },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[]"
-    }
-  },
-  "provider": {
-    "aws": [
-      {}
-    ]
-  }
-}
-```
-
-## clients/r.inflight.js
-```js
-class  r {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async method_2(x)  {
-    {
-      return x;
-    }
-  }
-}
-exports.r = r;
-
-```
-
 ## clients/A.inflight.js
 ```js
 class  A {
@@ -80,13 +32,52 @@ exports.Dog = Dog;
 
 ```
 
-## proc1/index.js
+## clients/r.inflight.js
 ```js
-async handle() {
-  const { x } = this;
-  (await x.handle("hello world!"));
+class  r {
+  constructor({ stateful }) {
+    this.stateful = stateful;
+  }
+  async method_2(x)  {
+    {
+      return x;
+    }
+  }
 }
+exports.r = r;
 
+```
+
+## main.tf.json
+```json
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2"
+    },
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+          }
+        }
+      }
+    }
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]"
+    }
+  },
+  "provider": {
+    "aws": [
+      {}
+    ]
+  }
+}
 ```
 
 ## preflight.js
@@ -199,6 +190,15 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle() {
+  const { x } = this;
+  (await x.handle("hello world!"));
+}
 
 ```
 

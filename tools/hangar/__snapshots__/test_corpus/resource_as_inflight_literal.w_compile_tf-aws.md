@@ -1,5 +1,21 @@
 # [resource_as_inflight_literal.w](../../../../examples/tests/valid/resource_as_inflight_literal.w) | compile | tf-aws
 
+## clients/Foo.inflight.js
+```js
+class  Foo {
+  constructor({ stateful }) {
+    this.stateful = stateful;
+  }
+  async handle(message)  {
+    {
+      return "hello world!";
+    }
+  }
+}
+exports.Foo = Foo;
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -186,31 +202,6 @@
 }
 ```
 
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async handle(message)  {
-    {
-      return "hello world!";
-    }
-  }
-}
-exports.Foo = Foo;
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { fn } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -270,6 +261,15 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle() {
+  const { fn } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
+}
 
 ```
 

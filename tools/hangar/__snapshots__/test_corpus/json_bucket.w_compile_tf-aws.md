@@ -233,26 +233,6 @@
 }
 ```
 
-## proc2/index.js
-```js
-async handle(msg) {
-  const { b, file_name, get_json, j } = this;
-  (await b.putJson(file_name,j));
-  (await get_json.invoke(msg));
-}
-
-```
-
-## proc1/index.js
-```js
-async handle(msg) {
-  const { b, file_name } = this;
-  const x = (await b.getJson(file_name));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -320,6 +300,26 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle(msg) {
+  const { b, file_name } = this;
+  const x = (await b.getJson(file_name));
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
+}
+
+```
+
+## proc2/index.js
+```js
+async handle(msg) {
+  const { b, file_name, get_json, j } = this;
+  (await b.putJson(file_name,j));
+  (await get_json.invoke(msg));
+}
 
 ```
 

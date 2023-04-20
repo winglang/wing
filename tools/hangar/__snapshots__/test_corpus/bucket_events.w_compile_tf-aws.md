@@ -1246,65 +1246,6 @@
 }
 ```
 
-## proc2/index.js
-```js
-async handle(key) {
-  const {  } = this;
-  {console.log(`updated ${key}`)};
-}
-
-```
-
-## proc5/index.js
-```js
-async handle(key) {
-  const {  } = this;
-  {console.log("other bucket event called!")};
-}
-
-```
-
-## proc4/index.js
-```js
-async handle(key) {
-  const { other } = this;
-  {console.log(`last key ${key}`)};
-  (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
-}
-
-```
-
-## proc3/index.js
-```js
-async handle(key) {
-  const {  } = this;
-  {console.log(`created ${key}`)};
-}
-
-```
-
-## proc6/index.js
-```js
-async handle() {
-  const { b } = this;
-  (await b.put("a","1"));
-  (await b.put("b","1"));
-  (await b.put("b","100"));
-  (await b.put("c","1"));
-  (await b.delete("c"));
-}
-
-```
-
-## proc1/index.js
-```js
-async handle(key) {
-  const {  } = this;
-  {console.log(`deleted ${key}`)};
-}
-
-```
-
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -1379,6 +1320,65 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
+```
+
+## proc1/index.js
+```js
+async handle(key) {
+  const {  } = this;
+  {console.log(`deleted ${key}`)};
+}
+
+```
+
+## proc2/index.js
+```js
+async handle(key) {
+  const {  } = this;
+  {console.log(`updated ${key}`)};
+}
+
+```
+
+## proc3/index.js
+```js
+async handle(key) {
+  const {  } = this;
+  {console.log(`created ${key}`)};
+}
+
+```
+
+## proc4/index.js
+```js
+async handle(key) {
+  const { other } = this;
+  {console.log(`last key ${key}`)};
+  (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+}
+
+```
+
+## proc5/index.js
+```js
+async handle(key) {
+  const {  } = this;
+  {console.log("other bucket event called!")};
+}
+
+```
+
+## proc6/index.js
+```js
+async handle() {
+  const { b } = this;
+  (await b.put("a","1"));
+  (await b.put("b","1"));
+  (await b.put("b","100"));
+  (await b.put("c","1"));
+  (await b.delete("c"));
+}
 
 ```
 
