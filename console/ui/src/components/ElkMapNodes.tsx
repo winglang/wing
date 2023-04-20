@@ -117,7 +117,7 @@ export const ContainerNode = ({
         <div
           className={classNames(
             "flex-1 flex items-center",
-            " px-2.5 py-2",
+            "px-2.5 py-2",
             "rounded-br",
             "group-focus:border-sky-300 dark:group-focus:border-sky-500",
             "transition-all",
@@ -160,17 +160,18 @@ export const ContainerNode = ({
           <div
             className={classNames(
               "flex-1 rounded-b",
-              "border-x border-b border-dashed",
-              "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-              "transition-all",
-              "shadow-inner",
               depth % 2 === 0 ? "bg-slate-50 dark:bg-slate-500" : theme.bg4,
-              {
-                [theme.border3]: !selected,
-                "border-sky-300 dark:border-sky-500": selected,
-              },
+              // The classes below are commented out because they cause rendering flashes while zooming.
+              // "border-x border-b border-dashed",
+              // "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+              // "transition-all",
+              // "shadow-inner",
+              // {
+              //   [theme.border3]: !selected,
+              //   "border-sky-300 dark:border-sky-500": selected,
+              // },
             )}
-          ></div>
+          />
         </div>
       )}
     </div>

@@ -36,7 +36,7 @@ export const MapControls = ({}: MapControlsProps) => {
             <MagnifyingGlassPlusIcon className="w-4 h-4" />
           </ToolbarButton>
 
-          <ToolbarButton title="Zoom to fit" onClick={zoomToFit}>
+          <ToolbarButton title="Zoom to fit" onClick={() => zoomToFit()}>
             <ArrowsPointingOutIcon className="w-4 h-4" />
           </ToolbarButton>
         </Toolbar>

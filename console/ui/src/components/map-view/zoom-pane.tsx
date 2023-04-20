@@ -27,11 +27,18 @@ export type Selection = d3Selection.Selection<
 
 export type ZoomBehavior = d3Zoom.ZoomBehavior<HTMLDivElement, unknown>;
 
+export interface Viewport {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export interface ZoomPaneContextValue {
   transform: d3Zoom.ZoomTransform;
-  zoomToFit(): void;
-  zoomOut(): void;
   zoomIn(): void;
+  zoomOut(): void;
+  zoomToFit(viewport?: Viewport): void;
 }
 
 const ZoomPaneContext = createContext<ZoomPaneContextValue>({
@@ -53,7 +60,7 @@ const ZoomPanePrivateContext = createContext<
 >(undefined);
 
 export interface ZoomPaneProviderProps {
-  children: ReactNode;
+  children: ReactNode | ((value: ZoomPaneContextValue) => ReactNode);
 }
 
 const selectionTransition = (selection: Selection, duration?: number) => {
@@ -98,32 +105,43 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
     [zoom],
   );
 
-  const zoomToFit = useCallback(() => {
-    const node = selection?.node();
-    if (!selection || !node) {
-      return;
-    }
+  const zoomToFit = useCallback(
+    (viewport?: Viewport) => {
+      const node = selection?.node();
+      if (!selection || !node) {
+        return;
+      }
 
-    if (!targetRef.current) {
-      return;
-    }
+      if (!targetRef.current) {
+        return;
+      }
 
-    const width = node.clientWidth;
-    const height = node.clientHeight;
-    const x0 = 0;
-    const y0 = 0;
-    const x1 = targetRef.current.clientWidth;
-    const y1 = targetRef.current.clientHeight;
-    selectionTransition(selection, 800).call(
-      zoom.transform,
-      d3Zoom.zoomIdentity
-        .translate(width / 2, height / 2)
-        .scale(
-          Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)),
-        )
-        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
-    );
-  }, [selection, zoom, targetRef]);
+      viewport ??= {
+        x: 0,
+        y: 0,
+        width: targetRef.current.clientWidth,
+        height: targetRef.current.clientHeight,
+      };
+
+      const width = node.clientWidth;
+      const height = node.clientHeight;
+      const x0 = viewport.x;
+      const y0 = viewport.y;
+      const x1 = x0 + viewport.width;
+      const y1 = y0 + viewport.height;
+      console.log({ x0, y0, x1, y1 });
+      selectionTransition(selection, 800).call(
+        zoom.transform,
+        d3Zoom.zoomIdentity
+          .translate(width / 2, height / 2)
+          .scale(
+            Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)),
+          )
+          .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+      );
+    },
+    [selection, zoom, targetRef],
+  );
 
   const zoomOut = useCallback(() => {
     if (!selection) {
@@ -146,7 +164,11 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
       <ZoomPaneContext.Provider
         value={{ transform, zoomIn, zoomOut, zoomToFit }}
       >
-        {props.children}
+        {typeof props.children === "function" ? (
+          props.children({ transform, zoomIn, zoomOut, zoomToFit })
+        ) : (
+          <>{props.children}</>
+        )}
       </ZoomPaneContext.Provider>
     </ZoomPanePrivateContext.Provider>
   );

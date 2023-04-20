@@ -3,7 +3,7 @@ import ELK, { ElkNode, LayoutOptions } from "elkjs/lib/elk.bundled.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
 
-import { ZoomPane } from "../zoom-pane.js";
+import { ZoomPane, useZoomPaneContext } from "../zoom-pane.js";
 
 import { Edge } from "./Edge.js";
 import { EdgeItem } from "./EdgeItem.js";
@@ -52,10 +52,12 @@ export type NodeItemProps<T> = {
   depth: number;
 };
 
+type Sizes = Record<string, { width: number; height: number }>;
+
 interface InvisibleNodeSizeCalculatorProps<T> {
   nodes: Node<T>[];
   node: FC<NodeItemProps<T>>;
-  onSizesChange(sizes: Record<string, { width: number; height: number }>): void;
+  onSizesChange(sizes: Sizes): void;
 }
 
 const InvisibleNodeSizeCalculator = <T extends unknown = undefined>({
@@ -65,11 +67,10 @@ const InvisibleNodeSizeCalculator = <T extends unknown = undefined>({
 }: InvisibleNodeSizeCalculatorProps<T>) => {
   const refs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const [sizes, setSizes] =
-    useState<Record<string, { width: number; height: number }>>();
+  const [sizes, setSizes] = useState<Sizes>();
   useEffect(() => {
     setSizes(() => {
-      const sizes: Record<string, { width: number; height: number }> = {};
+      const sizes: Sizes = {};
       for (const [nodeId, element] of Object.entries(refs.current)) {
         if (!element) {
           continue;
@@ -135,18 +136,17 @@ export const ElkMap = <T extends unknown = undefined>({
     nodes,
   });
 
-  const [sizes, setSizes] =
-    useState<Record<string, { width: number; height: number }>>();
+  const [minimumSizes, setMinimumSizes] = useState<Sizes>();
 
   const [offsets, setOffsets] =
     useState<Map<string, { x: number; y: number }>>();
   const [graph, setGraph] = useState<ElkNode>();
   useEffect(() => {
-    if (!sizes || Object.keys(sizes).length === 0) return;
+    if (!minimumSizes || Object.keys(minimumSizes).length === 0) return;
 
     const elk = new ELK();
     const toElkNode = (node: Node<T>): ElkNode => {
-      const size = sizes?.[node.id];
+      const size = minimumSizes?.[node.id];
       return {
         id: node.id,
         width: size?.width,
@@ -197,7 +197,7 @@ export const ElkMap = <T extends unknown = undefined>({
     return () => {
       abort = true;
     };
-  }, [nodes, edges, sizes]);
+  }, [nodes, edges, minimumSizes]);
 
   const [highlighted, setHighlighted] = useState<string>();
 
@@ -214,18 +214,17 @@ export const ElkMap = <T extends unknown = undefined>({
     [highlighted],
   );
 
-  const [nodeList, setNodeList] = useState<
-    {
-      id: string;
-      width: number;
-      height: number;
-      offset: { x: number; y: number };
-      depth: number;
-      hasEdge: boolean;
-      isHighlighted: boolean;
-      data: Node<T>;
-    }[]
-  >([]);
+  type NodeData = {
+    id: string;
+    width: number;
+    height: number;
+    offset: { x: number; y: number };
+    depth: number;
+    edges: Edge[];
+    data: Node<T>;
+  };
+
+  const [nodeList, setNodeList] = useState<NodeData[]>([]);
   useEffect(() => {
     setNodeList(() => {
       if (!graph) {
@@ -238,16 +237,7 @@ export const ElkMap = <T extends unknown = undefined>({
         return [];
       }
 
-      const nodeList: {
-        id: string;
-        width: number;
-        height: number;
-        offset: { x: number; y: number };
-        depth: number;
-        hasEdge: boolean;
-        isHighlighted: boolean;
-        data: Node<T>;
-      }[] = [];
+      const nodeList: NodeData[] = [];
       const traverse = (node: ElkNode, depth = 0) => {
         const offset = offsets?.get(node.id) ?? { x: 0, y: 0 };
         const data = nodeRecord[node.id];
@@ -258,13 +248,7 @@ export const ElkMap = <T extends unknown = undefined>({
             height: node.height ?? 0,
             offset,
             depth,
-            hasEdge:
-              edges?.some(
-                (edge) =>
-                  (edge.source === node.id && edge.target === highlighted) ||
-                  (edge.source === highlighted && edge.target === node.id),
-              ) ?? false,
-            isHighlighted: isHighlighted(node.id),
+            edges: edges ?? [],
             data,
           });
         }
@@ -279,22 +263,49 @@ export const ElkMap = <T extends unknown = undefined>({
 
       return nodeList;
     });
-  }, [
-    graph,
-    nodeRecord,
-    offsets,
-    edges,
-    setNodeList,
-    highlighted,
-    isHighlighted,
-  ]);
+  }, [graph, nodeRecord, offsets, edges, setNodeList]);
+
+  const { zoomToFit } = useZoomPaneContext() ?? {};
+  const zoomToNode = useCallback(
+    (nodeId: string | undefined) => {
+      const node = nodeList.find((node) => node.id === nodeId ?? "root");
+      if (!node) {
+        return;
+      }
+
+      zoomToFit({
+        x: node.offset.x,
+        y: node.offset.y,
+        width: node.width,
+        height: node.height,
+      });
+    },
+    [nodeList, zoomToFit],
+  );
+
+  // Zoom to fit when map changes
+  useEffect(() => {
+    zoomToNode("root");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeList]);
+
+  const hasHighlightedEdge = useCallback(
+    (node: NodeData) => {
+      return node.edges.some(
+        (edge) =>
+          (edge.source === node.id && edge.target === highlighted) ||
+          (edge.source === highlighted && edge.target === node.id),
+      );
+    },
+    [highlighted],
+  );
 
   return (
     <>
       <InvisibleNodeSizeCalculator
         nodes={nodes}
         node={NodeItem}
-        onSizesChange={setSizes}
+        onSizesChange={setMinimumSizes}
       />
 
       <ZoomPane className="w-full h-full">
@@ -311,7 +322,8 @@ export const ElkMap = <T extends unknown = undefined>({
                 <motion.div
                   key={node.id}
                   className={classNames(
-                    "absolute origin-top transition-all",
+                    "absolute origin-top",
+                    "transition-all",
                     durationClass,
                   )}
                   style={{
@@ -324,7 +336,10 @@ export const ElkMap = <T extends unknown = undefined>({
                     opacity: 0,
                   }}
                   animate={{
-                    opacity: node.isHighlighted || node.hasEdge ? 1 : 0.35,
+                    opacity:
+                      isHighlighted(node.id) || hasHighlightedEdge(node)
+                        ? 1
+                        : 0.35,
                   }}
                   transition={{ ease: "easeOut", duration: 0.15 }}
                   exit={{
