@@ -53,6 +53,7 @@ export async function compileTest(wingFile: string) {
 }
 
 export async function testTest(wingFile: string) {
+  const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await mkdir(testDir, { recursive: true });
@@ -64,7 +65,6 @@ export async function testTest(wingFile: string) {
     shouldSucceed: true,
   });
 
-  const fileMap: Record<string, string> = {};
   fileMap["stdout.log"] = out.stdout;
 
   await createMarkdownSnapshot(fileMap, wingFile, "test", "sim");
