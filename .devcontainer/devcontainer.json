@@ -10,5 +10,8 @@
     },
     "ghcr.io/devcontainers/features/rust:1": {},
     "devwasm.azurecr.io/dev-wasm/dev-wasm-feature/rust-wasi:0": {}
-  }
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind"
+  ]
 }
