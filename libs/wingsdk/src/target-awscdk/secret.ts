@@ -17,7 +17,9 @@ export class Secret extends cloud.Secret {
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
-    this.secret = new CdkSecret(this, "Default");
+    this.secret = new CdkSecret(this, "Default", {
+      secretName: props.name,
+    });
   }
 
   /**

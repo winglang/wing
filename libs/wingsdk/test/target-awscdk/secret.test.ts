@@ -16,5 +16,18 @@ test("default secret behavior", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(template.toJSON().Resources).toMatchSnapshot();
+});
+
+test("secret with a name", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  Secret._newSecret(app, "Secret", {
+    name: "my-secret",
+  });
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  expect(template.toJSON().Resources).toMatchSnapshot();
 });
