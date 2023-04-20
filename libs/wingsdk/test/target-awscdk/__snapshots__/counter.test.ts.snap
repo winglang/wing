@@ -119,11 +119,7 @@ exports[`dec() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-<<<<<<< HEAD
-          "S3Key": "70ea941c2ae18f2d23cd128a621a7c748fdc80da52b392299fd7874dcc2cae4d.zip",
-=======
-          "S3Key": "679cbd764536cde778046a96e51a2ce4ab2a2d953f0d4b8174bf7efa17722fcf.zip",
->>>>>>> main
+          "S3Key": "736aad0b6771ea3db96909988a18243a0c42c40bcd487b3b08e8708caf28bcb9.zip",
         },
         "Environment": {
           "Variables": {
@@ -351,11 +347,7 @@ exports[`function with a counter binding 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-<<<<<<< HEAD
-          "S3Key": "5e5f912d70696e83d90a63d9fa43879009f89dbcf55ffe2c7fec8aa63e0a28c5.zip",
-=======
-          "S3Key": "b3034d766b4e7702b1d0622656f1c653df0f95a875019cced934cdd79da02ed8.zip",
->>>>>>> main
+          "S3Key": "ee758f36fe1d1c2088dbc4b866dc8016a0462ed1768e1fb70359648ade40253b.zip",
         },
         "Environment": {
           "Variables": {
@@ -522,11 +514,7 @@ exports[`inc() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-<<<<<<< HEAD
-          "S3Key": "5e5f912d70696e83d90a63d9fa43879009f89dbcf55ffe2c7fec8aa63e0a28c5.zip",
-=======
-          "S3Key": "b3034d766b4e7702b1d0622656f1c653df0f95a875019cced934cdd79da02ed8.zip",
->>>>>>> main
+          "S3Key": "ee758f36fe1d1c2088dbc4b866dc8016a0462ed1768e1fb70359648ade40253b.zip",
         },
         "Environment": {
           "Variables": {
@@ -693,11 +681,7 @@ exports[`peek() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-<<<<<<< HEAD
-          "S3Key": "0de30eb6ac56a734a059c6ffaf07c193962f2159554e06d6ee12a26c62ee678a.zip",
-=======
-          "S3Key": "412d6a4e77282dae4f49ebe45b27943a5e8caf374920a05073521d9dcae84201.zip",
->>>>>>> main
+          "S3Key": "13767aa774791ec2a6dff797451962e511b4ac0b5f364e48fbb63fdd46029095.zip",
         },
         "Environment": {
           "Variables": {
@@ -864,11 +848,7 @@ exports[`reset() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-<<<<<<< HEAD
-          "S3Key": "d1cd37e7416d4d0d03e20b2127580ee60aa7299c93ec4a91c8391b6b3c6874e7.zip",
-=======
-          "S3Key": "b5eb11ccb22a1757e7af1c0a90e293527b5fcdb642c5a58d4edac963d0e42143.zip",
->>>>>>> main
+          "S3Key": "5e6fc773185e0098fe5dc3bce33a3245d621165f060ff065da77408999b3627d.zip",
         },
         "Environment": {
           "Variables": {
