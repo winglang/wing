@@ -6,6 +6,8 @@ import { resolve } from "path";
 import wasiBindings from "wasi-js/dist/bindings/node";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { readdir } from "fs-extra";
+import { lstat } from "fs/promises";
 
 const log = debug("wing:compile");
 
@@ -100,6 +102,18 @@ export async function load(options: WingCompilerLoadOptions) {
 
     for (const drive of drives) {
       preopens[normalPath(drive)] = drive;
+    }
+  } else {
+    // mapping the root is not sufficient on linux/mac
+    // we need to also map all directories in the root
+    const rootFiles = await readdir("/");
+    for (const file of rootFiles) {
+      // skip files and dot dirs
+      if (file.startsWith(".") || (await lstat(`/${file}`)).isFile()) {
+        continue;
+      } else {
+        preopens[file] = `/${file}`;
+      }
     }
   }
 
