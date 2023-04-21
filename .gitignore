@@ -47,3 +47,4 @@ apps/vscode-wing/resources/native/wing-language-server
 tools/hangar/results/
 tools/hangar/tmp/
 tools/hangar/src/test_corpus/*
+tools/hangar/__snapshots__/**/proc.*/
