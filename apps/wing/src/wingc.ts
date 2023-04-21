@@ -81,6 +81,7 @@ export async function load(options: WingCompilerLoadOptions) {
     resolve(require.resolve.call(null, "@winglang/sdk"), "../..");
 
   const preopens = {
+    "/": "/",
     // .jsii access
     [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
     ...(options.preopens ?? {}),
