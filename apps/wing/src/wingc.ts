@@ -1,9 +1,11 @@
 import debug from "debug";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync } from "fs";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
-import { isAbsolute, relative, resolve } from "path";
+import { resolve } from "path";
 import wasiBindings from "wasi-js/dist/bindings/node";
+import { exec } from "child_process";
+import { promisify } from "util";
 
 const log = debug("wing:compile");
 
@@ -80,39 +82,47 @@ export async function load(options: WingCompilerLoadOptions) {
     // using resolve.call so webpack will ignore the sdk package
     resolve(require.resolve.call(null, "@winglang/sdk"), "../..");
 
-  const preopens = {
-    // .jsii access
-    [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
-    ...(options.preopens ?? {}),
-  } as Record<string, string>;
+  let preopens: Record<string, string> = {};
 
-  // preopen all existing global node_modules
-  for (const m of module.paths ?? []) {
-    if (existsSync(m)) {
-      preopens[m] = m;
-    }
-  }
+  // preopen everything
+  preopens["/"] = "/";
+  preopens["."] = resolve(".");
 
   if (process.platform === "win32") {
-    preopens["C:\\"] = "C:\\";
-    for (const [key, value] of Object.entries(preopens)) {
-      delete preopens[key];
-      preopens[normalPath(value)] = value;
+    const wmicCommand = await promisify(exec)("wmic logicaldisk get name");
+    if(wmicCommand.stderr) {
+      throw new Error(`Unable to get available system drives to run WASM compiler: ${wmicCommand.stderr}`);
+    }
+
+    const drives = wmicCommand.stdout.split('\r\r\n')
+    .filter(value => /[A-Za-z]:/.test(value))
+    .map(value => value.trim());
+
+    for (const drive of drives) {
+      preopens[normalPath(drive)] = drive;
     }
   }
 
-  // for each provided preopens, add resolved paths in case any absolute paths are used
-  for (const [key, value] of Object.entries(preopens)) {
-    preopens[normalPath(resolve(key))] = value;
+  // Ensure all relative paths are preopened
+  // crawl up to the root and add .. for each
+  let dirI = 1;
+  while (true) {
+    const dir = "../".repeat(dirI++);
+    const resolvedDir = resolve(dir);
+    preopens[dir.slice(0, -1)] = resolvedDir;
+    if (resolvedDir === "/" || resolvedDir.match(/^[A-Z]:\\$/i)) {
+      break;
+    } else if (dirI > 100) {
+      throw new Error(
+        `Unable to find root directory to preopen for WASM compiler`
+      );
+    }
   }
 
-  // for each provided preopens, add relative paths in case any relative paths are used
-  for (const [key, value] of Object.entries(preopens)) {
-    if (isAbsolute(key)) {
-      const cwd = process.cwd();
-      const relativePath = normalPath(relative(cwd, key));
-      preopens[relativePath] = value;
-    }
+  // add provided preopens
+  preopens = {
+    ...preopens,
+    ...(options.preopens ?? {}),
   }
 
   // check if running in browser

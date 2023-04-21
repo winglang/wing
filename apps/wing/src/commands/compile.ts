@@ -124,12 +124,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WINGC_PREFLIGHT,
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
-    preopens: {
-      [wingDir]: wingDir, // for Rust's access to the source dir
-      [workDir]: workDir, // for Rust's access to the work directory
-      [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
-      [wingNodeModules]: wingNodeModules, // for Rust's access to the node_modules for the target wing file
-    },
   });
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(resolve(wingDir))}`;
