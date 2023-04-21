@@ -7,7 +7,7 @@ use itertools::Itertools;
 use std::{
 	cell::RefCell,
 	cmp::Ordering,
-	collections::{BTreeMap, BTreeSet},
+	collections::{BTreeMap, BTreeSet, HashSet},
 	fmt::Display,
 	fs,
 	path::Path,
@@ -19,7 +19,7 @@ use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionBodyRef,
 		FunctionDefinition, Initializer, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+		StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType, UtilityFunctions,
 	},
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
@@ -968,11 +968,14 @@ impl<'a> JSifier<'a> {
 		// Lookup the resource type
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
-		// Get all references between inflight methods and preflight fields
-		let mut refs = self.find_inflight_references(class);
+		// Find all free variables in the resource, and return their symbols
+		let free_vars = self.find_free_vars(class);
+
+		// Get all references between inflight methods and preflight values
+		let mut refs = self.find_inflight_references(class, &free_vars);
 
 		// Get fields to be captured by resource's client
-		let captured_fields = self.get_captures(resource_type);
+		let captured_fields = self.get_capturable_field_names(resource_type);
 
 		// Add inflight init's refs
 		// By default all captured fields are needed in the inflight init method
@@ -1021,7 +1024,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		let inflight_client = self.jsify_resource_client(env, &class, &captured_fields, &inflight_methods, context);
-		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields, inflight_client);
+		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields, &free_vars, inflight_client);
 		code.add_code(toinflight_method);
 
 		let mut bind_method = CodeMaker::default();
@@ -1089,11 +1092,23 @@ impl<'a> JSifier<'a> {
 		&mut self,
 		resource_name: &Symbol,
 		captured_fields: &[String],
+		free_inflight_variables: &[Symbol],
 		inflight_client: CodeMaker,
 	) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		code.open("_toInflight() {");
+
+		// de-duplicate multiple usages of the same free variable
+		let deduped_free_var_names: HashSet<String> = free_inflight_variables
+			.iter()
+			.map(|s| s.name.clone())
+			.into_iter()
+			.collect();
+
+		for var_name in &deduped_free_var_names {
+			code.line(format!("const __{var_name}_client = this._lift({var_name});",));
+		}
 
 		for inner_member_name in captured_fields {
 			code.line(format!(
@@ -1106,6 +1121,9 @@ impl<'a> JSifier<'a> {
 
 		let mut inflight_code = CodeMaker::default();
 		inflight_code.open("(await (async () => {");
+		for var_name in deduped_free_var_names {
+			inflight_code.line(format!("const {var_name} = ${{__{var_name}_client}};"));
+		}
 		inflight_code.add_code_escaped(inflight_client);
 		inflight_code.open(format!("const tmp = new {}({{", resource_name.name));
 		for inner_member_name in captured_fields {
@@ -1138,7 +1156,7 @@ impl<'a> JSifier<'a> {
 		let mut parent_captures = vec![];
 		if let Some(parent) = &resource.parent {
 			let parent_type = resolve_user_defined_type(parent, env, 0).unwrap();
-			parent_captures.extend(self.get_captures(parent_type));
+			parent_captures.extend(self.get_capturable_field_names(parent_type));
 		}
 
 		// Get the fields that are captured by this resource but not by its parent, they will be initialized in the generated constructor
@@ -1238,11 +1256,12 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	/// Get the type and capture info for fields that are captured in the client of the given resource
+	/// Get the type and capture info for symbols that are captured in the client of the given resource
 	/// Returns a map from method name to a map from field name to a set of operations
 	fn find_inflight_references(
 		&mut self,
 		resource_class: &AstClass,
+		free_vars: &[Symbol],
 	) -> BTreeMap<String, BTreeMap<String, BTreeSet<String>>> {
 		let inflight_methods = resource_class
 			.methods
@@ -1253,7 +1272,7 @@ impl<'a> JSifier<'a> {
 
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
-			let visitor = FieldReferenceVisitor::new(&function_def);
+			let visitor = FieldReferenceVisitor::new(&function_def, free_vars);
 			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
@@ -1264,7 +1283,7 @@ impl<'a> JSifier<'a> {
 
 		// Also add field rerferences from the inflight initializer
 		if let Some(inflight_init) = &resource_class.inflight_initializer {
-			let visitor = FieldReferenceVisitor::new(inflight_init);
+			let visitor = FieldReferenceVisitor::new(inflight_init, free_vars);
 			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
@@ -1276,7 +1295,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Get the type and capture info for fields that are captured in the client of the given resource
-	fn get_captures(&self, resource_type: TypeRef) -> Vec<String> {
+	fn get_capturable_field_names(&self, resource_type: TypeRef) -> Vec<String> {
 		resource_type
 			.as_resource()
 			.unwrap()
@@ -1289,6 +1308,18 @@ impl<'a> JSifier<'a> {
 			})
 			.map(|(name, ..)| name)
 			.collect_vec()
+	}
+
+	fn find_free_vars(&self, class: &AstClass) -> Vec<Symbol> {
+		let mut scanner = FreeVariableScanner::new(vec![
+			Symbol::global(UtilityFunctions::Log.to_string()),
+			Symbol::global(UtilityFunctions::Assert.to_string()),
+			Symbol::global(UtilityFunctions::Throw.to_string()),
+			Symbol::global(UtilityFunctions::Panic.to_string()),
+			Symbol::global("this".to_string()),
+		]);
+		scanner.visit_class(class);
+		scanner.free_vars
 	}
 }
 
@@ -1310,14 +1341,17 @@ struct FieldReferenceVisitor<'a> {
 	function_def: &'a FunctionDefinition,
 
 	diagnostics: Diagnostics,
+
+	free_vars: &'a [Symbol],
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(function_def: &'a FunctionDefinition) -> Self {
+	pub fn new(function_def: &'a FunctionDefinition, free_vars: &'a [Symbol]) -> Self {
 		Self {
 			references: BTreeMap::new(),
 			diagnostics: Diagnostics::new(),
 			function_def,
+			free_vars,
 		}
 	}
 
@@ -1331,19 +1365,29 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
-		let parts = Self::analyze_expr(node);
+		let parts = self.analyze_expr(node);
 
 		let is_field_reference = match parts.first() {
 			Some(first) => first.text == "this" && parts.len() > 1,
 			None => false,
 		};
 
-		if !is_field_reference {
+		let is_free_var = match parts.first() {
+			Some(first) => self.free_vars.iter().any(|v| v.exact_eq(&first.symbol)),
+			None => false,
+		};
+
+		if !is_field_reference && !is_free_var {
 			visit::visit_expr(self, node);
 			return;
 		}
 
-		let mut index = 1; // we know i[0] is "this" and that we have at least 2 parts
+		let mut index = if is_field_reference {
+			// we know i[0] is "this" and that we have at least 2 parts
+			1
+		} else {
+			0
+		};
 
 		// iterate over the components of the expression and determine
 		// what are we capturing from preflight.
@@ -1454,7 +1498,10 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 		}
 
 		let fmt = |x: Iter<&Component>| x.map(|f| f.text.to_string()).collect_vec();
-		let key = format!("this.{}", fmt(capture.iter()).join("."));
+		let mut key = fmt(capture.iter()).join(".");
+		if is_field_reference {
+			key = format!("this.{}", key);
+		}
 		let ops = fmt(qualification);
 
 		self.references.entry(key).or_default().extend(ops);
@@ -1465,6 +1512,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 
 struct Component<'a> {
 	expr: &'a Expr,
+	symbol: Symbol,
 	text: String,
 	variable: Option<VariableInfo>,
 }
@@ -1476,13 +1524,25 @@ impl Display for Component<'_> {
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	fn analyze_expr(node: &'a Expr) -> Vec<Component> {
+	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
 		match &node.kind {
 			ExprKind::Reference(Reference::Identifier(x)) => {
+				let scope = match &self.function_def.body {
+					FunctionBody::Statements(scope) => scope,
+					FunctionBody::External(_) => panic!("unexpected expression inside body of extern functions"),
+				};
+				let env = scope.env.borrow();
+				let env = env.as_ref().expect("scope should have an env");
+				let var = env
+					.lookup(&x, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.expect("reference to a non-variable");
 				return vec![Component {
 					expr: node,
+					symbol: x.clone(),
 					text: x.name.to_string(),
-					variable: None,
+					variable: Some(var),
 				}];
 			}
 
@@ -1520,15 +1580,175 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 				let prop = vec![Component {
 					expr: node,
+					symbol: property.clone(),
 					variable: var,
 					text: property.name.to_string(),
 				}];
 
-				let obj = Self::analyze_expr(&object);
+				let obj = self.analyze_expr(&object);
 				return [obj, prop].concat();
 			}
 
 			_ => vec![],
+		}
+	}
+}
+
+struct FreeVariableScanner {
+	bound_vars: Vec<Symbol>,
+	free_vars: Vec<Symbol>,
+}
+
+impl FreeVariableScanner {
+	pub fn new(globals: Vec<Symbol>) -> Self {
+		Self {
+			bound_vars: globals,
+			free_vars: Vec::new(),
+		}
+	}
+}
+
+impl Visit<'_> for FreeVariableScanner {
+	fn visit_reference(&mut self, node: &Reference) {
+		if let Reference::Identifier(ref x) = node {
+			// check if there is already a bound variable with the same name
+			if !self.bound_vars.contains(x) {
+				self.free_vars.push(x.clone());
+			}
+		};
+
+		return visit::visit_reference(self, node);
+	}
+
+	// invariant: adds net zero bound variables
+	fn visit_scope(&mut self, scope: &Scope) {
+		let old_bound_vars = self.bound_vars.clone();
+		visit::visit_scope(self, scope);
+		// remove the bound variables that were introduced in this scope
+		self.bound_vars = old_bound_vars;
+	}
+
+	fn visit_stmt(&mut self, stmt: &Stmt) {
+		match &stmt.kind {
+			// this statement introduces bound variables!
+			StmtKind::Bring {
+				module_name,
+				identifier,
+			} => {
+				self.visit_symbol(&module_name);
+
+				// bring cloud;
+				if !(module_name.name.starts_with('"') && module_name.name.ends_with('"')) {
+					// add `cloud` to the list of bound variables
+					self.bound_vars.push(module_name.clone());
+				}
+
+				// bring "foo" as bar;
+				if let Some(ref id) = identifier {
+					self.visit_symbol(&id);
+
+					// add `bar` to the list of bound variables
+					self.bound_vars.push(id.clone());
+				}
+			}
+			// this statement introduces bound variables!
+			StmtKind::VariableDef {
+				reassignable: _,
+				var_name,
+				initial_value,
+				type_,
+			} => {
+				self.visit_symbol(&var_name);
+				self.visit_expr(&initial_value);
+				if let Some(type_) = type_ {
+					self.visit_type_annotation(&type_);
+				}
+				self.bound_vars.push(var_name.clone());
+			}
+			// invariant: adds net zero bound variables
+			StmtKind::ForLoop {
+				iterator,
+				iterable,
+				statements,
+			} => {
+				self.visit_symbol(&iterator);
+				self.visit_expr(&iterable);
+				self.bound_vars.push(iterator.clone());
+				self.visit_scope(&statements);
+				self.bound_vars.pop();
+			}
+			// invariant: adds net zero bound variables
+			StmtKind::TryCatch {
+				try_statements,
+				catch_block,
+				finally_statements,
+			} => {
+				self.visit_scope(&try_statements);
+
+				if let Some(cb) = catch_block {
+					if let Some(ref var) = cb.exception_var {
+						self.visit_symbol(&var);
+						self.bound_vars.push(var.clone());
+					}
+					self.visit_scope(&cb.statements);
+					if cb.exception_var.is_some() {
+						self.bound_vars.pop();
+					}
+				}
+
+				if let Some(ref finally_statements) = finally_statements {
+					self.visit_scope(&finally_statements);
+				}
+			}
+
+			_ => return visit::visit_stmt(self, stmt),
+		};
+	}
+
+	// invariant: adds net zero bound variables
+	fn visit_constructor(&mut self, node: &Initializer) {
+		let Initializer {
+			signature,
+			statements,
+			span: _,
+		} = node;
+
+		for param in &signature.parameters {
+			self.bound_vars.push(param.name.clone());
+		}
+
+		self.visit_scope(statements);
+
+		for _ in &signature.parameters {
+			self.bound_vars.pop();
+		}
+	}
+
+	// invariant: adds net zero bound variables
+	fn visit_function_definition(&mut self, node: &FunctionDefinition) {
+		let FunctionDefinition {
+			signature,
+			body,
+			captures: _,
+			is_static: _,
+			span: _,
+		} = node;
+
+		for param in &signature.parameters {
+			self.bound_vars.push(param.name.clone());
+		}
+
+		self.visit_function_signature(signature);
+
+		let _new_body = match body {
+			FunctionBody::Statements(statements) => {
+				self.visit_scope(statements);
+			}
+			FunctionBody::External(_) => {}
+		};
+
+		for _ in &signature.parameters {
+			self.bound_vars.pop();
 		}
 	}
 }
