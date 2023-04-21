@@ -45,6 +45,11 @@ export abstract class Secret extends Resource {
     this.display.title = "Secret";
     this.display.description = "A cloud secret";
 
+    this._inflightOps.push(
+      SecretInflightMethods.VALUE,
+      SecretInflightMethods.VALUE_JSON
+    );
+
     props;
   }
 }

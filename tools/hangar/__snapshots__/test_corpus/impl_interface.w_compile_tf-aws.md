@@ -45,6 +45,7 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push("handle");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
@@ -68,12 +69,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    A._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
-    A._annotateInflight("handle", {});
     class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push("method_2");
       }
        method_1(x)  {
         {
@@ -107,12 +115,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("method_2")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    r._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
-    r._annotateInflight("method_2", {});
     class Dog extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push("eat");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
@@ -136,9 +151,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("eat")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Dog._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
-    Dog._annotateInflight("eat", {});
     const x = new A(this,"A");
     const y = new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),

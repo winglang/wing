@@ -49,6 +49,16 @@ export abstract class Bucket extends Resource {
     this.display.title = "Bucket";
     this.display.description = "A cloud object store";
 
+    this._inflightOps.push(
+      BucketInflightMethods.DELETE,
+      BucketInflightMethods.GET,
+      BucketInflightMethods.GET_JSON,
+      BucketInflightMethods.LIST,
+      BucketInflightMethods.PUT,
+      BucketInflightMethods.PUT_JSON,
+      BucketInflightMethods.PUBLIC_URL
+    );
+
     props;
   }
 

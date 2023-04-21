@@ -77,5 +77,3 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     return schema;
   }
 }
-
-Topic._annotateInflight("publish", {});

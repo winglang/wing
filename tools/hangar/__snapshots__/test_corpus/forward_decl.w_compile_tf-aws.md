@@ -44,6 +44,7 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push();
       }
        method2()  {
         {
@@ -76,8 +77,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.f, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    R._annotateInflight("$inflight_init", {"this.f": { ops: [] },"this.stateful": { ops: [] }});
     const x = "hi";
     if (true) {
       {console.log(`${x}`)};

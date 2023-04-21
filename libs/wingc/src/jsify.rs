@@ -1009,7 +1009,12 @@ impl<'a> JSifier<'a> {
 		};
 
 		code.open(format!("class {}{} {{", self.jsify_symbol(&class.name), extends));
-		code.add_code(self.jsify_resource_constructor(&class.initializer, class.parent.is_none(), context));
+		code.add_code(self.jsify_resource_constructor(
+			&class.initializer,
+			class.parent.is_none(),
+			&inflight_methods,
+			context,
+		));
 
 		for (n, m) in preflight_methods {
 			code.add_code(self.jsify_function(Some(&n.name), m, context));
@@ -1019,24 +1024,22 @@ impl<'a> JSifier<'a> {
 		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields, inflight_client);
 		code.add_code(toinflight_method);
 
-		code.close("}");
-
-		// go over all bindings and produce inflight annotations
-		for (method_name, refs) in refs {
-			code.line(format!(
-				"{}._annotateInflight(\"{}\", {{{}}});",
-				self.jsify_symbol(&class.name),
-				method_name,
-				refs
-					.iter()
-					.map(|(field, ops)| format!(
-						"\"{}\": {{ ops: [{}] }}",
-						field,
-						ops.iter().map(|op| format!("\"{}\"", op)).join(",")
-					))
-					.join(",")
-			));
+		let mut bind_method = CodeMaker::default();
+		bind_method.open("_registerBind(host, ops) {");
+		for (method_name, method_refs) in refs {
+			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
+			for (field, ops) in method_refs {
+				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+				bind_method.line(format!("this._registerBindObject({field}, host, [{ops_strings}]);",));
+			}
+			bind_method.close("}");
 		}
+		bind_method.line("super._registerBind(host, ops);".to_string());
+		bind_method.close("}");
+
+		code.add_code(bind_method);
+
+		code.close("}");
 
 		// Return the preflight resource class
 		code
@@ -1046,6 +1049,7 @@ impl<'a> JSifier<'a> {
 		&mut self,
 		constructor: &Initializer,
 		no_parent: bool,
+		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		context: &JSifyContext,
 	) -> CodeMaker {
 		let mut code = CodeMaker::default();
@@ -1062,6 +1066,12 @@ impl<'a> JSifier<'a> {
 		if no_parent {
 			code.line("super(scope, id);");
 		}
+
+		let inflight_ops_string = inflight_methods
+			.iter()
+			.map(|(name, _)| format!("\"{}\"", name.name))
+			.join(", ");
+		code.line(format!("this._inflightOps.push({inflight_ops_string});"));
 
 		code.add_code(self.jsify_scope_body(
 			&constructor.statements,

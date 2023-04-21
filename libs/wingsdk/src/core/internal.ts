@@ -1,7 +1,12 @@
 import { IConstruct } from "constructs";
 import { InflightBindings, NodeJsCode } from "./inflight";
 import { Duration } from "../std";
-import { DisplayProps, IResource, Resource } from "../std/resource";
+import {
+  DisplayProps,
+  IInflightHost,
+  IResource,
+  Resource,
+} from "../std/resource";
 
 export function makeHandler(
   scope: IConstruct,
@@ -31,6 +36,8 @@ export function makeHandler(
       this.display.title = display?.title;
       this.display.description = display?.description;
       this.display.hidden = display?.hidden;
+
+      this._inflightOps.push("handle");
     }
 
     public _toInflight(): NodeJsCode {
@@ -51,15 +58,14 @@ ${Object.entries(clients)
 })`
       );
     }
+
+    public _registerBind(host: IInflightHost, ops: string[]): void {
+      for (const v of Object.values(bindings)) {
+        this._registerBindObject(v.obj, host, v.ops);
+      }
+      super._registerBind(host, ops);
+    }
   }
-
-  const annotation: Record<string, { ops: Array<string> }> = {};
-
-  for (const [k, v] of Object.entries(bindings)) {
-    annotation["this." + k] = { ops: v.ops ?? [] };
-  }
-
-  Handler._annotateInflight("handle", annotation);
 
   return new Handler();
 }

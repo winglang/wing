@@ -59,6 +59,7 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push();
         {console.log(`my id is ${this.node.id}`)};
       }
       _toInflight() {
@@ -78,8 +79,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    WingResource._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
     const get_path =  (c) =>  {
       {
         return c.node.path;
