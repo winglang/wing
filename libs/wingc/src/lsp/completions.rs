@@ -124,11 +124,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						let found_env = found_env.as_ref().expect("Scope should have an env");
 						let found_phase = Some(found_env.phase);
 						let found_symbol = root_env
-							.lookup_ext(text.as_str(), None)
-							.ok()
-							.or_else(|| found_env.lookup_ext(text.as_str(), None).ok());
+							.lookup(text.as_str(), None)
+							.or_else(|| found_env.lookup(text.as_str(), None));
 
-						if let Some((found_symbol, _)) = found_symbol {
+						if let Some(found_symbol) = found_symbol {
 							match found_symbol {
 								SymbolKind::Type(t) => {
 									return get_completions_from_type(t, types, found_phase, false);
