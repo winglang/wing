@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.13.16
-        version: 0.13.16(constructs@10.2.4)
+        specifier: ^0.13.17
+        version: 0.13.17(constructs@10.2.4)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.13.16
-        version: 0.13.16(constructs@10.2.4)
+        specifier: ^0.13.17
+        version: 0.13.17(constructs@10.2.4)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -556,7 +556,7 @@ importers:
         version: 6.7.1(eslint@8.39.0)
       eslint-plugin-prettier:
         specifier: ^4.2.1
-        version: 4.2.1(eslint-config-prettier@8.8.0)(eslint@8.39.0)(prettier@2.8.7)
+        version: 4.2.1(eslint-config-prettier@8.8.0)(eslint@8.39.0)(prettier@2.8.8)
       eslint-plugin-react:
         specifier: ^7.32.2
         version: 7.32.2(eslint@8.39.0)
@@ -571,8 +571,8 @@ importers:
         specifier: ^8.39.0
         version: 8.39.0
       prettier:
-        specifier: ^2.8.7
-        version: 2.8.7
+        specifier: ^2.8.8
+        version: 2.8.8
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -3933,7 +3933,7 @@ packages:
       globby: 11.1.0
       jscodeshift: 0.14.0(@babel/preset-env@7.21.4)
       leven: 3.1.0
-      prettier: 2.8.7
+      prettier: 2.8.8
       prompts: 2.4.2
       puppeteer-core: 2.1.1
       read-pkg-up: 7.0.1
@@ -3971,7 +3971,7 @@ packages:
       globby: 11.1.0
       jscodeshift: 0.14.0(@babel/preset-env@7.21.4)
       lodash: 4.17.21
-      prettier: 2.8.7
+      prettier: 2.8.8
       recast: 0.23.1
     transitivePeerDependencies:
       - supports-color
@@ -5299,8 +5299,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.13.16(constructs@10.2.4):
-    resolution: {integrity: sha512-bVNir/7C12dVVF9OVP6K3VGD5Vj8OTOA/aBZjB9Iyv6VNCYSeZZIn3svVMCkI/szjgzZ0mQXyzZvM4nxaNxusQ==}
+  /@winglang/sdk@0.13.17(constructs@10.2.4):
+    resolution: {integrity: sha512-Ou4P+nYnbz3Tzq3Rq95byE8KWo/4PgrclvPc3L21vLnXEnYj1ax8oO6+lZCvHvVb5JMoF0qti/rxtA8f9jLAzg==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
@@ -7672,7 +7672,7 @@ packages:
       semver: 6.3.0
     dev: false
 
-  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.8.0)(eslint@8.39.0)(prettier@2.8.7):
+  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.8.0)(eslint@8.39.0)(prettier@2.8.8):
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -7685,7 +7685,7 @@ packages:
     dependencies:
       eslint: 8.39.0
       eslint-config-prettier: 8.8.0(eslint@8.39.0)
-      prettier: 2.8.7
+      prettier: 2.8.8
       prettier-linter-helpers: 1.0.0
     dev: false
 
@@ -10572,8 +10572,8 @@ packages:
       fast-diff: 1.2.0
     dev: false
 
-  /prettier@2.8.7:
-    resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==}
+  /prettier@2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
 
