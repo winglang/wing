@@ -61,7 +61,7 @@ jobs:
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
         name: Find mutations
         run: |-
-          git add .
+          git add -u
           git diff --staged --patch --exit-code > /dev/null || echo "::set-output name=self_mutation_happened::true"
       - name: Push changes
         if: steps.token-check.outputs.HAS_TOKEN == 'true' && steps.self_mutation.outputs.self_mutation_happened
