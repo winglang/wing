@@ -189,6 +189,27 @@ new $App().synth();
 
 ```
 
+## proc.09104e27ddc37691caca765b1b7cb87ad5bcd5f01349ff19070fce915e60db2b/index.js
+```js
+async handle(body) {
+  const {  } = this;
+  const i = 0;
+  while (((await iterator(i)) < 3)) {
+    {console.log(`${i}`)};
+  }
+}
+
+```
+
+## proc.8df6c52d279b5b0f60f3073722d4666c96d8faf3bae7f82cf289c11a372daa9a/index.js
+```js
+async handle(j) {
+  const {  } = this;
+  return (j + 1);
+}
+
+```
+
 ## proc1/index.js
 ```js
 async handle(j) {

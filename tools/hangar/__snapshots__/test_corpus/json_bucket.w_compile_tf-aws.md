@@ -303,6 +303,26 @@ new $App().synth();
 
 ```
 
+## proc.65da1a50b3f7d2621c34d29e0b410f0e504124beed71b58374c3bf728c7b80d9/index.js
+```js
+async handle(msg) {
+  const { b, file_name } = this;
+  const x = (await b.getJson(file_name));
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
+}
+
+```
+
+## proc.f9f9b40f387b4eb240575908f7968d76a559c71637db94a1aaf8124ca452f582/index.js
+```js
+async handle(msg) {
+  const { b, file_name, get_json, j } = this;
+  (await b.putJson(file_name,j));
+  (await get_json.invoke(msg));
+}
+
+```
+
 ## proc1/index.js
 ```js
 async handle(msg) {

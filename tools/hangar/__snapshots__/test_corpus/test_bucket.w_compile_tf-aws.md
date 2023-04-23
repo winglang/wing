@@ -284,6 +284,27 @@ new $App().synth();
 
 ```
 
+## proc.412efe1236e70dc0c84a7db92a612d4405b678740d6d9a86f75c2c059a93e1b3/index.js
+```js
+async handle(_) {
+  const { b } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
+  (await b.put("hello.txt","world"));
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 1)'`)})(((await b.list()).length === 1))};
+}
+
+```
+
+## proc.ac9708184e710f892c66bb4336569769a09d726ccc04b8ee83036b184d5bb763/index.js
+```js
+async handle(_) {
+  const { b } = this;
+  (await b.put("hello.txt","world"));
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("hello.txt")) === "world")'`)})(((await b.get("hello.txt")) === "world"))};
+}
+
+```
+
 ## proc1/index.js
 ```js
 async handle(_) {
