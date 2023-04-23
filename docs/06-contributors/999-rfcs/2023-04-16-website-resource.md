@@ -28,6 +28,8 @@ is a great way to introduice the feature to readers.
 
 ## Requirements
 
+The website resource represents a CDN-backed website. It is useful for hosting static content, such as a blog or a single-page application, but accepts dynamic data too.
+
 ## Design
 
 The user will be able to point at a local directory, and create a static website holding those files in a single line of code. The website will accept dynamic content too, that will be added in the following lines of preflight code. The website will be served using a CDN and could be placed under a certain domain.
