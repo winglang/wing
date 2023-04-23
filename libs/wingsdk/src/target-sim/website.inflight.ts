@@ -1,7 +1,7 @@
 import { Server } from "http";
 import { AddressInfo } from "net";
 import express from "express";
-import { ApiAttributes, API_TYPE, WebsiteSchema } from "./schema-resources";
+import { ApiAttributes, WebsiteSchema, WEBSITE_TYPE } from "./schema-resources";
 import { TraceType, IWebsiteClient } from "../cloud";
 import { Json } from "../std";
 import {
@@ -71,7 +71,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
         message,
       },
       sourcePath: this.context.resourcePath,
-      sourceType: API_TYPE,
+      sourceType: WEBSITE_TYPE,
       timestamp: new Date().toISOString(),
     });
   }
