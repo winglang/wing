@@ -64,17 +64,17 @@ pub enum LookupResultMut<'a> {
 }
 
 #[duplicate_item(
-	LookupResultT reference(lifetime, type);
+	LookupResult reference(lifetime, type);
 	[LookupResult] [& 'lifetime type];
 	[LookupResultMut] [& 'lifetime mut type];
 )]
-impl<'a> LookupResultT<'a> {
+impl<'a> LookupResult<'a> {
 	pub fn unwrap(self) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
 		match self {
-			LookupResultT::Found(kind, info) => (kind, info),
-			LookupResultT::NotFound => panic!("LookupResult::unwrap() called on LookupResult::NotFound"),
-			LookupResultT::DefinedLater => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
-			LookupResultT::ExpectedNamespace(symbol) => panic!(
+			LookupResult::Found(kind, info) => (kind, info),
+			LookupResult::NotFound => panic!("LookupResult::unwrap() called on LookupResult::NotFound"),
+			LookupResult::DefinedLater => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
+			LookupResult::ExpectedNamespace(symbol) => panic!(
 				"LookupResult::unwrap() called on LookupResult::ExpectedNamespace({:?})",
 				symbol
 			),
@@ -83,14 +83,14 @@ impl<'a> LookupResultT<'a> {
 
 	pub fn expect(self, message: &str) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
 		match self {
-			LookupResultT::Found(kind, info) => (kind, info),
+			LookupResult::Found(kind, info) => (kind, info),
 			_ => panic!("{message}"),
 		}
 	}
 
 	pub fn ok(self) -> Option<(reference([a], [SymbolKind]), SymbolLookupInfo)> {
 		match self {
-			LookupResultT::Found(kind, info) => Some((kind, info)),
+			LookupResult::Found(kind, info) => Some((kind, info)),
 			_ => None,
 		}
 	}
@@ -173,23 +173,23 @@ impl SymbolEnv {
 
 	#[allow(clippy::needless_arbitrary_self_type)]
 	#[duplicate_item(
-		lookup_ext LookupResultT map_get reference(type) ref_annotation(ident);
+		lookup_ext LookupResult map_get reference(type) ref_annotation(ident);
 		[lookup_ext] [LookupResult] [get] [& type] [ref ident];
 		[lookup_ext_mut] [LookupResultMut] [get_mut] [&mut type] [ref mut ident];
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. Note that the symbol name
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
-	pub fn lookup_ext(self: reference([Self]), symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResultT {
+	pub fn lookup_ext(self: reference([Self]), symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResult {
 		if let Some((definition_idx, kind)) = self.symbol_map.map_get(symbol_name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
 				if let StatementIdx::Index(definition_idx) = definition_idx {
 					if *definition_idx > not_after_stmt_idx {
-						return LookupResultT::DefinedLater;
+						return LookupResult::DefinedLater;
 					}
 				}
 			}
-			LookupResultT::Found(
+			LookupResult::Found(
 				kind,
 				SymbolLookupInfo {
 					phase: self.phase,
@@ -199,7 +199,7 @@ impl SymbolEnv {
 		} else if let Some(ref_annotation([parent_env])) = self.parent {
 			parent_env.lookup_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
-			LookupResultT::NotFound
+			LookupResult::NotFound
 		}
 	}
 
