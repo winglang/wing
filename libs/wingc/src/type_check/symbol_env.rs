@@ -154,6 +154,12 @@ impl SymbolEnv {
 		[lookup] [& type] [lookup_ext];
 		[lookup_mut] [& mut type] [lookup_ext_mut];
 	)]
+	/// Lookup a symbol in the environment, returning the symbol kind if it was found.
+	/// Note that the symbol name cannot be a nested symbol (e.g. `foo.bar`). Use
+	/// `lookup_nested` for that.
+	/// This is a simplified version of `lookup_ext` that only returns the symbol kind
+	/// without the added `SymbolLookupInfo` metadata and without details lookup errors,
+	/// just `None`.
 	pub fn lookup(
 		self: reference([Self]),
 		symbol_name: &str,
@@ -171,6 +177,9 @@ impl SymbolEnv {
 		[lookup_ext] [LookupResult] [get] [& type] [ref ident];
 		[lookup_ext_mut] [LookupResultMut] [get_mut] [&mut type] [ref mut ident];
 	)]
+	/// Lookup a symbol in the environment, returning a `LookupResult`. Note that the symbol name
+	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
+	/// TODO: perhaps make this private and switch to the nested version in all external calls
 	pub fn lookup_ext(self: reference([Self]), symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResultT {
 		if let Some((definition_idx, kind)) = self.symbol_map.map_get(symbol_name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
@@ -200,6 +209,8 @@ impl SymbolEnv {
 		[lookup_nested] [LookupResult] [lookup_ext] [as_namespace] [& type];
 		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type];
 	)]
+	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
+	/// nested symbol (e.g. `foo.bar`) if `nested_ver` is larger than 1.
 	pub fn lookup_nested(self: reference([Self]), nested_vec: &[&Symbol], statement_idx: Option<usize>) -> LookupResult {
 		let mut it = nested_vec.iter();
 
@@ -246,6 +257,8 @@ impl SymbolEnv {
 		[lookup_nested_str] [LookupResult] [lookup_nested] [& type];
 		[lookup_nested_str_mut] [LookupResultMut] [lookup_nested_mut] [&mut type];
 	)]
+	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
+	/// nested symbol (e.g. `foo.bar`).
 	pub fn lookup_nested_str(self: reference([Self]), nested_str: &str, statement_idx: Option<usize>) -> LookupResult {
 		let nested_vec = nested_str
 			.split('.')
