@@ -120,7 +120,7 @@ impl SymbolKind {
 		}
 	}
 
-	fn as_mut_namespace_ref(&mut self) -> Option<&mut Namespace> {
+	fn as_namespace_mut(&mut self) -> Option<&mut Namespace> {
 		match self {
 			SymbolKind::Namespace(ref mut ns) => Some(ns),
 			_ => None,
@@ -220,7 +220,7 @@ impl Interface {
 
 impl Display for Interface {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		if let LookupResult::Found(method, _) = self.get_env().try_lookup_ext("handle", None) {
+		if let LookupResult::Found(method, _) = self.get_env().lookup_ext("handle", None) {
 			let method = method.as_variable().unwrap();
 			if method.phase == Phase::Inflight {
 				write!(f, "{} ({})", self.name.name, method.type_)
@@ -262,7 +262,7 @@ pub trait ClassLike {
 	fn get_method(&self, name: &str) -> Option<VariableInfo> {
 		let v = self
 			.get_env()
-			.try_lookup_ext(name, None)
+			.lookup_ext(name, None)
 			.ok()?
 			.0
 			.as_variable()
@@ -383,7 +383,7 @@ impl Subtype for Type {
 				}
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
-				if let Some((method, _)) = r0.get_env().try_lookup_ext("handle", None).ok() {
+				if let Some((method, _)) = r0.get_env().lookup_ext("handle", None).ok() {
 					let method = method.as_variable().unwrap();
 					if method.phase != Phase::Inflight {
 						return false;
@@ -999,7 +999,7 @@ impl Types {
 			self.resource_base_type = Some(
 				self
 					.libraries
-					.try_lookup_nested_str(&resource_fqn, None)
+					.lookup_nested_str(&resource_fqn, None)
 					.unwrap()
 					.0
 					.as_type()
@@ -1300,7 +1300,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let lookup_res = class_env.try_lookup_ext(CLASS_INIT_NAME, None);
+				let lookup_res = class_env.lookup_ext(CLASS_INIT_NAME, None);
 				let constructor_type = if let LookupResult::Found(k, _) = lookup_res {
 					k.as_variable().expect("Expected constructor to be a variable").type_
 				} else {
@@ -1361,7 +1361,7 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
 						env
-							.try_lookup("this", Some(self.statement_idx))
+							.lookup("this", Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
 					};
 
@@ -1520,7 +1520,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify that no unexpected fields are present
 				for (name, _t) in field_types.iter() {
-					if st.env.try_lookup(&name.name, Some(self.statement_idx)).is_none() {
+					if st.env.lookup(&name.name, Some(self.statement_idx)).is_none() {
 						self.expr_error(exp, format!("\"{}\" is not a field of \"{}\"", name.name, st.name.name));
 					}
 				}
@@ -1641,7 +1641,7 @@ impl<'a> TypeChecker<'a> {
 		// Also map original field names to the ones in the struct type
 		let mut field_map = IndexMap::new();
 		for (k, _) in object_types.iter() {
-			let field = expected_struct.env.try_lookup(&k.name, None);
+			let field = expected_struct.env.lookup(&k.name, None);
 			if let Some(field) = field {
 				let field_type = field
 					.as_variable()
@@ -2258,7 +2258,7 @@ impl<'a> TypeChecker<'a> {
 
 					// Check all methods are implemented
 					for (method_name, method_type) in interface_type.methods(true) {
-						if let Some(symbol) = class_env.try_lookup(&method_name, None) {
+						if let Some(symbol) = class_env.lookup(&method_name, None) {
 							let class_method_type = symbol.as_variable().expect("Expected method to be a variable").type_;
 							self.validate_type(class_method_type, method_type, name);
 						} else {
@@ -2274,7 +2274,7 @@ impl<'a> TypeChecker<'a> {
 
 					// Check all fields are implemented
 					for (field_name, field_type) in interface_type.fields(true) {
-						if let Some(symbol) = class_env.try_lookup(&field_name, None) {
+						if let Some(symbol) = class_env.lookup(&field_name, None) {
 							let class_field_type = symbol.as_variable().expect("Expected field to be a variable").type_;
 							self.validate_type(class_field_type, field_type, name);
 						} else {
@@ -2491,7 +2491,7 @@ impl<'a> TypeChecker<'a> {
 		// https://github.com/winglang/wing/issues/457
 		// Lookup the method in the class_env
 		let method_type = class_env
-			.try_lookup(&method_name.name, None)
+			.lookup(&method_name.name, None)
 			.expect("Expected method to be in class env")
 			.as_variable()
 			.expect("Expected method to be a variable")
@@ -2683,12 +2683,7 @@ impl<'a> TypeChecker<'a> {
 		original_fqn: &str,
 		type_params: Vec<TypeRef>,
 	) -> TypeRef {
-		let original_type = env
-			.try_lookup_nested_str(original_fqn, None)
-			.unwrap()
-			.0
-			.as_type()
-			.unwrap();
+		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().0.as_type().unwrap();
 		let original_type_class = original_type.as_class().unwrap();
 		let original_type_params = if let Some(tp) = original_type_class.type_parameters.as_ref() {
 			tp
@@ -2920,7 +2915,7 @@ impl<'a> TypeChecker<'a> {
 	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv) -> VariableInfo {
 		match reference {
 			Reference::Identifier(symbol) => {
-				let lookup_res = env.try_lookup_ext(&symbol.name, Some(self.statement_idx));
+				let lookup_res = env.lookup_ext(&symbol.name, Some(self.statement_idx));
 				if let LookupResult::Found(var, _) = lookup_res {
 					if let Some(var) = var.as_variable() {
 						var
@@ -2971,7 +2966,7 @@ impl<'a> TypeChecker<'a> {
 				let mut force_reassignable = false;
 				if let ExprKind::Reference(Reference::Identifier(symb)) = &object.kind {
 					if symb.name == "this" {
-						if let LookupResult::Found(kind, info) = env.try_lookup_ext(&symb.name, Some(self.statement_idx)) {
+						if let LookupResult::Found(kind, info) = env.lookup_ext(&symb.name, Some(self.statement_idx)) {
 							// `this` resreved symbol should always be a variable
 							assert!(matches!(kind, SymbolKind::Variable(_)));
 							force_reassignable = info.init;
@@ -3017,7 +3012,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					Type::Json => self.get_property_from_class_like(
 						env
-							.try_lookup_nested_str(WINGSDK_JSON, None)
+							.lookup_nested_str(WINGSDK_JSON, None)
 							.unwrap()
 							.0
 							.as_type()
@@ -3028,7 +3023,7 @@ impl<'a> TypeChecker<'a> {
 					),
 					Type::MutJson => self.get_property_from_class_like(
 						env
-							.try_lookup_nested_str(WINGSDK_MUT_JSON, None)
+							.lookup_nested_str(WINGSDK_MUT_JSON, None)
 							.unwrap()
 							.0
 							.as_type()
@@ -3039,7 +3034,7 @@ impl<'a> TypeChecker<'a> {
 					),
 					Type::String => self.get_property_from_class_like(
 						env
-							.try_lookup_nested_str(WINGSDK_STRING, None)
+							.lookup_nested_str(WINGSDK_STRING, None)
 							.unwrap()
 							.0
 							.as_type()
@@ -3050,7 +3045,7 @@ impl<'a> TypeChecker<'a> {
 					),
 					Type::Duration => self.get_property_from_class_like(
 						env
-							.try_lookup_nested_str(WINGSDK_DURATION, None)
+							.lookup_nested_str(WINGSDK_DURATION, None)
 							.unwrap()
 							.0
 							.as_type()
@@ -3101,7 +3096,7 @@ impl<'a> TypeChecker<'a> {
 							)
 						}
 					}
-					Type::Class(ref c) | Type::Resource(ref c) => match c.env.try_lookup(&property.name, None) {
+					Type::Class(ref c) | Type::Resource(ref c) => match c.env.lookup(&property.name, None) {
 						Some(SymbolKind::Variable(v)) => {
 							if v.is_static {
 								v.clone()
@@ -3128,7 +3123,7 @@ impl<'a> TypeChecker<'a> {
 
 	/// Get's the type of an instance variable in a class
 	fn get_property_from_class_like(&mut self, class: &impl ClassLike, property: &Symbol) -> VariableInfo {
-		let lookup_res = class.get_env().try_lookup_ext(&property.name, None);
+		let lookup_res = class.get_env().lookup_ext(&property.name, None);
 		if let LookupResult::Found(field, _) = lookup_res {
 			let var = field.as_variable().expect("Expected property to be a variable");
 			if var.is_static {
@@ -3209,7 +3204,7 @@ fn add_parent_members_to_struct_env(
 				.as_variable()
 				.expect("Expected struct member to be a variable")
 				.type_;
-			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
+			if let Some(existing_type) = struct_env.lookup(&parent_member_name, None) {
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected struct member to be a variable")
@@ -3263,7 +3258,7 @@ fn add_parent_members_to_iface_env(
 				.as_variable()
 				.expect("Expected interface member to be a variable")
 				.type_;
-			if let Some(existing_type) = iface_env.try_lookup(&parent_member_name, None) {
+			if let Some(existing_type) = iface_env.lookup(&parent_member_name, None) {
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected interface member to be a variable")
@@ -3320,7 +3315,7 @@ pub fn resolve_user_defined_type(
 	let mut nested_name = vec![&user_defined_type.root];
 	nested_name.extend(user_defined_type.fields.iter().collect_vec());
 
-	let lookup_result = env.try_lookup_nested(&nested_name, Some(statement_idx));
+	let lookup_result = env.lookup_nested(&nested_name, Some(statement_idx));
 	if let LookupResult::Found(symb_kind, _) = lookup_result {
 		if let SymbolKind::Type(t) = symb_kind {
 			Ok(*t)

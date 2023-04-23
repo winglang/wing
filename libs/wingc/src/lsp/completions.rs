@@ -124,9 +124,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						let found_env = found_env.as_ref().expect("Scope should have an env");
 						let found_phase = Some(found_env.phase);
 						let found_symbol = root_env
-							.try_lookup_ext(text.as_str(), None)
+							.lookup_ext(text.as_str(), None)
 							.ok()
-							.or_else(|| found_env.try_lookup_ext(text.as_str(), None).ok());
+							.or_else(|| found_env.lookup_ext(text.as_str(), None).ok());
 
 						if let Some((found_symbol, _)) = found_symbol {
 							match found_symbol {
@@ -251,7 +251,7 @@ fn get_completions_from_type(
 			};
 			if let LookupResult::Found(std_type, _) = types
 				.libraries
-				.try_lookup_nested_str(format!("@winglang/sdk.std.{}", type_name).as_str(), None)
+				.lookup_nested_str(format!("@winglang/sdk.std.{}", type_name).as_str(), None)
 			{
 				return get_completions_from_type(&std_type.as_type().expect("is type"), types, current_phase, is_instance);
 			} else {
