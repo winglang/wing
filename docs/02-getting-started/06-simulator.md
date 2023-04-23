@@ -70,14 +70,14 @@ Now that our app is running, lets trigger a message on the queue
 For example, we can list all the resources in the app:
 
 ```js
- const queue = simulator.getResource("root/cloud.Queue"); // retrieve the queue resource
+ const queue = simulator.getResource("root/Default/cloud.Queue"); // retrieve the queue resource
  await queue.push("Wing")
 ```
 
 ## Viewing generated file
 
 ```js
-const bucket = simulator.getResource("root/cloud.Bucket"); // retrieve the bucket resource
+const bucket = simulator.getResource("root/Default/cloud.Bucket"); // retrieve the bucket resource
 await bucket.list() // will show available files
 await bucket.get("wing.txt") // will show the file content
 ```
