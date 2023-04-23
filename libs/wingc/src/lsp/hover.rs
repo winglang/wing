@@ -5,7 +5,7 @@ use crate::ast::{
 };
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
-use crate::type_check::symbol_env::SymbolLookupInfo;
+use crate::type_check::symbol_env::{LookupResult, SymbolLookupInfo};
 use crate::type_check::SymbolKind;
 use crate::visit::Visit;
 use crate::wasm_util::WASM_RETURN_ERROR;
@@ -235,10 +235,10 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 				.borrow();
 			let env = env.as_ref().expect("All scopes should have a symbol environment");
 
-			let symbol_lookup = env.lookup_ext(symbol, None);
+			let symbol_lookup = env.try_lookup_ext(&symbol.name, None);
 
-			let hover_string = if let Ok(symbol_lookup) = symbol_lookup {
-				format_symbol_with_lookup(&symbol.name, symbol_lookup)
+			let hover_string = if let LookupResult::Found(kind, info) = symbol_lookup {
+				format_symbol_with_lookup(&symbol.name, (kind, info))
 			} else {
 				format_unknown_symbol(&symbol.name)
 			};

@@ -6,7 +6,7 @@ use tree_sitter::Point;
 use crate::ast::{Expr, ExprKind, Phase, Reference, Scope};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::lsp::sync::FILES;
-use crate::type_check::symbol_env::StatementIdx;
+use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef};
 use crate::visit::{visit_expr, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
@@ -124,10 +124,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						let found_env = found_env.as_ref().expect("Scope should have an env");
 						let found_phase = Some(found_env.phase);
 						let found_symbol = root_env
-							.try_lookup(text.as_str(), None)
-							.or_else(|| found_env.try_lookup(text.as_str(), None));
+							.try_lookup_ext(text.as_str(), None)
+							.ok()
+							.or_else(|| found_env.try_lookup_ext(text.as_str(), None).ok());
 
-						if let Some(found_symbol) = found_symbol {
+						if let Some((found_symbol, _)) = found_symbol {
 							match found_symbol {
 								SymbolKind::Type(t) => {
 									return get_completions_from_type(t, types, found_phase, false);
@@ -248,9 +249,9 @@ fn get_completions_from_type(
 				"MutArray" => "MutableArray",
 				s => s,
 			};
-			if let Ok(std_type) = types
+			if let LookupResult::Found(std_type, _) = types
 				.libraries
-				.lookup_nested_str(format!("@winglang/sdk.std.{}", type_name).as_str(), None)
+				.try_lookup_nested_str(format!("@winglang/sdk.std.{}", type_name).as_str(), None)
 			{
 				return get_completions_from_type(&std_type.as_type().expect("is type"), types, current_phase, is_instance);
 			} else {

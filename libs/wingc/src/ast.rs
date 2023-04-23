@@ -132,6 +132,23 @@ pub struct FunctionTypeAnnotation {
 pub struct UserDefinedType {
 	pub root: Symbol,
 	pub fields: Vec<Symbol>,
+	pub span: WingSpan,
+}
+
+pub trait Locatable {
+	fn span(&self) -> &WingSpan;
+}
+
+impl Locatable for UserDefinedType {
+	fn span(&self) -> &WingSpan {
+		&self.span
+	}
+}
+
+impl Locatable for Symbol {
+	fn span(&self) -> &WingSpan {
+		&self.span
+	}
 }
 
 impl Display for UserDefinedType {

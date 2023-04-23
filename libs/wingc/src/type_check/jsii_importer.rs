@@ -17,7 +17,10 @@ use wingii::{
 	type_system::TypeSystem,
 };
 
-use super::{symbol_env::SymbolEnv, Enum, Namespace};
+use super::{
+	symbol_env::{LookupResult, SymbolEnv},
+	Enum, Namespace,
+};
 
 trait JsiiInterface {
 	fn methods(&self) -> &Option<Vec<jsii::Method>>;
@@ -135,7 +138,7 @@ impl<'a> JsiiImporter<'a> {
 
 	fn lookup_or_create_type(&mut self, type_fqn: &FQN) -> TypeRef {
 		// Check if this type is already imported
-		if let Ok(t) = self.wing_types.libraries.lookup_nested_str(type_fqn.as_str(), None) {
+		if let LookupResult::Found(t, _) = self.wing_types.libraries.try_lookup_nested_str(type_fqn.as_str(), None) {
 			return t.as_type().expect(&format!("Expected {} to be a type", type_fqn));
 		}
 		// Define new type and return it
@@ -143,8 +146,9 @@ impl<'a> JsiiImporter<'a> {
 		self
 			.wing_types
 			.libraries
-			.lookup_nested_str(type_fqn.as_str(), None)
+			.try_lookup_nested_str(type_fqn.as_str(), None)
 			.expect(&format!("Expected {} to be defined", type_fqn))
+			.0
 			.as_type()
 			.unwrap()
 	}
@@ -155,7 +159,10 @@ impl<'a> JsiiImporter<'a> {
 		let type_str = type_fqn.as_str();
 
 		// check if type is already imported
-		if self.wing_types.libraries.lookup_nested_str(type_str, None).is_ok() {
+		if matches!(
+			self.wing_types.libraries.try_lookup_nested_str(type_str, None),
+			LookupResult::Found(..)
+		) {
 			return true;
 		}
 
@@ -533,10 +540,10 @@ impl<'a> JsiiImporter<'a> {
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
 			let base_class_fqn = FQN::from(base_class_fqn.as_str());
 			let base_class_name = base_class_fqn.type_name();
-			let base_class_type = if let Ok(base_class_type) = self
+			let base_class_type = if let LookupResult::Found(base_class_type, _) = self
 				.wing_types
 				.libraries
-				.lookup_nested_str(base_class_fqn.as_str(), None)
+				.try_lookup_nested_str(base_class_fqn.as_str(), None)
 			{
 				base_class_type
 					.as_type()
@@ -547,11 +554,12 @@ impl<'a> JsiiImporter<'a> {
 				self
 					.wing_types
 					.libraries
-					.lookup_nested_str(&base_class_fqn.as_str(), None)
+					.try_lookup_nested_str(&base_class_fqn.as_str(), None)
 					.expect(&format!(
 						"Failed to define base class {} of {}",
 						base_class_name, type_name
 					))
+					.0
 					.as_type()
 					.unwrap()
 			};
@@ -823,7 +831,10 @@ impl<'a> JsiiImporter<'a> {
 
 	fn register_jsii_type(&mut self, fqn: &FQN, symbol: &Symbol, type_ref: TypeRef) {
 		// make this function idempotent
-		if self.wing_types.libraries.lookup_nested_str(fqn.as_str(), None).is_ok() {
+		if matches!(
+			self.wing_types.libraries.try_lookup_nested_str(fqn.as_str(), None),
+			LookupResult::Found(..)
+		) {
 			return;
 		}
 

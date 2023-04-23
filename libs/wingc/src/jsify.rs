@@ -973,7 +973,7 @@ impl<'a> JSifier<'a> {
 		assert!(context.phase == Phase::Preflight);
 
 		// Lookup the resource type
-		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
+		let resource_type = env.try_lookup(&class.name.name, None).unwrap().as_type().unwrap();
 
 		// Get all references between inflight methods and preflight fields
 		let mut refs = self.find_inflight_references(class);
@@ -1522,7 +1522,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					Some(
 						cls
 							.env
-							.lookup(&property, None)
+							.try_lookup(&property.name, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
@@ -1531,7 +1531,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					Some(
 						iface
 							.env
-							.lookup(&property, None)
+							.try_lookup(&property.name, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
@@ -1539,7 +1539,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				} else if let Some(s) = obj_type.as_struct() {
 					Some(
 						s.env
-							.lookup(&property, None)
+							.try_lookup(&property.name, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
@@ -1601,7 +1601,7 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 		if let Reference::TypeMember { type_, .. } = node {
 			let type_name = type_.to_string();
 			// Lookup the type in the current env and see where it was defined
-			if let LookupResult::Found((kind, info)) = (*self.env).try_lookup_nested_str(&type_name, None) {
+			if let LookupResult::Found(kind, info) = (*self.env).try_lookup_nested_str(&type_name, None) {
 				// This must be a type reference
 				if let SymbolKind::Type(t) = kind {
 					// If this user type was defined preflight then store it

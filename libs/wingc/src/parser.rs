@@ -541,6 +541,7 @@ impl<'s> Parser<'s> {
 								return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
 									root: name.clone(),
 									fields: vec![],
+									span: name.span.clone(),
 								}))),
 								phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 							},
@@ -842,6 +843,7 @@ impl<'s> Parser<'s> {
 								span: Default::default(),
 							},
 							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
 						},
 						property: self.node_symbol(&property)?,
 					}),
@@ -873,6 +875,7 @@ impl<'s> Parser<'s> {
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
+			span: self.node_span(&nested_node),
 		}))
 	}
 

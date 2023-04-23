@@ -12,7 +12,10 @@ use crate::{
 		Phase, Reference, Scope, StmtKind, Symbol,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::{symbol_env::SymbolEnv, ClassLike, Type},
+	type_check::{
+		symbol_env::{LookupResult, SymbolEnv},
+		ClassLike, Type,
+	},
 	visit::Visit,
 };
 use std::collections::{BTreeMap, BTreeSet};
@@ -153,13 +156,13 @@ fn scan_captures_in_expression(
 		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
-				let x = env.lookup_ext(&symbol, Some(statement_idx));
+				let x = env.try_lookup_ext(&symbol.name, Some(statement_idx));
 
 				// we ignore errors here because if the lookup symbol
 				// wasn't found, a error diagnostic is already emitted
 				// the type checker.
 
-				if let Ok((var, si)) = x {
+				if let LookupResult::Found(var, si) = x {
 					if var.as_variable().is_none() {
 						diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
@@ -228,19 +231,19 @@ fn scan_captures_in_expression(
 
 				// If the expression evaluates to a resource we should check what method of the resource we're accessing
 				if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
-					let (_, _flight) = match resource.env.lookup_ext(property, None) {
-						Ok((prop_type, phase)) => (
-							prop_type
-								.as_variable()
-								.expect("Expected resource property to be a variable")
-								.type_,
-							phase,
-						),
-						Err(_type_error) => {
+					let (_, _flight) =
+						if let LookupResult::Found(prop_type, li) = resource.env.try_lookup_ext(&property.name, None) {
+							(
+								prop_type
+									.as_variable()
+									.expect("Expected resource property to be a variable")
+									.type_,
+								li.phase,
+							)
+						} else {
 							// type errors are already reported in previous diagnostics
 							return res;
-						}
-					};
+						};
 				}
 			}
 			Reference::TypeMember { .. } => {
