@@ -245,6 +245,24 @@ new $App().synth();
 
 ```
 
+## proc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/index.js
+```js
+async handle(s) {
+  const {  } = this;
+}
+
+```
+
+## proc.e60080e02327d620984af1e0f736391d5699cae59be5733b234340cc59c07e66/index.js
+```js
+async handle(s) {
+  const { str_to_str } = this;
+  (await str_to_str.invoke("one"));
+  {console.log((await str_to_str.invoke("two")))};
+}
+
+```
+
 ## proc1/index.js
 ```js
 async handle(s) {

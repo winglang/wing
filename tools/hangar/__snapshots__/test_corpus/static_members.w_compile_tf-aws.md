@@ -205,6 +205,31 @@ new $App().synth();
 
 ```
 
+## proc.9bc2ebe720b1ce33f8961b4d75e64753d2833d1a50029354c9ccba5d429d01f2/index.js
+```js
+async handle(s) {
+  const {  } = this;
+  class InflightClass {
+    constructor()  {
+    }
+    async inflight_method()  {
+      {
+        return "Inflight method";
+      }
+    }
+    static async static_inflight_method()  {
+      {
+        return "Static inflight method";
+      }
+    }
+  }
+  const inflight_class = new InflightClass();
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflight_class.inflight_method()) === "Inflight method")'`)})(((await inflight_class.inflight_method()) === "Inflight method"))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.static_inflight_method()) === "Static inflight method")'`)})(((await InflightClass.static_inflight_method()) === "Static inflight method"))};
+}
+
+```
+
 ## proc1/index.js
 ```js
 async handle(s) {

@@ -1323,6 +1323,65 @@ new $App().synth();
 
 ```
 
+## proc.09dcc4ff0890e102805bbc51ef3934c08d91e5bf84395afde5497f34df87a7d8/index.js
+```js
+async handle(key) {
+  const {  } = this;
+  {console.log(`deleted ${key}`)};
+}
+
+```
+
+## proc.44ffe304e2ab76a8326d652a552eab6dfaadac1194df65fecf28d7c384a8cc13/index.js
+```js
+async handle() {
+  const { b } = this;
+  (await b.put("a","1"));
+  (await b.put("b","1"));
+  (await b.put("b","100"));
+  (await b.put("c","1"));
+  (await b.delete("c"));
+}
+
+```
+
+## proc.a726467156eb8c271f9225b3e17be8de6d6c17a49aaa65da842e2f7d6bdaf896/index.js
+```js
+async handle(key) {
+  const { other } = this;
+  {console.log(`last key ${key}`)};
+  (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+}
+
+```
+
+## proc.cdae347b8886baf52a55404c418d32d00e90df41124134b320bfa397a5f74c25/index.js
+```js
+async handle(key) {
+  const {  } = this;
+  {console.log(`updated ${key}`)};
+}
+
+```
+
+## proc.cf448bce60320955625b8e5174094d9799f236443e940587740acf6da94eed75/index.js
+```js
+async handle(key) {
+  const {  } = this;
+  {console.log(`created ${key}`)};
+}
+
+```
+
+## proc.fca059c479747295eb7f36bfd8dcd61c2e15d4b53e0aca4acb4cdea062e4b3a3/index.js
+```js
+async handle(key) {
+  const {  } = this;
+  {console.log("other bucket event called!")};
+}
+
+```
+
 ## proc1/index.js
 ```js
 async handle(key) {

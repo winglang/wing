@@ -110,6 +110,15 @@ new $App().synth();
 
 ```
 
+## proc.1eb4781e85032ffc58e74255182bc1fdee5701b5098072dd29f4faf4f591d6aa/index.js
+```js
+async handle(m) {
+  const {  } = this;
+  return `Hello ${m}!`;
+}
+
+```
+
 ## proc1/index.js
 ```js
 async handle(m) {
