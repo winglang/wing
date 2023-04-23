@@ -196,15 +196,6 @@ new $App().synth();
 
 ```
 
-## proc.81f22ed577c606e2abb5d01ab149b86464b35ffade7551b81842daccdbf2fb3e/index.js
-```js
-async handle() {
-  const { a } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle() {

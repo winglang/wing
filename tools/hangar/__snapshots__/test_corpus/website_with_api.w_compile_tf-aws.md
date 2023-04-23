@@ -586,50 +586,6 @@ new $App().synth();
 
 ```
 
-## proc.0aee24f16f02348bb2bf24f67a7f48be9134c9399f8802a8987f130c337dde0a/index.js
-```js
-async handle(req) {
-  const { table } = this;
-  return {
-  "body": Object.freeze({"users":(await table.list())}),
-  "status": 200,}
-  ;
-}
-
-```
-
-## proc.8150d45f5c1d81ba2e7c52ee991378c00da91259364c00659fe492b5e212bafc/index.js
-```js
-async handle(req) {
-  const {  } = this;
-  return {
-  "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
-  "status": 200,}
-  ;
-}
-
-```
-
-## proc.de1ffabaa3b17780094b7993a442348a853f9a65c5314528698091e09711508d/index.js
-```js
-async handle(req) {
-  const { table } = this;
-  const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
-  if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
-    return {
-    "body": Object.freeze({"error":"incomplete details"}),
-    "status": 500,}
-    ;
-  }
-  (await table.insert(body));
-  return {
-  "body": Object.freeze({"user":(body)["id"]}),
-  "status": 200,}
-  ;
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle(req) {

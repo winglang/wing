@@ -230,18 +230,6 @@ new $App().synth();
 
 ```
 
-## proc.282c2371efeb58766c430a9fafcc2f6b12044c38815124df7fe9b4da83adc985/index.js
-```js
-async handle(e) {
-  const { data, queue, res } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
-  (await res.put("file.txt","world"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await res.get("file.txt")) === "world")'`)})(((await res.get("file.txt")) === "world"))};
-  (await queue.push("spirulina"));
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle(e) {

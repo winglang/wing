@@ -207,25 +207,6 @@ new $App().synth();
 
 ```
 
-## proc.e985a655d1d19405f1798377278c6205fc276c76ea8815eb157a120ca44fdbcc/index.js
-```js
-async handle() {
-  const { b } = this;
-  (await b.put("foo","text"));
-  (await b.put("foo/","text"));
-  (await b.put("foo/bar","text"));
-  (await b.put("foo/bar/","text"));
-  (await b.put("foo/bar/baz","text"));
-  const objs = (await b.list());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(0)) === "foo")'`)})(((await objs.at(0)) === "foo"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(1)) === "foo/")'`)})(((await objs.at(1)) === "foo/"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(2)) === "foo/bar")'`)})(((await objs.at(2)) === "foo/bar"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(3)) === "foo/bar/")'`)})(((await objs.at(3)) === "foo/bar/"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(4)) === "foo/bar/baz")'`)})(((await objs.at(4)) === "foo/bar/baz"))};
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle() {

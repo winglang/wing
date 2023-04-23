@@ -300,24 +300,6 @@ new $App().synth();
 
 ```
 
-## proc.104793feca8a0c99ea8c2876b3c2124f464b0b5bffc723938b058ed94174607f/index.js
-```js
-async handle() {
-  const { f } = this;
-  (await f.call());
-}
-
-```
-
-## proc.39839ce4a470bf3d8e73b1b650e8bfd7f47f942f676ae2f4e206492f1a49d77c/index.js
-```js
-async handle() {
-  const { f } = this;
-  (await f.print("hey there"));
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle() {

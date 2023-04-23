@@ -343,31 +343,6 @@ new $App().synth();
 
 ```
 
-## proc.715acfaea3ff48e55a13ccb9337f2fa4389dd31fffa5b0f24a07bfa56038dcd8/index.js
-```js
-async handle(req) {
-  const {  } = this;
-  const vars = (req.vars ?? Object.freeze({"name":""}));
-  return {
-  "body": Object.freeze({"user":(vars)["name"]}),
-  "status": 200,}
-  ;
-}
-
-```
-
-## proc.718eff3f4061776cb4ae50876841ab4ee2dad187ff545f5ac2ae1e6beeb7d65e/index.js
-```js
-async handle() {
-  const { api, f } = this;
-  const username = "tsuf";
-  const res = (await f.get(`${api.url}/users/${username}`));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle(req) {

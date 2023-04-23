@@ -74,14 +74,6 @@ new $App().synth();
 
 ```
 
-## proc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/index.js
-```js
-async handle() {
-  const {  } = this;
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle() {

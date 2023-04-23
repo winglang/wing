@@ -321,18 +321,6 @@ new $App().synth();
 
 ```
 
-## proc.85cd22e95db4b8ae13939c7cb02f67a11a2af3c66bd3ccb217b2336de0f22399/index.js
-```js
-async handle(req) {
-  const {  } = this;
-  return {
-  "body": "ok",
-  "status": 200,}
-  ;
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle(req) {

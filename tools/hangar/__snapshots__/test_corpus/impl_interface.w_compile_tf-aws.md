@@ -193,15 +193,6 @@ new $App().synth();
 
 ```
 
-## proc.4bb413397aac07073d75578d701a65d4cbd2b018b9ba7fd5fc1654fa9a3a8abe/index.js
-```js
-async handle() {
-  const { x } = this;
-  (await x.handle("hello world!"));
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle() {

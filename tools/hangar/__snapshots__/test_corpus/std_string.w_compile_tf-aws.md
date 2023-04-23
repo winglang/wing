@@ -181,17 +181,6 @@ new $App().synth();
 
 ```
 
-## proc.9a4846d755bc1e93d1377b973079b3fb455a5196a4309ea68138302e1a6f3f65/index.js
-```js
-async handle() {
-  const { s1, s2 } = this;
-  {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
-  {console.log((await (await s1.split(" ")).at(1)))};
-  {console.log((await s1.concat(s2)))};
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle() {
