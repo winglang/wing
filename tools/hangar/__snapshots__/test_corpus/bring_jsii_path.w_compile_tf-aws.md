@@ -164,15 +164,6 @@ new $App().synth();
 
 ```
 
-## proc.0971d6c6098fbbfe02ff3f99e46b6e89243dbbb93903848c1d100f29b265d40c/index.js
-```js
-async handle(m) {
-  const { greeting } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(greeting === "Hello, wingnuts")'`)})((greeting === "Hello, wingnuts"))};
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle(m) {

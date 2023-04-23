@@ -421,43 +421,6 @@ new $App().synth();
 
 ```
 
-## proc.5ebfc1356186fe498d7c77085bf74da82ee2b4cc0d3396d5e240d89a689f5a70/index.js
-```js
-async handle() {
-  const { s } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
-}
-
-```
-
-## proc.b1aa79217b40a2b129132f76b7120cde0cb1ecc3a4b68bf48ee31594fa38cc4b/index.js
-```js
-async handle() {
-  const {  } = this;
-  const s = "inside_inflight";
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inside_inflight")'`)})((s === "inside_inflight"))};
-}
-
-```
-
-## proc.df438ca6138f58185d9c29cf9a58e1569a2c82980ef45ec3e718c6491e53bbbd/index.js
-```js
-async handle() {
-  const { s } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
-}
-
-```
-
-## proc.e28eb0e2c84db9ebf39c60f781e33eb71437de9aea3c9e56527b5592b0d7f259/index.js
-```js
-async handle() {
-  const { s } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle() {

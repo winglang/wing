@@ -232,15 +232,6 @@ new $App().synth();
 
 ```
 
-## proc.fdee27e4278018f0b82e92c0802d58032ccc3a21ab51caba9154598b79bbf7f6/index.js
-```js
-async handle(message) {
-  const { bucket } = this;
-  (await bucket.put("wing.txt",`Hello, ${message}`));
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle(message) {

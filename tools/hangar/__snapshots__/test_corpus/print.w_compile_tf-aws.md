@@ -229,26 +229,6 @@ new $App().synth();
 
 ```
 
-## proc.a4d16ad74e509f7ba53bb94a76d85ecfca8334031a4d57904b76d1b4fde85163/index.js
-```js
-async handle() {
-  const {  } = this;
-  {console.log("inflight log 1.1")};
-  {console.log("inflight log 1.2")};
-}
-
-```
-
-## proc.be3fb7aaa77c217758a5cd7be43b3bb17d3f8d89ee3a8532005b78396dc4de64/index.js
-```js
-async handle() {
-  const {  } = this;
-  {console.log("inflight log 2.1")};
-  {console.log("inflight log 2.2")};
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle() {

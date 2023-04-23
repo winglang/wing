@@ -259,17 +259,6 @@ new $App().synth();
 
 ```
 
-## proc.27b9b1acdf307e212f4288f000f9c2838cb38972f5055cd4dac4fd96baef0ee4/index.js
-```js
-async handle(body) {
-  const { bucket, counter } = this;
-  const next = (await counter.inc());
-  const key = `myfile-${"hi"}.txt`;
-  (await bucket.put(key,body));
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle(body) {

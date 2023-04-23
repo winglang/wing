@@ -361,21 +361,6 @@ new $App().synth();
 
 ```
 
-## proc.4ea11c0c20cac55e9e28b889e8e770331d2ed4a5baf0d566c4402cfa2b200882/index.js
-```js
-async handle(request) {
-  const { counter } = this;
-  const count = (await counter.inc());
-  const bodyResponse = Object.freeze({"count":count});
-  const resp = {
-  "body": bodyResponse,
-  "status": 200,}
-  ;
-  return resp;
-}
-
-```
-
 ## proc1/index.js
 ```js
 async handle(request) {
