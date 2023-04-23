@@ -38,8 +38,10 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
     this.app = express();
 
     // Parse request bodies as json.
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    // matching the limit to aws api gateway's payload size limit:
+    // https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
+    this.app.use(express.json({ limit: "10mb" }));
+    this.app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
     for (const route of this.routes) {
       const method = route.method.toLowerCase() as
