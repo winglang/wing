@@ -3311,6 +3311,7 @@ new std.ImmutableMap()
 | <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
@@ -3357,6 +3358,14 @@ Returns a boolean indicating whether an element with the specified key exists or
 The key of the element to test for presence.
 
 ---
+
+##### `keys` <a name="keys" id="@winglang/sdk.std.ImmutableMap.keys"></a>
+
+```wing
+keys(): ImmutableArray
+```
+
+Returns the keys of this map.
 
 ##### `size` <a name="size" id="@winglang/sdk.std.ImmutableMap.size"></a>
 

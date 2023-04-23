@@ -9,6 +9,7 @@ import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
 import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
+import { existsSync } from "fs";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -94,8 +95,20 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
 
+  // from wingDir, find the nearest node_modules directory
+  let wingNodeModules = resolve(wingDir, "node_modules");
+  while (!existsSync(wingNodeModules)) {
+    wingNodeModules = dirname(dirname(wingNodeModules));
+
+    if (wingNodeModules === "/" || wingNodeModules.match(/^[A-Z]:\\/)) {
+      break;
+    }
+
+    wingNodeModules = resolve(wingNodeModules, "node_modules")
+  }
+
   process.env["WING_SYNTH_DIR"] = tmpSynthDir;
-  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
+  process.env["WING_NODE_MODULES"] = wingNodeModules;
   process.env["WING_TARGET"] = options.target;
   process.env["WING_IS_TEST"] = testing.toString();
 
@@ -115,6 +128,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       [wingDir]: wingDir, // for Rust's access to the source dir
       [workDir]: workDir, // for Rust's access to the work directory
       [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
+      [wingNodeModules]: wingNodeModules, // for Rust's access to the node_modules for the target wing file
     },
   });
 

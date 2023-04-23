@@ -1,3 +1,0 @@
-async handle() {
-  const {  } = this;
-}
