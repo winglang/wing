@@ -36,24 +36,15 @@ pub enum StatementIdx {
 	Top,
 }
 
+#[duplicate_item(
+	LookupResult reference(lifetime, type);
+	[LookupResult] [& 'lifetime type];
+	[LookupResultMut] [& 'lifetime mut type];
+)]
 /// Possible results for a symbol lookup in the environment
 pub enum LookupResult<'a> {
 	/// The kind of symbol and useful metadata associated with its lookup
-	Found(&'a SymbolKind, SymbolLookupInfo),
-	/// The symbol was not found in the environment
-	NotFound,
-	/// The symbol exists in the environment but it's not defined yet (based on the statement
-	/// index passed to the lookup)
-	DefinedLater,
-	/// Expected a namespace in a nested lookup but found a different kind of symbol
-	ExpectedNamespace(Symbol),
-}
-
-/// Possible mutable results for a symbol lookup in the environment
-/// TODO: this is a duplicate of LookupResult, find a way to avoid this
-pub enum LookupResultMut<'a> {
-	/// The kind of symbol and useful metadata associated with its lookup
-	Found(&'a mut SymbolKind, SymbolLookupInfo),
+	Found(reference([a], [SymbolKind]), SymbolLookupInfo),
 	/// The symbol was not found in the environment
 	NotFound,
 	/// The symbol exists in the environment but it's not defined yet (based on the statement
