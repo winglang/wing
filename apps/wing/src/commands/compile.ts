@@ -1,13 +1,13 @@
 import * as vm from "vm";
 
-import {readFile, rmSync, mkdirp, mkdirpSync, copySync} from "fs-extra";
-import {basename, dirname, join, resolve} from "path";
+import { readFile, rmSync, mkdirp, mkdirpSync, copySync } from "fs-extra";
+import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
 import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
-import {normalPath} from "../util";
+import { normalPath } from "../util";
 import {
   CHARS_ASCII,
   emitDiagnostic,
@@ -15,6 +15,7 @@ import {
   File,
   Label,
 } from "codespan-wasm";
+import { existsSync } from "fs";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -121,8 +122,20 @@ export async function compile(
   log("work dir: %s", workDir);
 
   process.env["WING_SOURCE_DIR"] = resolve(wingDir);
+  // from wingDir, find the nearest node_modules directory
+  let wingNodeModules = resolve(wingDir, "node_modules");
+  while (!existsSync(wingNodeModules)) {
+    wingNodeModules = dirname(dirname(wingNodeModules));
+
+    if (wingNodeModules === "/" || wingNodeModules.match(/^[A-Z]:\\/)) {
+      break;
+    }
+
+    wingNodeModules = resolve(wingNodeModules, "node_modules");
+  }
+
   process.env["WING_SYNTH_DIR"] = tmpSynthDir;
-  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
+  process.env["WING_NODE_MODULES"] = wingNodeModules;
   process.env["WING_TARGET"] = options.target;
   process.env["WING_IS_TEST"] = testing.toString();
 
@@ -139,6 +152,7 @@ export async function compile(
       [wingDir]: wingDir, // for Rust's access to the source dir
       [workDir]: workDir, // for Rust's access to the work directory
       [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
+      [wingNodeModules]: wingNodeModules, // for Rust's access to the node_modules for the target wing file
     },
   });
 
@@ -168,7 +182,7 @@ export async function compile(
     const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
     for (const error of errors) {
-      const {message, span, level} = error;
+      const { message, span, level } = error;
       let files: File[] = [];
       let labels: Label[] = [];
 
@@ -225,7 +239,7 @@ export async function compile(
   // This is necessary because the Wing app may have installed dependencies in
   // the project directory.
   const requireResolve = (path: string) =>
-    require.resolve(path, {paths: [workDir, __dirname, wingDir]});
+    require.resolve(path, { paths: [workDir, __dirname, wingDir] });
   const preflightRequire = (path: string) => require(requireResolve(path));
   preflightRequire.resolve = requireResolve;
 
@@ -314,14 +328,14 @@ export async function compile(
     // Windows doesn't really support fully atomic moves.
     // So we just copy the directory instead.
     // Also only using sync methods to avoid possible async fs issues.
-    rmSync(synthDir, {recursive: true, force: true});
+    rmSync(synthDir, { recursive: true, force: true });
     mkdirpSync(synthDir);
     copySync(tmpSynthDir, synthDir);
-    rmSync(tmpSynthDir, {recursive: true, force: true});
+    rmSync(tmpSynthDir, { recursive: true, force: true });
   } else {
     // Move the temporary directory to the final target location in an atomic operation
-    copySync(tmpSynthDir, synthDir, {overwrite: true});
-    rmSync(tmpSynthDir, {recursive: true, force: true});
+    copySync(tmpSynthDir, synthDir, { overwrite: true });
+    rmSync(tmpSynthDir, { recursive: true, force: true });
   }
 
   return synthDir;

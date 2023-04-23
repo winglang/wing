@@ -116,6 +116,47 @@ jobs:
           github-comment: false
           vercel-args: "--prod "
 
+  benchmarks:
+    name: E2E Benchmarks
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    env:
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+
+      # Reads versions from root package.json "volta" section
+      - name: Setup Node/NPM with pinned Volta version
+        uses: volta-cli/action@v4.0.0
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: |
+            tools/hangar
+            examples/tests/valid
+            examples/tests/invalid
+          install-command: npm ci
+
+      - name: Run E2E Benchmarks
+        working-directory: tools/hangar
+        run: npm run bench
+
+      - name: Upload Report JSON
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmarks
+          path: tools/hangar/results/report.json
+
+      - name: Create Markdown report
+        run: node scripts/benchmark_json_to_table.mjs
+
   e2e:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
     needs:
@@ -176,6 +217,7 @@ jobs:
     needs: 
      - build
      - e2e
+     - benchmarks
     steps:
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
@@ -247,6 +289,7 @@ jobs:
           mv ./*/*.vsix ./dist
           mv ./*/*.tgz ./dist
           mv ./*/*.wasm ./dist
+          mv ./benchmarks/* ./dist
           cd dist
 
           echo '' >> ../CHANGELOG.md
