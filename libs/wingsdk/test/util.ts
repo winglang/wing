@@ -18,6 +18,16 @@ export function tfResourcesOfCount(
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
+export function getTfResource(
+  templateStr: string,
+  resourceId: string,
+  index?: number
+): any {
+  const resources = JSON.parse(templateStr).resource[resourceId];
+  const key = Object.keys(resources)[index ?? 0];
+  return resources[key];
+}
+
 export function tfSanitize(templateStr: string): string {
   const template = JSON.parse(templateStr);
 

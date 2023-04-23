@@ -44,23 +44,6 @@ exports[`bucket is public 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -263,23 +246,6 @@ exports[`bucket prefix must be lowercase 2`] = `
                 "id": "The-Uncanny.Bucket",
                 "path": "root/Default/The-Uncanny.Bucket",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -398,23 +364,6 @@ exports[`bucket prefix valid 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -565,9 +514,13 @@ exports[`bucket with onCreate method 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_mybucket_mybucketoncreateOnMessage2c90a36b_IamRole_048D6026.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketoncreateOnMessage2c90a36b_S3Object_DDC97BAE.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -579,12 +532,12 @@ exports[`bucket with onCreate method 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+      },
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
         \\"force_destroy\\": false
-      },
-      \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D\\": {
-        \\"bucket_prefix\\": \\"code-c8663a19-\\"
       }
     },
     \\"aws_s3_bucket_notification\\": {
@@ -623,7 +576,7 @@ exports[`bucket with onCreate method 1`] = `
     },
     \\"aws_s3_object\\": {
       \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_S3Object_DDC97BAE\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -658,29 +611,13 @@ exports[`bucket with onCreate method 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
+              "Code": {
                 "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
                 },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
+                "id": "Code",
+                "path": "root/Default/Code",
               },
               "aws": {
                 "constructInfo": {
@@ -857,12 +794,6 @@ exports[`bucket with onCreate method 2`] = `
                           "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
                         },
                         {
-                          "direction": "outbound",
-                          "implicit": true,
-                          "relationship": "log",
-                          "resource": "root/Default/WingLogger",
-                        },
-                        {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "on_message",
@@ -879,14 +810,6 @@ exports[`bucket with onCreate method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Asset",
-                      },
-                      "Code": {
-                        "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                          "version": "12.0.2",
-                        },
-                        "id": "Code",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Code",
                       },
                       "Default": {
                         "constructInfo": {
@@ -1070,9 +993,13 @@ exports[`bucket with onDelete method 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_mybucket_mybucketondeleteOnMessagef22c8a47_IamRole_86A910D1.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketondeleteOnMessagef22c8a47_S3Object_2F148230.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -1084,12 +1011,12 @@ exports[`bucket with onDelete method 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+      },
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
         \\"force_destroy\\": false
-      },
-      \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43\\": {
-        \\"bucket_prefix\\": \\"code-c8ee90a3-\\"
       }
     },
     \\"aws_s3_bucket_notification\\": {
@@ -1128,7 +1055,7 @@ exports[`bucket with onDelete method 1`] = `
     },
     \\"aws_s3_object\\": {
       \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_S3Object_2F148230\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -1163,29 +1090,13 @@ exports[`bucket with onDelete method 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
+              "Code": {
                 "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
                 },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
+                "id": "Code",
+                "path": "root/Default/Code",
               },
               "aws": {
                 "constructInfo": {
@@ -1362,12 +1273,6 @@ exports[`bucket with onDelete method 2`] = `
                           "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
                         },
                         {
-                          "direction": "outbound",
-                          "implicit": true,
-                          "relationship": "log",
-                          "resource": "root/Default/WingLogger",
-                        },
-                        {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "on_message",
@@ -1384,14 +1289,6 @@ exports[`bucket with onDelete method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Asset",
-                      },
-                      "Code": {
-                        "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                          "version": "12.0.2",
-                        },
-                        "id": "Code",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Code",
                       },
                       "Default": {
                         "constructInfo": {
@@ -1597,9 +1494,13 @@ exports[`bucket with onEvent method 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_mybucket_mybucketoncreateOnMessage2c90a36b_IamRole_048D6026.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketoncreateOnMessage2c90a36b_S3Object_DDC97BAE.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       },
       \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_43EA3B17\\": {
         \\"environment\\": {
@@ -1612,9 +1513,13 @@ exports[`bucket with onEvent method 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_mybucket_mybucketondeleteOnMessagef22c8a47_IamRole_86A910D1.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketondeleteOnMessagef22c8a47_S3Object_2F148230.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       },
       \\"root_mybucket_mybucketonupdateOnMessage32b7a290_F83D69C0\\": {
         \\"environment\\": {
@@ -1627,9 +1532,13 @@ exports[`bucket with onEvent method 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_mybucket_mybucketonupdateOnMessage32b7a290_IamRole_C2D0AC31.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketonupdateOnMessage32b7a290_S3Object_DD9A4CB9.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -1653,18 +1562,12 @@ exports[`bucket with onEvent method 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+      },
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
         \\"force_destroy\\": false
-      },
-      \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D\\": {
-        \\"bucket_prefix\\": \\"code-c8663a19-\\"
-      },
-      \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43\\": {
-        \\"bucket_prefix\\": \\"code-c8ee90a3-\\"
-      },
-      \\"root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A\\": {
-        \\"bucket_prefix\\": \\"code-c8864029-\\"
       }
     },
     \\"aws_s3_bucket_notification\\": {
@@ -1731,17 +1634,17 @@ exports[`bucket with onEvent method 1`] = `
     },
     \\"aws_s3_object\\": {
       \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_S3Object_DDC97BAE\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       },
       \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_S3Object_2F148230\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       },
       \\"root_mybucket_mybucketonupdateOnMessage32b7a290_S3Object_DD9A4CB9\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -1800,41 +1703,13 @@ exports[`bucket with onEvent method 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
+              "Code": {
                 "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
                 },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
+                "id": "Code",
+                "path": "root/Default/Code",
               },
               "aws": {
                 "constructInfo": {
@@ -2051,12 +1926,6 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
                         },
                         {
-                          "direction": "outbound",
-                          "implicit": true,
-                          "relationship": "log",
-                          "resource": "root/Default/WingLogger",
-                        },
-                        {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "on_message",
@@ -2073,14 +1942,6 @@ exports[`bucket with onEvent method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Asset",
-                      },
-                      "Code": {
-                        "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                          "version": "12.0.2",
-                        },
-                        "id": "Code",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Code",
                       },
                       "Default": {
                         "constructInfo": {
@@ -2228,12 +2089,6 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
                         },
                         {
-                          "direction": "outbound",
-                          "implicit": true,
-                          "relationship": "log",
-                          "resource": "root/Default/WingLogger",
-                        },
-                        {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "on_message",
@@ -2250,14 +2105,6 @@ exports[`bucket with onEvent method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Asset",
-                      },
-                      "Code": {
-                        "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                          "version": "12.0.2",
-                        },
-                        "id": "Code",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Code",
                       },
                       "Default": {
                         "constructInfo": {
@@ -2405,12 +2252,6 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
                         },
                         {
-                          "direction": "outbound",
-                          "implicit": true,
-                          "relationship": "log",
-                          "resource": "root/Default/WingLogger",
-                        },
-                        {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "on_message",
@@ -2427,14 +2268,6 @@ exports[`bucket with onEvent method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Asset",
-                      },
-                      "Code": {
-                        "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                          "version": "12.0.2",
-                        },
-                        "id": "Code",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Code",
                       },
                       "Default": {
                         "constructInfo": {
@@ -2662,9 +2495,13 @@ exports[`bucket with onUpdate method 1`] = `
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_mybucket_mybucketonupdateOnMessage32b7a290_IamRole_C2D0AC31.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketonupdateOnMessage32b7a290_S3Object_DD9A4CB9.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -2676,12 +2513,12 @@ exports[`bucket with onUpdate method 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+      },
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
         \\"force_destroy\\": false
-      },
-      \\"root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A\\": {
-        \\"bucket_prefix\\": \\"code-c8864029-\\"
       }
     },
     \\"aws_s3_bucket_notification\\": {
@@ -2720,7 +2557,7 @@ exports[`bucket with onUpdate method 1`] = `
     },
     \\"aws_s3_object\\": {
       \\"root_mybucket_mybucketonupdateOnMessage32b7a290_S3Object_DD9A4CB9\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -2755,29 +2592,13 @@ exports[`bucket with onUpdate method 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
+              "Code": {
                 "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
                 },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
+                "id": "Code",
+                "path": "root/Default/Code",
               },
               "aws": {
                 "constructInfo": {
@@ -2954,12 +2775,6 @@ exports[`bucket with onUpdate method 2`] = `
                           "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
                         },
                         {
-                          "direction": "outbound",
-                          "implicit": true,
-                          "relationship": "log",
-                          "resource": "root/Default/WingLogger",
-                        },
-                        {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "on_message",
@@ -2976,14 +2791,6 @@ exports[`bucket with onUpdate method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Asset",
-                      },
-                      "Code": {
-                        "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                          "version": "12.0.2",
-                        },
-                        "id": "Code",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Code",
                       },
                       "Default": {
                         "constructInfo": {
@@ -3186,23 +2993,6 @@ exports[`bucket with two preflight objects 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -3379,23 +3169,6 @@ exports[`create a bucket 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",

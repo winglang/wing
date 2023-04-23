@@ -3,22 +3,26 @@
 exports[`bucket on event creates 3 topics  1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
-  "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
-  "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
   "wingsdk.cloud.Bucket created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.sim.EventMapping created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.sim.EventMapping created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.sim.EventMapping created.",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Topic deleted.",
-  "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Topic deleted.",
-  "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Topic deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -26,14 +30,12 @@ exports[`bucket on event creates 3 topics  1`] = `
 exports[`can add object in preflight 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "Adding object from preflight (key=greeting.txt).",
   "wingsdk.cloud.Bucket created.",
   "Get (key=greeting.txt).",
   "Get (key=greeting.txt).",
   "List (prefix=null).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -49,12 +51,6 @@ exports[`can add object in preflight 2`] = `
           "tests": {},
         },
         "type": "wingsdk.cloud.TestRunner",
-      },
-      {
-        "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
       },
       {
         "attrs": {},
@@ -74,23 +70,6 @@ exports[`can add object in preflight 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -151,12 +130,6 @@ exports[`create a bucket 1`] = `
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -171,23 +144,6 @@ exports[`create a bucket 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -237,11 +193,9 @@ exports[`create a bucket 1`] = `
 exports[`get invalid object throws an error 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Get (key=unknown.txt).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -260,12 +214,6 @@ exports[`get invalid object throws an error 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -280,23 +228,6 @@ exports[`get invalid object throws an error 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -346,7 +277,6 @@ exports[`get invalid object throws an error 2`] = `
 exports[`list respects prefixes 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Put (key=path/dir1/file1.txt).",
   "Put (key=path/dir2/file2.txt).",
@@ -355,7 +285,6 @@ exports[`list respects prefixes 1`] = `
   "List (prefix=path/dir1).",
   "List (prefix=path/dir2).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -363,7 +292,6 @@ exports[`list respects prefixes 1`] = `
 exports[`objects can have keys that look like directories 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Put (key=foo).",
   "Put (key=foo/).",
@@ -377,7 +305,6 @@ exports[`objects can have keys that look like directories 1`] = `
   "List (prefix=foo/bar/).",
   "List (prefix=foo/bar/baz).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -385,12 +312,10 @@ exports[`objects can have keys that look like directories 1`] = `
 exports[`put and get objects from bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Put (key=greeting.txt).",
   "Get (key=greeting.txt).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -398,12 +323,10 @@ exports[`put and get objects from bucket 1`] = `
 exports[`put json objects from bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Put Json (key=greeting.json).",
   "Get Json (key=greeting.json).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -422,12 +345,6 @@ exports[`put json objects from bucket 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -442,23 +359,6 @@ exports[`put json objects from bucket 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -508,14 +408,12 @@ exports[`put json objects from bucket 2`] = `
 exports[`put multiple json objects and list all from bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Put Json (key=greeting1.json).",
   "Put Json (key=greeting2.json).",
   "Put Json (key=greeting3.json).",
   "List (prefix=null).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -523,14 +421,12 @@ exports[`put multiple json objects and list all from bucket 1`] = `
 exports[`put multiple objects and list all from bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Put (key=greeting1.txt).",
   "Put (key=greeting2.txt).",
   "Put (key=greeting3.txt).",
   "List (prefix=null).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -538,12 +434,10 @@ exports[`put multiple objects and list all from bucket 1`] = `
 exports[`remove object from a bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -551,12 +445,10 @@ exports[`remove object from a bucket 1`] = `
 exports[`remove object from a bucket with mustExist as option 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Bucket created.",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
   "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -564,20 +456,20 @@ exports[`remove object from a bucket with mustExist as option 1`] = `
 exports[`removing a key will call onDelete method 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
   "wingsdk.cloud.Bucket created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.sim.EventMapping created.",
   "Put (key=unknown.txt).",
   "Publish (message=unknown.txt).",
-  "Sending message (message=unknown.txt, subscriber=sim-2).",
+  "Sending message (message=unknown.txt, subscriber=sim-3).",
   "Invoke (payload=\\"unknown.txt\\").",
   "Subscriber error: TypeError: this.handler.handle is not a function",
   "Delete (key=unknown.txt).",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Topic deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -585,20 +477,20 @@ exports[`removing a key will call onDelete method 1`] = `
 exports[`update an object in bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
   "wingsdk.cloud.Bucket created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.sim.EventMapping created.",
   "Publish (message=greeting.txt).",
-  "Sending message (message=greeting.txt, subscriber=sim-2).",
+  "Sending message (message=greeting.txt, subscriber=sim-3).",
   "Invoke (payload=\\"greeting.txt\\").",
   "Subscriber error: TypeError: this.handler.handle is not a function",
   "Put (key=greeting.txt).",
   "Put (key=greeting.txt).",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Topic deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;

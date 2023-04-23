@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Resource } from "../core";
-import { Json } from "../std";
+import { App } from "../core";
+import { Json, Resource } from "../std";
 
 /**
  * Global identifier for `Table`.

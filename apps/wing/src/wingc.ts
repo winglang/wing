@@ -1,8 +1,8 @@
 import debug from "debug";
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
-import { resolve } from "path";
+import { isAbsolute, relative, resolve } from "path";
 import wasiBindings from "wasi-js/dist/bindings/node";
 
 const log = debug("wing:compile");
@@ -31,8 +31,8 @@ export interface WingCompilerLoadOptions {
    * The also represent mappings from the WASI instance's filesystem to the host filesystem. (map key -> value)
    *
    * The following directories are always preopened:
-   * - `/`
-   * - `@winglang/sdk` module directory
+   * - The `@winglang/sdk` module directory
+   * - All local and global node_modules directories (module.paths)
    *
    * @default - No additional preopens are added other than the above
    */
@@ -87,11 +87,32 @@ export async function load(options: WingCompilerLoadOptions) {
     ...(options.preopens ?? {}),
   } as Record<string, string>;
 
+  // preopen all existing global node_modules
+  for (const m of module.paths ?? []) {
+    if (existsSync(m)) {
+      preopens[m] = m;
+    }
+  }
+
   if (process.platform === "win32") {
     preopens["C:\\"] = "C:\\";
     for (const [key, value] of Object.entries(preopens)) {
       delete preopens[key];
       preopens[normalPath(value)] = value;
+    }
+  }
+
+  // for each provided preopens, add resolved paths in case any absolute paths are used
+  for (const [key, value] of Object.entries(preopens)) {
+    preopens[normalPath(resolve(key))] = value;
+  }
+
+  // for each provided preopens, add relative paths in case any relative paths are used
+  for (const [key, value] of Object.entries(preopens)) {
+    if (isAbsolute(key)) {
+      const cwd = process.cwd();
+      const relativePath = normalPath(relative(cwd, key));
+      preopens[relativePath] = value;
     }
   }
 

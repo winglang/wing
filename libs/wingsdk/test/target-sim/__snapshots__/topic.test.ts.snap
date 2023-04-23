@@ -14,16 +14,8 @@ exports[`create a topic 1`] = `
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_topic",
-        "props": {
-          "subscribers": [],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Topic",
       },
     ],
@@ -32,23 +24,6 @@ exports[`create a topic 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -98,20 +73,20 @@ exports[`create a topic 1`] = `
 exports[`topic publishes messages as they are received 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
+  "wingsdk.sim.EventMapping created.",
   "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-2).",
+  "Sending message (message=Alpha, subscriber=sim-1).",
   "Received Alpha",
   "Invoke (payload=\\"Alpha\\").",
   "Publish (message=Beta).",
-  "Sending message (message=Beta, subscriber=sim-2).",
+  "Sending message (message=Beta, subscriber=sim-1).",
   "Received Beta",
   "Invoke (payload=\\"Beta\\").",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -119,21 +94,23 @@ exports[`topic publishes messages as they are received 1`] = `
 exports[`topic publishes messages to multiple subscribers 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
+  "wingsdk.sim.EventMapping created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.sim.EventMapping created.",
   "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-2).",
+  "Sending message (message=Alpha, subscriber=sim-1).",
   "Received Alpha",
   "Invoke (payload=\\"Alpha\\").",
-  "Sending message (message=Alpha, subscriber=sim-3).",
+  "Sending message (message=Alpha, subscriber=sim-4).",
   "Also received Alpha",
   "Invoke (payload=\\"Alpha\\").",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;

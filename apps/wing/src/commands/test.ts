@@ -1,6 +1,6 @@
 import { basename } from "path";
 import { compile, CompileOptions } from "./compile";
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
 import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
 import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";
@@ -192,11 +192,20 @@ async function isTerraformInstalled(synthDir: string) {
 }
 
 async function checkTerraformStateIsEmpty(synthDir: string) {
-  const output = await execCapture("terraform state list", { cwd: synthDir });
-  if (output.length > 0) {
-    throw new Error(
-      `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
-    );
+  try {
+    const output = await execCapture("terraform state list", { cwd: synthDir });
+    if (output.length > 0) {
+      throw new Error(
+        `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
+      );
+    }
+  } catch (err) {
+    if ((err as any).stderr.includes("No state file was found")) {
+      return;
+    }
+
+    // An unexpected error occurred, rethrow it
+    throw err;
   }
 }
 

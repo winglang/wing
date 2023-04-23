@@ -20,7 +20,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "esModuleInterop": true,
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

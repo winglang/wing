@@ -1,4 +1,5 @@
 use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
+use wingii::type_system::TypeSystem;
 
 use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
@@ -8,7 +9,6 @@ use crate::capture::CaptureVisitor;
 use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
-use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::visit::Visit;
 use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
 
@@ -31,7 +31,7 @@ thread_local! {
 	/// This means that it cannot reliably manage stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
 	pub static FILES: RefCell<HashMap<Url,FileData>> = RefCell::new(HashMap::new());
-	pub static JSII_IMPORTS: RefCell<HashMap<String,Vec<JsiiImportSpec>>> = RefCell::new(HashMap::new());
+	pub static JSII_TYPES: RefCell<TypeSystem> = RefCell::new(TypeSystem::new());
 }
 
 #[no_mangle]
@@ -44,25 +44,17 @@ pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
 	}
 }
 pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
-	JSII_IMPORTS.with(|jsii_import_map| {
+	JSII_TYPES.with(|jsii_types| {
 		FILES.with(|files| {
 			let uri = params.text_document.uri;
 			let uri_path = uri.to_file_path().unwrap();
 			let path = uri_path.to_str().unwrap();
 
-			let mut borrowed_map = jsii_import_map.borrow_mut();
-			let current_jsii = if let Some(jsii) = borrowed_map.get_mut(path) {
-				jsii
-			} else {
-				borrowed_map.insert(path.to_string(), vec![]);
-				borrowed_map.get_mut(path).unwrap()
-			};
-
-			let result = partial_compile(path, params.text_document.text.as_bytes(), current_jsii);
+			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut jsii_types.borrow_mut());
 			send_diagnostics(&uri, &result.diagnostics);
 			files.borrow_mut().insert(uri, result);
 		});
-	})
+	});
 }
 
 #[no_mangle]
@@ -75,21 +67,17 @@ pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
 	}
 }
 pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
-	JSII_IMPORTS.with(|jsii_import_map| {
+	JSII_TYPES.with(|jsii_types| {
 		FILES.with(|files| {
 			let uri = params.text_document.uri;
 			let uri_path = uri.to_file_path().unwrap();
 			let path = uri_path.to_str().unwrap();
 
-			let mut borrowed_map = jsii_import_map.borrow_mut();
-			let current_jsii = if let Some(jsii) = borrowed_map.get_mut(path) {
-				jsii
-			} else {
-				borrowed_map.insert(path.to_string(), vec![]);
-				borrowed_map.get_mut(path).unwrap()
-			};
-
-			let result = partial_compile(path, params.content_changes[0].text.as_bytes(), current_jsii);
+			let result = partial_compile(
+				path,
+				params.content_changes[0].text.as_bytes(),
+				&mut jsii_types.borrow_mut(),
+			);
 			send_diagnostics(&uri, &result.diagnostics);
 			files.borrow_mut().insert(uri, result);
 		});
@@ -97,27 +85,27 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 }
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
-fn partial_compile(source_file: &str, text: &[u8], jsii_imports: &mut Vec<JsiiImportSpec>) -> FileData {
+fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) -> FileData {
 	let mut types = type_check::Types::new();
 
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
 
-	let tree = match parser.parse(&text[..], None) {
+	let tree = match parser.parse(text, None) {
 		Some(tree) => tree,
 		None => {
 			panic!("Failed parsing source file: {}", source_file);
 		}
 	};
 
-	let wing_parser = Parser::new(&text[..], source_file.to_string());
+	let wing_parser = Parser::new(text, source_file.to_string());
 
 	// Note: The scope is intentionally boxed here to force heap allocation
 	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
 	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
 
-	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_imports);
+	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
 
 	// Analyze inflight captures
 	let mut capture_visitor = CaptureVisitor::new();

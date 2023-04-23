@@ -2,16 +2,8 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/queue-onmessage-401ee792_c8515faa.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+  ".wing/queue-addconsumer-401ee792_c8a718bb.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -53,12 +45,6 @@ bucket: (function(env) {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/HelloWorld/Counter",
         "props": {
           "initial": 1000,
@@ -77,14 +63,13 @@ bucket: (function(env) {
       },
       {
         "attrs": {},
-        "path": "root/HelloWorld/Queue-OnMessage-401ee792",
+        "path": "root/HelloWorld/Queue-AddConsumer-401ee792",
         "props": {
           "environmentVariables": {
             "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/queue-onmessage-401ee792_c8515faa.js",
+          "sourceCodeFile": ".wing/queue-addconsumer-401ee792_c8a718bb.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -95,15 +80,21 @@ bucket: (function(env) {
         "path": "root/HelloWorld/Queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/HelloWorld/Queue-OnMessage-401ee792#attrs.handle}",
-            },
-          ],
-          "timeout": 30,
+          "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
+        "props": {
+          "publisher": "\${root/HelloWorld/Queue#attrs.handle}",
+          "subscriber": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -120,7 +111,7 @@ bucket: (function(env) {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "put",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                    "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
                 "wing:resource:stateful": true,
@@ -143,7 +134,7 @@ bucket: (function(env) {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "inc",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                    "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
                 "wing:resource:stateful": true,
@@ -166,7 +157,7 @@ bucket: (function(env) {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "handle",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                    "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
                 "wing:resource:stateful": false,
@@ -189,11 +180,28 @@ bucket: (function(env) {
                   {
                     "direction": "outbound",
                     "implicit": false,
-                    "relationship": "on_message",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                    "relationship": "add_consumer",
+                    "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
                 "wing:resource:stateful": true,
+              },
+              "children": {
+                "Queue-QueueEventMapping-401ee792": {
+                  "attributes": {
+                    "wing:resource:connections": [],
+                    "wing:resource:stateful": true,
+                  },
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.1.245",
+                  },
+                  "display": {
+                    "hidden": true,
+                  },
+                  "id": "Queue-QueueEventMapping-401ee792",
+                  "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
+                },
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -206,7 +214,7 @@ bucket: (function(env) {
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
             },
-            "Queue-OnMessage-401ee792": {
+            "Queue-AddConsumer-401ee792": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -228,15 +236,9 @@ bucket: (function(env) {
                     "resource": "root/HelloWorld/Processor",
                   },
                   {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
-                  {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "on_message",
+                    "relationship": "add_consumer",
                     "resource": "root/HelloWorld/Queue",
                   },
                 ],
@@ -250,10 +252,10 @@ bucket: (function(env) {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "Queue-OnMessage-401ee792",
-              "path": "root/HelloWorld/Queue-OnMessage-401ee792",
+              "id": "Queue-AddConsumer-401ee792",
+              "path": "root/HelloWorld/Queue-AddConsumer-401ee792",
             },
-            "Queue-OnMessageHandler-401ee792": {
+            "Queue-AddConsumerHandler-401ee792": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": false,
@@ -265,8 +267,8 @@ bucket: (function(env) {
               "display": {
                 "hidden": true,
               },
-              "id": "Queue-OnMessageHandler-401ee792",
-              "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",
+              "id": "Queue-AddConsumerHandler-401ee792",
+              "path": "root/HelloWorld/Queue-AddConsumerHandler-401ee792",
             },
           },
           "constructInfo": {
@@ -275,30 +277,6 @@ bucket: (function(env) {
           },
           "id": "HelloWorld",
           "path": "root/HelloWorld",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
         },
         "cloud.TestRunner": {
           "attributes": {

@@ -5,10 +5,20 @@ import { Template } from "aws-cdk-lib/assertions";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
+import { Counter } from "./counter";
 import { Function } from "./function";
-import { Logger } from "./logger";
+import { Queue } from "./queue";
+import { Secret } from "./secret";
+import { Topic } from "./topic";
 
-import { BUCKET_FQN, FUNCTION_FQN, LOGGER_FQN } from "../cloud";
+import {
+  BUCKET_FQN,
+  COUNTER_FQN,
+  FUNCTION_FQN,
+  QUEUE_FQN,
+  SECRET_FQN,
+  TOPIC_FQN,
+} from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 import { PluginManager } from "../core/plugin-manager";
 
@@ -79,9 +89,6 @@ export class App extends CoreApp {
     this.cdkStack = cdkStack;
     this.synthed = false;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
-
-    // register a logger for this app.
-    Logger.register(this);
   }
 
   /**
@@ -122,8 +129,17 @@ export class App extends CoreApp {
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
 
-      case LOGGER_FQN:
-        return new Logger(scope, id);
+      case COUNTER_FQN:
+        return new Counter(scope, id, args[0]);
+
+      case QUEUE_FQN:
+        return new Queue(scope, id, args[0]);
+
+      case TOPIC_FQN:
+        return new Topic(scope, id, args[0]);
+
+      case SECRET_FQN:
+        return new Secret(scope, id, args[0]);
     }
     return undefined;
   }

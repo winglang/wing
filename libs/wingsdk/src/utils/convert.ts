@@ -1,11 +1,12 @@
 import { Construct } from "constructs";
-import { IResource, NodeJsCode, Resource } from "../core";
+import { NodeJsCode } from "../core";
+import { IResource, Resource } from "../std";
 import { normalPath } from "../util";
 
 /**
  * Convert a resource with a single method into a resource with a different
  * single method. This is useful for converting between types like
- * IFunctionHandler and IQueueOnMessageHandler.
+ * IFunctionHandler and IQueueAddConsumerHandler.
  *
  * Both the input and return values of this function are expected to be
  * resources with a single method named "handle".

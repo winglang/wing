@@ -9,8 +9,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -42,17 +42,13 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
     host.addPolicyStatements(
-      ...calculateBucketPermissions(
-        this.bucket.bucketArn,
-        AwsTarget.AWSCDK,
-        ops
-      )
+      ...calculateBucketPermissions(this.bucket.bucketArn, ops)
     );
 
     // The bucket name needs to be passed through an environment variable since

@@ -12,7 +12,6 @@ and submit pull requests to the GitHub repository.
   - [Setting up and building the project](#setting-up-and-building-the-project)
   - [Logs](#logs)
   - [Testing](#testing)
-    - [Sandbox](#sandbox)
   - [Creating a resource](#creating-a-resource)
   - [Submitting a pull request](#submitting-a-pull-request)
   - [Getting Help](#getting-help)
@@ -61,9 +60,6 @@ export DEBUG="*,-bar" # to enable all namespaces except "bar"
 ```
 
 ## Testing
-
-### Sandbox
-
 
 ## Creating a resource
 

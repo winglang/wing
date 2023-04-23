@@ -1,7 +1,7 @@
 import { readdirSync, existsSync } from "fs";
 import { debug } from "debug";
 import { resolve } from "path";
-import open = require("open");
+import open from "open";
 
 export async function run(simfile?: string) {
   if (!simfile) {

@@ -1,7 +1,6 @@
 import { Server } from "http";
 import { AddressInfo } from "net";
 import express from "express";
-import { ISimulatorResourceInstance } from "./resource";
 import {
   ApiAttributes,
   ApiRoute,
@@ -17,7 +16,10 @@ import {
   parseHttpMethod,
   sanitizeParamLikeObject,
 } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -36,7 +38,10 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
     this.app = express();
 
     // Parse request bodies as json.
-    this.app.use(express.json());
+    // matching the limit to aws api gateway's payload size limit:
+    // https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
+    this.app.use(express.json({ limit: "10mb" }));
+    this.app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
     for (const route of this.routes) {
       const method = route.method.toLowerCase() as
@@ -57,7 +62,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
       }
 
       this.app[method](
-        route.route,
+        transformRoutePath(route.route),
         async (
           req: express.Request,
           res: express.Response,
@@ -67,16 +72,10 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
           this.addTrace(
             `Processing "${route.method} ${route.route}" (body=${JSON.stringify(
               body
-            )}).`
+            )}, params=${JSON.stringify(req.params)}).`
           );
 
           const apiRequest = transformRequest(req);
-
-          if (Object.keys(req.params).length > 0) {
-            throw new Error(
-              "Path variables are not yet supported in the simulator."
-            );
-          }
 
           try {
             const response = await fnClient.invoke(
@@ -163,6 +162,11 @@ function transformRequest(req: express.Request): ApiRequest {
     method: parseHttpMethod(req.method),
     path: req.path,
     query: sanitizeParamLikeObject(req.query as any),
-    vars: {}, // TODO: not supported in simulator yet
+    vars: req.params,
   };
+}
+
+function transformRoutePath(route: string): string {
+  // route validation is done in the preflight file
+  return route.replace(/{/g, ":").replace(/}/g, "");
 }

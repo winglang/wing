@@ -1,7 +1,7 @@
 import { Redis as IoRedis } from "ioredis";
 import { test, expect } from "vitest";
 import * as redis from "../../src/redis";
-import { SimApp } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 test("create a Redis resource", async () => {
   // GIVEN

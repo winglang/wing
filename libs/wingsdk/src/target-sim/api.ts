@@ -1,11 +1,12 @@
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { ApiSchema, API_TYPE } from "./schema-resources";
 import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost, Resource } from "../std";
+import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -46,6 +47,8 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: cloud.IApiEndpointHandler,
     props: any
   ): void {
+    this.validateRoute(route);
+
     this._addToSpec(route, method, undefined);
 
     const fn = this.createOrGetFunction(inflight, props);
@@ -57,7 +60,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       functionHandle,
     });
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
       relationship: `on_${method.toLowerCase()}_request`,
@@ -189,7 +192,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }

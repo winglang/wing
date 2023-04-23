@@ -2,7 +2,6 @@ import * as crypto from "crypto";
 import * as fs from "fs";
 import * as os from "os";
 import { dirname, join } from "path";
-import { ISimulatorResourceInstance } from "./resource";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
 import {
   BucketDeleteOptions,
@@ -11,7 +10,10 @@ import {
   ITopicClient,
 } from "../cloud";
 import { Json } from "../std";
-import { ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly objectKeys: Set<string>;

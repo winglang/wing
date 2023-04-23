@@ -1,16 +1,17 @@
+import IoRedis from "ioredis";
 import { v4 as uuidv4 } from "uuid";
-import { ISimulatorResourceInstance } from "./resource";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
-import { IRedisClient } from "../redis";
-import { ISimulatorContext } from "../testing/simulator";
+import { RedisClientBase } from "../redis";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 import { runCommand } from "../util";
 
-// Issue using types from ioredis with JSII
-//import { Redis as IoRedis } from "ioredis";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const IoRedis = require("ioredis");
-
-export class Redis implements IRedisClient, ISimulatorResourceInstance {
+export class Redis
+  extends RedisClientBase
+  implements ISimulatorResourceInstance
+{
   private container_name: string;
   private readonly WING_REDIS_IMAGE =
     process.env.WING_REDIS_IMAGE ??
@@ -22,6 +23,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   private connection?: any;
 
   public constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
+    super();
     this.context = context;
     this.container_name = `wing-sim-redis-${this.context.resourcePath.replace(
       /\//g,
@@ -82,57 +84,11 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     throw new Error("Redis server not initialized");
   }
 
-  // TODO: refactor these methods into an abstract class (will complete in: https://github.com/winglang/wing/issues/612)
   public async url(): Promise<string> {
     if (this.connection_url != undefined) {
       return this.connection_url;
     } else {
       throw new Error("Redis server not initialized");
     }
-  }
-
-  public async set(key: string, value: string): Promise<void> {
-    let redis = await this.rawClient();
-    await redis.set(key, value);
-  }
-
-  public async get(key: string): Promise<string | undefined> {
-    let redis = await this.rawClient();
-    let result = await redis.get(key);
-    return result;
-  }
-
-  public async hset(
-    key: string,
-    field: string,
-    value: string
-  ): Promise<number> {
-    const redis = await this.rawClient();
-    const result = await redis.hset(key, field, value);
-    return result;
-  }
-
-  public async hget(key: string, field: string): Promise<string | undefined> {
-    const redis = await this.rawClient();
-    const result = await redis.hget(key, field);
-    return result;
-  }
-
-  public async sadd(key: string, value: string): Promise<number> {
-    const redis = await this.rawClient();
-    const result = await redis.sadd(key, value);
-    return result;
-  }
-
-  public async smembers(key: string): Promise<string[]> {
-    const redis = await this.rawClient();
-    const result = await redis.smembers(key);
-    return result ?? [];
-  }
-
-  public async del(key: string): Promise<number> {
-    const redis = await this.rawClient();
-    const result = await redis.del(key);
-    return result;
   }
 }

@@ -26,7 +26,10 @@
     },
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["rust-target"],
+      "outputs": [
+        "{workspaceRoot}/target/wasm32-wasi/debug/wingc.wasm",
+        "{workspaceRoot}/target/wasm32-wasi/release/wingc.wasm"
+      ],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingc"

@@ -14,6 +14,7 @@ environment:
 * [Node.js] v18 and npm v8
   * We recommend [volta] to manage node tools
 * [Rust]
+  * We recommend using [rustup] to manage your Rust installation
 * [AWS CLI]
   * Only needed for integration tests - make sure to do the setup part to create credentials
 * [Terraform CLI]
@@ -36,7 +37,6 @@ npm install
 npx nx <target> <project>
 # or
 npx nx <target> <project> -- <args>
-
 ```
 
 - `npx` can be omitted if [Nx] is installed globally
@@ -47,7 +47,8 @@ npx nx <target> <project> -- <args>
 
 [Nx]: https://nx.dev/
 [Node.js]: https://nodejs.org/en/
-[Rust]: https://www.rust-lang.org/tools/install
+[Rust]: https://www.rust-lang.org/
+[rustup]: https://rustup.rs/
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
 [volta]: https://volta.sh
@@ -123,6 +124,49 @@ To run the tests (and update snapshots), run the following command from anywhere
 npx nx test hangar
 ```
 
+### Test Meta-Comments
+
+In your wing files in `examples/tests/valid`, you can add a specially formatted comment to add additional information for hangar.
+Inside this comment, a yaml block will be read and used for serveral purposes.
+
+Example:
+
+```ts
+/*\
+skipPlatforms:
+  - win32
+  - darwin
+\*/
+```
+
+Currently, the only supported meta-comment for regular tests is `skipPlatforms`.
+This will skip the test on the given platforms when when running on CI. The current supported platforms are `win32`, `darwin`, and `linux`.
+This is useful if, for example, the test requires docker. In our CI only linux supports docker.
+
+### Benchmarks
+
+Benchmark files are located in `examples/tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
+
+```sh
+npx nx bench hangar
+```
+
+Benchmark files should ideally have a meta-comment with the `cases` key. For example:
+
+```ts
+/*\
+cases:
+  - target: sim
+    maxMeanTime: 900
+  - target: tf-aws
+    maxMeanTime: 1000
+\*/
+```
+
+Given each of these cases, the current purpose is to provide a maxMeanTime (milliseconds) per compilation target. 
+If the average time for compiling to this target takes longer than the maxMeanTime, the test will fail.
+Note: In CI, tests likely run much slower than on your local machine, so you may need to observe the CI results to determine the correct maxMeanTime.
+
 ## How do I work only on the compiler?
 
 The following command runs the cargo tests, currently just ensures the valid examples compile and the
@@ -197,3 +241,20 @@ npx nx dev vscode-wing
 ```
 
 To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.
+
+## 🧹 How do I lint my code?
+
+To lint Rust code, you can run the `lint` target on the `wingc` or `wingii` projects:
+
+```sh
+npx nx lint wingc
+```
+
+It's also possible to lint by running `cargo clippy` directly.
+
+Lastly you can show linting errors in your IDE by enabling the following setting in the rust-analyzer extension:
+
+```json
+// in your VS Code settings
+"rust-analyzer.check.command": "clippy",
+```

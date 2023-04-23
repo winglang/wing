@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost } from "../std";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -37,47 +38,42 @@ export class Table extends cloud.Table {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("tables can only be bound by tfaws.Function for now");
     }
 
     if (ops.includes(cloud.TableInflightMethods.INSERT)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:PutItem"],
-        resource: this.table.arn,
+        actions: ["dynamodb:PutItem"],
+        resources: [this.table.arn],
       });
     }
     if (ops.includes(cloud.TableInflightMethods.UPDATE)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:UpdateItem"],
-        resource: this.table.arn,
+        actions: ["dynamodb:UpdateItem"],
+        resources: [this.table.arn],
       });
     }
 
     if (ops.includes(cloud.TableInflightMethods.DELETE)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:DeleteItem"],
-        resource: this.table.arn,
+        actions: ["dynamodb:DeleteItem"],
+        resources: [this.table.arn],
       });
     }
 
     if (ops.includes(cloud.TableInflightMethods.GET)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:GetItem"],
-        resource: this.table.arn,
+        actions: ["dynamodb:GetItem"],
+        resources: [this.table.arn],
       });
     }
 
     if (ops.includes(cloud.TableInflightMethods.LIST)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:Scan"],
-        resource: this.table.arn,
+        actions: ["dynamodb:Scan"],
+        resources: [this.table.arn],
       });
     }
 

@@ -1,5 +1,5 @@
-import { BaseResourceSchema } from "./schema";
-import { IResource } from "../core";
+import { IResource } from "../std";
+import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Interfaces shared by all polycon implementations (preflight classes)
@@ -17,21 +17,4 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
     typeof obj == "object" &&
     typeof (obj as ISimulatorResource).toSimulator === "function"
   );
-}
-
-/**
- * Shared interface for resource simulations.
- */
-export interface ISimulatorResourceInstance {
-  /**
-   * Perform any async initialization required by the resource. Return a map of
-   * the resource's runtime attributes.
-   */
-  init(): Promise<Record<string, any>>;
-
-  /**
-   * Stop the resource and clean up any physical resources it may have created
-   * (files, ports, etc).
-   */
-  cleanup(): Promise<void>;
 }

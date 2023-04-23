@@ -218,4 +218,40 @@ describe("ApiRequest", () => {
       vars: {},
     });
   });
+
+  test("handle body as urlencoded form", async () => {
+    // GIVEN
+    const apiRequestEvent: Partial<APIGatewayProxyEvent> = {
+      path: "/",
+      httpMethod: "POST",
+      body: "foo=bar&bar=baz",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    };
+
+    const handlerMock = vi.fn().mockResolvedValue({
+      status: 200,
+    });
+    const requestHandlerClient = new ApiOnRequestHandlerClient({
+      handler: {
+        handle: handlerMock,
+      },
+    });
+
+    // WHEN
+    await requestHandlerClient.handle(apiRequestEvent as APIGatewayProxyEvent);
+
+    // THEN
+    expect(handlerMock).toHaveBeenCalledWith({
+      body: { foo: "bar", bar: "baz" },
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      method: "POST",
+      path: "/",
+      query: {},
+      vars: {},
+    });
+  });
 });

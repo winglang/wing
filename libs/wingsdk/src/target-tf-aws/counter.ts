@@ -4,6 +4,8 @@ import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { COUNTER_HASH_KEY } from "../shared-aws/commons";
+import { calculateCounterPermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -36,30 +38,14 @@ export class Counter extends cloud.Counter {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
-    if (
-      ops.includes(cloud.CounterInflightMethods.INC) ||
-      ops.includes(cloud.CounterInflightMethods.DEC) ||
-      ops.includes(cloud.CounterInflightMethods.RESET)
-    ) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:UpdateItem"],
-        resource: this.table.arn,
-      });
-    }
-
-    if (ops.includes(cloud.CounterInflightMethods.PEEK)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:GetItem"],
-        resource: this.table.arn,
-      });
-    }
+    host.addPolicyStatements(
+      ...calculateCounterPermissions(this.table.arn, ops)
+    );
 
     host.addEnvironment(this.envName(), this.table.name);
 

@@ -14,8 +14,8 @@ resource ReplayableQueue {
     this.counter = new cloud.Counter();
   }
 
-  on_message(fn: inflight (str): str){
-    this.queue.on_message(fn);
+  add_consumer(fn: inflight (str): str){
+    this.queue.add_consumer(fn);
   }
   
   inflight push(m: str) {
@@ -35,10 +35,10 @@ resource ReplayableQueue {
 resource RemoteControl { 
   init(q: ReplayableQueue){
     let f = inflight (m: str): str => {
-      log("on_message got triggered with ${m}");
+      log("add_consumer got triggered with ${m}");
     };
       
-    q.on_message(f);
+    q.add_consumer(f);
     
     new cloud.Function(inflight (m: str) => {
       q.push(m);

@@ -13,6 +13,15 @@ for fox in sox {
     continue;
 }
 
+for item in 0..100 {
+}
+
+for item in 0..=100 {
+}
+
+for item in 0..(2*2) {
+}
+
 --------------------------------------------------------------------------------
 
 (source
@@ -32,7 +41,32 @@ for fox in sox {
       (identifier))
     iterable: (identifier)
     block: (block
-      (continue_statement))))
+      (continue_statement)))
+  (for_in_loop
+    iterator: (reference
+      (identifier))
+    iterable: (loop_range
+      start: (number)
+      end: (number))
+    block: (block))
+  (for_in_loop
+    iterator: (reference
+      (identifier))
+    iterable: (loop_range
+      start: (number)
+      inclusive: (inclusive_range)
+      end: (number))
+    block: (block))
+  (for_in_loop
+    iterator: (reference
+      (identifier))
+    iterable: (loop_range
+      start: (number)
+      end: (parenthesized_expression
+        (binary_expression
+          left: (number)
+          right: (number))))
+    block: (block)))
 
 ================================================================================
 Variable assignment
@@ -185,7 +219,11 @@ inflight (callback: (num,num):bool) => {};
 Struct definition
 ================================================================================
 
-struct Test {
+struct Foo {
+    a: num;
+}
+
+struct Test extends Foo {
     cool: num;
     hip: str?;
 }
@@ -194,13 +232,20 @@ struct Test {
 
 (source
   (struct_definition
-    (identifier)
-    (struct_field
-      (identifier)
-      (builtin_type))
-    (struct_field
-      (identifier)
-      (optional
+    name: (identifier)
+    field: (struct_field
+      name: (identifier)
+      type: (builtin_type)))
+  (struct_definition
+    name: (identifier)
+    extends: (custom_type
+      object: (identifier))
+    field: (struct_field
+      name: (identifier)
+      type: (builtin_type))
+    field: (struct_field
+      name: (identifier)
+      type: (optional
         (builtin_type)))))
 
 ================================================================================

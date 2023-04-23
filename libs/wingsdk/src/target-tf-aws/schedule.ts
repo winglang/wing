@@ -5,6 +5,7 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**
@@ -65,9 +66,7 @@ export class Schedule extends cloud.Schedule {
       `${this.node.id}-OnTickHandler-${hash}`,
       inflight,
       join(
-        __dirname
-          .replace("target-tf-aws", "shared-aws")
-          .replace("target-tf-aws", "shared-aws"),
+        __dirname.replace("target-tf-aws", "shared-aws"),
         "schedule.ontick.inflight.js"
       ),
       "ScheduleOnTickHandlerClient"
@@ -94,7 +93,7 @@ export class Schedule extends cloud.Schedule {
       rule: this.rule.name,
     });
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_tick",
@@ -106,9 +105,7 @@ export class Schedule extends cloud.Schedule {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname
-        .replace("target-tf-aws", "shared-aws")
-        .replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "ScheduleClient",
       [`process.env["${this.envName()}"]`]

@@ -1,14 +1,15 @@
 import * as vm from "vm";
 
-import { readFile, rmSync, mkdirp, move, mkdirpSync, copySync } from "fs-extra";
+import { readFile, rmSync, mkdirp, mkdirpSync, copySync } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
 import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
+import { existsSync } from "fs";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -94,8 +95,20 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
 
+  // from wingDir, find the nearest node_modules directory
+  let wingNodeModules = resolve(wingDir, "node_modules");
+  while (!existsSync(wingNodeModules)) {
+    wingNodeModules = dirname(dirname(wingNodeModules));
+
+    if (wingNodeModules === "/" || wingNodeModules.match(/^[A-Z]:\\/)) {
+      break;
+    }
+
+    wingNodeModules = resolve(wingNodeModules, "node_modules")
+  }
+
   process.env["WING_SYNTH_DIR"] = tmpSynthDir;
-  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
+  process.env["WING_NODE_MODULES"] = wingNodeModules;
   process.env["WING_TARGET"] = options.target;
   process.env["WING_IS_TEST"] = testing.toString();
 
@@ -112,13 +125,14 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
     preopens: {
-      [wingDir]: wingDir, // for Rust's access to the source file
+      [wingDir]: wingDir, // for Rust's access to the source dir
       [workDir]: workDir, // for Rust's access to the work directory
       [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
+      [wingNodeModules]: wingNodeModules, // for Rust's access to the node_modules for the target wing file
     },
   });
 
-  const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
+  const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(resolve(wingDir))}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
   let compileResult;
   try {
@@ -274,7 +288,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     rmSync(tmpSynthDir, { recursive: true, force: true });
   } else {
     // Move the temporary directory to the final target location in an atomic operation
-    await move(tmpSynthDir, synthDir, { overwrite: true } );
+    copySync(tmpSynthDir, synthDir, { overwrite: true } );
+    rmSync(tmpSynthDir, { recursive: true, force: true });
   }
 
   return synthDir;

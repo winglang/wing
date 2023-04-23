@@ -1,7 +1,10 @@
 import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { SimApp, Testing } from "../../src/testing";
+import { Duration } from "../../src/std";
+import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
+import { Testing } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -26,8 +29,7 @@ test("create a queue", async () => {
     path: "root/my_queue",
     props: {
       initialMessages: [],
-      subscribers: [],
-      timeout: 30,
+      timeout: 10,
     },
     type: "wingsdk.cloud.Queue",
   });
@@ -41,7 +43,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue");
-  queue.onMessage(handler);
+  queue.addConsumer(handler);
   const s = await app.startSimulator();
 
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
@@ -97,7 +99,7 @@ test("queue with one subscriber, batch size of 5", async () => {
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     initialMessages: ["A", "B", "C", "D", "E", "F"],
   });
-  queue.onMessage(handler, { batchSize: 5 });
+  queue.addConsumer(handler, { batchSize: 5 });
   const s = await app.startSimulator();
 
   // WHEN
@@ -110,12 +112,44 @@ test("queue with one subscriber, batch size of 5", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("messages are requeued if the function fails", async () => {
+test("messages are requeued if the function fails after timeout", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = cloud.Queue._newQueue(app, "my_queue");
-  queue.onMessage(handler);
+  const queue = cloud.Queue._newQueue(app, "my_queue", {
+    timeout: Duration.fromSeconds(1),
+  });
+  queue.addConsumer(handler);
+  const s = await app.startSimulator();
+
+  // WHEN
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+  await queueClient.push("BAD MESSAGE");
+
+  await sleep(1300);
+
+  // THEN
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+
+  expect(
+    s
+      .listTraces()
+      .filter((v) => v.sourceType == QUEUE_TYPE)
+      .map((trace) => trace.data.message)
+  ).toContain("1 messages pushed back to queue after timeout.");
+});
+
+test("messages are not requeued if the function fails before timeout", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const queue = cloud.Queue._newQueue(app, "my_queue", {
+    timeout: Duration.fromSeconds(1),
+  });
+  queue.addConsumer(handler);
   const s = await app.startSimulator();
 
   // WHEN
@@ -129,6 +163,19 @@ test("messages are requeued if the function fails", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+
+  expect(
+    s
+      .listTraces()
+      .filter((v) => v.sourceType == QUEUE_TYPE)
+      .map((trace) => trace.data.message)
+  ).toEqual([
+    "wingsdk.cloud.Queue created.",
+    "Push (message=BAD MESSAGE).",
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
+    "Subscriber error - returning 1 messages to queue: ERROR",
+    "wingsdk.cloud.Queue deleted.",
+  ]);
 });
 
 test("queue has no display hidden property", async () => {
