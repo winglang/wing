@@ -47,7 +47,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: cloud.IApiEndpointHandler,
     props: any
   ): void {
-    this.validateRoute(route);
+    this._validateRoute(route);
 
     this._addToSpec(route, method, undefined);
 
