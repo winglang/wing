@@ -14,9 +14,6 @@ const constructsPackageJsonContent = await import(
 const constructsJSIIContent = await import("constructs/.jsii?raw").then(
   (i) => i.default
 );
-const constructsIndexContent = await import("constructs/lib/index.js?raw").then(
-  (i) => i.default
-);
 
 const fs = createFsFromVolume(
   Volume.fromJSON({
@@ -26,30 +23,8 @@ const fs = createFsFromVolume(
       constructsPackageJsonContent,
     "/node_modules/wingsdk/node_modules/constructs/.jsii":
       constructsJSIIContent,
-    "/node_modules/wingsdk/node_modules/constructs/lib/index.js":
-      constructsIndexContent,
+    "/node_modules/wingsdk/node_modules/constructs/lib/index.js": "",
   })
-);
-
-await fs.promises.mkdir("/node_modules/wingsdk/node_modules/constructs/lib", {
-  recursive: true,
-});
-await fs.promises.writeFile(
-  "/node_modules/wingsdk/package.json",
-  wingsdkPackageJsonContent
-);
-await fs.promises.writeFile("/node_modules/wingsdk/.jsii", wingsdkJSIIContent);
-await fs.promises.writeFile(
-  "/node_modules/wingsdk/node_modules/constructs/package.json",
-  constructsPackageJsonContent
-);
-await fs.promises.writeFile(
-  "/node_modules/wingsdk/node_modules/constructs/.jsii",
-  constructsJSIIContent
-);
-await fs.promises.writeFile(
-  "/node_modules/wingsdk/node_modules/constructs/lib/index.js",
-  constructsIndexContent
 );
 
 let wasmFetchData = await fetch(wingcURL).then((d) => d.arrayBuffer());

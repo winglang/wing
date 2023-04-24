@@ -1,13 +1,13 @@
 import * as vm from "vm";
 
-import { rmSync, mkdirSync, copyFileSync, promises as fsPromise } from "fs";
+import { rmSync, mkdirSync, promises as fsPromise } from "fs";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
 import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
-import { normalPath } from "../util";
+import { copyDir, normalPath } from "../util";
 import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
 import { existsSync } from "fs";
 
@@ -278,11 +278,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     // Also only using sync methods to avoid possible async fs issues.
     rmSync(synthDir, { recursive: true, force: true });
     mkdirSync(synthDir, {recursive: true});
-    copyFileSync(tmpSynthDir, synthDir);
+    await copyDir(tmpSynthDir, synthDir);
     rmSync(tmpSynthDir, { recursive: true, force: true });
   } else {
     // Move the temporary directory to the final target location in an atomic operation
-    copyFileSync(tmpSynthDir, synthDir);
+    await copyDir(tmpSynthDir, synthDir);
     rmSync(tmpSynthDir, { recursive: true, force: true });
   }
 
