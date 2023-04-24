@@ -34,7 +34,7 @@ let post_handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
     users_table.insert(body);
     return cloud.ApiResponse {
       body: {user: body.get("id")},
-      status: 200
+      status: 201
     };
   };
 
