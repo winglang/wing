@@ -1,4 +1,7 @@
-import { Secret as CdkSecret } from "aws-cdk-lib/aws-secretsmanager";
+import {
+  ISecret as ICdkSecret,
+  Secret as CdkSecret,
+} from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
@@ -12,14 +15,14 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret {
-  private readonly secret: CdkSecret;
+  private readonly secret: ICdkSecret;
 
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
-    this.secret = new CdkSecret(this, "Default", {
-      secretName: props.name,
-    });
+    this.secret = props.name
+      ? CdkSecret.fromSecretNameV2(this, "Default", props.name)
+      : new CdkSecret(this, "Default");
   }
 
   /**

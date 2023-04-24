@@ -1,3 +1,4 @@
+import { DataAwsSecretsmanagerSecret } from "@cdktf/provider-aws/lib/data-aws-secretsmanager-secret";
 import { SecretsmanagerSecret } from "@cdktf/provider-aws/lib/secretsmanager-secret";
 import { Construct } from "constructs";
 import { Function } from "./function";
@@ -20,14 +21,16 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret {
-  private readonly secret: SecretsmanagerSecret;
+  private readonly secret: DataAwsSecretsmanagerSecret | SecretsmanagerSecret;
 
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
-    this.secret = new SecretsmanagerSecret(this, "Default", {
-      name: props.name ?? ResourceNames.generateName(this, NAME_OPTS),
-    });
+    this.secret = props.name
+      ? new DataAwsSecretsmanagerSecret(this, "Default", { name: props.name })
+      : new SecretsmanagerSecret(this, "Default", {
+          name: ResourceNames.generateName(this, NAME_OPTS),
+        });
   }
 
   /**
