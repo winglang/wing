@@ -38,7 +38,7 @@ exports.First = First;
 ## clients/MyResource.inflight.js
 ```js
 class  MyResource {
-  constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_queue, my_resource, my_str, set_of_str, unused_resource, stateful }) {
+  constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_opt_str, my_queue, my_resource, my_str, set_of_str, unused_resource, stateful }) {
     this.another = another;
     this.array_of_str = array_of_str;
     this.ext_bucket = ext_bucket;
@@ -46,6 +46,7 @@ class  MyResource {
     this.map_of_num = map_of_num;
     this.my_bool = my_bool;
     this.my_num = my_num;
+    this.my_opt_str = my_opt_str;
     this.my_queue = my_queue;
     this.my_resource = my_resource;
     this.my_str = my_str;
@@ -77,6 +78,11 @@ class  MyResource {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_str === "my_string")'`)})((this.my_str === "my_string"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_num === 42)'`)})((this.my_num === 42))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_bool === true)'`)})((this.my_bool === true))};
+    }
+  }
+  async test_capture_optional()  {
+    {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_opt_str === "my_opt_string")'`)})((this.my_opt_str === "my_opt_string"))};
     }
   }
   async test_capture_resource()  {
@@ -472,6 +478,7 @@ class $Root extends $stdlib.std.Resource {
         this.my_str = "my_string";
         this.my_num = 42;
         this.my_bool = true;
+        this.my_opt_str = "my_opt_string";
         this.array_of_str = Object.freeze(["s1", "s2"]);
         this.map_of_num = Object.freeze({"k1":11,"k2":22});
         this.set_of_str = Object.freeze(new Set(["s1", "s2", "s1"]));
@@ -494,6 +501,7 @@ class $Root extends $stdlib.std.Resource {
         const map_of_num_client = this._lift(this.map_of_num);
         const my_bool_client = this._lift(this.my_bool);
         const my_num_client = this._lift(this.my_num);
+        const my_opt_str_client = this._lift(this.my_opt_str);
         const my_queue_client = this._lift(this.my_queue);
         const my_resource_client = this._lift(this.my_resource);
         const my_str_client = this._lift(this.my_str);
@@ -511,6 +519,7 @@ class $Root extends $stdlib.std.Resource {
               map_of_num: ${map_of_num_client},
               my_bool: ${my_bool_client},
               my_num: ${my_num_client},
+              my_opt_str: ${my_opt_str_client},
               my_queue: ${my_queue_client},
               my_resource: ${my_resource_client},
               my_str: ${my_str_client},
@@ -524,8 +533,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    MyResource._annotateInflight("$inflight_init", {"this.another": { ops: [] },"this.array_of_str": { ops: [] },"this.ext_bucket": { ops: [] },"this.ext_num": { ops: [] },"this.map_of_num": { ops: [] },"this.my_bool": { ops: [] },"this.my_num": { ops: [] },"this.my_queue": { ops: [] },"this.my_resource": { ops: [] },"this.my_str": { ops: [] },"this.set_of_str": { ops: [] },"this.stateful": { ops: [] },"this.unused_resource": { ops: [] }});
+    MyResource._annotateInflight("$inflight_init", {"this.another": { ops: [] },"this.array_of_str": { ops: [] },"this.ext_bucket": { ops: [] },"this.ext_num": { ops: [] },"this.map_of_num": { ops: [] },"this.my_bool": { ops: [] },"this.my_num": { ops: [] },"this.my_opt_str": { ops: [] },"this.my_queue": { ops: [] },"this.my_resource": { ops: [] },"this.my_str": { ops: [] },"this.set_of_str": { ops: [] },"this.stateful": { ops: [] },"this.unused_resource": { ops: [] }});
     MyResource._annotateInflight("test_capture_collections_of_data", {"this.array_of_str": { ops: ["at","length"] },"this.map_of_num": { ops: ["get"] },"this.set_of_str": { ops: ["has"] }});
+    MyResource._annotateInflight("test_capture_optional", {"this.my_opt_str": { ops: [] }});
     MyResource._annotateInflight("test_capture_primitives", {"this.my_bool": { ops: [] },"this.my_num": { ops: [] },"this.my_str": { ops: [] }});
     MyResource._annotateInflight("test_capture_resource", {"this.my_resource": { ops: ["get","list","put"] }});
     MyResource._annotateInflight("test_expression_recursive", {"this.my_queue": { ops: ["push"] },"this.my_str": { ops: [] }});
@@ -542,7 +552,7 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         r: {
           obj: r,
-          ops: ["test_capture_collections_of_data","test_capture_primitives","test_capture_resource","test_expression_recursive","test_external","test_inflight_field","test_nested_preflight_field","test_nested_resource","test_no_capture","test_user_defined_resource"]
+          ops: ["test_capture_collections_of_data","test_capture_optional","test_capture_primitives","test_capture_resource","test_expression_recursive","test_external","test_inflight_field","test_nested_preflight_field","test_nested_resource","test_no_capture","test_user_defined_resource"]
         },
       }
     })
@@ -575,6 +585,7 @@ async handle() {
   (await r.test_no_capture());
   (await r.test_capture_collections_of_data());
   (await r.test_capture_primitives());
+  (await r.test_capture_optional());
   (await r.test_capture_resource());
   (await r.test_nested_preflight_field());
   (await r.test_nested_resource());
