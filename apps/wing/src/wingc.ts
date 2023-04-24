@@ -102,7 +102,8 @@ export async function load(options: WingCompilerLoadOptions) {
       .map((value) => value.trim());
 
     for (const drive of drives) {
-      preopens[normalPath(drive)] = drive;
+      // drive will be something like "C:"
+      preopens[`${drive}/`] = `${drive}\\`;
     }
   } else {
     // mapping the root is not sufficient on linux/mac
