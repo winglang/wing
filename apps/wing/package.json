@@ -23,7 +23,7 @@
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
     "build": "tsc",
     "watch": "tsc --watch",
-    "test": "vitest",
+    "test": "vitest run",
     "dev": "npm run build && ./bin/wing",
     "bump": "node version.js",
     "unbump": "node unversion.js"
