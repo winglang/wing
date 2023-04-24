@@ -1,6 +1,7 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode } from "../../src/util";
@@ -10,7 +11,6 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
-import { Duration } from "../../src/std";
 
 test("default topic behavior", () => {
   // GIVEN
