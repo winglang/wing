@@ -47,7 +47,7 @@ export abstract class Website extends Resource {
   }
 
   /**
-   * Local path to the website's static files, relative to the Wing source file.
+   * Absolute local path to the website's static files.
    * @example "./dist"
    */
   get path(): string {
