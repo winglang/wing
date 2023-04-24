@@ -116,7 +116,7 @@ export async function load(options: WingCompilerLoadOptions) {
         (await fs.promises.lstat(fullPath)).isDirectory()
       ) {
         try {
-          await fs.promises.access(fullPath);
+          await fs.promises.access(fullPath, fs.constants.R_OK | fs.constants.F_OK);
           preopens[fullPath] = fullPath;
         } catch {
           // can't access the file, don't bother preopening it
