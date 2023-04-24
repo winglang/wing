@@ -2532,9 +2532,9 @@ name: str;
 
 The secret's name.
 
-If no name is provided then a new secret is provisioned in the target
-cloud. If a name is provided then the resource will reference an existing
-secret in the target cloud.
+If no name is provided then a new secret is provisioned in the target.
+If a name is provided then the resource will reference an existing
+secret in the target.
 
 ---
 
