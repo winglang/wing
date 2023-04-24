@@ -20,7 +20,7 @@
     "playwright:update": "PLAYWRIGHT_TEST=true xvfb-maybe --auto-servernum --server-args='-screen 0 3440x1440x24' -- playwright test -u"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.317.0",
+    "@aws-sdk/client-s3": "^3.319.0",
     "@babel/core": "^7.21.4",
     "@cloudy-ts/eslint-plugin": "^0.0.260",
     "@electron/notarize": "^1.2.3",
@@ -36,7 +36,7 @@
     "@wingconsole/server": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "@wingconsole/ui": "workspace:^",
-    "@winglang/sdk": "^0.13.22",
+    "@winglang/sdk": "^0.13.23",
     "analytics-node": "^6.2.0",
     "autoprefixer": "^10.4.14",
     "c8": "^7.13.0",
