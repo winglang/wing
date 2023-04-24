@@ -1,7 +1,6 @@
 import { load, invoke } from "winglang";
-import { createFsFromVolume } from "@cowasm/memfs";
 import wingcURL from "winglang/wingc.wasm?url";
-import { Volume } from "@cowasm/memfs";
+import { Volume, createFsFromVolume } from "@cowasm/memfs";
 
 const wingsdkJSIIContent = await import("@winglang/sdk/.jsii?raw").then(
   (i) => i.default
@@ -9,12 +8,48 @@ const wingsdkJSIIContent = await import("@winglang/sdk/.jsii?raw").then(
 const wingsdkPackageJsonContent = await import(
   "@winglang/sdk/package.json?raw"
 ).then((i) => i.default);
+const constructsPackageJsonContent = await import(
+  "constructs/package.json?raw"
+).then((i) => i.default);
+const constructsJSIIContent = await import("constructs/.jsii?raw").then(
+  (i) => i.default
+);
+const constructsIndexContent = await import("constructs/lib/index.js?raw").then(
+  (i) => i.default
+);
 
 const fs = createFsFromVolume(
   Volume.fromJSON({
-    "/wingsdk/package.json": wingsdkPackageJsonContent,
-    "/wingsdk/.jsii": wingsdkJSIIContent,
+    "/node_modules/wingsdk/package.json": wingsdkPackageJsonContent,
+    "/node_modules/wingsdk/.jsii": wingsdkJSIIContent,
+    "/node_modules/wingsdk/node_modules/constructs/package.json":
+      constructsPackageJsonContent,
+    "/node_modules/wingsdk/node_modules/constructs/.jsii":
+      constructsJSIIContent,
+    "/node_modules/wingsdk/node_modules/constructs/lib/index.js":
+      constructsIndexContent,
   })
+);
+
+await fs.promises.mkdir("/node_modules/wingsdk/node_modules/constructs/lib", {
+  recursive: true,
+});
+await fs.promises.writeFile(
+  "/node_modules/wingsdk/package.json",
+  wingsdkPackageJsonContent
+);
+await fs.promises.writeFile("/node_modules/wingsdk/.jsii", wingsdkJSIIContent);
+await fs.promises.writeFile(
+  "/node_modules/wingsdk/node_modules/constructs/package.json",
+  constructsPackageJsonContent
+);
+await fs.promises.writeFile(
+  "/node_modules/wingsdk/node_modules/constructs/.jsii",
+  constructsJSIIContent
+);
+await fs.promises.writeFile(
+  "/node_modules/wingsdk/node_modules/constructs/lib/index.js",
+  constructsIndexContent
 );
 
 let wasmFetchData = await fetch(wingcURL).then((d) => d.arrayBuffer());
@@ -26,7 +61,7 @@ const wingc = await load({
   },
   fs: fs,
   wingcWASMData,
-  wingsdkManifestRoot: "/wingsdk",
+  wingsdkManifestRoot: "/node_modules/wingsdk",
 });
 
 self.onmessage = async (event) => {

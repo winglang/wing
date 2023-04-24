@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { readFile, rmSync, mkdirp, mkdirpSync, copySync } from "fs-extra";
+import { rmSync, mkdirSync, copyFileSync, promises as fsPromise } from "fs";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
@@ -113,8 +113,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   process.env["WING_IS_TEST"] = testing.toString();
 
   await Promise.all([
-    mkdirp(workDir),
-    mkdirp(tmpSynthDir),
+    fsPromise.mkdir(workDir, { recursive: true }, ),
+    fsPromise.mkdir(tmpSynthDir, { recursive: true }),
   ]);
 
   const wingc = await wingCompiler.load({
@@ -150,7 +150,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
       if (span !== null) {
         // `span` should only be null if source file couldn't be read etc.
-        const source = await readFile(span.file_id, "utf8");
+        const source = await fsPromise.readFile(span.file_id, "utf8");
         const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
         const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
         files.push({
@@ -180,7 +180,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
-  const artifact = await readFile(artifactPath, "utf-8");
+  const artifact = await fsPromise.readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
 
   // Try looking for dependencies not only in the current directory (wherever
@@ -277,12 +277,12 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     // So we just copy the directory instead.
     // Also only using sync methods to avoid possible async fs issues.
     rmSync(synthDir, { recursive: true, force: true });
-    mkdirpSync(synthDir);
-    copySync(tmpSynthDir, synthDir);
+    mkdirSync(synthDir, {recursive: true});
+    copyFileSync(tmpSynthDir, synthDir);
     rmSync(tmpSynthDir, { recursive: true, force: true });
   } else {
     // Move the temporary directory to the final target location in an atomic operation
-    copySync(tmpSynthDir, synthDir, { overwrite: true } );
+    copyFileSync(tmpSynthDir, synthDir);
     rmSync(tmpSynthDir, { recursive: true, force: true });
   }
 

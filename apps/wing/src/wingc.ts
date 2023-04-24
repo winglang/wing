@@ -1,13 +1,10 @@
 import debug from "debug";
-import { readFileSync } from "fs";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
 import { resolve } from "path";
 import wasiBindings from "wasi-js/dist/bindings/node";
 import { exec } from "child_process";
 import { promisify } from "util";
-import { readdir } from "fs-extra";
-import { lstat } from "fs/promises";
 
 const log = debug("wing:compile");
 
@@ -61,7 +58,7 @@ export interface WingCompilerLoadOptions {
    *
    * @default - The `fs` module from Node.js
    */
-  fs?: any;
+  fs?: typeof import("fs");
 
   /**
    * The bytes of the `wingc.wasm` data loaded into memory.
@@ -79,6 +76,7 @@ export interface WingCompilerLoadOptions {
 }
 
 export async function load(options: WingCompilerLoadOptions) {
+  const fs = options.fs ?? require("fs");
   const WINGSDK_MANIFEST_ROOT =
     options.wingsdkManifestRoot ??
     // using resolve.call so webpack will ignore the sdk package
@@ -92,13 +90,16 @@ export async function load(options: WingCompilerLoadOptions) {
 
   if (process.platform === "win32") {
     const wmicCommand = await promisify(exec)("wmic logicaldisk get name");
-    if(wmicCommand.stderr) {
-      throw new Error(`Unable to get available system drives to run WASM compiler: ${wmicCommand.stderr}`);
+    if (wmicCommand.stderr) {
+      throw new Error(
+        `Unable to get available system drives to run WASM compiler: ${wmicCommand.stderr}`
+      );
     }
 
-    const drives = wmicCommand.stdout.split('\r\r\n')
-    .filter(value => /[A-Za-z]:/.test(value))
-    .map(value => value.trim());
+    const drives = wmicCommand.stdout
+      .split("\r\r\n")
+      .filter((value) => /[A-Za-z]:/.test(value))
+      .map((value) => value.trim());
 
     for (const drive of drives) {
       preopens[normalPath(drive)] = drive;
@@ -106,13 +107,16 @@ export async function load(options: WingCompilerLoadOptions) {
   } else {
     // mapping the root is not sufficient on linux/mac
     // we need to also map all directories in the root
-    const rootFiles = await readdir("/");
+    const rootFiles = await fs.promises.readdir("/");
     for (const file of rootFiles) {
       // skip files and dot dirs
-      if (file.startsWith(".") || (await lstat(`/${file}`)).isFile()) {
+      if (
+        file.startsWith(".") ||
+        (await fs.promises.lstat(`/${file}`)).isFile()
+      ) {
         continue;
       } else {
-        preopens[file] = `/${file}`;
+        preopens[`/${file}`] = `/${file}`;
       }
     }
   }
@@ -137,12 +141,12 @@ export async function load(options: WingCompilerLoadOptions) {
   preopens = {
     ...preopens,
     ...(options.preopens ?? {}),
-  }
+  };
 
   // check if running in browser
   const bindings = {
     ...wasiBindings,
-    fs: options.fs ?? require("fs"),
+    fs,
   };
 
   const wasi = new WASI({
@@ -168,7 +172,9 @@ export async function load(options: WingCompilerLoadOptions) {
   log("compiling wingc WASM module");
   const binary =
     options.wingcWASMData ??
-    new Uint8Array(readFileSync(resolve(__dirname, "../wingc.wasm")));
+    new Uint8Array(
+      await fs.promises.readFile(resolve(__dirname, "../wingc.wasm"))
+    );
   const mod = new WebAssembly.Module(binary);
 
   log("instantiating wingc WASM module with importObject: %o", importObject);
