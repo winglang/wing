@@ -76,7 +76,7 @@ export interface WingCompilerLoadOptions {
 }
 
 export async function load(options: WingCompilerLoadOptions) {
-  const fs = options.fs ?? require("fs");
+  const fs: typeof import("fs") = options.fs ?? require("fs");
   const WINGSDK_MANIFEST_ROOT =
     options.wingsdkManifestRoot ??
     // using resolve.call so webpack will ignore the sdk package
@@ -110,13 +110,17 @@ export async function load(options: WingCompilerLoadOptions) {
     const rootFiles = await fs.promises.readdir("/");
     for (const file of rootFiles) {
       // skip files and dot dirs
+      const fullPath = `/${file}`;
       if (
-        file.startsWith(".") ||
-        (await fs.promises.lstat(`/${file}`)).isFile()
+        !file.startsWith(".") &&
+        (await fs.promises.lstat(fullPath)).isDirectory()
       ) {
-        continue;
-      } else {
-        preopens[`/${file}`] = `/${file}`;
+        try {
+          await fs.promises.access(fullPath);
+          preopens[fullPath] = fullPath;
+        } catch {
+          // can't access the file, don't bother preopening it
+        }
       }
     }
   }
