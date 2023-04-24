@@ -31,6 +31,7 @@ resource MyResource {
   my_str: str;
   my_num: num;
   my_bool: bool;
+  my_opt_str: str?;
   array_of_str: Array<str>;
   map_of_num: Map<num>;
   set_of_str: Set<str>;
@@ -50,6 +51,7 @@ resource MyResource {
     this.my_str = "my_string";
     this.my_num = 42;
     this.my_bool = true;
+    this.my_opt_str = "my_opt_string";
     this.array_of_str = ["s1", "s2"];
     this.map_of_num = {
       k1: 11,
@@ -85,6 +87,10 @@ resource MyResource {
     assert(this.my_str == "my_string");
     assert(this.my_num == 42);
     assert(this.my_bool == true);
+  }
+
+  inflight test_capture_optional() {
+    assert(this.my_opt_str ?? "" == "my_opt_string");
   }
 
   hello_preflight(): Another {
@@ -136,6 +142,7 @@ new cloud.Function(inflight () => {
   r.test_no_capture();
   r.test_capture_collections_of_data();
   r.test_capture_primitives();
+  r.test_capture_optional();
   r.test_capture_resource();
   r.test_nested_preflight_field();
   r.test_nested_resource();
