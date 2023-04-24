@@ -3871,7 +3871,7 @@ packages:
       magic-string: 0.27.0
       remark-external-links: 8.0.0
       remark-slug: 6.1.0
-      rollup: 3.20.7
+      rollup: 3.21.0
       typescript: 5.0.4
       vite: 4.3.1(@types/node@18.16.0)(sass@1.62.0)
     transitivePeerDependencies:
@@ -11176,8 +11176,8 @@ packages:
     dev: true
     optional: true
 
-  /rollup@3.20.7:
-    resolution: {integrity: sha512-P7E2zezKSLhWnTz46XxjSmInrbOCiul1yf+kJccMxT56vxjHwCbDfoLbiqFgu+WQoo9ij2PkraYaBstgB2prBA==}
+  /rollup@3.21.0:
+    resolution: {integrity: sha512-ANPhVcyeHvYdQMUyCbczy33nbLzI7RzrBje4uvNiTDJGIMtlKoOStmympwr9OtS1LZxiDmE2wvxHyVhoLtf1KQ==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -12131,7 +12131,7 @@ packages:
       joycon: 3.1.1
       postcss-load-config: 3.1.4(postcss@8.4.23)
       resolve-from: 5.0.0
-      rollup: 3.20.7
+      rollup: 3.21.0
       source-map: 0.8.0-beta.0
       sucrase: 3.32.0
       tree-kill: 1.2.2
@@ -12571,7 +12571,7 @@ packages:
       '@types/node': 18.16.0
       esbuild: 0.17.18
       postcss: 8.4.23
-      rollup: 3.20.7
+      rollup: 3.21.0
       sass: 1.62.0
     optionalDependencies:
       fsevents: 2.3.2
