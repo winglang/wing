@@ -46,7 +46,7 @@ let options_handler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
                 },
-        status: 200
+        status: 204
         };
 };
 
