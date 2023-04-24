@@ -8,13 +8,7 @@ import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
-import {
-  CHARS_ASCII,
-  emitDiagnostic,
-  Severity,
-  File,
-  Label,
-} from "codespan-wasm";
+import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
 import { existsSync } from "fs";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
@@ -91,10 +85,7 @@ function resolveSynthDir(
  * @param options Compile options.
  * @returns the output directory
  */
-export async function compile(
-  entrypoint: string,
-  options: CompileOptions
-): Promise<string> {
+export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
   // create a unique temporary directory for the compilation
   const targetdir = join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
@@ -103,20 +94,9 @@ export async function compile(
   log("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log("testing: %s", testing);
-  const tmpSynthDir = resolveSynthDir(
-    targetdir,
-    wingFile,
-    options.target,
-    testing,
-    true
-  );
+  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, testing, true);
   log("temp synth dir: %s", tmpSynthDir);
-  const synthDir = resolveSynthDir(
-    targetdir,
-    wingFile,
-    options.target,
-    testing
-  );
+  const synthDir = resolveSynthDir(targetdir, wingFile, options.target, testing);
   log("synth dir: %s", synthDir);
   const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
@@ -156,9 +136,7 @@ export async function compile(
     },
   });
 
-  const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(
-    resolve(wingDir)
-  )}`;
+  const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(resolve(wingDir))}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
   let compileResult;
   try {
@@ -175,9 +153,7 @@ export async function compile(
   }
   if (compileResult !== 0) {
     // This is a bug in the user's code. Print the compiler diagnostics.
-    const errors: wingCompiler.WingDiagnostic[] = JSON.parse(
-      compileResult.toString()
-    );
+    const errors: wingCompiler.WingDiagnostic[] = JSON.parse(compileResult.toString());
     const result = [];
     const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
@@ -189,20 +165,9 @@ export async function compile(
       if (span !== null) {
         // `span` should only be null if source file couldn't be read etc.
         const source = await readFile(span.file_id, "utf8");
-        const start = offsetFromLineAndColumn(
-          source,
-          span.start.line,
-          span.start.col
-        );
-        const end = offsetFromLineAndColumn(
-          source,
-          span.end.line,
-          span.end.col
-        );
-        files.push({
-          name: span.file_id,
-          source,
-        });
+        const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
+        const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
+        files.push({ name: span.file_id, source });
         labels.push({
           fileId: span.file_id,
           rangeStart: start,
@@ -272,14 +237,9 @@ export async function compile(
   try {
     vm.runInContext(artifact, context);
   } catch (e) {
-    console.error(
-      chalk.bold.red("preflight error:") + " " + (e as any).message
-    );
+    console.error(chalk.bold.red("preflight error:") + " " + (e as any).message);
 
-    if (
-      (e as any).stack &&
-      (e as any).stack.includes("evalmachine.<anonymous>:")
-    ) {
+    if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
       console.log();
       console.log(
         "  " +
@@ -288,9 +248,7 @@ export async function compile(
           chalk.white(`intermediate javascript code (${artifactPath}):`)
       );
       const lineNumber =
-        Number.parseInt(
-          (e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]
-        ) - 1;
+        Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
       const lines = artifact.split("\n");
       let startLine = Math.max(lineNumber - 2, 0);
       let finishLine = Math.min(lineNumber + 2, lines.length - 1);
@@ -315,9 +273,7 @@ export async function compile(
         "  " +
           chalk.bold.white("note:") +
           " " +
-          chalk.white(
-            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-          )
+          chalk.white("run with `NODE_STACKTRACE=1` environment variable to display a stack trace")
       );
     }
 
