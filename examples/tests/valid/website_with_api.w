@@ -28,7 +28,7 @@ let post_handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
     if (body.get("name") == "" || body.get("age")  == "" || body.get("id")  == "") {
         return cloud.ApiResponse {
             body: {error: "incomplete details"},       
-            status: 500
+            status: 400
           };
     }
     users_table.insert(body);
