@@ -90,7 +90,7 @@ resource MyResource {
   }
 
   inflight test_capture_optional() {
-    assert(this.my_opt_str == "my_opt_string");
+    assert(this.my_opt_str ?? "" == "my_opt_string");
   }
 
   hello_preflight(): Another {

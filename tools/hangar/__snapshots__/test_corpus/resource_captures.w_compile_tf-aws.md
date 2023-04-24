@@ -82,7 +82,7 @@ class  MyResource {
   }
   async test_capture_optional()  {
     {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_opt_str === "my_opt_string")'`)})((this.my_opt_str === "my_opt_string"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.my_opt_str ?? "") === "my_opt_string")'`)})(((this.my_opt_str ?? "") === "my_opt_string"))};
     }
   }
   async test_capture_resource()  {
