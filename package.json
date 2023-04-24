@@ -1,11 +1,11 @@
 {
   "name": "monowingo",
   "devDependencies": {
-    "@nrwl/devkit": "15.9.2",
+    "@nrwl/devkit": "15.7.2",
     "@nxrs/cargo": "^0.3.3",
     "changelogen": "^0.5.3",
     "npm-run-all": "^4.1.5",
-    "nx": "15.9.2",
+    "nx": "15.7.2",
     "semver": "^7.3.8"
   },
   "scripts": {
