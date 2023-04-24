@@ -1,5 +1,6 @@
 import { DataAwsSecretsmanagerSecret } from "@cdktf/provider-aws/lib/data-aws-secretsmanager-secret";
 import { SecretsmanagerSecret } from "@cdktf/provider-aws/lib/secretsmanager-secret";
+import { TerraformOutput } from "cdktf";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
@@ -26,11 +27,19 @@ export class Secret extends cloud.Secret {
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
-    this.secret = props.name
-      ? new DataAwsSecretsmanagerSecret(this, "Default", { name: props.name })
-      : new SecretsmanagerSecret(this, "Default", {
-          name: ResourceNames.generateName(this, NAME_OPTS),
-        });
+    if (props.name) {
+      this.secret = new DataAwsSecretsmanagerSecret(this, "Default", {
+        name: props.name,
+      });
+    } else {
+      this.secret = new SecretsmanagerSecret(this, "Default", {
+        name: ResourceNames.generateName(this, NAME_OPTS),
+      });
+
+      new TerraformOutput(this, "SecretArn", {
+        value: this.secret.arn,
+      });
+    }
   }
 
   /**
