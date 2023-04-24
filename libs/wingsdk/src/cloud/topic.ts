@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { IResource, Resource } from "../std";
@@ -52,7 +52,7 @@ export abstract class Topic extends Resource {
 /**
  * Options for `Topic.onMessage`.
  */
-export interface TopicOnMessageProps {}
+export interface TopicOnMessageProps extends FunctionProps {}
 
 /**
  * Inflight interface for `Topic`.
