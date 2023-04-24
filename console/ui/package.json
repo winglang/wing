@@ -23,7 +23,7 @@
     "@storybook/react": "^7.0.7",
     "@storybook/react-vite": "^7.0.7",
     "@storybook/testing-library": "^0.1.0",
-    "@tanstack/react-query": "^4.29.3",
+    "@tanstack/react-query": "^4.29.5",
     "@trpc/client": "^10.21.1",
     "@trpc/react-query": "^10.21.1",
     "@trpc/server": "^10.21.1",
