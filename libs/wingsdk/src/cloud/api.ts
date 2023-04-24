@@ -164,8 +164,9 @@ export abstract class Api extends Resource {
    * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
    * @param path
    * @throws if the path is invalid
+   * @internal
    */
-  protected validatePath(path: string) {
+  protected _validatePath(path: string) {
     if (!/^([^\{\}\:\n]|.+\/\{\w+\}(\/|$))*$/g.test(path)) {
       throw new Error(
         `Invalid path ${path}. Url cannot contain ":", params contains only alpha-numeric chars or "_".`

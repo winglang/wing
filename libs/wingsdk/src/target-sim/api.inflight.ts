@@ -1,6 +1,7 @@
 import { Server } from "http";
 import { AddressInfo } from "net";
 import express from "express";
+import { IEventPublisher } from "./event-mapping";
 import {
   ApiAttributes,
   ApiRoute,
@@ -21,11 +22,12 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
-import { IEventPublisher } from "./event-mapping";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
-export class Api implements IApiClient, ISimulatorResourceInstance, IEventPublisher {
+export class Api
+  implements IApiClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly routes: ApiRoute[];
   private readonly context: ISimulatorContext;
   private readonly app: express.Application;
@@ -47,17 +49,20 @@ export class Api implements IApiClient, ISimulatorResourceInstance, IEventPublis
     this.app.use(express.urlencoded({ extended: true, limit: "10mb" }));
   }
 
-  public async addEventSubscription(subscriber: string, subscriptionProps: EventSubscription): Promise<void> {
+  public async addEventSubscription(
+    subscriber: string,
+    subscriptionProps: EventSubscription
+  ): Promise<void> {
     const routes = (subscriptionProps as any).routes as ApiRoute[];
     routes.forEach((r) => {
       const s = {
         functionHandle: subscriber,
         method: r.method,
-        path: r.path
+        path: r.path,
       };
-      this.routes.push(s)
+      this.routes.push(s);
       this.populateRoute(s, subscriber);
-    })
+    });
   }
 
   private populateRoute(route: ApiRoute, functionHandle: string): void {
@@ -114,9 +119,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance, IEventPublis
             res.set(key, value);
           }
           res.send(JSON.stringify(response.body));
-          this.addTrace(
-            `${route.method} ${route.path} - ${response.status}.`
-          );
+          this.addTrace(`${route.method} ${route.path} - ${response.status}.`);
         } catch (err) {
           return next(err);
         }

@@ -24,7 +24,7 @@ export type PublisherHandle = string;
 /** Schema for cloud.Api */
 export interface ApiSchema extends BaseResourceSchema {
   readonly type: typeof API_TYPE;
-  readonly props: { };
+  readonly props: {};
   readonly attrs: ApiAttributes & BaseResourceAttributes;
 }
 

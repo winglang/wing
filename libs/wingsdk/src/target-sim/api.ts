@@ -1,3 +1,4 @@
+import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { ApiSchema, API_TYPE, ApiRoute } from "./schema-resources";
@@ -7,7 +8,6 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
-import { EventMapping } from "./event-mapping";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -15,7 +15,7 @@ import { EventMapping } from "./event-mapping";
  * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 export class Api extends cloud.Api implements ISimulatorResource {
-  private eventMappings: {[key: string]: EventMapping} = {};
+  private eventMappings: { [key: string]: EventMapping } = {};
 
   public get url(): string {
     return simulatorAttrToken(this, "url");
@@ -35,10 +35,11 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
     if (existingFn) {
       const event = this.eventMappings[eventId];
-      const routes = (event.eventProps.subscriptionProps as any).routes as ApiRoute[];
+      const routes = (event.eventProps.subscriptionProps as any)
+        .routes as ApiRoute[];
       routes.push({
         path,
-        method
+        method,
       });
 
       this.eventMappings[eventId] = event;
@@ -57,9 +58,9 @@ export class Api extends cloud.Api implements ISimulatorResource {
           {
             path,
             method,
-          }
-        ]
-      }
+          },
+        ],
+      },
     });
     this.eventMappings[eventId] = eventMapping;
 
@@ -72,7 +73,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: cloud.IApiEndpointHandler,
     props: any
   ): void {
-    this._validatePath(route);
+    this._validatePath(path);
 
     this._addToSpec(path, method, undefined);
 
@@ -200,7 +201,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const schema: ApiSchema = {
       type: API_TYPE,
       path: this.node.path,
-      props: { },
+      props: {},
       attrs: {} as any,
     };
     return schema;
