@@ -142,7 +142,8 @@ export class Bucket extends cloud.Bucket {
 
 export function createEncryptedBucket(
   scope: Construct,
-  isPublic: boolean
+  isPublic: boolean,
+  name: string = "Default"
 ): S3Bucket {
   const bucketPrefix = ResourceNames.generateName(scope, BUCKET_PREFIX_OPTS);
 
@@ -162,7 +163,7 @@ export function createEncryptedBucket(
 
   const isTestEnvironment = App.of(scope).isTestEnvironment;
 
-  const bucket = new S3Bucket(scope, "Default", {
+  const bucket = new S3Bucket(scope, name, {
     bucketPrefix,
     forceDestroy: isTestEnvironment ? true : false,
   });

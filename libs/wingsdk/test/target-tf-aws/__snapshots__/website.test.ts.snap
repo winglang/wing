@@ -36,7 +36,7 @@ exports[`default website behavior 1`] = `
         \\"enabled\\": true,
         \\"origin\\": [
           {
-            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket_regional_domain_name}\\",
+            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket_regional_domain_name}\\",
             \\"origin_id\\": \\"s3Origin\\"
           }
         ],
@@ -53,20 +53,20 @@ exports[`default website behavior 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Website_3C57D90B\\": {
+      \\"root_Website_websitebucket_B2448438\\": {
         \\"bucket_prefix\\": \\"website-c80d509a-\\",
         \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_policy\\": {
       \\"root_Website_PublicPolicy_F4A65951\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_3C57D90B.arn}/*\\\\\\"]}]}\\"
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.arn}/*\\\\\\"]}]}\\"
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
       \\"root_Website_Encryption_3BFF2396\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"rule\\": [
           {
             \\"apply_server_side_encryption_by_default\\": {
@@ -77,8 +77,8 @@ exports[`default website behavior 1`] = `
       }
     },
     \\"aws_s3_bucket_website_configuration\\": {
-      \\"root_Website_F683BEB2\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+      \\"root_Website_bucketwebsiteconfiguration_9537CA41\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"index_document\\": {
           \\"suffix\\": \\"index.html\\"
         }
@@ -86,22 +86,22 @@ exports[`default website behavior 1`] = `
     },
     \\"aws_s3_object\\": {
       \\"root_Website_awss3bucketobjectahtml_21E76D5F\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_3C57D90B\\"
+          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
         ],
         \\"key\\": \\"/inner-folder/a.html\\",
-        \\"source\\": \\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\"
+        \\"source\\": \\"<source>\\"
       },
       \\"root_Website_awss3bucketobjectbhtml_6B166508\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_3C57D90B\\"
+          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
         ],
         \\"key\\": \\"/b.html\\",
-        \\"source\\": \\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\"
+        \\"source\\": \\"<source>\\"
       }
     }
   }
@@ -122,14 +122,6 @@ exports[`default website behavior 2`] = `
                   "wing:resource:stateful": false,
                 },
                 "children": {
-                  "Default": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Default",
-                    "path": "root/Default/Website/Default",
-                  },
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
@@ -145,14 +137,6 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/Website/PublicPolicy",
-                  },
-                  "Website": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration",
-                      "version": "12.0.2",
-                    },
-                    "id": "Website",
-                    "path": "root/Default/Website/Website",
                   },
                   "aws_s3_bucket_object_a.html": {
                     "constructInfo": {
@@ -170,6 +154,14 @@ exports[`default website behavior 2`] = `
                     "id": "aws_s3_bucket_object_b.html",
                     "path": "root/Default/Website/aws_s3_bucket_object_b.html",
                   },
+                  "bucket-website-configuration": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration",
+                      "version": "12.0.2",
+                    },
+                    "id": "bucket-website-configuration",
+                    "path": "root/Default/Website/bucket-website-configuration",
+                  },
                   "distribution": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudfrontDistribution.CloudfrontDistribution",
@@ -177,6 +169,14 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "distribution",
                     "path": "root/Default/Website/distribution",
+                  },
+                  "website-bucket": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "12.0.2",
+                    },
+                    "id": "website-bucket",
+                    "path": "root/Default/Website/website-bucket",
                   },
                 },
                 "constructInfo": {
@@ -297,7 +297,7 @@ exports[`website with add_json 1`] = `
         \\"enabled\\": true,
         \\"origin\\": [
           {
-            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket_regional_domain_name}\\",
+            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket_regional_domain_name}\\",
             \\"origin_id\\": \\"s3Origin\\"
           }
         ],
@@ -314,20 +314,20 @@ exports[`website with add_json 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Website_3C57D90B\\": {
+      \\"root_Website_websitebucket_B2448438\\": {
         \\"bucket_prefix\\": \\"website-c80d509a-\\",
         \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_policy\\": {
       \\"root_Website_PublicPolicy_F4A65951\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_3C57D90B.arn}/*\\\\\\"]}]}\\"
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.arn}/*\\\\\\"]}]}\\"
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
       \\"root_Website_Encryption_3BFF2396\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"rule\\": [
           {
             \\"apply_server_side_encryption_by_default\\": {
@@ -338,8 +338,8 @@ exports[`website with add_json 1`] = `
       }
     },
     \\"aws_s3_bucket_website_configuration\\": {
-      \\"root_Website_F683BEB2\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+      \\"root_Website_bucketwebsiteconfiguration_9537CA41\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"index_document\\": {
           \\"suffix\\": \\"index.html\\"
         }
@@ -347,29 +347,29 @@ exports[`website with add_json 1`] = `
     },
     \\"aws_s3_object\\": {
       \\"root_Website_awss3bucketobjectahtml_21E76D5F\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_3C57D90B\\"
+          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
         ],
         \\"key\\": \\"/inner-folder/a.html\\",
-        \\"source\\": \\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\"
+        \\"source\\": \\"<source>\\"
       },
       \\"root_Website_awss3bucketobjectbhtml_6B166508\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_3C57D90B\\"
+          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
         ],
         \\"key\\": \\"/b.html\\",
-        \\"source\\": \\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\"
+        \\"source\\": \\"<source>\\"
       },
       \\"root_Website_awss3bucketobjectconfigjson_56517E14\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
         \\"content\\": \\"{\\\\\\"version\\\\\\":\\\\\\"8.31.0\\\\\\"}\\",
         \\"content_type\\": \\"application/json\\",
         \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_3C57D90B\\"
+          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
         ],
         \\"key\\": \\"config.json\\"
       }
@@ -392,14 +392,6 @@ exports[`website with add_json 2`] = `
                   "wing:resource:stateful": false,
                 },
                 "children": {
-                  "Default": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Default",
-                    "path": "root/Default/Website/Default",
-                  },
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
@@ -415,14 +407,6 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/Website/PublicPolicy",
-                  },
-                  "Website": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration",
-                      "version": "12.0.2",
-                    },
-                    "id": "Website",
-                    "path": "root/Default/Website/Website",
                   },
                   "aws_s3_bucket_object_a.html": {
                     "constructInfo": {
@@ -448,6 +432,14 @@ exports[`website with add_json 2`] = `
                     "id": "aws_s3_bucket_object_config.json",
                     "path": "root/Default/Website/aws_s3_bucket_object_config.json",
                   },
+                  "bucket-website-configuration": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration",
+                      "version": "12.0.2",
+                    },
+                    "id": "bucket-website-configuration",
+                    "path": "root/Default/Website/bucket-website-configuration",
+                  },
                   "distribution": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudfrontDistribution.CloudfrontDistribution",
@@ -455,6 +447,14 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "distribution",
                     "path": "root/Default/Website/distribution",
+                  },
+                  "website-bucket": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "12.0.2",
+                    },
+                    "id": "website-bucket",
+                    "path": "root/Default/Website/website-bucket",
                   },
                 },
                 "constructInfo": {

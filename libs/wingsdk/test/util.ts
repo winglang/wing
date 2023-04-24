@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { join } from "path";
+import { isAbsolute, join } from "path";
 import { App } from "../src/core";
 import { directorySnapshot } from "../src/util";
 
@@ -66,7 +66,7 @@ export function tfSanitize(templateStr: string): string {
       if (
         key === "source" &&
         typeof value === "string" &&
-        value.match(/^assets\/.*\/archive.zip$/)
+        (value.match(/^assets\/.*\/archive.zip$/) || isAbsolute(value))
       ) {
         return "<source>";
       }
