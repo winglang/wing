@@ -814,7 +814,15 @@ impl TypeRef {
 			Type::Map(v) => v.is_capturable(),
 			Type::Set(v) => v.is_capturable(),
 			Type::Struct(_) => true,
-			_ => false,
+			Type::Optional(v) => v.is_capturable(),
+			Type::Anything => false,
+			Type::Void => false,
+			Type::MutJson => false,
+			Type::MutArray(_) => false,
+			Type::MutMap(_) => false,
+			Type::MutSet(_) => false,
+			Type::Function(_) => false, // TODO: https://github.com/winglang/wing/issues/2236
+			Type::Class(_) => false,
 		}
 	}
 

@@ -3561,6 +3561,7 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
+| <code><a href="#@winglang/sdk.std.Json.tryParse">try_parse</a></code> | Try to parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
 
 ---
@@ -3686,6 +3687,24 @@ to format as string.
 ###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.stringify.parameter.indent"></a>
 
 - *Type:* num
+
+---
+
+##### `try_parse` <a name="try_parse" id="@winglang/sdk.std.Json.tryParse"></a>
+
+```wing
+bring std;
+
+std.Json.try_parse(str: str)
+```
+
+Try to parse a string into a Json.
+
+###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.tryParse.parameter.str"></a>
+
+- *Type:* str
+
+to parse as Json.
 
 ---
 
