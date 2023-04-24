@@ -5,9 +5,9 @@ export class BucketEventHandlerClient implements IBucketEventHandlerClient {
   constructor({ handler }: { handler: IFunctionHandlerClient }) {
     this.handler = handler;
   }
-  public async handle(event: any) {
+  public async handle(event: string) {
     try {
-      const message = JSON.parse(event?.Message);
+      const message = JSON.parse(event);
       if (message?.Event === "s3:TestEvent") {
         // aws sends a test event to the topic before of the actual one, we're ignoring it for now
         return;
