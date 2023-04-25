@@ -1,11 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`bool_from_json.w > stderr 1`] = `"preflight error: $stdlib.core.App.for is not a function"`;
+exports[`bool_from_json.w > stderr 1`] = `"preflight error: unable to parse number 123 as a boolean"`;
 
-exports[`num_from_str.w > stderr 1`] = `"preflight error: $stdlib.core.App.for is not a function"`;
+exports[`num_from_str.w > stderr 1`] = `"preflight error: unable to parse \\"123a\\" as a number"`;
 
-exports[`number_from_json.w > stderr 1`] = `"preflight error: $stdlib.core.App.for is not a function"`;
+exports[`number_from_json.w > stderr 1`] = `"preflight error: unable to parse string apples as a number"`;
 
-exports[`string_from_json.w > stderr 1`] = `"preflight error: $stdlib.core.App.for is not a function"`;
+exports[`string_from_json.w > stderr 1`] = `"preflight error: unable to parse number 123 as a string"`;
 
-exports[`utilities.w > stderr 1`] = `"preflight error: $stdlib.core.App.for is not a function"`;
+exports[`utilities.w > stderr 1`] = `"preflight error: assertion failed: 'false'"`;

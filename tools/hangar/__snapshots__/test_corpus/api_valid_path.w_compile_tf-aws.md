@@ -136,7 +136,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequeste46e5cb7_IamRole_15046B29.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_cloudApi_cloudApiOnRequeste46e5cb7_S3Object_69EE2256.key}",
         "timeout": 30,
