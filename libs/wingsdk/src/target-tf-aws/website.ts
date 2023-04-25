@@ -27,7 +27,7 @@ export class Website extends cloud.Website {
 
     this.bucket = createEncryptedBucket(this, true, "WebsiteBucket");
 
-    new S3BucketWebsiteConfiguration(this, "bucket-website-configuration", {
+    new S3BucketWebsiteConfiguration(this, "BucketWebsiteConfiguration", {
       bucket: this.bucket.bucket,
       indexDocument: { suffix: INDEX_FILE },
     });
