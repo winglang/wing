@@ -1515,7 +1515,7 @@ new cloud.Website(props: WebsiteProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Website.addJson">add_json</a></code> | used for adding dynamic content to the website after deployment. |
+| <code><a href="#@winglang/sdk.cloud.Website.addJson">add_json</a></code> | Add a JSON file with custom values during the website's deployment. |
 
 ---
 
@@ -1525,21 +1525,21 @@ new cloud.Website(props: WebsiteProps)
 add_json(path: str, obj: Json): str
 ```
 
-used for adding dynamic content to the website after deployment.
+Add a JSON file with custom values during the website's deployment.
+
+If the path conflicts with file path from the website's static assets, an error will be thrown.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.addJson.parameter.path"></a>
 
 - *Type:* str
 
-the bucket key to add.
+the file path it will be uploaded as.
 
 ---
 
 ###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Website.addJson.parameter.obj"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-the object to write to the key.
 
 ---
 

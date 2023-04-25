@@ -802,7 +802,7 @@ exports[`website with add_json 1`] = `
         \\"key\\": \\"/inner-folder/a.html\\",
         \\"source\\": \\"<source>\\"
       },
-      \\"root_Website_awss3bucketobjectconfigjson_56517E14\\": {
+      \\"root_Website_Fileconfigjson_49B1EFB1\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"content\\": \\"{\\\\\\"version\\\\\\":\\\\\\"8.31.0\\\\\\"}\\",
         \\"content_type\\": \\"application/json\\",
@@ -1308,6 +1308,14 @@ exports[`website with add_json 2`] = `
     return StringPrototypeSlice(path, start, end);
   }-82cd5558",
                   },
+                  "File-config.json": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.2",
+                    },
+                    "id": "File-config.json",
+                    "path": "root/Default/Website/File-config.json",
+                  },
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
@@ -1323,14 +1331,6 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "WebsiteBucket",
                     "path": "root/Default/Website/WebsiteBucket",
-                  },
-                  "aws_s3_bucket_object_config.json": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
-                    },
-                    "id": "aws_s3_bucket_object_config.json",
-                    "path": "root/Default/Website/aws_s3_bucket_object_config.json",
                   },
                 },
                 "constructInfo": {
