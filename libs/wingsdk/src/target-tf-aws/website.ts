@@ -35,7 +35,7 @@ export class Website extends cloud.Website {
     this.uploadFiles(this.path);
 
     // create a cloudFront distribution
-    const distribution = new CloudfrontDistribution(this, "distribution", {
+    const distribution = new CloudfrontDistribution(this, "Distribution", {
       enabled: true,
       ...(this._domain && { aliases: [this._domain] }),
       origin: [
