@@ -80,7 +80,7 @@ export class Website extends cloud.Website {
       );
     }
 
-    new S3Object(this, `aws_s3_bucket_object_${filePath}`, {
+    new S3Object(this, `File-${filePath}`, {
       dependsOn: [this.bucket],
       content: JSON.stringify(obj),
       bucket: this.bucket.bucket,
