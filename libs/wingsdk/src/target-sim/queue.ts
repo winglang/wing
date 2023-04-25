@@ -26,6 +26,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     this.timeout = props.timeout ?? std.Duration.fromSeconds(10);
     this.retentionPeriod = props.retentionPeriod ?? std.Duration.fromHours(1);
+
+    if (this.retentionPeriod < this.timeout) {
+      throw new Error(
+        "Retention period must be greater than or equal to timeout"
+      );
+    }
+
     this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
