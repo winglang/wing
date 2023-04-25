@@ -10,7 +10,7 @@ import { Json, Resource } from "../std";
 export const WEBSITE_FQN = fqnForType("cloud.Website");
 
 /**
- * Represents a cloud object store.
+ * Represents a cloud static website.
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
@@ -40,9 +40,15 @@ export abstract class Website extends Resource {
     this.display.title = "Website";
     this.display.description = "A static website";
 
-    this._path = isAbsolute(props.path)
-      ? props.path
-      : resolve(process.env.WING_SOURCE_DIR ?? "", props.path);
+    if (isAbsolute(props.path)) {
+      this._path = props.path;
+    } else {
+      if (!process.env.WING_SOURCE_DIR) {
+        throw new Error("Missing environment variable: WING_SOURCE_DIR");
+      }
+      this._path = resolve(process.env.WING_SOURCE_DIR, props.path);
+    }
+
     this._domain = props.domain;
   }
 

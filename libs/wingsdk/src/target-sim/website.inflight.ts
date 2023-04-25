@@ -24,7 +24,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
     this.app = express();
 
     // Use static directory
-    this.app.use(express.static(props.path));
+    this.app.use(express.static(props.staticFilesPath));
     this.initiateJsonRoutes(props.jsonRoutes);
   }
 

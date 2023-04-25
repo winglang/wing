@@ -10,6 +10,7 @@ import { BaseResourceSchema } from "../testing/simulator";
 
 export class Website extends cloud.Website implements ISimulatorResource {
   private jsonRoutes: Record<string, Json> = {};
+
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
   }
@@ -33,7 +34,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
     const schema: WebsiteSchema = {
       type: WEBSITE_TYPE,
       path: this.node.path,
-      props: { path: this.path, jsonRoutes: this.jsonRoutes },
+      props: { staticFilesPath: this.path, jsonRoutes: this.jsonRoutes },
       attrs: {} as any,
     };
     return schema;
