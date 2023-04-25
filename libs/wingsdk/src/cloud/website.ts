@@ -67,9 +67,10 @@ export abstract class Website extends Resource {
   }
 
   /**
-   * used for adding dynamic content to the website after deployment
-   * @param path the bucket key to add
-   * @param obj the object to write to the key
+   * Add a JSON file with custom values during the website's deployment.
+   * If the path conflicts with file path from the website's static assets, an error will be thrown.
+   * @param path the file path it will be uploaded as
+   * @param data the data to write to the file
    */
   abstract addJson(path: string, obj: Json): string;
 }
