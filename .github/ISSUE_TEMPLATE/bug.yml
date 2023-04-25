@@ -47,6 +47,7 @@ body:
     - Compiler
     - SDK
     - Wing Console
+    - Playground
     - IDE Extension
     - CLI
     - Plugins
