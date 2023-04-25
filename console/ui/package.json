@@ -34,7 +34,7 @@
     "@types/lodash.throttle": "^4.1.7",
     "@types/lodash.uniqby": "^4.7.7",
     "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
     "@vitejs/plugin-react-swc": "^3.3.0",
     "@wingconsole/design-system": "workspace:^",
     "@wingconsole/eslint-plugin": "workspace:^",
@@ -61,7 +61,7 @@
     "storybook": "^7.0.7",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
-    "vite": "^4.3.1",
+    "vite": "^4.3.2",
     "vitest": "^0.30.1",
     "webpack": "^5.80.0",
     "zod": "^3.21.4"
