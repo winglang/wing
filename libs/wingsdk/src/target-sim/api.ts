@@ -28,8 +28,8 @@ export class Api extends cloud.Api implements ISimulatorResource {
     method: cloud.HttpMethod
   ): Function {
     const hash = inflight.node.addr.slice(-8);
-    const fnPath = `${this.node.id}-OnRequestHandler-${hash}`;
-    const eventId = `${this.node.id}-ApiEventMapping-${hash}`;
+    const fnPath = `OnRequestHandler-${hash}`;
+    const eventId = `ApiEventMapping-${hash}`;
 
     let existingFn = this.node.tryFindChild(fnPath) as Function;
 
@@ -48,8 +48,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
 
-    // Api needs to be deployed after functions in the simulator so that the
-    // function handles will be available.
     const eventMapping = new EventMapping(this, eventId, {
       publisher: this,
       subscriber: fn,
