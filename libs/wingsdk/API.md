@@ -1489,7 +1489,7 @@ with a fresh copy without any consequences.
 
 **Inflight client:** [@winglang/sdk.cloud.IWebsiteClient](#@winglang/sdk.cloud.IWebsiteClient)
 
-Represents a cloud object store.
+Represents a cloud static website.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Website.Initializer"></a>
 
@@ -1522,12 +1522,12 @@ new cloud.Website(props: WebsiteProps)
 ##### `add_json` <a name="add_json" id="@winglang/sdk.cloud.Website.addJson"></a>
 
 ```wing
-add_json(file_path: str, obj: Json): str
+add_json(path: str, obj: Json): str
 ```
 
 used for adding dynamic content to the website after deployment.
 
-###### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.cloud.Website.addJson.parameter.filePath"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.addJson.parameter.path"></a>
 
 - *Type:* str
 
@@ -1551,7 +1551,7 @@ the object to write to the key.
 | <code><a href="#@winglang/sdk.cloud.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-| <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Absolute local path to the website's static files. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
 
 ---
@@ -1604,16 +1604,9 @@ path: str;
 
 - *Type:* str
 
-Local path to the website's static files, relative to the Wing source file.
+Absolute local path to the website's static files.
 
 ---
-
-*Example*
-
-```wing
-"./dist"
-```
-
 
 ##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.cloud.Website.property.url"></a>
 
@@ -2958,7 +2951,7 @@ let website_props = cloud.WebsiteProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file. |
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
 | <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
 
 ---
@@ -2971,7 +2964,7 @@ path: str;
 
 - *Type:* str
 
-Local path to the website's static files, relative to the Wing source file.
+Local path to the website's static files, relative to the Wing source file or absolute.
 
 ---
 

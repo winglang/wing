@@ -1,5 +1,6 @@
+import * as crypto from "crypto";
 import { readdirSync } from "fs";
-import path, { basename, extname, join, resolve } from "path";
+import { basename, extname, join, resolve } from "path";
 import { CloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront-distribution";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 
@@ -10,7 +11,6 @@ import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
 import * as cloud from "../cloud";
-import * as crypto from "crypto";
 import { Json } from "../std";
 
 const INDEX_FILE = "index.html";

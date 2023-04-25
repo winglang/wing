@@ -9,7 +9,7 @@ exports[`default website behavior 1`] = `
   },
   \\"resource\\": {
     \\"aws_cloudfront_distribution\\": {
-      \\"root_Website_distribution_75869D6B\\": {
+      \\"root_Website_Distribution_02AE6540\\": {
         \\"default_cache_behavior\\": {
           \\"allowed_methods\\": [
             \\"GET\\",
@@ -36,7 +36,7 @@ exports[`default website behavior 1`] = `
         \\"enabled\\": true,
         \\"origin\\": [
           {
-            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket_regional_domain_name}\\",
+            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket_regional_domain_name}\\",
             \\"origin_id\\": \\"s3Origin\\"
           }
         ],
@@ -53,20 +53,20 @@ exports[`default website behavior 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Website_websitebucket_B2448438\\": {
+      \\"root_Website_WebsiteBucket_B334706B\\": {
         \\"bucket_prefix\\": \\"website-c80d509a-\\",
         \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_policy\\": {
       \\"root_Website_PublicPolicy_F4A65951\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.arn}/*\\\\\\"]}]}\\"
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.arn}/*\\\\\\"]}]}\\"
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
       \\"root_Website_Encryption_3BFF2396\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"rule\\": [
           {
             \\"apply_server_side_encryption_by_default\\": {
@@ -77,30 +77,30 @@ exports[`default website behavior 1`] = `
       }
     },
     \\"aws_s3_bucket_website_configuration\\": {
-      \\"root_Website_bucketwebsiteconfiguration_9537CA41\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+      \\"root_Website_BucketWebsiteConfiguration_9BCFE685\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"index_document\\": {
           \\"suffix\\": \\"index.html\\"
         }
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Website_awss3bucketobjectahtml_21E76D5F\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_020EEDFA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
-        ],
-        \\"key\\": \\"/inner-folder/a.html\\",
-        \\"source\\": \\"<source>\\"
-      },
-      \\"root_Website_awss3bucketobjectbhtml_6B166508\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
-        \\"content_type\\": \\"text/html; charset=utf-8\\",
-        \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
         ],
         \\"key\\": \\"/b.html\\",
+        \\"source\\": \\"<source>\\"
+      },
+      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_70F4D0CA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"content_type\\": \\"text/html; charset=utf-8\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
+        \\"key\\": \\"/inner-folder/a.html\\",
         \\"source\\": \\"<source>\\"
       }
     }
@@ -122,6 +122,22 @@ exports[`default website behavior 2`] = `
                   "wing:resource:stateful": false,
                 },
                 "children": {
+                  "BucketWebsiteConfiguration": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration",
+                      "version": "12.0.2",
+                    },
+                    "id": "BucketWebsiteConfiguration",
+                    "path": "root/Default/Website/BucketWebsiteConfiguration",
+                  },
+                  "Distribution": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.cloudfrontDistribution.CloudfrontDistribution",
+                      "version": "12.0.2",
+                    },
+                    "id": "Distribution",
+                    "path": "root/Default/Website/Distribution",
+                  },
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
@@ -129,6 +145,460 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "Encryption",
                     "path": "root/Default/Website/Encryption",
+                  },
+                  "File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-43ed6fc9": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.2",
+                    },
+                    "id": "File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-43ed6fc9",
+                    "path": "root/Default/Website/File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-43ed6fc9",
+                  },
+                  "File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-82cd5558": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.2",
+                    },
+                    "id": "File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-82cd5558",
+                    "path": "root/Default/Website/File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-82cd5558",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
@@ -138,45 +608,13 @@ exports[`default website behavior 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/Website/PublicPolicy",
                   },
-                  "aws_s3_bucket_object_a.html": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
-                    },
-                    "id": "aws_s3_bucket_object_a.html",
-                    "path": "root/Default/Website/aws_s3_bucket_object_a.html",
-                  },
-                  "aws_s3_bucket_object_b.html": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
-                    },
-                    "id": "aws_s3_bucket_object_b.html",
-                    "path": "root/Default/Website/aws_s3_bucket_object_b.html",
-                  },
-                  "bucket-website-configuration": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration",
-                      "version": "12.0.2",
-                    },
-                    "id": "bucket-website-configuration",
-                    "path": "root/Default/Website/bucket-website-configuration",
-                  },
-                  "distribution": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.cloudfrontDistribution.CloudfrontDistribution",
-                      "version": "12.0.2",
-                    },
-                    "id": "distribution",
-                    "path": "root/Default/Website/distribution",
-                  },
-                  "website-bucket": {
+                  "WebsiteBucket": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                       "version": "12.0.2",
                     },
-                    "id": "website-bucket",
-                    "path": "root/Default/Website/website-bucket",
+                    "id": "WebsiteBucket",
+                    "path": "root/Default/Website/WebsiteBucket",
                   },
                 },
                 "constructInfo": {
@@ -270,7 +708,7 @@ exports[`website with add_json 1`] = `
   },
   \\"resource\\": {
     \\"aws_cloudfront_distribution\\": {
-      \\"root_Website_distribution_75869D6B\\": {
+      \\"root_Website_Distribution_02AE6540\\": {
         \\"default_cache_behavior\\": {
           \\"allowed_methods\\": [
             \\"GET\\",
@@ -297,7 +735,7 @@ exports[`website with add_json 1`] = `
         \\"enabled\\": true,
         \\"origin\\": [
           {
-            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket_regional_domain_name}\\",
+            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket_regional_domain_name}\\",
             \\"origin_id\\": \\"s3Origin\\"
           }
         ],
@@ -314,20 +752,20 @@ exports[`website with add_json 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Website_websitebucket_B2448438\\": {
+      \\"root_Website_WebsiteBucket_B334706B\\": {
         \\"bucket_prefix\\": \\"website-c80d509a-\\",
         \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_policy\\": {
       \\"root_Website_PublicPolicy_F4A65951\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.arn}/*\\\\\\"]}]}\\"
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.arn}/*\\\\\\"]}]}\\"
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
       \\"root_Website_Encryption_3BFF2396\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"rule\\": [
           {
             \\"apply_server_side_encryption_by_default\\": {
@@ -338,38 +776,38 @@ exports[`website with add_json 1`] = `
       }
     },
     \\"aws_s3_bucket_website_configuration\\": {
-      \\"root_Website_bucketwebsiteconfiguration_9537CA41\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+      \\"root_Website_BucketWebsiteConfiguration_9BCFE685\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"index_document\\": {
           \\"suffix\\": \\"index.html\\"
         }
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Website_awss3bucketobjectahtml_21E76D5F\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_020EEDFA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
-        ],
-        \\"key\\": \\"/inner-folder/a.html\\",
-        \\"source\\": \\"<source>\\"
-      },
-      \\"root_Website_awss3bucketobjectbhtml_6B166508\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
-        \\"content_type\\": \\"text/html; charset=utf-8\\",
-        \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
         ],
         \\"key\\": \\"/b.html\\",
         \\"source\\": \\"<source>\\"
       },
+      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_70F4D0CA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"content_type\\": \\"text/html; charset=utf-8\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
+        \\"key\\": \\"/inner-folder/a.html\\",
+        \\"source\\": \\"<source>\\"
+      },
       \\"root_Website_awss3bucketobjectconfigjson_56517E14\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_websitebucket_B2448438.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"content\\": \\"{\\\\\\"version\\\\\\":\\\\\\"8.31.0\\\\\\"}\\",
         \\"content_type\\": \\"application/json\\",
         \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_websitebucket_B2448438\\"
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
         ],
         \\"key\\": \\"config.json\\"
       }
@@ -392,6 +830,22 @@ exports[`website with add_json 2`] = `
                   "wing:resource:stateful": false,
                 },
                 "children": {
+                  "BucketWebsiteConfiguration": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration",
+                      "version": "12.0.2",
+                    },
+                    "id": "BucketWebsiteConfiguration",
+                    "path": "root/Default/Website/BucketWebsiteConfiguration",
+                  },
+                  "Distribution": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.cloudfrontDistribution.CloudfrontDistribution",
+                      "version": "12.0.2",
+                    },
+                    "id": "Distribution",
+                    "path": "root/Default/Website/Distribution",
+                  },
                   "Encryption": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
@@ -399,6 +853,460 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "Encryption",
                     "path": "root/Default/Website/Encryption",
+                  },
+                  "File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-43ed6fc9": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.2",
+                    },
+                    "id": "File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-43ed6fc9",
+                    "path": "root/Default/Website/File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-43ed6fc9",
+                  },
+                  "File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-82cd5558": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.2",
+                    },
+                    "id": "File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-82cd5558",
+                    "path": "root/Default/Website/File-basename(path, suffix) {
+    if (suffix !== undefined)
+      validateString(suffix, 'ext');
+    validateString(path, 'path');
+
+    let start = 0;
+    let end = -1;
+    let matchedSlash = true;
+
+    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {
+      if (suffix === path)
+        return '';
+      let extIdx = suffix.length - 1;
+      let firstNonSlashEnd = -1;
+      for (let i = path.length - 1; i >= 0; --i) {
+        const code = StringPrototypeCharCodeAt(path, i);
+        if (code === CHAR_FORWARD_SLASH) {
+          ---- If we reached a path separator that was not part of a set of path
+          ---- separators at the end of the string, stop now
+          if (!matchedSlash) {
+            start = i + 1;
+            break;
+          }
+        } else {
+          if (firstNonSlashEnd === -1) {
+            ---- We saw the first non-path separator, remember this index in case
+            ---- we need it if the extension ends up not matching
+            matchedSlash = false;
+            firstNonSlashEnd = i + 1;
+          }
+          if (extIdx >= 0) {
+            ---- Try to match the explicit extension
+            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {
+              if (--extIdx === -1) {
+                ---- We matched the extension, so mark this as the end of our path
+                ---- component
+                end = i;
+              }
+            } else {
+              ---- Extension does not match, so our result is the entire path
+              ---- component
+              extIdx = -1;
+              end = firstNonSlashEnd;
+            }
+          }
+        }
+      }
+
+      if (start === end)
+        end = firstNonSlashEnd;
+      else if (end === -1)
+        end = path.length;
+      return StringPrototypeSlice(path, start, end);
+    }
+    for (let i = path.length - 1; i >= 0; --i) {
+      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {
+        ---- If we reached a path separator that was not part of a set of path
+        ---- separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+        ---- We saw the first non-path separator, mark this as the end of our
+        ---- path component
+        matchedSlash = false;
+        end = i + 1;
+      }
+    }
+
+    if (end === -1)
+      return '';
+    return StringPrototypeSlice(path, start, end);
+  }-82cd5558",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
@@ -408,21 +1316,13 @@ exports[`website with add_json 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/Website/PublicPolicy",
                   },
-                  "aws_s3_bucket_object_a.html": {
+                  "WebsiteBucket": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                       "version": "12.0.2",
                     },
-                    "id": "aws_s3_bucket_object_a.html",
-                    "path": "root/Default/Website/aws_s3_bucket_object_a.html",
-                  },
-                  "aws_s3_bucket_object_b.html": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
-                    },
-                    "id": "aws_s3_bucket_object_b.html",
-                    "path": "root/Default/Website/aws_s3_bucket_object_b.html",
+                    "id": "WebsiteBucket",
+                    "path": "root/Default/Website/WebsiteBucket",
                   },
                   "aws_s3_bucket_object_config.json": {
                     "constructInfo": {
@@ -431,30 +1331,6 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "aws_s3_bucket_object_config.json",
                     "path": "root/Default/Website/aws_s3_bucket_object_config.json",
-                  },
-                  "bucket-website-configuration": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration",
-                      "version": "12.0.2",
-                    },
-                    "id": "bucket-website-configuration",
-                    "path": "root/Default/Website/bucket-website-configuration",
-                  },
-                  "distribution": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.cloudfrontDistribution.CloudfrontDistribution",
-                      "version": "12.0.2",
-                    },
-                    "id": "distribution",
-                    "path": "root/Default/Website/distribution",
-                  },
-                  "website-bucket": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "website-bucket",
-                    "path": "root/Default/Website/website-bucket",
                   },
                 },
                 "constructInfo": {
