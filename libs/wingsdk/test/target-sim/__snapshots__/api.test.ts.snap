@@ -20,7 +20,7 @@ exports[`api handler can read the request params 1`] = `
 
 exports[`api handler can read the request params 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -46,10 +46,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -63,10 +63,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -125,13 +125,13 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -143,10 +143,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -166,8 +166,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
@@ -214,7 +214,7 @@ exports[`api handler can read the request path 1`] = `
 
 exports[`api handler can read the request path 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -240,10 +240,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -257,10 +257,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -319,13 +319,13 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -337,10 +337,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -360,8 +360,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
@@ -408,7 +408,7 @@ exports[`api handler can set response headers 1`] = `
 
 exports[`api handler can set response headers 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -434,10 +434,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -451,10 +451,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -513,13 +513,13 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -531,10 +531,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -554,8 +554,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
@@ -620,7 +620,7 @@ exports[`api supports every method type 1`] = `
 
 exports[`api supports every method type 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -646,10 +646,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -663,10 +663,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -749,49 +749,49 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_post_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_put_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_delete_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_head_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_options_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_patch_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -803,10 +803,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -862,8 +862,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
@@ -892,7 +892,7 @@ return class Handler {
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -918,10 +918,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -935,10 +935,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1001,13 +1001,13 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -1019,10 +1019,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -1042,8 +1042,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
@@ -1097,7 +1097,7 @@ exports[`api with multiple methods on same route 1`] = `
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1111,7 +1111,7 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1137,10 +1137,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
+        "path": "root/my_api/OnRequestHandler-7c48a9f0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js",
+          "sourceCodeFile": ".wing/onrequesthandler-7c48a9f0_c8912b27.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1154,10 +1154,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-7c48a9f0",
+        "path": "root/my_api/ApiEventMapping-7c48a9f0",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1171,10 +1171,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
+        "path": "root/my_api/OnRequestHandler-f6d90a7f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js",
+          "sourceCodeFile": ".wing/onrequesthandler-f6d90a7f_c869cdc5.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1182,10 +1182,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-f6d90a7f",
+        "path": "root/my_api/ApiEventMapping-f6d90a7f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1261,19 +1261,19 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
+                "resource": "root/my_api/OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_post_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
+                "resource": "root/my_api/OnRequestHandler-f6d90a7f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-7c48a9f0": {
+            "ApiEventMapping-7c48a9f0": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -1285,10 +1285,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-7c48a9f0",
-              "path": "root/my_api/my_api-ApiEventMapping-7c48a9f0",
+              "id": "ApiEventMapping-7c48a9f0",
+              "path": "root/my_api/ApiEventMapping-7c48a9f0",
             },
-            "my_api-ApiEventMapping-f6d90a7f": {
+            "ApiEventMapping-f6d90a7f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -1300,10 +1300,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-f6d90a7f",
-              "path": "root/my_api/my_api-ApiEventMapping-f6d90a7f",
+              "id": "ApiEventMapping-f6d90a7f",
+              "path": "root/my_api/ApiEventMapping-f6d90a7f",
             },
-            "my_api-OnRequestHandler-7c48a9f0": {
+            "OnRequestHandler-7c48a9f0": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -1323,10 +1323,10 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-7c48a9f0",
-              "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
+              "id": "OnRequestHandler-7c48a9f0",
+              "path": "root/my_api/OnRequestHandler-7c48a9f0",
             },
-            "my_api-OnRequestHandler-f6d90a7f": {
+            "OnRequestHandler-f6d90a7f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -1346,8 +1346,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-f6d90a7f",
-              "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
+              "id": "OnRequestHandler-f6d90a7f",
+              "path": "root/my_api/OnRequestHandler-f6d90a7f",
             },
           },
           "constructInfo": {
@@ -1401,7 +1401,7 @@ exports[`api with multiple routes 1`] = `
 
 exports[`api with multiple routes 2`] = `
 {
-  ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1415,7 +1415,7 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1441,10 +1441,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
+        "path": "root/my_api/OnRequestHandler-7c48a9f0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js",
+          "sourceCodeFile": ".wing/onrequesthandler-7c48a9f0_c8912b27.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1458,10 +1458,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-7c48a9f0",
+        "path": "root/my_api/ApiEventMapping-7c48a9f0",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1475,10 +1475,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
+        "path": "root/my_api/OnRequestHandler-f6d90a7f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js",
+          "sourceCodeFile": ".wing/onrequesthandler-f6d90a7f_c869cdc5.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1486,10 +1486,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-f6d90a7f",
+        "path": "root/my_api/ApiEventMapping-f6d90a7f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1565,19 +1565,19 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
+                "resource": "root/my_api/OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
+                "resource": "root/my_api/OnRequestHandler-f6d90a7f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-7c48a9f0": {
+            "ApiEventMapping-7c48a9f0": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -1589,10 +1589,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-7c48a9f0",
-              "path": "root/my_api/my_api-ApiEventMapping-7c48a9f0",
+              "id": "ApiEventMapping-7c48a9f0",
+              "path": "root/my_api/ApiEventMapping-7c48a9f0",
             },
-            "my_api-ApiEventMapping-f6d90a7f": {
+            "ApiEventMapping-f6d90a7f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -1604,10 +1604,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-f6d90a7f",
-              "path": "root/my_api/my_api-ApiEventMapping-f6d90a7f",
+              "id": "ApiEventMapping-f6d90a7f",
+              "path": "root/my_api/ApiEventMapping-f6d90a7f",
             },
-            "my_api-OnRequestHandler-7c48a9f0": {
+            "OnRequestHandler-7c48a9f0": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -1627,10 +1627,10 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-7c48a9f0",
-              "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
+              "id": "OnRequestHandler-7c48a9f0",
+              "path": "root/my_api/OnRequestHandler-7c48a9f0",
             },
-            "my_api-OnRequestHandler-f6d90a7f": {
+            "OnRequestHandler-f6d90a7f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -1650,8 +1650,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-f6d90a7f",
-              "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
+              "id": "OnRequestHandler-f6d90a7f",
+              "path": "root/my_api/OnRequestHandler-f6d90a7f",
             },
           },
           "constructInfo": {
@@ -1698,7 +1698,7 @@ exports[`api with one GET route 1`] = `
 
 exports[`api with one GET route 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1724,10 +1724,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1741,10 +1741,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1803,13 +1803,13 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -1821,10 +1821,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -1844,8 +1844,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
@@ -1892,7 +1892,7 @@ exports[`api with one GET route with request params 1`] = `
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1918,10 +1918,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1935,10 +1935,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1997,13 +1997,13 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -2015,10 +2015,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -2038,8 +2038,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
@@ -2086,7 +2086,7 @@ exports[`api with one POST route, with body 1`] = `
 
 exports[`api with one POST route, with body 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2112,10 +2112,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2129,10 +2129,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2191,13 +2191,13 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_post_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -2209,10 +2209,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -2232,8 +2232,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
@@ -2280,7 +2280,7 @@ exports[`api with one POST route, with body urlencoded 1`] = `
 
 exports[`api with one POST route, with body urlencoded 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2306,10 +2306,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2323,10 +2323,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2385,13 +2385,13 @@ return class Handler {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_post_request",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
           },
           "children": {
-            "my_api-ApiEventMapping-e645076f": {
+            "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
                 "wing:resource:stateful": true,
@@ -2403,10 +2403,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "my_api-ApiEventMapping-e645076f",
-              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
             },
-            "my_api-OnRequestHandler-e645076f": {
+            "OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
                   {
@@ -2426,8 +2426,8 @@ return class Handler {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "my_api-OnRequestHandler-e645076f",
-              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
             },
           },
           "constructInfo": {
