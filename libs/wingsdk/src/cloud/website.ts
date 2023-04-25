@@ -87,7 +87,6 @@ export interface WebsiteProps {
 }
 
 /**
-/**
  * Inflight methods and members of `cloud.Website`.
  */
 export interface IWebsiteClient {}
