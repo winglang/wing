@@ -102,3 +102,95 @@ new $App().synth();
 
 ```
 
+## tree.json
+```json
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "root": {
+        "id": "root",
+        "path": "root",
+        "children": {
+          "Default": {
+            "id": "Default",
+            "path": "root/Default",
+            "children": {
+              "aws": {
+                "id": "aws",
+                "path": "root/Default/aws",
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "12.0.2"
+                }
+              },
+              "cloud.TestRunner": {
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+                "children": {
+                  "TestFunctionArns": {
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2"
+                    }
+                  }
+                },
+                "attributes": {
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.cloud.TestRunner",
+                  "version": "0.0.0"
+                },
+                "display": {
+                  "title": "TestRunner",
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "root/Default/Default",
+                "attributes": {
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.std.Resource",
+                  "version": "0.0.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@winglang/sdk.core.CdktfApp",
+              "version": "0.0.0"
+            }
+          },
+          "backend": {
+            "id": "backend",
+            "path": "root/backend",
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2"
+    }
+  }
+}
+```
+

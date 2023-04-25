@@ -1382,3 +1382,2381 @@ async handle() {
 
 ```
 
+## tree.json
+```json
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "root": {
+        "id": "root",
+        "path": "root",
+        "children": {
+          "Default": {
+            "id": "Default",
+            "path": "root/Default",
+            "children": {
+              "aws": {
+                "id": "aws",
+                "path": "root/Default/aws",
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "12.0.2"
+                }
+              },
+              "cloud.TestRunner": {
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+                "children": {
+                  "TestFunctionArns": {
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2"
+                    }
+                  }
+                },
+                "attributes": {
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.cloud.TestRunner",
+                  "version": "0.0.0"
+                },
+                "display": {
+                  "title": "TestRunner",
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "root/Default/Default",
+                "children": {
+                  "other": {
+                    "id": "other",
+                    "path": "root/Default/Default/other",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "root/Default/Default/other/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "Encryption": {
+                        "id": "Encryption",
+                        "path": "root/Default/Default/other/Encryption",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "PublicAccessBlock": {
+                        "id": "PublicAccessBlock",
+                        "path": "root/Default/Default/other/PublicAccessBlock",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "other-on_create": {
+                        "id": "other-on_create",
+                        "path": "root/Default/Default/other/other-on_create",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/other/other-on_create/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead": {
+                            "id": "PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+                            "path": "root/Default/Default/other/other-on_create/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "other-on_create-TopicSubscription-1a259cac": {
+                            "id": "other-on_create-TopicSubscription-1a259cac",
+                            "path": "root/Default/Default/other/other-on_create/other-on_create-TopicSubscription-1a259cac",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": true,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "relationship": "CREATE",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/other/other-on_create-OnMessage-1a259cac",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Topic",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Topic",
+                          "description": "A pub/sub notification topic"
+                        }
+                      },
+                      "S3Object_on_create_notifier": {
+                        "id": "S3Object_on_create_notifier",
+                        "path": "root/Default/Default/other/S3Object_on_create_notifier",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "other-on_create-OnMessageHandler-1a259cac": {
+                        "id": "other-on_create-OnMessageHandler-1a259cac",
+                        "path": "root/Default/Default/other/other-on_create-OnMessageHandler-1a259cac",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "other-on_create-OnMessage-1a259cac": {
+                        "id": "other-on_create-OnMessage-1a259cac",
+                        "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c89c79376e17b283a7d691aa1bda7fc8588302362f": {
+                            "id": "InvokePermission-c89c79376e17b283a7d691aa1bda7fc8588302362f",
+                            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/InvokePermission-c89c79376e17b283a7d691aa1bda7fc8588302362f",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight5",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/other-on_create-eventHandler-3b57d687",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/other/other-on_create",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      },
+                      "other-on_update": {
+                        "id": "other-on_update",
+                        "path": "root/Default/Default/other/other-on_update",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/other/other-on_update/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead": {
+                            "id": "PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+                            "path": "root/Default/Default/other/other-on_update/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "other-on_update-TopicSubscription-02fb2142": {
+                            "id": "other-on_update-TopicSubscription-02fb2142",
+                            "path": "root/Default/Default/other/other-on_update/other-on_update-TopicSubscription-02fb2142",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": true,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "relationship": "UPDATE",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/other/other-on_update-OnMessage-02fb2142",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Topic",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Topic",
+                          "description": "A pub/sub notification topic"
+                        }
+                      },
+                      "S3Object_on_update_notifier": {
+                        "id": "S3Object_on_update_notifier",
+                        "path": "root/Default/Default/other/S3Object_on_update_notifier",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "other-on_update-OnMessageHandler-02fb2142": {
+                        "id": "other-on_update-OnMessageHandler-02fb2142",
+                        "path": "root/Default/Default/other/other-on_update-OnMessageHandler-02fb2142",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "other-on_update-OnMessage-02fb2142": {
+                        "id": "other-on_update-OnMessage-02fb2142",
+                        "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c8f0227611913f709ca5218e4a4dd4cb2475593882": {
+                            "id": "InvokePermission-c8f0227611913f709ca5218e4a4dd4cb2475593882",
+                            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/InvokePermission-c8f0227611913f709ca5218e4a4dd4cb2475593882",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight5",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/other-on_update-eventHandler-3b57d687",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/other/other-on_update",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      },
+                      "other-on_delete": {
+                        "id": "other-on_delete",
+                        "path": "root/Default/Default/other/other-on_delete",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/other/other-on_delete/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead": {
+                            "id": "PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+                            "path": "root/Default/Default/other/other-on_delete/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "other-on_delete-TopicSubscription-2e31a750": {
+                            "id": "other-on_delete-TopicSubscription-2e31a750",
+                            "path": "root/Default/Default/other/other-on_delete/other-on_delete-TopicSubscription-2e31a750",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": true,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "relationship": "DELETE",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Topic",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Topic",
+                          "description": "A pub/sub notification topic"
+                        }
+                      },
+                      "S3Object_on_delete_notifier": {
+                        "id": "S3Object_on_delete_notifier",
+                        "path": "root/Default/Default/other/S3Object_on_delete_notifier",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "other-on_delete-OnMessageHandler-2e31a750": {
+                        "id": "other-on_delete-OnMessageHandler-2e31a750",
+                        "path": "root/Default/Default/other/other-on_delete-OnMessageHandler-2e31a750",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "other-on_delete-OnMessage-2e31a750": {
+                        "id": "other-on_delete-OnMessage-2e31a750",
+                        "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c861917e84992c81ed683a3edeae66ebc879e0682a": {
+                            "id": "InvokePermission-c861917e84992c81ed683a3edeae66ebc879e0682a",
+                            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/InvokePermission-c861917e84992c81ed683a3edeae66ebc879e0682a",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight5",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/other-on_delete-eventHandler-3b57d687",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/other/other-on_delete",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "delete",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "get",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "get_json",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "list",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "public_url",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "put",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "put_json",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "delete",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "get",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "get_json",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "list",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "public_url",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "put",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "put_json",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "delete",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "get",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "get_json",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "list",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "public_url",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "put",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "put_json",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "CREATE",
+                          "resource": "root/Default/Default/other/other-on_create",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "UPDATE",
+                          "resource": "root/Default/Default/other/other-on_update",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "DELETE",
+                          "resource": "root/Default/Default/other/other-on_delete",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Bucket",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Bucket",
+                      "description": "A cloud object store"
+                    }
+                  },
+                  "b": {
+                    "id": "b",
+                    "path": "root/Default/Default/b",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "root/Default/Default/b/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "Encryption": {
+                        "id": "Encryption",
+                        "path": "root/Default/Default/b/Encryption",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "PublicAccessBlock": {
+                        "id": "PublicAccessBlock",
+                        "path": "root/Default/Default/b/PublicAccessBlock",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "b-on_delete": {
+                        "id": "b-on_delete",
+                        "path": "root/Default/Default/b/b-on_delete",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_delete/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "PublishPermission-c81aa40d099e0812205448708df27e482b34279ead": {
+                            "id": "PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+                            "path": "root/Default/Default/b/b-on_delete/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "b-on_delete-TopicSubscription-6e8b2f6c": {
+                            "id": "b-on_delete-TopicSubscription-6e8b2f6c",
+                            "path": "root/Default/Default/b/b-on_delete/b-on_delete-TopicSubscription-6e8b2f6c",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "b-on_delete-TopicSubscription-dece1815": {
+                            "id": "b-on_delete-TopicSubscription-dece1815",
+                            "path": "root/Default/Default/b/b-on_delete/b-on_delete-TopicSubscription-dece1815",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": true,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "relationship": "DELETE",
+                              "resource": "root/Default/Default/b",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Topic",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Topic",
+                          "description": "A pub/sub notification topic"
+                        }
+                      },
+                      "S3Object_on_delete_notifier": {
+                        "id": "S3Object_on_delete_notifier",
+                        "path": "root/Default/Default/b/S3Object_on_delete_notifier",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "b-on_delete-OnMessageHandler-6e8b2f6c": {
+                        "id": "b-on_delete-OnMessageHandler-6e8b2f6c",
+                        "path": "root/Default/Default/b/b-on_delete-OnMessageHandler-6e8b2f6c",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "b-on_delete-OnMessage-6e8b2f6c": {
+                        "id": "b-on_delete-OnMessage-6e8b2f6c",
+                        "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01": {
+                            "id": "InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight1",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/b-on_delete-eventHandler-e46e5cb7",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_delete",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      },
+                      "b-on_update": {
+                        "id": "b-on_update",
+                        "path": "root/Default/Default/b/b-on_update",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_update/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "PublishPermission-c81aa40d099e0812205448708df27e482b34279ead": {
+                            "id": "PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+                            "path": "root/Default/Default/b/b-on_update/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "b-on_update-TopicSubscription-8b441417": {
+                            "id": "b-on_update-TopicSubscription-8b441417",
+                            "path": "root/Default/Default/b/b-on_update/b-on_update-TopicSubscription-8b441417",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "b-on_update-TopicSubscription-c7d8cc3e": {
+                            "id": "b-on_update-TopicSubscription-c7d8cc3e",
+                            "path": "root/Default/Default/b/b-on_update/b-on_update-TopicSubscription-c7d8cc3e",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": true,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "relationship": "UPDATE",
+                              "resource": "root/Default/Default/b",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_update-OnMessage-8b441417",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Topic",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Topic",
+                          "description": "A pub/sub notification topic"
+                        }
+                      },
+                      "S3Object_on_update_notifier": {
+                        "id": "S3Object_on_update_notifier",
+                        "path": "root/Default/Default/b/S3Object_on_update_notifier",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "b-on_update-OnMessageHandler-8b441417": {
+                        "id": "b-on_update-OnMessageHandler-8b441417",
+                        "path": "root/Default/Default/b/b-on_update-OnMessageHandler-8b441417",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "b-on_update-OnMessage-8b441417": {
+                        "id": "b-on_update-OnMessage-8b441417",
+                        "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f": {
+                            "id": "InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight2",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/b-on_update-eventHandler-b3f3d188",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_update",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      },
+                      "b-on_create": {
+                        "id": "b-on_create",
+                        "path": "root/Default/Default/b/b-on_create",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_create/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "PublishPermission-c81aa40d099e0812205448708df27e482b34279ead": {
+                            "id": "PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+                            "path": "root/Default/Default/b/b-on_create/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "b-on_create-TopicSubscription-88f6f7aa": {
+                            "id": "b-on_create-TopicSubscription-88f6f7aa",
+                            "path": "root/Default/Default/b/b-on_create/b-on_create-TopicSubscription-88f6f7aa",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "b-on_create-TopicSubscription-8588493f": {
+                            "id": "b-on_create-TopicSubscription-8588493f",
+                            "path": "root/Default/Default/b/b-on_create/b-on_create-TopicSubscription-8588493f",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": true,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "relationship": "CREATE",
+                              "resource": "root/Default/Default/b",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Topic",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Topic",
+                          "description": "A pub/sub notification topic"
+                        }
+                      },
+                      "S3Object_on_create_notifier": {
+                        "id": "S3Object_on_create_notifier",
+                        "path": "root/Default/Default/b/S3Object_on_create_notifier",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "b-on_create-OnMessageHandler-88f6f7aa": {
+                        "id": "b-on_create-OnMessageHandler-88f6f7aa",
+                        "path": "root/Default/Default/b/b-on_create-OnMessageHandler-88f6f7aa",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "b-on_create-OnMessage-88f6f7aa": {
+                        "id": "b-on_create-OnMessage-88f6f7aa",
+                        "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c": {
+                            "id": "InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight3",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/b-on_create-eventHandler-7df3a533",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_create",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      },
+                      "b-on_create-OnMessageHandler-8588493f": {
+                        "id": "b-on_create-OnMessageHandler-8588493f",
+                        "path": "root/Default/Default/b/b-on_create-OnMessageHandler-8588493f",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "b-on_create-OnMessage-8588493f": {
+                        "id": "b-on_create-OnMessage-8588493f",
+                        "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c": {
+                            "id": "InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c",
+                            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "delete",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "get",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "get_json",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "list",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "public_url",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "put",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "put_json",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight4",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/b-on_create-eventHandler-4a06ff61",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_create",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      },
+                      "b-on_update-OnMessageHandler-c7d8cc3e": {
+                        "id": "b-on_update-OnMessageHandler-c7d8cc3e",
+                        "path": "root/Default/Default/b/b-on_update-OnMessageHandler-c7d8cc3e",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "b-on_update-OnMessage-c7d8cc3e": {
+                        "id": "b-on_update-OnMessage-c7d8cc3e",
+                        "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f": {
+                            "id": "InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f",
+                            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "delete",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "get",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "get_json",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "list",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "public_url",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "put",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "put_json",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight4",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/b-on_update-eventHandler-4a06ff61",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_update",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      },
+                      "b-on_delete-OnMessageHandler-dece1815": {
+                        "id": "b-on_delete-OnMessageHandler-dece1815",
+                        "path": "root/Default/Default/b/b-on_delete-OnMessageHandler-dece1815",
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": []
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "hidden": true
+                        }
+                      },
+                      "b-on_delete-OnMessage-dece1815": {
+                        "id": "b-on_delete-OnMessage-dece1815",
+                        "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                        "children": {
+                          "Asset": {
+                            "id": "Asset",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/Asset",
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2"
+                            }
+                          },
+                          "S3Object": {
+                            "id": "S3Object",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/S3Object",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRole": {
+                            "id": "IamRole",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/IamRole",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicy": {
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/IamRolePolicy",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "IamRolePolicyAttachment": {
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/IamRolePolicyAttachment",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "Default": {
+                            "id": "Default",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/Default",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2"
+                            }
+                          },
+                          "InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01": {
+                            "id": "InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01",
+                            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01",
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2"
+                            }
+                          }
+                        },
+                        "attributes": {
+                          "wing:resource:stateful": false,
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "relationship": "delete",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "get",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "get_json",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "list",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "public_url",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "put",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "put_json",
+                              "resource": "root/Default/Default/other",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/$Inflight4",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "outbound",
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/b-on_delete-eventHandler-4a06ff61",
+                              "implicit": false
+                            },
+                            {
+                              "direction": "inbound",
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/b/b-on_delete",
+                              "implicit": false
+                            }
+                          ]
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0"
+                        },
+                        "display": {
+                          "title": "Function",
+                          "description": "A cloud function (FaaS)"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "outbound",
+                          "relationship": "DELETE",
+                          "resource": "root/Default/Default/b/b-on_delete",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "UPDATE",
+                          "resource": "root/Default/Default/b/b-on_update",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "CREATE",
+                          "resource": "root/Default/Default/b/b-on_create",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "delete",
+                          "resource": "root/Default/Default/test",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "get",
+                          "resource": "root/Default/Default/test",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "get_json",
+                          "resource": "root/Default/Default/test",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "list",
+                          "resource": "root/Default/Default/test",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "public_url",
+                          "resource": "root/Default/Default/test",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "put",
+                          "resource": "root/Default/Default/test",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "put_json",
+                          "resource": "root/Default/Default/test",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Bucket",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Bucket",
+                      "description": "A cloud object store"
+                    }
+                  },
+                  "$Inflight1": {
+                    "id": "$Inflight1",
+                    "path": "root/Default/Default/$Inflight1",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Inflight",
+                      "description": "An inflight resource",
+                      "hidden": true
+                    }
+                  },
+                  "b-on_delete-eventHandler-e46e5cb7": {
+                    "id": "b-on_delete-eventHandler-e46e5cb7",
+                    "path": "root/Default/Default/b-on_delete-eventHandler-e46e5cb7",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "$Inflight2": {
+                    "id": "$Inflight2",
+                    "path": "root/Default/Default/$Inflight2",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-8b441417",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Inflight",
+                      "description": "An inflight resource",
+                      "hidden": true
+                    }
+                  },
+                  "b-on_update-eventHandler-b3f3d188": {
+                    "id": "b-on_update-eventHandler-b3f3d188",
+                    "path": "root/Default/Default/b-on_update-eventHandler-b3f3d188",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-8b441417",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "$Inflight3": {
+                    "id": "$Inflight3",
+                    "path": "root/Default/Default/$Inflight3",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Inflight",
+                      "description": "An inflight resource",
+                      "hidden": true
+                    }
+                  },
+                  "b-on_create-eventHandler-7df3a533": {
+                    "id": "b-on_create-eventHandler-7df3a533",
+                    "path": "root/Default/Default/b-on_create-eventHandler-7df3a533",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "$Inflight4": {
+                    "id": "$Inflight4",
+                    "path": "root/Default/Default/$Inflight4",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Inflight",
+                      "description": "An inflight resource",
+                      "hidden": true
+                    }
+                  },
+                  "b-on_create-eventHandler-4a06ff61": {
+                    "id": "b-on_create-eventHandler-4a06ff61",
+                    "path": "root/Default/Default/b-on_create-eventHandler-4a06ff61",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_create-OnMessage-8588493f",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "b-on_update-eventHandler-4a06ff61": {
+                    "id": "b-on_update-eventHandler-4a06ff61",
+                    "path": "root/Default/Default/b-on_update-eventHandler-4a06ff61",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "b-on_delete-eventHandler-4a06ff61": {
+                    "id": "b-on_delete-eventHandler-4a06ff61",
+                    "path": "root/Default/Default/b-on_delete-eventHandler-4a06ff61",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/b/b-on_delete-OnMessage-dece1815",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "$Inflight5": {
+                    "id": "$Inflight5",
+                    "path": "root/Default/Default/$Inflight5",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/other/other-on_create-OnMessage-1a259cac",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/other/other-on_update-OnMessage-02fb2142",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Inflight",
+                      "description": "An inflight resource",
+                      "hidden": true
+                    }
+                  },
+                  "other-on_create-eventHandler-3b57d687": {
+                    "id": "other-on_create-eventHandler-3b57d687",
+                    "path": "root/Default/Default/other-on_create-eventHandler-3b57d687",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/other/other-on_create-OnMessage-1a259cac",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "other-on_update-eventHandler-3b57d687": {
+                    "id": "other-on_update-eventHandler-3b57d687",
+                    "path": "root/Default/Default/other-on_update-eventHandler-3b57d687",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/other/other-on_update-OnMessage-02fb2142",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "other-on_delete-eventHandler-3b57d687": {
+                    "id": "other-on_delete-eventHandler-3b57d687",
+                    "path": "root/Default/Default/other-on_delete-eventHandler-3b57d687",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "$Inflight6": {
+                    "id": "$Inflight6",
+                    "path": "root/Default/Default/$Inflight6",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": []
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Inflight",
+                      "description": "An inflight resource",
+                      "hidden": true
+                    }
+                  },
+                  "test": {
+                    "id": "test",
+                    "path": "root/Default/Default/test",
+                    "children": {
+                      "Asset": {
+                        "id": "Asset",
+                        "path": "root/Default/Default/test/Asset",
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformAsset",
+                          "version": "0.15.2"
+                        }
+                      },
+                      "S3Object": {
+                        "id": "S3Object",
+                        "path": "root/Default/Default/test/S3Object",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "IamRole": {
+                        "id": "IamRole",
+                        "path": "root/Default/Default/test/IamRole",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "IamRolePolicy": {
+                        "id": "IamRolePolicy",
+                        "path": "root/Default/Default/test/IamRolePolicy",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "IamRolePolicyAttachment": {
+                        "id": "IamRolePolicyAttachment",
+                        "path": "root/Default/Default/test/IamRolePolicyAttachment",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "Default": {
+                        "id": "Default",
+                        "path": "root/Default/Default/test/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                          "version": "12.0.2"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "outbound",
+                          "relationship": "delete",
+                          "resource": "root/Default/Default/b",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "get",
+                          "resource": "root/Default/Default/b",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "get_json",
+                          "resource": "root/Default/Default/b",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "list",
+                          "resource": "root/Default/Default/b",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "public_url",
+                          "resource": "root/Default/Default/b",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "put",
+                          "resource": "root/Default/Default/b",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "outbound",
+                          "relationship": "put_json",
+                          "resource": "root/Default/Default/b",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Function",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Function",
+                      "description": "A cloud function (FaaS)"
+                    }
+                  }
+                },
+                "attributes": {
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.std.Resource",
+                  "version": "0.0.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "root/Default/Code",
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@winglang/sdk.core.CdktfApp",
+              "version": "0.0.0"
+            }
+          },
+          "backend": {
+            "id": "backend",
+            "path": "root/backend",
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2"
+    }
+  }
+}
+```
+

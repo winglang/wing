@@ -227,3 +227,223 @@ new $App().synth();
 
 ```
 
+## tree.json
+```json
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "root": {
+        "id": "root",
+        "path": "root",
+        "children": {
+          "Default": {
+            "id": "Default",
+            "path": "root/Default",
+            "children": {
+              "aws": {
+                "id": "aws",
+                "path": "root/Default/aws",
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "12.0.2"
+                }
+              },
+              "cloud.TestRunner": {
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+                "children": {
+                  "TestFunctionArns": {
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2"
+                    }
+                  }
+                },
+                "attributes": {
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.cloud.TestRunner",
+                  "version": "0.0.0"
+                },
+                "display": {
+                  "title": "TestRunner",
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "root/Default/Default",
+                "children": {
+                  "bucket1": {
+                    "id": "bucket1",
+                    "path": "root/Default/Default/bucket1",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "root/Default/Default/bucket1/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "Encryption": {
+                        "id": "Encryption",
+                        "path": "root/Default/Default/bucket1/Encryption",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "PublicAccessBlock": {
+                        "id": "PublicAccessBlock",
+                        "path": "root/Default/Default/bucket1/PublicAccessBlock",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                          "version": "12.0.2"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Bucket",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Bucket",
+                      "description": "A cloud object store"
+                    }
+                  },
+                  "bucket2": {
+                    "id": "bucket2",
+                    "path": "root/Default/Default/bucket2",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "root/Default/Default/bucket2/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "Encryption": {
+                        "id": "Encryption",
+                        "path": "root/Default/Default/bucket2/Encryption",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "PublicAccessBlock": {
+                        "id": "PublicAccessBlock",
+                        "path": "root/Default/Default/bucket2/PublicAccessBlock",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                          "version": "12.0.2"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Bucket",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Bucket",
+                      "description": "A cloud object store"
+                    }
+                  },
+                  "bucket3": {
+                    "id": "bucket3",
+                    "path": "root/Default/Default/bucket3",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "root/Default/Default/bucket3/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "Encryption": {
+                        "id": "Encryption",
+                        "path": "root/Default/Default/bucket3/Encryption",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "PublicAccessBlock": {
+                        "id": "PublicAccessBlock",
+                        "path": "root/Default/Default/bucket3/PublicAccessBlock",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                          "version": "12.0.2"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Bucket",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Bucket",
+                      "description": "A cloud object store"
+                    }
+                  }
+                },
+                "attributes": {
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.std.Resource",
+                  "version": "0.0.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@winglang/sdk.core.CdktfApp",
+              "version": "0.0.0"
+            }
+          },
+          "backend": {
+            "id": "backend",
+            "path": "root/backend",
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2"
+    }
+  }
+}
+```
+

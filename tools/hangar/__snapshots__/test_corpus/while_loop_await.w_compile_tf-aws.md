@@ -210,3 +210,281 @@ async handle(body) {
 
 ```
 
+## tree.json
+```json
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "root": {
+        "id": "root",
+        "path": "root",
+        "children": {
+          "Default": {
+            "id": "Default",
+            "path": "root/Default",
+            "children": {
+              "aws": {
+                "id": "aws",
+                "path": "root/Default/aws",
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "12.0.2"
+                }
+              },
+              "cloud.TestRunner": {
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+                "children": {
+                  "TestFunctionArns": {
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2"
+                    }
+                  }
+                },
+                "attributes": {
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.cloud.TestRunner",
+                  "version": "0.0.0"
+                },
+                "display": {
+                  "title": "TestRunner",
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "root/Default/Default",
+                "children": {
+                  "cloud.Queue": {
+                    "id": "cloud.Queue",
+                    "path": "root/Default/Default/cloud.Queue",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "root/Default/Default/cloud.Queue/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "EventSourceMapping": {
+                        "id": "EventSourceMapping",
+                        "path": "root/Default/Default/cloud.Queue/EventSourceMapping",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.lambdaEventSourceMapping.LambdaEventSourceMapping",
+                          "version": "12.0.2"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "outbound",
+                          "relationship": "add_consumer",
+                          "resource": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Queue",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Queue",
+                      "description": "A distributed message queue"
+                    }
+                  },
+                  "$Inflight1": {
+                    "id": "$Inflight1",
+                    "path": "root/Default/Default/$Inflight1",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": []
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Inflight",
+                      "description": "An inflight resource",
+                      "hidden": true
+                    }
+                  },
+                  "$Inflight2": {
+                    "id": "$Inflight2",
+                    "path": "root/Default/Default/$Inflight2",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Inflight",
+                      "description": "An inflight resource",
+                      "hidden": true
+                    }
+                  },
+                  "cloud.Queue-AddConsumerHandler-b3f3d188": {
+                    "id": "cloud.Queue-AddConsumerHandler-b3f3d188",
+                    "path": "root/Default/Default/cloud.Queue-AddConsumerHandler-b3f3d188",
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": []
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "hidden": true
+                    }
+                  },
+                  "cloud.Queue-AddConsumer-b3f3d188": {
+                    "id": "cloud.Queue-AddConsumer-b3f3d188",
+                    "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188",
+                    "children": {
+                      "Asset": {
+                        "id": "Asset",
+                        "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/Asset",
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformAsset",
+                          "version": "0.15.2"
+                        }
+                      },
+                      "S3Object": {
+                        "id": "S3Object",
+                        "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/S3Object",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "IamRole": {
+                        "id": "IamRole",
+                        "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/IamRole",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "IamRolePolicy": {
+                        "id": "IamRolePolicy",
+                        "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/IamRolePolicy",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "IamRolePolicyAttachment": {
+                        "id": "IamRolePolicyAttachment",
+                        "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/IamRolePolicyAttachment",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                          "version": "12.0.2"
+                        }
+                      },
+                      "Default": {
+                        "id": "Default",
+                        "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                          "version": "12.0.2"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "outbound",
+                          "relationship": "handle",
+                          "resource": "root/Default/Default/$Inflight2",
+                          "implicit": false
+                        },
+                        {
+                          "direction": "inbound",
+                          "relationship": "add_consumer",
+                          "resource": "root/Default/Default/cloud.Queue",
+                          "implicit": false
+                        }
+                      ]
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Function",
+                      "version": "0.0.0"
+                    },
+                    "display": {
+                      "title": "Function",
+                      "description": "A cloud function (FaaS)"
+                    }
+                  }
+                },
+                "attributes": {
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.std.Resource",
+                  "version": "0.0.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "root/Default/Code",
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@winglang/sdk.core.CdktfApp",
+              "version": "0.0.0"
+            }
+          },
+          "backend": {
+            "id": "backend",
+            "path": "root/backend",
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2"
+    }
+  }
+}
+```
+
