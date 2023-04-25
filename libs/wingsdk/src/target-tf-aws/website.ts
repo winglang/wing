@@ -1,5 +1,5 @@
 import { readdirSync } from "fs";
-import path from "path";
+import path, { basename, extname, join, resolve } from "path";
 import { CloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront-distribution";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 
@@ -10,6 +10,7 @@ import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
 import * as cloud from "../cloud";
+import * as crypto from "crypto";
 import { Json } from "../std";
 
 const INDEX_FILE = "index.html";
@@ -69,42 +70,41 @@ export class Website extends cloud.Website {
       viewerCertificate: { cloudfrontDefaultCertificate: true },
     });
 
-    // //TODO: this is currently a cdk token. we need to see if we can resolve those tokens somehow
     this._url = distribution.domainName;
   }
 
-  public addJson(filePath: string, obj: Json): string {
-    if (!filePath.endsWith(".json")) {
-      throw new Error(
-        `key must have a .json suffix: ${filePath.split(".").pop()}`
-      );
+  public addJson(path: string, obj: Json): string {
+    if (!path.endsWith(".json")) {
+      throw new Error(`key must have a .json suffix: ${path.split(".").pop()}`);
     }
 
-    new S3Object(this, `aws_s3_bucket_object_${filePath}`, {
+    new S3Object(this, `aws_s3_bucket_object_${path}`, {
       dependsOn: [this.bucket],
       content: JSON.stringify(obj),
       bucket: this.bucket.bucket,
       contentType: "application/json",
-      key: filePath,
+      key: path,
     });
 
-    return `${this.url}/${filePath}`;
+    return `${this.url}/${path}`;
   }
 
   private uploadFile(filePath: string) {
-    new S3Object(this, `File-${basename}-${hash(filePath).slice(-8)}`, {
+    const hash = crypto.createHash("md5").update(filePath).digest("hex");
+
+    new S3Object(this, `File-${basename}-${hash.slice(-8)}`, {
       dependsOn: [this.bucket],
       key: filePath.replace(this.path, ""),
       bucket: this.bucket.bucket,
-      source: path.resolve(filePath),
-      contentType: mime.contentType(path.extname(filePath)) || undefined,
+      source: resolve(filePath),
+      contentType: mime.contentType(extname(filePath)) || undefined,
     });
   }
 
   private uploadFiles(dir: string): void {
     const files = readdirSync(dir, { withFileTypes: true });
     for (const file of files) {
-      const filename = path.join(dir, file.name);
+      const filename = join(dir, file.name);
       if (file.isDirectory()) {
         this.uploadFiles(filename);
       } else {

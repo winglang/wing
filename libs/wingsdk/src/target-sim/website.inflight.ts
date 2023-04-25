@@ -14,8 +14,8 @@ const LOCALHOST_ADDRESS = "127.0.0.1";
 export class Website implements IWebsiteClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
   private readonly app: express.Application;
-  private server: Server | undefined;
-  private url: string | undefined;
+  private server?: Server;
+  private url?: string;
 
   constructor(props: WebsiteSchema["props"], context: ISimulatorContext) {
     this.context = context;

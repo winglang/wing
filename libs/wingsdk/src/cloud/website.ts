@@ -54,7 +54,6 @@ export abstract class Website extends Resource {
 
   /**
    * Absolute local path to the website's static files.
-   * @example "./dist"
    */
   get path(): string {
     return this._path;
@@ -69,17 +68,17 @@ export abstract class Website extends Resource {
 
   /**
    * used for adding dynamic content to the website after deployment
-   * @param filePath the bucket key to add
+   * @param path the bucket key to add
    * @param obj the object to write to the key
    */
-  abstract addJson(filePath: string, obj: Json): string;
+  abstract addJson(path: string, obj: Json): string;
 }
 /**
  * website props
  */
 export interface WebsiteProps {
   /**
-   * Local path to the website's static files, relative to the Wing source file.
+   * Local path to the website's static files, relative to the Wing source file or absolute.
    * @example "./dist"
    */
   readonly path: string;
