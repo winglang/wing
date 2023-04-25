@@ -18,19 +18,19 @@ body:
   validations:
     required: true
 - type: textarea
-  id: what-did-you-expect
-  attributes:
-    label: "I expected this:"
-    placeholder: "What did you expect to happen? Describe the output or behavior you expected to see."
-  validations:
-    required: true
-- type: textarea
   id: instead-what-happened
   attributes:
     label: "Instead, this happened"
     placeholder: "What happend instead of what you've expected?"
   validations:
     required: true
+- type: textarea
+  id: what-did-you-expect
+  attributes:
+    label: "I expected this:"
+    placeholder: "What did you expect to happen? Describe the output or behavior you expected to see."
+  validations:
+    required: true    
 - type: textarea
   id: workaround
   attributes:
