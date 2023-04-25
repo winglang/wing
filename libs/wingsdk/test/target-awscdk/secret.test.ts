@@ -1,3 +1,4 @@
+import { CfnOutput, Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Secret } from "../../src/cloud";
@@ -17,17 +18,29 @@ test("default secret behavior", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   expect(template.toJSON().Resources).toMatchSnapshot();
+  expect(template.toJSON().Outputs).toMatchSnapshot();
 });
 
 test("secret with a name", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  Secret._newSecret(app, "Secret", {
+  const secret = Secret._newSecret(app, "Secret", {
     name: "my-secret",
-  });
-  const output = app.synth();
+  }) as awscdk.Secret;
 
   // THEN
-  const template = Template.fromJSON(JSON.parse(output));
-  expect(template.toJSON().Resources).toMatchSnapshot();
+  expect(Stack.of(secret).resolve(secret.arn)).toEqual({
+    "Fn::Join": [
+      "",
+      [
+        "arn:",
+        { Ref: "AWS::Partition" },
+        ":secretsmanager:",
+        { Ref: "AWS::Region" },
+        ":",
+        { Ref: "AWS::AccountId" },
+        ":secret:my-secret",
+      ],
+    ],
+  });
 });
