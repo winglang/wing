@@ -136,7 +136,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
     messages: Array<QueueMessage>
   ): Promise<void> {
     setTimeout(() => {
-      // Don't push back messages with retention timeout
+      // Don't push back messages with retention timeouts that have expired
       const retainedMessages = messages.filter(
         (message) => message.retentionTimeout > new Date()
       );
