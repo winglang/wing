@@ -78,7 +78,7 @@ export class Website extends cloud.Website {
       throw new Error(`key must have a .json suffix: ${path.split(".").pop()}`);
     }
 
-    new S3Object(this, `aws_s3_bucket_object_${path}`, {
+    new S3Object(this, `File-${path}`, {
       dependsOn: [this.bucket],
       content: JSON.stringify(obj),
       bucket: this.bucket.bucket,
