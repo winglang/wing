@@ -762,37 +762,37 @@ resource Api {
   cors: ApiCorsProps;
 
   /**
-   * Run an inflight whenever a GET request is made to the specified route.
+   * Run an inflight whenever a GET request is made to the specified path.
    */
-  get(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
+  get(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
 
   /**
-   * Run an inflight whenever a POST request is made to the specified route.
+   * Run an inflight whenever a POST request is made to the specified path.
    */
-  post(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
+  post(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
 
   /**
-   * Run an inflight whenever a PUT request is made to the specified route.
+   * Run an inflight whenever a PUT request is made to the specified path.
    */
-  put(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
+  put(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
 
   /**
-   * Run an inflight whenever a DELETE request is made to the specified route.
+   * Run an inflight whenever a DELETE request is made to the specified path.
    */
-  delete(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
+  delete(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
 
   /**
-   * Run an inflight whenever a PATCH request is made to the specified route.
+   * Run an inflight whenever a PATCH request is made to the specified path.
    */
-  patch(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
+  patch(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
 
   /**
-   * Run an inflight whenever any request is made to the specified route.
+   * Run an inflight whenever any request is made to the specified path.
    */
-  any(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnAnyProps?): void;
+  any(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnAnyProps?): void;
 
   /**
-   * Make a request to the specified route. Throws if the route hasn't been
+   * Make a request to the specified path. Throws if the path hasn't been
    * defined.
    */
   inflight request(req: ApiRequest): ApiResponse;
