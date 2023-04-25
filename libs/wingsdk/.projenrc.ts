@@ -1,4 +1,4 @@
-import { JsonFile, cdk, javascript } from "projen";
+import { cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
 const JSII_DEPS = ["constructs@~10.1.228"];
@@ -93,28 +93,6 @@ project.eslint?.addOverride({
 project.deps.removeDependency("jsii-docgen");
 project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
 
-// Set up the project so that:
-// 1. Preflight code is compiled with JSII
-// 2. Inflight and simulator code is compiled with TypeScript
-//
-// Note: inflight and preflight code are not automatically exported from
-// the root of the package, so accessing them requires barrel imports:
-// const { BucketClient } = require("wingsdk/lib/aws/bucket.inflight");
-const pkgJson = project.tryFindObjectFile("package.json");
-pkgJson!.addOverride("jsii.excludeTypescript", ["src/**/*.inflight.ts"]);
-
-const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
-  obj: {
-    extends: "./tsconfig.json",
-    compilerOptions: {
-      esModuleInterop: true,
-    },
-    include: ["src/**/*.inflight.ts"],
-    exclude: ["node_modules"],
-  },
-});
-project.compileTask.exec(`tsc -p ${tsconfigNonJsii.path}`);
-
 enum Zone {
   PREFLIGHT = "preflight",
   INFLIGHT = "inflight",
@@ -171,12 +149,7 @@ project.eslint!.addRules({
   ],
 });
 
-project.npmignore?.addPatterns(
-  "tsconfig.nonjsii.json",
-  ".prettierignore",
-  ".prettierrc.json",
-  "*.tgz"
-);
+project.npmignore?.addPatterns(".prettierignore", ".prettierrc.json", "*.tgz");
 
 const apiCheck = project.addTask("api-check", {
   exec: "wing-api-check",
