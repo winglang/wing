@@ -160,7 +160,7 @@ class QueueMessage {
 
   constructor(retentionPeriod: number, message: string) {
     const currentTime = new Date();
-    currentTime.setSeconds(retentionPeriod);
+    currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
     this.retentionTimeout = currentTime;
     this.payload = message;
   }
