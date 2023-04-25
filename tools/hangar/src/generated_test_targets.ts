@@ -16,19 +16,18 @@ export async function compileTest(wingFile: string) {
     "target",
     `${wingBasename.replace(".w", "")}.tfaws`
   );
-  
+  const tf_json = join(targetDir, "main.tf.json");
+
   await runWingCommand({
     cwd: validTestDir,
     wingFile: join(validTestDir, wingBasename),
     args,
     shouldSucceed: true,
   });
-  
-  const tf_json = sanitize_json_paths(join(targetDir, "main.tf.json"));
-  fileMap["main.tf.json"] = JSON.stringify(tf_json, null, 2);
 
-  const tree_json = sanitize_json_paths(join(targetDir, "tree.json"));
-  fileMap["tree.json"] = JSON.stringify(tree_json, null, 2);
+  const npx_tfJson = sanitize_json_paths(tf_json);
+
+  fileMap["main.tf.json"] = JSON.stringify(npx_tfJson, null, 2);
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
