@@ -64,7 +64,7 @@
         "enabled": true,
         "origin": [
           {
-            "domain_name": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket_regional_domain_name}",
+            "domain_name": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket_regional_domain_name}",
             "origin_id": "s3Origin"
           }
         ],
@@ -81,11 +81,11 @@
       }
     },
     "aws_s3_bucket": {
-      "root_cloudWebsite_B2013695": {
+      "root_cloudWebsite_websitebucket_4CF820EB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/Default",
-            "uniqueId": "root_cloudWebsite_B2013695"
+            "path": "root/Default/Default/cloud.Website/website-bucket",
+            "uniqueId": "root_cloudWebsite_websitebucket_4CF820EB"
           }
         },
         "bucket_prefix": "cloud-website-c8e58765-",
@@ -100,8 +100,8 @@
             "uniqueId": "root_cloudWebsite_PublicPolicy_2884A0C6"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_B2013695.arn}/*\"]}]}"
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.arn}/*\"]}]}"
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -112,7 +112,7 @@
             "uniqueId": "root_cloudWebsite_Encryption_8B168696"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -123,14 +123,14 @@
       }
     },
     "aws_s3_bucket_website_configuration": {
-      "root_cloudWebsite_136F5C7F": {
+      "root_cloudWebsite_bucketwebsiteconfiguration_F1E7E201": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/Website",
-            "uniqueId": "root_cloudWebsite_136F5C7F"
+            "path": "root/Default/Default/cloud.Website/bucket-website-configuration",
+            "uniqueId": "root_cloudWebsite_bucketwebsiteconfiguration_F1E7E201"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
         "index_document": {
           "suffix": "index.html"
         }
@@ -144,13 +144,13 @@
             "uniqueId": "root_cloudWebsite_awss3bucketobjectindexhtml_3A649306"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_B2013695"
+          "aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB"
         ],
         "key": "/index.html",
-        "source": "/Users/tsuf/Documents/wing/examples/tests/valid/website/index.html"
+        "source": "<SOURCE>"
       },
       "root_cloudWebsite_awss3bucketobjectotherhtml_2DA2BBB4": {
         "//": {
@@ -159,13 +159,13 @@
             "uniqueId": "root_cloudWebsite_awss3bucketobjectotherhtml_2DA2BBB4"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_B2013695"
+          "aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB"
         ],
         "key": "/inner-folder/other.html",
-        "source": "/Users/tsuf/Documents/wing/examples/tests/valid/website/inner-folder/other.html"
+        "source": "<SOURCE>"
       }
     }
   }

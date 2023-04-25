@@ -55,7 +55,7 @@
         },
         "rest_api_id": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
         "triggers": {
-          "redeployment": "c46535d385dc86a1ba350f23ab28b58821f513fc"
+          "redeployment": "637f45045dd7b841ee6dca6afd481771016d8a76"
         }
       }
     },
@@ -118,7 +118,7 @@
         "enabled": true,
         "origin": [
           {
-            "domain_name": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket_regional_domain_name}",
+            "domain_name": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket_regional_domain_name}",
             "origin_id": "s3Origin"
           }
         ],
@@ -380,11 +380,11 @@
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudWebsite_B2013695": {
+      "root_cloudWebsite_websitebucket_4CF820EB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/Default",
-            "uniqueId": "root_cloudWebsite_B2013695"
+            "path": "root/Default/Default/cloud.Website/website-bucket",
+            "uniqueId": "root_cloudWebsite_websitebucket_4CF820EB"
           }
         },
         "bucket_prefix": "cloud-website-c8e58765-",
@@ -399,8 +399,8 @@
             "uniqueId": "root_cloudWebsite_PublicPolicy_2884A0C6"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_B2013695.arn}/*\"]}]}"
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.arn}/*\"]}]}"
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -411,7 +411,7 @@
             "uniqueId": "root_cloudWebsite_Encryption_8B168696"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -422,14 +422,14 @@
       }
     },
     "aws_s3_bucket_website_configuration": {
-      "root_cloudWebsite_136F5C7F": {
+      "root_cloudWebsite_bucketwebsiteconfiguration_F1E7E201": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/Website",
-            "uniqueId": "root_cloudWebsite_136F5C7F"
+            "path": "root/Default/Default/cloud.Website/bucket-website-configuration",
+            "uniqueId": "root_cloudWebsite_bucketwebsiteconfiguration_F1E7E201"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
         "index_document": {
           "suffix": "index.html"
         }
@@ -469,20 +469,6 @@
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_cloudWebsite_awss3bucketobjectDSStore_12291830": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/aws_s3_bucket_object_.DS_Store",
-            "uniqueId": "root_cloudWebsite_awss3bucketobjectDSStore_12291830"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
-        "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_B2013695"
-        ],
-        "key": "/.DS_Store",
-        "source": "/Users/tsuf/Documents/wing/examples/tests/valid/website_with_api/.DS_Store"
-      },
       "root_cloudWebsite_awss3bucketobjectconfigjson_BC6959AB": {
         "//": {
           "metadata": {
@@ -490,11 +476,11 @@
             "uniqueId": "root_cloudWebsite_awss3bucketobjectconfigjson_BC6959AB"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
         "content": "{\"apiUrl\":\"${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}\"}",
         "content_type": "application/json",
         "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_B2013695"
+          "aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB"
         ],
         "key": "config.json"
       },
@@ -505,13 +491,13 @@
             "uniqueId": "root_cloudWebsite_awss3bucketobjectindexhtml_3A649306"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_B2013695.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_B2013695"
+          "aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB"
         ],
         "key": "/index.html",
-        "source": "/Users/tsuf/Documents/wing/examples/tests/valid/website_with_api/index.html"
+        "source": "<SOURCE>"
       }
     }
   }
@@ -606,13 +592,13 @@ async handle(req) {
   if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
     return {
     "body": Object.freeze({"error":"incomplete details"}),
-    "status": 500,}
+    "status": 400,}
     ;
   }
   (await users_table.insert(body));
   return {
   "body": Object.freeze({"user":(body)["id"]}),
-  "status": 200,}
+  "status": 201,}
   ;
 }
 
@@ -624,7 +610,7 @@ async handle(req) {
   const {  } = this;
   return {
   "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
-  "status": 200,}
+  "status": 204,}
   ;
 }
 

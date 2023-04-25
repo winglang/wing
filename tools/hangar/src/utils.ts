@@ -1,8 +1,8 @@
-import { execa } from "execa";
+import {execa} from "execa";
 import * as fs from "fs-extra";
-import { expect } from "vitest";
-import { snapshotDir, wingBin } from "./paths";
-import { join, extname } from "path";
+import {expect} from "vitest";
+import {snapshotDir, wingBin} from "./paths";
+import {join, extname} from "path";
 
 export interface RunWingCommandOptions {
   cwd: string;
@@ -15,16 +15,12 @@ export interface RunWingCommandOptions {
 
 export async function runWingCommand(options: RunWingCommandOptions) {
   const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
-  const out = await execa(
-    wingBin,
-    ["--no-update-check", ...options.args, options.wingFile, ...plugins],
-    {
-      cwd: options.cwd,
-      reject: false,
-      stdin: "ignore",
-      env: options.env,
-    }
-  );
+  const out = await execa(wingBin, ["--no-update-check", ...options.args, options.wingFile, ...plugins], {
+    cwd: options.cwd,
+    reject: false,
+    stdin: "ignore",
+    env: options.env,
+  });
   if (options.shouldSucceed) {
     if (out.exitCode !== 0 || out.stderr !== "") {
       expect.fail(out.stderr);
@@ -39,13 +35,11 @@ export async function runWingCommand(options: RunWingCommandOptions) {
 export function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+?"/g;
   const assetSourceRegex = /"assets\/.+?"/g;
+  const sourceRegex = /(?<=\"source\"\:)\"(\/|\\)[\/\-\w\.]+\"/g;
   const json = fs.readJsonSync(path);
 
   const jsonText = JSON.stringify(json);
-  const sanitizedJsonText = jsonText
-    .replace(assetKeyRegex, '"<ASSET_KEY>"')
-    .replace(assetSourceRegex, '"<ASSET_SOURCE>"');
-
+  const sanitizedJsonText = jsonText.replace(assetKeyRegex, '"<ASSET_KEY>"').replace(assetSourceRegex, '"<ASSET_SOURCE>"').replace(sourceRegex, '"<SOURCE>"');
   const finalObj = JSON.parse(sanitizedJsonText);
   delete finalObj.terraform;
 
@@ -56,24 +50,12 @@ export function tfResourcesOf(templateStr: string): string[] {
   return Object.keys(JSON.parse(templateStr).resource).sort();
 }
 
-export function tfResourcesOfCount(
-  templateStr: string,
-  resourceId: string
-): number {
+export function tfResourcesOfCount(templateStr: string, resourceId: string): number {
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
-export async function createMarkdownSnapshot(
-  fileMap: Record<string, string>,
-  wingFile: string,
-  testCase: string,
-  target: string
-) {
-  const snapPath = join(
-    snapshotDir,
-    "test_corpus",
-    `${wingFile}_${testCase}_${target}.md`
-  );
+export async function createMarkdownSnapshot(fileMap: Record<string, string>, wingFile: string, testCase: string, target: string) {
+  const snapPath = join(snapshotDir, "test_corpus", `${wingFile}_${testCase}_${target}.md`);
 
   let md = `# [${wingFile}](../../../../examples/tests/valid/${wingFile}) | ${testCase} | ${target}\n\n`;
 
