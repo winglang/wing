@@ -2705,6 +2705,54 @@ bring cloud;
 let topic_on_message_props = cloud.TopicOnMessageProps{ ... }
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.TopicOnMessageProps.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.TopicOnMessageProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 128
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicOnMessageProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### TopicProps <a name="TopicProps" id="@winglang/sdk.cloud.TopicProps"></a>
 
@@ -3524,6 +3572,7 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
+| <code><a href="#@winglang/sdk.std.Json.tryParse">try_parse</a></code> | Try to parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
 
 ---
@@ -3649,6 +3698,24 @@ to format as string.
 ###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.stringify.parameter.indent"></a>
 
 - *Type:* num
+
+---
+
+##### `try_parse` <a name="try_parse" id="@winglang/sdk.std.Json.tryParse"></a>
+
+```wing
+bring std;
+
+std.Json.try_parse(str: str)
+```
+
+Try to parse a string into a Json.
+
+###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.tryParse.parameter.str"></a>
+
+- *Type:* str
+
+to parse as Json.
 
 ---
 

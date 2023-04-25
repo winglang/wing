@@ -98,6 +98,19 @@ export class Json {
   }
 
   /**
+   * Try to parse a string into a Json
+   *
+   * @macro ((args) => { try { return JSON.parse(args); } catch (err) { return undefined; } })($args$)
+   *
+   * @param str to parse as Json
+   * @returns Json representation of the string or undefined if string is not parsable
+   */
+  public static tryParse(str: string): Json | undefined {
+    str;
+    throw new Error("Macro");
+  }
+
+  /**
    * Returns a specified element from the Json.
    *
    * @macro ($self$)[$args$]
