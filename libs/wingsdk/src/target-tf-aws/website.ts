@@ -25,9 +25,9 @@ export class Website extends cloud.Website {
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
 
-    this.bucket = createEncryptedBucket(this, true, "website-bucket");
+    this.bucket = createEncryptedBucket(this, true, "WebsiteBucket");
 
-    new S3BucketWebsiteConfiguration(this, "bucket-website-configuration", {
+    new S3BucketWebsiteConfiguration(this, "BucketWebsiteConfiguration", {
       bucket: this.bucket.bucket,
       indexDocument: { suffix: INDEX_FILE },
     });
@@ -35,7 +35,7 @@ export class Website extends cloud.Website {
     this.uploadFiles(this.path);
 
     // create a cloudFront distribution
-    const distribution = new CloudfrontDistribution(this, "distribution", {
+    const distribution = new CloudfrontDistribution(this, "Distribution", {
       enabled: true,
       ...(this._domain && { aliases: [this._domain] }),
       origin: [
@@ -92,7 +92,7 @@ export class Website extends cloud.Website {
   }
 
   private uploadFile(filePath: string) {
-    new S3Object(this, `aws_s3_bucket_object_${path.basename(filePath)}`, {
+    new S3Object(this, `File-${basename}-${hash(filePath).slice(-8)}`, {
       dependsOn: [this.bucket],
       key: filePath.replace(this.path, ""),
       bucket: this.bucket.bucket,
