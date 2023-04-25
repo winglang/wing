@@ -92,7 +92,7 @@ export class Website extends cloud.Website {
   }
 
   private uploadFile(filePath: string) {
-    new S3Object(this, `aws_s3_bucket_object_${path.basename(filePath)}`, {
+    new S3Object(this, `File-${basename}-${hash(filePath).slice(-8)}`, {
       dependsOn: [this.bucket],
       key: filePath.replace(this.path, ""),
       bucket: this.bucket.bucket,
