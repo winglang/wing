@@ -1281,7 +1281,7 @@ impl<'a> TypeChecker<'a> {
 							(&class.env, &class.name)
 						} else {
 							return self.general_type_error(format!(
-								"Cannot create the preflight class \"{}\" in inflight phase",
+								"Cannot create preflight class \"{}\" in inflight phase",
 								class.name
 							));
 						}
