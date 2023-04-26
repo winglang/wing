@@ -4,14 +4,14 @@ import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
 import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
-import { BUCKET_PREFIX_OPTS } from "./bucket";
+import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { PolicyStatement } from "../shared-aws";
+import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 import { createBundle } from "../utils/bundling";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
@@ -92,10 +92,8 @@ export class Function extends cloud.Function {
     });
 
     // Create unique S3 bucket for hosting Lambda code
-    // TODO: share all code in a single bucket https://github.com/winglang/wing/issues/178
-    const bucket = new S3Bucket(this, "Code");
-    const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
-    bucket.bucketPrefix = bucketPrefix;
+    const app = App.of(this) as App;
+    const bucket = app.codeBucket;
 
     // Choose an object name so that:
     // - whenever code changes, the object name changes
@@ -190,7 +188,7 @@ export class Function extends cloud.Function {
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
-      runtime: "nodejs16.x",
+      runtime: "nodejs18.x",
       role: this.role.arn,
       publish: true,
       vpcConfig: {
@@ -221,7 +219,7 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
@@ -287,7 +285,7 @@ export class Function extends cloud.Function {
    * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
    */
   public addPermissionToInvoke(
-    source: core.Resource,
+    source: Resource,
     principal: string,
     sourceArn: string,
     options: FunctionPermissionsOptions = { qualifier: this.function.version }
@@ -314,5 +312,3 @@ export class Function extends cloud.Function {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Function._annotateInflight(cloud.FunctionInflightMethods.INVOKE, {});

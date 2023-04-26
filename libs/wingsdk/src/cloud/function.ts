@@ -3,8 +3,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core/app";
-import { IInflightHost, IResource, Resource } from "../core/resource";
-import { Duration } from "../std";
+import { Duration, IInflightHost, IResource, Resource } from "../std";
 import { CaseConventions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -76,13 +75,15 @@ export abstract class Function extends Resource implements IInflightHost {
     this.display.title = "Function";
     this.display.description = "A cloud function (FaaS)";
 
+    this._addInflightOps(FunctionInflightMethods.INVOKE);
+
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);
     }
 
-    // indicates that we are calling "handle" on the handler resource
-    // and that we are calling "log" on the logger.
-    inflight._registerBind(this, ["handle"]);
+    // indicates that we are calling the inflight constructor and the
+    // inflight "handle" method on the handler resource.
+    inflight._registerBind(this, ["handle", "$inflight_init"]);
 
     const inflightClient = inflight._toInflight();
     const lines = new Array<string>();

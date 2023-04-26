@@ -1,13 +1,13 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
-import { simulatorHandleToken } from "./tokens";
+import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import * as std from "../std";
+import { Duration, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
 
@@ -17,9 +17,8 @@ import { convertBetweenHandlers } from "../utils/convert";
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.Queue implements ISimulatorResource {
-  private readonly timeout: std.Duration;
-  private readonly retentionPeriod: std.Duration;
-  private readonly subscribers: QueueSubscriber[];
+  private readonly timeout: Duration;
+  private readonly retentionPeriod: Duration;
   private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
@@ -33,7 +32,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       );
     }
 
-    this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
@@ -80,16 +78,15 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       props
     );
 
-    // At the time the queue is created in the simulator, it needs to be able to
-    // call subscribed functions.
-    this.node.addDependency(fn);
-
-    this.subscribers.push({
-      functionHandle: simulatorHandleToken(fn),
-      batchSize: props.batchSize ?? 1,
+    new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
+      subscriber: fn,
+      publisher: this,
+      subscriptionProps: {
+        batchSize: props.batchSize ?? 1,
+      },
     });
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
       relationship: "add_consumer",
@@ -105,7 +102,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       props: {
         timeout: this.timeout.seconds,
         retentionPeriod: this.retentionPeriod.seconds,
-        subscribers: this.subscribers,
         initialMessages: this.initialMessages,
       },
       attrs: {} as any,
@@ -114,7 +110,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
@@ -124,7 +120,3 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});

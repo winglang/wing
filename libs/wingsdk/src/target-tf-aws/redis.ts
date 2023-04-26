@@ -8,6 +8,7 @@ import { Function } from "./function";
 import { Code } from "../core";
 import * as core from "../core";
 import * as redis from "../redis";
+import { IInflightHost } from "../std";
 import {
   CaseConventions,
   NameOptions,
@@ -94,7 +95,7 @@ export class Redis extends redis.Redis {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("redis can only be bound by tfaws.Function for now");
     }
@@ -128,13 +129,3 @@ export class Redis extends redis.Redis {
     return `REDIS_CLUSTER_ID_${this.node.addr.slice(-8)}`;
   }
 }
-
-Redis._annotateInflight("raw_client", {});
-Redis._annotateInflight("url", {});
-Redis._annotateInflight("get", {});
-Redis._annotateInflight("set", {});
-Redis._annotateInflight("hset", {});
-Redis._annotateInflight("hget", {});
-Redis._annotateInflight("sadd", {});
-Redis._annotateInflight("smembers", {});
-Redis._annotateInflight("del", {});

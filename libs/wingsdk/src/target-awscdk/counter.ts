@@ -6,6 +6,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { COUNTER_HASH_KEY } from "../shared-aws/commons";
 import { calculateCounterPermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
 
 /**
  * AWS implementation of `cloud.Counter`.
@@ -26,7 +27,7 @@ export class Counter extends cloud.Counter {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by awscdk.Function for now");
     }
@@ -52,8 +53,3 @@ export class Counter extends cloud.Counter {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Counter._annotateInflight(cloud.CounterInflightMethods.INC, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.DEC, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.PEEK, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.RESET, {});

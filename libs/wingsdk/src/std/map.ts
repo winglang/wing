@@ -2,6 +2,7 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
+import { ImmutableArray } from "./array";
 import { T1 } from "./util";
 
 /**
@@ -59,6 +60,17 @@ export class ImmutableMap {
    * @returns a MutableMap with the same values as this map
    */
   public copyMut(): MutableMap {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the keys of this map
+   *
+   * @macro Object.keys($self$)
+   *
+   * @returns an array containing the keys of this map
+   */
+  public keys(): ImmutableArray {
     throw new Error("Macro");
   }
 }

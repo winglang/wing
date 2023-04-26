@@ -1,7 +1,8 @@
-import * as open from "open";
+import open from "open";
 import { docs } from "./docs";
+import { vi, test, expect } from "vitest";
 
-jest.mock("open");
+vi.mock("open");
 
 test("wing docs opens the docs website", async () => {  
   await docs();

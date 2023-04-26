@@ -14,6 +14,7 @@ import * as cloud from "../cloud";
 import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
 import {
   CaseConventions,
   NameOptions,
@@ -22,8 +23,8 @@ import {
 
 const EVENTS = {
   [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
-  [BucketEventType.CREATE]: ["s3:ObjectCreated:Post"],
-  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Put"],
+  [BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
+  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
 };
 
 /**
@@ -161,7 +162,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
@@ -199,11 +200,3 @@ export class Bucket extends cloud.Bucket {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.DELETE, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.LIST, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUBLIC_URL, {});

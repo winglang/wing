@@ -4,6 +4,7 @@ import { CounterSchema, COUNTER_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -32,7 +33,7 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
@@ -42,8 +43,3 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Counter._annotateInflight("inc", {});
-Counter._annotateInflight("dec", {});
-Counter._annotateInflight("peek", {});
-Counter._annotateInflight("reset", {});

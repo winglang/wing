@@ -29,7 +29,6 @@ test("create a queue", async () => {
     path: "root/my_queue",
     props: {
       initialMessages: [],
-      subscribers: [],
       timeout: 10,
       retentionPeriod: 3600,
     },

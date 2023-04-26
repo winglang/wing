@@ -81,15 +81,21 @@ bucket: (function(env) {
         "props": {
           "initialMessages": [],
           "retentionPeriod": 3600,
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
-            },
-          ],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
+        "props": {
+          "publisher": "\${root/HelloWorld/Queue#attrs.handle}",
+          "subscriber": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -180,6 +186,23 @@ bucket: (function(env) {
                   },
                 ],
                 "wing:resource:stateful": true,
+              },
+              "children": {
+                "Queue-QueueEventMapping-401ee792": {
+                  "attributes": {
+                    "wing:resource:connections": [],
+                    "wing:resource:stateful": true,
+                  },
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.1.245",
+                  },
+                  "display": {
+                    "hidden": true,
+                  },
+                  "id": "Queue-QueueEventMapping-401ee792",
+                  "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
+                },
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",

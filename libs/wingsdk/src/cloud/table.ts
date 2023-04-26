@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Resource } from "../core";
-import { Json } from "../std";
+import { App } from "../core";
+import { Json, Resource } from "../std";
 
 /**
  * Global identifier for `Table`.
@@ -97,6 +97,14 @@ export abstract class Table extends Resource {
       throw new Error("No column is defined");
     }
     this.columns = props.columns;
+
+    this._addInflightOps(
+      TableInflightMethods.INSERT,
+      TableInflightMethods.UPDATE,
+      TableInflightMethods.DELETE,
+      TableInflightMethods.GET,
+      TableInflightMethods.LIST
+    );
   }
 }
 

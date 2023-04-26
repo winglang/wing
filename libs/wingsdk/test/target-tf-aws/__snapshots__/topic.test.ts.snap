@@ -417,8 +417,8 @@ exports[`topic with subscriber function 2`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_TopicOnMessagec5395e41_IamRole_9BB6BE88.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_TopicOnMessagec5395e41_Code_97E7E354.bucket}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_TopicOnMessagec5395e41_S3Object_D172367F.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
@@ -436,13 +436,13 @@ exports[`topic with subscriber function 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_TopicOnMessagec5395e41_Code_97E7E354\\": {
-        \\"bucket_prefix\\": \\"code-c8092503-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_TopicOnMessagec5395e41_S3Object_D172367F\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_TopicOnMessagec5395e41_Code_97E7E354.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -471,6 +471,14 @@ exports[`topic with subscriber function 3`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -562,14 +570,6 @@ exports[`topic with subscriber function 3`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Topic-OnMessage-c5395e41/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/Code",
                   },
                   "Default": {
                     "constructInfo": {

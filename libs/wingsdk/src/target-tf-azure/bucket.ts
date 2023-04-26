@@ -13,6 +13,7 @@ import {
   IBucketEventHandler,
 } from "../cloud";
 import * as core from "../core";
+import { IInflightHost } from "../std";
 import {
   CaseConventions,
   NameOptions,
@@ -97,7 +98,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfazure.Function for now");
     }
@@ -193,11 +194,3 @@ export class Bucket extends cloud.Bucket {
     return `STORAGE_ACCOUNT_${this.storageContainer.node.addr.slice(-8)}`;
   }
 }
-
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.DELETE, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.LIST, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUBLIC_URL, {});

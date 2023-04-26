@@ -18,3 +18,6 @@ let s3: Set<num> = [1, "2", 3];
 let s4 = Set<num>{1,2};
 let s5: Set<str> = s4;
 s1.some_random_method();
+
+let a: Array<str> = MutArray<str>[];
+//                  ^^^^^^^^^^^^^^^ Expected type to be "Array<str>", but got "MutArray<str>" instead

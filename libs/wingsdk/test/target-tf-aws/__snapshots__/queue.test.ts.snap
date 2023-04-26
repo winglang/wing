@@ -289,8 +289,8 @@ exports[`queue with a consumer function 2`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_QueueAddConsumerc5395e41_IamRole_11C209FD.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueAddConsumerc5395e41_Code_4409437D.bucket}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_QueueAddConsumerc5395e41_S3Object_B837411C.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
@@ -300,13 +300,13 @@ exports[`queue with a consumer function 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_QueueAddConsumerc5395e41_Code_4409437D\\": {
-        \\"bucket_prefix\\": \\"code-c8839c77-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_QueueAddConsumerc5395e41_S3Object_B837411C\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueAddConsumerc5395e41_Code_4409437D.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -329,6 +329,14 @@ exports[`queue with a consumer function 3`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -420,14 +428,6 @@ exports[`queue with a consumer function 3`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Queue-AddConsumer-c5395e41/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Queue-AddConsumer-c5395e41/Code",
                   },
                   "Default": {
                     "constructInfo": {

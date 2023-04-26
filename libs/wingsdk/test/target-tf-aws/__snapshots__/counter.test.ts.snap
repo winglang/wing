@@ -310,8 +310,8 @@ exports[`dec() policy statement 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
@@ -321,13 +321,13 @@ exports[`dec() policy statement 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -344,6 +344,14 @@ exports[`dec() policy statement 2`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -397,14 +405,6 @@ exports[`dec() policy statement 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -639,8 +639,8 @@ exports[`function with a counter binding 2`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
@@ -650,13 +650,13 @@ exports[`function with a counter binding 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -673,6 +673,14 @@ exports[`function with a counter binding 3`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -726,14 +734,6 @@ exports[`function with a counter binding 3`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -925,8 +925,8 @@ exports[`inc() policy statement 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
@@ -936,13 +936,13 @@ exports[`inc() policy statement 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -959,6 +959,14 @@ exports[`inc() policy statement 2`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -1012,14 +1020,6 @@ exports[`inc() policy statement 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -1211,8 +1211,8 @@ exports[`peek() policy statement 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
@@ -1222,13 +1222,13 @@ exports[`peek() policy statement 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -1245,6 +1245,14 @@ exports[`peek() policy statement 2`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -1298,14 +1306,6 @@ exports[`peek() policy statement 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -1627,8 +1627,8 @@ exports[`reset() policy statement 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
@@ -1638,13 +1638,13 @@ exports[`reset() policy statement 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -1661,6 +1661,14 @@ exports[`reset() policy statement 2`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -1714,14 +1722,6 @@ exports[`reset() policy statement 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {

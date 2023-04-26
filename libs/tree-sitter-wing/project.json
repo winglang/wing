@@ -27,6 +27,20 @@
           "command": "cargo wasi build --release"
         }
       }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run playground",
+        "cwd": "libs/tree-sitter-wing"
+      }
+    },
+    "dev:watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run playground:watch",
+        "cwd": "libs/tree-sitter-wing"
+      }
     }
   }
 }

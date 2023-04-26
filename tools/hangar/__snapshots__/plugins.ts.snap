@@ -97,8 +97,8 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
         "handler": "index.handler",
         "publish": true,
         "role": "\${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE.arn}",
-        "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4.key}",
         "timeout": 30,
         "vpc_config": {
@@ -108,6 +108,15 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
       },
     },
     "aws_s3_bucket": {
+      "root_Code_02F3C603": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Code",
+            "uniqueId": "root_Code_02F3C603",
+          },
+        },
+        "bucket_prefix": "code-c84a50b1-",
+      },
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
@@ -117,15 +126,6 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-      "root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/Code",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947",
-          },
-        },
-        "bucket_prefix": "code-c882cbfb-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -169,7 +169,7 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
             "uniqueId": "root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
+        "bucket": "\${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -219,6 +219,16 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
   },
   "resource": {
     "aws_iam_policy": {
+      "root_ReplicaCodePolicy_45CC5F7D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/ReplicaCodePolicy",
+            "uniqueId": "root_ReplicaCodePolicy_45CC5F7D",
+          },
+        },
+        "name": "some-prefix\${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.root_Code_02F3C603.arn}\\",\\"\${aws_s3_bucket.root_Code_02F3C603.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.root_Code_02F3C603.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.root_ReplicaCode_EC5CE972.arn}/*\\"}]}",
+      },
       "root_cloudBucket_ReplicaDefaultPolicy_CF3D8930": {
         "//": {
           "metadata": {
@@ -229,18 +239,21 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
         "name": "some-prefix\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.root_cloudBucket_ReplicaDefault_FAA1B938.arn}/*\\"}]}",
       },
-      "root_cloudQueueAddConsumere46e5cb7_ReplicaCodePolicy_456572A2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/ReplicaCodePolicy",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_ReplicaCodePolicy_456572A2",
-          },
-        },
-        "name": "some-prefix\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.arn}\\",\\"\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_ReplicaCode_ED5CBA2E.arn}/*\\"}]}",
-      },
     },
     "aws_iam_policy_attachment": {
+      "root_ReplicaCodePolicyAttachment_BC537D23": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/ReplicaCodePolicyAttachment",
+            "uniqueId": "root_ReplicaCodePolicyAttachment_BC537D23",
+          },
+        },
+        "name": "some-prefixpolicy-attachment\${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "policy_arn": "\${aws_iam_policy.root_ReplicaCodePolicy_45CC5F7D.arn}",
+        "roles": [
+          "\${aws_iam_role.root_ReplicaCodeRole_E6CC0FD1.name}",
+        ],
+      },
       "root_cloudBucket_ReplicaDefaultPolicyAttachment_CDFF3C3B": {
         "//": {
           "metadata": {
@@ -254,21 +267,18 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           "\${aws_iam_role.root_cloudBucket_ReplicaDefaultRole_F6AC926C.name}",
         ],
       },
-      "root_cloudQueueAddConsumere46e5cb7_ReplicaCodePolicyAttachment_F4E9BAD5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/ReplicaCodePolicyAttachment",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_ReplicaCodePolicyAttachment_F4E9BAD5",
-          },
-        },
-        "name": "some-prefixpolicy-attachment\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
-        "policy_arn": "\${aws_iam_policy.root_cloudQueueAddConsumere46e5cb7_ReplicaCodePolicy_456572A2.arn}",
-        "roles": [
-          "\${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_ReplicaCodeRole_A49F3850.name}",
-        ],
-      },
     },
     "aws_iam_role": {
+      "root_ReplicaCodeRole_E6CC0FD1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/ReplicaCodeRole",
+            "uniqueId": "root_ReplicaCodeRole_E6CC0FD1",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
+        "name": "some-prefix\${aws_s3_bucket.root_Code_02F3C603.bucket}",
+      },
       "root_cloudBucket_ReplicaDefaultRole_F6AC926C": {
         "//": {
           "metadata": {
@@ -287,16 +297,6 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
-      },
-      "root_cloudQueueAddConsumere46e5cb7_ReplicaCodeRole_A49F3850": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/ReplicaCodeRole",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_ReplicaCodeRole_A49F3850",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
-        "name": "some-prefix\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
       },
     },
     "aws_iam_role_policy": {
@@ -355,8 +355,8 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
         "handler": "index.handler",
         "publish": true,
         "role": "\${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE.arn}",
-        "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4.key}",
         "timeout": 30,
         "vpc_config": {
@@ -366,6 +366,24 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
       },
     },
     "aws_s3_bucket": {
+      "root_Code_02F3C603": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Code",
+            "uniqueId": "root_Code_02F3C603",
+          },
+        },
+        "bucket_prefix": "code-c84a50b1-",
+      },
+      "root_ReplicaCode_EC5CE972": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/ReplicaCode",
+            "uniqueId": "root_ReplicaCode_EC5CE972",
+          },
+        },
+        "bucket": "some-prefix\${aws_s3_bucket.root_Code_02F3C603.bucket}",
+      },
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
@@ -385,24 +403,6 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
         },
         "bucket": "some-prefix\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
       },
-      "root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/Code",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947",
-          },
-        },
-        "bucket_prefix": "code-c882cbfb-",
-      },
-      "root_cloudQueueAddConsumere46e5cb7_ReplicaCode_ED5CBA2E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/ReplicaCode",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_ReplicaCode_ED5CBA2E",
-          },
-        },
-        "bucket": "some-prefix\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
-      },
     },
     "aws_s3_bucket_public_access_block": {
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
@@ -420,6 +420,30 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
       },
     },
     "aws_s3_bucket_replication_configuration": {
+      "root_ReplicaCodeConfig_D751EDC8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/ReplicaCodeConfig",
+            "uniqueId": "root_ReplicaCodeConfig_D751EDC8",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_Code_02F3C603.id}",
+        "depends_on": [
+          "aws_s3_bucket_versioning.root_ReplicaCodeVersioning_236B3629",
+          "aws_s3_bucket_versioning.root_SourceCodeVersioning_8C94F5B3",
+        ],
+        "role": "\${aws_iam_role.root_ReplicaCodeRole_E6CC0FD1.arn}",
+        "rule": [
+          {
+            "destination": {
+              "bucket": "\${aws_s3_bucket.root_ReplicaCode_EC5CE972.arn}",
+              "storage_class": "STANDARD",
+            },
+            "id": "some-prefix\${aws_s3_bucket.root_Code_02F3C603.bucket}",
+            "status": "Enabled",
+          },
+        ],
+      },
       "root_cloudBucket_ReplicaDefaultConfig_0CC8C208": {
         "//": {
           "metadata": {
@@ -444,30 +468,6 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           },
         ],
       },
-      "root_cloudQueueAddConsumere46e5cb7_ReplicaCodeConfig_5BF64962": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/ReplicaCodeConfig",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_ReplicaCodeConfig_5BF64962",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.id}",
-        "depends_on": [
-          "aws_s3_bucket_versioning.root_cloudQueueAddConsumere46e5cb7_ReplicaCodeVersioning_9A981135",
-          "aws_s3_bucket_versioning.root_cloudQueueAddConsumere46e5cb7_SourceCodeVersioning_D9341870",
-        ],
-        "role": "\${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_ReplicaCodeRole_A49F3850.arn}",
-        "rule": [
-          {
-            "destination": {
-              "bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_ReplicaCode_ED5CBA2E.arn}",
-              "storage_class": "STANDARD",
-            },
-            "id": "some-prefix\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
-            "status": "Enabled",
-          },
-        ],
-      },
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
       "root_cloudBucket_Encryption_8ED0CD9C": {
@@ -488,6 +488,30 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
       },
     },
     "aws_s3_bucket_versioning": {
+      "root_ReplicaCodeVersioning_236B3629": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/ReplicaCodeVersioning",
+            "uniqueId": "root_ReplicaCodeVersioning_236B3629",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_ReplicaCode_EC5CE972.id}",
+        "versioning_configuration": {
+          "status": "Enabled",
+        },
+      },
+      "root_SourceCodeVersioning_8C94F5B3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/SourceCodeVersioning",
+            "uniqueId": "root_SourceCodeVersioning_8C94F5B3",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_Code_02F3C603.id}",
+        "versioning_configuration": {
+          "status": "Enabled",
+        },
+      },
       "root_cloudBucket_ReplicaDefaultVersioning_EB8534D6": {
         "//": {
           "metadata": {
@@ -512,30 +536,6 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           "status": "Enabled",
         },
       },
-      "root_cloudQueueAddConsumere46e5cb7_ReplicaCodeVersioning_9A981135": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/ReplicaCodeVersioning",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_ReplicaCodeVersioning_9A981135",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_ReplicaCode_ED5CBA2E.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
-      "root_cloudQueueAddConsumere46e5cb7_SourceCodeVersioning_D9341870": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/SourceCodeVersioning",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_SourceCodeVersioning_D9341870",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.id}",
-        "versioning_configuration": {
-          "status": "Enabled",
-        },
-      },
     },
     "aws_s3_object": {
       "root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4": {
@@ -545,7 +545,7 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
             "uniqueId": "root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
+        "bucket": "\${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -661,8 +661,8 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
         "handler": "index.handler",
         "publish": true,
         "role": "\${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE.arn}",
-        "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4.key}",
         "timeout": 30,
         "vpc_config": {
@@ -672,6 +672,15 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
       },
     },
     "aws_s3_bucket": {
+      "root_Code_02F3C603": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Code",
+            "uniqueId": "root_Code_02F3C603",
+          },
+        },
+        "bucket_prefix": "code-c84a50b1-",
+      },
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
@@ -681,15 +690,6 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-      "root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/Code",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947",
-          },
-        },
-        "bucket_prefix": "code-c882cbfb-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -733,7 +733,7 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
             "uniqueId": "root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumere46e5cb7_Code_8AFA6947.bucket}",
+        "bucket": "\${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },

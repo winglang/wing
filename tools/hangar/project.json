@@ -8,8 +8,9 @@
     "generate": {
       "executor": "nx:run-commands",
       "inputs": [
-        "src",
-        "examples-tests"
+        "examples-tests",
+        "{projectRoot}/src/generate_tests.ts",
+        "{projectRoot}/src/generated_test_targets.ts"
       ],
       "outputs": [
         "{projectRoot}/src/test_corpus/**/*"
@@ -27,8 +28,10 @@
       ],
       "inputs": [
         "src",
-        "examples-tests"
+        "examples-tests",
+        "project-files"
       ],
+      "outputs": ["${projectRoot}/reports"],
       "executor": "nx:run-commands",
       "options": {
         "command": "npm run test:update",
@@ -38,6 +41,23 @@
         "release": {
           "command": "npm run test"
         }
+      }
+    },
+    "bench": {
+      "dependsOn": [
+        "^build",
+        "^package"
+      ],
+      "inputs": [
+        "src",
+        "examples-tests",
+        "project-files"
+      ],
+      "outputs": ["${projectRoot}/reports"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run bench",
+        "cwd": "tools/hangar"
       }
     }
   }

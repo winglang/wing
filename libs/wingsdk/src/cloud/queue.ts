@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { IResource, Resource, App } from "../core";
-import { Duration } from "../std";
+import { App } from "../core";
+import { Duration, IResource, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.
@@ -56,6 +56,12 @@ export abstract class Queue extends Resource {
 
     this.display.title = "Queue";
     this.display.description = "A distributed message queue";
+
+    this._addInflightOps(
+      QueueInflightMethods.PUSH,
+      QueueInflightMethods.PURGE,
+      QueueInflightMethods.APPROX_SIZE
+    );
 
     props;
   }

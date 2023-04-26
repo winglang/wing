@@ -59,8 +59,10 @@ assert(m7.size() == 3);
 assert(m7.get("b") == 2);
 assert(m7.has("b"));
 assert(m4.has("boom") == false);
-
-// TODO: add map API tests
+let m8 = {"a": "a1", b: "b1", c: "c1"};
+assert(m8.keys().at(0) == "a");
+assert(m8.keys().at(1) == "b");
+assert(m8.keys().at(2) == "c");
 
 //Set tests
 let empty_set = Set<num>{};

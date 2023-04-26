@@ -94,8 +94,8 @@ exports[`function with a table binding 2`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
@@ -105,13 +105,13 @@ exports[`function with a table binding 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Code_794C2A8A\\": {
-        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -128,6 +128,14 @@ exports[`function with a table binding 3`] = `
         "children": {
           "Default": {
             "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [
@@ -148,14 +156,6 @@ exports[`function with a table binding 3`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "Code": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
-                    },
-                    "id": "Code",
-                    "path": "root/Default/Function/Code",
                   },
                   "Default": {
                     "constructInfo": {

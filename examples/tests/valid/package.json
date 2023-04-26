@@ -4,7 +4,8 @@
     "jsii-code-samples": "1.7.0",
     "node-fetch": "^2",
     "projen": "0.67.65",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "constructs": "^10"
   },
   "volta": {
     "node": "18.12.1",

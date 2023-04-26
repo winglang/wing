@@ -1,6 +1,6 @@
 name: Enhancement 🚀
 description: Suggest a new feature or other improvement
-labels: ["enhancement"]
+labels: ["✨ enhancement"]
 body:
 - type: markdown
   attributes:
@@ -45,6 +45,7 @@ body:
     - Compiler
     - SDK
     - Wing Console
+    - Playground
     - IDE Extension
     - CLI
     - Plugins

@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Resource } from "../../src/core";
+import { Resource } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
