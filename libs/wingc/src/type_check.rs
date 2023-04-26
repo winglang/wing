@@ -482,12 +482,6 @@ impl Subtype for Type {
 				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
-			(Self::MutArray(l0), Self::Array(r0)) => {
-				// A MutArray type is a subtype of an Array type if the value type is a subtype of the other value type
-				let l: &Type = l0;
-				let r: &Type = r0;
-				l.is_subtype_of(r)
-			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// A Map type is a subtype of another Map type if the value type is a subtype of the other value type
 				let l: &Type = l0;

@@ -286,6 +286,13 @@ error: Unknown symbol \\"some_random_method\\"
 20 | s1.some_random_method();
    |    ^^^^^^^^^^^^^^^^^^ Unknown symbol \\"some_random_method\\"
 
+
+error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
+   --> ../../../examples/tests/invalid/container_types.w:22:21
+   |
+22 | let a: Array<str> = MutArray<str>[];
+   |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
+
 "
 `;
 
