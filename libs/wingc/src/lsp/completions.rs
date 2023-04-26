@@ -281,6 +281,7 @@ fn get_completions_from_class(
 		.get_env()
 		.iter(true)
 		.filter_map(|symbol_data| {
+			// hide the init methods, since they're not generally callable
 			if symbol_data.0 == CLASS_INIT_NAME || symbol_data.0 == CLASS_INFLIGHT_INIT_NAME {
 				return None;
 			}
@@ -383,8 +384,8 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 	}
 }
 
-/// This visitor is used to find the scope and relevant reference
-/// that contains a given location.
+/// This visitor is used to find the scope
+/// and relevant expression that contains a given location.
 pub struct ScopeVisitor<'a> {
 	/// The target location we're looking for
 	pub location: WingSpan,
@@ -428,10 +429,15 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	}
 
 	fn visit_expr(&mut self, node: &'a Expr) {
+		// We want to find the nearest expression to our target location
+		// i.e we want the expression that is to the left of it
 		if node.span <= self.location {
 			self.nearest_expr = Some(node);
 		}
 
+		// We don't want to visit the children of a reference expression
+		// as that will actually be a less useful piece of information
+		// e.g. With `a.b.c.` we are interested in `a.b.c` and not `a.b`
 		if !matches!(&node.kind, ExprKind::Reference(_)) {
 			visit_expr(self, node);
 		}
