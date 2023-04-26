@@ -49,7 +49,7 @@ export abstract class Counter extends Resource {
     this.display.title = "Counter";
     this.display.description = "A distributed atomic counter";
 
-    this._inflightOps.push(
+    this._addInflightOps(
       CounterInflightMethods.INC,
       CounterInflightMethods.DEC,
       CounterInflightMethods.PEEK,

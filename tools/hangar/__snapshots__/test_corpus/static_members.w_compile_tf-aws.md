@@ -150,7 +150,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._inflightOps.push("get_123");
+        this._addInflightOps("get_123");
         this.instance_field = 100;
       }
       static m()  {

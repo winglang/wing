@@ -145,7 +145,7 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._inflightOps.push();
+        this._addInflightOps();
         this.field = "hey";
       }
       _toInflight() {

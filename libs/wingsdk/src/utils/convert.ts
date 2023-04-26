@@ -26,7 +26,7 @@ export function convertBetweenHandlers(
       super(theScope, theId);
       this.handler = handler;
       this.display.hidden = true;
-      this._inflightOps.push("handle");
+      this._addInflightOps("handle");
     }
 
     public _toInflight(): NodeJsCode {

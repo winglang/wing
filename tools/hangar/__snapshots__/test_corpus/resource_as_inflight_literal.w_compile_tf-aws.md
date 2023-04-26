@@ -215,7 +215,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._inflightOps.push("handle");
+        this._addInflightOps("handle");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);

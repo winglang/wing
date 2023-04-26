@@ -1072,7 +1072,7 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.map(|(name, _)| format!("\"{}\"", name.name))
 			.join(", ");
-		code.line(format!("this._inflightOps.push({inflight_ops_string});"));
+		code.line(format!("this._addInflightOps({inflight_ops_string});"));
 
 		code.add_code(self.jsify_scope_body(
 			&constructor.statements,

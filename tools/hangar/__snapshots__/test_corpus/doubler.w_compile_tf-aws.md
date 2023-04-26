@@ -63,7 +63,7 @@ class $Root extends $stdlib.std.Resource {
     class Doubler extends $stdlib.std.Resource {
       constructor(scope, id, func) {
         super(scope, id);
-        this._inflightOps.push("invoke");
+        this._addInflightOps("invoke");
         this.func = func;
       }
       _toInflight() {

@@ -51,7 +51,7 @@ export abstract class Queue extends Resource {
     this.display.title = "Queue";
     this.display.description = "A distributed message queue";
 
-    this._inflightOps.push(
+    this._addInflightOps(
       QueueInflightMethods.PUSH,
       QueueInflightMethods.PURGE,
       QueueInflightMethods.APPROX_SIZE

@@ -93,7 +93,7 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._inflightOps.push("handle");
+        this._addInflightOps("handle");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
@@ -120,7 +120,7 @@ class $Root extends $stdlib.std.Resource {
     class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._inflightOps.push("method_2");
+        this._addInflightOps("method_2");
       }
        method_1(x)  {
         {
@@ -157,7 +157,7 @@ class $Root extends $stdlib.std.Resource {
     class Dog extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._inflightOps.push("eat");
+        this._addInflightOps("eat");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);

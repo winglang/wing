@@ -98,7 +98,7 @@ export abstract class Table extends Resource {
     }
     this.columns = props.columns;
 
-    this._inflightOps.push(
+    this._addInflightOps(
       TableInflightMethods.INSERT,
       TableInflightMethods.UPDATE,
       TableInflightMethods.DELETE,

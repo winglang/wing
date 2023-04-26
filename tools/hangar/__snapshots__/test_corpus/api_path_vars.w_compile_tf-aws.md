@@ -282,7 +282,7 @@ class $Root extends $stdlib.std.Resource {
     class Fetch extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._inflightOps.push("get");
+        this._addInflightOps("get");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);

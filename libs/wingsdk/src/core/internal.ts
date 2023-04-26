@@ -37,7 +37,7 @@ export function makeHandler(
       this.display.description = display?.description;
       this.display.hidden = display?.hidden;
 
-      this._inflightOps.push("handle");
+      this._addInflightOps("handle");
     }
 
     public _toInflight(): NodeJsCode {

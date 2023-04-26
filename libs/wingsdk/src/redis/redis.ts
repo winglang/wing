@@ -30,7 +30,7 @@ export abstract class Redis extends Resource {
     this.display.title = "Redis";
     this.display.description = "A Redis server";
 
-    this._inflightOps.push(
+    this._addInflightOps(
       RedisInflightMethods.RAW_CLIENT,
       RedisInflightMethods.URL,
       RedisInflightMethods.SET,

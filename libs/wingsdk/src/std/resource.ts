@@ -127,9 +127,8 @@ export abstract class Resource extends Construct implements IResource {
 
   /**
    * A list of all inflight operations that are supported by this resource.
-   * @internal
    */
-  public readonly _inflightOps: string[] = ["$inflight_init"];
+  private readonly inflightOps: string[] = ["$inflight_init"];
 
   /**
    * Information on how to display a resource in the UI.
@@ -145,6 +144,18 @@ export abstract class Resource extends Construct implements IResource {
    * with a fresh copy without any consequences.
    */
   public readonly stateful: boolean = false;
+
+  /**
+   * Record that this resource supports the given inflight operation.
+   *
+   * This is used to give better error messages if the compiler attempts to bind
+   * a resource with an operation that is not supported.
+   *
+   * @internal
+   */
+  public _addInflightOps(...ops: string[]) {
+    this.inflightOps.push(...ops);
+  }
 
   /**
    * Binds the resource to the host so that it can be used by inflight code.
@@ -177,7 +188,7 @@ export abstract class Resource extends Construct implements IResource {
     );
 
     for (const op of ops) {
-      if (!this._inflightOps.includes(op)) {
+      if (!this.inflightOps.includes(op)) {
         throw new Error(
           `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
         );

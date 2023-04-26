@@ -229,7 +229,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._inflightOps.push("regex_inflight", "get_uuid", "get_data", "print", "call");
+        this._addInflightOps("regex_inflight", "get_uuid", "get_data", "print", "call");
       }
       static get_greeting(name)  {
         return (require("<ABSOLUTE_PATH>/external_js.js")["get_greeting"])(name)

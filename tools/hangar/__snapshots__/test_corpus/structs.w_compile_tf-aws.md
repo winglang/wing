@@ -61,7 +61,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, b) {
         super(scope, id);
-        this._inflightOps.push("get_stuff");
+        this._addInflightOps("get_stuff");
         this.data = b;
       }
       _toInflight() {
