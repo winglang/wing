@@ -53,8 +53,3 @@ export class Counter extends cloud.Counter {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Counter._annotateInflight(cloud.CounterInflightMethods.INC, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.DEC, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.PEEK, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.RESET, {});

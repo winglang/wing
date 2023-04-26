@@ -127,7 +127,3 @@ export class Queue extends cloud.Queue {
     return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
 }
-
-Queue._annotateInflight(cloud.QueueInflightMethods.PUSH, {});
-Queue._annotateInflight(cloud.QueueInflightMethods.PURGE, {});
-Queue._annotateInflight(cloud.QueueInflightMethods.APPROX_SIZE, {});

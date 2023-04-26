@@ -46,6 +46,3 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
     return schema;
   }
 }
-
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE, {});
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE_JSON, {});

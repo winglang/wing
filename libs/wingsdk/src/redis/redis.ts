@@ -29,6 +29,18 @@ export abstract class Redis extends Resource {
 
     this.display.title = "Redis";
     this.display.description = "A Redis server";
+
+    this._addInflightOps(
+      RedisInflightMethods.RAW_CLIENT,
+      RedisInflightMethods.URL,
+      RedisInflightMethods.SET,
+      RedisInflightMethods.GET,
+      RedisInflightMethods.HSET,
+      RedisInflightMethods.HGET,
+      RedisInflightMethods.SADD,
+      RedisInflightMethods.SMEMBERS,
+      RedisInflightMethods.DEL
+    );
   }
 }
 
@@ -106,6 +118,31 @@ export interface IRedisClient {
    * @inflight
    */
   del(key: string): Promise<number>;
+}
+
+/**
+ * List of inflight operations available for `Redis`.
+ * @internal
+ */
+export enum RedisInflightMethods {
+  /** `Redis.raw_client` */
+  RAW_CLIENT = "raw_client",
+  /** `Redis.url` */
+  URL = "url",
+  /** `Redis.set` */
+  SET = "set",
+  /** `Redis.get` */
+  GET = "get",
+  /** `Redis.hset` */
+  HSET = "hset",
+  /** `Redis.hget` */
+  HGET = "hget",
+  /** `Redis.sadd` */
+  SADD = "sadd",
+  /** `Redis.smembers` */
+  SMEMBERS = "smembers",
+  /** `Redis.del` */
+  DEL = "del",
 }
 
 /**

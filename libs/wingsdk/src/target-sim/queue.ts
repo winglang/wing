@@ -110,7 +110,3 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});

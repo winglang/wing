@@ -365,8 +365,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    A._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
     const s = "top";
     if (true) {
       const s = "inner";

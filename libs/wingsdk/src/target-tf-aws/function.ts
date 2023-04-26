@@ -312,5 +312,3 @@ export class Function extends cloud.Function {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Function._annotateInflight(cloud.FunctionInflightMethods.INVOKE, {});
