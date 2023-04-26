@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.13.32
-        version: 0.13.32(constructs@10.2.7)
+        specifier: ^0.13.33
+        version: 0.13.33(constructs@10.2.7)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.13.32
-        version: 0.13.32(constructs@10.2.7)
+        specifier: ^0.13.33
+        version: 0.13.33(constructs@10.2.7)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -5316,8 +5316,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.13.32(constructs@10.2.7):
-    resolution: {integrity: sha512-uMpfEw/GVsgOsJT0JqlQF9IxMq/mbXee9fxO38oIugJ18COy7+D9qnnFElEAkI3HQURVXKNvI16NBLfWru4FwA==}
+  /@winglang/sdk@0.13.33(constructs@10.2.7):
+    resolution: {integrity: sha512-cr1m5aHEXQyzs0DGsZjyIgJt2gSS3yKTeXDmb8eh5uLlcqiaSfX8c+BPoURsDQmdL3jrKTB9ud/SlC3bjt6OGw==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
@@ -6033,7 +6033,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001481
-      electron-to-chromium: 1.4.372
+      electron-to-chromium: 1.4.373
       node-releases: 2.0.10
       update-browserslist-db: 1.0.11(browserslist@4.21.5)
     dev: true
@@ -7302,8 +7302,8 @@ packages:
       type-fest: 2.19.0
     dev: true
 
-  /electron-to-chromium@1.4.372:
-    resolution: {integrity: sha512-MrlFq/j+TYHOjeWsWGYfzevc25HNeJdsF6qaLFrqBTRWZQtWkb1myq/Q2veLWezVaa5OcSZ99CFwTT4aF4Mung==}
+  /electron-to-chromium@1.4.373:
+    resolution: {integrity: sha512-whGyixOVSRlyOBQDsRH9xltFaMij2/+DQRdaYahCq0P/fiVnAVGaW7OVsFnEjze/qUo298ez9C46gnALpo6ukg==}
     dev: true
 
   /electron-updater@5.3.0:
