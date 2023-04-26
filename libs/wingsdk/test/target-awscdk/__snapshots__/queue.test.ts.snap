@@ -85,7 +85,7 @@ exports[`queue with a consumer function 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",

@@ -37,7 +37,7 @@ export class Function extends cloud.Function {
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
-      runtime: Runtime.NODEJS_16_X,
+      runtime: Runtime.NODEJS_18_X,
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),

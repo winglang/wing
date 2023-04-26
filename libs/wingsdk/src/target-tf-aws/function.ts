@@ -188,7 +188,7 @@ export class Function extends cloud.Function {
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
-      runtime: "nodejs16.x",
+      runtime: "nodejs18.x",
       role: this.role.arn,
       publish: true,
       vpcConfig: {
