@@ -19,7 +19,7 @@ use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionBodyRef,
 		FunctionDefinition, Initializer, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+		StmtKind, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
@@ -188,7 +188,7 @@ impl<'a> JSifier<'a> {
 				self.jsify_expression(object, context) + "." + &symbolize(self, property)
 			}
 			Reference::TypeMember { type_, property } => {
-				self.jsify_type(&TypeAnnotation::UserDefined(type_.clone())) + "." + &symbolize(self, property)
+				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &symbolize(self, property)
 			}
 		}
 	}
@@ -255,9 +255,9 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &TypeAnnotation) -> String {
+	fn jsify_type(&self, typ: &TypeAnnotationKind) -> String {
 		match typ {
-			TypeAnnotation::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
+			TypeAnnotationKind::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
 			_ => todo!(),
 		}
 	}
@@ -315,7 +315,7 @@ impl<'a> JSifier<'a> {
 				// user-defined types), we simply instantiate the type directly (maybe in the future we will
 				// allow customizations of user-defined types as well, but for now we don't).
 
-				let ctor = self.jsify_type(class);
+				let ctor = self.jsify_type(&class.kind);
 
 				let scope = if is_resource { Some("this") } else { None };
 

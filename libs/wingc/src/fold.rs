@@ -2,7 +2,7 @@ use crate::ast::{
 	ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
 	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-	UserDefinedType,
+	TypeAnnotationKind, UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -413,26 +413,71 @@ pub fn fold_type_annotation<F>(f: &mut F, node: TypeAnnotation) -> TypeAnnotatio
 where
 	F: Fold + ?Sized,
 {
-	match node {
-		TypeAnnotation::Number => TypeAnnotation::Number,
-		TypeAnnotation::String => TypeAnnotation::String,
-		TypeAnnotation::Bool => TypeAnnotation::Bool,
-		TypeAnnotation::Duration => TypeAnnotation::Duration,
-		TypeAnnotation::Json => TypeAnnotation::Json,
-		TypeAnnotation::MutJson => TypeAnnotation::MutJson,
-		TypeAnnotation::Optional(t) => TypeAnnotation::Optional(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::Array(t) => TypeAnnotation::Array(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::MutArray(t) => TypeAnnotation::MutArray(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::Map(t) => TypeAnnotation::Map(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::MutMap(t) => TypeAnnotation::MutMap(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::Set(t) => TypeAnnotation::Set(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::MutSet(t) => TypeAnnotation::MutSet(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::Function(t) => TypeAnnotation::Function(FunctionTypeAnnotation {
-			param_types: t.param_types.into_iter().map(|t| f.fold_type_annotation(t)).collect(),
-			return_type: t.return_type.map(|t| Box::new(f.fold_type_annotation(*t))),
-			phase: t.phase,
-		}),
-		TypeAnnotation::UserDefined(t) => TypeAnnotation::UserDefined(f.fold_user_defined_type(t)),
+	match node.kind {
+		TypeAnnotationKind::Number => TypeAnnotation {
+			kind: TypeAnnotationKind::Number,
+			span: node.span,
+		},
+		TypeAnnotationKind::String => TypeAnnotation {
+			kind: TypeAnnotationKind::String,
+			span: node.span,
+		},
+		TypeAnnotationKind::Bool => TypeAnnotation {
+			kind: TypeAnnotationKind::Bool,
+			span: node.span,
+		},
+		TypeAnnotationKind::Duration => TypeAnnotation {
+			kind: TypeAnnotationKind::Duration,
+			span: node.span,
+		},
+		TypeAnnotationKind::Json => TypeAnnotation {
+			kind: TypeAnnotationKind::Json,
+			span: node.span,
+		},
+		TypeAnnotationKind::MutJson => TypeAnnotation {
+			kind: TypeAnnotationKind::MutJson,
+			span: node.span,
+		},
+		TypeAnnotationKind::Optional(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::Optional(Box::new(f.fold_type_annotation(*t))),
+			span: node.span,
+		},
+		TypeAnnotationKind::Array(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::Array(Box::new(f.fold_type_annotation(*t))),
+			span: node.span,
+		},
+		TypeAnnotationKind::MutArray(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::MutArray(Box::new(f.fold_type_annotation(*t))),
+			span: node.span,
+		},
+		TypeAnnotationKind::Map(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::Map(Box::new(f.fold_type_annotation(*t))),
+			span: node.span,
+		},
+		TypeAnnotationKind::MutMap(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::MutMap(Box::new(f.fold_type_annotation(*t))),
+			span: node.span,
+		},
+		TypeAnnotationKind::Set(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::Set(Box::new(f.fold_type_annotation(*t))),
+			span: node.span,
+		},
+		TypeAnnotationKind::MutSet(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::MutSet(Box::new(f.fold_type_annotation(*t))),
+			span: node.span,
+		},
+		TypeAnnotationKind::Function(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
+				param_types: t.param_types.into_iter().map(|t| f.fold_type_annotation(t)).collect(),
+				return_type: t.return_type.map(|t| Box::new(f.fold_type_annotation(*t))),
+				phase: t.phase,
+			}),
+			span: node.span,
+		},
+		TypeAnnotationKind::UserDefined(t) => TypeAnnotation {
+			kind: TypeAnnotationKind::UserDefined(f.fold_user_defined_type(t)),
+			span: node.span,
+		},
 	}
 }
 
