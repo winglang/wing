@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.13.33
-        version: 0.13.33(constructs@10.2.7)
+        specifier: ^0.13.34
+        version: 0.13.34(constructs@10.2.7)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -95,8 +95,8 @@ importers:
         specifier: ^16.0.3
         version: 16.0.3
       electron:
-        specifier: ^24.1.2
-        version: 24.1.2
+        specifier: ^24.1.3
+        version: 24.1.3
       electron-builder:
         specifier: ^23.6.0
         version: 23.6.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.13.33
-        version: 0.13.33(constructs@10.2.7)
+        specifier: ^0.13.34
+        version: 0.13.34(constructs@10.2.7)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -5316,8 +5316,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.13.33(constructs@10.2.7):
-    resolution: {integrity: sha512-cr1m5aHEXQyzs0DGsZjyIgJt2gSS3yKTeXDmb8eh5uLlcqiaSfX8c+BPoURsDQmdL3jrKTB9ud/SlC3bjt6OGw==}
+  /@winglang/sdk@0.13.34(constructs@10.2.7):
+    resolution: {integrity: sha512-RbifWY2ijPpuKjBNTdtlDpoFgTYYCoaHqUDUn242GXBaDEMhK+xlIbTje5CIA3gj1hTuTiBG5ApXhh9649C7/A==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
@@ -6033,7 +6033,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001481
-      electron-to-chromium: 1.4.373
+      electron-to-chromium: 1.4.374
       node-releases: 2.0.10
       update-browserslist-db: 1.0.11(browserslist@4.21.5)
     dev: true
@@ -7302,8 +7302,8 @@ packages:
       type-fest: 2.19.0
     dev: true
 
-  /electron-to-chromium@1.4.373:
-    resolution: {integrity: sha512-whGyixOVSRlyOBQDsRH9xltFaMij2/+DQRdaYahCq0P/fiVnAVGaW7OVsFnEjze/qUo298ez9C46gnALpo6ukg==}
+  /electron-to-chromium@1.4.374:
+    resolution: {integrity: sha512-dNP9tQNTrjgVlSXMqGaj0BdrCS+9pcUvy5/emB6x8kh0YwCoDZ0Z4ce1+7aod+KhybHUd5o5LgKrc5al4kVmzQ==}
     dev: true
 
   /electron-updater@5.3.0:
@@ -7322,8 +7322,8 @@ packages:
       - supports-color
     dev: true
 
-  /electron@24.1.2:
-    resolution: {integrity: sha512-V0isWbyLYiXrSCcB4lrSVhS/U56NFGfuqHyc+yEPkyhhvY+h4F85cYGdEiZlXp6XjHT+/CLHmw0ltK54g9lvDw==}
+  /electron@24.1.3:
+    resolution: {integrity: sha512-lHFRf2CgeOxPLje4BayzaLz1e/SbNejUU4NDarFjBlcYfuH4ceGevYRVjyDZJLbSGdhmM2dLraeku30LGEigCg==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
     requiresBuild: true
@@ -8161,8 +8161,8 @@ packages:
   /flatted@3.2.7:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
 
-  /flow-parser@0.204.1:
-    resolution: {integrity: sha512-PoeSF0VhSORn3hYzD/NxsQjXX1iLU0UZXzVwZXnRWjeVsedmvDo4epd7PtCQjxveGajmVlyVW35BOOOkqLqJpw==}
+  /flow-parser@0.205.0:
+    resolution: {integrity: sha512-ZJ6VuLe/BoqeI4GsF+ZuzlpfGi3FCnBrb4xDYhgEJxRt7SAj3ibRuRSsuJSRcY+lQhPZRPNbNWiQqFMxramUzw==}
     engines: {node: '>=0.4.0'}
     dev: true
 
@@ -9337,7 +9337,7 @@ packages:
       '@babel/register': 7.21.0(@babel/core@7.21.4)
       babel-core: 7.0.0-bridge.0(@babel/core@7.21.4)
       chalk: 4.1.2
-      flow-parser: 0.204.1
+      flow-parser: 0.205.0
       graceful-fs: 4.2.11
       micromatch: 4.0.5
       neo-async: 2.6.2
@@ -11228,8 +11228,8 @@ packages:
     dependencies:
       queue-microtask: 1.2.3
 
-  /rxjs@7.8.0:
-    resolution: {integrity: sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==}
+  /rxjs@7.8.1:
+    resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
     requiresBuild: true
     dependencies:
       tslib: 2.5.0
@@ -12322,7 +12322,7 @@ packages:
   /typed-emitter@2.1.0:
     resolution: {integrity: sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==}
     optionalDependencies:
-      rxjs: 7.8.0
+      rxjs: 7.8.1
     dev: true
 
   /typedarray@0.0.6:
