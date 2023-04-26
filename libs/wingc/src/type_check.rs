@@ -3298,7 +3298,7 @@ pub fn resolve_user_defined_type(
 			} else {
 				let symb = nested_name.last().unwrap();
 				Err(TypeError {
-					message: format!("Expected {} to be a type but it's a {}", symb, _type),
+					message: format!("Expected '{}' to be a type but it's a {}", symb.name, _type),
 					span: symb.span.clone(),
 				})
 			}

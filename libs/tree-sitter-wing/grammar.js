@@ -61,10 +61,10 @@ module.exports = grammar({
     _reference_identifier: ($) => alias($.identifier, $.reference_identifier),
 
     custom_type: ($) =>
-      seq(
+      prec.right(seq(
         field("object", $._type_identifier),
         repeat(seq(".", optional(field("fields", $._type_identifier))))
-      ),
+      )),
 
     nested_identifier: ($) =>
       prec(
@@ -396,13 +396,13 @@ module.exports = grammar({
       ),
 
     new_expression: ($) =>
-      seq(
+      prec.right(seq(
         "new",
         field("class", choice($.custom_type, $.mutable_container_type)),
-        field("args", $.argument_list),
+        field("args", optional($.argument_list)),
         field("id", optional($.new_object_id)),
         field("scope", optional($.new_object_scope))
-      ),
+      )),
 
     new_object_id: ($) => seq("as", $.string),
 
