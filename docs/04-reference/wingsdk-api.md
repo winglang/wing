@@ -1991,7 +1991,7 @@ retention_period: Duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* Duration.fromHours(1)
+- *Default:* undefined
 
 How long a queue retains a message.
 
@@ -2004,7 +2004,7 @@ timeout: Duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* Duration.fromSeconds(10)
+- *Default:* undefined
 
 How long a queue's consumers have to process a message.
 
