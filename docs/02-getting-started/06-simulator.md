@@ -92,7 +92,12 @@ The result of the last two function calls will be
 
 ## Congratulations! :rocket:
 
-You've just tested your cloud application through the `Simulator` class
+You've just tested your cloud application through the `Simulator` class in NodeJS.
 
+If you're done playing with the simulator, you can clean up and uninstall the SDK (Wing's CLI already has a copy of it bundled).
+
+```sh
+npm uninstall @winglang/sdk
+```
 
 [Node.js REPL]: https://nodejs.org/api/repl.html
