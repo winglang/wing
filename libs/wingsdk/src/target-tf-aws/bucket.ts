@@ -23,8 +23,8 @@ import {
 
 const EVENTS = {
   [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
-  [BucketEventType.CREATE]: ["s3:ObjectCreated:Post"],
-  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Put"],
+  [BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
+  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
 };
 
 /**
