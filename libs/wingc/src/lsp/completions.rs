@@ -3,11 +3,13 @@ use std::cmp::max;
 use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
-use crate::ast::{Expr, ExprKind, Phase, Reference, Scope};
+use crate::ast::{Expr, ExprKind, Phase, Scope};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::StatementIdx;
-use crate::type_check::{ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef};
+use crate::type_check::{
+	ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+};
 use crate::visit::{visit_expr, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -83,10 +85,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		};
 
 		if within_nested_node {
-			if let Some(nearest_reference) = scope_visitor.nearest_reference {
-				if nearest_reference.0.span.contains(&wing_location.into()) {
-					let nearest_expression_type = nearest_reference
-						.0
+			if let Some(nearest_expr) = scope_visitor.nearest_expr {
+				if node_to_complete.kind() == "." {
+					let nearest_expression_type = nearest_expr
 						.evaluated_type
 						.borrow()
 						.expect("Expressions must have a type");
@@ -104,6 +105,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					}
 				}
 			}
+
 			// check to see if we are inside a reference of some kind (the last series of non-whitespace characters contains a ., starting from the current location)
 			if let Some(sibling) = node_to_complete.prev_named_sibling().or(Some(node_to_complete)) {
 				let sibling_kind = sibling.kind();
@@ -279,7 +281,7 @@ fn get_completions_from_class(
 		.get_env()
 		.iter(true)
 		.filter_map(|symbol_data| {
-			if symbol_data.0 == "init" {
+			if symbol_data.0 == CLASS_INIT_NAME || symbol_data.0 == CLASS_INFLIGHT_INIT_NAME {
 				return None;
 			}
 			let variable = symbol_data
@@ -289,13 +291,16 @@ fn get_completions_from_class(
 			if variable.is_static == is_instance {
 				return None;
 			}
+
+			let is_function = variable.type_.as_function_sig().is_some();
+
 			if let Some(current_phase) = current_phase {
-				if !current_phase.can_call_to(&variable.phase) {
+				if is_function && !current_phase.can_call_to(&variable.phase) {
 					return None;
 				}
 			}
 
-			let kind = if variable.type_.as_function_sig().is_some() {
+			let kind = if is_function {
 				Some(CompletionItemKind::METHOD)
 			} else {
 				Some(CompletionItemKind::FIELD)
@@ -388,8 +393,8 @@ pub struct ScopeVisitor<'a> {
 	pub found_stmt_index: Option<usize>,
 	/// The scope that contains the target location
 	pub found_scope: Option<&'a Scope>,
-	/// The nearest reference before (or containing) to the target location
-	pub nearest_reference: Option<(&'a Expr, &'a Reference)>,
+	/// The nearest expression before (or containing) to the target location
+	pub nearest_expr: Option<&'a Expr>,
 }
 
 impl<'a> ScopeVisitor<'a> {
@@ -397,7 +402,7 @@ impl<'a> ScopeVisitor<'a> {
 		Self {
 			location,
 			found_stmt_index: None,
-			nearest_reference: None,
+			nearest_expr: None,
 			found_scope: None,
 		}
 	}
@@ -423,25 +428,12 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	}
 
 	fn visit_expr(&mut self, node: &'a Expr) {
-		if let ExprKind::Reference(r) = &node.kind {
-			match r {
-				Reference::Identifier(i) => {
-					if i.span < self.location {
-						self.nearest_reference = Some((node, r));
-					}
-				}
-				Reference::InstanceMember { object: _, property } => {
-					if property.span < self.location {
-						self.nearest_reference = Some((node, r));
-					}
-				}
-				Reference::TypeMember { property, .. } => {
-					if property.span < self.location {
-						self.nearest_reference = Some((node, r));
-					}
-				}
-			}
+		if node.span <= self.location {
+			self.nearest_expr = Some(node);
 		}
-		visit_expr(self, node);
+
+		if !matches!(&node.kind, ExprKind::Reference(_)) {
+			visit_expr(self, node);
+		}
 	}
 }
