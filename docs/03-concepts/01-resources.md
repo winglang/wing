@@ -27,7 +27,7 @@ The following code declares a new resource called `SafeQueue` which contains
 a queue with a dead-letter-queue associated with it:
 
 ```js
-resource SafeQueue extends cloud.Queue {
+class SafeQueue extends cloud.Queue {
   init() {
     let dlq = new cloud.Queue();
 
