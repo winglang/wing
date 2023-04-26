@@ -32,7 +32,7 @@ export interface IResource extends IInspectable, IConstruct {
   /**
    * Binds the resource to the host so that it can be used by inflight code.
    *
-   * If the resource does not support any of the operations, it should throw an
+   * If `ops` contains any operations not supported by the resource, it should throw an
    * error.
    *
    * @internal
@@ -66,8 +66,6 @@ export interface IResource extends IInspectable, IConstruct {
    */
   _preSynthesize(): void;
 }
-
-const BIND_METADATA_PREFIX = "$bindings__";
 
 /**
  * Shared behavior between all Wing SDK resources.
@@ -122,36 +120,15 @@ export abstract class Resource extends Construct implements IResource {
     }
   }
 
-  /**
-   * Annotate a class with with metadata about what operations it supports
-   * inflight, and what sub-resources each operation requires access to.
-   *
-   * For example if `MyBucket` has a `fancy_get` method that calls `get` on an
-   * underlying `cloud.Bucket`, then it would be annotated as follows:
-   * ```
-   * MyBucket._annotateInflight("fancy_get", {
-   *  "this.bucket": { ops: ["get"] }
-   * });
-   * ```
-   *
-   * The Wing compiler will automatically generate the correct annotations by
-   * scanning the source code, but in the Wing SDK we have to add them manually.
-   *
-   * @internal
-   */
-  public static _annotateInflight(op: string, annotation: OperationAnnotation) {
-    const sym = Symbol.for(BIND_METADATA_PREFIX + op);
-    Object.defineProperty(this.prototype, sym, {
-      value: annotation,
-      enumerable: false,
-      writable: false,
-    });
-  }
-
   private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
 
   /** @internal */
   public readonly _connections: Connection[] = [];
+
+  /**
+   * A list of all inflight operations that are supported by this resource.
+   */
+  private readonly inflightOps: string[] = ["$inflight_init"];
 
   /**
    * Information on how to display a resource in the UI.
@@ -167,6 +144,18 @@ export abstract class Resource extends Construct implements IResource {
    * with a fresh copy without any consequences.
    */
   public readonly stateful: boolean = false;
+
+  /**
+   * Record that this resource supports the given inflight operation.
+   *
+   * This is used to give better error messages if the compiler attempts to bind
+   * a resource with an operation that is not supported.
+   *
+   * @internal
+   */
+  public _addInflightOps(...ops: string[]) {
+    this.inflightOps.push(...ops);
+  }
 
   /**
    * Binds the resource to the host so that it can be used by inflight code.
@@ -198,64 +187,20 @@ export abstract class Resource extends Construct implements IResource {
       }) with ops: ${JSON.stringify(ops)}`
     );
 
+    for (const op of ops) {
+      if (!this.inflightOps.includes(op)) {
+        throw new Error(
+          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
+        );
+      }
+    }
+
     // Register the binding between this resource and the host
     if (!this.bindMap.has(host)) {
       this.bindMap.set(host, new Set());
     }
     for (const op of ops) {
       this.bindMap.get(host)!.add(op);
-    }
-
-    // Collect a list of all immediate child bindings
-    const resources: Record<string, string[]> = {};
-    for (const op of ops) {
-      const sym = Symbol.for(BIND_METADATA_PREFIX + op);
-      const bindAnnotation: OperationAnnotation = (this as any)[sym];
-      if (!bindAnnotation) {
-        throw new Error(
-          `Unable to reference "${this.node.path}" from "${host.node.path}" because it does not support operation "${op}"`
-        );
-      }
-      for (const resource of Object.keys(bindAnnotation)) {
-        resources[resource] = resources[resource] ?? [];
-        resources[resource].push(...bindAnnotation[resource].ops);
-      }
-    }
-
-    // this is how resources will look:
-    // resources = {
-    //   "this.bucket": [ "put", "get" ],
-    //   "this.foo.bar.baz": [ "bang" ],
-    //   "counter": [ "inc" ]
-    // };
-
-    // Register the bindings for all child resources
-    for (const field of Object.keys(resources)) {
-      if (!field.startsWith("this.")) {
-        log(`Skipped binding ${field} since it should be bound already.`);
-        continue;
-      }
-
-      const key = field.substring(5);
-
-      // traverse the object graph to find the target object we are referencing
-      const resolveReference = (obj: any, parts: string[]): any => {
-        const next = parts.shift();
-        if (!next) {
-          return obj;
-        }
-        return resolveReference(obj[next], parts);
-      };
-
-      // split the key into parts with "." as the separator
-      const obj = resolveReference(this, key.split("."));
-      if (obj === undefined) {
-        throw new Error(
-          `Resource ${this.node.path} does not have field ${key}`
-        );
-      }
-
-      this.registerBindObject(obj, host, resources[field]);
     }
   }
 
@@ -270,8 +215,10 @@ export abstract class Resource extends Construct implements IResource {
    * @param host The host to bind to
    * @param ops The set of operations that may access the object (use "?" to indicate that we don't
    * know the operation)
+   *
+   * @internal
    */
-  private registerBindObject(
+  protected _registerBindObject(
     obj: any,
     host: IResource,
     ops: string[] = []
@@ -284,7 +231,7 @@ export abstract class Resource extends Construct implements IResource {
 
       case "object":
         if (Array.isArray(obj)) {
-          obj.forEach((item) => this.registerBindObject(item, host));
+          obj.forEach((item) => this._registerBindObject(item, host));
           return;
         }
 
@@ -294,13 +241,13 @@ export abstract class Resource extends Construct implements IResource {
 
         if (obj instanceof Set) {
           return Array.from(obj).forEach((item) =>
-            this.registerBindObject(item, host)
+            this._registerBindObject(item, host)
           );
         }
 
         if (obj instanceof Map) {
           Array.from(obj.values()).forEach((item) =>
-            this.registerBindObject(item, host)
+            this._registerBindObject(item, host)
           );
           return;
         }
@@ -328,7 +275,7 @@ export abstract class Resource extends Construct implements IResource {
         // structs are just plain objects
         if (obj.constructor.name === "Object") {
           Object.values(obj).forEach((item) =>
-            this.registerBindObject(item, host, ops)
+            this._registerBindObject(item, host, ops)
           );
           return;
         }
@@ -395,9 +342,6 @@ export abstract class Resource extends Construct implements IResource {
     return serializeImmutableData(value);
   }
 }
-
-// The `init` op is a placeholder for any annotations needed for an instance of a resource's client to be instantiated
-Resource._annotateInflight("$inflight_init", {});
 
 /**
  * The direction of a connection.

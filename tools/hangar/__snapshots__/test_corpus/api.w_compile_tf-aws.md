@@ -306,6 +306,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, api) {
         super(scope, id);
+        this._addInflightOps("handle");
         this.api = api;
       }
       _toInflight() {
@@ -323,9 +324,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.api, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(this.api.url, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this.api": { ops: [] },"this.stateful": { ops: [] }});
-    Foo._annotateInflight("handle", {"this.api.url": { ops: [] }});
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {

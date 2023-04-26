@@ -63,6 +63,7 @@ class $Root extends $stdlib.std.Resource {
     class Doubler extends $stdlib.std.Resource {
       constructor(scope, id, func) {
         super(scope, id);
+        this._addInflightOps("invoke");
         this.func = func;
       }
       _toInflight() {
@@ -80,9 +81,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.func, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("invoke")) {
+          this._registerBindObject(this.func, host, ["handle"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Doubler._annotateInflight("$inflight_init", {"this.func": { ops: [] },"this.stateful": { ops: [] }});
-    Doubler._annotateInflight("invoke", {"this.func": { ops: ["handle"] }});
     const fn = new Doubler(this,"Doubler",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {

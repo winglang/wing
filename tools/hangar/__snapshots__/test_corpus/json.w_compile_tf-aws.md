@@ -73,8 +73,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this._sum_str, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this._sum_str": { ops: [] },"this.stateful": { ops: [] }});
     const json_number = 123;
     const json_bool = true;
     const json_array = [1, 2, 3];

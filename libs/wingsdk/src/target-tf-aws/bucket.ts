@@ -200,11 +200,3 @@ export class Bucket extends cloud.Bucket {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.DELETE, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.LIST, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUBLIC_URL, {});
