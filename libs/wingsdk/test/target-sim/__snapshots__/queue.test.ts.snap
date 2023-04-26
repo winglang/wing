@@ -79,10 +79,12 @@ exports[`messages are not requeued if the function fails after retention timeout
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
+  "wingsdk.sim.EventMapping created.",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -137,15 +139,21 @@ async handle(message) {
         "props": {
           "initialMessages": [],
           "retentionPeriod": 1,
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-            },
-          ],
           "timeout": 2,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -205,6 +213,23 @@ async handle(message) {
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_queue-QueueEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_queue-QueueEventMapping-e645076f",
+              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

@@ -13,7 +13,9 @@ import {
   ISimulatorResourceInstance,
 } from "../testing/simulator";
 
-export class Queue implements IQueueClient, ISimulatorResourceInstance, IEventPublisher {
+export class Queue
+  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
