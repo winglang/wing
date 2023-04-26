@@ -1253,8 +1253,8 @@ expected from a call and it is not being caught.
 Wing recommends the following formatting and naming conventions:
 
 - Interface names should start with capital letter "I"
-- Class, struct and interface names should be TitleCased
-- Members of classes and interfaces cannot share the same TitleCased
+- Class, struct, and interface names should be TitleCased
+- Members of classes, and interfaces cannot share the same TitleCased
   representation as the declaring expression itself.
 - Parentheses are optional in expressions. Any Wing expression can be surrounded
   by parentheses to enforce precedence, which implies that the expression inside
