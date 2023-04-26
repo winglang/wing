@@ -526,7 +526,7 @@ exports.Foo = Foo;
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Post"
+              "s3:ObjectCreated:Put"
             ],
             "topic_arn": "${aws_sns_topic.root_BigPublisher_b2_b2oncreate_DFA80519.arn}"
           }
