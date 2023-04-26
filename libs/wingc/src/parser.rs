@@ -32,13 +32,11 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"nil" => "see https://github.com/winglang/wing/issues/433",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
 	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
-	"inflight_closure" => "see https://github.com/winglang/wing/issues/474",
-	"pure_closure" => "see https://github.com/winglang/wing/issues/435",
+	"pure_closure" => "see https://github.com/winglang/wing/issues/474",
 	"storage_modifier" => "see https://github.com/winglang/wing/issues/107",
 	"access_modifier" => "see https://github.com/winglang/wing/issues/108",
 	"await_expression" => "see https://github.com/winglang/wing/issues/116",
 	"defer_expression" => "see https://github.com/winglang/wing/issues/116",
-	"for_in_loop" => "see https://github.com/winglang/wing/issues/118",
 	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
 
@@ -56,9 +54,11 @@ impl<'s> Parser<'s> {
 	pub fn wingit(&self, root: &Node) -> Scope {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root),
-			other => {
-				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
-			}
+			_ => Scope {
+				env: RefCell::new(None),
+				span: Default::default(),
+				statements: vec![],
+			},
 		};
 
 		self.report_unhandled_errors(&root);
@@ -327,10 +327,18 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_assignment_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		Ok(StmtKind::Assignment {
-			variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
-			value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-		})
+		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap())?;
+		if let ExprKind::Reference(r) = reference.kind {
+			Ok(StmtKind::Assignment {
+				variable: r,
+				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+			})
+		} else {
+			self.add_error(
+				"Expected a reference on the left hand side of an assignment",
+				statement_node,
+			)
+		}
 	}
 
 	fn build_struct_definition_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
@@ -827,12 +835,14 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
+	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Expr> {
 		if nested_node.has_error() {
 			return self.add_error("Syntax error", &nested_node);
 		}
+
+		let object_expr = self.get_child_field(nested_node, "object")?;
+
 		if let Some(property) = nested_node.child_by_field_name("property") {
-			let object_expr = self.get_child_field(nested_node, "object")?;
 			let object_expr = if object_expr.kind() == "json_container_type" {
 				Expr {
 					kind: ExprKind::Reference(Reference::TypeMember {
@@ -849,23 +859,42 @@ impl<'s> Parser<'s> {
 					evaluated_type: RefCell::new(None),
 				}
 			} else {
-				self.build_expression(&nested_node.child_by_field_name("object").unwrap())?
+				self.build_expression(&object_expr)?
 			};
-			Ok(Reference::InstanceMember {
-				object: Box::new(object_expr),
-				property: self.node_symbol(&property)?,
+			Ok(Expr {
+				kind: ExprKind::Reference(Reference::InstanceMember {
+					object: Box::new(object_expr),
+					property: self.node_symbol(&property)?,
+				}),
+				span: self.node_span(&nested_node),
+				evaluated_type: RefCell::new(None),
 			})
 		} else {
-			self.add_error(
+			// we are missing the last property, but we can still parse the rest of the expression
+			let err = self.add_error(
 				"Expected property",
 				&nested_node
 					.child(nested_node.child_count() - 1)
 					.expect("Nested identifier should have at least one child"),
-			)
+			);
+			if object_expr.kind() == "reference" {
+				self.build_reference(&object_expr)
+			} else {
+				err
+			}
 		}
 	}
 
 	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
+		// check if last node is a "."
+		let last_child = nested_node
+			.child(nested_node.child_count() - 1)
+			.expect("If node is a custom type, it will have at least one child");
+		if last_child.kind() == "." {
+			// even though we're missing a field, we can still parse the rest of the type
+			let _ = self.add_error::<()>("Expected namespaced type", &last_child);
+		}
+
 		let mut cursor = nested_node.walk();
 		Ok(TypeAnnotation::UserDefined(UserDefinedType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
@@ -876,13 +905,20 @@ impl<'s> Parser<'s> {
 		}))
 	}
 
-	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
+	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Expr> {
 		let actual_node = reference_node.named_child(0).unwrap();
+		let actual_node_span = self.node_span(&actual_node);
 		match actual_node.kind() {
-			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
+			"reference_identifier" => Ok(Expr {
+				kind: ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
+				span: actual_node_span,
+				evaluated_type: RefCell::new(None),
+			}),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
-			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
-			other => self.report_unimplemented_grammar(other, "type node", &actual_node),
+			"structured_access_expression" => {
+				self.report_unimplemented_grammar("structured_access_expression", "reference", &actual_node)
+			}
+			other => self.add_error(format!("Expected reference, got {other}"), &actual_node),
 		}
 	}
 
@@ -1098,14 +1134,7 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
-			"identifier" => Ok(Expr::new(
-				ExprKind::Reference(Reference::Identifier(self.node_symbol(&expression_node)?)),
-				expression_span,
-			)),
-			"nested_identifier" => Ok(Expr::new(
-				ExprKind::Reference(self.build_nested_identifier(&expression_node)?),
-				expression_span,
-			)),
+			"reference" => self.build_reference(&expression_node),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
@@ -1205,7 +1234,24 @@ impl<'s> Parser<'s> {
 				let element_node = expression_node
 					.child_by_field_name("element")
 					.expect("Should always have element");
-				let element = Box::new(self.build_expression(&element_node)?);
+
+				let named_element_child = element_node.named_child(0);
+				let exp = if element_node.kind() == "reference"
+					&& named_element_child
+						.expect("references always have a child")
+						.is_missing()
+				{
+					_ = self.add_error::<()>("Json literal must have an element", &named_element_child.unwrap());
+					Expr {
+						evaluated_type: RefCell::new(None),
+						kind: ExprKind::Literal(Literal::Number(0.0)),
+						span: self.node_span(&element_node),
+					}
+				} else {
+					self.build_expression(&element_node)?
+				};
+
+				let element = Box::new(exp);
 
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
@@ -1270,19 +1316,21 @@ impl<'s> Parser<'s> {
 	fn report_unhandled_errors(&self, root: &Node) {
 		let iter = traverse(root.walk(), Order::Pre);
 		for node in iter {
-			if !self.error_nodes.borrow().contains(&node.id()) {
+			if node.kind() == "AUTOMATIC_SEMICOLON" {
+				_ = self.add_error::<()>("Expected ';'", &node);
+			} else if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
 					if node.named_child_count() == 0 {
-						_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+						_ = self.add_error::<()>(String::from("Unknown parser error"), &node);
 					} else {
 						let mut cursor = node.walk();
 						let children = node.named_children(&mut cursor);
 						for child in children {
-							_ = self.add_error::<()>(format!("Unexpected '{}'.", child.kind()), &child);
+							_ = self.add_error::<()>(format!("Unexpected '{}'", child.kind()), &child);
 						}
 					}
 				} else if node.is_missing() {
-					_ = self.add_error::<()>(format!("'{}' expected.", node.kind()), &node);
+					_ = self.add_error::<()>(format!("Expected '{}'", node.kind()), &node);
 				}
 			}
 		}

@@ -26,40 +26,37 @@ for item in 0..(2*2) {
 
 (source
   (for_in_loop
-    iterator: (reference
-      (identifier))
-    iterable: (identifier)
+    iterator: (identifier)
+    iterable: (reference
+      (reference_identifier))
     block: (block))
   (for_in_loop
-    iterator: (reference
-      (identifier))
-    iterable: (identifier)
+    iterator: (identifier)
+    iterable: (reference
+      (reference_identifier))
     block: (block
       (break_statement)))
   (for_in_loop
-    iterator: (reference
-      (identifier))
-    iterable: (identifier)
+    iterator: (identifier)
+    iterable: (reference
+      (reference_identifier))
     block: (block
       (continue_statement)))
   (for_in_loop
-    iterator: (reference
-      (identifier))
+    iterator: (identifier)
     iterable: (loop_range
       start: (number)
       end: (number))
     block: (block))
   (for_in_loop
-    iterator: (reference
-      (identifier))
+    iterator: (identifier)
     iterable: (loop_range
       start: (number)
       inclusive: (inclusive_range)
       end: (number))
     block: (block))
   (for_in_loop
-    iterator: (reference
-      (identifier))
+    iterator: (identifier)
     iterable: (loop_range
       start: (number)
       end: (parenthesized_expression
@@ -85,8 +82,8 @@ let var y = "hello";
     type: (builtin_type)
     value: (number))
   (variable_assignment_statement
-    name: (reference
-      (identifier))
+    name: (lvalue
+      (reference_identifier))
     value: (number))
   (variable_definition_statement
     reassignable: (reassignable)
@@ -180,6 +177,7 @@ inflight (a: num, b: str?, var c: bool) => {};
 (source
   (expression_statement
     (inflight_closure
+      (inflight_specifier)
       parameter_list: (parameter_list
         (parameter_definition
           name: (identifier)
@@ -205,6 +203,7 @@ inflight (callback: (num,num):bool) => {};
 (source
   (expression_statement
     (inflight_closure
+      (inflight_specifier)
       parameter_list: (parameter_list
         (parameter_definition
           name: (identifier)
@@ -239,7 +238,7 @@ struct Test extends Foo {
   (struct_definition
     name: (identifier)
     extends: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     field: (struct_field
       name: (identifier)
       type: (builtin_type))

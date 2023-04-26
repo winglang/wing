@@ -24,6 +24,8 @@ module.exports = grammar({
 
   word: ($) => $.identifier,
 
+  externals: ($) => [$.AUTOMATIC_SEMICOLON],
+
   precedences: ($) => [
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
@@ -31,9 +33,7 @@ module.exports = grammar({
     [$.json_literal, $.structured_access_expression],
   ],
 
-  conflicts: ($) => [
-    [$.expression, $.custom_type]
-  ],
+  conflicts: ($) => [[$._reference_identifier, $._type_identifier]],
 
   supertypes: ($) => [$.expression, $._literal],
 
@@ -41,27 +41,37 @@ module.exports = grammar({
     // Basics
     source: ($) => repeat($._statement),
     block: ($) => seq("{", optional(repeat($._statement)), "}"),
+    _semicolon: ($) => choice(";", $.AUTOMATIC_SEMICOLON),
     comment: ($) =>
       token(
         choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
       ),
 
     // Identifiers
-    reference: ($) => choice($.nested_identifier, $.identifier),
+    reference: ($) =>
+      choice(
+        $.nested_identifier,
+        $._reference_identifier,
+        $.structured_access_expression
+      ),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
+    _type_identifier: ($) => alias($.identifier, $.type_identifier),
+    _member_identifier: ($) => alias($.identifier, $.member_identifier),
+    _reference_identifier: ($) => alias($.identifier, $.reference_identifier),
 
     custom_type: ($) =>
       seq(
-        field("object", $.identifier),
-        repeat(seq(".", field("fields", $.identifier)))
+        field("object", $._type_identifier),
+        repeat(seq(".", optional(field("fields", $._type_identifier))))
       ),
 
     nested_identifier: ($) =>
       prec(
         PREC.MEMBER,
         seq(
-          field("object",
+          field(
+            "object",
             choice(
               $.expression,
               // This is required because of ambiguity with using Json keyword for both instantiation of Json
@@ -70,11 +80,11 @@ module.exports = grammar({
             )
           ),
           choice(".", "?."),
-          optional(field("property", $.identifier))
+          optional(field("property", $._member_identifier))
         )
       ),
 
-    _inflight_specifier: ($) => "inflight",
+    inflight_specifier: ($) => "inflight",
 
     _statement: ($) =>
       choice(
@@ -101,7 +111,7 @@ module.exports = grammar({
         "bring",
         field("module_name", choice($.identifier, $.string)),
         optional(seq("as", field("alias", $.identifier))),
-        ";"
+        $._semicolon
       ),
 
     struct_definition: ($) =>
@@ -114,7 +124,7 @@ module.exports = grammar({
         "}"
       ),
     struct_field: ($) =>
-      seq(field("name", $.identifier), $._type_annotation, ";"),
+      seq(field("name", $.identifier), $._type_annotation, $._semicolon),
 
     enum_definition: ($) =>
       seq(
@@ -126,12 +136,17 @@ module.exports = grammar({
       ),
 
     return_statement: ($) =>
-      seq("return", optional(field("expression", $.expression)), ";"),
+      seq("return", optional(field("expression", $.expression)), $._semicolon),
 
     variable_assignment_statement: ($) =>
-      seq(field("name", $.reference), "=", field("value", $.expression), ";"),
+      seq(
+        field("name", alias($.reference, $.lvalue)),
+        "=",
+        field("value", $.expression),
+        $._semicolon
+      ),
 
-    expression_statement: ($) => seq($.expression, ";"),
+    expression_statement: ($) => seq($.expression, $._semicolon),
 
     reassignable: ($) => "var",
 
@@ -145,7 +160,7 @@ module.exports = grammar({
         optional($._type_annotation),
         "=",
         field("value", $.expression),
-        ";"
+        $._semicolon
       ),
 
     _type_annotation: ($) => seq(":", field("type", $._type)),
@@ -176,12 +191,12 @@ module.exports = grammar({
       seq(
         optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
-        optional(field("phase_modifier", $._inflight_specifier)),
+        optional(field("phase_modifier", $.inflight_specifier)),
         optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         $._type_annotation,
         optional(seq("=", field("initializer", $.expression))),
-        ";"
+        $._semicolon
       ),
 
     resource_definition: ($) =>
@@ -217,11 +232,7 @@ module.exports = grammar({
       seq(
         "{",
         repeat(
-          choice(
-            $.method_signature,
-            $.inflight_method_signature,
-            $.class_field,
-          )
+          choice($.method_signature, $.inflight_method_signature, $.class_field)
         ),
         "}"
       ),
@@ -239,7 +250,7 @@ module.exports = grammar({
     for_in_loop: ($) =>
       seq(
         "for",
-        field("iterator", $.reference),
+        field("iterator", $.identifier),
         "in",
         field("iterable", choice($.expression, $.loop_range)),
         field("block", $.block)
@@ -248,9 +259,9 @@ module.exports = grammar({
     while_statement: ($) =>
       seq("while", field("condition", $.expression), field("block", $.block)),
 
-    break_statement: ($) => seq("break", ";"),
+    break_statement: ($) => seq("break", $._semicolon),
 
-    continue_statement: ($) => seq("continue", ";"),
+    continue_statement: ($) => seq("continue", $._semicolon),
 
     if_statement: ($) =>
       seq(
@@ -284,8 +295,7 @@ module.exports = grammar({
         $.unary_expression,
         $.new_expression,
         $._literal,
-        $.identifier,
-        $.nested_identifier,
+        $.reference,
         $.call,
         $.preflight_closure,
         $.inflight_closure,
@@ -293,7 +303,6 @@ module.exports = grammar({
         $.defer_expression,
         $._collection_literal,
         $.parenthesized_expression,
-        $.structured_access_expression,
         $.json_literal,
         $.struct_literal,
         $.optional_test
@@ -342,7 +351,16 @@ module.exports = grammar({
         )
       ),
 
-    optional_test: ($) => prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
+    optional_test: ($) =>
+      prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
+
+    _callable_expression: ($) =>
+      choice(
+        $.nested_identifier,
+        $.identifier,
+        $.call,
+        $.parenthesized_expression
+      ),
 
     call: ($) =>
       prec.left(
@@ -405,7 +423,7 @@ module.exports = grammar({
     function_type: ($) =>
       prec.right(
         seq(
-          optional(field("inflight", $._inflight_specifier)),
+          optional(field("inflight", $.inflight_specifier)),
           field("parameter_types", $.parameter_type_list),
           optional(seq(":", field("return_type", $._type)))
         )
@@ -418,7 +436,7 @@ module.exports = grammar({
 
     initializer: ($) =>
       seq(
-        optional(field("inflight", $._inflight_specifier)),
+        optional(field("inflight", $.inflight_specifier)),
         "init",
         field("parameter_list", $.parameter_list),
         field("block", $.block)
@@ -434,7 +452,7 @@ module.exports = grammar({
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
-        ";"
+        $._semicolon
       ),
 
     method_definition: ($) =>
@@ -446,16 +464,16 @@ module.exports = grammar({
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
-        choice(field("block", $.block), ";")
+        choice(field("block", $.block), $._semicolon)
       ),
 
     inflight_method_signature: ($) =>
       seq(
-        field("phase_modifier", $._inflight_specifier),
+        field("phase_modifier", $.inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
-        ";"
+        $._semicolon
       ),
 
     inflight_method_definition: ($) =>
@@ -463,11 +481,11 @@ module.exports = grammar({
         optional(field("extern_modifier", $.extern_modifier)),
         optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
-        field("phase_modifier", $._inflight_specifier),
+        field("phase_modifier", $.inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
-        choice(field("block", $.block), ";")
+        choice(field("block", $.block), $._semicolon)
       ),
 
     async_modifier: ($) => "async",
@@ -573,7 +591,7 @@ module.exports = grammar({
 
     inflight_closure: ($) =>
       seq(
-        "inflight",
+        $.inflight_specifier,
         field("parameter_list", $.parameter_list),
         optional($._return_type),
         "=>",
@@ -622,10 +640,7 @@ module.exports = grammar({
       prec.right(seq($.expression, "[", $.expression, "]")),
 
     json_literal: ($) =>
-      seq(
-        field("type", $.json_container_type),
-        field("element", $.expression)
-      ),
+      seq(field("type", $.json_container_type), field("element", $.expression)),
 
     json_container_type: ($) => $._json_types,
 

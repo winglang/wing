@@ -20,7 +20,14 @@
   },
   "scripts": {
     "test": "npx tree-sitter-cli test",
-    "test:update": "npx tree-sitter-cli test --update"
+    "test:update": "npx tree-sitter-cli test --update",
+    "test:watch": "npx nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run test\"",
+    "build": "npx tree-sitter-cli generate",
+    "build:watch": "npx nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run build\"",
+    "build:wasm": "npm run build && npx tree-sitter-cli build-wasm --docker",
+    "playground": "npm run build:wasm && npx tree-sitter-cli playground",
+    "playground:quiet": "npm run build:wasm && npx tree-sitter-cli playground -q",
+    "playground:watch": "npx nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run playground:quiet\""
   },
   "volta": {
     "node": "18.12.1",

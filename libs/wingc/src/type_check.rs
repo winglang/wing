@@ -160,7 +160,7 @@ pub enum Type {
 	Enum(Enum),
 }
 
-const CLASS_INIT_NAME: &'static str = "init";
+pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 #[derive(Derivative)]
@@ -2075,7 +2075,7 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						self.stmt_error(
 							stmt,
-							"Return statement outside of function cannot return a value.".to_string(),
+							"Return statement outside of function cannot return a value".to_string(),
 						);
 					}
 				} else {
