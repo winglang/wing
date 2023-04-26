@@ -2304,7 +2304,7 @@ This includes functions, classes, structs and interfaces.
 In inflight, the above excluding preflight classes are importable.
 Variables are not exportable.
 
-Preflight classes are not usable in inflight functions. There is no synthesizer inside
+Preflight classes cannot be instantiated in inflight functions. There is no synthesizer inside
 and no deployment system in the inflight body to provision.
 
 "Bringing" other Wing files currently ignores exports, but bringing JSII modules
