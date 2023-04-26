@@ -282,6 +282,7 @@ class $Root extends $stdlib.std.Resource {
     class Fetch extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push("get");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
@@ -296,9 +297,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("get")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Fetch._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
-    Fetch._annotateInflight("get", {});
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),

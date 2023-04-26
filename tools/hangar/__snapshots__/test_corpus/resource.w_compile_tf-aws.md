@@ -765,6 +765,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push("foo_inc", "foo_get");
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       _toInflight() {
@@ -782,13 +783,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.c, host, ["dec", "inc"]);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("foo_get")) {
+          this._registerBindObject(this.c, host, ["peek"]);
+        }
+        if (ops.includes("foo_inc")) {
+          this._registerBindObject(this.c, host, ["inc"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this.c": { ops: ["dec","inc"] },"this.stateful": { ops: [] }});
-    Foo._annotateInflight("foo_get", {"this.c": { ops: ["peek"] }});
-    Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
     class Bar extends $stdlib.std.Resource {
       constructor(scope, id, name, b) {
         super(scope, id);
+        this._inflightOps.push("my_method");
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
@@ -812,12 +824,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.b, host, []);
+          this._registerBindObject(this.foo, host, []);
+          this._registerBindObject(this.name, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("my_method")) {
+          this._registerBindObject(this.b, host, ["get", "put"]);
+          this._registerBindObject(this.foo, host, ["foo_get", "foo_inc"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Bar._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] },"this.stateful": { ops: [] }});
-    Bar._annotateInflight("my_method", {"this.b": { ops: ["get","put"] },"this.foo": { ops: ["foo_get","foo_inc"] }});
     class BigPublisher extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push("publish", "getObjectCount");
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b2");
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
@@ -874,10 +898,25 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.b, host, []);
+          this._registerBindObject(this.b2, host, []);
+          this._registerBindObject(this.q, host, []);
+          this._registerBindObject(this.stateful, host, []);
+          this._registerBindObject(this.t, host, []);
+        }
+        if (ops.includes("getObjectCount")) {
+          this._registerBindObject(this.b, host, ["list"]);
+        }
+        if (ops.includes("publish")) {
+          this._registerBindObject(this.b2, host, ["put"]);
+          this._registerBindObject(this.q, host, ["push"]);
+          this._registerBindObject(this.t, host, ["publish"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    BigPublisher._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.b2": { ops: [] },"this.q": { ops: [] },"this.stateful": { ops: [] },"this.t": { ops: [] }});
-    BigPublisher._annotateInflight("getObjectCount", {"this.b": { ops: ["list"] }});
-    BigPublisher._annotateInflight("publish", {"this.b2": { ops: ["put"] },"this.q": { ops: ["push"] },"this.t": { ops: ["publish"] }});
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket);
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight4", {

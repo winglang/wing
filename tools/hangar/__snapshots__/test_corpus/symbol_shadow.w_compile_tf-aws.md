@@ -339,6 +339,7 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._inflightOps.push();
         const s = "in_resource";
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
         this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inflight in resource should capture the right scoped var",new $stdlib.core.Inflight(this, "$Inflight1", {
@@ -365,8 +366,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    A._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
     const s = "top";
     if (true) {
       const s = "inner";
