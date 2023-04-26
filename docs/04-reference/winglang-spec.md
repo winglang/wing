@@ -1878,8 +1878,8 @@ let <name>[: <type>] = new <Type>(<args>) [as <id>] [in <scope>];
 // Wing Code:
 let a = Foo(); // with default scope and id
 let a = Foo() in scope; // with user-defined scope
-let a = Foo() as "custom-id" in scope; // with user-defined scope and id
-let a = Foo(...) as "custom-id2" in scope; // with constructor arguments
+let a = new Foo() as "custom-id" in scope; // with user-defined scope and id
+let a = new Foo(...) as "custom-id2" in scope; // with constructor arguments
 ```
 
 "id" must be of type string. It can also be a string literal with substitution
