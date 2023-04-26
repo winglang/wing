@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.13.31
-        version: 0.13.31(constructs@10.2.7)
+        specifier: ^0.13.32
+        version: 0.13.32(constructs@10.2.7)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.13.31
-        version: 0.13.31(constructs@10.2.7)
+        specifier: ^0.13.32
+        version: 0.13.32(constructs@10.2.7)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -4610,7 +4610,7 @@ packages:
       '@babel/types': 7.21.4
       '@types/babel__generator': 7.6.4
       '@types/babel__template': 7.4.1
-      '@types/babel__traverse': 7.18.4
+      '@types/babel__traverse': 7.18.5
     dev: true
 
   /@types/babel__generator@7.6.4:
@@ -4626,8 +4626,8 @@ packages:
       '@babel/types': 7.21.4
     dev: true
 
-  /@types/babel__traverse@7.18.4:
-    resolution: {integrity: sha512-TLG7CsGZZmX9aDF78UuJxnNTfQyRUFU0OYIVyIblr0/wd/HvsIo8wmuB90CszeD2MtLLAE9Tt4cWvk+KVkyGIw==}
+  /@types/babel__traverse@7.18.5:
+    resolution: {integrity: sha512-enCvTL8m/EHS/zIvJno9nE+ndYPh1/oNFzRYRmtUqJICG2VnCSBzMLW5VN2KCQU91f23tsNKR8v7VJJQMatl7Q==}
     dependencies:
       '@babel/types': 7.21.4
     dev: true
@@ -5316,8 +5316,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.13.31(constructs@10.2.7):
-    resolution: {integrity: sha512-mVytvQpN0dd6aQFbZ/WulFfN85ECH1MdbZ3U0fxvfNSWQGNrKxDFLel3R1bXopkeX127VIswQ8RAugYCXi0rCA==}
+  /@winglang/sdk@0.13.32(constructs@10.2.7):
+    resolution: {integrity: sha512-uMpfEw/GVsgOsJT0JqlQF9IxMq/mbXee9fxO38oIugJ18COy7+D9qnnFElEAkI3HQURVXKNvI16NBLfWru4FwA==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
