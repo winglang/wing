@@ -556,7 +556,11 @@ impl<'s> Parser<'s> {
 				(other, _) => {
 					panic!(
 						"Unexpected {} element node type {} || {:#?}",
-						if is_resource { "resource" } else { "class" },
+						if is_resource {
+							"preflight class"
+						} else {
+							"inflight class"
+						},
 						other,
 						class_element
 					);
@@ -567,7 +571,11 @@ impl<'s> Parser<'s> {
 			self.add_error::<Node>(
 				format!(
 					"No constructor defined in {} {:?}",
-					if is_resource { "resource" } else { "class" },
+					if is_resource {
+						"preflight class"
+					} else {
+						"inflight class"
+					},
 					statement_node
 				),
 				&statement_node,
