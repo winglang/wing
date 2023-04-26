@@ -70,7 +70,6 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps();
         {console.log(`my id is ${this.node.id}`)};
       }
       _toInflight() {

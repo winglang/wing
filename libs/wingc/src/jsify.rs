@@ -1068,11 +1068,13 @@ impl<'a> JSifier<'a> {
 			code.line("super(scope, id);");
 		}
 
-		let inflight_ops_string = inflight_methods
-			.iter()
-			.map(|(name, _)| format!("\"{}\"", name.name))
-			.join(", ");
-		code.line(format!("this._addInflightOps({inflight_ops_string});"));
+		if inflight_methods.len() > 0 {
+			let inflight_ops_string = inflight_methods
+				.iter()
+				.map(|(name, _)| format!("\"{}\"", name.name))
+				.join(", ");
+			code.line(format!("this._addInflightOps({inflight_ops_string});"));
+		}
 
 		code.add_code(self.jsify_scope_body(
 			&constructor.statements,

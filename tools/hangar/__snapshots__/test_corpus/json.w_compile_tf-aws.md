@@ -56,7 +56,6 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps();
         this._sum_str = "wow!";
       }
       _toInflight() {
