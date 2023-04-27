@@ -23,7 +23,8 @@
     },
     "test": {
       "options": {
-        "command": "npm run test"
+        "command": "npm run test",
+        "cwd": "apps/wing"
       }
     },
     "package": {
