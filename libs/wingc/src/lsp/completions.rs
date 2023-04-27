@@ -352,7 +352,14 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(if t.as_resource().is_some() { "resource" } else { "class" }.to_string()),
+			detail: Some(
+				if t.as_resource().is_some() {
+					"preflight class"
+				} else {
+					"inflight class"
+				}
+				.to_string(),
+			),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {

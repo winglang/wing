@@ -162,7 +162,7 @@ error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\"
 `;
 
 exports[`construction.w > stderr 1`] = `
-"error: Cannot instantiate type \\"BucketProps\\" because it is not a class or resource
+"error: Cannot instantiate type \\"BucketProps\\" because it is not a class
 
 "
 `;
@@ -351,42 +351,42 @@ exports[`immutable_container_types.w > stderr 1`] = `
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
-  --> ../../../examples/tests/invalid/impl_interface.w:3:10
+"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+  --> ../../../examples/tests/invalid/impl_interface.w:3:7
   |
-3 | resource A impl cloud.IQueueAddConsumerHandler {
-  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+3 | class A impl cloud.IQueueAddConsumerHandler {
+  |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
 
 
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
-  --> ../../../examples/tests/invalid/impl_interface.w:8:10
+  --> ../../../examples/tests/invalid/impl_interface.w:8:7
   |
-8 | resource B impl cloud.IQueueAddConsumerHandler {
-  |          ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
+8 | class B impl cloud.IQueueAddConsumerHandler {
+  |       ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
 
 
 error: Expected an interface, instead found type \\"Bucket\\"
 
 
-error: Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+error: Class \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:7
    |
-33 | resource r impl I3 {
-   |          ^ Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+33 | class r impl I3 {
+   |       ^ Class \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
 
 
-error: Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+error: Class \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:7
    |
-33 | resource r impl I3 {
-   |          ^ Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+33 | class r impl I3 {
+   |       ^ Class \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
 
 
-error: Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+error: Class \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:7
    |
-33 | resource r impl I3 {
-   |          ^ Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
+33 | class r impl I3 {
+   |       ^ Class \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
 
 "
 `;
@@ -860,7 +860,7 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 `;
 
 exports[`resource_inflight.w > stderr 1`] = `
-"error: Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
+"error: Cannot create preflight class \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
 
 "
 `;
@@ -904,14 +904,14 @@ exports[`sorted_errors_no_span.w > stderr 1`] = `
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17
+error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26) to be a type but it's a variable
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
-3 | class c extends b {
-  |                 ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
+3 | inflight class c extends b {
+  |                          ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26) to be a type but it's a variable
 
 
-error: Class c (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:7)'s parent \\"any\\" is not a class
+error: Inflight class c (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:16)'s parent \\"any\\" is not a class
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -921,14 +921,14 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17
+error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:26) to be a type but it's a variable
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:7:26
   |
-7 | class e extends b {
-  |                 ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable
+7 | inflight class e extends b {
+  |                          ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:26) to be a type but it's a variable
 
 
-error: Class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:7)'s parent \\"any\\" is not a class
+error: Inflight class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:16)'s parent \\"any\\" is not a class
 
 "
 `;

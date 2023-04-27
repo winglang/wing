@@ -2,7 +2,7 @@
 Class definition
 ================================================================================
 
-class A {
+inflight class A {
     init() {}
     inflight do_something() {}
     a_member: str;
@@ -16,6 +16,7 @@ class A {
 
 (source
   (class_definition
+    (inflight_specifier)
     name: (identifier)
     implementation: (class_implementation
       (initializer
@@ -52,12 +53,13 @@ class A {
 Class inheritance
 ================================================================================
 
-class A extends B {}
+inflight class A extends B {}
 
 --------------------------------------------------------------------------------
 
 (source
   (class_definition
+    (inflight_specifier)
     name: (identifier)
     parent: (custom_type
       object: (type_identifier))
@@ -67,7 +69,7 @@ class A extends B {}
 Resource definition
 ================================================================================
 
-resource A {
+class A {
     init() {}
     inflight init() {}
     preflight_func() {}
@@ -147,10 +149,10 @@ resource A {
         block: (block)))))
 
 ================================================================================
-Resource inheritance
+Preflight class inheritance
 ================================================================================
 
-resource A extends B impl C, D {}
+class A extends B impl C, D {}
 
 --------------------------------------------------------------------------------
 

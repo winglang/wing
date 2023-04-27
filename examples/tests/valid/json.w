@@ -32,7 +32,7 @@ let get_str = (): str => {
 let jj3 = Json get_str();
 assert(jj3 == Json "hello");
 
-resource Foo {
+class Foo {
   _sum_str: str;
   init() {
     this._sum_str = "wow!";
