@@ -29,8 +29,7 @@ export abstract class Website extends Resource {
 
   public readonly stateful = false;
   private readonly _path: string;
-  /**@internal */
-  protected _url!: string;
+
   /** @internal */
   protected _domain?: string;
 
@@ -55,16 +54,14 @@ export abstract class Website extends Resource {
   /**
    * Absolute local path to the website's static files.
    */
-  get path(): string {
+  public get path(): string {
     return this._path;
   }
 
   /**
    * The website's url.
    */
-  get url(): string {
-    return this._url;
-  }
+  public abstract get url(): string;
 
   /**
    * Add a JSON file with custom values during the website's deployment.
@@ -72,7 +69,7 @@ export abstract class Website extends Resource {
    * @param path the file path it will be uploaded as
    * @param data the data to write to the file
    */
-  abstract addJson(path: string, obj: Json): string;
+  public abstract addJson(path: string, obj: Json): string;
 }
 /**
  * website props

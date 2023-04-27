@@ -22,6 +22,7 @@ const INDEX_FILE = "index.html";
  */
 export class Website extends cloud.Website {
   private readonly bucket: S3Bucket;
+  private readonly _url: string;
 
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
@@ -71,6 +72,10 @@ export class Website extends cloud.Website {
     });
 
     this._url = distribution.domainName;
+  }
+
+  public get url(): string {
+    return this._url;
   }
 
   public addJson(path: string, obj: Json): string {
