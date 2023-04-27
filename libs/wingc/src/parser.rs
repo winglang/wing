@@ -1006,7 +1006,7 @@ impl<'s> Parser<'s> {
 			"new_expression" => {
 				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap())?;
 
-				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
+				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node)
 				} else {
 					Ok(ArgList::new())
