@@ -61,10 +61,11 @@ module.exports = grammar({
     _reference_identifier: ($) => alias($.identifier, $.reference_identifier),
 
     custom_type: ($) =>
-      seq(
+      prec.right(seq(
         field("object", $._type_identifier),
+        // While the final "fields" identifier is optional in this grammar, upstream parsing will fail if it is not present
         repeat(seq(".", optional(field("fields", $._type_identifier))))
-      ),
+      )),
 
     nested_identifier: ($) =>
       prec(
@@ -80,6 +81,7 @@ module.exports = grammar({
             )
           ),
           choice(".", "?."),
+          // While the "property" identifier is optional in this grammar, upstream parsing will fail if it is not present
           optional(field("property", $._member_identifier))
         )
       ),
@@ -397,13 +399,14 @@ module.exports = grammar({
       ),
 
     new_expression: ($) =>
-      seq(
+      prec.right(seq(
         "new",
         field("class", choice($.custom_type, $.mutable_container_type)),
-        field("args", $.argument_list),
+        // While "args" is optional in this grammar, upstream parsing will fail if it is not present
+        field("args", optional($.argument_list)),
         field("id", optional($.new_object_id)),
         field("scope", optional($.new_object_scope))
-      ),
+      )),
 
     new_object_id: ($) => seq("as", $.string),
 
