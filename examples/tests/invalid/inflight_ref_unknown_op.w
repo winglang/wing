@@ -1,6 +1,6 @@
 bring cloud;
 
-resource Test {
+class Test {
   b: cloud.Bucket;
 
   init() {

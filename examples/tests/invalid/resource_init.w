@@ -1,4 +1,4 @@
-resource R {
+class R {
   init() {}
   init() {}
 //^-- can't have multiple inits

@@ -1,6 +1,6 @@
 bring cloud;
 
-resource Foo {
+class Foo {
   extern "./external_js.js" static get_greeting(name: str): str;
   extern "./external_js.js" static inflight regex_inflight(pattern: str, text: str): bool;
   extern "./external_js.js" static inflight get_uuid(): str;
