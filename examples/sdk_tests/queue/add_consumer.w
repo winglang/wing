@@ -5,10 +5,9 @@ let c = new cloud.Counter();
 
 resource JSHelper {
   init(){}
-  extern "helper.js" inflight sleep(milli: num);
+  extern "./helper.js" inflight sleep(milli: num);
 }
 
-// TODO: wont work without: https://github.com/winglang/wing/issues/1384
 q.add_consumer(inflight () => {
   c.inc();
 });

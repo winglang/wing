@@ -4,12 +4,12 @@ let q = new cloud.Queue(cloud.QueueProps{timeout: 1s});
 
 resource JSHelper {
   init() {}
-  extern "helper.js" inflight sleep(milli: num);
+  extern "./helper.js" inflight sleep(milli: num);
 }
 
 let js = new JSHelper();
 
-q.on_message(inflight () => {
+q.add_consumer(inflight () => {
   js.sleep(2000);
 });
 

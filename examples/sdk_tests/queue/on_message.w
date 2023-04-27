@@ -18,7 +18,7 @@ resource Predicate {
 
 resource TestHelper {
   init(){}
-  extern "helper.js" static inflight sleep(milli: num);
+  extern "./helper.js" static inflight sleep(milli: num);
   
   /** 
    * test predicate every 100 miliseconds until a minute passes
@@ -37,7 +37,7 @@ resource TestHelper {
   }
 }
 
-q.on_message(inflight (msg: str): str => {
+q.add_consumer(inflight (msg: str): str => {
   c.inc();
 });
 
