@@ -129,13 +129,3 @@ export class Redis extends redis.Redis {
     return `REDIS_CLUSTER_ID_${this.node.addr.slice(-8)}`;
   }
 }
-
-Redis._annotateInflight("raw_client", {});
-Redis._annotateInflight("url", {});
-Redis._annotateInflight("get", {});
-Redis._annotateInflight("set", {});
-Redis._annotateInflight("hset", {});
-Redis._annotateInflight("hget", {});
-Redis._annotateInflight("sadd", {});
-Redis._annotateInflight("smembers", {});
-Redis._annotateInflight("del", {});

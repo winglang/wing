@@ -81,8 +81,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.f1, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    R._annotateInflight("$inflight_init", {"this.f1": { ops: [] },"this.stateful": { ops: [] }});
     let x = 5;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 5)'`)})((x === 5))};
     x = (x + 1);
