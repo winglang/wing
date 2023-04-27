@@ -2,7 +2,7 @@ use crate::ast::{
 	ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
 	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-	UserDefinedType,
+	TypeAnnotationKind, UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -413,27 +413,29 @@ pub fn fold_type_annotation<F>(f: &mut F, node: TypeAnnotation) -> TypeAnnotatio
 where
 	F: Fold + ?Sized,
 {
-	match node {
-		TypeAnnotation::Number => TypeAnnotation::Number,
-		TypeAnnotation::String => TypeAnnotation::String,
-		TypeAnnotation::Bool => TypeAnnotation::Bool,
-		TypeAnnotation::Duration => TypeAnnotation::Duration,
-		TypeAnnotation::Json => TypeAnnotation::Json,
-		TypeAnnotation::MutJson => TypeAnnotation::MutJson,
-		TypeAnnotation::Optional(t) => TypeAnnotation::Optional(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::Array(t) => TypeAnnotation::Array(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::MutArray(t) => TypeAnnotation::MutArray(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::Map(t) => TypeAnnotation::Map(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::MutMap(t) => TypeAnnotation::MutMap(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::Set(t) => TypeAnnotation::Set(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::MutSet(t) => TypeAnnotation::MutSet(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotation::Function(t) => TypeAnnotation::Function(FunctionTypeAnnotation {
+	let kind = match node.kind {
+		TypeAnnotationKind::Number => TypeAnnotationKind::Number,
+		TypeAnnotationKind::String => TypeAnnotationKind::String,
+		TypeAnnotationKind::Bool => TypeAnnotationKind::Bool,
+		TypeAnnotationKind::Duration => TypeAnnotationKind::Duration,
+		TypeAnnotationKind::Json => TypeAnnotationKind::Json,
+		TypeAnnotationKind::MutJson => TypeAnnotationKind::MutJson,
+		TypeAnnotationKind::Optional(t) => TypeAnnotationKind::Optional(Box::new(f.fold_type_annotation(*t))),
+		TypeAnnotationKind::Array(t) => TypeAnnotationKind::Array(Box::new(f.fold_type_annotation(*t))),
+		TypeAnnotationKind::MutArray(t) => TypeAnnotationKind::MutArray(Box::new(f.fold_type_annotation(*t))),
+		TypeAnnotationKind::Map(t) => TypeAnnotationKind::Map(Box::new(f.fold_type_annotation(*t))),
+		TypeAnnotationKind::MutMap(t) => TypeAnnotationKind::MutMap(Box::new(f.fold_type_annotation(*t))),
+		TypeAnnotationKind::Set(t) => TypeAnnotationKind::Set(Box::new(f.fold_type_annotation(*t))),
+		TypeAnnotationKind::MutSet(t) => TypeAnnotationKind::MutSet(Box::new(f.fold_type_annotation(*t))),
+		TypeAnnotationKind::Function(t) => TypeAnnotationKind::Function(FunctionTypeAnnotation {
 			param_types: t.param_types.into_iter().map(|t| f.fold_type_annotation(t)).collect(),
 			return_type: t.return_type.map(|t| Box::new(f.fold_type_annotation(*t))),
 			phase: t.phase,
 		}),
-		TypeAnnotation::UserDefined(t) => TypeAnnotation::UserDefined(f.fold_user_defined_type(t)),
-	}
+		TypeAnnotationKind::UserDefined(t) => TypeAnnotationKind::UserDefined(f.fold_user_defined_type(t)),
+	};
+
+	TypeAnnotation { kind, span: node.span }
 }
 
 pub fn fold_user_defined_type<F>(f: &mut F, node: UserDefinedType) -> UserDefinedType
