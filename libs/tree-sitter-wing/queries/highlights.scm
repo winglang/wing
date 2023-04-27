@@ -1,9 +1,3 @@
-; Variables
-
-((nested_identifier) @variable)
-((nested_identifier property: (identifier) @property) . ) 
-
-
 ; Classes
 
 (custom_type) @type
@@ -24,10 +18,13 @@
 
 (keyword_argument_key) @variable.parameter
 (call 
-  caller: (identifier) @function.method
+  caller: (reference 
+  	(nested_identifier 
+    	property: (member_identifier) @function.method)) 
 )
 (call 
-  caller: (nested_identifier) @function.method
+  caller: (reference 
+  	(reference_identifier) @function.method)
 )
 
 ; Primitives
@@ -86,8 +83,12 @@
   "if"
   "in"
   "init"
-  "inflight"
   "let"
   "new"
   "return"
+  (inflight_specifier)
 ] @keyword
+
+(identifier) @variable
+(reference_identifier) @variable
+(member_identifier) @property

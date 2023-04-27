@@ -78,6 +78,3 @@ export class Secret extends cloud.Secret {
     return `SECRET_ARN_${this.node.addr.slice(-8)}`;
   }
 }
-
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE, {});
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE_JSON, {});

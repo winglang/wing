@@ -313,7 +313,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessagea754ef69_IamRole_3DE070D7.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_BigPublisher_b2_b2oncreateOnMessagea754ef69_S3Object_06566844.key}",
         "timeout": 30,
@@ -344,7 +344,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerc351460f_IamRole_74516E60.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_BigPublisher_cloudQueueAddConsumerc351460f_S3Object_626A0CF8.key}",
         "timeout": 30,
@@ -375,7 +375,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessagecb235724_IamRole_E95E92A5.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_BigPublisher_cloudTopicOnMessagecb235724_S3Object_100A1F10.key}",
         "timeout": 30,
@@ -403,7 +403,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
@@ -434,7 +434,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_testdependencycycles_IamRole_35624E89.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testdependencycycles_S3Object_8DA21812.key}",
         "timeout": 30,
@@ -526,7 +526,7 @@ exports.Foo = Foo;
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Post"
+              "s3:ObjectCreated:Put"
             ],
             "topic_arn": "${aws_sns_topic.root_BigPublisher_b2_b2oncreate_DFA80519.arn}"
           }
@@ -765,6 +765,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("foo_inc", "foo_get");
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       _toInflight() {
@@ -782,13 +783,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.c, host, ["dec", "inc"]);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("foo_get")) {
+          this._registerBindObject(this.c, host, ["peek"]);
+        }
+        if (ops.includes("foo_inc")) {
+          this._registerBindObject(this.c, host, ["inc"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this.c": { ops: ["dec","inc"] },"this.stateful": { ops: [] }});
-    Foo._annotateInflight("foo_get", {"this.c": { ops: ["peek"] }});
-    Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
     class Bar extends $stdlib.std.Resource {
       constructor(scope, id, name, b) {
         super(scope, id);
+        this._addInflightOps("my_method");
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
@@ -812,12 +824,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.b, host, []);
+          this._registerBindObject(this.foo, host, []);
+          this._registerBindObject(this.name, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("my_method")) {
+          this._registerBindObject(this.b, host, ["get", "put"]);
+          this._registerBindObject(this.foo, host, ["foo_get", "foo_inc"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Bar._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] },"this.stateful": { ops: [] }});
-    Bar._annotateInflight("my_method", {"this.b": { ops: ["get","put"] },"this.foo": { ops: ["foo_get","foo_inc"] }});
     class BigPublisher extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("publish", "getObjectCount");
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b2");
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
@@ -874,10 +898,25 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.b, host, []);
+          this._registerBindObject(this.b2, host, []);
+          this._registerBindObject(this.q, host, []);
+          this._registerBindObject(this.stateful, host, []);
+          this._registerBindObject(this.t, host, []);
+        }
+        if (ops.includes("getObjectCount")) {
+          this._registerBindObject(this.b, host, ["list"]);
+        }
+        if (ops.includes("publish")) {
+          this._registerBindObject(this.b2, host, ["put"]);
+          this._registerBindObject(this.q, host, ["push"]);
+          this._registerBindObject(this.t, host, ["publish"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    BigPublisher._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.b2": { ops: [] },"this.q": { ops: [] },"this.stateful": { ops: [] },"this.t": { ops: [] }});
-    BigPublisher._annotateInflight("getObjectCount", {"this.b": { ops: ["list"] }});
-    BigPublisher._annotateInflight("publish", {"this.b2": { ops: ["put"] },"this.q": { ops: ["push"] },"this.t": { ops: ["publish"] }});
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket);
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight4", {

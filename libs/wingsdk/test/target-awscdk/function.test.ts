@@ -25,7 +25,7 @@ test("basic function", () => {
     "AWS::Lambda::Function",
     Match.objectLike({
       Handler: "index.handler",
-      Runtime: "nodejs16.x",
+      Runtime: "nodejs18.x",
       Timeout: 30,
     })
   );
@@ -50,7 +50,7 @@ test("basic function with environment variables", () => {
     "AWS::Lambda::Function",
     Match.objectLike({
       Handler: "index.handler",
-      Runtime: "nodejs16.x",
+      Runtime: "nodejs18.x",
       Timeout: 30,
       Environment: {
         Variables: {
@@ -78,7 +78,7 @@ test("basic function with timeout explicitly set", () => {
     "AWS::Lambda::Function",
     Match.objectLike({
       Handler: "index.handler",
-      Runtime: "nodejs16.x",
+      Runtime: "nodejs18.x",
       Timeout: 300,
     })
   );

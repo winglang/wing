@@ -180,7 +180,7 @@ exports.A = A;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_A_testinflightinresourceshouldcapturetherightscopedvar_IamRole_5FB68186.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_A_testinflightinresourceshouldcapturetherightscopedvar_S3Object_4C07FA3E.key}",
         "timeout": 30,
@@ -205,7 +205,7 @@ exports.A = A;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_testinflightnestedshouldnotcapturetheshadowedvar_IamRole_5890FA19.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testinflightnestedshouldnotcapturetheshadowedvar_S3Object_C99A3326.key}",
         "timeout": 30,
@@ -230,7 +230,7 @@ exports.A = A;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_testinflightontopshouldcapturetop_IamRole_E3EDF4E3.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testinflightontopshouldcapturetop_S3Object_75B26800.key}",
         "timeout": 30,
@@ -255,7 +255,7 @@ exports.A = A;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_testinsideinflightshouldcapturetherightscope_IamRole_AC6104A8.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC.key}",
         "timeout": 30,
@@ -365,8 +365,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    A._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
     const s = "top";
     if (true) {
       const s = "inner";

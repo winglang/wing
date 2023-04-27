@@ -38,13 +38,3 @@ export class Redis extends redis.Redis implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Redis._annotateInflight("raw_client", {});
-Redis._annotateInflight("url", {});
-Redis._annotateInflight("get", {});
-Redis._annotateInflight("set", {});
-Redis._annotateInflight("hset", {});
-Redis._annotateInflight("hget", {});
-Redis._annotateInflight("sadd", {});
-Redis._annotateInflight("smembers", {});
-Redis._annotateInflight("del", {});

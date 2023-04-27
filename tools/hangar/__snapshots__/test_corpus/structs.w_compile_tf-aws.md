@@ -61,6 +61,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, b) {
         super(scope, id);
+        this._addInflightOps("get_stuff");
         this.data = b;
       }
       _toInflight() {
@@ -78,9 +79,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.data, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("get_stuff")) {
+          this._registerBindObject(this.data.field0, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this.data": { ops: [] },"this.stateful": { ops: [] }});
-    Foo._annotateInflight("get_stuff", {"this.data.field0": { ops: [] }});
     const x = {
     "field0": "Sup",}
     ;

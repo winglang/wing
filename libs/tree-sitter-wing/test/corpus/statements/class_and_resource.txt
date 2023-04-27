@@ -16,12 +16,14 @@ inflight class A {
 
 (source
   (class_definition
+    (inflight_specifier)
     name: (identifier)
     implementation: (class_implementation
       (initializer
         parameter_list: (parameter_list)
         block: (block))
       (inflight_method_definition
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         parameter_list: (parameter_list)
         block: (block))
@@ -57,13 +59,14 @@ inflight class A extends B {}
 
 (source
   (class_definition
+    (inflight_specifier)
     name: (identifier)
     parent: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     implementation: (class_implementation)))
 
 ================================================================================
-Preflight class definition
+Resource definition
 ================================================================================
 
 class A {
@@ -91,6 +94,7 @@ class A {
         parameter_list: (parameter_list)
         block: (block))
       (initializer
+        inflight: (inflight_specifier)
         parameter_list: (parameter_list)
         block: (block))
       (method_definition
@@ -108,11 +112,13 @@ class A {
         parameter_list: (parameter_list)
         block: (block))
       (inflight_method_definition
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         parameter_list: (parameter_list)
         block: (block))
       (inflight_method_definition
         access_modifier: (access_modifier)
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         parameter_list: (parameter_list)
         type: (builtin_type)
@@ -121,19 +127,23 @@ class A {
         name: (identifier)
         type: (builtin_type))
       (class_field
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         type: (builtin_type))
       (class_field
         access_modifier: (access_modifier)
+        phase_modifier: (inflight_specifier)
         reassignable: (reassignable)
         name: (identifier)
         type: (builtin_type))
       (class_field
         static: (static)
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         type: (builtin_type))
       (inflight_method_definition
         static: (static)
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         parameter_list: (parameter_list)
         block: (block)))))
@@ -150,11 +160,11 @@ class A extends B impl C, D {}
   (resource_definition
     name: (identifier)
     parent: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     implements: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     implements: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     implementation: (resource_implementation)))
 
 ================================================================================
@@ -174,14 +184,15 @@ interface A extends B, C {
   (interface_definition
     name: (identifier)
     extends: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     extends: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     implementation: (interface_implementation
       (method_signature
         name: (identifier)
         parameter_list: (parameter_list))
       (inflight_method_signature
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         parameter_list: (parameter_list
           (parameter_definition
@@ -192,5 +203,6 @@ interface A extends B, C {
         name: (identifier)
         type: (builtin_type))
       (class_field
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         type: (builtin_type)))))
