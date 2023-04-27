@@ -3,9 +3,16 @@ import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
+import { LayoutType } from "./utils/layout-provider.js";
 import { trpc } from "./utils/trpc.js";
 
-export const Console = ({ port }: { port?: number }) => {
+export const Console = ({
+  port,
+  layout,
+}: {
+  port?: number;
+  layout?: LayoutType;
+}) => {
   const url = `http://localhost:${port}`;
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -42,7 +49,7 @@ export const Console = ({ port }: { port?: number }) => {
     <AppContext.Provider value={{ appMode: "electron" }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <App layout={layout} />
         </QueryClientProvider>
       </trpc.Provider>
     </AppContext.Provider>

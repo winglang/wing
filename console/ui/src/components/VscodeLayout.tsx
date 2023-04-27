@@ -1,7 +1,5 @@
-import { useTheme } from "@wingconsole/design-system";
-import { LogEntry, LogLevel, State } from "@wingconsole/server";
+import { State } from "@wingconsole/server";
 import classNames from "classnames";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
@@ -9,9 +7,7 @@ import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
-import { TestsContext } from "../utils/tests-context.js";
-import { trpc } from "../utils/trpc.js";
-import { useExplorer } from "../utils/use-explorer.js";
+import { useLayout } from "../utils/use-layout.js";
 
 import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";
@@ -21,17 +17,12 @@ import { MetadataPanel } from "./MetadataPanel.js";
 import { StatusBar } from "./StatusBar.js";
 import { TestsTree } from "./TestsTree.js";
 
-export interface VscodeLayoutProps {
+export interface LayoutProps {
   cloudAppState: State;
   wingVersion: string | undefined;
 }
 
-export const VscodeLayout = ({
-  cloudAppState,
-  wingVersion,
-}: VscodeLayoutProps) => {
-  const theme = useTheme();
-
+export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
   const {
     items,
     selectedItems,
@@ -41,68 +32,22 @@ export const VscodeLayout = ({
     expand,
     expandAll,
     collapseAll,
-  } = useExplorer();
-
-  const errorMessage = trpc["app.error"].useQuery();
-  const { showTests } = useContext(TestsContext);
-
-  const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
-    LogLevel[]
-  >(["info", "warn", "error"]);
-  const [searchText, setSearchText] = useState("");
-
-  const [logsTimeFilter, setLogsTimeFilter] = useState(0);
-
-  const logs = trpc["app.logs"].useQuery(
-    {
-      filters: {
-        level: {
-          verbose: selectedLogTypeFilters.includes("verbose"),
-          info: selectedLogTypeFilters.includes("info"),
-          warn: selectedLogTypeFilters.includes("warn"),
-          error: selectedLogTypeFilters.includes("error"),
-        },
-        text: searchText,
-        timestamp: logsTimeFilter,
-      },
-    },
-    {
-      keepPreviousData: true,
-    },
-  );
-
-  const logsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const div = logsRef.current;
-    if (div) {
-      div.scrollTo({ top: div.scrollHeight });
-    }
-    if (!logs.data) {
-      return;
-    }
-  }, [logs.data]);
-
-  const onResourceClick = (log: LogEntry) => {
-    const path = log.ctx?.sourcePath;
-    if (path) {
-      setSelectedItems([path]);
-    }
-  };
-
-  const metadata = trpc["app.nodeMetadata"].useQuery(
-    {
-      path: selectedItems[0],
-      showTests,
-    },
-    {
-      enabled: selectedItems.length > 0,
-    },
-  );
-
-  const loading = useMemo(() => {
-    return cloudAppState === "loadingSimulator" || items.length === 0;
-  }, [cloudAppState, items.length]);
+    theme,
+    errorMessage,
+    loading,
+    metadata,
+    setSearchText,
+    selectedLogTypeFilters,
+    setSelectedLogTypeFilters,
+    setLogsTimeFilter,
+    showTests,
+    logsRef,
+    logs,
+    onResourceClick,
+  } = useLayout({
+    cloudAppState,
+    defaultLogLevels: ["info", "warn", "error"],
+  });
 
   return (
     <div

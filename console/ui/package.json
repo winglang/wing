@@ -45,6 +45,7 @@
     "d3-selection": "^3.0.0",
     "d3-zoom": "^3.0.0",
     "elkjs": "^0.8.2",
+    "esbuild-plugin-external-global": "^1.0.1",
     "eslint": "^8.39.0",
     "framer-motion": "^10.12.4",
     "jszip": "^3.10.1",

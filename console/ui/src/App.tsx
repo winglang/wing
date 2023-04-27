@@ -1,13 +1,15 @@
 import { ThemeProvider } from "@wingconsole/design-system";
 
-import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";
+import { LayoutProvider, LayoutType } from "./utils/layout-provider.js";
 import { TestsContextProvider } from "./utils/tests-context.js";
 import { trpc } from "./utils/trpc.js";
 
-export interface AppProps {}
+export interface AppProps {
+  layout?: LayoutType;
+}
 
-export const App = ({}: AppProps) => {
+export const App = ({ layout }: AppProps) => {
   const trpcContext = trpc.useContext();
 
   trpc["app.invalidateQuery"].useSubscription(undefined, {
@@ -29,10 +31,13 @@ export const App = ({}: AppProps) => {
     <ThemeProvider>
       <NotificationsProvider>
         <TestsContextProvider>
-          <VscodeLayout
-            cloudAppState={appState.data ?? "compiling"}
-            wingVersion={appDetails.data?.wingVersion}
-          />
+          <LayoutProvider
+            layoutType={layout}
+            layoutProps={{
+              cloudAppState: appState.data ?? "compiling",
+              wingVersion: appDetails.data?.wingVersion,
+            }}
+          ></LayoutProvider>
         </TestsContextProvider>
       </NotificationsProvider>
     </ThemeProvider>
