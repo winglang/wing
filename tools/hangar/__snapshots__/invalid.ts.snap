@@ -904,11 +904,11 @@ exports[`sorted_errors_no_span.w > stderr 1`] = `
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26) to be a type but it's a variable
+error: Expected 'b' to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
 3 | inflight class c extends b {
-  |                          ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26) to be a type but it's a variable
+  |                          ^ Expected 'b' to be a type but it's a variable
 
 
 error: Inflight class c (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:16)'s parent \\"any\\" is not a class
@@ -921,11 +921,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:26) to be a type but it's a variable
+error: Expected 'b' to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:7:26
   |
 7 | inflight class e extends b {
-  |                          ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:26) to be a type but it's a variable
+  |                          ^ Expected 'b' to be a type but it's a variable
 
 
 error: Inflight class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:16)'s parent \\"any\\" is not a class
