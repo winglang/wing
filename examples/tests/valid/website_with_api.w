@@ -3,7 +3,7 @@ bring cloud;
 //needs to be written before the website (so the website will be able to use it's url on sim env)
 let api = new cloud.Api();
 
-let website = new cloud.Website( path: "./website_with_api" );
+let website = new cloud.Website(path: "./website_with_api");
 
 let users_table = new cloud.Table(cloud.TableProps{
     name: "users-table",
