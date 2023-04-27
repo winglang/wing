@@ -142,7 +142,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_testcall_IamRole_ACAC0DA1.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testcall_S3Object_7FFD9CF8.key}",
         "timeout": 30,
@@ -167,7 +167,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_testconsole_IamRole_73B3A70E.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testconsole_S3Object_DC38E410.key}",
         "timeout": 30,
@@ -229,6 +229,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("regex_inflight", "get_uuid", "get_data", "print", "call");
       }
       static get_greeting(name)  {
         return (require("<ABSOLUTE_PATH>/external_js.js")["get_greeting"])(name)
@@ -249,13 +250,23 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("call")) {
+        }
+        if (ops.includes("get_data")) {
+        }
+        if (ops.includes("get_uuid")) {
+        }
+        if (ops.includes("print")) {
+        }
+        if (ops.includes("regex_inflight")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
-    Foo._annotateInflight("call", {});
-    Foo._annotateInflight("get_data", {});
-    Foo._annotateInflight("get_uuid", {});
-    Foo._annotateInflight("print", {});
-    Foo._annotateInflight("regex_inflight", {});
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.get_greeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");

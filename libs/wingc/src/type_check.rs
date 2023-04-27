@@ -160,7 +160,7 @@ pub enum Type {
 	Enum(Enum),
 }
 
-const CLASS_INIT_NAME: &'static str = "init";
+pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 #[derive(Derivative)]
@@ -478,12 +478,6 @@ impl Subtype for Type {
 			}
 			(Self::MutArray(l0), Self::MutArray(r0)) => {
 				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
-				let l: &Type = l0;
-				let r: &Type = r0;
-				l.is_subtype_of(r)
-			}
-			(Self::MutArray(l0), Self::Array(r0)) => {
-				// A MutArray type is a subtype of an Array type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
 				l.is_subtype_of(r)
@@ -2081,7 +2075,7 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						self.stmt_error(
 							stmt,
-							"Return statement outside of function cannot return a value.".to_string(),
+							"Return statement outside of function cannot return a value".to_string(),
 						);
 					}
 				} else {

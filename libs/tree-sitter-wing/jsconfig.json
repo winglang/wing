@@ -4,5 +4,5 @@
     "module": "CommonJS",
     "lib": ["ES2020"]
   },
-  "include": ["**/*.js", "node_modules/tree-sitter-cli/dsl.d.ts"]
+  "include": ["grammar.js", "tree-sitter-dsl.d.ts"]
 }

@@ -95,7 +95,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_cloudQueueAddConsumerb3f3d188_IamRole_DE9F8DCD.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_cloudQueueAddConsumerb3f3d188_S3Object_E185C166.key}",
         "timeout": 30,

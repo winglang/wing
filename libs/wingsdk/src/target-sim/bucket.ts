@@ -70,11 +70,3 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Bucket._annotateInflight("put", {});
-Bucket._annotateInflight("get", {});
-Bucket._annotateInflight("delete", {});
-Bucket._annotateInflight("list", {});
-Bucket._annotateInflight("put_json", {});
-Bucket._annotateInflight("get_json", {});
-Bucket._annotateInflight("public_url", {});

@@ -154,10 +154,7 @@
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"
-    },
-    "excludeTypescript": [
-      "src/**/*.inflight.ts"
-    ]
+    }
   },
   "volta": {
     "node": "18.12.1",

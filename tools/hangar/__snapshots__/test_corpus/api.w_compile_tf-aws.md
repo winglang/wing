@@ -203,7 +203,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequeste46e5cb7_IamRole_15046B29.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_cloudApi_cloudApiOnRequeste46e5cb7_S3Object_69EE2256.key}",
         "timeout": 30,
@@ -229,7 +229,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
@@ -306,6 +306,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, api) {
         super(scope, id);
+        this._addInflightOps("handle");
         this.api = api;
       }
       _toInflight() {
@@ -323,9 +324,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.api, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(this.api.url, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this.api": { ops: [] },"this.stateful": { ops: [] }});
-    Foo._annotateInflight("handle", {"this.api.url": { ops: [] }});
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {

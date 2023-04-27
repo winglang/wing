@@ -8,11 +8,14 @@ test1.test2.test3;
 
 (source
   (expression_statement
-    (nested_identifier
-      object: (nested_identifier
-        object: (identifier)
-        property: (identifier))
-      property: (identifier))))
+    (reference
+      (nested_identifier
+        object: (reference
+          (nested_identifier
+            object: (reference
+              (reference_identifier))
+            property: (member_identifier)))
+        property: (member_identifier)))))
 
 ================================================================================
 Nested identifier method call
@@ -25,9 +28,12 @@ test1.test2.test3();
 (source
   (expression_statement
     (call
-      caller: (nested_identifier
-        object: (nested_identifier
-          object: (identifier)
-          property: (identifier))
-        property: (identifier))
+      caller: (reference
+        (nested_identifier
+          object: (reference
+            (nested_identifier
+              object: (reference
+                (reference_identifier))
+              property: (member_identifier)))
+          property: (member_identifier)))
       args: (argument_list))))
