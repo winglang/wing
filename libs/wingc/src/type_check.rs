@@ -1457,8 +1457,12 @@ impl<'a> TypeChecker<'a> {
 					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env);
 					self.types.add_type(Type::Array(some_val_type))
 				} else {
-					self.expr_error(exp, "Cannot infer type of empty array".to_owned());
-					self.types.add_type(Type::Array(self.types.anything()))
+					if self.in_json > 0 {
+						self.types.add_type(Type::Array(self.types.json()))
+					} else {
+						self.expr_error(exp, "Cannot infer type of empty array".to_owned());
+						self.types.add_type(Type::Array(self.types.anything()))
+					}
 				};
 
 				let element_type = match *container_type {
@@ -1544,8 +1548,12 @@ impl<'a> TypeChecker<'a> {
 					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env);
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
-					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
-					self.types.add_type(Type::Map(self.types.anything()))
+					if self.in_json > 0 {
+						self.types.add_type(Type::Map(self.types.json()))
+					} else {
+						self.expr_error(exp, "Cannot infer type of empty map".to_owned());
+						self.types.add_type(Type::Map(self.types.anything()))
+					}
 				};
 
 				let value_type = match *container_type {
