@@ -2,7 +2,7 @@ import { Target, compile } from "./compile";
 import { readdir, stat, writeFile } from "fs/promises";
 import { describe, test, expect, beforeAll } from "vitest";
 import { join, resolve } from "path";
-import { rmdirSync } from "fs";
+import { existsSync, rmdirSync } from "fs";
 
 const exampleDir = resolve("../../examples/tests/valid");
 const exampleWingFile = join(exampleDir, "captures.w");
@@ -13,7 +13,9 @@ describe(
     beforeAll(() => {
       // deleting the artifactDir
       const artifactDir = resolve("../../examples/tests/valid/target/captures.tfaws");
-      rmdirSync(artifactDir, { recursive: true });
+      if (existsSync(artifactDir)) {
+        rmdirSync(artifactDir, { recursive: true });
+      }
     });
 
     test("should be able to compile the SDK capture test to tf-aws", async () => {
