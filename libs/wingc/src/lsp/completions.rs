@@ -75,9 +75,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		let parent = node_to_complete.parent();
 
-		dbg!(parent);
-		dbg!(scope_visitor.nearest_expr);
-
 		if node_to_complete.kind() == "." {
 			let parent = parent.expect("A dot must have a parent");
 
@@ -100,7 +97,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						);
 					} else {
 						if let ExprKind::Reference(_) = &nearest_expr.kind {
-							// this is probably a type of some kind
+							// This is probably a type of some kind
 							// just get the entire reference and try to resolve it
 							let wing_source = result.contents.as_bytes();
 							let mut reference_text = parent
@@ -111,14 +108,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								reference_text.pop();
 							}
 
-							dbg!(&reference_text);
-
 							let found_env = scope_visitor.found_scope.unwrap();
 							let found_env = found_env.env.borrow();
 							let found_env = found_env.as_ref().unwrap();
 							let lookup_thing = found_env.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index);
 
-							dbg!(&lookup_thing);
 							if let Ok(lookup_thing) = lookup_thing {
 								match lookup_thing {
 									SymbolKind::Type(t) => {
@@ -135,19 +129,12 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 										)
 									}
 									SymbolKind::Namespace(n) => {
-										let completions = get_completions_from_namespace(n);
-										// if let Some(grandparent) = parent.parent() {
-										// 	if grandparent.kind() == "new_expression" {
-										// 		// we only want classes
-										// 		return completions
-										// 			.into_iter()
-										// 			.filter(|c| matches!(c.kind, Some(CompletionItemKind::CLASS)))
-										// 			.collect();
-										// 	}
-										// }
-										return completions;
+										return get_completions_from_namespace(n);
 									}
 								}
+							} else {
+								// This is probably a JSII type that has not been imported yet
+								// TODO Need to map a custom_type to a JSII FQN
 							}
 						}
 					}
