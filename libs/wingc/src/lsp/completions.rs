@@ -3,14 +3,15 @@ use std::cmp::max;
 use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
-use crate::ast::{Expr, ExprKind, Phase, Scope};
+use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::StatementIdx;
 use crate::type_check::{
-	ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME,
+	CLASS_INIT_NAME,
 };
-use crate::visit::{visit_expr, Visit};
+use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 #[no_mangle]
@@ -32,7 +33,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let files = files.borrow();
 		let uri = params.text_document_position.text_document.uri;
 		let result = files.get(&uri).expect("File must be open to get completions");
-		let wing_source = result.contents.as_bytes();
 
 		let types = &result.types;
 		let root_scope = &result.scope;
@@ -75,18 +75,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		let parent = node_to_complete.parent();
 
-		let within_nested_node = if let Some(parent) = parent {
-			node_to_complete.kind() == "."
-				|| parent.kind() == "custom_type"
-				|| parent.kind() == "nested_identifier"
-				|| parent.kind() == "reference"
-		} else {
-			false
-		};
+		if node_to_complete.kind() == "." {
+			let parent = parent.expect("A dot must have a parent");
 
-		if within_nested_node {
-			if let Some(nearest_expr) = scope_visitor.nearest_expr {
-				if node_to_complete.kind() == "." {
+			if parent.kind() == "nested_identifier" {
+				if let Some(nearest_expr) = scope_visitor.nearest_expr {
 					let nearest_expression_type = nearest_expr
 						.evaluated_type
 						.borrow()
@@ -102,55 +95,73 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
 							true,
 						);
+					} else {
+						if let ExprKind::Reference(_) = &nearest_expr.kind {
+							// This is probably a type of some kind
+							// just get the entire reference and try to resolve it
+							let wing_source = result.contents.as_bytes();
+							let mut reference_text = parent
+								.utf8_text(wing_source)
+								.expect("The referenced text should be available")
+								.to_string();
+							if reference_text.ends_with(".") {
+								reference_text.pop();
+							}
+
+							let found_env = scope_visitor.found_scope.unwrap();
+							let found_env = found_env.env.borrow();
+							let found_env = found_env.as_ref().unwrap();
+							let lookup_thing = found_env.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index);
+
+							if let Ok(lookup_thing) = lookup_thing {
+								match lookup_thing {
+									SymbolKind::Type(t) => {
+										return get_completions_from_type(&t, types, Some(found_env.phase), false);
+									}
+									SymbolKind::Variable(v) => {
+										return get_completions_from_type(
+											&v.type_,
+											types,
+											scope_visitor
+												.found_scope
+												.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
+											false,
+										)
+									}
+									SymbolKind::Namespace(n) => {
+										return get_completions_from_namespace(n);
+									}
+								}
+							} else {
+								// This is probably a JSII type that has not been imported yet
+								// TODO Need to map a custom_type to a JSII FQN
+							}
+						}
 					}
 				}
 			}
 
-			// check to see if we are inside a reference of some kind (the last series of non-whitespace characters contains a ., starting from the current location)
-			if let Some(sibling) = node_to_complete.prev_named_sibling().or(Some(node_to_complete)) {
-				let sibling_kind = sibling.kind();
-				if sibling_kind == "reference" || sibling_kind == "nested_identifier" || sibling_kind == "identifier" {
-					// collect all the text of the reference
-					let mut text = sibling
-						.utf8_text(wing_source)
-						.expect("The referenced text should be available")
-						.to_string();
-					if text.ends_with(".") {
-						text.pop();
-					}
-					if !text.contains(".") {
-						// Currently, we can only handle references that are just a single identifier
-						// In this code path, we are inside an error state so the type checker never resolved full references
-						let found_scope = scope_visitor.found_scope.expect("Should have found a scope");
-						let found_env = found_scope.env.borrow();
-						let found_env = found_env.as_ref().expect("Scope should have an env");
-						let found_phase = Some(found_env.phase);
-						let found_symbol = root_env
-							.try_lookup(text.as_str(), None)
-							.or_else(|| found_env.try_lookup(text.as_str(), None));
-
-						if let Some(found_symbol) = found_symbol {
-							match found_symbol {
-								SymbolKind::Type(t) => {
-									return get_completions_from_type(t, types, found_phase, false);
-								}
-								SymbolKind::Variable(v) => {
-									return get_completions_from_type(&v.type_, types, found_phase, true);
-								}
-								SymbolKind::Namespace(n) => {
-									return get_completions_from_namespace(n);
+			if parent.kind() == "custom_type" {
+				if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
+					if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
+						if udt.fields.is_empty() {
+							// this is probably a namespace
+							// `resolve_user_defined_type` will fail for namespaces, let's just look it up instead
+							let namespace = root_env.lookup_nested_str(&udt.root.name, scope_visitor.found_stmt_index);
+							if let Ok(namespace) = namespace {
+								if let SymbolKind::Namespace(namespace) = namespace {
+									return get_completions_from_namespace(namespace);
 								}
 							}
 						}
-					}
-				} else {
-					// we are inside some sort of a (possibly incomplete) literal expression
-					match sibling_kind {
-						"string" => return get_completions_from_type(&types.string(), types, None, true),
-						"number" => return get_completions_from_type(&types.number(), types, None, true),
-						"boolean" => return get_completions_from_type(&types.bool(), types, None, true),
-						"duration" => return get_completions_from_type(&types.duration(), types, None, true),
-						_ => {}
+						let found_env = scope_visitor.found_scope.unwrap();
+						let found_env = found_env.env.borrow();
+						let found_env = found_env.as_ref().unwrap();
+						let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap());
+
+						if let Ok(type_lookup) = type_lookup {
+							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
+						}
 					}
 				}
 			}
@@ -401,8 +412,10 @@ pub struct ScopeVisitor<'a> {
 	pub found_stmt_index: Option<usize>,
 	/// The scope that contains the target location
 	pub found_scope: Option<&'a Scope>,
-	/// The nearest expression before (or containing) to the target location
+	/// The nearest expression before (or containing) the target location
 	pub nearest_expr: Option<&'a Expr>,
+	/// The nearest type annotation before (or containing) the target location
+	pub nearest_type_annotation: Option<&'a TypeAnnotation>,
 }
 
 impl<'a> ScopeVisitor<'a> {
@@ -412,6 +425,7 @@ impl<'a> ScopeVisitor<'a> {
 			found_stmt_index: None,
 			nearest_expr: None,
 			found_scope: None,
+			nearest_type_annotation: None,
 		}
 	}
 }
@@ -448,5 +462,13 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 		if !matches!(&node.kind, ExprKind::Reference(_)) {
 			visit_expr(self, node);
 		}
+	}
+
+	fn visit_type_annotation(&mut self, node: &'a TypeAnnotation) {
+		if node.span <= self.location {
+			self.nearest_type_annotation = Some(node);
+		}
+
+		visit_type_annotation(self, node);
 	}
 }

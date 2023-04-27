@@ -1,6 +1,6 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
-use crate::ast::{self, FunctionBodyRef};
+use crate::ast::{self, FunctionBodyRef, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
@@ -1756,18 +1756,18 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn resolve_type_annotation(&mut self, annotation: &TypeAnnotation, env: &SymbolEnv) -> TypeRef {
-		match annotation {
-			TypeAnnotation::Number => self.types.number(),
-			TypeAnnotation::String => self.types.string(),
-			TypeAnnotation::Bool => self.types.bool(),
-			TypeAnnotation::Duration => self.types.duration(),
-			TypeAnnotation::Json => self.types.json(),
-			TypeAnnotation::MutJson => self.types.mut_json(),
-			TypeAnnotation::Optional(v) => {
+		match &annotation.kind {
+			TypeAnnotationKind::Number => self.types.number(),
+			TypeAnnotationKind::String => self.types.string(),
+			TypeAnnotationKind::Bool => self.types.bool(),
+			TypeAnnotationKind::Duration => self.types.duration(),
+			TypeAnnotationKind::Json => self.types.json(),
+			TypeAnnotationKind::MutJson => self.types.mut_json(),
+			TypeAnnotationKind::Optional(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				self.types.add_type(Type::Optional(value_type))
 			}
-			TypeAnnotation::Function(ast_sig) => {
+			TypeAnnotationKind::Function(ast_sig) => {
 				let mut args = vec![];
 				for arg in ast_sig.param_types.iter() {
 					args.push(self.resolve_type_annotation(arg, env));
@@ -1785,35 +1785,35 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
 			}
-			TypeAnnotation::UserDefined(user_defined_type) => self
+			TypeAnnotationKind::UserDefined(user_defined_type) => self
 				.resolve_user_defined_type(user_defined_type, env, self.statement_idx)
 				.unwrap_or_else(|e| self.type_error(e)),
-			TypeAnnotation::Array(v) => {
+			TypeAnnotationKind::Array(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
 			}
-			TypeAnnotation::MutArray(v) => {
+			TypeAnnotationKind::MutArray(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::MutArray(value_type))
 			}
-			TypeAnnotation::Set(v) => {
+			TypeAnnotationKind::Set(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::Set(value_type))
 			}
-			TypeAnnotation::MutSet(v) => {
+			TypeAnnotationKind::MutSet(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::MutSet(value_type))
 			}
-			TypeAnnotation::Map(v) => {
+			TypeAnnotationKind::Map(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::Map(value_type))
 			}
-			TypeAnnotation::MutMap(v) => {
+			TypeAnnotationKind::MutMap(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
@@ -3298,7 +3298,7 @@ pub fn resolve_user_defined_type(
 			} else {
 				let symb = nested_name.last().unwrap();
 				Err(TypeError {
-					message: format!("Expected {} to be a type but it's a {}", symb, _type),
+					message: format!("Expected '{}' to be a type but it's a {}", symb.name, _type),
 					span: symb.span.clone(),
 				})
 			}

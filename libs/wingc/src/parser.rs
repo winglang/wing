@@ -10,7 +10,7 @@ use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
 	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-	UnaryOperator, UserDefinedType,
+	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -360,8 +360,8 @@ impl<'s> Parser<'s> {
 		let mut extends = vec![];
 		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
 			let super_type = self.build_type_annotation(&super_node)?;
-			match super_type {
-				TypeAnnotation::UserDefined(t) => {
+			match super_type.kind {
+				TypeAnnotationKind::UserDefined(t) => {
 					extends.push(t);
 				}
 				_ => {
@@ -546,10 +546,13 @@ impl<'s> Parser<'s> {
 							statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 							signature: FunctionSignature {
 								parameters,
-								return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
-									root: name.clone(),
-									fields: vec![],
-								}))),
+								return_type: Some(Box::new(TypeAnnotation {
+									kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+										root: name.clone(),
+										fields: vec![],
+									}),
+									span: self.node_span(&class_element),
+								})),
 								phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 							},
 							span: self.node_span(&class_element),
@@ -575,8 +578,8 @@ impl<'s> Parser<'s> {
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(&parent_node)?;
-			match parent_type {
-				TypeAnnotation::UserDefined(parent_type) => Some(parent_type),
+			match parent_type.kind {
+				TypeAnnotationKind::UserDefined(parent_type) => Some(parent_type),
 				_ => {
 					self.add_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -602,8 +605,8 @@ impl<'s> Parser<'s> {
 			}
 
 			let interface_type = self.build_type_annotation(&type_node)?;
-			match interface_type {
-				TypeAnnotation::UserDefined(interface_type) => implements.push(interface_type),
+			match interface_type.kind {
+				TypeAnnotationKind::UserDefined(interface_type) => implements.push(interface_type),
 				_ => {
 					self.add_error::<Node>(
 						format!(
@@ -684,7 +687,11 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			if let Ok(TypeAnnotation::UserDefined(interface_type)) = self.build_udt_annotation(&extend) {
+			if let Ok(TypeAnnotation {
+				kind: TypeAnnotationKind::UserDefined(interface_type),
+				..
+			}) = self.build_udt_annotation(&extend)
+			{
 				extends.push(interface_type);
 			}
 		}
@@ -753,18 +760,34 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_type_annotation(&self, type_node: &Node) -> DiagnosticResult<TypeAnnotation> {
+		let span = self.node_span(type_node);
 		match type_node.kind() {
 			"builtin_type" => match self.node_text(type_node) {
-				"num" => Ok(TypeAnnotation::Number),
-				"str" => Ok(TypeAnnotation::String),
-				"bool" => Ok(TypeAnnotation::Bool),
-				"duration" => Ok(TypeAnnotation::Duration),
+				"num" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Number,
+					span,
+				}),
+				"str" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::String,
+					span,
+				}),
+				"bool" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Bool,
+					span,
+				}),
+				"duration" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Duration,
+					span,
+				}),
 				"ERROR" => self.add_error("Expected builtin type", type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
 				let inner_type = self.build_type_annotation(&type_node.named_child(0).unwrap()).unwrap();
-				Ok(TypeAnnotation::Optional(Box::new(inner_type)))
+				Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Optional(Box::new(inner_type)),
+					span,
+				})
 			}
 			"custom_type" => Ok(self.build_udt_annotation(&type_node)?),
 			"function_type" => {
@@ -777,7 +800,7 @@ impl<'s> Parser<'s> {
 				let return_type = type_node
 					.child_by_field_name("return_type")
 					.map(|n| Box::new(self.build_type_annotation(&n).unwrap()));
-				Ok(TypeAnnotation::Function(FunctionTypeAnnotation {
+				let kind = TypeAnnotationKind::Function(FunctionTypeAnnotation {
 					param_types,
 					return_type,
 					phase: if type_node.child_by_field_name("inflight").is_some() {
@@ -785,13 +808,20 @@ impl<'s> Parser<'s> {
 					} else {
 						Phase::Preflight
 					},
-				}))
+				});
+				Ok(TypeAnnotation { kind, span })
 			}
 			"json_container_type" => {
 				let container_type = self.node_text(&type_node);
 				match container_type {
-					"Json" => Ok(TypeAnnotation::Json),
-					"MutJson" => Ok(TypeAnnotation::MutJson),
+					"Json" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Json,
+						span,
+					}),
+					"MutJson" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::MutJson,
+						span,
+					}),
 					other => self.add_error(format!("invalid json container type {}", other), &type_node),
 				}
 			}
@@ -799,24 +829,30 @@ impl<'s> Parser<'s> {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
-					"Map" => Ok(TypeAnnotation::Map(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"MutMap" => Ok(TypeAnnotation::MutMap(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"Array" => Ok(TypeAnnotation::Array(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"MutArray" => Ok(TypeAnnotation::MutArray(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"Set" => Ok(TypeAnnotation::Set(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"MutSet" => Ok(TypeAnnotation::MutSet(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
+					"Map" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Map(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"MutMap" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::MutMap(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"Array" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Array(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"MutArray" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::MutArray(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"Set" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Set(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"MutSet" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::MutSet(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
 					"ERROR" => self.add_error("Expected builtin container type", type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
@@ -887,13 +923,17 @@ impl<'s> Parser<'s> {
 		}
 
 		let mut cursor = nested_node.walk();
-		Ok(TypeAnnotation::UserDefined(UserDefinedType {
+		let kind = TypeAnnotationKind::UserDefined(UserDefinedType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
 			fields: nested_node
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
-		}))
+		});
+		Ok(TypeAnnotation {
+			kind,
+			span: self.node_span(&nested_node),
+		})
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Expr> {
@@ -957,7 +997,7 @@ impl<'s> Parser<'s> {
 			"new_expression" => {
 				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap())?;
 
-				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
+				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node)
 				} else {
 					Ok(ArgList::new())
@@ -1199,8 +1239,8 @@ impl<'s> Parser<'s> {
 
 				// Special case: empty {} (which is detected as map by tree-sitter) -
 				// if it is annotated as a Set/MutSet we should treat it as a set literal
-				if let Some(TypeAnnotation::Set(_)) | Some(TypeAnnotation::MutSet(_)) = map_type {
-					if fields.is_empty() {
+				if let Some(TypeAnnotation { kind, .. }) = &map_type {
+					if matches!(kind, TypeAnnotationKind::Set(_) | TypeAnnotationKind::MutSet(_)) && fields.is_empty() {
 						return self.build_set_literal(expression_node);
 					}
 				}
