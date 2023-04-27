@@ -82,3 +82,50 @@ Json {
   a: Json [1, 2, "world"],
   b: [1, 2, "world"], // Verify the type-checker knows we're still in a Json after handling `a` above
 };
+
+// Empty Jsons
+let empty_json = Json {};
+let empty_json_arr = Json [];
+
+// start mutjson empty
+let empty_mut_json = MutJson {};
+let empty_mut_json_arr = MutJson [];
+
+// then get crazy with it
+empty_mut_json.set("cool", MutJson{a: 1, b: 2});
+empty_mut_json.get("cool").set("a", 3);
+
+empty_mut_json_arr.set_at(0, MutJson{a: 1, b: 2});
+empty_mut_json_arr.get_at(0).set("a", 3);
+
+// Wanna see something nuts?
+let the_tower_of_json = MutJson {
+  a: {},
+  b: {
+    c: {},
+    d: [
+      [
+        [
+          {}
+        ]
+      ],
+    ],
+  },
+  e: {
+    f: {
+      g: {},
+      h: [
+        {},
+        []
+      ]
+    },
+  }
+};
+
+the_tower_of_json.get("e").get("f").get("h").get_at(0).set("a", 1);
+let that_super_nested_value = the_tower_of_json.get("e").get("f").get("h").get_at(0).get("a");
+assert(num.from_json(that_super_nested_value) == 1);
+
+// Unested Json Arrays
+let unested_json_arr = Json [1, 2, 3];
+assert(unested_json_arr.get_at(0) == 1);
