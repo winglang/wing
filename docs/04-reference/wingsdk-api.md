@@ -1529,7 +1529,7 @@ new cloud.Website(props: WebsiteProps)
 ##### `add_json` <a name="add_json" id="@winglang/sdk.cloud.Website.addJson"></a>
 
 ```wing
-add_json(path: str, obj: Json): str
+add_json(path: str, data: Json): str
 ```
 
 Add a JSON file with custom values during the website's deployment.
@@ -1544,9 +1544,11 @@ the file path it will be uploaded as.
 
 ---
 
-###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Website.addJson.parameter.obj"></a>
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.cloud.Website.addJson.parameter.data"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the data to write to the file.
 
 ---
 

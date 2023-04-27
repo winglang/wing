@@ -1,6 +1,5 @@
-import * as crypto from "crypto";
 import { readdirSync } from "fs";
-import { basename, extname, join, resolve } from "path";
+import { extname, join, resolve } from "path";
 import { CloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront-distribution";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 
@@ -78,14 +77,14 @@ export class Website extends cloud.Website {
     return this._url;
   }
 
-  public addJson(path: string, obj: Json): string {
+  public addJson(path: string, data: Json): string {
     if (!path.endsWith(".json")) {
       throw new Error(`key must have a .json suffix: ${path.split(".").pop()}`);
     }
 
     new S3Object(this, `File-${path}`, {
       dependsOn: [this.bucket],
-      content: JSON.stringify(obj),
+      content: JSON.stringify(data),
       bucket: this.bucket.bucket,
       contentType: "application/json",
       key: path,
@@ -95,9 +94,10 @@ export class Website extends cloud.Website {
   }
 
   private uploadFile(filePath: string) {
-    const hash = crypto.createHash("md5").update(filePath).digest("hex");
+    const fileKey = filePath.replace(this.path, "");
+    console.log(fileKey.replace(/[\/\\]/g, "__").replace(/\./g, "_"));
 
-    new S3Object(this, `File-${basename}-${hash.slice(-8)}`, {
+    new S3Object(this, `File${fileKey.replace(/[\/\\]/g, "--")}`, {
       dependsOn: [this.bucket],
       key: filePath.replace(this.path, ""),
       bucket: this.bucket.bucket,

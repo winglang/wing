@@ -69,7 +69,7 @@ export abstract class Website extends Resource {
    * @param path the file path it will be uploaded as
    * @param data the data to write to the file
    */
-  public abstract addJson(path: string, obj: Json): string;
+  public abstract addJson(path: string, data: Json): string;
 }
 /**
  * website props
