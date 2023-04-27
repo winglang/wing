@@ -18,6 +18,8 @@ class  Bar {
   }
 }
 exports.Bar = Bar;
+exports.setupGlobals = function(globals) {
+};
 
 ```
 
@@ -45,6 +47,8 @@ class  BigPublisher {
   }
 }
 exports.BigPublisher = BigPublisher;
+exports.setupGlobals = function(globals) {
+};
 
 ```
 
@@ -74,6 +78,8 @@ class  Foo {
   }
 }
 exports.Foo = Foo;
+exports.setupGlobals = function(globals) {
+};
 
 ```
 
@@ -774,12 +780,13 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            const mod = require("${self_client_path}")
+            const client = new mod.Foo({
               c: ${c_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
@@ -813,14 +820,15 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Bar({
+            const mod = require("${self_client_path}")
+            const client = new mod.Bar({
               b: ${b_client},
               foo: ${foo_client},
               name: ${name_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
@@ -886,15 +894,16 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).BigPublisher({
+            const mod = require("${self_client_path}")
+            const client = new mod.BigPublisher({
               b: ${b_client},
               b2: ${b2_client},
               q: ${q_client},
               t: ${t_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }

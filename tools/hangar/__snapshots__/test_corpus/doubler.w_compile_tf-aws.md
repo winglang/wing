@@ -15,6 +15,8 @@ class  Doubler {
   }
 }
 exports.Doubler = Doubler;
+exports.setupGlobals = function(globals) {
+};
 
 ```
 
@@ -72,12 +74,13 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Doubler.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Doubler({
+            const mod = require("${self_client_path}")
+            const client = new mod.Doubler({
               func: ${func_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }

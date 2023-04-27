@@ -20,6 +20,8 @@ class  Another {
   }
 }
 exports.Another = Another;
+exports.setupGlobals = function(globals) {
+};
 
 ```
 
@@ -32,6 +34,8 @@ class  First {
   }
 }
 exports.First = First;
+exports.setupGlobals = function(globals) {
+};
 
 ```
 
@@ -130,6 +134,8 @@ class  MyResource {
   }
 }
 exports.MyResource = MyResource;
+exports.setupGlobals = function(globals) {
+};
 
 ```
 
@@ -433,12 +439,13 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).First({
+            const mod = require("${self_client_path}")
+            const client = new mod.First({
               my_resource: ${my_resource_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
@@ -464,13 +471,14 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Another({
+            const mod = require("${self_client_path}")
+            const client = new mod.Another({
               first: ${first_client},
               my_field: ${my_field_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
@@ -528,7 +536,8 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).MyResource({
+            const mod = require("${self_client_path}")
+            const client = new mod.MyResource({
               another: ${another_client},
               array_of_str: ${array_of_str_client},
               ext_bucket: ${ext_bucket_client},
@@ -544,8 +553,8 @@ class $Root extends $stdlib.std.Resource {
               unused_resource: ${unused_resource_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }

@@ -11,6 +11,8 @@ class  Fetch {
   }
 }
 exports.Fetch = Fetch;
+exports.setupGlobals = function(globals) {
+};
 
 ```
 
@@ -289,11 +291,12 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Fetch.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Fetch({
+            const mod = require("${self_client_path}")
+            const client = new mod.Fetch({
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
