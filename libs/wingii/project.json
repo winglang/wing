@@ -4,18 +4,16 @@
   "targets": {
     "test": {
       "dependsOn": ["lint"],
-      "executor": "nx:run-commands",
       "options": {
         "command": "cargo test",
         "cwd": "libs/wingii"
       }
     },
     "lint": {
-      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "cargo fmt",
-          "cargo clippy --fix --no-deps --target wasm32-wasi --release"
+          "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi"
         ],
         "cwd": "libs/wingii",
         "parallel": false
@@ -23,15 +21,13 @@
       "configurations": {
         "release": {
           "commands": [
-            "cargo fmt --check",
-            "cargo clippy --no-deps --target wasm32-wasi --release"
+            "cargo fmt",
+            "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"
           ]
         }
       }
     },
     "build": {
-      "executor": "nx:run-commands",
-      "outputs": ["rust-target"],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingii"

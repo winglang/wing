@@ -3,10 +3,9 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "targets": {
     "build": {
-      "executor": "nx:run-script",
       "options": {
         "cwd": "apps/wing-api-checker",
-        "script": "compile"
+        "command": "npm run compile"
       }
     }
   }
