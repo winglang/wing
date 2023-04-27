@@ -170,6 +170,7 @@ module.exports = grammar({
     // Classes
     class_definition: ($) =>
       seq(
+        $.inflight_specifier,
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
@@ -203,7 +204,7 @@ module.exports = grammar({
 
     resource_definition: ($) =>
       seq(
-        "resource",
+        "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
         optional(seq("impl", field("implements", commaSep1($.custom_type)))),

@@ -1,4 +1,4 @@
-resource SomeResource {
+class SomeResource {
     name: str;
     init() {
     }

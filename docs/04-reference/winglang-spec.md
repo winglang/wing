@@ -23,7 +23,7 @@ What makes Wing special? Traditional programming languages are designed around
 the premise of telling a single machine what to do. The output of the compiler
 is a program that can be executed on that machine. But cloud applications are
 distributed systems that consist of code running across multiple machines and
-which intimately use various cloud resources and services to achieve their
+which intimately use various cloud services to achieve their
 business goals.
 
 Wing’s goal is to allow developers to express all pieces of a cloud application
@@ -708,11 +708,11 @@ cloud architecture, and not the code that runs within a specific machine within
 this cloud infrastructure.
 
 The phase modifier `inflight` is allowed in the context of declaring interface
-and resource members (methods, fields and properties). Example code is shown in
-the [resources](#33-resources) section.
+and class members (methods, fields and properties). Example code is shown in
+the [preflight classes](#33-preflight-classes) section.
 
 ```TS
-resource Bucket {
+class Bucket {
   // preflight method
   allow_public_access() {
 
@@ -729,12 +729,17 @@ Inflight members can only be accessed from an **inflight context** (an inflight
 method or an inflight closure) and preflight members can only be accessed from a
 **preflight context** (a preflight method or a preflight closure).
 
-The `inflight` modifier is allowed when defining a function closure:
+The `inflight` modifier is allowed when defining function closures or classes. This implies that
+these types can only be used within inflight context.
 
 ```TS
 let handler = inflight () => {
   log("hello, world");
 };
+
+inflight class Foo {
+  // ...
+}
 ```
 
 For example (continuing the `Bucket` example above):
@@ -753,24 +758,24 @@ let handler = inflight () => {
 };
 ```
 
-Resources can only be instantiated within **preflight** context:
+Preflight classes can only be instantiated within **preflight** context:
 
 ```TS
-resource Bar {}
+class Bar {}
 
-new Bar(); // OK! Bar is a resource
+new Bar(); // OK! Bar is a preflight class
 
 let handler2 = inflight() => {
-  new Bar(); // ERROR: cannot instantiate a resource from an inflight context
+  new Bar(); // ERROR: cannot instantiate a preflight class from an inflight context
 }
 ```
 
 Bridge between preflight and inflight is crossed with the help of immutable data
 structures, "structs" (user definable and `Struct`), and the capture mechanism.
 
-Preflight resource methods and initializers can receive an inflight function as
-an argument. This enables resources to define code that will be executed on the
-deployed resource (lambda functions, docker, virtual machines etc).
+Preflight class methods and initializers can receive an inflight function as an argument. This
+enables preflight classes to define code that will be executed on a cloud compute platform such as
+lambda functions, docker, virtual machines etc.
 
 [`▲ top`][top]
 
@@ -822,7 +827,7 @@ Visibility inference is done with the following rules:
 
 Accessing fields, members, or structured data is done with `.`.
 
-Visibility modifiers can be applied to members of classes and resources.  
+Visibility modifiers can be applied to members of classes.
 Mixing `protected` and `internal` is not allowed.
 
 [`▲ top`][top]
@@ -1248,8 +1253,8 @@ expected from a call and it is not being caught.
 Wing recommends the following formatting and naming conventions:
 
 - Interface names should start with capital letter "I"
-- Class, struct, interface, and resource names should be TitleCased
-- Members of classes, interfaces, and resources cannot share the same TitleCased
+- Class, struct, and interface names should be TitleCased
+- Members of classes, and interfaces cannot share the same TitleCased
   representation as the declaring expression itself.
 - Parentheses are optional in expressions. Any Wing expression can be surrounded
   by parentheses to enforce precedence, which implies that the expression inside
@@ -1275,13 +1280,13 @@ targeting JSII with Node, Wing will use the event based loop that Node offers.
 
 In Wing, writing and executing at root block scope level is forbidden except for
 the entrypoint of the program. Root block scope is considered special and
-compiler generates special instructions to properly assign all resources to
+compiler generates special instructions to properly assign all preflight classes to
 their respective scopes recursively down the constructs tree based on entry.
 
 Entrypoint is always a Wing source with an extension of `.w`. Within this entry
-point, a root resource is made available for all subsequent resources that are
-initialized and instantiated. Type of the root resource is determined by the
-target being used by the compiler. The root resource might be of type `App` in
+point, a root preflight class is made available for all subsequent preflight classes that are
+initialized and instantiated. Type of the root class is determined by the
+target being used by the compiler. The root class might be of type `App` in
 AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 > Following "shimming" is only done for the entrypoint file and nowhere else.
@@ -1605,7 +1610,7 @@ Structs are loosely modeled after typed JSON literals in JavaScript.
 Structs are defined with the `struct` keyword.  
 Structs are "bags" of immutable data.
 
-Structs can only have fields of primitive types, resources, and other structs.  
+Structs can only have fields of primitive types, preflight classes, and other structs.  
 Array, set, and map of above types is also allowed in struct field definition.  
 Visibility, storage and phase modifiers are not allowed in struct fields.
 
@@ -1672,15 +1677,26 @@ Structs can inherit from multiple other structs.
 
 ### 3.2 Classes
 
+Similarly to other object-oriented programming languages, Wing uses classes as its first-class
+composition pattern. 
+
 Classes consist of fields and methods in any order.  
-The class system is single-dispatch class based object orientated system.  
+The class system is single-dispatch class based object-orientated system.  
 Classes are instantiated with the `new` keyword.
 
-A class member function that has the name **init** is considered to be a class
+Classes are associated with a specific execution phase (preflight or inflight). The phase indicates
+in which scope objects can be instantiated from this class.
+
+If a [phase modifier](#13-phase-modifiers) is not specified, the class inherits the phase from the
+scope in which it is declared. This implies that, if a class is declared at the root scope (e.g. the
+program's entrypoint), it will be a *preflight class*. If a class is declared within an inflight
+scope, it will be implicitly an inflight class.
+
+A method that has the name **init** is considered to be a class
 constructor (or initializer, or allocator).
 
 ```TS
-class Name extends Base impl IMyInterface1, IMyInterface2 {
+inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
   init() {
     // constructor implementation
     // order is up to user
@@ -1810,18 +1826,16 @@ In methods if return type is missing, `: void` is assumed.
 
 ---
 
-### 3.3 Resources
+### 3.3 Preflight Classes
 
-> Resources cannot be defined and instantiated in inflight contexts.
+Classes declared within a preflight scope (the root scope) are implicitly bound to the preflight
+phase. These classes can have specific `inflight` members.
 
-Resources provide first class composite pattern support in Wing. They are
-modeled after and leverage the [constructs](https://github.com/aws/constructs)
-programming model and as such are fully interoperable with CDK constructs.  
-Resources can be defined like so:
+For example:
 
 ```TS
 // Wing Code:
-resource Foo {
+class Foo {
   init() { /* initialize preflight fields */ } // preflight constructor
   inflight init() {} // optional client initializer
 
@@ -1849,43 +1863,46 @@ resource Foo {
 }
 ```
 
-Resources all have a scope and a unique ID. Compiler provides an implicit scope
-and ID for each resource, both overrideable by user-defined ones in constructor.
+Preflight objects all have a scope and a unique ID. Compiler provides an implicit scope
+and ID for each object, both overrideable by user-defined ones in constructor.
 
-The default for scope is `this`, which means the scope in which the resource was
-defined. The implicit ID is the type name of the resource iff the resource type
-is the only resource type being used in the current scope. In other words, if
-there are multiple resources of the same type defined in the same scope, they
+The default for scope is `this`, which means the scope in which the object was
+defined (instantiated). The implicit ID is the type name of the class iff the type
+is the only preflight object of this type being used in the current scope. In other words, if
+there are multiple preflight objects of the same type defined in the same scope, they
 must all have an explicit id.
 
-Resources instantiated at block scope root level of entrypoint are assigned the
-root app construct as their default implicit scope.
+Preflight objects instantiated at block scope root level of entrypoint are assigned the
+root app as their default implicit scope.
 
-Resource instantiation syntax uses the `let` keyword the same way variables are
-declared in Wing. The difference is `be/in` keywords afterwards.
+Preflight object instantiation syntax uses the `let` keyword the same way variables are declared in
+Wing. The `as` and `in` keywords can be used to customize the scope and identifier assigned to this
+preflight object.
 
 ```pre
-let <name>[: <type>] = <resource> [be <id>] [in <scope>];
+let <name>[: <type>] = new <Type>(<args>) [as <id>] [in <scope>];
 ```
 
 ```TS
 // Wing Code:
 let a = Foo(); // with default scope and id
 let a = Foo() in scope; // with user-defined scope
-let a = Foo() be "custom-id" in scope; // with user-defined scope and id
-let a = Foo(...) be "custom-id2" in scope; // with constructor arguments
+let a = new Foo() as "custom-id" in scope; // with user-defined scope and id
+let a = new Foo(...) as "custom-id2" in scope; // with constructor arguments
 ```
 
 "id" must be of type string. It can also be a string literal with substitution
 support (normal strings as well as shell strings).  
-"scope" must be an expression of resource type.
+"scope" must be an expression that resolves to a preflight object.
 
-Resources can be captured into inflight functions and once that happens, inside
+Preflight objects can be captured into inflight scopes and once that happens, inside
 the capture block only the inflight members are available.
 
-Resources can extend other resources (but not structs) and implement interfaces.
+Preflight classes can extend other preflight classes (but not [structs](#31-structs)) and implement
+[interfaces](#34-interfaces). If a class implements an interface marked `inflight interface`, then
+all of the implemented methods must be `inflight`.
 
-Declaration of fields with different phases is not allowed due to requirement of
+Declaration of fields of the same name with different phases is not allowed due to requirement of
 having inflight fields of same name being implicitly initialized by the compiler  
 but declaration of methods with different phases is allowed.
 
@@ -1895,10 +1912,10 @@ but declaration of methods with different phases is allowed.
 
 ### 3.4 Interfaces
 
-Interfaces represent a contract that a class or resource must fulfill.  
-Interfaces are defined with the `interface` keyword.  
-Both preflight and inflight signatures are allowed.  
-`impl` keyword is used to implement an interface or multiple interfaces that are
+Interfaces represent a contract that a class must fulfill.
+Interfaces are defined with the `interface` keyword.
+Both preflight and inflight signatures are allowed.
+If the `inflight` modifier is used in the interface declaration, all methods will be automatically considered inflight methods. `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
 All methods of an interface are implicitly public and cannot be of any other
@@ -1910,11 +1927,14 @@ Interface fields are not supported.
 > // Wing program:
 > interface IMyInterface1 {
 >   method1(x: num): str;
+>   inflight method3(): void;
 > };
-> interface IMyInterface2 {
->   inflight method2(): str;
+>
+> inflight interface IMyInterface2 {
+>   method2(): str; // <-- "inflight" is implied
 > };
-> resource MyResource impl IMyInterface1, IMyInterface2 {
+>
+> class MyResource impl IMyInterface1, IMyInterface2 {
 >   field1: num;
 >   field2: str;
 >
@@ -1926,6 +1946,7 @@ Interface fields are not supported.
 >   method1(x: num): str {
 >     return "sample: ${x}";
 >   }
+>   inflight method3(): void { }
 >   inflight method2(): str {
 >     return this.field2;
 >   }
@@ -2291,13 +2312,13 @@ acts like C `#include`s. Symbols collision is fatal in this style of imports.
 
 ### 4.2 Exports
 
-In preflight, anything with `public` at block scope level is importable.  
-This includes functions, classes, structs, interfaces and resources.  
-In inflight, the above excluding resources are importable.  
+In preflight, anything with `public` at block scope level is importable.
+This includes functions, classes, structs and interfaces.
+In inflight, the above excluding preflight classes are importable.
 Variables are not exportable.
 
-Resources are not usable in inflight functions. There is no synthesizer inside
-and no deployment system in the inflight body to synthesize inflight resources.
+Preflight classes cannot be instantiated in inflight functions. There is no synthesizer inside
+and no deployment system in the inflight body to provision.
 
 "Bringing" other Wing files currently ignores exports, but bringing JSII modules
 respect the visibility of JSII module exports.
@@ -2312,7 +2333,7 @@ respect the visibility of JSII module exports.
 
 ### 5.1.1 External Libraries
 
-You may import JSII modules in Wing and they are considered resources if their
+You may import JSII modules in Wing and they are considered preflight classes if their
 JSII type manifest shows that the JSII module is a construct. Wing is a consumer
 of JSII modules currently.
 
@@ -2330,14 +2351,14 @@ supported languages.
 
 ## 5.2 JavaScript
 
-The `extern "<commonjs module path or name>"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<commonjs module path or name>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
 
 In the following example, the static inflight method `make_id` is implemented
 in `helper.js`:
 
 ```js
 // task-list.w
-resource TaskList {
+class TaskList {
   // ...
 
   inflight add_task(title: str) {
@@ -2402,7 +2423,6 @@ If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 | User-Defined Wing Types | JavaScript Type                                                                        | Frozen? |
 |-------------------------|----------------------------------------------------------------------------------------|---------|
 | `class`                 | `class`, only with members whose phase is compatible with the function signature       |         |
-| `resource`              | `class`, only with members whose phase is compatible with the function signature       |         |
 | `interface`             | `interface`, only with members whose phase is compatible with the function signature   |         |
 | `struct`                | `interface`                                                                            | Yes     |
 | `enum`                  | `string`-based enum-like `Object`                                                      | Yes     |
@@ -2643,7 +2663,7 @@ struct DenyListProps {
   rules: MutArray<DenyListRule>[];
 }
 
-resource DenyList {
+class DenyList {
   _bucket: cloud.Bucket;
   _object_key: str;
 

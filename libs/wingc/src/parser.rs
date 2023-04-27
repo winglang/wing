@@ -565,22 +565,13 @@ impl<'s> Parser<'s> {
 						.err();
 				}
 				(other, _) => {
-					panic!(
-						"Unexpected {} element node type {} || {:#?}",
-						if is_resource { "resource" } else { "class" },
-						other,
-						class_element
-					);
+					panic!("Unexpected class element node type {} || {:#?}", other, class_element);
 				}
 			}
 		}
 		if initializer.is_none() {
 			self.add_error::<Node>(
-				format!(
-					"No constructor defined in {} {:?}",
-					if is_resource { "resource" } else { "class" },
-					statement_node
-				),
+				format!("No constructor defined in class {:?}", statement_node),
 				&statement_node,
 			)?;
 		}

@@ -10,7 +10,7 @@ if true {
 }
 assert(s == "top");
 
-resource A {
+class A {
   init(){
     let s = "in_resource";
     assert(s == "in_resource");

@@ -1281,7 +1281,7 @@ impl<'a> TypeChecker<'a> {
 							(&class.env, &class.name)
 						} else {
 							return self.general_type_error(format!(
-								"Cannot create the resource \"{}\" in inflight phase",
+								"Cannot create preflight class \"{}\" in inflight phase",
 								class.name
 							));
 						}
@@ -1291,7 +1291,7 @@ impl<'a> TypeChecker<'a> {
 							return self.types.anything();
 						} else {
 							return self.general_type_error(format!(
-								"Cannot instantiate type \"{}\" because it is not a class or resource",
+								"Cannot instantiate type \"{}\" because it is not a class",
 								type_
 							));
 						}
@@ -1358,7 +1358,7 @@ impl<'a> TypeChecker<'a> {
 					let obj_scope_type = if let Some(obj_scope) = obj_scope {
 						Some(self.type_check_exp(obj_scope, env))
 					} else {
-						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
+						// If this returns None, this means we're instantiating a preflight object in the global scope, which is valid
 						env
 							.try_lookup("this", Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
@@ -1370,7 +1370,7 @@ impl<'a> TypeChecker<'a> {
 							self.expr_error(
 								exp,
 								format!(
-									"Expected scope to be a resource object, instead found \"{}\"",
+									"Expected scope to be a preflight object, instead found \"{}\"",
 									obj_scope_type
 								),
 							);
@@ -2109,13 +2109,13 @@ impl<'a> TypeChecker<'a> {
 						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
 						} else {
-							panic!("Resource {}'s parent {} is not a resource", name, t);
+							panic!("Preflight class {}'s parent {} is not a preflight class", name, t);
 						}
 					} else {
 						if let Type::Class(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
 						} else {
-							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
+							self.general_type_error(format!("Inflight class {}'s parent \"{}\" is not a class", name, t));
 							(None, None)
 						}
 					}
@@ -2263,7 +2263,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							self.type_error(TypeError {
 								message: format!(
-									"Resource \"{}\" does not implement method \"{}\" of interface \"{}\"",
+									"Class \"{}\" does not implement method \"{}\" of interface \"{}\"",
 									name.name, method_name, interface_type.name.name
 								),
 								span: name.span.clone(),
@@ -2279,7 +2279,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							self.type_error(TypeError {
 								message: format!(
-									"Resource \"{}\" does not implement field \"{}\" of interface \"{}\"",
+									"Class \"{}\" does not implement field \"{}\" of interface \"{}\"",
 									name.name, field_name, interface_type.name.name
 								),
 								span: name.span.clone(),

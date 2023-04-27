@@ -57,7 +57,7 @@ Wing is designed around this new programming paradigm, which we call
 [Inflight functions](https://docs.winglang.io/concepts/inflights) are likely Wing's most significant
 language innovation. Since cloud applications are distributed systems and code is executed on
 multiple machines across various compute platforms, our language needs first-class support for this
-idea: code that executes in the cloud and interacts with cloud resources around it. This is where
+idea: code that executes in the cloud and interacts with managed services around it. This is where
 inflight functions come into play.
 
 Asynchronous and concurrent programming have been a continuous source for programming language
@@ -91,7 +91,7 @@ new cloud.Function(inflight () => {
 ```
 
 The magic happens when the inflight function is referencing `my_bucket`. The `cloud.Bucket` which is
-defined (with `new`) outside the function closure represents a **cloud infrastructure resource**,
+defined (with `new`) outside the function closure is a preflight object which represents a **cloud infrastructure resource**,
 not an in-memory object. When the function code interacts with this bucket (calls
 `my_bucket.put()`), it represents an interaction across machine boundaries. The code is executed
 inside some compute service such as AWS Lambda, and the bucket is backed by something like Amazon
@@ -99,7 +99,7 @@ S3. The compiler has to do quite a lot in order to make this a reality on the cl
 wire up the bucket information during deployment, add the right permissions to the Lambda's IAM
 policy, and create a code bundle with just the right set of dependencies.
 
-Inflight functions can interact with resources through their *inflight interface*. This is not very
+Inflight functions can interact with preflight objects through their *inflight interface*. This is not very
 different from e.g. `async` functions in JavaScript, where it doesn't really make sense to `await`
 an async function from synchronous contexts. It is also not very different from how
 [Goroutines](https://gobyexample.com/goroutines) can only interact with the world through
@@ -107,7 +107,7 @@ an async function from synchronous contexts. It is also not very different from 
 
 Inflight functions are an *isolation boundary* enforced by the compiler. This means that there are
 certain limitations on what can be accessed from an inflight scope. Specifically, you can only
-access *immutable data* and interact with *cloud resources* through their inflight API (like the
+access *immutable data* and interact with *preflight object* through their inflight API (like the
 example above demonstrates). If you try to call `my_bucket.put()` outside of an `inflight` context
 the Wing compiler will emit this error: 
 
@@ -116,7 +116,7 @@ Cannot call inflight function "my_bucket.put" while in preflight phase
 ```
 
 Many folks are asking us [why is Wing a language and not a
-library](https://news.ycombinator.com/item?id=34051472). Inflight functions and resources are a
+library](https://news.ycombinator.com/item?id=34051472). Inflight functions and preflight objects are a
 great example. We believe it is impossible to ensure this level of isolation and interaction
 semantics in existing languages through a library, or even through a compiler extension. We've seen
 some worthy efforts in projects like [Pulumi's Function
@@ -142,16 +142,4 @@ let handler = inflight (e: str): str => {
   // on air (apologies, the puns are unavoidable, really)
 };
 ```
-
-The next major step for inflights is to establish a model that allows them to be composed together,
-while tracking the operations performed by each one for the purpose of permission inference and
-other wiring. We've implemented the first stage in the SDK
-([#869](https://github.com/winglang/wing/pull/869)), and we are working on implementing this in the
-compiler ([#542](https://github.com/winglang/wing/issues/542)), which will enable the creation of
-resources with inflight methods.
-
-To see what this work will enable, check out this [user
-story](https://github.com/winglang/wing/blob/4ac4f0985702f092719f97760c99249757e6dba4/rfcs/epic-todo-app-compiler.md)
-which talks about declaring a user-defined resource in Wing with a set of inflight methods. This is
-going to be fabulous!
 
