@@ -860,7 +860,7 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 `;
 
 exports[`resource_inflight.w > stderr 1`] = `
-"error: Cannot create the preflight class \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
+"error: Cannot create preflight class \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
 
 "
 `;
