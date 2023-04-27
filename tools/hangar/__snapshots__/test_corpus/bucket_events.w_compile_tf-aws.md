@@ -742,7 +742,7 @@
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Post"
+              "s3:ObjectCreated:Put"
             ],
             "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
           }
@@ -782,7 +782,7 @@
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Put"
+              "s3:ObjectCreated:Post"
             ],
             "topic_arn": "${aws_sns_topic.root_b_bonupdate_F11B4439.arn}"
           }
@@ -802,7 +802,7 @@
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Post"
+              "s3:ObjectCreated:Put"
             ],
             "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
           }
@@ -842,7 +842,7 @@
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Put"
+              "s3:ObjectCreated:Post"
             ],
             "topic_arn": "${aws_sns_topic.root_other_otheronupdate_3B763057.arn}"
           }
