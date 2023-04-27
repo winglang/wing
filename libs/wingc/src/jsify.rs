@@ -19,7 +19,7 @@ use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionBodyRef,
 		FunctionDefinition, Initializer, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType, UtilityFunctions,
+		StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType, UtilityFunctions,
 	},
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
@@ -1124,15 +1124,15 @@ impl<'a> JSifier<'a> {
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
 		code.open("(await (async () => {");
-		code.line("const mod = require(\"${{self_client_path}}\")");
+		code.line("const mod = require(\"${self_client_path}\")");
 
-		code.open("mod.setupGlobals({");
-
-		for var_name in free_inflight_variables {
-			code.line(format!("{var_name}: ${{{var_name}_client}},"));
+		if free_inflight_variables.len() > 0 {
+			code.open("mod.setupGlobals({");
+			for var_name in free_inflight_variables {
+				code.line(format!("{var_name}: ${{{var_name}_client}},"));
+			}
+			code.close("});");
 		}
-
-		code.close("});");
 
 		code.open(format!("const client = new mod.{}({{", resource_name.name));
 
@@ -1627,8 +1627,50 @@ impl<'a> FieldReferenceVisitor<'a> {
 	}
 }
 
+/// Scans AST nodes for free variables.
+///
+/// A free variable is a variable that is used in the body of a function but not
+/// defined in the function's scope. Here is an example where "x" is a free variable:
+/// ```wing
+/// let x = 5;
+/// let foo = () => {
+///  return x + 3;
+/// }
+/// ```
+/// Variables that are defined in the function's scope are called "bound variables".
+/// Function parameters and local variables are typically bound variables.
+///
+/// For more info see https://en.wikipedia.org/wiki/Free_variables_and_bound_variables
 struct FreeVariableScanner {
+	/// A list of all known bound variables in the current scope.
+	///
+	/// If a variable symbol appears is in a declaration-like position (such as a function parameter
+	/// or a local variable assignment/definition), it's added to the list of bound variables.
+	/// If a variable symbol appears in any other position (like in an expression), the scanner
+	/// checks if it's in the list of bound variables. If it's not, it's recorded as a free variable.
+	///
+	/// Since the scanner traverses the AST in depth-first order, the list of bound variables
+	/// may increase or decrease as it enters and exits different scopes.
+	/// The AST methods are commented with a note about whether the list of bound variables
+	/// is expected to increase or stay the same.
 	bound_vars: Vec<Symbol>,
+
+	/// A list of all free variables the scanner has found so far.
+	/// This collects the exact symbols (not just the names of variables) since
+	/// this scanner may be used to scan an entire class, and a class may have
+	/// multiple methods. It's possible that in method A, a variable "x" is a
+	/// free variable, but in method B, "x" is a bound variable:
+	/// ```wing
+	/// let x = 5;
+	/// class Foo {
+	///   methodA() {
+	///     return x + 3;
+	///   }
+	///   methodB(x) {
+	///     return x + 3;
+	///   }
+	/// }
+	/// ```
 	free_vars: Vec<Symbol>,
 }
 
@@ -1642,6 +1684,7 @@ impl FreeVariableScanner {
 }
 
 impl Visit<'_> for FreeVariableScanner {
+	// invariant: adds zero bound variables
 	fn visit_reference(&mut self, node: &Reference) {
 		if let Reference::Identifier(ref x) = node {
 			// check if there is already a bound variable with the same name
@@ -1653,7 +1696,7 @@ impl Visit<'_> for FreeVariableScanner {
 		return visit::visit_reference(self, node);
 	}
 
-	// invariant: adds net zero bound variables
+	// invariant: adds zero bound variables
 	fn visit_scope(&mut self, scope: &Scope) {
 		let old_bound_vars = self.bound_vars.clone();
 		visit::visit_scope(self, scope);
@@ -1663,20 +1706,20 @@ impl Visit<'_> for FreeVariableScanner {
 
 	fn visit_stmt(&mut self, stmt: &Stmt) {
 		match &stmt.kind {
-			// this statement introduces bound variables!
+			// invariant: may introduce bound variables!
 			StmtKind::Bring {
 				module_name,
 				identifier,
 			} => {
 				self.visit_symbol(&module_name);
 
-				// bring cloud;
+				// `bring cloud;`
 				if !(module_name.name.starts_with('"') && module_name.name.ends_with('"')) {
 					// add `cloud` to the list of bound variables
 					self.bound_vars.push(module_name.clone());
 				}
 
-				// bring "foo" as bar;
+				// `bring "foo" as bar;`
 				if let Some(ref id) = identifier {
 					self.visit_symbol(&id);
 
@@ -1684,7 +1727,8 @@ impl Visit<'_> for FreeVariableScanner {
 					self.bound_vars.push(id.clone());
 				}
 			}
-			// this statement introduces bound variables!
+			// invariant: may introduce bound variables!
+			// `let x = y;`
 			StmtKind::VariableDef {
 				reassignable: _,
 				var_name,
@@ -1698,7 +1742,7 @@ impl Visit<'_> for FreeVariableScanner {
 				}
 				self.bound_vars.push(var_name.clone());
 			}
-			// invariant: adds net zero bound variables
+			// invariant: adds zero bound variables
 			StmtKind::ForLoop {
 				iterator,
 				iterable,
@@ -1710,7 +1754,7 @@ impl Visit<'_> for FreeVariableScanner {
 				self.visit_scope(&statements);
 				self.bound_vars.pop();
 			}
-			// invariant: adds net zero bound variables
+			// invariant: adds zero bound variables
 			StmtKind::TryCatch {
 				try_statements,
 				catch_block,
@@ -1738,7 +1782,7 @@ impl Visit<'_> for FreeVariableScanner {
 		};
 	}
 
-	// invariant: adds net zero bound variables
+	// invariant: adds zero bound variables
 	fn visit_constructor(&mut self, node: &Initializer) {
 		let Initializer {
 			signature,
@@ -1757,7 +1801,7 @@ impl Visit<'_> for FreeVariableScanner {
 		}
 	}
 
-	// invariant: adds net zero bound variables
+	// invariant: adds zero bound variables
 	fn visit_function_definition(&mut self, node: &FunctionDefinition) {
 		let FunctionDefinition {
 			signature,
@@ -1783,5 +1827,11 @@ impl Visit<'_> for FreeVariableScanner {
 		for _ in &signature.parameters {
 			self.bound_vars.pop();
 		}
+	}
+
+	// invariant: adds zero bound variables
+	// e.g. in `let x: Foo = 5;` we don't want to add `Foo` to the list of bound variables
+	fn visit_type_annotation(&mut self, _node: &TypeAnnotation) {
+		// do nothing
 	}
 }
