@@ -5,15 +5,15 @@ let api = new cloud.Api();
 
 let website = new cloud.Website(path: "./website_with_api");
 
-let users_table = new cloud.Table(cloud.TableProps{
-    name: "users-table",
-    primary_key: "id",
-    columns: {
-      id: cloud.ColumnType.STRING,
-      name: cloud.ColumnType.STRING,
-      age: cloud.ColumnType.NUMBER,
-    }
-  });
+let users_table = new cloud.Table(
+  name: "users-table",
+  primary_key: "id",
+  columns: {
+    id: cloud.ColumnType.STRING,
+    name: cloud.ColumnType.STRING,
+    age: cloud.ColumnType.NUMBER,
+  }
+);
 
 
 let get_handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
