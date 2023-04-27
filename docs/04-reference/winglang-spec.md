@@ -1677,15 +1677,26 @@ Structs can inherit from multiple other structs.
 
 ### 3.2 Classes
 
+Similarly to other object-oriented programming languages, Wing uses classes as its first-class
+composition pattern. 
+
 Classes consist of fields and methods in any order.  
-The class system is single-dispatch class based object orientated system.  
+The class system is single-dispatch class based object-orientated system.  
 Classes are instantiated with the `new` keyword.
 
-A class member function that has the name **init** is considered to be a class
+Classes are associated with a specific execution phase (preflight or inflight). The phase indicates
+in which scope objects can be instantiated from this class.
+
+If a [phase modifier](#13-phase-modifiers) is not specified, the class inherits the phase from the
+scope in which it is declared. This implies that, if a class is declared at the root scope (e.g. the
+program's entrypoint), it will be a *preflight class*. If a class is declared within an inflight
+scope, it will be implicitly an inflight class.
+
+A method that has the name **init** is considered to be a class
 constructor (or initializer, or allocator).
 
 ```TS
-class Name extends Base impl IMyInterface1, IMyInterface2 {
+inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
   init() {
     // constructor implementation
     // order is up to user
@@ -1817,12 +1828,10 @@ In methods if return type is missing, `: void` is assumed.
 
 ### 3.3 Preflight Classes
 
-> Preflight objects cannot be declared and instantiated in inflight contexts.
+Classes declared within a preflight scope (the root scope) are implicitly bound to the preflight
+phase. These classes can have specific `inflight` members.
 
-Similarly to other object-oriented programming languages, Wing uses classes as its first-class
-composition pattern. 
-
-Preflight classes can be defined like so:
+For example:
 
 ```TS
 // Wing Code:
@@ -1889,7 +1898,9 @@ support (normal strings as well as shell strings).
 Preflight objects can be captured into inflight scopes and once that happens, inside
 the capture block only the inflight members are available.
 
-Preflight classes can extend other preflight classes (but not structs) and implement preflight interfaces.
+Preflight classes can extend other preflight classes (but not [structs](#31-structs)) and implement
+[interfaces](#34-interfaces). If a class implements an interface marked `inflight interface`, then
+all of the implemented methods must be `inflight`.
 
 Declaration of fields of the same name with different phases is not allowed due to requirement of
 having inflight fields of same name being implicitly initialized by the compiler  
@@ -1901,10 +1912,10 @@ but declaration of methods with different phases is allowed.
 
 ### 3.4 Interfaces
 
-Interfaces represent a contract that a class must fulfill.  
-Interfaces are defined with the `interface` keyword.  
-Both preflight and inflight signatures are allowed.  
-`impl` keyword is used to implement an interface or multiple interfaces that are
+Interfaces represent a contract that a class must fulfill.
+Interfaces are defined with the `interface` keyword.
+Both preflight and inflight signatures are allowed.
+If the `inflight` modifier is used in the interface declaration, all methods will be automatically considered inflight methods. `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
 All methods of an interface are implicitly public and cannot be of any other
@@ -1916,10 +1927,11 @@ Interface fields are not supported.
 > // Wing program:
 > interface IMyInterface1 {
 >   method1(x: num): str;
+>   inflight method3(): void;
 > };
 >
-> interface IMyInterface2 {
->   inflight method2(): str;
+> inflight interface IMyInterface2 {
+>   method2(): str; // <-- "inflight" is implied
 > };
 >
 > class MyResource impl IMyInterface1, IMyInterface2 {
@@ -1934,6 +1946,7 @@ Interface fields are not supported.
 >   method1(x: num): str {
 >     return "sample: ${x}";
 >   }
+>   inflight method3(): void { }
 >   inflight method2(): str {
 >     return this.field2;
 >   }
