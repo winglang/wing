@@ -216,7 +216,7 @@ impl FunctionSignature {
 				return_type: self.return_type.clone(),
 				phase: self.phase,
 			}),
-			// TODO
+			// Function signatures may not necessarily have spans
 			span: Default::default(),
 		}
 	}
