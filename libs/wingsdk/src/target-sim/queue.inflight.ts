@@ -16,18 +16,24 @@ import {
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
 {
-  private readonly messages = new Array<string>();
+  private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
+  private readonly retentionPeriod: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
     if (props.initialMessages) {
-      this.messages.push(...props.initialMessages);
+      this.messages.push(
+        ...props.initialMessages.map(
+          (message) => new QueueMessage(this.retentionPeriod, message)
+        )
+      );
     }
 
     this.timeout = props.timeout;
+    this.retentionPeriod = props.retentionPeriod;
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
     this.context = context;
   }
@@ -56,7 +62,7 @@ export class Queue
     return this.context.withTrace({
       message: `Push (message=${message}).`,
       activity: async () => {
-        this.messages.push(message);
+        this.messages.push(new QueueMessage(this.retentionPeriod, message));
       },
     });
   }
@@ -87,7 +93,8 @@ export class Queue
       // assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
         const messages = this.messages.splice(0, subscriber.batchSize);
-        if (messages.length === 0) {
+        const messagesPayload = messages.map((m) => m.payload);
+        if (messagesPayload.length === 0) {
           continue;
         }
         const fnClient = this.context.findInstance(
@@ -100,47 +107,55 @@ export class Queue
           type: TraceType.RESOURCE,
           data: {
             message: `Sending messages (messages=${JSON.stringify(
-              messages
+              messagesPayload
             )}, subscriber=${subscriber.functionHandle}).`,
           },
           sourcePath: this.context.resourcePath,
           sourceType: QUEUE_TYPE,
           timestamp: new Date().toISOString(),
         });
-        void fnClient.invoke(JSON.stringify({ messages })).catch((err) => {
-          // If the function returns an error, put the message back on the queue after timeout period
-          this.context.addTrace({
-            data: {
-              message: `Subscriber error - returning ${messages.length} messages to queue: ${err.message}`,
-            },
-            sourcePath: this.context.resourcePath,
-            sourceType: QUEUE_TYPE,
-            type: TraceType.RESOURCE,
-            timestamp: new Date().toISOString(),
-          });
-          void this.pushMessagesBackToQueue(messages).catch((requeueErr) => {
+        void fnClient
+          .invoke(JSON.stringify({ messages: messagesPayload }))
+          .catch((err) => {
+            // If the function returns an error, put the message back on the queue after timeout period
             this.context.addTrace({
               data: {
-                message: `Error pushing ${messages.length} messages back to queue: ${requeueErr.message}`,
+                message: `Subscriber error - returning ${messagesPayload.length} messages to queue: ${err.message}`,
               },
               sourcePath: this.context.resourcePath,
               sourceType: QUEUE_TYPE,
               type: TraceType.RESOURCE,
               timestamp: new Date().toISOString(),
             });
+            void this.pushMessagesBackToQueue(messages).catch((requeueErr) => {
+              this.context.addTrace({
+                data: {
+                  message: `Error pushing ${messagesPayload.length} messages back to queue: ${requeueErr.message}`,
+                },
+                sourcePath: this.context.resourcePath,
+                sourceType: QUEUE_TYPE,
+                type: TraceType.RESOURCE,
+                timestamp: new Date().toISOString(),
+              });
+            });
           });
-        });
         processedMessages = true;
       }
     } while (processedMessages);
   }
 
-  public async pushMessagesBackToQueue(messages: Array<string>): Promise<void> {
+  public async pushMessagesBackToQueue(
+    messages: Array<QueueMessage>
+  ): Promise<void> {
     setTimeout(() => {
-      this.messages.push(...messages);
+      // Don't push back messages with retention timeouts that have expired
+      const retainedMessages = messages.filter(
+        (message) => message.retentionTimeout > new Date()
+      );
+      this.messages.push(...retainedMessages);
       this.context.addTrace({
         data: {
-          message: `${messages.length} messages pushed back to queue after timeout.`,
+          message: `${retainedMessages.length} messages pushed back to queue after visibility timeout.`,
         },
         sourcePath: this.context.resourcePath,
         sourceType: QUEUE_TYPE,
@@ -148,6 +163,18 @@ export class Queue
         timestamp: new Date().toISOString(),
       });
     }, this.timeout * 1000);
+  }
+}
+
+class QueueMessage {
+  retentionTimeout: Date;
+  payload: string;
+
+  constructor(retentionPeriod: number, message: string) {
+    const currentTime = new Date();
+    currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
+    this.retentionTimeout = currentTime;
+    this.payload = message;
   }
 }
 
