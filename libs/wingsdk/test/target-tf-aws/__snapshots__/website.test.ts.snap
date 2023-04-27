@@ -85,7 +85,7 @@ exports[`default website behavior 1`] = `
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_17CA2583\\": {
+      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_020EEDFA\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
@@ -94,7 +94,7 @@ exports[`default website behavior 1`] = `
         \\"key\\": \\"/b.html\\",
         \\"source\\": \\"<source>\\"
       },
-      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_2B591C83\\": {
+      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_70F4D0CA\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
@@ -219,7 +219,7 @@ exports[`default website behavior 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-8cb79062": {
+  }-43ed6fc9": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
@@ -297,7 +297,7 @@ exports[`default website behavior 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-8cb79062",
+  }-43ed6fc9",
                     "path": "root/Default/Website/File-basename(path, suffix) {
     if (suffix !== undefined)
       validateString(suffix, 'ext');
@@ -371,7 +371,7 @@ exports[`default website behavior 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-8cb79062",
+  }-43ed6fc9",
                   },
                   "File-basename(path, suffix) {
     if (suffix !== undefined)
@@ -446,7 +446,7 @@ exports[`default website behavior 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-d1bb8b58": {
+  }-82cd5558": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
@@ -524,7 +524,7 @@ exports[`default website behavior 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-d1bb8b58",
+  }-82cd5558",
                     "path": "root/Default/Website/File-basename(path, suffix) {
     if (suffix !== undefined)
       validateString(suffix, 'ext');
@@ -598,7 +598,7 @@ exports[`default website behavior 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-d1bb8b58",
+  }-82cd5558",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
@@ -784,7 +784,7 @@ exports[`website with add_json 1`] = `
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_17CA2583\\": {
+      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_020EEDFA\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
@@ -793,7 +793,7 @@ exports[`website with add_json 1`] = `
         \\"key\\": \\"/b.html\\",
         \\"source\\": \\"<source>\\"
       },
-      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_2B591C83\\": {
+      \\"root_Website_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNonSlash_70F4D0CA\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
         \\"content_type\\": \\"text/html; charset=utf-8\\",
         \\"depends_on\\": [
@@ -927,7 +927,7 @@ exports[`website with add_json 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-8cb79062": {
+  }-43ed6fc9": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
@@ -1005,7 +1005,7 @@ exports[`website with add_json 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-8cb79062",
+  }-43ed6fc9",
                     "path": "root/Default/Website/File-basename(path, suffix) {
     if (suffix !== undefined)
       validateString(suffix, 'ext');
@@ -1079,7 +1079,7 @@ exports[`website with add_json 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-8cb79062",
+  }-43ed6fc9",
                   },
                   "File-basename(path, suffix) {
     if (suffix !== undefined)
@@ -1154,7 +1154,7 @@ exports[`website with add_json 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-d1bb8b58": {
+  }-82cd5558": {
                     "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
@@ -1232,7 +1232,7 @@ exports[`website with add_json 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-d1bb8b58",
+  }-82cd5558",
                     "path": "root/Default/Website/File-basename(path, suffix) {
     if (suffix !== undefined)
       validateString(suffix, 'ext');
@@ -1306,7 +1306,7 @@ exports[`website with add_json 2`] = `
     if (end === -1)
       return '';
     return StringPrototypeSlice(path, start, end);
-  }-d1bb8b58",
+  }-82cd5558",
                   },
                   "File-config.json": {
                     "constructInfo": {

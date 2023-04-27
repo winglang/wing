@@ -31,11 +31,11 @@
   },
   "resource": {
     "aws_cloudfront_distribution": {
-      "root_cloudWebsite_distribution_CC27FD7B": {
+      "root_cloudWebsite_Distribution_6BC863F8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/distribution",
-            "uniqueId": "root_cloudWebsite_distribution_CC27FD7B"
+            "path": "root/Default/Default/cloud.Website/Distribution",
+            "uniqueId": "root_cloudWebsite_Distribution_6BC863F8"
           }
         },
         "default_cache_behavior": {
@@ -64,7 +64,7 @@
         "enabled": true,
         "origin": [
           {
-            "domain_name": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket_regional_domain_name}",
+            "domain_name": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket_regional_domain_name}",
             "origin_id": "s3Origin"
           }
         ],
@@ -81,11 +81,11 @@
       }
     },
     "aws_s3_bucket": {
-      "root_cloudWebsite_websitebucket_4CF820EB": {
+      "root_cloudWebsite_WebsiteBucket_E28E35CE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/website-bucket",
-            "uniqueId": "root_cloudWebsite_websitebucket_4CF820EB"
+            "path": "root/Default/Default/cloud.Website/WebsiteBucket",
+            "uniqueId": "root_cloudWebsite_WebsiteBucket_E28E35CE"
           }
         },
         "bucket_prefix": "cloud-website-c8e58765-",
@@ -100,8 +100,8 @@
             "uniqueId": "root_cloudWebsite_PublicPolicy_2884A0C6"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.arn}/*\"]}]}"
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.arn}/*\"]}]}"
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -112,7 +112,7 @@
             "uniqueId": "root_cloudWebsite_Encryption_8B168696"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -123,46 +123,46 @@
       }
     },
     "aws_s3_bucket_website_configuration": {
-      "root_cloudWebsite_bucketwebsiteconfiguration_F1E7E201": {
+      "root_cloudWebsite_BucketWebsiteConfiguration_DEE39F09": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/bucket-website-configuration",
-            "uniqueId": "root_cloudWebsite_bucketwebsiteconfiguration_F1E7E201"
+            "path": "root/Default/Default/cloud.Website/BucketWebsiteConfiguration",
+            "uniqueId": "root_cloudWebsite_BucketWebsiteConfiguration_DEE39F09"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
         "index_document": {
           "suffix": "index.html"
         }
       }
     },
     "aws_s3_object": {
-      "root_cloudWebsite_awss3bucketobjectindexhtml_3A649306": {
+      "root_cloudWebsite_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNon_9DC0852D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/aws_s3_bucket_object_index.html",
-            "uniqueId": "root_cloudWebsite_awss3bucketobjectindexhtml_3A649306"
+            "path": "root/Default/Default/cloud.Website/File-basename(path, suffix) {\n    if (suffix !== undefined)\n      validateString(suffix, 'ext');\n    validateString(path, 'path');\n\n    let start = 0;\n    let end = -1;\n    let matchedSlash = true;\n\n    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {\n      if (suffix === path)\n        return '';\n      let extIdx = suffix.length - 1;\n      let firstNonSlashEnd = -1;\n      for (let i = path.length - 1; i >= 0; --i) {\n        const code = StringPrototypeCharCodeAt(path, i);\n        if (code === CHAR_FORWARD_SLASH) {\n          ---- If we reached a path separator that was not part of a set of path\n          ---- separators at the end of the string, stop now\n          if (!matchedSlash) {\n            start = i + 1;\n            break;\n          }\n        } else {\n          if (firstNonSlashEnd === -1) {\n            ---- We saw the first non-path separator, remember this index in case\n            ---- we need it if the extension ends up not matching\n            matchedSlash = false;\n            firstNonSlashEnd = i + 1;\n          }\n          if (extIdx >= 0) {\n            ---- Try to match the explicit extension\n            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {\n              if (--extIdx === -1) {\n                ---- We matched the extension, so mark this as the end of our path\n                ---- component\n                end = i;\n              }\n            } else {\n              ---- Extension does not match, so our result is the entire path\n              ---- component\n              extIdx = -1;\n              end = firstNonSlashEnd;\n            }\n          }\n        }\n      }\n\n      if (start === end)\n        end = firstNonSlashEnd;\n      else if (end === -1)\n        end = path.length;\n      return StringPrototypeSlice(path, start, end);\n    }\n    for (let i = path.length - 1; i >= 0; --i) {\n      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {\n        ---- If we reached a path separator that was not part of a set of path\n        ---- separators at the end of the string, stop now\n        if (!matchedSlash) {\n          start = i + 1;\n          break;\n        }\n      } else if (end === -1) {\n        ---- We saw the first non-path separator, mark this as the end of our\n        ---- path component\n        matchedSlash = false;\n        end = i + 1;\n      }\n    }\n\n    if (end === -1)\n      return '';\n    return StringPrototypeSlice(path, start, end);\n  }-2889493a",
+            "uniqueId": "root_cloudWebsite_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNon_9DC0852D"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB"
+          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
         ],
         "key": "/index.html",
         "source": "<SOURCE>"
       },
-      "root_cloudWebsite_awss3bucketobjectotherhtml_2DA2BBB4": {
+      "root_cloudWebsite_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNon_D0314DD8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/aws_s3_bucket_object_other.html",
-            "uniqueId": "root_cloudWebsite_awss3bucketobjectotherhtml_2DA2BBB4"
+            "path": "root/Default/Default/cloud.Website/File-basename(path, suffix) {\n    if (suffix !== undefined)\n      validateString(suffix, 'ext');\n    validateString(path, 'path');\n\n    let start = 0;\n    let end = -1;\n    let matchedSlash = true;\n\n    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {\n      if (suffix === path)\n        return '';\n      let extIdx = suffix.length - 1;\n      let firstNonSlashEnd = -1;\n      for (let i = path.length - 1; i >= 0; --i) {\n        const code = StringPrototypeCharCodeAt(path, i);\n        if (code === CHAR_FORWARD_SLASH) {\n          ---- If we reached a path separator that was not part of a set of path\n          ---- separators at the end of the string, stop now\n          if (!matchedSlash) {\n            start = i + 1;\n            break;\n          }\n        } else {\n          if (firstNonSlashEnd === -1) {\n            ---- We saw the first non-path separator, remember this index in case\n            ---- we need it if the extension ends up not matching\n            matchedSlash = false;\n            firstNonSlashEnd = i + 1;\n          }\n          if (extIdx >= 0) {\n            ---- Try to match the explicit extension\n            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {\n              if (--extIdx === -1) {\n                ---- We matched the extension, so mark this as the end of our path\n                ---- component\n                end = i;\n              }\n            } else {\n              ---- Extension does not match, so our result is the entire path\n              ---- component\n              extIdx = -1;\n              end = firstNonSlashEnd;\n            }\n          }\n        }\n      }\n\n      if (start === end)\n        end = firstNonSlashEnd;\n      else if (end === -1)\n        end = path.length;\n      return StringPrototypeSlice(path, start, end);\n    }\n    for (let i = path.length - 1; i >= 0; --i) {\n      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {\n        ---- If we reached a path separator that was not part of a set of path\n        ---- separators at the end of the string, stop now\n        if (!matchedSlash) {\n          start = i + 1;\n          break;\n        }\n      } else if (end === -1) {\n        ---- We saw the first non-path separator, mark this as the end of our\n        ---- path component\n        matchedSlash = false;\n        end = i + 1;\n      }\n    }\n\n    if (end === -1)\n      return '';\n    return StringPrototypeSlice(path, start, end);\n  }-102b858e",
+            "uniqueId": "root_cloudWebsite_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNon_D0314DD8"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB.bucket}",
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_websitebucket_4CF820EB"
+          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
         ],
         "key": "/inner-folder/other.html",
         "source": "<SOURCE>"
@@ -182,9 +182,7 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{
-    "path": "./website",}
-    );
+    const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
     {console.log(`website is up and running on ${w.url}!`)};
   }
 }
