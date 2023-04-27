@@ -33,6 +33,20 @@ test("queue with custom timeout", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("queue with custom retention", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  Queue._newQueue(app, "Queue", {
+    retentionPeriod: std.Duration.fromMinutes(30),
+  });
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual(["aws_sqs_queue"]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("queue with a consumer function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });

@@ -567,6 +567,129 @@ exports[`queue with a consumer function 3`] = `
 }
 `;
 
+exports[`queue with custom retention 1`] = `
+"{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
+  \\"resource\\": {
+    \\"aws_sqs_queue\\": {
+      \\"root_Queue_7193B145\\": {
+        \\"message_retention_seconds\\": 1800,
+        \\"name\\": \\"Queue-c822c726\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`queue with custom retention 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Queue": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": true,
+                },
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                      "version": "12.0.2",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/Queue/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A distributed message queue",
+                  "title": "Queue",
+                },
+                "id": "Queue",
+                "path": "root/Default/Queue",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "12.0.2",
+                },
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.245",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`queue with custom timeout 1`] = `
 "{
   \\"output\\": {

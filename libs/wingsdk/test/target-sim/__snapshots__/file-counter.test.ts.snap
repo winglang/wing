@@ -80,6 +80,7 @@ bucket: (function(env) {
         "path": "root/HelloWorld/Queue",
         "props": {
           "initialMessages": [],
+          "retentionPeriod": 3600,
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",

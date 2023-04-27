@@ -25,6 +25,9 @@ export class Queue extends cloud.Queue {
       visibilityTimeout: props.timeout
         ? Duration.seconds(props.timeout?.seconds)
         : undefined,
+      retentionPeriod: props.retentionPeriod
+        ? Duration.seconds(props.retentionPeriod?.seconds)
+        : undefined,
     });
 
     if ((props.initialMessages ?? []).length) {
