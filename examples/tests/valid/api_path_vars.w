@@ -8,9 +8,8 @@ class Fetch {
 }
 
 let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  let vars = req.vars ?? {name: ""};
   return cloud.ApiResponse {
-    body: {user: vars.get("name")},
+    body: Json.stringify({user: req.vars.get("name")}),
     status: 200
   };
 };

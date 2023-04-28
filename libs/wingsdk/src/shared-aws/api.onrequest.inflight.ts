@@ -33,7 +33,7 @@ function mapCloudApiResponseToApigatewayResponse(
 ): APIGatewayProxyResult {
   return {
     statusCode: resp.status,
-    body: resp.body ? JSON.stringify(resp.body) : "",
+    body: resp.body,
     headers: resp.headers,
   };
 }
@@ -53,27 +53,10 @@ function mapApigatewayEventToCloudApiRequest(
 
   return {
     path: request.path,
-    body: parseBody(request),
+    body: request.body ?? "",
     headers: request.headers as Record<string, string>,
     method: parseHttpMethod(request.httpMethod),
     query: sanitizeParamLikeObject(query),
     vars: sanitizeParamLikeObject(request.pathParameters ?? {}),
   };
-}
-
-/**
- * Parse body to JSON or empty string
- * @param body body
- * @returns JSON body
- */
-function parseBody(request: APIGatewayProxyEvent) {
-  if (!request.body) return "";
-
-  const contentType = Object.entries(request.headers).find(
-    ([key, _]) => key.toLowerCase() === "content-type"
-  )?.[1];
-  if (contentType === "application/x-www-form-urlencoded") {
-    return Object.fromEntries(new URLSearchParams(request.body));
-  }
-  return JSON.parse(request.body);
 }

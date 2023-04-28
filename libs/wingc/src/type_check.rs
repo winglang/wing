@@ -301,6 +301,7 @@ pub struct Struct {
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
+	pub defaults: IndexMap<String, Expr>,
 }
 
 #[derive(Debug)]
@@ -680,6 +681,14 @@ impl TypeRef {
 
 	pub fn as_struct(&self) -> Option<&Struct> {
 		if let Type::Struct(ref s) = **self {
+			Some(s)
+		} else {
+			None
+		}
+	}
+
+	pub fn as_struct_mut(&mut self) -> Option<&mut Struct> {
+		if let Type::Struct(ref mut s) = **self {
 			Some(s)
 		} else {
 			None
@@ -1508,13 +1517,14 @@ impl<'a> TypeChecker<'a> {
 						.as_variable()
 						.expect("Expected struct field to be a variable in the struct env")
 						.type_;
+					let has_default = st.defaults.contains_key(&name);
 					match fields.get(name.as_str()) {
 						Some(field_exp) => {
 							let t = field_types.get(name.as_str()).unwrap();
 							self.validate_type(*t, field_type, field_exp);
 						}
 						None => {
-							if !field_type.is_option() {
+							if !field_type.is_option() && !has_default {
 								self.expr_error(exp, format!("\"{}\" is not initialized", name));
 							}
 						}
@@ -2420,6 +2430,7 @@ impl<'a> TypeChecker<'a> {
 						should_case_convert_jsii: false,
 						extends: extends_types,
 						env: struct_env,
+						defaults: IndexMap::default(),
 					}))),
 					StatementIdx::Top,
 				) {

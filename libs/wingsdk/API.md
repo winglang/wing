@@ -1692,12 +1692,37 @@ let api_request = cloud.ApiRequest{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>str</code> | The request's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>json</code> | The request's body. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
+
+---
+
+##### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
+
+```wing
+body: str;
+```
+
+- *Type:* str
+
+The request's body.
+
+---
+
+##### `headers`<sup>Required</sup> <a name="headers" id="@winglang/sdk.cloud.ApiRequest.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* {}
+
+The request's headers.
 
 ---
 
@@ -1732,42 +1757,20 @@ query: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
+- *Default:* {}
 
 The request's query string values.
 
 ---
 
-##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
-
-```wing
-body: json;
-```
-
-- *Type:* json
-
-The request's body.
-
----
-
-##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiRequest.property.headers"></a>
-
-```wing
-headers: MutMap<str>;
-```
-
-- *Type:* MutMap&lt;str&gt;
-
-The request's headers.
-
----
-
-##### `vars`<sup>Optional</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
+##### `vars`<sup>Required</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
 
 ```wing
 vars: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
+- *Default:* {}
 
 The path variables.
 
@@ -1789,9 +1792,34 @@ let api_response = cloud.ApiResponse{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>json</code> | The response's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>str</code> | The response's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
+
+---
+
+##### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.ApiResponse.property.body"></a>
+
+```wing
+body: str;
+```
+
+- *Type:* str
+
+The response's body.
+
+---
+
+##### `headers`<sup>Required</sup> <a name="headers" id="@winglang/sdk.cloud.ApiResponse.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* {}
+
+The response's headers.
 
 ---
 
@@ -1804,30 +1832,6 @@ status: num;
 - *Type:* num
 
 The response's status code.
-
----
-
-##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiResponse.property.body"></a>
-
-```wing
-body: json;
-```
-
-- *Type:* json
-
-The response's body.
-
----
-
-##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiResponse.property.headers"></a>
-
-```wing
-headers: MutMap<str>;
-```
-
-- *Type:* MutMap&lt;str&gt;
-
-The response's headers.
 
 ---
 

@@ -86,9 +86,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
             // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
             if (!isApiResponse(response)) {
               throw new Error(
-                `Expected an ApiResponse struct, found ${JSON.stringify(
-                  response
-                )}`
+                `Expected an ApiResponse struct, found ${response}`
               );
             }
 
@@ -96,7 +94,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
             for (const [key, value] of Object.entries(response.headers ?? {})) {
               res.set(key, value);
             }
-            res.send(JSON.stringify(response.body));
+            res.send(response.body);
             this.addTrace(
               `${route.method} ${route.route} - ${response.status}.`
             );

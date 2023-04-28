@@ -13,7 +13,7 @@ let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   };
   
   let resp = cloud.ApiResponse {
-    body: bodyResponse,
+    body: Json.stringify(bodyResponse),
     status: 200,
   };
   return resp;

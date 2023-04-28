@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Phase, Symbol},
+	ast::{Expr, ExprKind, Phase, Symbol, TypeAnnotation, TypeAnnotationKind},
 	debug,
 	diagnostic::{WingLocation, WingSpan},
 	type_check::{
@@ -11,6 +11,7 @@ use crate::{
 	WINGSDK_RESOURCE,
 };
 use colored::Colorize;
+use indexmap::IndexMap;
 use wingii::{
 	fqn::FQN,
 	jsii::{self, CollectionKind, PrimitiveType, TypeReference},
@@ -284,7 +285,7 @@ impl<'a> JsiiImporter<'a> {
 	///
 	/// In JSII an interface can either be a "struct" (for data types) or a "behavioral" interface (for normal
 	/// interface types).
-	/// A struct's name always starts with "I", it has no methods, and its properties are all readonly.
+	/// A struct's name has no methods, and its properties are all readonly.
 	/// Structs can be distinguished non-structs with the "datatype: true" property in `jsii::InterfaceType`.
 	///
 	/// See https://aws.github.io/jsii/specification/2-type-system/#interfaces-structs
@@ -326,6 +327,7 @@ impl<'a> JsiiImporter<'a> {
 				name: new_type_symbol.clone(),
 				extends: extends.clone(),
 				should_case_convert_jsii: true,
+				defaults: IndexMap::new(), // Dummy map, will be replaced below
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
@@ -350,6 +352,8 @@ impl<'a> JsiiImporter<'a> {
 		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
 
 		self.add_members_to_class_env(jsii_interface, false, iface_env.phase, &mut iface_env, wing_type);
+
+		self.add_struct_defaults(is_struct, jsii_interface, &mut wing_type);
 
 		// Add properties from our parents to the new structs env
 		if is_struct {
@@ -410,12 +414,6 @@ impl<'a> JsiiImporter<'a> {
 		// Add methods to the class environment
 		if let Some(methods) = &jsii_interface.methods() {
 			for m in methods {
-				// TODO: skip internal methods (for now we skip `capture` until we mark it as internal)
-				if is_resource && m.name == "capture" {
-					debug!("Skipping capture method on resource");
-					continue;
-				}
-
 				let is_static = if let Some(true) = m.static_ { true } else { false };
 
 				debug!("Adding method {} to class", m.name.green());
@@ -710,6 +708,45 @@ impl<'a> JsiiImporter<'a> {
 			}
 			_ => panic!("Expected {} to be a class or resource ", type_name),
 		};
+	}
+
+	fn add_struct_defaults(
+		&self,
+		is_struct: bool,
+		jsii_interface: &jsii::InterfaceType,
+		wing_type: &mut type_check::UnsafeRef<Type>,
+	) {
+		let mut struct_defaults: IndexMap<String, Expr> = IndexMap::new();
+		if is_struct {
+			if let Some(properties) = jsii_interface.properties() {
+				for p in properties {
+					if let Some(docs) = &p.docs {
+						if let Some(default_str) = &docs.default {
+							// HACK: treat "{}" as meaning "Map<str>{}"
+							// is there a better way to inject default values?
+							if default_str == "{}" {
+								let str_type = TypeAnnotation {
+									kind: TypeAnnotationKind::String,
+									span: WingSpan::default(),
+								};
+								let map_literal = Expr::new(
+									ExprKind::MapLiteral {
+										type_: Some(str_type),
+										fields: IndexMap::new(),
+									},
+									WingSpan::default(),
+								);
+								struct_defaults.insert(p.name.clone(), map_literal);
+							}
+						}
+					}
+				}
+			}
+
+			// replace the dummy struct_defaults with the correct one
+			let st = wing_type.as_struct_mut().unwrap();
+			st.defaults = struct_defaults;
+		}
 	}
 
 	fn optional_type_to_wing_type(&mut self, jsii_optional_type: &jsii::OptionalValue) -> TypeRef {

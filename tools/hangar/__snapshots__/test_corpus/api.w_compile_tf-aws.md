@@ -377,7 +377,7 @@ async handle(request) {
   const count = (await counter.inc());
   const bodyResponse = Object.freeze({"count":count});
   const resp = {
-  "body": bodyResponse,
+  "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),
   "status": 200,}
   ;
   return resp;

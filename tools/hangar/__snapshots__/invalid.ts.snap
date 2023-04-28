@@ -1027,6 +1027,13 @@ error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
   |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
 
 
+error: Expected type to be \\"str\\", but got \\"Json\\" instead
+   --> ../../../examples/tests/invalid/struct_expansion.w:16:9
+   |
+16 |   body: Json \\"Hello, world!\\",
+   |         ^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"Json\\" instead
+
+
 error: \\"status\\" is not initialized
    --> ../../../examples/tests/invalid/struct_expansion.w:15:9
    |  
@@ -1035,6 +1042,18 @@ error: \\"status\\" is not initialized
 16 | |   body: Json \\"Hello, world!\\",
 17 | | };
    | \\\\-^ \\"status\\" is not initialized
+
+
+error: \\"body\\" is not initialized
+   --> ../../../examples/tests/invalid/struct_expansion.w:20:9
+   |  
+20 |   let y = cloud.ApiResponse {
+   | /---------^
+21 | |   status: 200,
+22 | |   not_a_field: 500,
+23 | | // ^^^^^^^^^^^ \\"not_a_field\\" is not a field of \\"ApiResponse\\"
+24 | | };
+   | \\\\-^ \\"body\\" is not initialized
 
 
 error: \\"not_a_field\\" is not a field of \\"ApiResponse\\"
