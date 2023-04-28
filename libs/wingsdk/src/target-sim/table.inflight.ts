@@ -34,8 +34,13 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
         this.name
       }.`,
       activity: async () => {
-        let item: Record<string, any> = {};
         const pk = anyRow[this.primaryKey];
+        if (await this.get(pk)) {
+          throw new Error(
+            `The primary key "${pk}" already exists in the "${this.name}" table.`
+          );
+        }
+        let item: Record<string, any> = {};
         item[this.primaryKey] = anyRow[this.primaryKey];
         for (const key of Object.keys(this.columns)) {
           item[key] = anyRow[key];
@@ -51,6 +56,11 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
       activity: async () => {
         const pk = anyRow[this.primaryKey];
         let item = await this.get(pk);
+        if (!item) {
+          throw new Error(
+            `The primary key "${pk}" was not found in the "${this.name}" table.`
+          );
+        }
         for (const key of Object.keys(this.columns)) {
           if (anyRow[key]) {
             item[key] = anyRow[key];
@@ -64,7 +74,11 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `remove row ${key} from table ${this.name}.`,
       activity: async () => {
-        this.table.delete(key);
+        if (!this.table.delete(key)) {
+          throw new Error(
+            `The primary key "${key}" not found in the "${this.name}" table.`
+          );
+        }
       },
     });
   }

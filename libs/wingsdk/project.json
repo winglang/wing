@@ -4,7 +4,6 @@
   "implicitDependencies": ["wing-api-checker", "jsii-docgen"],
   "targets": {
     "build": {
-      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "npm run projen",
@@ -16,8 +15,6 @@
       }
     },
     "test": {
-      "dependsOn": ["build"],
-      "executor": "nx:run-commands",
       "options": {
         "commands": ["npm run post-compile", "npm run test"],
         "cwd": "libs/wingsdk",
@@ -25,8 +22,6 @@
       }
     },
     "package": {
-      "dependsOn": ["build"],
-      "executor": "nx:run-commands",
       "options": {
         "commands": ["npm run bump", "npm pack", "npm run unbump"],
         "cwd": "libs/wingsdk",

@@ -195,3 +195,62 @@ test("list table", async () => {
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
+
+test("inserting the same id twice", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = cloud.Table._newTable(app, "my_table", {
+    name: "my_list_table",
+    columns: {
+      name: cloud.ColumnType.STRING,
+    },
+    primaryKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ITableClient;
+
+  await client.insert({ id: "joe-id", name: "Joe Doe" } as any);
+  await expect(() =>
+    client.insert({ id: "joe-id", name: "Joe Doe II" } as any)
+  ).rejects.toThrow(
+    `The primary key "joe-id" already exists in the "my_list_table" table.`
+  );
+});
+
+test("update non-existent item", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = cloud.Table._newTable(app, "my_table", {
+    name: "my_list_table",
+    columns: {
+      name: cloud.ColumnType.STRING,
+    },
+    primaryKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ITableClient;
+
+  await expect(() =>
+    client.update({ id: "joe-id", name: "Joe Doe" } as any)
+  ).rejects.toThrow(
+    `The primary key "joe-id" was not found in the "my_list_table" table.`
+  );
+});
+
+test("deleting non-existent item", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = cloud.Table._newTable(app, "my_table", {
+    name: "my_list_table",
+    columns: {
+      name: cloud.ColumnType.STRING,
+    },
+    primaryKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ITableClient;
+
+  await expect(() => client.delete("joe-id")).rejects.toThrow(
+    `The primary key "joe-id" not found in the "my_list_table" table.`
+  );
+});
