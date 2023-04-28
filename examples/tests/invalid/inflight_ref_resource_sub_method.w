@@ -16,6 +16,7 @@ class Another {
 
   inflight inflight_returns_resource2(): cloud.Queue {
     return global_queue;
+//         ^^^^^^^^^^^^ Cannot qualify which operations are performed on class "global_queue"
   }
 }
 
