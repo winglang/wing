@@ -37,6 +37,8 @@ export abstract class Topic extends Resource {
     this.display.title = "Topic";
     this.display.description = "A pub/sub notification topic";
 
+    this._addInflightOps(TopicInflightMethods.PUBLISH);
+
     props;
   }
 

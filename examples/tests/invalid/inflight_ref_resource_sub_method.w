@@ -1,6 +1,6 @@
 bring cloud;
 
-resource Another {
+class Another {
   my_queue: cloud.Queue;
 
   init () {
@@ -9,11 +9,11 @@ resource Another {
 
   inflight inflight_returns_resource(): cloud.Queue {
     return this.my_queue;
-//              ^^^^^^^^ Cannot qualify which operations are performed on resource "this.my_queue"
+//              ^^^^^^^^ Cannot qualify which operations are performed on class "this.my_queue"
   }
 }
 
-resource Test {
+class Test {
   another: Another;
 
   init() {

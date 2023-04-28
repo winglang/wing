@@ -1002,6 +1002,72 @@ Future extensions:
 
 - support for derived metrics? (e.g. `metric1 + metric2`)
 
+## Secret
+
+Secret represents a securely stored value that is encrypted at rest.
+Secrets are useful for storing sensitive information, like API keys and passwords, and are usually preferable over storing them in environment variables or hardcoding them in code, since they can be rotated and revoked.
+
+When using a secret in Wing's simulator, a secrets file is generated in your home directory at `~/.wing/secrets.json`. Here, your secrets should be saved in the JSON format:
+
+```json
+// secrets.json
+{
+  "my-api-key": "1234567890"
+}
+```
+
+Then, you can access the secrets in Wing like so:
+
+```js
+bring cloud;
+
+let secret = new cloud.Secret(name: "my-api-key");
+
+new cloud.Function(inflight () => {
+  // securely retrieve key value at runtime
+  let api_key = secret.value();
+});
+```
+
+When the `Secret` is compiled to a cloud provider, it is provisioned using the provider's native secret management service.
+For example, on AWS, this would be AWS Secrets Manager.
+To use it, you must manually create a secret with a matching name on the provider before deploying your application.
+
+**Stateful:** Yes
+
+```ts
+struct SecretProps {
+  /**
+   * The secret's name.
+   * 
+   * If no name is provided then a new secret is provisioned in the target.
+   * If a name is provided then the resource will reference an existing
+   * secret in the target.
+   *
+   * @default - a new secret is provisioned with a generated name
+   */
+  name: str;
+
+  /**
+   * Retrieve the value of the secret.
+   * @throws if the secret doesn't exist.
+   * @returns the secret value as string.
+   */
+  inflight value(): str;
+
+  /**
+   * Retrieve the value of the secret and parse it as JSON.
+   * @throws if the secret doesn't exist or cannot be parsed as JSON
+   * @returns the secret value parsed as JSON
+   */
+  value_json(options?: GetSecretValueOptions): Promise<Json>;
+}
+```
+
+Future extensions:
+
+- support for secret rotation?
+
 ## Service
 
 The service resource represents a containerized workload that can run indefinitely.

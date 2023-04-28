@@ -30,6 +30,7 @@ test("create a queue", async () => {
     props: {
       initialMessages: [],
       timeout: 10,
+      retentionPeriod: 3600,
     },
     type: "wingsdk.cloud.Queue",
   });
@@ -139,7 +140,7 @@ test("messages are requeued if the function fails after timeout", async () => {
       .listTraces()
       .filter((v) => v.sourceType == QUEUE_TYPE)
       .map((trace) => trace.data.message)
-  ).toContain("1 messages pushed back to queue after timeout.");
+  ).toContain("1 messages pushed back to queue after visibility timeout.");
 });
 
 test("messages are not requeued if the function fails before timeout", async () => {
@@ -148,6 +149,43 @@ test("messages are not requeued if the function fails before timeout", async () 
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     timeout: Duration.fromSeconds(1),
+  });
+  queue.addConsumer(handler);
+  const s = await app.startSimulator();
+
+  // WHEN
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+  await queueClient.push("BAD MESSAGE");
+
+  await sleep(300);
+
+  // THEN
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+
+  expect(
+    s
+      .listTraces()
+      .filter((v) => v.sourceType == QUEUE_TYPE)
+      .map((trace) => trace.data.message)
+  ).toEqual([
+    "wingsdk.cloud.Queue created.",
+    "Push (message=BAD MESSAGE).",
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
+    "Subscriber error - returning 1 messages to queue: ERROR",
+    "wingsdk.cloud.Queue deleted.",
+  ]);
+});
+
+test("messages are not requeued if the function fails after retention timeout", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const queue = cloud.Queue._newQueue(app, "my_queue", {
+    timeout: Duration.fromSeconds(2),
+    retentionPeriod: Duration.fromSeconds(1),
   });
   queue.addConsumer(handler);
   const s = await app.startSimulator();

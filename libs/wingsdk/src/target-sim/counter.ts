@@ -43,8 +43,3 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Counter._annotateInflight("inc", {});
-Counter._annotateInflight("dec", {});
-Counter._annotateInflight("peek", {});
-Counter._annotateInflight("reset", {});

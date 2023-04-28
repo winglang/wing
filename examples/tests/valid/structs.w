@@ -21,7 +21,7 @@ let y = B {
   }
 };
 
-resource Foo {
+class Foo {
   data: B;
 
   init(b: B) {

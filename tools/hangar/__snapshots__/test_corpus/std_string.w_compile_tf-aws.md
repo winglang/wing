@@ -82,7 +82,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_teststring_IamRole_A23B11BC.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_teststring_S3Object_9049C921.key}",
         "timeout": 30,

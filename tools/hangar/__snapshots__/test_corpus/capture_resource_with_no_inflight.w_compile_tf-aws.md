@@ -94,7 +94,7 @@ exports.A = A;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
@@ -162,8 +162,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.field, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    A._annotateInflight("$inflight_init", {"this.field": { ops: [] },"this.stateful": { ops: [] }});
     const a = new A(this,"A");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),

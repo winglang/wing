@@ -1,6 +1,6 @@
 bring cloud;
 
-resource First {
+class First {
   my_resource: cloud.Bucket;
 
   init() {
@@ -8,7 +8,7 @@ resource First {
   }
 }
 
-resource Another {
+class Another {
   my_field: str;
   first: First;
 
@@ -26,7 +26,7 @@ resource Another {
   }
 }
 
-resource MyResource {
+class MyResource {
   my_resource: cloud.Bucket;
   my_str: str;
   my_num: num;
