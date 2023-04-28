@@ -17,6 +17,7 @@ import {
   REDIS_TYPE,
   SECRET_TYPE,
   EVENT_MAPPING_TYPE,
+  SCHEDULE_TYPE,
 } from "./schema-resources";
 import { Secret } from "./secret.inflight";
 import { Table } from "./table.inflight";
@@ -27,6 +28,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
+import { Schedule } from "./schedule.inflight";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**
@@ -64,6 +66,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Secret(props, context);
       case EVENT_MAPPING_TYPE:
         return new EventMapping(props, context);
+      case SCHEDULE_TYPE:
+        return new Schedule(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }

@@ -80,6 +80,10 @@ export interface ScheduleOnTickProps extends FunctionProps {}
  */
 export interface IScheduleOnTickHandler extends IResource {}
 
+export interface IScheduleClient {
+  
+}
+
 /**
  * Inflight client for `IScheduleOnTickHandler`.
  */

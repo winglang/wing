@@ -1,0 +1,271 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`create a schedule 1`] = `
+{
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_schedule",
+        "props": {},
+        "type": "wingsdk.cloud.Schedule",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_schedule": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud schedule to trigger events at regular intervals",
+            "title": "Schedule",
+          },
+          "id": "my_schedule",
+          "path": "root/my_schedule",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`schedule with one task 1`] = `
+{
+  ".wing/my_schedule-ontickfunction-e645076f_c82e823e.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.ts\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+  console.log(\\"Hello from schedule!\\");
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_schedule-OnTickFunction-e645076f",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_schedule-ontickfunction-e645076f_c82e823e.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_schedule",
+        "props": {},
+        "type": "wingsdk.cloud.Schedule",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_schedule#attrs.handle}",
+          "subscriber": "\${root/my_schedule-OnTickFunction-e645076f#attrs.handle}",
+          "subscriptionProps": {},
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_schedule-OnTickFunction-e645076f",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_schedule": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_tick",
+                "resource": "root/my_schedule-OnTickFunction-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_schedule-OnTickMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_schedule-OnTickMapping-e645076f",
+              "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud schedule to trigger events at regular intervals",
+            "title": "Schedule",
+          },
+          "id": "my_schedule",
+          "path": "root/my_schedule",
+        },
+        "my_schedule-OnTickFunction-e645076f": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "on_tick",
+                "resource": "root/my_schedule",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_schedule-OnTickFunction-e645076f",
+          "path": "root/my_schedule-OnTickFunction-e645076f",
+        },
+        "my_scheduleOnTickHandlere645076f": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "hidden": true,
+          },
+          "id": "my_scheduleOnTickHandlere645076f",
+          "path": "root/my_scheduleOnTickHandlere645076f",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;

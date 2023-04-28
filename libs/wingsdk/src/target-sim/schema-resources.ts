@@ -78,6 +78,25 @@ export interface QueueSchema extends BaseResourceSchema {
   };
 }
 
+/** Runtime attributes for cloud.Schedule */
+export interface ScheduleAttributes {}
+
+/** Schema for cloud.Schedule */
+export interface ScheduleSchema extends BaseResourceSchema {
+  readonly type: typeof SCHEDULE_TYPE;
+  readonly props: {
+    /** The cron expression that defines when the schedule should run. */
+    readonly cronExpression: string;
+  }
+}
+
+/** Schema for cloud.Queue.props.subscribers */
+export interface ScheduleTask extends EventSubscription {
+  /** Function that should be called. */
+  readonly functionHandle: FunctionHandle;
+}
+
+
 export interface EventSubscription {}
 
 /** Schema for sim.EventMapping */
