@@ -18,6 +18,9 @@ The SDK is built using a couple of extra libraries and tools:
 
 Everything in the SDK can be built by running `npm run build` from `libs/wingsdk`. You can also run `npm run test` to just run tests.
 
+In order to work on the source code, you will need to the build at least once so that TypeScript bindings for Terraform resources will be automatically generated.
+These files are not checked in because they are quite large.
+
 (If you have any issues building the package, please open an issue and let us know!)
 
 [CDK for Terraform]: https://github.com/hashicorp/terraform-cdk
