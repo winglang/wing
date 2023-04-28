@@ -1522,10 +1522,10 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 						self.diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
 							message: format!(
-								"Unable to qualify which operations are performed on 'this.{}' of type '{}'. This is not supported yet.",
+								"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
 								c.text, v.type_,
 							),
-							span: Some(c.expr.span.clone()),
+							span: Some(c.symbol.span.clone()),
 						});
 
 						return;
