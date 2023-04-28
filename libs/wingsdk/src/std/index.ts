@@ -9,3 +9,4 @@ export * from "./resource";
 export * from "./set";
 export * from "./string";
 export * from "./util";
+export * from "./sleep";

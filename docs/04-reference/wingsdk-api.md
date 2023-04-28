@@ -3287,6 +3287,7 @@ Represents a length of time.
 | <code><a href="#@winglang/sdk.std.Duration.fromHours">fromHours</a></code> | Create a Duration representing an amount of hours. |
 | <code><a href="#@winglang/sdk.std.Duration.fromMinutes">fromMinutes</a></code> | Create a Duration representing an amount of minutes. |
 | <code><a href="#@winglang/sdk.std.Duration.fromSeconds">fromSeconds</a></code> | Create a Duration representing an amount of seconds. |
+| <code><a href="#@winglang/sdk.std.Duration.fromMilliseconds">fromMilliseconds</a></code> | Create a Duration representing an amount of milliseconds. |
 
 ---
 
@@ -3305,6 +3306,24 @@ Create a Duration representing an amount of hours.
 - *Type:* num
 
 the amount of Hours the `Duration` will represent.
+
+---
+
+##### `fromMilliseconds` <a name="fromMilliseconds" id="@winglang/sdk.std.Duration.fromMilliseconds"></a>
+
+```wing
+bring std;
+
+std.Duration.fromMilliseconds(amount: num)
+```
+
+Create a Duration representing an amount of milliseconds.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromMilliseconds.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of milliseconds the `Duration` will represent.
 
 ---
 
@@ -3349,8 +3368,9 @@ the amount of Seconds the `Duration` will represent.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.std.Duration.property.hours">hours</a></code> | <code>num</code> | Return the total number of hours in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.milliseconds">milliseconds</a></code> | <code>num</code> | Return the total number of milliseconds in this Duration. |
 | <code><a href="#@winglang/sdk.std.Duration.property.minutes">minutes</a></code> | <code>num</code> | Return the total number of minutes in this Duration. |
-| <code><a href="#@winglang/sdk.std.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of seconds in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of milliseconds in this Duration. |
 
 ---
 
@@ -3363,6 +3383,18 @@ hours: num;
 - *Type:* num
 
 Return the total number of hours in this Duration.
+
+---
+
+##### `milliseconds`<sup>Required</sup> <a name="milliseconds" id="@winglang/sdk.std.Duration.property.milliseconds"></a>
+
+```wing
+milliseconds: num;
+```
+
+- *Type:* num
+
+Return the total number of milliseconds in this Duration.
 
 ---
 
@@ -3386,7 +3418,7 @@ seconds: num;
 
 - *Type:* num
 
-Return the total number of seconds in this Duration.
+Return the total number of milliseconds in this Duration.
 
 ---
 

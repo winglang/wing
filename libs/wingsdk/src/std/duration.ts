@@ -9,7 +9,7 @@ export class Duration {
    * @returns a new `Duration` representing `amount` Minutes.
    */
   public static fromMinutes(amount: number): Duration {
-    return new Duration(amount * 60);
+    return new Duration(amount * 60 * 1000);
   }
 
   /**
@@ -19,7 +19,7 @@ export class Duration {
    * @returns a new `Duration` representing `amount` Hours.
    */
   public static fromHours(amount: number): Duration {
-    return new Duration(amount * 60 * 60);
+    return new Duration(amount * 60 * 60 * 1000);
   }
 
   /**
@@ -29,18 +29,28 @@ export class Duration {
    * @returns a new `Duration` representing `amount` Seconds.
    */
   public static fromSeconds(amount: number): Duration {
+    return new Duration(amount * 1000);
+  }
+
+  /**
+   * Create a Duration representing an amount of milliseconds
+   *
+   * @param amount the amount of milliseconds the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` milliseconds.
+   */
+  public static fromMilliseconds(amount: number): Duration {
     return new Duration(amount);
   }
 
   /**
-   * Return the total number of seconds in this Duration
+   * Return the total number of milliseconds in this Duration
    *
-   * @returns the value of this `Duration` expressed in Seconds.
+   * @returns the value of this `Duration` expressed in Milliseconds.
    */
-  public readonly seconds: number;
+  public readonly milliseconds: number;
 
-  private constructor(seconds: number) {
-    this.seconds = seconds;
+  private constructor(milliseconds: number) {
+    this.milliseconds = milliseconds;
   }
 
   /**
@@ -59,5 +69,14 @@ export class Duration {
    */
   public get hours() {
     return this.minutes / 60;
+  }
+
+  /**
+   * Return the total number of milliseconds in this Duration
+   *
+   * @returns the value of this `Duration` expressed in Milliseconds.
+   */
+  public get seconds() {
+    return this.milliseconds / 1000;
   }
 }
