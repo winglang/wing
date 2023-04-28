@@ -1124,17 +1124,24 @@ impl<'a> JSifier<'a> {
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
 		code.open("(await (async () => {");
-		code.line("const mod = require(\"${self_client_path}\")");
 
 		if free_inflight_variables.len() > 0 {
-			code.open("mod.setupGlobals({");
+			code.open(format!(
+				"const {} = require(\"${{self_client_path}}\")({{",
+				resource_name.name
+			));
 			for var_name in free_inflight_variables {
 				code.line(format!("{var_name}: ${{{var_name}_client}},"));
 			}
 			code.close("});");
+		} else {
+			code.line(format!(
+				"const {} = require(\"${{self_client_path}}\")({{}});",
+				resource_name.name
+			));
 		}
 
-		code.open(format!("const client = new mod.{}({{", resource_name.name));
+		code.open(format!("const client = new {}({{", resource_name.name));
 
 		for inner_member_name in captured_fields {
 			code.line(format!("{}: ${{{}_client}},", inner_member_name, inner_member_name));
@@ -1178,10 +1185,10 @@ impl<'a> JSifier<'a> {
 			.filter(|name| !parent_captures.iter().any(|n| n == *name))
 			.collect_vec();
 
-		let mut code = CodeMaker::default();
+		let mut class_code = CodeMaker::default();
 
 		let name = &resource.name.name;
-		code.open(format!(
+		class_code.open(format!(
 			"class {} {name} {{",
 			if let Some(parent) = &resource.parent {
 				format!("extends {}", self.jsify_user_defined_type(parent))
@@ -1190,7 +1197,7 @@ impl<'a> JSifier<'a> {
 			}
 		));
 
-		code.open(format!(
+		class_code.open(format!(
 			"constructor({{ {} }}) {{",
 			captured_fields
 				.iter()
@@ -1200,20 +1207,20 @@ impl<'a> JSifier<'a> {
 		));
 
 		if resource.parent.is_some() {
-			code.line(format!(
+			class_code.line(format!(
 				"super({});",
 				parent_captures.iter().map(|name| name.clone()).collect_vec().join(", ")
 			));
 		}
 
 		for name in &my_captures {
-			code.line(format!("this.{} = {};", name, name));
+			class_code.line(format!("this.{} = {};", name, name));
 		}
 
-		code.close("}");
+		class_code.close("}");
 
 		if let Some(inflight_init) = &resource.inflight_initializer {
-			code.add_code(self.jsify_function(
+			class_code.add_code(self.jsify_function(
 				Some(CLASS_INFLIGHT_INIT_NAME),
 				inflight_init,
 				&JSifyContext {
@@ -1224,7 +1231,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		for (name, def) in inflight_methods {
-			code.add_code(self.jsify_function(
+			class_code.add_code(self.jsify_function(
 				Some(&name.name),
 				def,
 				&JSifyContext {
@@ -1234,20 +1241,18 @@ impl<'a> JSifier<'a> {
 			));
 		}
 
-		code.close("}");
+		class_code.close("}");
 
-		// export all classes from this file
-		code.line(format!("exports.{name} = {name};"));
-
-		// Add a function that can be used to inject free variables
-		for var in free_variables {
-			code.line(format!("let {};", var));
+		// export the main class from this file
+		let mut code = CodeMaker::default();
+		code.open("module.exports = function($globals) {".to_string());
+		if free_variables.len() > 0 {
+			let free_variables_str = free_variables.iter().join(", ");
+			code.line(format!("const {{ {free_variables_str} }} = $globals;"));
 		}
-		code.open("exports.setupGlobals = function(globals) {");
-		for var in free_variables {
-			code.line(format!("{} = globals[\"{}\"];", var, var));
-		}
-		code.close("};");
+		code.add_code(class_code);
+		code.line(format!("return {name};"));
+		code.close("}".to_string());
 
 		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());
 		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
