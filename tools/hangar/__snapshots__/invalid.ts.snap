@@ -1027,19 +1027,12 @@ error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
   |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
 
 
-error: Expected type to be \\"str\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/struct_expansion.w:16:9
-   |
-16 |   body: Json \\"Hello, world!\\",
-   |         ^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"Json\\" instead
-
-
 error: \\"status\\" is not initialized
    --> ../../../examples/tests/invalid/struct_expansion.w:15:9
    |  
 15 |   let x = cloud.ApiResponse {
    | /---------^
-16 | |   body: Json \\"Hello, world!\\",
+16 | |   body: \\"Hello, world!\\",
 17 | | };
    | \\\\-^ \\"status\\" is not initialized
 

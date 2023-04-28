@@ -722,9 +722,9 @@ impl<'a> JsiiImporter<'a> {
 				for p in properties {
 					if let Some(docs) = &p.docs {
 						if let Some(default_str) = &docs.default {
-							// HACK: treat "{}" as meaning "Map<str>{}"
+							// HACK: treat "empty map" docstring as meaning "Map<str>{}"
 							// is there a better way to inject default values?
-							if default_str == "{}" {
+							if default_str == "- empty map" {
 								let str_type = TypeAnnotation {
 									kind: TypeAnnotationKind::String,
 									span: WingSpan::default(),
@@ -737,6 +737,11 @@ impl<'a> JsiiImporter<'a> {
 									WingSpan::default(),
 								);
 								struct_defaults.insert(p.name.clone(), map_literal);
+							} else {
+								debug!(
+									"unable to process struct default {} for field {}.{}",
+									default_str, jsii_interface.name, p.name
+								);
 							}
 						}
 					}

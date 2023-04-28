@@ -314,19 +314,19 @@ export interface ApiRequest {
   readonly path: string;
   /**
    * The request's query string values.
-   * @default {}
+   * @default - empty map
    */
   readonly query: Record<string, string>;
   /**
    * The path variables.
-   * @default {}
+   * @default - empty map
    */
   readonly vars: Record<string, string>;
   /** The request's body. */
   readonly body: string;
   /**
    * The request's headers.
-   * @default {}
+   * @default - empty map
    */
   readonly headers: Record<string, string>;
 }
@@ -341,7 +341,7 @@ export interface ApiResponse {
   readonly body: string;
   /**
    * The response's headers.
-   * @default {}
+   * @default - empty map
    */
   readonly headers: Record<string, string>;
 }

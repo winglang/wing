@@ -1720,7 +1720,7 @@ headers: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
-- *Default:* {}
+- *Default:* empty map
 
 The request's headers.
 
@@ -1757,7 +1757,7 @@ query: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
-- *Default:* {}
+- *Default:* empty map
 
 The request's query string values.
 
@@ -1770,7 +1770,7 @@ vars: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
-- *Default:* {}
+- *Default:* empty map
 
 The path variables.
 
@@ -1817,7 +1817,7 @@ headers: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
-- *Default:* {}
+- *Default:* empty map
 
 The response's headers.
 
