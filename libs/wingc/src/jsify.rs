@@ -1346,13 +1346,12 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn find_free_vars(&self, class: &AstClass) -> Vec<Symbol> {
-		let mut scanner = FreeVariableScanner::new(vec![
-			Symbol::global(UtilityFunctions::Log.to_string()),
-			Symbol::global(UtilityFunctions::Assert.to_string()),
-			Symbol::global(UtilityFunctions::Throw.to_string()),
-			Symbol::global(UtilityFunctions::Panic.to_string()),
-			Symbol::global("this".to_string()),
-		]);
+		let mut globals = UtilityFunctions::all()
+			.iter()
+			.map(|f| Symbol::global(f.to_string()))
+			.collect_vec();
+		globals.push(Symbol::global("this".to_string()));
+		let mut scanner = FreeVariableScanner::new(globals);
 		scanner.visit_class(class);
 		scanner.free_vars
 	}
@@ -1565,6 +1564,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
 		match &node.kind {
 			ExprKind::Reference(Reference::Identifier(x)) => {
+				// We know the expr we're analyzing is inside of a function. To obtain
+				// information about the variable we're referencing (like its type and
+				// whether it's reassignable), we look it up in the function's symbol environment.
 				let scope = match &self.function_def.body {
 					FunctionBody::Statements(scope) => scope,
 					FunctionBody::External(_) => panic!("unexpected expression inside body of extern functions"),
@@ -1576,6 +1578,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					.expect("covered by type checking")
 					.as_variable()
 					.expect("reference to a non-variable");
+
 				return vec![Component {
 					expr: node,
 					symbol: x.clone(),
