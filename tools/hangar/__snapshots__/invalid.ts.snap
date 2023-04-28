@@ -402,18 +402,18 @@ exports[`inflight_in_class.w > stderr 1`] = `
 `;
 
 exports[`inflight_ref_explicit_ops.w > stderr 1`] = `
-"error: Unable to qualify which operations are performed on 'my_queue' of type 'Queue'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:13:17
+"error: Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:13:12
    |
 13 |     return this.my_queue;
-   |                 ^^^^^^^^ Unable to qualify which operations are performed on 'my_queue' of type 'Queue'. This is not supported yet.
+   |            ^^^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
 
 
-error: Unable to qualify which operations are performed on 'b' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:34:18
+error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:34:13
    |
 34 |     let x = this.b;
-   |                  ^ Unable to qualify which operations are performed on 'b' of type 'Bucket'. This is not supported yet.
+   |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
 
 
 error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
@@ -426,11 +426,11 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 `;
 
 exports[`inflight_ref_resource_sub_method.w > stderr 1`] = `
-"error: Unable to qualify which operations are performed on 'my_queue' of type 'Queue'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:13:17
+"error: Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:13:12
    |
 13 |     return this.my_queue;
-   |                 ^^^^^^^^ Unable to qualify which operations are performed on 'my_queue' of type 'Queue'. This is not supported yet.
+   |            ^^^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
 
 
 error: Unable to qualify which operations are performed on 'global_queue' of type 'Queue'. This is not supported yet.
@@ -443,11 +443,11 @@ error: Unable to qualify which operations are performed on 'global_queue' of typ
 `;
 
 exports[`inflight_ref_unknown_op.w > stderr 1`] = `
-"error: Unable to qualify which operations are performed on 'b' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:13:18
+"error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:13:13
    |
 13 |     let x = this.b;
-   |                  ^ Unable to qualify which operations are performed on 'b' of type 'Bucket'. This is not supported yet.
+   |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
 
 
 error: Unable to qualify which operations are performed on 'global_b' of type 'Bucket'. This is not supported yet.
@@ -857,11 +857,11 @@ error: Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
    |         ^^^^^^^^^^^^^^ Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
 
 
-error: Unable to qualify which operations are performed on 'bucket' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/resource_captures.w:22:18
+error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
+   --> ../../../examples/tests/invalid/resource_captures.w:22:13
    |
 22 |     let b = this.bucket;
-   |                  ^^^^^^ Unable to qualify which operations are performed on 'bucket' of type 'Bucket'. This is not supported yet.
+   |             ^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
 
 
 error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')

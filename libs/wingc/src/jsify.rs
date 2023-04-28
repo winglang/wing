@@ -1513,6 +1513,12 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 		let binding = parts.iter().collect::<Vec<_>>();
 		let qualification = binding.split_at(index).1.iter();
 
+		let fmt = |x: Iter<&Component>| x.map(|f| f.text.to_string()).collect_vec();
+		let mut key = fmt(capture.iter()).join(".");
+		if is_field_reference {
+			key = format!("this.{}", key);
+		}
+
 		// if our last captured component is a resource and we don't have
 		// a qualification for it, it's currently an error.
 		if let Some(c) = capture.last() {
@@ -1523,9 +1529,9 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 							level: DiagnosticLevel::Error,
 							message: format!(
 								"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
-								c.text, v.type_,
+								key, v.type_,
 							),
-							span: Some(c.symbol.span.clone()),
+							span: Some(node.span.clone()),
 						});
 
 						return;
@@ -1534,11 +1540,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			}
 		}
 
-		let fmt = |x: Iter<&Component>| x.map(|f| f.text.to_string()).collect_vec();
-		let mut key = fmt(capture.iter()).join(".");
-		if is_field_reference {
-			key = format!("this.{}", key);
-		}
 		let ops = fmt(qualification);
 
 		self.references.entry(key).or_default().extend(ops);
