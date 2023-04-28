@@ -41,7 +41,7 @@
     "@wingconsole/server": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "classnames": "^2.3.2",
-    "constructs": "^10.2.8",
+    "constructs": "^10.2.9",
     "d3-selection": "^3.0.0",
     "d3-zoom": "^3.0.0",
     "elkjs": "^0.8.2",
