@@ -16,7 +16,7 @@ export class TableClient implements ITableClient {
     private readonly primaryKey: string,
     private readonly columns: string,
     private readonly client = new DynamoDBClient({})
-  ) {}
+  ) { }
 
   public async insert(row: Json): Promise<void> {
     this.validateRow(row);
@@ -58,16 +58,16 @@ export class TableClient implements ITableClient {
     await this.client.send(command);
   }
 
-  public async get(key: string): Promise<any> {
+  public async get(key: string): Promise<Json> {
     const command = new GetItemCommand({
       TableName: this.tableName,
       Key: { [this.primaryKey]: { S: key } },
     });
     const result = await this.client.send(command);
     if (result.Item) {
-      return unmarshall(result.Item);
+      return unmarshall(result.Item) as Json;
     }
-    return null;
+    return {} as Json;
   }
 
   public async list(): Promise<any> {

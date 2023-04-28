@@ -25,14 +25,13 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     return {};
   }
 
-  public async cleanup(): Promise<void> {}
+  public async cleanup(): Promise<void> { }
 
   public async insert(row: Json): Promise<void> {
     const anyRow = row as any;
     return this.context.withTrace({
-      message: `insert row ${anyRow[this.primaryKey]} into the table ${
-        this.name
-      }.`,
+      message: `insert row ${anyRow[this.primaryKey]} into the table ${this.name
+        }.`,
       activity: async () => {
         const pk = anyRow[this.primaryKey];
         if (await this.get(pk)) {
@@ -55,7 +54,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
       message: `update row ${anyRow[this.primaryKey]} in table ${this.name}.`,
       activity: async () => {
         const pk = anyRow[this.primaryKey];
-        let item = await this.get(pk);
+        let item: any = await this.get(pk);
         if (!item) {
           throw new Error(
             `The primary key "${pk}" was not found in the "${this.name}" table.`
@@ -82,7 +81,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
       },
     });
   }
-  public async get(key: string): Promise<any> {
+  public async get(key: string): Promise<Json> {
     return this.context.withTrace({
       message: `get row ${key} from table ${this.name}.`,
       activity: async () => {

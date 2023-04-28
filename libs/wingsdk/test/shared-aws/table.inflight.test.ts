@@ -108,7 +108,7 @@ describe("inflight table tests", () => {
     // WHEN
     const response = await client.get(row.id);
     // THEN
-    expect(response).toEqual(null);
+    expect(response).toEqual({});
   });
 
   test("get", async () => {
