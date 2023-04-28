@@ -4,6 +4,13 @@ import rootPackageJson from "../../package.json";
 const JSII_DEPS = ["constructs@~10.1.228"];
 const CDKTF_VERSION = "0.15.2";
 
+const CDKTF_BINDINGS = [
+  "aws@~>4.0",
+  "random@~>3.1",
+  "azurerm@~>3.10",
+  "google@~>4.0",
+];
+
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
   author: "Monada, Inc.",
@@ -205,12 +212,7 @@ new JsonFile(project, "cdktf.json", {
   obj: {
     language: "typescript",
     app: "echo noop",
-    terraformProviders: [
-      "aws@~>4.0",
-      "random@~>3.1",
-      "azurerm@~>3.10",
-      "google@~>4.0",
-    ],
+    terraformProviders: CDKTF_BINDINGS,
     codeMakerOutput: "src/.gen",
     projectId: "93afdbfa-23ed-40cf-9ce4-495b3289c519",
   },

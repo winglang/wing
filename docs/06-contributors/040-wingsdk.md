@@ -48,6 +48,16 @@ Here is an example of adding a package named "fast-json-stringify" pinned to maj
 
 > [2] JSII libraries are npm packages that are compiled with JSII. They are usually published to npm with the `cdk` keyword, and they will have a `.jsii` file at their root.
 
+## 🧱 How do I add a new Terraform provider for use in the SDK?
+
+The SDK uses [CDK for Terraform] to generate Terraform files.
+This means that you can generate bindings for any Terraform provider and reference in in the SDK using TypeScript.
+
+To add a new provider, go to `libs/wingsdk/.projenrc.ts` and edit the section
+that says "CDKTF_BINDINGS" to add the new provider.
+Then, run `npx projen` to update the project.
+One that has finished, you can run `npm run build` and the new bindings should be generated inside `libs/wingsdk/src/.gen`.
+
 ## 🧩 How do I add a resource to the SDK?
 
 A resource in the SDK has several parts:
