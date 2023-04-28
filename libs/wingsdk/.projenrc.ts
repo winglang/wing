@@ -1,7 +1,8 @@
-import { cdk, javascript } from "projen";
+import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
 const JSII_DEPS = ["constructs@~10.1.228"];
+const CDKTF_VERSION = "0.15.2";
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
@@ -16,11 +17,7 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   bundledDeps: [
-    "cdktf@0.15.2",
-    "@cdktf/provider-random@^5.0.0",
-    "@cdktf/provider-aws@^12.0.1",
-    "@cdktf/provider-azurerm@^5.0.1",
-    "@cdktf/provider-google@^5.0.2",
+    `cdktf@${CDKTF_VERSION}`,
     "aws-cdk-lib@^2.64.0",
     // preflight dependencies
     "debug",
@@ -62,6 +59,7 @@ const project = new cdk.JsiiProject({
     "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
+    `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",
     "patch-package",
@@ -201,5 +199,24 @@ project.addFields({
 });
 
 project.gitignore.addPatterns("src/**/*.js", "src/**/*.d.ts");
+
+// generate CDKTF bindings
+new JsonFile(project, "cdktf.json", {
+  obj: {
+    language: "typescript",
+    app: "echo noop",
+    terraformProviders: [
+      "aws@~>4.0",
+      "random@~>3.1",
+      "azurerm@~>3.10",
+      "google@~>4.0",
+    ],
+    codeMakerOutput: "src/.gen",
+    projectId: "93afdbfa-23ed-40cf-9ce4-495b3289c519",
+  },
+});
+project.gitignore.addPatterns("src/.gen/providers");
+
+project.preCompileTask.exec("cdktf get");
 
 project.synth();

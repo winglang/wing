@@ -1,8 +1,8 @@
 import { join } from "path";
-import { CloudwatchEventRule } from "@cdktf/provider-aws/lib/cloudwatch-event-rule";
-import { CloudwatchEventTarget } from "@cdktf/provider-aws/lib/cloudwatch-event-target";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule";
+import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Resource } from "../std";
