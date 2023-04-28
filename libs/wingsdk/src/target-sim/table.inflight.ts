@@ -25,14 +25,13 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     return {};
   }
 
-  public async cleanup(): Promise<void> { }
+  public async cleanup(): Promise<void> {}
 
   public async insert(key: string, row: Json): Promise<void> {
     this.validateRow(row);
     const anyRow = row as any;
     return this.context.withTrace({
-      message: `insert row ${key} into the table ${this.name
-        }.`,
+      message: `insert row ${key} into the table ${this.name}.`,
       activity: async () => {
         if (await this.get(key)) {
           throw new Error(
@@ -41,8 +40,8 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
         }
         let item: Record<string, any> = {};
         item[this.primaryKey] = key;
-        for (const key of Object.keys(this.columns)) {
-          item[key] = anyRow[key];
+        for (const column of Object.keys(this.columns)) {
+          item[column] = anyRow[column];
         }
         this.table.set(key, item);
       },
