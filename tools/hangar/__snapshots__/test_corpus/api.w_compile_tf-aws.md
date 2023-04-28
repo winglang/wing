@@ -2,21 +2,21 @@
 
 ## clients/Foo.inflight.js
 ```js
-class  Foo {
-  constructor({ api, stateful }) {
-    this.api = api;
-    this.stateful = stateful;
-  }
-  async handle(message)  {
-    {
-      const url = this.api.url;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http://")'`)})(url.startsWith("http://"))};
+module.exports = function($globals) {
+  class  Foo {
+    constructor({ api, stateful }) {
+      this.api = api;
+      this.stateful = stateful;
+    }
+    async handle(message)  {
+      {
+        const url = this.api.url;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http://")'`)})(url.startsWith("http://"))};
+      }
     }
   }
+  return Foo;
 }
-exports.Foo = Foo;
-exports.setupGlobals = function(globals) {
-};
 
 ```
 
@@ -317,8 +317,8 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            const client = new mod.Foo({
+            const Foo = require("${self_client_path}")({});
+            const client = new Foo({
               api: ${api_client},
               stateful: ${stateful_client},
             });

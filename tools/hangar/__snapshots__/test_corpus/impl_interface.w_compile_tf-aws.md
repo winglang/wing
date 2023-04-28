@@ -2,55 +2,55 @@
 
 ## clients/A.inflight.js
 ```js
-class  A {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async handle(msg)  {
-    {
-      return;
+module.exports = function($globals) {
+  class  A {
+    constructor({ stateful }) {
+      this.stateful = stateful;
+    }
+    async handle(msg)  {
+      {
+        return;
+      }
     }
   }
+  return A;
 }
-exports.A = A;
-exports.setupGlobals = function(globals) {
-};
 
 ```
 
 ## clients/Dog.inflight.js
 ```js
-class  Dog {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async eat()  {
-    {
-      return;
+module.exports = function($globals) {
+  class  Dog {
+    constructor({ stateful }) {
+      this.stateful = stateful;
+    }
+    async eat()  {
+      {
+        return;
+      }
     }
   }
+  return Dog;
 }
-exports.Dog = Dog;
-exports.setupGlobals = function(globals) {
-};
 
 ```
 
 ## clients/r.inflight.js
 ```js
-class  r {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async method_2(x)  {
-    {
-      return x;
+module.exports = function($globals) {
+  class  r {
+    constructor({ stateful }) {
+      this.stateful = stateful;
+    }
+    async method_2(x)  {
+      {
+        return x;
+      }
     }
   }
+  return r;
 }
-exports.r = r;
-exports.setupGlobals = function(globals) {
-};
 
 ```
 
@@ -106,8 +106,8 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            const client = new mod.A({
+            const A = require("${self_client_path}")({});
+            const client = new A({
               stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -144,8 +144,8 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            const client = new mod.r({
+            const r = require("${self_client_path}")({});
+            const client = new r({
               stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -172,8 +172,8 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            const client = new mod.Dog({
+            const Dog = require("${self_client_path}")({});
+            const client = new Dog({
               stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

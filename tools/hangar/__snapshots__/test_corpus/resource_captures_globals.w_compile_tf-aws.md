@@ -2,86 +2,93 @@
 
 ## clients/Another.inflight.js
 ```js
-class  Another {
-  constructor({ first, my_field, stateful }) {
-    this.first = first;
-    this.my_field = my_field;
-    this.stateful = stateful;
-  }
-  async $inflight_init()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await global_counter.peek()) === 0)'`)})(((await global_counter.peek()) === 0))};
+module.exports = function($globals) {
+  const { global_counter } = $globals;
+  class  Another {
+    constructor({ first, my_field, stateful }) {
+      this.first = first;
+      this.my_field = my_field;
+      this.stateful = stateful;
+    }
+    async $inflight_init()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await global_counter.peek()) === 0)'`)})(((await global_counter.peek()) === 0))};
+      }
+    }
+    async my_method()  {
+      {
+        (await global_counter.inc());
+        return (await global_counter.peek());
+      }
     }
   }
-  async my_method()  {
-    {
-      (await global_counter.inc());
-      return (await global_counter.peek());
-    }
-  }
+  return Another;
 }
-exports.Another = Another;
-let global_counter;
-exports.setupGlobals = function(globals) {
-  global_counter = globals["global_counter"];
-};
 
 ```
 
 ## clients/First.inflight.js
 ```js
-class  First {
-  constructor({ my_resource, stateful }) {
-    this.my_resource = my_resource;
-    this.stateful = stateful;
+module.exports = function($globals) {
+  class  First {
+    constructor({ my_resource, stateful }) {
+      this.my_resource = my_resource;
+      this.stateful = stateful;
+    }
   }
+  return First;
 }
-exports.First = First;
-exports.setupGlobals = function(globals) {
-};
 
 ```
 
 ## clients/MyResource.inflight.js
 ```js
-class  MyResource {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async my_put()  {
-    {
-      (await global_bucket.put("key","value"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_str === "hello")'`)})((global_str === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_bool === true)'`)})((global_bool === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_num === 42)'`)})((global_num === 42))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await global_array_of_str.at(0)) === "hello")'`)})(((await global_array_of_str.at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((global_map_of_num)["a"] === (-5))'`)})(((global_map_of_num)["a"] === (-5)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await global_set_of_str.has("a"))'`)})((await global_set_of_str.has("a")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_another.my_field === "hello!")'`)})((global_another.my_field === "hello!"))};
-      (await global_another.first.my_resource.put("key","value"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await global_another.my_method()) > 0)'`)})(((await global_another.my_method()) > 0))};
+module.exports = function($globals) {
+  const { global_another, global_array_of_str, global_bool, global_bucket, global_counter, global_map_of_num, global_num, global_set_of_str, global_str } = $globals;
+  class  MyResource {
+    constructor({ local_counter, local_topic, stateful }) {
+      this.local_counter = local_counter;
+      this.local_topic = local_topic;
+      this.stateful = stateful;
+    }
+    async my_put()  {
+      {
+        (await this.local_topic.publish("hello"));
+        (await global_bucket.put("key","value"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_str === "hello")'`)})((global_str === "hello"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_bool === true)'`)})((global_bool === true))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_num === 42)'`)})((global_num === 42))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await global_array_of_str.at(0)) === "hello")'`)})(((await global_array_of_str.at(0)) === "hello"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((global_map_of_num)["a"] === (-5))'`)})(((global_map_of_num)["a"] === (-5)))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await global_set_of_str.has("a"))'`)})((await global_set_of_str.has("a")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_another.my_field === "hello!")'`)})((global_another.my_field === "hello!"))};
+        (await global_another.first.my_resource.put("key","value"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await global_another.my_method()) > 0)'`)})(((await global_another.my_method()) > 0))};
+      }
     }
   }
+  return MyResource;
 }
-exports.MyResource = MyResource;
-let global_another;
-let global_array_of_str;
-let global_bool;
-let global_bucket;
-let global_map_of_num;
-let global_num;
-let global_set_of_str;
-let global_str;
-exports.setupGlobals = function(globals) {
-  global_another = globals["global_another"];
-  global_array_of_str = globals["global_array_of_str"];
-  global_bool = globals["global_bool"];
-  global_bucket = globals["global_bucket"];
-  global_map_of_num = globals["global_map_of_num"];
-  global_num = globals["global_num"];
-  global_set_of_str = globals["global_set_of_str"];
-  global_str = globals["global_str"];
-};
+
+```
+
+## clients/R.inflight.js
+```js
+module.exports = function($globals) {
+  const { $parent_this, global_counter } = $globals;
+  class  R {
+    constructor({ stateful }) {
+      this.stateful = stateful;
+    }
+    async handle()  {
+      {
+        (await global_counter.inc());
+        (await $parent_this.local_counter.inc());
+      }
+    }
+  }
+  return R;
+}
 
 ```
 
@@ -116,6 +123,23 @@ exports.setupGlobals = function(globals) {
   },
   "resource": {
     "aws_dynamodb_table": {
+      "root_MyResource_cloudCounter_B6FF7B6A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Counter/Default",
+            "uniqueId": "root_MyResource_cloudCounter_B6FF7B6A"
+          }
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wing-counter-cloud.Counter-c87187fa"
+      },
       "root_cloudCounter_E0AC1263": {
         "//": {
           "metadata": {
@@ -135,6 +159,15 @@ exports.setupGlobals = function(globals) {
       }
     },
     "aws_iam_role": {
+      "root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRole",
+            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
@@ -146,6 +179,16 @@ exports.setupGlobals = function(globals) {
       }
     },
     "aws_iam_role_policy": {
+      "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicy_389E9A62": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRolePolicy",
+            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicy_389E9A62"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.name}"
+      },
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
@@ -153,11 +196,21 @@ exports.setupGlobals = function(globals) {
             "uniqueId": "root_test_IamRolePolicy_474A6820"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.arn}\",\"${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.arn}\",\"${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
+      "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicyAttachment_B9171011": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRolePolicyAttachment",
+            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicyAttachment_B9171011"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.name}"
+      },
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
@@ -170,6 +223,33 @@ exports.setupGlobals = function(globals) {
       }
     },
     "aws_lambda_function": {
+      "root_MyResource_cloudTopicOnMessagef10eb240_AE4B2541": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/Default",
+            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_AE4B2541"
+          }
+        },
+        "environment": {
+          "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86"
+          }
+        },
+        "function_name": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_MyResource_cloudTopicOnMessagef10eb240_S3Object_7458F840.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
       "root_test_AAE85061": {
         "//": {
           "metadata": {
@@ -184,6 +264,8 @@ exports.setupGlobals = function(globals) {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
+            "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
             "WING_FUNCTION_NAME": "test-c8b6eece"
           }
         },
@@ -199,6 +281,20 @@ exports.setupGlobals = function(globals) {
           "security_group_ids": [],
           "subnet_ids": []
         }
+      }
+    },
+    "aws_lambda_permission": {
+      "root_MyResource_cloudTopicOnMessagef10eb240_InvokePermissionc8f2c43e88c72aa87b4192974983c81bf653de52bf_BEBFCC54": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
+            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_InvokePermissionc8f2c43e88c72aa87b4192974983c81bf653de52bf_BEBFCC54"
+          }
+        },
+        "action": "lambda:InvokeFunction",
+        "function_name": "${aws_lambda_function.root_MyResource_cloudTopicOnMessagef10eb240_AE4B2541.function_name}",
+        "principal": "sns.amazonaws.com",
+        "source_arn": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}"
       }
     },
     "aws_s3_bucket": {
@@ -295,6 +391,17 @@ exports.setupGlobals = function(globals) {
       }
     },
     "aws_s3_object": {
+      "root_MyResource_cloudTopicOnMessagef10eb240_S3Object_7458F840": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/S3Object",
+            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_S3Object_7458F840"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
@@ -305,6 +412,30 @@ exports.setupGlobals = function(globals) {
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
+      }
+    },
+    "aws_sns_topic": {
+      "root_MyResource_cloudTopic_F71B23B1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic/Default",
+            "uniqueId": "root_MyResource_cloudTopic_F71B23B1"
+          }
+        },
+        "name": "cloud-Topic-c8f2c43e"
+      }
+    },
+    "aws_sns_topic_subscription": {
+      "root_MyResource_cloudTopic_cloudTopicTopicSubscriptionf10eb240_334AAAEE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-TopicSubscription-f10eb240",
+            "uniqueId": "root_MyResource_cloudTopic_cloudTopicTopicSubscriptionf10eb240_334AAAEE"
+          }
+        },
+        "endpoint": "${aws_lambda_function.root_MyResource_cloudTopicOnMessagef10eb240_AE4B2541.arn}",
+        "protocol": "lambda",
+        "topic_arn": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}"
       }
     }
   }
@@ -332,8 +463,8 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            const client = new mod.First({
+            const First = require("${self_client_path}")({});
+            const client = new First({
               my_resource: ${my_resource_client},
               stateful: ${stateful_client},
             });
@@ -365,11 +496,10 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            mod.setupGlobals({
+            const Another = require("${self_client_path}")({
               global_counter: ${global_counter_client},
             });
-            const client = new mod.Another({
+            const client = new Another({
               first: ${first_client},
               my_field: ${my_field_client},
               stateful: ${stateful_client},
@@ -396,13 +526,55 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("my_put");
+        this.local_topic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
+        this.local_counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        const $parent_this = this;
+        class R extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const stateful_client = this._lift(this.stateful);
+            const $parent_this_client = this._lift($parent_this);
+            const global_counter_client = this._lift(global_counter);
+            const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const R = require("${self_client_path}")({
+                  $parent_this: ${$parent_this_client},
+                  global_counter: ${global_counter_client},
+                });
+                const client = new R({
+                  stateful: ${stateful_client},
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+              this._registerBindObject(this.stateful, host, []);
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject($parent_this.local_counter, host, ["inc"]);
+              this._registerBindObject(global_counter, host, ["inc"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        (this.local_topic.onMessage(new R(this,"R")));
       }
       _toInflight() {
+        const local_counter_client = this._lift(this.local_counter);
+        const local_topic_client = this._lift(this.local_topic);
         const stateful_client = this._lift(this.stateful);
         const global_another_client = this._lift(global_another);
         const global_array_of_str_client = this._lift(global_array_of_str);
         const global_bool_client = this._lift(global_bool);
         const global_bucket_client = this._lift(global_bucket);
+        const global_counter_client = this._lift(global_counter);
         const global_map_of_num_client = this._lift(global_map_of_num);
         const global_num_client = this._lift(global_num);
         const global_set_of_str_client = this._lift(global_set_of_str);
@@ -410,18 +582,20 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            mod.setupGlobals({
+            const MyResource = require("${self_client_path}")({
               global_another: ${global_another_client},
               global_array_of_str: ${global_array_of_str_client},
               global_bool: ${global_bool_client},
               global_bucket: ${global_bucket_client},
+              global_counter: ${global_counter_client},
               global_map_of_num: ${global_map_of_num_client},
               global_num: ${global_num_client},
               global_set_of_str: ${global_set_of_str_client},
               global_str: ${global_str_client},
             });
-            const client = new mod.MyResource({
+            const client = new MyResource({
+              local_counter: ${local_counter_client},
+              local_topic: ${local_topic_client},
               stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -431,6 +605,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.local_counter, host, []);
+          this._registerBindObject(this.local_topic, host, []);
           this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("my_put")) {
@@ -444,6 +620,7 @@ class $Root extends $stdlib.std.Resource {
           this._registerBindObject(global_num, host, []);
           this._registerBindObject(global_set_of_str, host, ["has"]);
           this._registerBindObject(global_str, host, []);
+          this._registerBindObject(this.local_topic, host, ["publish"]);
         }
         super._registerBind(host, ops);
       }

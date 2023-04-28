@@ -2,15 +2,15 @@
 
 ## clients/A.inflight.js
 ```js
-class  A {
-  constructor({ field, stateful }) {
-    this.field = field;
-    this.stateful = stateful;
+module.exports = function($globals) {
+  class  A {
+    constructor({ field, stateful }) {
+      this.field = field;
+      this.stateful = stateful;
+    }
   }
+  return A;
 }
-exports.A = A;
-exports.setupGlobals = function(globals) {
-};
 
 ```
 
@@ -155,8 +155,8 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            const client = new mod.A({
+            const A = require("${self_client_path}")({});
+            const client = new A({
               field: ${field_client},
               stateful: ${stateful_client},
             });

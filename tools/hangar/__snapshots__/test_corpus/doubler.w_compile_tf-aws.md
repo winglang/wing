@@ -2,21 +2,21 @@
 
 ## clients/Doubler.inflight.js
 ```js
-class  Doubler {
-  constructor({ func, stateful }) {
-    this.func = func;
-    this.stateful = stateful;
-  }
-  async invoke(message)  {
-    {
-      (await this.func.handle(message));
-      (await this.func.handle(message));
+module.exports = function($globals) {
+  class  Doubler {
+    constructor({ func, stateful }) {
+      this.func = func;
+      this.stateful = stateful;
+    }
+    async invoke(message)  {
+      {
+        (await this.func.handle(message));
+        (await this.func.handle(message));
+      }
     }
   }
+  return Doubler;
 }
-exports.Doubler = Doubler;
-exports.setupGlobals = function(globals) {
-};
 
 ```
 
@@ -74,8 +74,8 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Doubler.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const mod = require("${self_client_path}")
-            const client = new mod.Doubler({
+            const Doubler = require("${self_client_path}")({});
+            const client = new Doubler({
               func: ${func_client},
               stateful: ${stateful_client},
             });
