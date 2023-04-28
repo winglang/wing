@@ -31,7 +31,7 @@
     "lodash.uniqby": "^4.7.0",
     "nanoid": "^4.0.2",
     "node-fetch": "^3.3.1",
-    "redis": "^4.6.5",
+    "redis": "^4.6.6",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
     "vitest": "^0.30.1",
