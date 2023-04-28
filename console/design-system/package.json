@@ -10,7 +10,7 @@
     "vitest": "vitest run --coverage --passWithNoTests"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.4",
+    "@babel/core": "^7.21.5",
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.17",
     "@popperjs/core": "^2.11.7",
@@ -24,7 +24,7 @@
     "@wingconsole/tsconfig": "workspace:^",
     "classnames": "^2.3.2",
     "eslint": "^8.39.0",
-    "happy-dom": "^9.9.2",
+    "happy-dom": "^9.10.0",
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

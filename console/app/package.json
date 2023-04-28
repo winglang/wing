@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.321.1",
-    "@babel/core": "^7.21.4",
+    "@babel/core": "^7.21.5",
     "@cloudy-ts/eslint-plugin": "^0.0.260",
     "@electron/notarize": "^1.2.3",
     "@playwright/test": "^1.33.0",
