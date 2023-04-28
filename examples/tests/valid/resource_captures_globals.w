@@ -39,9 +39,25 @@ class Another {
 let global_another = new Another();
 
 class MyResource {
-  init() {}
+  local_topic: cloud.Topic;
+  local_counter: cloud.Counter;
+  init() {
+    this.local_topic = new cloud.Topic();
+    this.local_counter = new cloud.Counter();
+    let $parent_this = this;
+
+    class R impl cloud.ITopicOnMessageHandler {
+      init() {}
+      inflight handle() {
+        global_counter.inc();
+        $parent_this.local_counter.inc();
+      }
+    }
+    this.local_topic.on_message(new R());
+  }
 
   inflight my_put() {
+    this.local_topic.publish("hello");
     global_bucket.put("key", "value");
     assert(global_str == "hello");
     assert(global_bool == true);
