@@ -25,48 +25,47 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     return {};
   }
 
-  public async cleanup(): Promise<void> {}
+  public async cleanup(): Promise<void> { }
 
-  public async insert(row: Json): Promise<void> {
+  public async insert(key: string, row: Json): Promise<void> {
+    this.validateRow(row);
     const anyRow = row as any;
     return this.context.withTrace({
-      message: `insert row ${anyRow[this.primaryKey]} into the table ${
-        this.name
-      }.`,
+      message: `insert row ${key} into the table ${this.name
+        }.`,
       activity: async () => {
-        const pk = anyRow[this.primaryKey];
-        if (await this.get(pk)) {
+        if (await this.get(key)) {
           throw new Error(
-            `The primary key "${pk}" already exists in the "${this.name}" table.`
+            `The primary key "${key}" already exists in the "${this.name}" table.`
           );
         }
         let item: Record<string, any> = {};
-        item[this.primaryKey] = anyRow[this.primaryKey];
+        item[this.primaryKey] = key;
         for (const key of Object.keys(this.columns)) {
           item[key] = anyRow[key];
         }
-        this.table.set(pk, item);
+        this.table.set(key, item);
       },
     });
   }
-  public async update(row: Json): Promise<void> {
+  public async update(key: string, row: Json): Promise<void> {
+    this.validateRow(row);
     const anyRow = row as any;
     return this.context.withTrace({
-      message: `update row ${anyRow[this.primaryKey]} in table ${this.name}.`,
+      message: `update row ${key} in table ${this.name}.`,
       activity: async () => {
-        const pk = anyRow[this.primaryKey];
-        let item: any = await this.get(pk);
+        let item: any = await this.get(key);
         if (!item) {
           throw new Error(
-            `The primary key "${pk}" was not found in the "${this.name}" table.`
+            `The primary key "${key}" was not found in the "${this.name}" table.`
           );
         }
-        for (const key of Object.keys(this.columns)) {
-          if (anyRow[key]) {
-            item[key] = anyRow[key];
+        for (const column of Object.keys(this.columns)) {
+          if (anyRow[column]) {
+            item[column] = anyRow[column];
           }
         }
-        this.table.set(pk, item);
+        this.table.set(key, item);
       },
     });
   }
@@ -97,5 +96,37 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
         return Array.from(this.table.values());
       },
     });
+  }
+
+  private validateRow(row: Json) {
+    const columns = this.columns;
+    for (const [key, value] of Object.entries(row)) {
+      if (!columns.hasOwnProperty(key)) {
+        throw new Error(`"${key}" is not a valid column in the table.`);
+      }
+      switch (columns[key]) {
+        case ColumnType.STRING:
+        case ColumnType.DATE:
+          if (typeof value !== "string") {
+            throw new Error(`"${key}" value is not a valid string.`);
+          }
+          break;
+        case ColumnType.NUMBER:
+          if (typeof value !== "number") {
+            throw new Error(`"${key}" value is not a valid number.`);
+          }
+          break;
+        case ColumnType.BOOLEAN:
+          if (typeof value !== "boolean") {
+            throw new Error(`"${key}" value is not a valid bool.`);
+          }
+          break;
+        case ColumnType.JSON:
+          if (typeof value !== "object") {
+            throw new Error(`"${key}" value is not a valid json.`);
+          }
+          break;
+      }
+    }
   }
 }

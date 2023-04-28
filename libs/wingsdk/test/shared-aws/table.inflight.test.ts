@@ -54,7 +54,7 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(PutItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.insert(row as any);
+    const response = await client.insert(row.id, row as any);
     // THEN
     expect(response).toEqual(undefined);
   });
@@ -74,7 +74,7 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.update(row as any);
+    const response = await client.update(row.id, row as any);
     // THEN
     expect(response).toEqual(undefined);
   });
