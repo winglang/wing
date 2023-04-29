@@ -2,7 +2,7 @@
 
 ## clients/Bar.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Bar {
     constructor({ b, foo, name, stateful }) {
       this.b = b;
@@ -25,7 +25,7 @@ module.exports = function($globals) {
 
 ## clients/BigPublisher.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  BigPublisher {
     constructor({ b, b2, q, t, stateful }) {
       this.b = b;
@@ -54,7 +54,7 @@ module.exports = function($globals) {
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Foo {
     constructor({ c, stateful }) {
       this.c = c;

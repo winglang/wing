@@ -2,7 +2,7 @@
 
 ## clients/R.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  R {
     constructor({ f, stateful }) {
       this.f = f;

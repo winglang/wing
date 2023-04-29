@@ -2,8 +2,7 @@
 
 ## clients/Another.inflight.js
 ```js
-module.exports = function($globals) {
-  const { global_counter } = $globals;
+module.exports = function({ global_counter }) {
   class  Another {
     constructor({ first, my_field, stateful }) {
       this.first = first;
@@ -29,7 +28,7 @@ module.exports = function($globals) {
 
 ## clients/First.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  First {
     constructor({ my_resource, stateful }) {
       this.my_resource = my_resource;
@@ -43,8 +42,7 @@ module.exports = function($globals) {
 
 ## clients/MyResource.inflight.js
 ```js
-module.exports = function($globals) {
-  const { global_another, global_array_of_str, global_bool, global_bucket, global_counter, global_map_of_num, global_num, global_set_of_str, global_str } = $globals;
+module.exports = function({ global_another, global_array_of_str, global_bool, global_bucket, global_counter, global_map_of_num, global_num, global_set_of_str, global_str }) {
   class  MyResource {
     constructor({ local_counter, local_topic, stateful }) {
       this.local_counter = local_counter;
@@ -74,8 +72,7 @@ module.exports = function($globals) {
 
 ## clients/R.inflight.js
 ```js
-module.exports = function($globals) {
-  const { $parent_this, global_counter } = $globals;
+module.exports = function({ $parent_this, global_counter }) {
   class  R {
     constructor({ stateful }) {
       this.stateful = stateful;

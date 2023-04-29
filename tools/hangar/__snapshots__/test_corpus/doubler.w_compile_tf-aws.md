@@ -2,7 +2,7 @@
 
 ## clients/Doubler.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Doubler {
     constructor({ func, stateful }) {
       this.func = func;

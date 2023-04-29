@@ -2,7 +2,7 @@
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Foo {
     constructor({ instance_field, stateful }) {
       this.instance_field = instance_field;

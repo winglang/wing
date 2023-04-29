@@ -2,7 +2,7 @@
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Foo {
     constructor({ _sum_str, stateful }) {
       this._sum_str = _sum_str;

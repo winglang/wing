@@ -2,7 +2,7 @@
 
 ## clients/Fetch.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Fetch {
     constructor({ stateful }) {
       this.stateful = stateful;

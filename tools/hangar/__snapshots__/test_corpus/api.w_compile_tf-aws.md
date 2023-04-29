@@ -2,7 +2,7 @@
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Foo {
     constructor({ api, stateful }) {
       this.api = api;

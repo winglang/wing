@@ -2,7 +2,7 @@
 
 ## clients/A.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  A {
     constructor({ stateful }) {
       this.stateful = stateful;
@@ -20,7 +20,7 @@ module.exports = function($globals) {
 
 ## clients/Dog.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Dog {
     constructor({ stateful }) {
       this.stateful = stateful;
@@ -38,7 +38,7 @@ module.exports = function($globals) {
 
 ## clients/r.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  r {
     constructor({ stateful }) {
       this.stateful = stateful;

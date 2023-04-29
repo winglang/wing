@@ -2,7 +2,7 @@
 
 ## clients/WingResource.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  WingResource {
     constructor({ stateful }) {
       this.stateful = stateful;

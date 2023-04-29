@@ -2,7 +2,7 @@
 
 ## clients/Another.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  Another {
     constructor({ first, my_field, stateful }) {
       this.first = first;
@@ -27,7 +27,7 @@ module.exports = function($globals) {
 
 ## clients/First.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  First {
     constructor({ my_resource, stateful }) {
       this.my_resource = my_resource;
@@ -41,7 +41,7 @@ module.exports = function($globals) {
 
 ## clients/MyResource.inflight.js
 ```js
-module.exports = function($globals) {
+module.exports = function() {
   class  MyResource {
     constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_opt_str, my_queue, my_resource, my_str, set_of_str, unused_resource, stateful }) {
       this.another = another;

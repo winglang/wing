@@ -701,7 +701,7 @@ impl<'a> JSifier<'a> {
 
 				code.line(format!("return {};", name));
 
-				code.close("})({}));".to_string());
+				code.close("})({}));");
 				code
 			}
 			StmtKind::TryCatch {
@@ -1041,7 +1041,7 @@ impl<'a> JSifier<'a> {
 			}
 			bind_method.close("}");
 		}
-		bind_method.line("super._registerBind(host, ops);".to_string());
+		bind_method.line("super._registerBind(host, ops);");
 		bind_method.close("}");
 
 		code.add_code(bind_method);
@@ -1245,14 +1245,15 @@ impl<'a> JSifier<'a> {
 
 		// export the main class from this file
 		let mut code = CodeMaker::default();
-		code.open("module.exports = function($globals) {".to_string());
 		if free_variables.len() > 0 {
 			let free_variables_str = free_variables.iter().join(", ");
-			code.line(format!("const {{ {free_variables_str} }} = $globals;"));
+			code.open(format!("module.exports = function({{ {free_variables_str} }}) {{"));
+		} else {
+			code.open("module.exports = function() {");
 		}
 		code.add_code(class_code);
 		code.line(format!("return {name};"));
-		code.close("}".to_string());
+		code.close("}");
 
 		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());
 		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
