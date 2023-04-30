@@ -1,12 +1,12 @@
-import {mkdirpSync, readdirSync, rmSync, writeFileSync} from "fs-extra";
-import {validTestDir} from "./paths";
-import {join, extname, basename} from "path";
-import {parseMetaCommentFromPath} from "./meta_comment";
+import { mkdirpSync, readdirSync, rmSync, writeFileSync } from "fs-extra";
+import { validTestDir } from "./paths";
+import { join, extname, basename } from "path";
+import { parseMetaCommentFromPath } from "./meta_comment";
 
 const generatedTestDir = join(__dirname, "test_corpus", "valid");
-rmSync(generatedTestDir, {recursive: true, force: true});
+rmSync(generatedTestDir, { recursive: true, force: true });
 mkdirpSync(generatedTestDir);
-for (const fileInfo of readdirSync(validTestDir, {withFileTypes: true})) {
+for (const fileInfo of readdirSync(validTestDir, { withFileTypes: true })) {
   if (!fileInfo.isFile() || extname(fileInfo.name) !== ".w") {
     continue;
   }
@@ -17,7 +17,10 @@ for (const fileInfo of readdirSync(validTestDir, {withFileTypes: true})) {
 
   let skipText = "";
 
-  if (metaComment?.skipPlatforms?.includes(process.platform) && process.env.CI) {
+  if (
+    metaComment?.skipPlatforms?.includes(process.platform) &&
+    process.env.CI
+  ) {
     skipText = ".skip";
   }
 
