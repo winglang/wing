@@ -114,7 +114,8 @@ export async function load(options: WingCompilerLoadOptions) {
       const fullPath = `/${file}`;
       if (
         !file.startsWith(".") &&
-        (await fs.promises.lstat(fullPath)).isDirectory()
+        // include directories and symlinks to directories
+        (await fs.promises.stat(fullPath)).isDirectory()
       ) {
         try {
           await fs.promises.access(fullPath, fs.constants.R_OK | fs.constants.F_OK);
