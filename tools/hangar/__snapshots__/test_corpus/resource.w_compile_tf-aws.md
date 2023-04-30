@@ -2,78 +2,84 @@
 
 ## clients/Bar.inflight.js
 ```js
-class  Bar {
-  constructor({ b, foo, name, stateful }) {
-    this.b = b;
-    this.foo = foo;
-    this.name = name;
-    this.stateful = stateful;
-  }
-  async my_method()  {
-    {
-      (await this.foo.foo_inc());
-      (await this.b.put("foo",`counter is: ${(await this.foo.foo_get())}`));
-      return (await this.b.get("foo"));
+module.exports = function() {
+  class  Bar {
+    constructor({ b, foo, name, stateful }) {
+      this.b = b;
+      this.foo = foo;
+      this.name = name;
+      this.stateful = stateful;
+    }
+    async my_method()  {
+      {
+        (await this.foo.foo_inc());
+        (await this.b.put("foo",`counter is: ${(await this.foo.foo_get())}`));
+        return (await this.b.get("foo"));
+      }
     }
   }
+  return Bar;
 }
-exports.Bar = Bar;
 
 ```
 
 ## clients/BigPublisher.inflight.js
 ```js
-class  BigPublisher {
-  constructor({ b, b2, q, t, stateful }) {
-    this.b = b;
-    this.b2 = b2;
-    this.q = q;
-    this.t = t;
-    this.stateful = stateful;
-  }
-  async publish(s)  {
-    {
-      (await this.t.publish(s));
-      (await this.q.push(s));
-      (await this.b2.put("foo",s));
+module.exports = function() {
+  class  BigPublisher {
+    constructor({ b, b2, q, t, stateful }) {
+      this.b = b;
+      this.b2 = b2;
+      this.q = q;
+      this.t = t;
+      this.stateful = stateful;
+    }
+    async publish(s)  {
+      {
+        (await this.t.publish(s));
+        (await this.q.push(s));
+        (await this.b2.put("foo",s));
+      }
+    }
+    async getObjectCount()  {
+      {
+        return (await this.b.list()).length;
+      }
     }
   }
-  async getObjectCount()  {
-    {
-      return (await this.b.list()).length;
-    }
-  }
+  return BigPublisher;
 }
-exports.BigPublisher = BigPublisher;
 
 ```
 
 ## clients/Foo.inflight.js
 ```js
-class  Foo {
-  constructor({ c, stateful }) {
-    this.c = c;
-    this.stateful = stateful;
-  }
-  async $inflight_init()  {
-    {
-      this.inflight_field = 123;
-      (await this.c.inc(110));
-      (await this.c.dec(10));
+module.exports = function() {
+  class  Foo {
+    constructor({ c, stateful }) {
+      this.c = c;
+      this.stateful = stateful;
+    }
+    async $inflight_init()  {
+      {
+        this.inflight_field = 123;
+        (await this.c.inc(110));
+        (await this.c.dec(10));
+      }
+    }
+    async foo_inc()  {
+      {
+        (await this.c.inc());
+      }
+    }
+    async foo_get()  {
+      {
+        return (await this.c.peek());
+      }
     }
   }
-  async foo_inc()  {
-    {
-      (await this.c.inc());
-    }
-  }
-  async foo_get()  {
-    {
-      return (await this.c.peek());
-    }
-  }
+  return Foo;
 }
-exports.Foo = Foo;
 
 ```
 
@@ -774,12 +780,13 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            const Foo = require("${self_client_path}")({});
+            const client = new Foo({
               c: ${c_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
@@ -813,14 +820,15 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Bar({
+            const Bar = require("${self_client_path}")({});
+            const client = new Bar({
               b: ${b_client},
               foo: ${foo_client},
               name: ${name_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
@@ -886,15 +894,16 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).BigPublisher({
+            const BigPublisher = require("${self_client_path}")({});
+            const client = new BigPublisher({
               b: ${b_client},
               b2: ${b2_client},
               q: ${q_client},
               t: ${t_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }

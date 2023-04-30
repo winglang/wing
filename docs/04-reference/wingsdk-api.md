@@ -5545,7 +5545,7 @@ primary key to delete the row.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.ITableClient.get"></a>
 
 ```wing
-get(key: str): any
+get(key: str): Json
 ```
 
 **Inflight client:** [true](#true)
