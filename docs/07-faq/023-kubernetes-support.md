@@ -1,5 +1,5 @@
 ---
-title: Does Wing support Kebernetes?
+title: Does Wing support Kubernetes?
 id: kubernetes-support
 keywords: [faq, supported provisioning engines, winglang, Wing programming language, Wing language, Kubernetes, K8S]
 ---
