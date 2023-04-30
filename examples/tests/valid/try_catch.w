@@ -26,11 +26,15 @@ assert(x == "finally");
 
 // Verify that finally is executed even if there's no catch block.
 try {
-  throw("hello");
-} finally {
-  x = "finally with no catch";
+  try {
+    throw("hello");
+  } finally {
+    x = "finally with no catch";
+  }
+  assert(x == "finally with no catch");
+} catch {
+  // no op (we just dont want the inner exception to stop the test)
 }
-assert(x == "finally with no catch");
 
 // Verify that finally is executed even if there's no catch block and no exception.
 try {

@@ -1,13 +1,13 @@
 bring cloud;
 
-resource A impl cloud.IQueueOnMessageHandler {
+class A impl cloud.IQueueAddConsumerHandler {
   init() {}
   inflight handle(msg: str) {
     return;
   }
 }
 
-let x: cloud.IQueueOnMessageHandler = new A();
+let x: cloud.IQueueAddConsumerHandler = new A();
 
 let y = inflight () => {
   x.handle("hello world!");
@@ -25,7 +25,7 @@ interface I3 extends I2 {
   method_3(x: Array<num>): Array<num>;
 }
 
-resource r impl I3 {
+class r impl I3 {
   init() {}
   method_1(x: num): num {
     return x;
@@ -43,7 +43,7 @@ interface IAnimal {
   inflight eat();
 }
 
-resource Dog impl IAnimal {
+class Dog impl IAnimal {
   init(){}
   inflight eat() {
     return;

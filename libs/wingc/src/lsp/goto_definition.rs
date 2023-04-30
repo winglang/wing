@@ -15,7 +15,7 @@ pub unsafe extern "C" fn wingc_on_goto_definition(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn on_goto_definition<'a>(params: lsp_types::GotoDefinitionParams) -> Vec<lsp_types::LocationLink> {
+pub fn on_goto_definition(params: lsp_types::GotoDefinitionParams) -> Vec<lsp_types::LocationLink> {
 	FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position_params.text_document.uri;

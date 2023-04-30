@@ -2,8 +2,7 @@ import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
 import { RandomProvider } from "@cdktf/provider-random/lib/provider";
 import { Construct } from "constructs";
 import { Bucket } from "./bucket";
-import { Logger } from "./logger";
-import { BUCKET_FQN, LOGGER_FQN } from "../cloud";
+import { BUCKET_FQN } from "../cloud";
 import { AppProps as CdktfAppProps, CdktfApp } from "../core";
 
 /**
@@ -74,9 +73,6 @@ export class App extends CdktfApp {
     switch (fqn) {
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
-
-      case LOGGER_FQN:
-        return new Logger(scope, id);
     }
 
     return undefined;

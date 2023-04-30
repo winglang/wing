@@ -7,7 +7,7 @@ pub mod package_json {
 		path::{Path, PathBuf},
 	};
 
-	use crate::node_resolve::resolve_from;
+	use crate::node_resolve::{is_path_dependency, resolve_from};
 
 	pub fn dependencies_of(package_json: &serde_json::Value) -> Vec<String> {
 		// merge both dependencies and peerDependencies and return the list of keys
@@ -85,11 +85,5 @@ pub mod package_json {
 		} else {
 			None
 		}
-	}
-
-	/// If the dependency looks like a path, return the path
-	/// This means it starts with `./`, `../`, or `/`
-	pub fn is_path_dependency(dependency_name: &str) -> bool {
-		dependency_name.starts_with("./") || dependency_name.starts_with("../") || dependency_name.starts_with("/")
 	}
 }

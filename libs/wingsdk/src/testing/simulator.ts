@@ -4,10 +4,8 @@ import { Tree } from "./tree";
 import { ITestRunnerClient, TestResult, Trace, TraceType } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
-import { ISimulatorResourceInstance } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
-import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { readJsonSync } from "../util";
 
 /**
@@ -567,4 +565,47 @@ class HandleManager {
     this.handles.clear();
     this.nextHandle = 0;
   }
+}
+
+/**
+ * Shared interface for resource simulations.
+ */
+export interface ISimulatorResourceInstance {
+  /**
+   * Perform any async initialization required by the resource. Return a map of
+   * the resource's runtime attributes.
+   */
+  init(): Promise<Record<string, any>>;
+
+  /**
+   * Stop the resource and clean up any physical resources it may have created
+   * (files, ports, etc).
+   */
+  cleanup(): Promise<void>;
+}
+
+/** Schema for simulator.json */
+export interface WingSimulatorSchema {
+  /** The list of resources. */
+  readonly resources: BaseResourceSchema[];
+  /** The version of the Wing SDK used to synthesize the .wsim file. */
+  readonly sdkVersion: string;
+}
+
+/** Schema for individual resources */
+export interface BaseResourceSchema {
+  /** The resource path from the app's construct tree. */
+  readonly path: string;
+  /** The type of the resource. */
+  readonly type: string;
+  /** The resource-specific properties needed to create this resource. */
+  readonly props: { [key: string]: any };
+  /** The resource-specific attributes that are set after the resource is created. */
+  readonly attrs: Record<string, any>;
+}
+
+/** Schema for resource attributes */
+export interface BaseResourceAttributes {
+  /** The resource's simulator-unique id. */
+  readonly handle: string;
 }

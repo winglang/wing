@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, IResource, Resource } from "../core";
+import { App } from "../core";
+import { IResource, Resource } from "../std/resource";
 
 /**
  * Global identifier for `Api`.
@@ -158,6 +159,20 @@ export abstract class Api extends Resource {
     inflight: IApiEndpointHandler,
     props?: ApiConnectProps
   ): void;
+  /**
+   * validating route:
+   * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
+   * @param route
+   * @throws if the route is invalid
+   * @internal
+   */
+  protected _validateRoute(route: string) {
+    if (!/^([^\{\}\:\n]|.+\/\{\w+\}(\/|$))*$/g.test(route)) {
+      throw new Error(
+        `Invalid route ${route}. Url cannot contain ":", params contains only alpha-numeric chars or "_".`
+      );
+    }
+  }
 
   /**
    * Add a route to the api spec.

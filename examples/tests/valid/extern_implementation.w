@@ -1,10 +1,11 @@
 bring cloud;
 
-resource Foo {
+class Foo {
   extern "./external_js.js" static get_greeting(name: str): str;
   extern "./external_js.js" static inflight regex_inflight(pattern: str, text: str): bool;
   extern "./external_js.js" static inflight get_uuid(): str;
   extern "./external_js.js" static inflight get_data(): str;
+  extern "./external_js.js" inflight print(msg: str);
   extern "uuid" static v4(): str;
 
   init(){}
@@ -26,4 +27,8 @@ let f = new Foo();
 new cloud.Function(inflight () => {
   f.call();
 }) as "test:call";
+
+new cloud.Function(inflight () => {
+  f.print("hey there");
+}) as "test:console";
 

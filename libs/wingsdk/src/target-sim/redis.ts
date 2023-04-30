@@ -1,10 +1,11 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { RedisSchema, REDIS_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as core from "../core";
 import * as redis from "../redis";
+import { IInflightHost } from "../std";
+import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `redis.Redis`.
@@ -27,7 +28,7 @@ export class Redis extends redis.Redis implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
@@ -37,13 +38,3 @@ export class Redis extends redis.Redis implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Redis._annotateInflight("raw_client", {});
-Redis._annotateInflight("url", {});
-Redis._annotateInflight("get", {});
-Redis._annotateInflight("set", {});
-Redis._annotateInflight("hset", {});
-Redis._annotateInflight("hget", {});
-Redis._annotateInflight("sadd", {});
-Redis._annotateInflight("smembers", {});
-Redis._annotateInflight("del", {});

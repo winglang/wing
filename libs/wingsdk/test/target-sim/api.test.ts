@@ -2,7 +2,8 @@ import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { SimApp, Simulator, Testing } from "../../src/testing";
+import { Simulator, Testing } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 // Handler that responds to a request with a fixed string
 const INFLIGHT_CODE = (body: string) =>
@@ -15,6 +16,8 @@ const INFLIGHT_CODE_ECHO_METHOD = `async handle(req) { return { status: 200, bod
 const INFLIGHT_CODE_ECHO_PATH = `async handle(req) { return { status: 200, body: req.path }; }`;
 // Handler that responds to a request with the request query params
 const INFLIGHT_CODE_ECHO_QUERY = `async handle(req) { return { status: 200, body: req.query }; }`;
+// Handler that responds to a request with the request params
+const INFLIGHT_CODE_ECHO_PARAMS = `async handle(req) { return { status: 200, body: req.vars ?? {} }; }`;
 // Handler that responds to a request with extra response headers
 const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
 
@@ -61,6 +64,34 @@ test("api with one GET route", async () => {
 
   expect(response.status).toEqual(200);
   expect(await response.json()).toEqual(RESPONSE);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api with one GET route with request params", async () => {
+  // GIVEN
+  const ROUTE = "/users/{name}";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_PARAMS
+  );
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(`${apiUrl}/users/tsuf`, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.json()).toEqual({ name: "tsuf" });
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -224,6 +255,35 @@ test("api with one POST route, with body", async () => {
     headers: {
       "Content-Type": "application/json",
     },
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(await response.json()).toEqual(REQUEST_BODY);
+  expect(response.status).toEqual(200);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api with one POST route, with body urlencoded", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+  const REQUEST_BODY = { message: "hello world" };
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  api.post(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const params = new URLSearchParams(REQUEST_BODY);
+  const response = await fetch(apiUrl + ROUTE, {
+    method: "POST",
+    body: params,
   });
 
   // THEN

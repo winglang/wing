@@ -4,30 +4,6 @@ exports[`provides raw tree data 1`] = `
 {
   "tree": {
     "children": {
-      "WingLogger": {
-        "attributes": {
-          "wing:resource:connections": [
-            {
-              "direction": "inbound",
-              "implicit": true,
-              "relationship": "log",
-              "resource": "root/test",
-            },
-          ],
-          "wing:resource:stateful": true,
-        },
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.1.245",
-        },
-        "display": {
-          "description": "A cloud logging facility",
-          "hidden": true,
-          "title": "Logger",
-        },
-        "id": "WingLogger",
-        "path": "root/WingLogger",
-      },
       "cloud.TestRunner": {
         "attributes": {
           "wing:resource:connections": [],
@@ -47,14 +23,7 @@ exports[`provides raw tree data 1`] = `
       },
       "test": {
         "attributes": {
-          "wing:resource:connections": [
-            {
-              "direction": "outbound",
-              "implicit": true,
-              "relationship": "log",
-              "resource": "root/WingLogger",
-            },
-          ],
+          "wing:resource:connections": [],
           "wing:resource:stateful": false,
         },
         "constructInfo": {
@@ -162,13 +131,13 @@ exports[`run single test > happy path 1`] = `
 exports[`run single test > test failure 1`] = `
 {
   "error": "Error: test failed
-    at Handler.handle (evalmachine.<anonymous>:20:7)
-    at Object.exports.handler (evalmachine.<anonymous>:24:5)
-    at evalmachine.<anonymous>:26:9
-    at Script.runInContext (node:vm:141:12)
-    at Object.runInContext (node:vm:297:6)
 <sanitized>
-    at new Promise (<anonymous>)
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
+<sanitized>
 <sanitized>
 <sanitized>
 <sanitized>",

@@ -1,7 +1,7 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
 use crate::ast::{
-	Class, Constructor, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+	Class, Expr, FunctionBody, FunctionDefinition, Initializer, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 };
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
@@ -145,9 +145,9 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 		self.visit_symbol(&node.name);
 
-		self.visit_constructor(&node.constructor);
+		self.visit_constructor(&node.initializer);
 
-		self.with_scope(&node.constructor.statements, |v| {
+		self.with_scope(&node.initializer.statements, |v| {
 			for field in &node.fields {
 				v.visit_symbol(&field.name);
 				v.visit_type_annotation(&field.member_type);
@@ -160,7 +160,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		});
 	}
 
-	fn visit_constructor(&mut self, node: &'a Constructor) {
+	fn visit_constructor(&mut self, node: &'a Initializer) {
 		if self.is_found() {
 			return;
 		}
@@ -203,7 +203,7 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 		WASM_RETURN_ERROR
 	}
 }
-pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
+pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 	FILES.with(|files| {
 		let files = files.borrow();
 		let parse_result = files.get(&params.text_document_position_params.text_document.uri.clone());

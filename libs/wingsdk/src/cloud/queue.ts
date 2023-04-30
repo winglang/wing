@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { IResource, Resource, App } from "../core";
-import { Duration } from "../std";
+import { App } from "../core";
+import { Duration, IResource, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.
@@ -15,9 +15,15 @@ export const QUEUE_FQN = fqnForType("cloud.Queue");
 export interface QueueProps {
   /**
    * How long a queue's consumers have to process a message.
-   * @default Duration.fromSeconds(10)
+   * @default undefined
    */
   readonly timeout?: Duration;
+
+  /**
+   * How long a queue retains a message.
+   * @default undefined
+   */
+  readonly retentionPeriod?: Duration;
 
   /**
    * Initialize the queue with a set of messages.
@@ -51,22 +57,28 @@ export abstract class Queue extends Resource {
     this.display.title = "Queue";
     this.display.description = "A distributed message queue";
 
+    this._addInflightOps(
+      QueueInflightMethods.PUSH,
+      QueueInflightMethods.PURGE,
+      QueueInflightMethods.APPROX_SIZE
+    );
+
     props;
   }
 
   /**
    * Create a function to consume messages from this queue.
    */
-  public abstract onMessage(
-    handler: IQueueOnMessageHandler,
-    props?: QueueOnMessageProps
+  public abstract addConsumer(
+    handler: IQueueAddConsumerHandler,
+    props?: QueueAddConsumerProps
   ): Function;
 }
 
 /**
- * Options for Queue.onMessage.
+ * Options for Queue.addConsumer.
  */
-export interface QueueOnMessageProps extends FunctionProps {
+export interface QueueAddConsumerProps extends FunctionProps {
   /**
    * The maximum number of messages to send to subscribers at once.
    * @default 1
@@ -100,16 +112,16 @@ export interface IQueueClient {
 
 /**
  * Represents a resource with an inflight "handle" method that can be passed to
- * `Queue.on_message`.
+ * `Queue.add_consumer`.
  *
- * @inflight `@winglang/sdk.cloud.IQueueOnMessageHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IQueueAddConsumerHandlerClient`
  */
-export interface IQueueOnMessageHandler extends IResource {}
+export interface IQueueAddConsumerHandler extends IResource {}
 
 /**
- * Inflight client for `IQueueOnMessageHandler`.
+ * Inflight client for `IQueueAddConsumerHandler`.
  */
-export interface IQueueOnMessageHandlerClient {
+export interface IQueueAddConsumerHandlerClient {
   /**
    * Function that will be called when a message is received from the queue.
    * @inflight

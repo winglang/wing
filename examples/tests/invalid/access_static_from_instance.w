@@ -1,4 +1,4 @@
-resource Foo {
+class Foo {
   instance_field: num;
 
   static f: num;

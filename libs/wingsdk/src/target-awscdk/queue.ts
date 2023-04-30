@@ -6,8 +6,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
+import { IInflightHost, Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**
@@ -25,6 +25,9 @@ export class Queue extends cloud.Queue {
       visibilityTimeout: props.timeout
         ? Duration.seconds(props.timeout?.seconds)
         : undefined,
+      retentionPeriod: props.retentionPeriod
+        ? Duration.seconds(props.retentionPeriod?.seconds)
+        : undefined,
     });
 
     if ((props.initialMessages ?? []).length) {
@@ -34,25 +37,25 @@ export class Queue extends cloud.Queue {
     }
   }
 
-  public onMessage(
-    inflight: cloud.IQueueOnMessageHandler,
-    props: cloud.QueueOnMessageProps = {}
+  public addConsumer(
+    inflight: cloud.IQueueAddConsumerHandler,
+    props: cloud.QueueAddConsumerProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessageHandler-${hash}`,
+      `${this.node.id}-AddConsumerHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),
-        "queue.onmessage.inflight.js"
+        "queue.addconsumer.inflight.js"
       ),
-      "QueueOnMessageHandlerClient"
+      "QueueAddConsumerHandlerClient"
     );
 
     const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
+      `${this.node.id}-AddConsumer-${hash}`,
       functionHandler,
       props
     );
@@ -67,17 +70,17 @@ export class Queue extends cloud.Queue {
     });
     fn._addEventSource(eventSource);
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "add_consumer",
     });
 
     return fn;
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -85,7 +88,7 @@ export class Queue extends cloud.Queue {
     const env = this.envName();
 
     host.addPolicyStatements(
-      ...calculateQueuePermissions(this.queue.queueArn, AwsTarget.AWSCDK, ops)
+      ...calculateQueuePermissions(this.queue.queueArn, ops)
     );
 
     // The queue url needs to be passed through an environment variable since
@@ -109,7 +112,3 @@ export class Queue extends cloud.Queue {
     return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
   }
 }
-
-Queue._annotateInflight(cloud.QueueInflightMethods.PUSH, {});
-Queue._annotateInflight(cloud.QueueInflightMethods.PURGE, {});
-Queue._annotateInflight(cloud.QueueInflightMethods.APPROX_SIZE, {});

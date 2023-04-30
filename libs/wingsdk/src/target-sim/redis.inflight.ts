@@ -1,14 +1,12 @@
+import IoRedis from "ioredis";
 import { v4 as uuidv4 } from "uuid";
-import { ISimulatorResourceInstance } from "./resource";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { RedisClientBase } from "../redis";
-import { ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 import { runCommand } from "../util";
-
-// Issue using types from ioredis with JSII
-//import { Redis as IoRedis } from "ioredis";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const IoRedis = require("ioredis");
 
 export class Redis
   extends RedisClientBase

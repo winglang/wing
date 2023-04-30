@@ -84,7 +84,7 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn on_document_symbols<'a>(params: lsp_types::DocumentSymbolParams) -> Vec<DocumentSymbol> {
+pub fn on_document_symbols(params: lsp_types::DocumentSymbolParams) -> Vec<DocumentSymbol> {
 	FILES.with(|files| {
 		let files = files.borrow();
 		let parse_result = files.get(&params.text_document.uri);

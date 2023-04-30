@@ -53,23 +53,6 @@ exports[`bucket is public 2`] = `
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "azure": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
@@ -219,23 +202,6 @@ exports[`bucket name valid 2`] = `
                 "id": "The-Uncanny-Bucket",
                 "path": "root/Default/The-Uncanny-Bucket",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "azure": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
@@ -348,23 +314,6 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "azure": {
                 "constructInfo": {
@@ -505,23 +454,6 @@ exports[`create a bucket 2`] = `
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "azure": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
@@ -649,23 +581,6 @@ exports[`create multiple buckets 2`] = `
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "azure": {
                 "constructInfo": {

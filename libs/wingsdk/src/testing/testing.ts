@@ -1,12 +1,13 @@
 import { IConstruct } from "constructs";
-import { Inflight, InflightBindings, IResource, NodeJsCode } from "../core";
+import { Inflight, InflightBindings, NodeJsCode } from "../core";
+import { IResource } from "../std";
 
 /**
  * Test utilities.
  */
 export class Testing {
   /**
-   * Make an `IFunctionHandler`, `IQueueOnMessageHandler` or any other handler
+   * Make an `IFunctionHandler`, `IQueueAddConsumerHandler` or any other handler
    * on the fly. The resource will have a single method named "handle".
    *
    * The JavaScript code passed to the handler must be in the form of

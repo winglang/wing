@@ -3,8 +3,6 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "targets": {
     "test": {
-      "dependsOn": ["build"],
-      "executor": "nx:run-commands",
       "options": {
         "command": "npm run test:update",
         "cwd": "libs/tree-sitter-wing"
@@ -16,8 +14,6 @@
       }
     },
     "build": {
-      "executor": "nx:run-commands",
-      "outputs": ["rust-target"],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/tree-sitter-wing"
@@ -26,6 +22,18 @@
         "release": {
           "command": "cargo wasi build --release"
         }
+      }
+    },
+    "dev": {
+      "options": {
+        "command": "npm run playground",
+        "cwd": "libs/tree-sitter-wing"
+      }
+    },
+    "dev:watch": {
+      "options": {
+        "command": "npm run playground:watch",
+        "cwd": "libs/tree-sitter-wing"
       }
     }
   }

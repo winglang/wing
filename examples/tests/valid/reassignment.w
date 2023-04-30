@@ -4,7 +4,7 @@ assert(x == 5);
 x = x + 1;
 assert(x == 6);
 
-resource R {
+class R {
   var f: num;
   f1: num;
   init() {

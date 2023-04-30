@@ -1,20 +1,16 @@
-import * as fs from "fs";
 import * as path from "path";
-import { dirname } from "path";
-import * as process from "process";
-import * as vm from "vm";
-import {
-  ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
-  ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
-} from "./function";
-import { ISimulatorResourceInstance } from "./resource";
+import * as util from "util";
+import { NodeVM } from "vm2";
 import {
   FunctionAttributes,
   FunctionSchema,
   FUNCTION_TYPE,
 } from "./schema-resources";
-import { IFunctionClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
+import { IFunctionClient, TraceType } from "../cloud";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
@@ -41,111 +37,53 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   public async invoke(payload: string): Promise<string> {
-    const userCode = fs.readFileSync(this.filename, "utf8");
-
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        return runInSandbox(userCode, payload, {
-          resolveDir: dirname(this.filename),
-          context: {
-            fs,
-            path,
-            process: {
-              ...process,
-
-              // override process.exit to throw an exception instead of exiting the process
-              exit: (exitCode: number) => {
-                throw new Error(
-                  "process.exit() was called with exit code " + exitCode
-                );
-              },
-            },
-
-            $env: {
-              ...this.env,
-              [ENV_WING_SIM_INFLIGHT_RESOURCE_PATH]: this.context.resourcePath,
-              [ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE]: FUNCTION_TYPE,
-            },
-
-            __dirname: dirname(this.filename),
-
-            // Make the global simulator available to user code so that they can find
-            // and use other resource clients
-            // TODO: Object.freeze this?
+        const vm = new NodeVM({
+          console: "redirect", // we hijack `console.xxx` in `cloud/function.ts`
+          require: {
+            external: true,
+            builtin: ["*"], // allow using all node modules
+            context: "sandbox", // require inside the sandbox (addresses #1871)
+          },
+          sandbox: {
             $simulator: this.context,
-
-            // explicitly DO NOT propagate `console` because inflight
-            // function bind console.log to the global $logger object.
+          },
+          env: {
+            ...process.env,
+            ...this.env,
           },
           timeout: this.timeout,
         });
+
+        // see https://github.com/patriksimek/vm2/blob/master/lib/nodevm.js#L89
+        const levels = [
+          "debug",
+          "info",
+          "log",
+          "warn",
+          "error",
+          "dir",
+          "trace",
+        ];
+
+        for (const level of levels) {
+          vm.on(`console.${level}`, (...args) => {
+            const message = util.format(...args);
+            this.context.addTrace({
+              data: { message },
+              type: TraceType.LOG,
+              sourcePath: this.context.resourcePath,
+              sourceType: FUNCTION_TYPE,
+              timestamp: new Date().toISOString(),
+            });
+          });
+        }
+
+        const index = vm.runFile(this.filename);
+        return index.handler(payload);
       },
     });
   }
-}
-
-interface RunCodeOptions {
-  readonly resolveDir: string;
-  readonly context: { [key: string]: any };
-  readonly timeout: number;
-}
-
-/**
- * Runs user code in a sandboxed environment. The code is expected to export a `handler`
- * async function which take a payload and returns a result.
- *
- * @param code The JavaScript code
- * @param payload The payload JSON object to pass to the handler
- * @param opts
- * @returns
- */
-async function runInSandbox(code: string, payload: any, opts: RunCodeOptions) {
-  const ctx: any = {};
-
-  // create a copy of all the globals from our current context.
-  for (const k of Object.getOwnPropertyNames(global)) {
-    try {
-      ctx[k] = (global as any)[k];
-    } catch {
-      // ignore unresolvable globals
-      // see https://github.com/winglang/wing/pull/1923
-    }
-  }
-
-  // append the user's context
-  for (const k of Object.keys(opts.context)) {
-    ctx[k] = opts.context[k];
-  }
-
-  // we are hijacking console.log to log to the inflight $logger so do not propagate
-  delete ctx.console;
-
-  return new Promise(($resolve, $reject) => {
-    const wrapper = [
-      "const exports = {};",
-      "Object.assign(process.env, $env);",
-      code,
-      // The last statement is the value that will be returned by vm.runInThisContext
-      `exports.handler(${JSON.stringify(
-        payload
-      )}).then($resolve).catch($reject);`,
-    ].join("\n");
-
-    // we want "require"s to resolve relative to the directory of the user's code
-    const requireResolve = (p: string) =>
-      require.resolve(p, { paths: [opts.resolveDir] });
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const inflightRequire = (p: string) => require(requireResolve(p));
-    inflightRequire.resolve = requireResolve;
-
-    const context = vm.createContext({
-      ...ctx,
-      require: inflightRequire,
-      $resolve,
-      $reject,
-    });
-
-    vm.runInContext(wrapper, context, { timeout: opts.timeout });
-  });
 }

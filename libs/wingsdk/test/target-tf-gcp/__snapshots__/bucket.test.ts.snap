@@ -35,23 +35,6 @@ exports[`bucket is public 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
@@ -186,23 +169,6 @@ exports[`bucket with two preflight objects 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
@@ -333,23 +299,6 @@ exports[`create a bucket 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
@@ -473,23 +422,6 @@ exports[`two buckets 2`] = `
         "children": {
           "Default": {
             "children": {
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",

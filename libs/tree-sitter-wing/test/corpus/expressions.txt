@@ -87,12 +87,14 @@ hello(1,a);
 (source
   (expression_statement
     (call
-      caller: (identifier)
+      caller: (reference
+        (reference_identifier))
       args: (argument_list
         (positional_argument
           (number))
         (positional_argument
-          (identifier))))))
+          (reference
+            (reference_identifier)))))))
 
 ================================================================================
 Method call
@@ -105,9 +107,11 @@ obj.method();
 (source
   (expression_statement
     (call
-      caller: (nested_identifier
-        object: (identifier)
-        property: (identifier))
+      caller: (reference
+        (nested_identifier
+          object: (reference
+            (reference_identifier))
+          property: (member_identifier)))
       args: (argument_list))))
 
 ================================================================================
@@ -121,11 +125,14 @@ x == obj.method();
 (source
   (expression_statement
     (binary_expression
-      left: (identifier)
+      left: (reference
+        (reference_identifier))
       right: (call
-        caller: (nested_identifier
-          object: (identifier)
-          property: (identifier))
+        caller: (reference
+          (nested_identifier
+            object: (reference
+              (reference_identifier))
+            property: (member_identifier)))
         args: (argument_list)))))
 
 ================================================================================
@@ -140,7 +147,7 @@ new A();
   (expression_statement
     (new_expression
       class: (custom_type
-        object: (identifier))
+        object: (type_identifier))
       args: (argument_list))))
 
 ================================================================================
@@ -155,12 +162,13 @@ new A() as "b" in c;
   (expression_statement
     (new_expression
       class: (custom_type
-        object: (identifier))
+        object: (type_identifier))
       args: (argument_list)
       id: (new_object_id
         (string))
       scope: (new_object_scope
-        (identifier)))))
+        (reference
+          (reference_identifier))))))
 
 ================================================================================
 preflight anonymous closure
@@ -180,7 +188,8 @@ preflight anonymous closure
       (builtin_type)
       (block
         (return_statement
-          (identifier))))))
+          (reference
+            (reference_identifier)))))))
 
 ================================================================================
 inflight anonymous closure
@@ -193,6 +202,7 @@ inflight (): num => { return 1; };
 (source
   (expression_statement
     (inflight_closure
+      (inflight_specifier)
       (parameter_list)
       (builtin_type)
       (block
@@ -211,7 +221,8 @@ Template string
   (expression_statement
     (string
       (template_substitution
-        (identifier)))))
+        (reference
+          (reference_identifier))))))
 
 ================================================================================
 ?? operator
@@ -226,18 +237,21 @@ maybeVal ?? 2 == 2;
 (source
   (expression_statement
     (binary_expression
-      (identifier)
+      (reference
+        (reference_identifier))
       (number)))
   (expression_statement
     (binary_expression
-      (identifier)
+      (reference
+        (reference_identifier))
       (binary_expression
         (number)
         (number))))
   (expression_statement
     (binary_expression
       (binary_expression
-        (identifier)
+        (reference
+          (reference_identifier))
         (number))
       (number))))
 
@@ -360,7 +374,7 @@ let a = A { f1: 3, f2: true };
     name: (identifier)
     value: (struct_literal
       type: (custom_type
-        object: (identifier))
+        object: (type_identifier))
       fields: (struct_literal_member
         (identifier)
         (number))
@@ -381,21 +395,27 @@ a?;
 (source
   (expression_statement
     (optional_test
-      (identifier)))
+      (reference
+        (reference_identifier))))
   (expression_statement
     (unary_expression
       arg: (optional_test
-        (identifier))))
+        (reference
+          (reference_identifier)))))
   (expression_statement
     (optional_test
       (parenthesized_expression
         (unary_expression
-          arg: (identifier)))))
+          arg: (reference
+            (reference_identifier))))))
   (expression_statement
     (optional_test
       (parenthesized_expression
-        (nested_identifier
-          object: (nested_identifier
-            object: (identifier)
-            property: (identifier))
-          property: (identifier))))))
+        (reference
+          (nested_identifier
+            object: (reference
+              (nested_identifier
+                object: (reference
+                  (reference_identifier))
+                property: (member_identifier)))
+            property: (member_identifier)))))))

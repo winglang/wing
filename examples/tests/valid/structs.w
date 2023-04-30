@@ -21,7 +21,7 @@ let y = B {
   }
 };
 
-resource Foo {
+class Foo {
   data: B;
 
   init(b: B) {
@@ -48,3 +48,18 @@ struct lots_of_types {
   g: str?;
   h: Array<Map<num>>;
 }
+
+// two inherits with same field name and type
+struct Razzle {
+  a: str;
+}
+
+struct Dazzle {
+  a: str;
+}
+
+struct Showtime extends Razzle, Dazzle {}
+
+let s = Showtime {
+  a: "Boom baby"
+};

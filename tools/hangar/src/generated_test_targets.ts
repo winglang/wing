@@ -1,9 +1,14 @@
 import { mkdir, readFile } from "fs-extra";
 import { tmpDir, validTestDir, walkdir } from "./paths";
 import { basename, join, relative } from "path";
-import { runWingCommand, sanitize_json_paths } from "./utils";
+import {
+  createMarkdownSnapshot,
+  runWingCommand,
+  sanitize_json_paths,
+} from "./utils";
 
-export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
+export async function compileTest(wingFile: string) {
+  const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
   const args = ["compile", "--target", "tf-aws"];
   const targetDir = join(
@@ -14,35 +19,41 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
   const tf_json = join(targetDir, "main.tf.json");
 
   await runWingCommand({
-    cwd: validTestDir, 
-    wingFile: join(validTestDir, wingBasename), 
-    args, 
-    shouldSucceed: true
+    cwd: validTestDir,
+    wingFile: join(validTestDir, wingBasename),
+    args,
+    shouldSucceed: true,
   });
 
   const npx_tfJson = sanitize_json_paths(tf_json);
 
-  expect(npx_tfJson).toMatchSnapshot("main.tf.json");
+  fileMap["main.tf.json"] = JSON.stringify(npx_tfJson, null, 2);
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
-  const include = [
-    "preflight.js",
-    "clients/",
-    "extern/",
-    "proc.",
-  ];
+  const include = ["preflight.js", "clients/", "extern/", "proc"];
 
   for await (const dotFile of walkdir(dotWing)) {
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
     if (!include.find((f) => subpath.startsWith(f))) {
       continue;
     }
-    expect(await readFile(dotFile, "utf8")).toMatchSnapshot(subpath);
+    let fileContents = await readFile(dotFile, "utf8");
+
+    // remove requires with absolute paths
+    fileContents = fileContents.replace(
+      /require\("(\/|\w:).*\/(.+)"\)/g,
+      'require("<ABSOLUTE_PATH>/$2")'
+    );
+
+    fileMap[subpath] = fileContents;
   }
+
+  await createMarkdownSnapshot(fileMap, wingFile, "compile", "tf-aws");
 }
 
-export async function testTest(expect: Vi.ExpectStatic, wingFile: string) {
+export async function testTest(wingFile: string) {
+  const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await mkdir(testDir, { recursive: true });
@@ -51,8 +62,10 @@ export async function testTest(expect: Vi.ExpectStatic, wingFile: string) {
     cwd: testDir,
     wingFile: join(validTestDir, wingFile),
     args,
-    shouldSucceed: true
+    shouldSucceed: true,
   });
 
-  expect(out.stdout).toMatchSnapshot("stdout");
+  fileMap["stdout.log"] = out.stdout;
+
+  await createMarkdownSnapshot(fileMap, wingFile, "test", "sim");
 }

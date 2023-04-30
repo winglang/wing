@@ -46,7 +46,7 @@ exports[`default queue behavior 1`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_1ddf4174\\"])"`;
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_47be82b5\\"])"`;
 
 exports[`queue with a consumer function 2`] = `
 {
@@ -66,31 +66,31 @@ exports[`queue with a consumer function 2`] = `
       "Type": "AWS::SQS::Queue",
       "UpdateReplacePolicy": "Delete",
     },
-    "QueueOnMessagec185c7e3908B5F4A": {
+    "QueueAddConsumerc185c7e31C0F56C8": {
       "DependsOn": [
-        "QueueOnMessagec185c7e3ServiceRoleDefaultPolicy9E696076",
-        "QueueOnMessagec185c7e3ServiceRole57B25FAB",
+        "QueueAddConsumerc185c7e3ServiceRoleDefaultPolicyA42919E1",
+        "QueueAddConsumerc185c7e3ServiceRoleD16C83A1",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "049ee2c0b749fa307e10d5c146c46b8ae6266a2ff22e5458c31ca0dcfc3b120a.zip",
+          "S3Key": "feb941f4c7974d21accf66792f56ace54050bda25c72bf7c86ac21e241758bd3.zip",
         },
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "QueueOnMessagec185c7e3ServiceRole57B25FAB",
+            "QueueAddConsumerc185c7e3ServiceRoleD16C83A1",
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "QueueOnMessagec185c7e3ServiceRole57B25FAB": {
+    "QueueAddConsumerc185c7e3ServiceRoleD16C83A1": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -121,7 +121,7 @@ exports[`queue with a consumer function 2`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "QueueOnMessagec185c7e3ServiceRoleDefaultPolicy9E696076": {
+    "QueueAddConsumerc185c7e3ServiceRoleDefaultPolicyA42919E1": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -144,16 +144,16 @@ exports[`queue with a consumer function 2`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "QueueOnMessagec185c7e3ServiceRoleDefaultPolicy9E696076",
+        "PolicyName": "QueueAddConsumerc185c7e3ServiceRoleDefaultPolicyA42919E1",
         "Roles": [
           {
-            "Ref": "QueueOnMessagec185c7e3ServiceRole57B25FAB",
+            "Ref": "QueueAddConsumerc185c7e3ServiceRoleD16C83A1",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "QueueOnMessagec185c7e3SqsEventSourcemyprojectQueue97F83A7B39A5496C": {
+    "QueueAddConsumerc185c7e3SqsEventSourcemyprojectQueue97F83A7BF716800D": {
       "Properties": {
         "BatchSize": 1,
         "EventSourceArn": {
@@ -163,10 +163,59 @@ exports[`queue with a consumer function 2`] = `
           ],
         },
         "FunctionName": {
-          "Ref": "QueueOnMessagec185c7e3908B5F4A",
+          "Ref": "QueueAddConsumerc185c7e31C0F56C8",
         },
       },
       "Type": "AWS::Lambda::EventSourceMapping",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`queue with custom retention 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "Queue4A7E3555": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "MessageRetentionPeriod": 1800,
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
     },
   },
   "Rules": {

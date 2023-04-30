@@ -1,6 +1,6 @@
 bring cloud;
 
-resource Doubler {
+class Doubler {
   func: cloud.IFunctionHandler;
   init(func: cloud.IFunctionHandler) {
     this.func = func;

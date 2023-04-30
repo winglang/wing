@@ -34,6 +34,19 @@ test("queue with custom timeout", () => {
   expect(template.toJSON()).toMatchSnapshot();
 });
 
+test("queue with custom retention", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  Queue._newQueue(app, "Queue", {
+    retentionPeriod: std.Duration.fromMinutes(30),
+  });
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  expect(template.toJSON()).toMatchSnapshot();
+});
+
 test("queue with a consumer function", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
@@ -48,7 +61,7 @@ async handle(event) {
   console.log("Received " + event.name);
 }`
   );
-  const processorFn = queue.onMessage(processor);
+  const processorFn = queue.addConsumer(processor);
   const output = app.synth();
 
   // THEN

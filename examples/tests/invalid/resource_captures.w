@@ -1,6 +1,6 @@
 bring cloud;
 
-resource Foo {
+class Foo {
   bucket: cloud.Bucket;
   mut_array: MutArray<str>;
   var reassignable: num;

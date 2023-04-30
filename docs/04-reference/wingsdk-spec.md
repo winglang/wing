@@ -196,35 +196,34 @@ struct ThresholdReachedEvent {
 
 ## Planned resources
 
-- Bucket (P1) - object storage, similar to AWS S3, Azure Blob Storage, GCP Storage
-- Queue (P1) - a message queue, similar to AWS SQS, Azure Storage Queues
-- Function (P1) - a serverless function, similar to AWS Lambda, Azure Functions, GCP Cloud Functions
-- Topic (P1) - a pub/sub topic, similar to AWS SNS, Azure Event Grid, GCP Pub/Sub
-- Logger (P1) - a log aggregator
-- Counter (P1) - an atomic counter
-- Schedule (P1) - a cron job / scheduled task trigger
-- Api (P1) - a REST API
-- Service (P1) - a long-running service, similar to AWS ECS, Azure Container Instances, GCP Cloud Run
-- SqlDatabase (P1) - a relational database that lets you execute arbitrary SQL queries, similar to AWS RDS, Azure SQL Database, GCP Cloud SQL
-- Website (P2) - a CDN-backed static website
-- Metric (P2) - a metric for monitoring system performance
-- Alarm (P2) - an alarm that triggers when a metric crosses a threshold
-- Table (P2) - a NoSQL database table
-- Key-value store (P2) - a lightweight key-value store, similar to Redis or Memcached
-- Job (P2) - a long-running compute workload that can be run on demand
-- Workflow (P2) - a task orchestration engine, similar to AWS Step Functions, Azure Logic Apps, GCP Workflows
-- Secret (P2) - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
-- Stream (P2) - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
-- OnDeploy (P2) - a variation of Function that runs every time the app is deployed
-- GraphQLApi (P2) - a GraphQL API, similar to AWS AppSync
+- Bucket (P1) [[issue](https://github.com/winglang/wing/issues/600)] - object storage, similar to AWS S3, Azure Blob Storage, GCP Storage
+- Queue (P1) [[issue](https://github.com/winglang/wing/issues/604)] - a message queue, similar to AWS SQS, Azure Storage Queues
+- Function (P1) [[issue](https://github.com/winglang/wing/issues/602)] - a serverless function, similar to AWS Lambda, Azure Functions, GCP Cloud Functions
+- Topic (P1) [[issue](https://github.com/winglang/wing/issues/592)] - a pub/sub topic, similar to AWS SNS, Azure Event Grid, GCP Pub/Sub
+- Counter (P1) [[issue](https://github.com/winglang/wing/issues/609)] - an atomic counter
+- Schedule (P1) [[issue](https://github.com/winglang/wing/issues/1289)] - a cron job / scheduled task trigger
+- Api (P1) [[issue](https://github.com/winglang/wing/issues/623)] - a REST API
+- Service (P1) [[issue](https://github.com/winglang/wing/issues/1305)] - a long-running service, similar to AWS ECS, Azure Container Instances, GCP Cloud Run
+- SqlDatabase (P1) [[issue](https://github.com/winglang/wing/issues/1309)] - a relational database that lets you execute arbitrary SQL queries, similar to AWS RDS, Azure SQL Database, GCP Cloud SQL
+- Website (P2) [[issue](https://github.com/winglang/wing/issues/1293)] - a CDN-backed static website
+- Metric (P2) [[issue](https://github.com/winglang/wing/issues/1297)] - a metric for monitoring system performance
+- Alarm (P2) [[issue](https://github.com/winglang/wing/issues/1301)] - an alarm that triggers when a metric crosses a threshold
+- Table (P2) [[issue](https://github.com/winglang/wing/issues/1314)] - a NoSQL database table
+- Key-value store (P2) [[issue](https://github.com/winglang/wing/issues/1317)] - a lightweight key-value store, similar to Redis or Memcached
+- Job (P2) [[issue](https://github.com/winglang/wing/issues/1321)] - a long-running compute workload that can be run on demand
+- Workflow (P2) [[issue](https://github.com/winglang/wing/issues/1325)] - a task orchestration engine, similar to AWS Step Functions, Azure Logic Apps, GCP Workflows
+- Secret (P2) [[issue](https://github.com/winglang/wing/issues/1329)] - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
+- Stream (P2) [[issue](https://github.com/winglang/wing/issues/1333)] - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
+- OnDeploy (P2) [[issue](https://github.com/winglang/wing/issues/1337)] - a variation of Function that runs every time the app is deployed
+- GraphQLApi (P2) [[issue](https://github.com/winglang/wing/issues/1341)] - a GraphQL API, similar to AWS AppSync
 
 ### Resources planned as third party libraries
 
-- Redis (P1)
-- DynamoDBTable
-- MongoDB
-- GithubRepo
-- Authorization/authentication related resources
+- Redis (P1) [[issue](https://github.com/winglang/wing/issues/611)]
+- DynamoDBTable [[issue](https://github.com/winglang/wing/issues/1345)]
+- MongoDB [[issue](https://github.com/winglang/wing/issues/1349)]
+- GithubRepo [[issue](https://github.com/winglang/wing/issues/1353)]
+- Authorization/authentication related resources [[issue](https://github.com/winglang/wing/issues/1216)]
 
 ## Bucket
 
@@ -547,83 +546,6 @@ Future extensions:
 
 - `on_invoke(fn: inflight (payload: Json) => void): cloud.Function`
 - `on_resolve(fn: inflight(result: Json) => void): cloud.Function`
-
-## Logger
-
-The logger resource represents a service that can be used to log messages to a central location.
-
-**Stateful:** No
-
-```ts
-struct LoggerProps {}
-
-resource Logger {
-  init(props: LoggerProps = {});
-
-  /**
-   * Log a message at the given level. The default level is "info".
-   */
-  log(message: str, level?: LogLevel): void;
-
-  /**
-   * Log a message at the debug level.
-   */
-  debug(message: str): void;
-
-  /**
-   * Log a message at the info level.
-   */
-  info(message: str): void;
-
-  /**
-   * Log a message at the warn level.
-   */
-  warn(message: str): void;
-
-  /**
-   * Log a message at the error level.
-   */
-  error(message: str): void;
-
-  /**
-   * Log a message at the given level. The default level is "info".
-   */
-  inflight log(message: str, level?: LogLevel): void;
-
-  /**
-   * Log a message at the debug level.
-   */
-  inflight debug(message: str): void;
-
-  /**
-   * Log a message at the info level.
-   */
-  inflight info(message: str): void;
-
-  /**
-   * Log a message at the warn level.
-   */
-  inflight warn(message: str): void;
-
-  /**
-   * Log a message at the error level.
-   */
-  inflight error(message: str): void;
-}
-
-enum LogLevel {
-  TRACE,
-  INFO,
-  WARN,
-  ERROR,
-}
-```
-
-Future extensions:
-
-- log severity options?
-- APIs for scanning/filtering logs?
-- tracing options
 
 ## Counter
 
@@ -1079,6 +1001,72 @@ enum ComparisonOperator {
 Future extensions:
 
 - support for derived metrics? (e.g. `metric1 + metric2`)
+
+## Secret
+
+Secret represents a securely stored value that is encrypted at rest.
+Secrets are useful for storing sensitive information, like API keys and passwords, and are usually preferable over storing them in environment variables or hardcoding them in code, since they can be rotated and revoked.
+
+When using a secret in Wing's simulator, a secrets file is generated in your home directory at `~/.wing/secrets.json`. Here, your secrets should be saved in the JSON format:
+
+```json
+// secrets.json
+{
+  "my-api-key": "1234567890"
+}
+```
+
+Then, you can access the secrets in Wing like so:
+
+```js
+bring cloud;
+
+let secret = new cloud.Secret(name: "my-api-key");
+
+new cloud.Function(inflight () => {
+  // securely retrieve key value at runtime
+  let api_key = secret.value();
+});
+```
+
+When the `Secret` is compiled to a cloud provider, it is provisioned using the provider's native secret management service.
+For example, on AWS, this would be AWS Secrets Manager.
+To use it, you must manually create a secret with a matching name on the provider before deploying your application.
+
+**Stateful:** Yes
+
+```ts
+struct SecretProps {
+  /**
+   * The secret's name.
+   * 
+   * If no name is provided then a new secret is provisioned in the target.
+   * If a name is provided then the resource will reference an existing
+   * secret in the target.
+   *
+   * @default - a new secret is provisioned with a generated name
+   */
+  name: str;
+
+  /**
+   * Retrieve the value of the secret.
+   * @throws if the secret doesn't exist.
+   * @returns the secret value as string.
+   */
+  inflight value(): str;
+
+  /**
+   * Retrieve the value of the secret and parse it as JSON.
+   * @throws if the secret doesn't exist or cannot be parsed as JSON
+   * @returns the secret value parsed as JSON
+   */
+  value_json(options?: GetSecretValueOptions): Promise<Json>;
+}
+```
+
+Future extensions:
+
+- support for secret rotation?
 
 ## Service
 

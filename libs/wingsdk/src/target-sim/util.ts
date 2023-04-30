@@ -4,7 +4,8 @@ import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { Function } from "./function";
 import { simulatorHandleToken } from "./tokens";
-import { IInflightHost, NodeJsCode, Resource } from "../core";
+import { NodeJsCode } from "../core";
+import { IInflightHost, Resource } from "../std";
 
 /**
  * Check if a file exists for an specific path

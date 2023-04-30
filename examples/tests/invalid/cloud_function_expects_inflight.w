@@ -6,7 +6,7 @@ new cloud.Function((name: str): str => {
 // ^ Expected type to be "inflight (any): any", but got "preflight (str): str" instead
 
 let q = new cloud.Queue();
-q.on_message(inflight (x: num) => {
+q.add_consumer(inflight (x: num) => {
                     // ^ "num" doesn't match the expected type "str"
     return;
 });

@@ -1,6 +1,7 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode } from "../../src/util";
@@ -84,7 +85,7 @@ test("topic with multiple subscribers", () => {
   );
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_lambda_permission")).toEqual(2);
-  expect(tfResourcesOfCount(output, "aws_s3_bucket")).toEqual(2);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_sns_topic_subscription")).toEqual(2);
 });
@@ -119,4 +120,25 @@ test("replace invalid character from queue name", () => {
   );
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("topic with subscriber function timeout", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const topic = cloud.Topic._newTopic(app, "Topic");
+  const subscriber = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) { console.log("Received: ", event); }`
+  );
+
+  topic.onMessage(subscriber, { timeout: Duration.fromSeconds(30) });
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      timeout: 30,
+    })
+  ).toEqual(true);
 });

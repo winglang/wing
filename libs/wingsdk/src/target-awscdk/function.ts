@@ -1,10 +1,6 @@
 import { resolve } from "path";
 import { Duration } from "aws-cdk-lib";
-import {
-  Effect,
-  PolicyStatement,
-  PolicyStatementProps,
-} from "aws-cdk-lib/aws-iam";
+import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
   Function as CdkFunction,
   Code,
@@ -14,6 +10,7 @@ import {
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { PolicyStatement } from "../shared-aws";
 import { createBundle } from "../utils/bundling";
 
 /**
@@ -40,7 +37,7 @@ export class Function extends cloud.Function {
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
-      runtime: Runtime.NODEJS_16_X,
+      runtime: Runtime.NODEJS_18_X,
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
@@ -77,16 +74,10 @@ export class Function extends cloud.Function {
   /**
    * Add a policy statement to the Lambda role.
    */
-  public addPolicyStatements(...statements: PolicyStatementProps[]) {
-    statements.map((s) => {
-      this.function.addToRolePolicy(
-        new PolicyStatement({
-          actions: s.actions,
-          resources: s.resources,
-          effect: s.effect ?? Effect.ALLOW,
-        })
-      );
-    });
+  public addPolicyStatements(...statements: PolicyStatement[]) {
+    for (const statement of statements) {
+      this.function.addToRolePolicy(new CdkPolicyStatement(statement));
+    }
   }
 
   /** @internal */
@@ -108,5 +99,3 @@ export class Function extends cloud.Function {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Function._annotateInflight(cloud.FunctionInflightMethods.INVOKE, {});

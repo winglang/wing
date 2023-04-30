@@ -13,7 +13,8 @@ fn main() {
 		.flag("-Wno-unused-parameter")
 		.flag("-Wno-unused-but-set-variable")
 		.flag("-Wno-trigraphs")
-		.file(&src_dir.join("parser.c"));
+		.file(&src_dir.join("parser.c"))
+		.file(&src_dir.join("scanner.c"));
 
 	if cfg!(target_arch = "wasm32") {
 		// This parser is used in a WASI context, so it needs to be compiled with
@@ -30,4 +31,5 @@ fn main() {
 	c_config.compile("parser");
 
 	println!("cargo:rerun-if-changed=grammar.js");
+	println!("cargo:rerun-if-changed=src/scanner.c");
 }

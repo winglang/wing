@@ -1,6 +1,7 @@
 use crate::ast::{
-	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+	ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
 	Interface, InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+	TypeAnnotationKind, UserDefinedType,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -41,7 +42,7 @@ pub trait Visit<'ast> {
 	fn visit_interface(&mut self, node: &'ast Interface) {
 		visit_interface(self, node);
 	}
-	fn visit_constructor(&mut self, node: &'ast Constructor) {
+	fn visit_constructor(&mut self, node: &'ast Initializer) {
 		visit_constructor(self, node);
 	}
 	fn visit_expr(&mut self, node: &'ast Expr) {
@@ -64,6 +65,9 @@ pub trait Visit<'ast> {
 	}
 	fn visit_args(&mut self, node: &'ast ArgList) {
 		visit_args(self, node);
+	}
+	fn visit_user_defined_type(&mut self, node: &'ast UserDefinedType) {
+		visit_user_defined_type(self, node);
 	}
 	fn visit_type_annotation(&mut self, node: &'ast TypeAnnotation) {
 		visit_type_annotation(self, node)
@@ -157,10 +161,14 @@ where
 		StmtKind::Interface(interface) => {
 			v.visit_interface(interface);
 		}
-		StmtKind::Struct { name, extends, members } => {
+		StmtKind::Struct {
+			name,
+			extends,
+			fields: members,
+		} => {
 			v.visit_symbol(name);
 			for extend in extends {
-				v.visit_symbol(extend);
+				v.visit_user_defined_type(extend);
 			}
 			for member in members {
 				v.visit_symbol(&member.name);
@@ -198,7 +206,11 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	v.visit_constructor(&node.constructor);
+	v.visit_constructor(&node.initializer);
+
+	if let Some(inflight_init) = &node.inflight_initializer {
+		v.visit_function_definition(inflight_init);
+	}
 
 	for field in &node.fields {
 		v.visit_symbol(&field.name);
@@ -208,6 +220,14 @@ where
 	for method in &node.methods {
 		v.visit_symbol(&method.0);
 		v.visit_function_definition(&method.1);
+	}
+
+	if let Some(extend) = &node.parent {
+		v.visit_user_defined_type(&extend);
+	}
+
+	for implement in &node.implements {
+		v.visit_user_defined_type(&implement);
 	}
 }
 
@@ -223,11 +243,11 @@ where
 	}
 
 	for extend in &node.extends {
-		v.visit_symbol(&extend.root);
+		v.visit_user_defined_type(extend);
 	}
 }
 
-pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast Constructor)
+pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast Initializer)
 where
 	V: Visit<'ast> + ?Sized,
 {
@@ -341,14 +361,15 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match node {
+		Reference::Identifier(s) => {
+			v.visit_symbol(s);
+		}
 		Reference::InstanceMember { property, object } => {
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		Reference::Identifier(s) => {
-			v.visit_symbol(s);
-		}
-		Reference::TypeMember { type_: _, property } => {
+		Reference::TypeMember { type_, property } => {
+			v.visit_user_defined_type(type_);
 			v.visit_symbol(property);
 		}
 	}
@@ -401,21 +422,21 @@ pub fn visit_type_annotation<'ast, V>(v: &mut V, node: &'ast TypeAnnotation)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	match node {
-		TypeAnnotation::Number => {}
-		TypeAnnotation::String => {}
-		TypeAnnotation::Bool => {}
-		TypeAnnotation::Duration => {}
-		TypeAnnotation::Json => {}
-		TypeAnnotation::MutJson => {}
-		TypeAnnotation::Optional(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Array(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutArray(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Map(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutMap(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Set(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutSet(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Function(f) => {
+	match &node.kind {
+		TypeAnnotationKind::Number => {}
+		TypeAnnotationKind::String => {}
+		TypeAnnotationKind::Bool => {}
+		TypeAnnotationKind::Duration => {}
+		TypeAnnotationKind::Json => {}
+		TypeAnnotationKind::MutJson => {}
+		TypeAnnotationKind::Optional(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Array(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutArray(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Map(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutMap(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Set(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutSet(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Function(f) => {
 			for param in &f.param_types {
 				v.visit_type_annotation(&param);
 			}
@@ -423,11 +444,21 @@ where
 				v.visit_type_annotation(return_type);
 			}
 		}
-		TypeAnnotation::UserDefined(t) => {
+		TypeAnnotationKind::UserDefined(t) => {
 			v.visit_symbol(&t.root);
 			for field in &t.fields {
 				v.visit_symbol(field);
 			}
 		}
+	}
+}
+
+pub fn visit_user_defined_type<'ast, V>(v: &mut V, node: &'ast UserDefinedType)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.root);
+	for field in &node.fields {
+		v.visit_symbol(field);
 	}
 }

@@ -80,11 +80,11 @@ exports[`bring_jsii.w > stderr 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Cannot find module \\"foobar\\" in source directory
+error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
   --> ../../../examples/tests/invalid/bring_jsii.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory
+  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
 
 "
 `;
@@ -148,45 +148,45 @@ exports[`cloud_function_expects_inflight.w > stderr 1`] = `
   | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
 
 
-error: Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
-   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:14
+error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:16
    |  
- 9 |   q.on_message(inflight (x: num) => {
-   | /--------------^
+ 9 |   q.add_consumer(inflight (x: num) => {
+   | /----------------^
 10 | |                     // ^ \\"num\\" doesn't match the expected type \\"str\\"
 11 | |     return;
 12 | | });
-   | \\\\-^ Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
 
 "
 `;
 
 exports[`construction.w > stderr 1`] = `
-"error: Cannot instantiate type \\"BucketProps\\" because it is not a class or resource
+"error: Cannot instantiate type \\"BucketProps\\" because it is not a class
 
 "
 `;
 
 exports[`container_types.w > stderr 1`] = `
-"error: Unknown parser error.
+"error: Unknown parser error
    --> ../../../examples/tests/invalid/container_types.w:10:24
    |
 10 | let m2: Map<num> = [\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3];
-   |                        ^^ Unknown parser error.
+   |                        ^^ Unknown parser error
 
 
-error: Unexpected 'string'.
+error: Unexpected 'string'
    --> ../../../examples/tests/invalid/container_types.w:10:28
    |
 10 | let m2: Map<num> = [\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3];
-   |                            ^^^ Unexpected 'string'.
+   |                            ^^^ Unexpected 'string'
 
 
-error: Unknown parser error.
+error: Unknown parser error
    --> ../../../examples/tests/invalid/container_types.w:10:40
    |
 10 | let m2: Map<num> = [\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3];
-   |                                        ^^ Unknown parser error.
+   |                                        ^^ Unknown parser error
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -286,6 +286,13 @@ error: Unknown symbol \\"some_random_method\\"
 20 | s1.some_random_method();
    |    ^^^^^^^^^^^^^^^^^^ Unknown symbol \\"some_random_method\\"
 
+
+error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
+   --> ../../../examples/tests/invalid/container_types.w:22:21
+   |
+22 | let a: Array<str> = MutArray<str>[];
+   |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
+
 "
 `;
 
@@ -302,6 +309,23 @@ error: Property access unsupported on type \\"SomeEnum\\"
   |
 8 | let two = SomeEnum.TWO.TWO;
   |           ^^^^^^^^^^^^ Property access unsupported on type \\"SomeEnum\\"
+
+"
+`;
+
+exports[`extern.w > stderr 1`] = `
+"error: Failed to resolve extern \\"./sad.js\\": Not Found
+  --> ../../../examples/tests/invalid/extern.w:2:3
+  |
+2 |   extern \\"./sad.js\\" static get_num(): num;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"./sad.js\\": Not Found
+
+
+error: Failed to resolve extern \\"not-installed\\": Not Found
+  --> ../../../examples/tests/invalid/extern.w:4:3
+  |
+4 |   extern \\"not-installed\\" static too_bad(): bool;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"not-installed\\": Not Found
 
 "
 `;
@@ -327,42 +351,42 @@ exports[`immutable_container_types.w > stderr 1`] = `
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
-  --> ../../../examples/tests/invalid/impl_interface.w:3:10
+"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+  --> ../../../examples/tests/invalid/impl_interface.w:3:7
   |
-3 | resource A impl cloud.IQueueOnMessageHandler {
-  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
+3 | class A impl cloud.IQueueAddConsumerHandler {
+  |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
 
 
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
-  --> ../../../examples/tests/invalid/impl_interface.w:8:10
+  --> ../../../examples/tests/invalid/impl_interface.w:8:7
   |
-8 | resource B impl cloud.IQueueOnMessageHandler {
-  |          ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
+8 | class B impl cloud.IQueueAddConsumerHandler {
+  |       ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
 
 
 error: Expected an interface, instead found type \\"Bucket\\"
 
 
-error: Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+error: Class \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:7
    |
-33 | resource r impl I3 {
-   |          ^ Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+33 | class r impl I3 {
+   |       ^ Class \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
 
 
-error: Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+error: Class \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:7
    |
-33 | resource r impl I3 {
-   |          ^ Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+33 | class r impl I3 {
+   |       ^ Class \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
 
 
-error: Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+error: Class \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:7
    |
-33 | resource r impl I3 {
-   |          ^ Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
+33 | class r impl I3 {
+   |       ^ Class \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
 
 "
 `;
@@ -403,20 +427,34 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 
 exports[`inflight_ref_resource_sub_method.w > stderr 1`] = `
 "error: Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:11:12
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:13:12
    |
-11 |     return this.my_queue;
+13 |     return this.my_queue;
    |            ^^^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
+
+
+error: Unable to qualify which operations are performed on 'global_queue' of type 'Queue'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:18:12
+   |
+18 |     return global_queue;
+   |            ^^^^^^^^^^^^ Unable to qualify which operations are performed on 'global_queue' of type 'Queue'. This is not supported yet.
 
 "
 `;
 
 exports[`inflight_ref_unknown_op.w > stderr 1`] = `
 "error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:11:13
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:13:13
    |
-11 |     let x = this.b;
+13 |     let x = this.b;
    |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+
+
+error: Unable to qualify which operations are performed on 'global_b' of type 'Bucket'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:17:13
+   |
+17 |     let y = global_b;
+   |             ^^^^^^^^ Unable to qualify which operations are performed on 'global_b' of type 'Bucket'. This is not supported yet.
 
 "
 `;
@@ -456,7 +494,14 @@ error: Symbol \\"foo\\" already defined in this scope
 `;
 
 exports[`json.w > stderr 1`] = `
-"error: Expected type to be \\"str\\", but got \\"Json\\" instead
+"error: Json literal must have an element
+   --> ../../../examples/tests/invalid/json.w:30:27
+   |
+30 | let json_incomplete = Json;
+   |                           ^ Json literal must have an element
+
+
+error: Expected type to be \\"str\\", but got \\"Json\\" instead
   --> ../../../examples/tests/invalid/json.w:5:14
   |
 5 | let s: str = j;
@@ -532,36 +577,25 @@ exports[`json_static.w > stderr 1`] = `
 `;
 
 exports[`missing_semicolon.w > stderr 1`] = `
-"error: Syntax error
-   --> ../../../examples/tests/invalid/missing_semicolon.w:7:1
-   |  
- 7 | / q1.on_message(inflight (m:str): str => {
- 8 | |   b.put(\\"1.txt\\", \\"Hello, \${m}\\"); 
- 9 | | })
-10 | | 
-11 | | q2.on_message(inflight (m:str): str => {
-   | \\\\-------------^ Syntax error
+"error: Expected ';'
+  --> ../../../examples/tests/invalid/missing_semicolon.w:9:3
+  |
+9 | })
+  |   ^ Expected ';'
 
 
-error: Unexpected 'identifier'.
-   --> ../../../examples/tests/invalid/missing_semicolon.w:11:1
+error: Expected ';'
+   --> ../../../examples/tests/invalid/missing_semicolon.w:15:10
    |
-11 | q2.on_message(inflight (m:str): str => {
-   | ^^ Unexpected 'identifier'.
+15 | let x = 5
+   |          ^ Expected ';'
 
 
-error: ';' expected.
-   --> ../../../examples/tests/invalid/missing_semicolon.w:16:24
-   |
-16 | //       ^ ';' expected
-   |                        ^ ';' expected.
-
-
-error: '}' expected.
+error: Expected '}'
    --> ../../../examples/tests/invalid/missing_semicolon.w:19:28
    |
 19 | //           ^ '}' expected
-   |                            ^ '}' expected.
+   |                            ^ Expected '}'
 
 "
 `;
@@ -730,11 +764,11 @@ exports[`preflight_from_inflight.w > stderr 1`] = `
 `;
 
 exports[`primitives.w > stderr 1`] = `
-"error: Unexpected expression \\"structured_access_expression\\"
+"error: Unexpected reference \\"structured_access_expression\\"
   --> ../../../examples/tests/invalid/primitives.w:5:5
   |
 5 | log(y[0]);
-  |     ^^^^ Unexpected expression \\"structured_access_expression\\"
+  |     ^^^^ Unexpected reference \\"structured_access_expression\\"
 
 
 error: Unknown symbol \\"blabla\\"
@@ -761,14 +795,7 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 `;
 
 exports[`reassign_to_nonreassignable.w > stderr 1`] = `
-"error: ';' expected.
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:21:2
-   |
-21 | }
-   |  ^ ';' expected.
-
-
-error: Variable x is not reassignable 
+"error: Variable x is not reassignable 
   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:3:1
   |
 3 | x = x + 1;
@@ -776,16 +803,30 @@ error: Variable x is not reassignable
 
 
 error: Variable this.f is not reassignable 
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:13:5
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:29:5
    |
-13 |     this.f = this.f + 1;
+29 |     this.f = this.f + 1;
    |     ^^^^^^^^^^^^^^^^^^^^ Variable this.f is not reassignable 
 
 
-error: Variable arg is not reassignable 
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:19:3
+error: Variable this.inner_r.inner is not reassignable 
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:31:5
    |
-19 |   arg = 0;
+31 |     this.inner_r.inner = 2;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inner_r.inner is not reassignable 
+
+
+error: Variable this.inflight_f is not reassignable 
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:36:5
+   |
+36 |     this.inflight_f = this.inflight_f + 1;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inflight_f is not reassignable 
+
+
+error: Variable arg is not reassignable 
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:43:3
+   |
+43 |   arg = 0;
    |   ^^^^^^^^ Variable arg is not reassignable 
 
 "
@@ -833,7 +874,38 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 `;
 
 exports[`resource_inflight.w > stderr 1`] = `
-"error: Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
+"error: Cannot create preflight class \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
+
+"
+`;
+
+exports[`resource_init.w > stderr 1`] = `
+"error: Multiple initializers defined in class R
+  --> ../../../examples/tests/invalid/resource_init.w:3:3
+  |
+3 |   init() {}
+  |   ^^^^^^^^^ Multiple initializers defined in class R
+
+
+error: Multiple inflight initializers defined in class R
+  --> ../../../examples/tests/invalid/resource_init.w:6:3
+  |
+6 |   inflight init() {}
+  |   ^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+
+
+error: Multiple inflight initializers defined in class R
+  --> ../../../examples/tests/invalid/resource_init.w:9:3
+  |
+9 |   inflight init(x: num) {}
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+
+
+error: Inflight initializers cannot have parameters
+  --> ../../../examples/tests/invalid/resource_init.w:9:16
+  |
+9 |   inflight init(x: num) {}
+  |                ^^^^^^^^ Inflight initializers cannot have parameters
 
 "
 `;
@@ -846,14 +918,14 @@ exports[`sorted_errors_no_span.w > stderr 1`] = `
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17
+error: Expected 'b' to be a type but it's a variable
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
-3 | class c extends b {
-  |                 ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
+3 | inflight class c extends b {
+  |                          ^ Expected 'b' to be a type but it's a variable
 
 
-error: Class c (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:7)'s parent \\"any\\" is not a class
+error: Inflight class c (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:16)'s parent \\"any\\" is not a class
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -863,14 +935,14 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17
+error: Expected 'b' to be a type but it's a variable
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:7:26
   |
-7 | class e extends b {
-  |                 ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable
+7 | inflight class e extends b {
+  |                          ^ Expected 'b' to be a type but it's a variable
 
 
-error: Class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:7)'s parent \\"any\\" is not a class
+error: Inflight class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:16)'s parent \\"any\\" is not a class
 
 "
 `;
@@ -941,11 +1013,11 @@ exports[`std_containers.w > stderr 1`] = `
 `;
 
 exports[`struct_expansion.w > stderr 1`] = `
-"error: Unexpected 'keyword_argument'.
+"error: Unexpected 'keyword_argument'
    --> ../../../examples/tests/invalid/struct_expansion.w:11:15
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |               ^^^^^^^^^^^^^^^^ Unexpected 'keyword_argument'.
+   |               ^^^^^^^^^^^^^^^^ Unexpected 'keyword_argument'
 
 
 error: \\"bublic\\" is not a field of \\"BucketProps\\"
@@ -1001,11 +1073,11 @@ error: Expected 2 arguments but got 1
 `;
 
 exports[`structs.w > stderr 1`] = `
-"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
   --> ../../../examples/tests/invalid/structs.w:9:8
   |
 9 | struct C extends B {
-  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
 
 
 error: \\"x\\" is not initialized
@@ -1034,6 +1106,13 @@ error: Unknown symbol \\"bad_field\\"
    |
 30 | log(a.bad_field);
    |       ^^^^^^^^^ Unknown symbol \\"bad_field\\"
+
+
+error: Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+   --> ../../../examples/tests/invalid/structs.w:42:8
+   |
+42 | struct Showtime extends Razzle, Dazzle {}
+   |        ^^^^^^^^ Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
 
 "
 `;

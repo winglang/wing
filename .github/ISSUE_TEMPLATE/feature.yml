@@ -1,18 +1,11 @@
 name: Enhancement 🚀
 description: Suggest a new feature or other improvement
-labels: ["enhancement"]
+labels: ["✨ enhancement"]
 body:
 - type: markdown
   attributes:
     value: |
        :pray: Thanks for taking the time to fill out this enhancement request! Feel free to ping us on [Wing Slack](https://t.winglang.io/slack) if you have any questions or need help.
-- type: textarea
-  attributes:
-    label: Community Note
-    description: "Please keep this note for the community:"
-    value: |
-      > Please vote by adding a 👍 reaction to the issue to help us prioritize.
-      > If you are interested to work on this issue, please leave a comment.
 - type: markdown
   attributes:
     value: |
@@ -52,6 +45,7 @@ body:
     - Compiler
     - SDK
     - Wing Console
+    - Playground
     - IDE Extension
     - CLI
     - Plugins
@@ -61,3 +55,12 @@ body:
     - Other
   validations:
     required: false
+
+
+- type: textarea
+  attributes:
+    label: Community Notes
+    value: |
+      <!-- Please keep this note for the community -->
+      * Please vote by adding a 👍 reaction to the issue to help us prioritize.
+      * If you are interested to work on this issue, please leave a comment.

@@ -23,7 +23,7 @@ What makes Wing special? Traditional programming languages are designed around
 the premise of telling a single machine what to do. The output of the compiler
 is a program that can be executed on that machine. But cloud applications are
 distributed systems that consist of code running across multiple machines and
-which intimately use various cloud resources and services to achieve their
+which intimately use various cloud services to achieve their
 business goals.
 
 Wing’s goal is to allow developers to express all pieces of a cloud application
@@ -708,11 +708,11 @@ cloud architecture, and not the code that runs within a specific machine within
 this cloud infrastructure.
 
 The phase modifier `inflight` is allowed in the context of declaring interface
-and resource members (methods, fields and properties). Example code is shown in
-the [resources](#33-resources) section.
+and class members (methods, fields and properties). Example code is shown in
+the [preflight classes](#33-preflight-classes) section.
 
 ```TS
-resource Bucket {
+class Bucket {
   // preflight method
   allow_public_access() {
 
@@ -729,12 +729,17 @@ Inflight members can only be accessed from an **inflight context** (an inflight
 method or an inflight closure) and preflight members can only be accessed from a
 **preflight context** (a preflight method or a preflight closure).
 
-The `inflight` modifier is allowed when defining a function closure:
+The `inflight` modifier is allowed when defining function closures or classes. This implies that
+these types can only be used within inflight context.
 
 ```TS
 let handler = inflight () => {
   log("hello, world");
 };
+
+inflight class Foo {
+  // ...
+}
 ```
 
 For example (continuing the `Bucket` example above):
@@ -753,24 +758,24 @@ let handler = inflight () => {
 };
 ```
 
-Resources can only be instantiated within **preflight** context:
+Preflight classes can only be instantiated within **preflight** context:
 
 ```TS
-resource Bar {}
+class Bar {}
 
-new Bar(); // OK! Bar is a resource
+new Bar(); // OK! Bar is a preflight class
 
 let handler2 = inflight() => {
-  new Bar(); // ERROR: cannot instantiate a resource from an inflight context
+  new Bar(); // ERROR: cannot instantiate a preflight class from an inflight context
 }
 ```
 
 Bridge between preflight and inflight is crossed with the help of immutable data
 structures, "structs" (user definable and `Struct`), and the capture mechanism.
 
-Preflight resource methods and initializers can receive an inflight function as
-an argument. This enables resources to define code that will be executed on the
-deployed resource (lambda functions, docker, virtual machines etc).
+Preflight class methods and initializers can receive an inflight function as an argument. This
+enables preflight classes to define code that will be executed on a cloud compute platform such as
+lambda functions, docker, virtual machines etc.
 
 [`▲ top`][top]
 
@@ -822,7 +827,7 @@ Visibility inference is done with the following rules:
 
 Accessing fields, members, or structured data is done with `.`.
 
-Visibility modifiers can be applied to members of classes and resources.  
+Visibility modifiers can be applied to members of classes.
 Mixing `protected` and `internal` is not allowed.
 
 [`▲ top`][top]
@@ -869,30 +874,287 @@ let f = (arg1: num, var arg2: num) => {
 
 ### 1.7 Optionality
 
-Symbol `?` can mark a type as optional.  
-Optionality means the value behind type can be either present or nil.
+Nullity is a primary source of bugs in software. Being able to guarantee that a value will never be
+null makes it easier to write safe code without constantly having to take nullity into account.
 
-Rules of optionality apply to the entire new container type of `type?` and not
-the value behind it (`type`).  
+In order to allow the compiler to offer stronger guarantees, Wing includes a higher-level concept
+called "optionality" which requires developers to be more intentional about working with the concept
+of "lack of value".
 
-Using the `??` operator allows one to safely access the value behind an optional
-variable by always providing a default, in case the variable is nil. This forces
-a value to be present for the l-value (left hand side of the assignment operator
-and guarantees what's returned is type-stripped from its `?` keyword).
+Here's a quick summary of how optionality works in Wing:
 
-> ```TS
-> let x? = 44;
-> let y = x ?? 55;
-> ```
+* `x: T?` marks `x` as "optional of T". This means that `x` can either be `nil` (without a value) or
+  have a value of type `T`.
+* To test for a value, the unary expression `x?` returns a `true` if `x` has a value and `false`
+  otherwise.
+* `if let y = x { } else { }` is a special control flow statement which binds `y` inside the first
+  block only if `x` has a value. Otherwise, the `else` block will be executed.
+* The `x?.y?.z` notation can be used to access fields only if they have a value. The type of this
+  expression is `Z?` (an optional based on the type of the last component).
+* The `x ?? y ?? z` notation will return the value in `x` if there is one, `y` otherwise or `z`. The
+  last expression in a `??` chain (e.g. `z`) must be of type `T` (not `T?`).
+* The default value notation (`= y`) in declarations of struct fields or function arguments will use
+  this value if a value is not provided, and implies type is `T` (not `T?`).
+* The `x ??= y` notation returns `x` if it has a value or assigns `x` with `y` and returns the value
+  of `y`.
+* The `x ?? throw(message)` and `x ?? return val` are special cases of `??` which can be used for
+  unwrapping (if a value exists) or early bailout.
+* The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
+  value. It cannot be used to test if an optional has a value or not.
 
-<details><summary>Equivalent TypeScript Code</summary>
+#### 1.7.1 Declaration
 
-> ```TS
-> const x: number? = 44;
-> const y: number = x ?? 55;
-> ```
+##### 1.7.1.1 Struct fields
 
-</details>
+One of the more common use cases for optionals is to use them in struct declarations.
+
+```js
+struct Person {
+  name: str;
+  address: str?;
+}
+```
+
+In the `Person` struct above, the `address` field is marked as optional using `?`. This means that
+we can initialize without defining the `address` field:
+
+```js
+let david = Person { name: "david" };
+let jonathan = Person { name: "jonathan", address: "earth" };
+assert(david.address? == false);
+assert(jonathan.address? == true);
+```
+
+The *default value notation* (`=`) can also be used in struct declarations. If provided, the field
+is also not required in a struct literal definition, and the default value will be implied. It also
+means that the type of the field must be `T` and not `T?`, because we can ensure it has a value (in
+the example below the field `radix` as a type of `num`).
+
+```js
+struct FormatOpts {
+  radix: num = 10;
+  some_optional: str?;
+}
+
+let opts = FormatOpts {};
+assert(opts.radix == 10);
+assert(opts.some_optional? == false); // <-- no value inside `some_optional`
+```
+
+A value can be omitted from a struct literal if the field is optional _or_ if it has a default value
+in the struct declaration. If an optional field doesn't have a default value, its type must be `T?`
+(`some_optional` above). If it has a default value it's type must be `T` (`radix` above).
+
+This is a compilation error:
+
+```js
+struct Test {
+  hello: str? = "hello";
+//       ^^^^ type should be `str` since a default value is provided
+}
+```
+
+> NOTE: Default values can only be serializable values (immutable primitives, collections of
+> primitives or other serializable structs). This limitation exists because we will evaluate the
+> expression of the default value only upon struct initialization (it is stored in the type system).
+
+##### 1.7.1.2 Variables
+
+Use `T?` to indicate that a variable is optional. To initialize it without a value use `= nil`.
+
+```js
+let var x: num? = 12;
+let var y: num? = nil;
+assert(y? == false); // y doesn't have a value
+assert(x? == true); // x has a value
+
+// ok to reassign another value because `y` is reassignable (`var`)
+y = 123;
+assert(y? == true);
+
+x = nil;
+assert(x? == false);
+```
+
+##### 1.7.1.3 Class fields
+
+Similarly to struct fields, fields of classes can be also defined as optional using `T?`:
+
+```js
+class Foo {
+  my_opt: num?;
+  var my_var: str?;
+
+  init(opt: num?) {
+    this.my_opt = opt;
+    this.my_var = nil; // everything must be initialized, so you can use `nil` to indicate that there is no value
+  }
+
+  set_my_var(x: str) {
+    this.my_var = x;
+  }
+}
+```
+
+##### 1.7.1.4 Function arguments
+
+In the following example, the argument `by` is optional, so it is possible to call `increment()`
+without supplying a value for `by`:
+
+```js
+let increment = (x: num, by: num?): num => {
+  return x + (by ?? 1);
+};
+
+assert(increment(88) == 89);
+assert(increment(88, 2) == 90);
+```
+
+Alternatively, using the default value notation can be used to allow an parameter not to be assigned
+when calling the function. Using a default value in the function declaration ensures that `by`
+always has a value so there is no need to unwrap it (this is why its type is `num` and not `num?`):
+
+```js
+let increment = (x: num, by: num = 1): num {
+  return x + by;
+}
+```
+
+Non-optional arguments can only be used before all optional arguments:
+
+```js
+let my_fun = (a: str, x?: num, y: str): void = { /* ... */ };
+//-----------------------------^^^^^^ ERROR: cannot declare a non-optional argument after an optional
+```
+
+If a function uses a keyword argument struct as the last argument, and there are other optional
+arguments before, it also has to be declared as optional.
+
+```js
+let parse_int = (x: str, radix: num?, opts?: ParseOpts): num { /* ... */ };
+// or
+let parse_int = (x: str, radix: num = 10, opts: ParseOpts = ParseOpts {}): num { /* ... */ };
+```
+
+The optionality of keyword arguments is determined by the struct field's optionality:
+
+```js
+struct Options {
+  my_required: str;
+  my_optional: num?;
+  implicit_optional: bool = false;
+}
+
+let f = (opts: Options) => { }
+
+f(my_required: "hello");
+f(my_optional: 12, my_required: "dang");
+f(my_required: "dude", implicit_optional: true);
+```
+
+##### 1.7.1.5 Function return types
+
+If a function returns an optional type, use the `return nil;` statement to indicate that the value
+is not defined.
+
+```js
+struct Name { first: str, last: str };
+
+let try_parse_name = (full_name: str): Name? => {
+  let parts = full_name.split(" ");
+  if parts.len < 2 {
+    return nil;
+  }
+
+  return Name { first: parts.at(0), last: parts.at(1) };
+}
+
+// since result is optional, it needs to be unwrapped in order to be used
+if let name = try_parse_name("Neo Matrix") {
+  print("Hello, ${name.first}!");
+}
+```
+
+#### 1.7.2 Testing using `x?`
+
+To test if an optional has a value or not, you can either use `x == nil` or `x != nil` or the
+special syntax `x?`.
+
+```js
+let is_address_defined = my_person.address?; // type is `bool`
+let is_address_really_defined = my_person.address != nil; // equivalent
+
+// or within a condition
+if my_person.address? {
+  log("address is defined but i do not care what it is");
+}
+
+// can be negated
+if !my_person.address? {
+  log("address is not defined");
+}
+
+if my_person.address == nil {
+  log("no address")
+}
+```
+
+#### 1.7.3 Unwrapping using `if let`
+
+The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
+non-optional variable defined inside the block:
+
+```js
+if let address = my_person.address {
+  print(address.len);
+  print(address); // address is type `str`
+}
+```
+
+> NOTE: `if let` is not the same as `if`. For example, we currently don't support specifying
+> multiple conditions, or unwrapping multiple optionals. This is something we might consider in the
+> future.
+
+#### 1.7.4 Unwrapping or default value using `??`
+
+The `??` operator can be used to unwrap or provide a default value. This returns a value of `T` that
+can safely be used.
+
+```js
+let address: str = my_person.address ?? "Planet Earth";
+```
+
+`??` can be chained:
+
+```js
+let address = my_person.address ?? your_person.address ?? "No address";
+//            <----- str? ---->    <----- str? ------>    <-- str --->
+```
+
+The last element in a `??` chain must be a non-optional type `T`.
+
+#### 1.7.5 Optional chaining using `?.`
+
+The `?.` syntax can be used for optional chaining. Optional chaining returns a value of type `T?`
+which must be unwrapped in order to be used.
+
+```js
+let ip_address: str? = options.networking?.ip_address;
+
+if let ip = ip_address {
+  print("the ip address is defined and it is: ${ip}");
+}
+```
+
+#### 1.7.6 Roadmap
+
+In the future we will consider the following additional sugar syntax:
+
+* `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
+* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy
+  evaluation/memoization (inspired by [Nullish coalescing
+  assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
+* Support `??` for different types if they have a common ancestor (and also think of interfaces).
 
 [`▲ top`][top]
 
@@ -991,8 +1253,8 @@ expected from a call and it is not being caught.
 Wing recommends the following formatting and naming conventions:
 
 - Interface names should start with capital letter "I"
-- Class, struct, interface, and resource names should be TitleCased
-- Members of classes, interfaces, and resources cannot share the same TitleCased
+- Class, struct, and interface names should be TitleCased
+- Members of classes, and interfaces cannot share the same TitleCased
   representation as the declaring expression itself.
 - Parentheses are optional in expressions. Any Wing expression can be surrounded
   by parentheses to enforce precedence, which implies that the expression inside
@@ -1018,13 +1280,13 @@ targeting JSII with Node, Wing will use the event based loop that Node offers.
 
 In Wing, writing and executing at root block scope level is forbidden except for
 the entrypoint of the program. Root block scope is considered special and
-compiler generates special instructions to properly assign all resources to
+compiler generates special instructions to properly assign all preflight classes to
 their respective scopes recursively down the constructs tree based on entry.
 
 Entrypoint is always a Wing source with an extension of `.w`. Within this entry
-point, a root resource is made available for all subsequent resources that are
-initialized and instantiated. Type of the root resource is determined by the
-target being used by the compiler. The root resource might be of type `App` in
+point, a root preflight class is made available for all subsequent preflight classes that are
+initialized and instantiated. Type of the root class is determined by the
+target being used by the compiler. The root class might be of type `App` in
 AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 > Following "shimming" is only done for the entrypoint file and nowhere else.
@@ -1348,7 +1610,7 @@ Structs are loosely modeled after typed JSON literals in JavaScript.
 Structs are defined with the `struct` keyword.  
 Structs are "bags" of immutable data.
 
-Structs can only have fields of primitive types, resources, and other structs.  
+Structs can only have fields of primitive types, preflight classes, and other structs.  
 Array, set, and map of above types is also allowed in struct field definition.  
 Visibility, storage and phase modifiers are not allowed in struct fields.
 
@@ -1415,15 +1677,26 @@ Structs can inherit from multiple other structs.
 
 ### 3.2 Classes
 
+Similarly to other object-oriented programming languages, Wing uses classes as its first-class
+composition pattern. 
+
 Classes consist of fields and methods in any order.  
-The class system is single-dispatch class based object orientated system.  
+The class system is single-dispatch class based object-orientated system.  
 Classes are instantiated with the `new` keyword.
 
-A class member function that has the name **init** is considered to be a class
+Classes are associated with a specific execution phase (preflight or inflight). The phase indicates
+in which scope objects can be instantiated from this class.
+
+If a [phase modifier](#13-phase-modifiers) is not specified, the class inherits the phase from the
+scope in which it is declared. This implies that, if a class is declared at the root scope (e.g. the
+program's entrypoint), it will be a *preflight class*. If a class is declared within an inflight
+scope, it will be implicitly an inflight class.
+
+A method that has the name **init** is considered to be a class
 constructor (or initializer, or allocator).
 
 ```TS
-class Name extends Base impl IMyInterface1, IMyInterface2 {
+inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
   init() {
     // constructor implementation
     // order is up to user
@@ -1553,18 +1826,16 @@ In methods if return type is missing, `: void` is assumed.
 
 ---
 
-### 3.3 Resources
+### 3.3 Preflight Classes
 
-> Resources cannot be defined and instantiated in inflight contexts.
+Classes declared within a preflight scope (the root scope) are implicitly bound to the preflight
+phase. These classes can have specific `inflight` members.
 
-Resources provide first class composite pattern support in Wing. They are
-modeled after and leverage the [constructs](https://github.com/aws/constructs)
-programming model and as such are fully interoperable with CDK constructs.  
-Resources can be defined like so:
+For example:
 
 ```TS
 // Wing Code:
-resource Foo {
+class Foo {
   init() { /* initialize preflight fields */ } // preflight constructor
   inflight init() {} // optional client initializer
 
@@ -1592,43 +1863,46 @@ resource Foo {
 }
 ```
 
-Resources all have a scope and a unique ID. Compiler provides an implicit scope
-and ID for each resource, both overrideable by user-defined ones in constructor.
+Preflight objects all have a scope and a unique ID. Compiler provides an implicit scope
+and ID for each object, both overrideable by user-defined ones in constructor.
 
-The default for scope is `this`, which means the scope in which the resource was
-defined. The implicit ID is the type name of the resource iff the resource type
-is the only resource type being used in the current scope. In other words, if
-there are multiple resources of the same type defined in the same scope, they
+The default for scope is `this`, which means the scope in which the object was
+defined (instantiated). The implicit ID is the type name of the class iff the type
+is the only preflight object of this type being used in the current scope. In other words, if
+there are multiple preflight objects of the same type defined in the same scope, they
 must all have an explicit id.
 
-Resources instantiated at block scope root level of entrypoint are assigned the
-root app construct as their default implicit scope.
+Preflight objects instantiated at block scope root level of entrypoint are assigned the
+root app as their default implicit scope.
 
-Resource instantiation syntax uses the `let` keyword the same way variables are
-declared in Wing. The difference is `be/in` keywords afterwards.
+Preflight object instantiation syntax uses the `let` keyword the same way variables are declared in
+Wing. The `as` and `in` keywords can be used to customize the scope and identifier assigned to this
+preflight object.
 
 ```pre
-let <name>[: <type>] = <resource> [be <id>] [in <scope>];
+let <name>[: <type>] = new <Type>(<args>) [as <id>] [in <scope>];
 ```
 
 ```TS
 // Wing Code:
 let a = Foo(); // with default scope and id
 let a = Foo() in scope; // with user-defined scope
-let a = Foo() be "custom-id" in scope; // with user-defined scope and id
-let a = Foo(...) be "custom-id2" in scope; // with constructor arguments
+let a = new Foo() as "custom-id" in scope; // with user-defined scope and id
+let a = new Foo(...) as "custom-id2" in scope; // with constructor arguments
 ```
 
 "id" must be of type string. It can also be a string literal with substitution
 support (normal strings as well as shell strings).  
-"scope" must be an expression of resource type.
+"scope" must be an expression that resolves to a preflight object.
 
-Resources can be captured into inflight functions and once that happens, inside
+Preflight objects can be captured into inflight scopes and once that happens, inside
 the capture block only the inflight members are available.
 
-Resources can extend other resources (but not structs) and implement interfaces.
+Preflight classes can extend other preflight classes (but not [structs](#31-structs)) and implement
+[interfaces](#34-interfaces). If a class implements an interface marked `inflight interface`, then
+all of the implemented methods must be `inflight`.
 
-Declaration of fields with different phases is not allowed due to requirement of
+Declaration of fields of the same name with different phases is not allowed due to requirement of
 having inflight fields of same name being implicitly initialized by the compiler  
 but declaration of methods with different phases is allowed.
 
@@ -1638,10 +1912,10 @@ but declaration of methods with different phases is allowed.
 
 ### 3.4 Interfaces
 
-Interfaces represent a contract that a class or resource must fulfill.  
-Interfaces are defined with the `interface` keyword.  
-Both preflight and inflight signatures are allowed.  
-`impl` keyword is used to implement an interface or multiple interfaces that are
+Interfaces represent a contract that a class must fulfill.
+Interfaces are defined with the `interface` keyword.
+Both preflight and inflight signatures are allowed.
+If the `inflight` modifier is used in the interface declaration, all methods will be automatically considered inflight methods. `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
 All methods of an interface are implicitly public and cannot be of any other
@@ -1653,11 +1927,14 @@ Interface fields are not supported.
 > // Wing program:
 > interface IMyInterface1 {
 >   method1(x: num): str;
+>   inflight method3(): void;
 > };
-> interface IMyInterface2 {
->   inflight method2(): str;
+>
+> inflight interface IMyInterface2 {
+>   method2(): str; // <-- "inflight" is implied
 > };
-> resource MyResource impl IMyInterface1, IMyInterface2 {
+>
+> class MyResource impl IMyInterface1, IMyInterface2 {
 >   field1: num;
 >   field2: str;
 >
@@ -1669,6 +1946,7 @@ Interface fields are not supported.
 >   method1(x: num): str {
 >     return "sample: ${x}";
 >   }
+>   inflight method3(): void { }
 >   inflight method2(): str {
 >     return this.field2;
 >   }
@@ -2034,13 +2312,13 @@ acts like C `#include`s. Symbols collision is fatal in this style of imports.
 
 ### 4.2 Exports
 
-In preflight, anything with `public` at block scope level is importable.  
-This includes functions, classes, structs, interfaces and resources.  
-In inflight, the above excluding resources are importable.  
+In preflight, anything with `public` at block scope level is importable.
+This includes functions, classes, structs and interfaces.
+In inflight, the above excluding preflight classes are importable.
 Variables are not exportable.
 
-Resources are not usable in inflight functions. There is no synthesizer inside
-and no deployment system in the inflight body to synthesize inflight resources.
+Preflight classes cannot be instantiated in inflight functions. There is no synthesizer inside
+and no deployment system in the inflight body to provision.
 
 "Bringing" other Wing files currently ignores exports, but bringing JSII modules
 respect the visibility of JSII module exports.
@@ -2055,7 +2333,7 @@ respect the visibility of JSII module exports.
 
 ### 5.1.1 External Libraries
 
-You may import JSII modules in Wing and they are considered resources if their
+You may import JSII modules in Wing and they are considered preflight classes if their
 JSII type manifest shows that the JSII module is a construct. Wing is a consumer
 of JSII modules currently.
 
@@ -2073,14 +2351,14 @@ supported languages.
 
 ## 5.2 JavaScript
 
-The `extern "<commonjs module path or name>"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<commonjs module path or name>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
 
 In the following example, the static inflight method `make_id` is implemented
 in `helper.js`:
 
 ```js
 // task-list.w
-resource TaskList {
+class TaskList {
   // ...
 
   inflight add_task(title: str) {
@@ -2145,7 +2423,6 @@ If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 | User-Defined Wing Types | JavaScript Type                                                                        | Frozen? |
 |-------------------------|----------------------------------------------------------------------------------------|---------|
 | `class`                 | `class`, only with members whose phase is compatible with the function signature       |         |
-| `resource`              | `class`, only with members whose phase is compatible with the function signature       |         |
 | `interface`             | `interface`, only with members whose phase is compatible with the function signature   |         |
 | `struct`                | `interface`                                                                            | Yes     |
 | `enum`                  | `string`-based enum-like `Object`                                                      | Yes     |
@@ -2189,7 +2466,7 @@ Processing unicode escape sequences happens in these strings.
 > ```
 
 </details>
-  
+
 [`▲ top`][top]
 
 ---
@@ -2386,7 +2663,7 @@ struct DenyListProps {
   rules: MutArray<DenyListRule>[];
 }
 
-resource DenyList {
+class DenyList {
   _bucket: cloud.Bucket;
   _object_key: str;
 

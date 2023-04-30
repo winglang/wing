@@ -1,35 +1,24 @@
 {
   "name": "hangar",
-  "implicitDependencies": [
-    "winglang",
-    "sdk"
-  ],
+  "implicitDependencies": ["winglang", "sdk"],
   "targets": {
     "generate": {
       "executor": "nx:run-commands",
       "inputs": [
-        "src",
-        "examples-tests"
+        "examples-tests",
+        "{projectRoot}/src/generate_tests.ts",
+        "{projectRoot}/src/generated_test_targets.ts"
       ],
-      "outputs": [
-        "{projectRoot}/src/test_corpus/**/*"
-      ],
+      "outputs": ["{projectRoot}/src/test_corpus/**"],
       "options": {
         "command": "npm run test:generate",
         "cwd": "tools/hangar"
       }
     },
     "test": {
-      "dependsOn": [
-        "^build",
-        "^package",
-        "generate"
-      ],
-      "inputs": [
-        "src",
-        "examples-tests"
-      ],
-      "executor": "nx:run-commands",
+      "dependsOn": ["^build", "^package", "generate"],
+      "inputs": ["default", "^default", "examples-tests", "!{projectRoot}/tmp/**"],
+      "outputs": ["${projectRoot}/reports/**"],
       "options": {
         "command": "npm run test:update",
         "cwd": "tools/hangar"
@@ -38,6 +27,15 @@
         "release": {
           "command": "npm run test"
         }
+      }
+    },
+    "bench": {
+      "dependsOn": ["^build", "^package"],
+      "inputs": ["default", "^default", "examples-tests"],
+      "outputs": ["${projectRoot}/reports/**"],
+      "options": {
+        "command": "npm run bench",
+        "cwd": "tools/hangar"
       }
     }
   }

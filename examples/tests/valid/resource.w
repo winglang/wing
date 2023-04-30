@@ -1,11 +1,20 @@
 bring cloud;
 
 // User defined resource
-resource Foo {
+class Foo {
   c: cloud.Counter; // Use SDK built in resource in the user defined resource
+  inflight inflight_field: num;
 
   init() {
     this.c = new cloud.Counter();
+  }
+
+  inflight init() {
+    this.inflight_field = 123;
+    // Access a cloud resource from inflight init
+    this.c.inc(110);
+    // Access a some method in the cloud resource's init that's not used anywhere else (to see reference binding works for init)
+    this.c.dec(10);
   }
 
   // Our resource has an inflight method
@@ -19,7 +28,7 @@ resource Foo {
   }
 }
 
-resource Bar {
+class Bar {
   name: str;
   b: cloud.Bucket;
   // Use a user defined resource inside another user defined resource
@@ -44,6 +53,50 @@ let bucket = new cloud.Bucket();
 let res = new Bar("Arr", bucket);
 new cloud.Function(inflight () => {
   let s = res.my_method();
-  assert(s == "counter is: 1");
+  assert(s == "counter is: 101");
   assert(bucket.list().length == 1);
+  assert(res.foo.inflight_field == 123);
 }) as "test";
+
+class BigPublisher {
+  b: cloud.Bucket;
+  b2: cloud.Bucket;
+  q: cloud.Queue;
+  t: cloud.Topic;
+
+  init() {
+    this.b = new cloud.Bucket();
+    this.b2 = new cloud.Bucket() as "b2";
+    this.q = new cloud.Queue();
+    this.t = new cloud.Topic();
+
+    this.t.on_message(inflight () => {
+      this.b.put("foo1.txt", "bar");
+    });
+
+    this.q.add_consumer(inflight () => {
+      this.b.put("foo2.txt", "bar");
+    });
+
+    this.b2.on_create(inflight () => {
+      this.q.push("foo");
+    });
+  }
+
+  inflight publish(s: str) {
+    this.t.publish(s);
+    this.q.push(s);
+    this.b2.put("foo", s);
+  }
+
+  inflight getObjectCount(): num {
+    return this.b.list().length;
+  }
+}
+
+let bigOlPublisher = new BigPublisher();
+new cloud.Function(inflight () => {
+  bigOlPublisher.publish("foo");
+  let count = bigOlPublisher.getObjectCount();
+  // assert(count == 2); TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
+}) as "test: dependency cycles";

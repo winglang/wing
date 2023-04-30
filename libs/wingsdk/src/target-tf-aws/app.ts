@@ -6,17 +6,18 @@ import { NatGateway } from "@cdktf/provider-aws/lib/nat-gateway";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { RouteTable } from "@cdktf/provider-aws/lib/route-table";
 import { RouteTableAssociation } from "@cdktf/provider-aws/lib/route-table-association";
+import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Construct } from "constructs";
 import { Api } from "./api";
-import { Bucket } from "./bucket";
+import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
-import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
+import { Secret } from "./secret";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
@@ -25,9 +26,9 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
-  LOGGER_FQN,
   QUEUE_FQN,
   SCHEDULE_FQN,
+  SECRET_FQN,
   TABLE_FQN,
   TEST_RUNNER_FQN,
   TOPIC_FQN,
@@ -49,6 +50,8 @@ export class App extends CdktfApp {
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
   private _vpc?: Vpc;
+  private _codeBucket?: S3Bucket;
+
   /** Subnets shared across app */
   public subnets: { [key: string]: Subnet };
 
@@ -76,9 +79,6 @@ export class App extends CdktfApp {
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
 
-      case LOGGER_FQN:
-        return new Logger(scope, id);
-
       case QUEUE_FQN:
         return new Queue(scope, id, args[0]);
 
@@ -102,6 +102,9 @@ export class App extends CdktfApp {
 
       case REDIS_FQN:
         return new Redis(scope, id);
+
+      case SECRET_FQN:
+        return new Secret(scope, id, args[0]);
     }
 
     return undefined;
@@ -125,6 +128,17 @@ export class App extends CdktfApp {
       this.awsRegionProvider = new DataAwsRegion(this, "Region");
     }
     return this.awsRegionProvider.name;
+  }
+
+  public get codeBucket(): S3Bucket {
+    if (this._codeBucket) {
+      return this._codeBucket;
+    }
+    const bucket = new S3Bucket(this, "Code");
+    const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
+    bucket.bucketPrefix = bucketPrefix;
+    this._codeBucket = bucket;
+    return this._codeBucket;
   }
 
   /**

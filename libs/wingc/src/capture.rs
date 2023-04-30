@@ -8,7 +8,7 @@
 
 use crate::{
 	ast::{
-		ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal,
+		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Initializer, InterpolatedStringPart, Literal,
 		Phase, Reference, Scope, StmtKind, Symbol,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
@@ -72,7 +72,7 @@ impl CaptureVisitor {
 impl Visit<'_> for CaptureVisitor {
 	// TODO: currently there's no special treatment for resources, see file's top comment
 
-	fn visit_constructor(&mut self, constructor: &Constructor) {
+	fn visit_constructor(&mut self, constructor: &Initializer) {
 		match constructor.signature.phase {
 			Phase::Inflight => {
 				// TODO: the result of this is not used, see file's top comment
@@ -159,9 +159,7 @@ fn scan_captures_in_expression(
 				// wasn't found, a error diagnostic is already emitted
 				// the type checker.
 
-				if x.is_ok() {
-					let (var, si) = x.unwrap();
-
+				if let Ok((var, si)) = x {
 					if var.as_variable().is_none() {
 						diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
@@ -193,7 +191,7 @@ fn scan_captures_in_expression(
 										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().phase, Phase::Inflight))
 										.map(|(name, _)| Capture {
 											symbol: symbol.clone(),
-											ops: vec![CaptureOperation { member: name.clone() }],
+											ops: vec![CaptureOperation { member: name }],
 										})
 										.collect::<Vec<Capture>>(),
 								);
@@ -383,9 +381,9 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s, diagnostics)),
 			StmtKind::Class(Class {
-				methods, constructor, ..
+				methods, initializer, ..
 			}) => {
-				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
+				res.extend(scan_captures_in_inflight_scope(&initializer.statements, diagnostics));
 				for (_, m) in methods.iter() {
 					let FunctionBody::Statements(func_scope) = &m.body else {
 						continue;

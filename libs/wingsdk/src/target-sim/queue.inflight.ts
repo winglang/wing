@@ -1,28 +1,39 @@
-import { ISimulatorResourceInstance } from "./resource";
+import { IEventPublisher } from "./event-mapping";
 import {
   QueueAttributes,
   QueueSchema,
   QueueSubscriber,
   QUEUE_TYPE,
+  EventSubscription,
+  FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, TraceType } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
-export class Queue implements IQueueClient, ISimulatorResourceInstance {
-  private readonly messages = new Array<string>();
+export class Queue
+  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
+{
+  private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
   private readonly context: ISimulatorContext;
+  private readonly timeout: number;
+  private readonly retentionPeriod: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    for (const sub of props.subscribers ?? []) {
-      this.subscribers.push({ ...sub });
-    }
-
     if (props.initialMessages) {
-      this.messages.push(...props.initialMessages);
+      this.messages.push(
+        ...props.initialMessages.map(
+          (message) => new QueueMessage(this.retentionPeriod, message)
+        )
+      );
     }
 
+    this.timeout = props.timeout;
+    this.retentionPeriod = props.retentionPeriod;
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
     this.context = context;
   }
@@ -35,12 +46,23 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
     clearInterval(this.intervalId);
   }
 
+  public async addEventSubscription(
+    subscriber: FunctionHandle,
+    subscriptionProps: EventSubscription
+  ): Promise<void> {
+    const s = {
+      functionHandle: subscriber,
+      ...subscriptionProps,
+    } as QueueSubscriber;
+    this.subscribers.push(s);
+  }
+
   public async push(message: string): Promise<void> {
     // TODO: enforce maximum queue message size?
     return this.context.withTrace({
       message: `Push (message=${message}).`,
       activity: async () => {
-        this.messages.push(message);
+        this.messages.push(new QueueMessage(this.retentionPeriod, message));
       },
     });
   }
@@ -71,7 +93,8 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
       // assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
         const messages = this.messages.splice(0, subscriber.batchSize);
-        if (messages.length === 0) {
+        const messagesPayload = messages.map((m) => m.payload);
+        if (messagesPayload.length === 0) {
           continue;
         }
         const fnClient = this.context.findInstance(
@@ -84,29 +107,74 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
           type: TraceType.RESOURCE,
           data: {
             message: `Sending messages (messages=${JSON.stringify(
-              messages
+              messagesPayload
             )}, subscriber=${subscriber.functionHandle}).`,
           },
           sourcePath: this.context.resourcePath,
           sourceType: QUEUE_TYPE,
           timestamp: new Date().toISOString(),
         });
-        void fnClient.invoke(JSON.stringify({ messages })).catch((err) => {
-          // If the function returns an error, put the message back on the queue
-          this.context.addTrace({
-            data: {
-              message: `Subscriber error - returning ${messages.length} messages to queue: ${err.message}`,
-            },
-            sourcePath: this.context.resourcePath,
-            sourceType: QUEUE_TYPE,
-            type: TraceType.RESOURCE,
-            timestamp: new Date().toISOString(),
+        void fnClient
+          .invoke(JSON.stringify({ messages: messagesPayload }))
+          .catch((err) => {
+            // If the function returns an error, put the message back on the queue after timeout period
+            this.context.addTrace({
+              data: {
+                message: `Subscriber error - returning ${messagesPayload.length} messages to queue: ${err.message}`,
+              },
+              sourcePath: this.context.resourcePath,
+              sourceType: QUEUE_TYPE,
+              type: TraceType.RESOURCE,
+              timestamp: new Date().toISOString(),
+            });
+            void this.pushMessagesBackToQueue(messages).catch((requeueErr) => {
+              this.context.addTrace({
+                data: {
+                  message: `Error pushing ${messagesPayload.length} messages back to queue: ${requeueErr.message}`,
+                },
+                sourcePath: this.context.resourcePath,
+                sourceType: QUEUE_TYPE,
+                type: TraceType.RESOURCE,
+                timestamp: new Date().toISOString(),
+              });
+            });
           });
-          this.messages.push(...messages);
-        });
         processedMessages = true;
       }
     } while (processedMessages);
+  }
+
+  public async pushMessagesBackToQueue(
+    messages: Array<QueueMessage>
+  ): Promise<void> {
+    setTimeout(() => {
+      // Don't push back messages with retention timeouts that have expired
+      const retainedMessages = messages.filter(
+        (message) => message.retentionTimeout > new Date()
+      );
+      this.messages.push(...retainedMessages);
+      this.context.addTrace({
+        data: {
+          message: `${retainedMessages.length} messages pushed back to queue after visibility timeout.`,
+        },
+        sourcePath: this.context.resourcePath,
+        sourceType: QUEUE_TYPE,
+        type: TraceType.RESOURCE,
+        timestamp: new Date().toISOString(),
+      });
+    }, this.timeout * 1000);
+  }
+}
+
+class QueueMessage {
+  retentionTimeout: Date;
+  payload: string;
+
+  constructor(retentionPeriod: number, message: string) {
+    const currentTime = new Date();
+    currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
+    this.retentionTimeout = currentTime;
+    this.payload = message;
   }
 }
 

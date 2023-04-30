@@ -1,11 +1,9 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
-import { Logger } from "./logger";
 import { fqnForType } from "../constants";
 import { App } from "../core/app";
-import { IInflightHost, IResource, Resource } from "../core/resource";
-import { Duration } from "../std";
+import { Duration, IInflightHost, IResource, Resource } from "../std";
 import { CaseConventions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -77,37 +75,22 @@ export abstract class Function extends Resource implements IInflightHost {
     this.display.title = "Function";
     this.display.description = "A cloud function (FaaS)";
 
+    this._addInflightOps(FunctionInflightMethods.INVOKE);
+
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);
     }
 
-    const logger = Logger.of(this);
-
-    // indicates that we are calling "handle" on the handler resource
-    // and that we are calling "log" on the logger.
-    inflight._registerBind(this, ["handle"]);
-    logger._registerBind(this, ["log"]);
+    // indicates that we are calling the inflight constructor and the
+    // inflight "handle" method on the handler resource.
+    inflight._registerBind(this, ["handle", "$inflight_init"]);
 
     const inflightClient = inflight._toInflight();
-    const loggerClientCode = logger._toInflight();
     const lines = new Array<string>();
-
-    // create a logger inflight client and attach it to `console.log`.
-    // TODO: attach console.error, console.warn, once our logger supports log levels.
-    lines.push(`const $logger = ${loggerClientCode.text};`);
-    lines.push(`console.log = (...args) => $logger.log(...args);`);
 
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await (${inflightClient.text}).handle(event);`);
     lines.push("};");
-
-    // add an annotation that the Wing logger is implicitly used
-    Resource.addConnection({
-      from: this,
-      to: logger,
-      relationship: "log",
-      implicit: true,
-    });
 
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues

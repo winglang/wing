@@ -8,10 +8,15 @@ use std::path::PathBuf;
 
 #[cfg(test)]
 mod tests {
+	use flate2::{write::GzEncoder, Compression};
+
 	use crate::{fqn::FQN, jsii::JsiiFile, type_system::TypeSystem};
 
 	use super::*;
-	use std::fs;
+	use std::{
+		fs,
+		io::{Read, Write},
+	};
 
 	#[test]
 	fn does_not_blow_up() {
@@ -30,15 +35,33 @@ mod tests {
 	#[test]
 	fn can_load_assembly_from_single_file() {
 		let assembly_path = create_temp_assembly();
-		let assembly = spec::load_assembly_from_file(assembly_path.to_str().unwrap()).unwrap();
+		let assembly = spec::load_assembly_from_file(assembly_path.to_str().unwrap(), None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
 		remove_temp_assembly(assembly_path);
 	}
 
 	#[test]
-	fn can_load_assembly_from_path() {
+	fn can_load_assembly_from_single_file_compressed() {
+		let assembly_path_pre = create_temp_assembly();
+		let assembly_path = assembly_path_pre.with_extension("jsii.gz");
+
+		// gzip the file
+		let mut gz = GzEncoder::new(File::create(&assembly_path).unwrap(), Compression::default());
+		let mut file = File::open(&assembly_path_pre).unwrap();
+		let mut buffer = Vec::new();
+		file.read_to_end(&mut buffer).unwrap();
+		gz.write_all(&buffer).unwrap();
+		gz.finish().unwrap();
+
+		let assembly = spec::load_assembly_from_file(assembly_path.to_str().unwrap(), Some("gzip")).unwrap();
+		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
+		remove_temp_assembly(assembly_path);
+	}
+
+	#[test]
+	fn can_load_assembly_from_file() {
 		let assembly_path = create_temp_assembly();
-		let assembly = spec::load_assembly_from_path(assembly_path.parent().unwrap().to_str().unwrap()).unwrap();
+		let assembly = spec::load_assembly_from_file(&assembly_path.to_str().unwrap(), None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
 		remove_temp_assembly(assembly_path);
 	}
@@ -50,7 +73,7 @@ mod tests {
 			.join("src")
 			.join("fixtures")
 			.join("constructs");
-		let name = type_system.load(fixture_path.to_str().unwrap(), None).unwrap();
+		let name = type_system.load_module(fixture_path.to_str().unwrap()).unwrap();
 		assert_eq!(name, "constructs");
 		let assembly = type_system.find_assembly(&name).unwrap();
 		assert_eq!(assembly.name, "constructs");
@@ -63,7 +86,7 @@ mod tests {
 			.join("src")
 			.join("fixtures")
 			.join("constructs");
-		let name = type_system.load(fixture_path.to_str().unwrap(), None).unwrap();
+		let name = type_system.load_module(fixture_path.to_str().unwrap()).unwrap();
 		assert_eq!(name, "constructs");
 		// find class with fqn "constructs.Construct"
 		let construct = type_system.find_class(&FQN::from("constructs.Construct")).unwrap();

@@ -1,5 +1,8 @@
 #![allow(clippy::all)]
 #![deny(clippy::correctness)]
+#![deny(clippy::suspicious)]
+#![deny(clippy::complexity)]
+#![allow(clippy::vec_box)]
 
 #[macro_use]
 extern crate lazy_static;
@@ -8,12 +11,12 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
-use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use wingii::type_system::TypeSystem;
 
 use crate::parser::Parser;
 use std::alloc::{alloc, dealloc, Layout};
@@ -31,6 +34,7 @@ pub mod ast;
 pub mod capture;
 pub mod debug;
 pub mod diagnostic;
+pub mod fold;
 pub mod jsify;
 pub mod lsp;
 pub mod parser;
@@ -57,11 +61,10 @@ const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
 const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
-const WINGSDK_RESOURCE: &'static str = "core.Resource";
+const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
-const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
@@ -113,8 +116,9 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let split = args.split(";").collect::<Vec<&str>>();
 	let source_file = Path::new(split[0]);
 	let output_dir = split.get(1).map(|s| Path::new(s));
+	let absolute_project_dir = split.get(2).map(|s| Path::new(s));
 
-	let results = compile(source_file, output_dir);
+	let results = compile(source_file, output_dir, absolute_project_dir);
 	if let Err(diagnostics) = results {
 		// Output diagnostics as a stringified JSON array
 		let json = serde_json::to_string(&diagnostics).unwrap();
@@ -169,7 +173,7 @@ pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
 	source_path: &Path,
-	jsii_imports: &mut Vec<JsiiImportSpec>,
+	jsii_types: &mut TypeSystem,
 ) -> Diagnostics {
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
@@ -225,7 +229,7 @@ pub fn type_check(
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path, jsii_imports);
+	let mut tc = TypeChecker::new(types, source_path, jsii_types);
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
@@ -249,7 +253,11 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.expect("Failed to add builtin");
 }
 
-pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOutput, Diagnostics> {
+pub fn compile(
+	source_path: &Path,
+	out_dir: Option<&Path>,
+	absolute_project_root: Option<&Path>,
+) -> Result<CompilerOutput, Diagnostics> {
 	if !source_path.exists() {
 		return Err(vec![Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
@@ -277,11 +285,11 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	let mut types = Types::new();
 	// Build our AST
 	let (mut scope, parse_diagnostics) = parse(&source_path);
-	let mut jsii_imports = Vec::new();
+	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path, &mut jsii_imports)
+		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
 	} else {
 		// empty scope, no type checking needed
 		Diagnostics::new()
@@ -320,7 +328,26 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	fs::create_dir_all(out_dir).expect("create output dir");
 
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
-	let mut jsifier = JSifier::new(out_dir, app_name, true);
+	let project_dir = absolute_project_root
+		.unwrap_or(source_path.parent().unwrap())
+		.to_path_buf();
+
+	// Verify that the project dir is absolute
+	if !project_dir.starts_with("/") {
+		let dir_str = project_dir.to_str().expect("Project dir is valid UTF-8");
+		// Check if this is a Windows path instead by checking if the second char is a colon
+		// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
+		if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
+			diagnostics.push(Diagnostic {
+				message: format!("Project directory must be absolute: {}", project_dir.display()),
+				span: None,
+				level: DiagnosticLevel::Error,
+			});
+			return Err(diagnostics);
+		}
+	}
+
+	let mut jsifier = JSifier::new(out_dir, app_name, project_dir.as_path(), true);
 
 	let intermediate_js = jsifier.jsify(&scope);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
@@ -368,7 +395,11 @@ mod sanity {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			let result = compile(&test_file, Some(&out_dir));
+			let result = compile(
+				&test_file,
+				Some(&out_dir),
+				Some(test_file.canonicalize().unwrap().parent().unwrap()),
+			);
 
 			if result.is_err() {
 				assert!(
