@@ -1714,7 +1714,7 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 					panic!("Expected {type_name} to be a type");
 				}
 			} else {
-				panic!("Unknown symbol: {type_name}");
+				panic!("Unknown symbol: {type_name}, should be covered by type checking");
 			}
 		}
 	}
