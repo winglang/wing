@@ -110,9 +110,3 @@ export class Table extends cloud.Table {
     return `${this.envName()}_COLUMNS`;
   }
 }
-
-Table._annotateInflight(cloud.TableInflightMethods.INSERT, {});
-Table._annotateInflight(cloud.TableInflightMethods.UPDATE, {});
-Table._annotateInflight(cloud.TableInflightMethods.DELETE, {});
-Table._annotateInflight(cloud.TableInflightMethods.GET, {});
-Table._annotateInflight(cloud.TableInflightMethods.LIST, {});

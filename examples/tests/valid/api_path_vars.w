@@ -2,7 +2,7 @@ bring cloud;
 
 let api = new cloud.Api();
 
-resource Fetch {
+class Fetch {
   extern "./api_path_vars.js" inflight get(url: str): Json;
   init() { }
 }

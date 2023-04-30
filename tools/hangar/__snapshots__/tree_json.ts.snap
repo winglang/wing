@@ -1,0 +1,1464 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tree.json for an app with many resources 1`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.2",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
+              "Default": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "$Inflight4": {
+                    "attributes": {
+                      "wing:resource:connections": [],
+                      "wing:resource:stateful": false,
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0",
+                    },
+                    "display": {
+                      "description": "An inflight resource",
+                      "hidden": true,
+                      "title": "Inflight",
+                    },
+                    "id": "$Inflight4",
+                    "path": "root/Default/Default/$Inflight4",
+                  },
+                  "$Inflight5": {
+                    "attributes": {
+                      "wing:resource:connections": [],
+                      "wing:resource:stateful": false,
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0",
+                    },
+                    "display": {
+                      "description": "An inflight resource",
+                      "hidden": true,
+                      "title": "Inflight",
+                    },
+                    "id": "$Inflight5",
+                    "path": "root/Default/Default/$Inflight5",
+                  },
+                  "Bar": {
+                    "attributes": {
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "my_method",
+                          "resource": "root/Default/Default/test",
+                        },
+                      ],
+                      "wing:resource:stateful": false,
+                    },
+                    "children": {
+                      "Foo": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "foo_get",
+                              "resource": "root/Default/Default/test",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "foo_inc",
+                              "resource": "root/Default/Default/test",
+                            },
+                          ],
+                          "wing:resource:stateful": false,
+                        },
+                        "children": {
+                          "cloud.Counter": {
+                            "attributes": {
+                              "wing:resource:connections": [
+                                {
+                                  "direction": "inbound",
+                                  "implicit": false,
+                                  "relationship": "dec",
+                                  "resource": "root/Default/Default/test",
+                                },
+                                {
+                                  "direction": "inbound",
+                                  "implicit": false,
+                                  "relationship": "inc",
+                                  "resource": "root/Default/Default/test",
+                                },
+                                {
+                                  "direction": "inbound",
+                                  "implicit": false,
+                                  "relationship": "peek",
+                                  "resource": "root/Default/Default/test",
+                                },
+                              ],
+                              "wing:resource:stateful": true,
+                            },
+                            "children": {
+                              "Default": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
+                                  "version": "12.0.2",
+                                },
+                                "id": "Default",
+                                "path": "root/Default/Default/Bar/Foo/cloud.Counter/Default",
+                              },
+                            },
+                            "constructInfo": {
+                              "fqn": "@winglang/sdk.cloud.Counter",
+                              "version": "0.0.0",
+                            },
+                            "display": {
+                              "description": "A distributed atomic counter",
+                              "title": "Counter",
+                            },
+                            "id": "cloud.Counter",
+                            "path": "root/Default/Default/Bar/Foo/cloud.Counter",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "id": "Foo",
+                        "path": "root/Default/Default/Bar/Foo",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0",
+                    },
+                    "id": "Bar",
+                    "path": "root/Default/Default/Bar",
+                  },
+                  "BigPublisher": {
+                    "attributes": {
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "getObjectCount",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "publish",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "getObjectCount",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "publish",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "getObjectCount",
+                          "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "publish",
+                          "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "getObjectCount",
+                          "resource": "root/Default/Default/test: dependency cycles",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "publish",
+                          "resource": "root/Default/Default/test: dependency cycles",
+                        },
+                      ],
+                      "wing:resource:stateful": false,
+                    },
+                    "children": {
+                      "$Inflight1": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                            },
+                          ],
+                          "wing:resource:stateful": false,
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "An inflight resource",
+                          "hidden": true,
+                          "title": "Inflight",
+                        },
+                        "id": "$Inflight1",
+                        "path": "root/Default/Default/BigPublisher/$Inflight1",
+                      },
+                      "$Inflight2": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                            },
+                          ],
+                          "wing:resource:stateful": false,
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "An inflight resource",
+                          "hidden": true,
+                          "title": "Inflight",
+                        },
+                        "id": "$Inflight2",
+                        "path": "root/Default/Default/BigPublisher/$Inflight2",
+                      },
+                      "$Inflight3": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                            },
+                          ],
+                          "wing:resource:stateful": false,
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "An inflight resource",
+                          "hidden": true,
+                          "title": "Inflight",
+                        },
+                        "id": "$Inflight3",
+                        "path": "root/Default/Default/BigPublisher/$Inflight3",
+                      },
+                      "b2": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "put",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "put",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "CREATE",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "put",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "put",
+                              "resource": "root/Default/Default/test: dependency cycles",
+                            },
+                          ],
+                          "wing:resource:stateful": true,
+                        },
+                        "children": {
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                              "version": "12.0.2",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/BigPublisher/b2/Default",
+                          },
+                          "Encryption": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                              "version": "12.0.2",
+                            },
+                            "id": "Encryption",
+                            "path": "root/Default/Default/BigPublisher/b2/Encryption",
+                          },
+                          "PublicAccessBlock": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                              "version": "12.0.2",
+                            },
+                            "id": "PublicAccessBlock",
+                            "path": "root/Default/Default/BigPublisher/b2/PublicAccessBlock",
+                          },
+                          "S3Object_on_create_notifier": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
+                              "version": "12.0.2",
+                            },
+                            "id": "S3Object_on_create_notifier",
+                            "path": "root/Default/Default/BigPublisher/b2/S3Object_on_create_notifier",
+                          },
+                          "b2-on_create": {
+                            "attributes": {
+                              "wing:resource:connections": [
+                                {
+                                  "direction": "inbound",
+                                  "implicit": false,
+                                  "relationship": "CREATE",
+                                  "resource": "root/Default/Default/BigPublisher/b2",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "on_message",
+                                  "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                                },
+                              ],
+                              "wing:resource:stateful": true,
+                            },
+                            "children": {
+                              "Default": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
+                                  "version": "12.0.2",
+                                },
+                                "id": "Default",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create/Default",
+                              },
+                              "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
+                                  "version": "12.0.2",
+                                },
+                                "id": "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
+                              },
+                              "b2-on_create-TopicSubscription-a754ef69": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                                  "version": "12.0.2",
+                                },
+                                "id": "b2-on_create-TopicSubscription-a754ef69",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create/b2-on_create-TopicSubscription-a754ef69",
+                              },
+                            },
+                            "constructInfo": {
+                              "fqn": "@winglang/sdk.cloud.Topic",
+                              "version": "0.0.0",
+                            },
+                            "display": {
+                              "description": "A pub/sub notification topic",
+                              "title": "Topic",
+                            },
+                            "id": "b2-on_create",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-on_create",
+                          },
+                          "b2-on_create-OnMessage-a754ef69": {
+                            "attributes": {
+                              "wing:resource:connections": [
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "list",
+                                  "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "put",
+                                  "resource": "root/Default/Default/BigPublisher/b2",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "push",
+                                  "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "publish",
+                                  "resource": "root/Default/Default/BigPublisher/cloud.Topic",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "getObjectCount",
+                                  "resource": "root/Default/Default/BigPublisher",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "publish",
+                                  "resource": "root/Default/Default/BigPublisher",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "handle",
+                                  "resource": "root/Default/Default/BigPublisher/$Inflight3",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "handle",
+                                  "resource": "root/Default/Default/BigPublisher/b2-on_create-eventHandler-fe215853",
+                                },
+                                {
+                                  "direction": "inbound",
+                                  "implicit": false,
+                                  "relationship": "on_message",
+                                  "resource": "root/Default/Default/BigPublisher/b2/b2-on_create",
+                                },
+                              ],
+                              "wing:resource:stateful": false,
+                            },
+                            "children": {
+                              "Asset": {
+                                "constructInfo": {
+                                  "fqn": "cdktf.TerraformAsset",
+                                  "version": "0.15.2",
+                                },
+                                "id": "Asset",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/Asset",
+                              },
+                              "Default": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                                  "version": "12.0.2",
+                                },
+                                "id": "Default",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/Default",
+                              },
+                              "IamRole": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                                  "version": "12.0.2",
+                                },
+                                "id": "IamRole",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/IamRole",
+                              },
+                              "IamRolePolicy": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                                  "version": "12.0.2",
+                                },
+                                "id": "IamRolePolicy",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/IamRolePolicy",
+                              },
+                              "IamRolePolicyAttachment": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                                  "version": "12.0.2",
+                                },
+                                "id": "IamRolePolicyAttachment",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/IamRolePolicyAttachment",
+                              },
+                              "InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                                  "version": "12.0.2",
+                                },
+                                "id": "InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
+                              },
+                              "S3Object": {
+                                "constructInfo": {
+                                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                                  "version": "12.0.2",
+                                },
+                                "id": "S3Object",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/S3Object",
+                              },
+                            },
+                            "constructInfo": {
+                              "fqn": "@winglang/sdk.cloud.Function",
+                              "version": "0.0.0",
+                            },
+                            "display": {
+                              "description": "A cloud function (FaaS)",
+                              "title": "Function",
+                            },
+                            "id": "b2-on_create-OnMessage-a754ef69",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                          },
+                          "b2-on_create-OnMessageHandler-a754ef69": {
+                            "attributes": {
+                              "wing:resource:connections": [],
+                              "wing:resource:stateful": false,
+                            },
+                            "constructInfo": {
+                              "fqn": "@winglang/sdk.std.Resource",
+                              "version": "0.0.0",
+                            },
+                            "display": {
+                              "hidden": true,
+                            },
+                            "id": "b2-on_create-OnMessageHandler-a754ef69",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessageHandler-a754ef69",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Bucket",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "A cloud object store",
+                          "title": "Bucket",
+                        },
+                        "id": "b2",
+                        "path": "root/Default/Default/BigPublisher/b2",
+                      },
+                      "b2-on_create-eventHandler-fe215853": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                            },
+                          ],
+                          "wing:resource:stateful": false,
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "hidden": true,
+                        },
+                        "id": "b2-on_create-eventHandler-fe215853",
+                        "path": "root/Default/Default/BigPublisher/b2-on_create-eventHandler-fe215853",
+                      },
+                      "cloud.Bucket": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/test: dependency cycles",
+                            },
+                          ],
+                          "wing:resource:stateful": true,
+                        },
+                        "children": {
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                              "version": "12.0.2",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Bucket/Default",
+                          },
+                          "Encryption": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                              "version": "12.0.2",
+                            },
+                            "id": "Encryption",
+                            "path": "root/Default/Default/BigPublisher/cloud.Bucket/Encryption",
+                          },
+                          "PublicAccessBlock": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                              "version": "12.0.2",
+                            },
+                            "id": "PublicAccessBlock",
+                            "path": "root/Default/Default/BigPublisher/cloud.Bucket/PublicAccessBlock",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Bucket",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "A cloud object store",
+                          "title": "Bucket",
+                        },
+                        "id": "cloud.Bucket",
+                        "path": "root/Default/Default/BigPublisher/cloud.Bucket",
+                      },
+                      "cloud.Queue": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "push",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "push",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "add_consumer",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "push",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "push",
+                              "resource": "root/Default/Default/test: dependency cycles",
+                            },
+                          ],
+                          "wing:resource:stateful": true,
+                        },
+                        "children": {
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                              "version": "12.0.2",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue/Default",
+                          },
+                          "EventSourceMapping": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaEventSourceMapping.LambdaEventSourceMapping",
+                              "version": "12.0.2",
+                            },
+                            "id": "EventSourceMapping",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue/EventSourceMapping",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Queue",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "A distributed message queue",
+                          "title": "Queue",
+                        },
+                        "id": "cloud.Queue",
+                        "path": "root/Default/Default/BigPublisher/cloud.Queue",
+                      },
+                      "cloud.Queue-AddConsumer-c351460f": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "put",
+                              "resource": "root/Default/Default/BigPublisher/b2",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "push",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "getObjectCount",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/$Inflight2",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "add_consumer",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                            },
+                          ],
+                          "wing:resource:stateful": false,
+                        },
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2",
+                            },
+                            "id": "Asset",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/Asset",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2",
+                            },
+                            "id": "IamRole",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2",
+                            },
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2",
+                            },
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/IamRolePolicyAttachment",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2",
+                            },
+                            "id": "S3Object",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/S3Object",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
+                        },
+                        "id": "cloud.Queue-AddConsumer-c351460f",
+                        "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                      },
+                      "cloud.Queue-AddConsumerHandler-c351460f": {
+                        "attributes": {
+                          "wing:resource:connections": [],
+                          "wing:resource:stateful": false,
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "hidden": true,
+                        },
+                        "id": "cloud.Queue-AddConsumerHandler-c351460f",
+                        "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumerHandler-c351460f",
+                      },
+                      "cloud.Topic": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/test: dependency cycles",
+                            },
+                          ],
+                          "wing:resource:stateful": true,
+                        },
+                        "children": {
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
+                              "version": "12.0.2",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic/Default",
+                          },
+                          "cloud.Topic-TopicSubscription-cb235724": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
+                              "version": "12.0.2",
+                            },
+                            "id": "cloud.Topic-TopicSubscription-cb235724",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-TopicSubscription-cb235724",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Topic",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "A pub/sub notification topic",
+                          "title": "Topic",
+                        },
+                        "id": "cloud.Topic",
+                        "path": "root/Default/Default/BigPublisher/cloud.Topic",
+                      },
+                      "cloud.Topic-OnMessage-cb235724": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "put",
+                              "resource": "root/Default/Default/BigPublisher/b2",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "push",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "getObjectCount",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/$Inflight1",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "on_message",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
+                            },
+                          ],
+                          "wing:resource:stateful": false,
+                        },
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2",
+                            },
+                            "id": "Asset",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/Asset",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                              "version": "12.0.2",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                              "version": "12.0.2",
+                            },
+                            "id": "IamRole",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                              "version": "12.0.2",
+                            },
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                              "version": "12.0.2",
+                            },
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/IamRolePolicyAttachment",
+                          },
+                          "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                              "version": "12.0.2",
+                            },
+                            "id": "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                              "version": "12.0.2",
+                            },
+                            "id": "S3Object",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/S3Object",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
+                        },
+                        "id": "cloud.Topic-OnMessage-cb235724",
+                        "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
+                      },
+                      "cloud.Topic-OnMessageHandler-cb235724": {
+                        "attributes": {
+                          "wing:resource:connections": [],
+                          "wing:resource:stateful": false,
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "hidden": true,
+                        },
+                        "id": "cloud.Topic-OnMessageHandler-cb235724",
+                        "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessageHandler-cb235724",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0",
+                    },
+                    "id": "BigPublisher",
+                    "path": "root/Default/Default/BigPublisher",
+                  },
+                  "cloud.Bucket": {
+                    "attributes": {
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "delete",
+                          "resource": "root/Default/Default/test",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "get",
+                          "resource": "root/Default/Default/test",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "get_json",
+                          "resource": "root/Default/Default/test",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "list",
+                          "resource": "root/Default/Default/test",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "public_url",
+                          "resource": "root/Default/Default/test",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "put",
+                          "resource": "root/Default/Default/test",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "put_json",
+                          "resource": "root/Default/Default/test",
+                        },
+                      ],
+                      "wing:resource:stateful": true,
+                    },
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                          "version": "12.0.2",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Default/cloud.Bucket/Default",
+                      },
+                      "Encryption": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                          "version": "12.0.2",
+                        },
+                        "id": "Encryption",
+                        "path": "root/Default/Default/cloud.Bucket/Encryption",
+                      },
+                      "PublicAccessBlock": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                          "version": "12.0.2",
+                        },
+                        "id": "PublicAccessBlock",
+                        "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Bucket",
+                      "version": "0.0.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "cloud.Bucket",
+                    "path": "root/Default/Default/cloud.Bucket",
+                  },
+                  "test": {
+                    "attributes": {
+                      "wing:resource:connections": [
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "delete",
+                          "resource": "root/Default/Default/cloud.Bucket",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "get",
+                          "resource": "root/Default/Default/cloud.Bucket",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "get_json",
+                          "resource": "root/Default/Default/cloud.Bucket",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "list",
+                          "resource": "root/Default/Default/cloud.Bucket",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "public_url",
+                          "resource": "root/Default/Default/cloud.Bucket",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "put",
+                          "resource": "root/Default/Default/cloud.Bucket",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "put_json",
+                          "resource": "root/Default/Default/cloud.Bucket",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "dec",
+                          "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "inc",
+                          "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "peek",
+                          "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "foo_get",
+                          "resource": "root/Default/Default/Bar/Foo",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "foo_inc",
+                          "resource": "root/Default/Default/Bar/Foo",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "my_method",
+                          "resource": "root/Default/Default/Bar",
+                        },
+                      ],
+                      "wing:resource:stateful": false,
+                    },
+                    "children": {
+                      "Asset": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformAsset",
+                          "version": "0.15.2",
+                        },
+                        "id": "Asset",
+                        "path": "root/Default/Default/test/Asset",
+                      },
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                          "version": "12.0.2",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Default/test/Default",
+                      },
+                      "IamRole": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                          "version": "12.0.2",
+                        },
+                        "id": "IamRole",
+                        "path": "root/Default/Default/test/IamRole",
+                      },
+                      "IamRolePolicy": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                          "version": "12.0.2",
+                        },
+                        "id": "IamRolePolicy",
+                        "path": "root/Default/Default/test/IamRolePolicy",
+                      },
+                      "IamRolePolicyAttachment": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                          "version": "12.0.2",
+                        },
+                        "id": "IamRolePolicyAttachment",
+                        "path": "root/Default/Default/test/IamRolePolicyAttachment",
+                      },
+                      "S3Object": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                          "version": "12.0.2",
+                        },
+                        "id": "S3Object",
+                        "path": "root/Default/Default/test/S3Object",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Function",
+                      "version": "0.0.0",
+                    },
+                    "display": {
+                      "description": "A cloud function (FaaS)",
+                      "title": "Function",
+                    },
+                    "id": "test",
+                    "path": "root/Default/Default/test",
+                  },
+                  "test: dependency cycles": {
+                    "attributes": {
+                      "wing:resource:connections": [
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "list",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "put",
+                          "resource": "root/Default/Default/BigPublisher/b2",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "push",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "publish",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Topic",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "getObjectCount",
+                          "resource": "root/Default/Default/BigPublisher",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "publish",
+                          "resource": "root/Default/Default/BigPublisher",
+                        },
+                      ],
+                      "wing:resource:stateful": false,
+                    },
+                    "children": {
+                      "Asset": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformAsset",
+                          "version": "0.15.2",
+                        },
+                        "id": "Asset",
+                        "path": "root/Default/Default/test: dependency cycles/Asset",
+                      },
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                          "version": "12.0.2",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/Default/test: dependency cycles/Default",
+                      },
+                      "IamRole": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                          "version": "12.0.2",
+                        },
+                        "id": "IamRole",
+                        "path": "root/Default/Default/test: dependency cycles/IamRole",
+                      },
+                      "IamRolePolicy": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                          "version": "12.0.2",
+                        },
+                        "id": "IamRolePolicy",
+                        "path": "root/Default/Default/test: dependency cycles/IamRolePolicy",
+                      },
+                      "IamRolePolicyAttachment": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                          "version": "12.0.2",
+                        },
+                        "id": "IamRolePolicyAttachment",
+                        "path": "root/Default/Default/test: dependency cycles/IamRolePolicyAttachment",
+                      },
+                      "S3Object": {
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                          "version": "12.0.2",
+                        },
+                        "id": "S3Object",
+                        "path": "root/Default/Default/test: dependency cycles/S3Object",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.cloud.Function",
+                      "version": "0.0.0",
+                    },
+                    "display": {
+                      "description": "A cloud function (FaaS)",
+                      "title": "Function",
+                    },
+                    "id": "test: dependency cycles",
+                    "path": "root/Default/Default/test: dependency cycles",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.std.Resource",
+                  "version": "0.0.0",
+                },
+                "id": "Default",
+                "path": "root/Default/Default",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "12.0.2",
+                },
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.cloud.TestRunner",
+                  "version": "0.0.0",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
+            },
+            "constructInfo": {
+              "fqn": "@winglang/sdk.core.CdktfApp",
+              "version": "0.0.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

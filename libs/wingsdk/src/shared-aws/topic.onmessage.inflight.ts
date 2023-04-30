@@ -12,7 +12,7 @@ export class TopicOnMessageHandlerClient
   }
   public async handle(event: any) {
     for (const record of event.Records ?? []) {
-      await this.handler.handle(record.Sns);
+      await this.handler.handle(record.Sns.Message);
     }
   }
 }

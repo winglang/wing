@@ -98,6 +98,19 @@ export class Json {
   }
 
   /**
+   * Try to parse a string into a Json
+   *
+   * @macro ((args) => { try { return JSON.parse(args); } catch (err) { return undefined; } })($args$)
+   *
+   * @param str to parse as Json
+   * @returns Json representation of the string or undefined if string is not parsable
+   */
+  public static tryParse(str: string): Json | undefined {
+    str;
+    throw new Error("Macro");
+  }
+
+  /**
    * Returns a specified element from the Json.
    *
    * @macro ($self$)[$args$]
@@ -171,7 +184,7 @@ export class MutJson {
   /**
    * Set element in MutJson Array with a specific key and value
    *
-   * @macro ((obj, args)) => { obj[args[0]] = args[1]; })($self$, [$args$])
+   * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
    *
    * @param value The value of the element to set
    */

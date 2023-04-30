@@ -2,13 +2,15 @@
 
 ## clients/A.inflight.js
 ```js
-class  A {
-  constructor({ field, stateful }) {
-    this.field = field;
-    this.stateful = stateful;
+module.exports = function() {
+  class  A {
+    constructor({ field, stateful }) {
+      this.field = field;
+      this.stateful = stateful;
+    }
   }
+  return A;
 }
-exports.A = A;
 
 ```
 
@@ -94,7 +96,7 @@ exports.A = A;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
@@ -153,17 +155,24 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).A({
+            const A = require("${self_client_path}")({});
+            const client = new A({
               field: ${field_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.field, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    A._annotateInflight("$inflight_init", {"this.field": { ops: [] },"this.stateful": { ops: [] }});
     const a = new A(this,"A");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),

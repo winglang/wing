@@ -42,7 +42,6 @@ jspm_packages/
 .jsii
 tsconfig.json
 !/API.md
-!/tsconfig.nonjsii.json
 /coverage/
 src/**/*.js
 src/**/*.d.ts

@@ -2,15 +2,17 @@
 
 ## clients/Fetch.inflight.js
 ```js
-class  Fetch {
-  constructor({ stateful }) {
-    this.stateful = stateful;
+module.exports = function() {
+  class  Fetch {
+    constructor({ stateful }) {
+      this.stateful = stateful;
+    }
+    async get(url)  {
+      return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
+    }
   }
-  async get(url)  {
-    return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
-  }
+  return Fetch;
 }
-exports.Fetch = Fetch;
 
 ```
 
@@ -179,7 +181,7 @@ exports.Fetch = Fetch;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequeste46e5cb7_IamRole_15046B29.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_cloudApi_cloudApiOnRequeste46e5cb7_S3Object_69EE2256.key}",
         "timeout": 30,
@@ -205,7 +207,7 @@ exports.Fetch = Fetch;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
@@ -282,23 +284,31 @@ class $Root extends $stdlib.std.Resource {
     class Fetch extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("get");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Fetch.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Fetch({
+            const Fetch = require("${self_client_path}")({});
+            const client = new Fetch({
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("get")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Fetch._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
-    Fetch._annotateInflight("get", {});
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),

@@ -2,17 +2,19 @@
 
 ## clients/Foo.inflight.js
 ```js
-class  Foo {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async handle(message)  {
-    {
-      return "hello world!";
+module.exports = function() {
+  class  Foo {
+    constructor({ stateful }) {
+      this.stateful = stateful;
+    }
+    async handle(message)  {
+      {
+        return "hello world!";
+      }
     }
   }
+  return Foo;
 }
-exports.Foo = Foo;
 
 ```
 
@@ -127,7 +129,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
         "timeout": 30,
@@ -153,7 +155,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
@@ -215,23 +217,31 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle");
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            const Foo = require("${self_client_path}")({});
+            const client = new Foo({
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.stateful, host, []);
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
-    Foo._annotateInflight("handle", {});
     const fn = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new Foo(this,"Foo"));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),

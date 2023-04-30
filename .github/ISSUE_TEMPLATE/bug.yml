@@ -13,8 +13,15 @@ body:
 - type: textarea
   id: i-tried-this
   attributes:
-    label: "I tried this"
+    label: "I tried this:"
     placeholder: "What did you try to do? A code snippet or exact command line is ideal."
+  validations:
+    required: true
+- type: textarea
+  id: instead-what-happened
+  attributes:
+    label: "This happened:"
+    placeholder: "What happend instead of what you've expected?"
   validations:
     required: true
 - type: textarea
@@ -23,14 +30,7 @@ body:
     label: "I expected this:"
     placeholder: "What did you expect to happen? Describe the output or behavior you expected to see."
   validations:
-    required: true
-- type: textarea
-  id: instead-what-happened
-  attributes:
-    label: "Instead, this happened"
-    placeholder: "What happend instead of what you've expected?"
-  validations:
-    required: true
+    required: true    
 - type: textarea
   id: workaround
   attributes:
@@ -47,6 +47,7 @@ body:
     - Compiler
     - SDK
     - Wing Console
+    - Playground
     - IDE Extension
     - CLI
     - Plugins

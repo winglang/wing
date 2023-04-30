@@ -2,13 +2,15 @@
 
 ## clients/R.inflight.js
 ```js
-class  R {
-  constructor({ f, stateful }) {
-    this.f = f;
-    this.stateful = stateful;
+module.exports = function() {
+  class  R {
+    constructor({ f, stateful }) {
+      this.f = f;
+      this.stateful = stateful;
+    }
   }
+  return R;
 }
-exports.R = R;
 
 ```
 
@@ -74,17 +76,24 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).R({
+            const R = require("${self_client_path}")({});
+            const client = new R({
               f: ${f_client},
               stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.f, host, []);
+          this._registerBindObject(this.stateful, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    R._annotateInflight("$inflight_init", {"this.f": { ops: [] },"this.stateful": { ops: [] }});
     const x = "hi";
     if (true) {
       {console.log(`${x}`)};

@@ -1,7 +1,7 @@
 bring cloud;
 
 // User defined resource
-resource Foo {
+class Foo {
   c: cloud.Counter; // Use SDK built in resource in the user defined resource
   inflight inflight_field: num;
 
@@ -39,7 +39,7 @@ enum MyEnum {
   C,
 }
 
-resource Bar {
+class Bar {
   name: str;
   b: cloud.Bucket;
   // Use a user defined resource inside another user defined resource
@@ -95,7 +95,7 @@ new cloud.Function(inflight () => {
   res.test_type_access();
 }) as "test";
 
-resource BigPublisher {
+class BigPublisher {
   b: cloud.Bucket;
   b2: cloud.Bucket;
   q: cloud.Queue;
