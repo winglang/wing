@@ -21,7 +21,7 @@
   "dependencies": {
     "npm-which": "^3.0.1",
     "standard-version": "^9.5.0",
-    "tsx": "^3.12.6",
+    "tsx": "^3.12.7",
     "yoctocolors": "^1.0.0"
   }
 }

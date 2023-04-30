@@ -24,7 +24,7 @@
     "@wingconsole/tsconfig": "workspace:^",
     "classnames": "^2.3.2",
     "eslint": "^8.39.0",
-    "happy-dom": "^9.10.0",
+    "happy-dom": "^9.10.1",
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
