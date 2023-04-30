@@ -11,9 +11,10 @@ description: How to create unique IDs for preflight instances
 In the current implementation of Wing, when instantiating a new preflight class, the compiler provides a default ID for the instance. 
 In cases where the default ID cannot be made unique, a compiler error occurs.
 
+In the last wingathon, more than 70% of preflight instances in the Wing research repository are created with a custom ID. 
+
 ## Observed Patterns
 
-More than 70% of preflight instances in the Wing research repository are created with a custom ID. 
 When examining the code, the following patterns can be observed:
 
 1. Improved readability of preflight instances, e.g.:
