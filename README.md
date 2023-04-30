@@ -57,8 +57,8 @@ queue.add_consumer(inflight (message: str) => {
 });
 ```
 
-The `cloud.Bucket`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*. They represent
-cloud infrastructure resources. When compiled to AWS, a Terraform file will be produced with the AWS implementation
+The `cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*. They represent
+cloud infrastructure resources. When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
 of these resources.
 
 The `queue.add_consumer()` method is a *preflight method* that configures the infrastructure to
