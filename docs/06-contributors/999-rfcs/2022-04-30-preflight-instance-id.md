@@ -19,20 +19,20 @@ When examining the code, the following patterns can be observed:
 
 1. Improved readability of preflight instances, e.g.:
   
-    [dogfooding/publications-etl](https://github.com/winglang/research/blob/926453f5c5abd2e3158b4c8c659f1e790c99d741//app.w#L70)
+    [dogfooding/publications-etl](https://github.com/winglang/research/blob/926453f5c5abd2e3158b4c8c659f1e790c99d741//app.w#L70):
      ```ts (wing)
      this.initialized = new cloud.Counter() as "initialized";
      ```
 2. Name duplications - situations where the ID (or part of it) is also reflected in the constructor:
   
-    [dogfooding/release-webhoo](https://github.com/winglang/research/blob/926453f5c5abd2e3158b4c8c659f1e790c99d741/dogfooding/release-webhook/main.w#L207):
+    [dogfooding/release-webhool](https://github.com/winglang/research/blob/926453f5c5abd2e3158b4c8c659f1e790c99d741/dogfooding/release-webhook/main.w#L207):
      ```ts (wing)
      let slack_token = new cloud.Secret(name: "slack-token") as "Slack Token";
      ```
      You can also consider situations where `cloud.Bucket` and `cloud.Test` where the ID of the instance and the name of bucket/test are connected 
 3. Multiple instances of the same type in the same scope:
    
-     [dogfooding/publications-et](https://github.com/winglang/research/blob/926453f5c5abd2e3158b4c8c659f1e790c99d741/dogfooding/publications-etl/app.w#LL31-L33C58)
+     [dogfooding/publications-etl](https://github.com/winglang/research/blob/926453f5c5abd2e3158b4c8c659f1e790c99d741/dogfooding/publications-etl/app.w#LL31-L33C58):
      ```ts (wing)
      this.inbox = new cloud.Bucket() as "inbox";
      this.transformations = new cloud.Bucket() as "transformations";
