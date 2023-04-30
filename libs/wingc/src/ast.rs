@@ -147,19 +147,9 @@ pub struct UserDefinedType {
 	pub span: WingSpan,
 }
 
-pub trait Locatable {
-	fn span(&self) -> &WingSpan;
-}
-
 impl Locatable for UserDefinedType {
-	fn span(&self) -> &WingSpan {
-		&self.span
-	}
-}
-
-impl Locatable for Symbol {
-	fn span(&self) -> &WingSpan {
-		&self.span
+	fn span(&self) -> WingSpan {
+		self.span.clone()
 	}
 }
 
@@ -674,31 +664,31 @@ impl Display for Reference {
 }
 
 /// Represents any type that has a span.
-pub trait ToSpan {
+pub trait Locatable {
 	fn span(&self) -> WingSpan;
 }
 
-impl ToSpan for Stmt {
+impl Locatable for Stmt {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl ToSpan for Expr {
+impl Locatable for Expr {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl ToSpan for Symbol {
+impl Locatable for Symbol {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl<T> ToSpan for Box<T>
+impl<T> Locatable for Box<T>
 where
-	T: ToSpan,
+	T: Locatable,
 {
 	fn span(&self) -> WingSpan {
 		(&**self).span()

@@ -548,8 +548,9 @@ impl<'s> Parser<'s> {
 								parameters,
 								return_type: Some(Box::new(TypeAnnotation {
 									kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-									root: name.clone(),
-									fields: vec![],
+										root: name.clone(),
+										fields: vec![],
+										span: name.span.clone(),
 									}),
 									span: self.node_span(&class_element),
 								})),
@@ -930,6 +931,7 @@ impl<'s> Parser<'s> {
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
+			span: self.node_span(&nested_node),
 		});
 		Ok(TypeAnnotation {
 			kind,

@@ -3,8 +3,8 @@ pub mod symbol_env;
 use crate::ast::{self, FunctionBodyRef, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
-	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Interface as AstInterface, InterpolatedStringPart, Literal, Locatable, MethodLike, Phase, Reference, Scope, Stmt,
+	StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
@@ -1715,14 +1715,14 @@ impl<'a> TypeChecker<'a> {
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
 	/// to the diagnostics.
 	/// Returns the given type on success, otherwise returns the expected type.
-	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl ToSpan) -> TypeRef {
+	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Locatable) -> TypeRef {
 		self.validate_type_in(actual_type, &[expected_type], span)
 	}
 
 	/// Validate that the given type is a subtype (or same) as the one of the expected types. If not, add
 	/// an error to the diagnostics.
 	/// Returns the given type on success, otherwise returns one of the expected types.
-	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl ToSpan) -> TypeRef {
+	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Locatable) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		if !actual_type.is_anything()
 			&& !expected_types
@@ -3329,12 +3329,12 @@ pub fn resolve_user_defined_type(
 	if let LookupResult::Found(symb_kind, _) = lookup_result {
 		if let SymbolKind::Type(t) = symb_kind {
 			Ok(*t)
-			} else {
-				let symb = nested_name.last().unwrap();
-				Err(TypeError {
+		} else {
+			let symb = nested_name.last().unwrap();
+			Err(TypeError {
 				message: format!("Expected {} to be a type but it's a {symb_kind}", symb.name),
-					span: symb.span.clone(),
-				})
+				span: symb.span.clone(),
+			})
 		}
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))

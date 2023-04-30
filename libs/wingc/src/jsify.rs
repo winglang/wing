@@ -1208,9 +1208,9 @@ impl<'a> JSifier<'a> {
 			match &*t {
 				Type::Resource(_) => {
 					let client_path = format!("\"./{type_name}.inflight.js\"");
-					code.line(format!("const {type_name} = require({client_path}).{type_name};"));
+					class_code.line(format!("const {type_name} = require({client_path}).{type_name};"));
 				}
-				Type::Enum(e) => code.add_code(self.jsify_enum(&e.name, &e.values)),
+				Type::Enum(e) => class_code.add_code(self.jsify_enum(&e.name, &e.values)),
 				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
 			}
 		}
@@ -1604,7 +1604,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let env = scope.env.borrow();
 				let env = env.as_ref().expect("scope should have an env");
 				let var = env
-					.lookup(&x, None)
+					.lookup(&x.name, None)
 					.expect("covered by type checking")
 					.as_variable()
 					.expect("reference to a non-variable");

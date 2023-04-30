@@ -6,7 +6,7 @@ use tree_sitter::Point;
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::lsp::sync::FILES;
-use crate::type_check::symbol_env::StatementIdx;
+use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
 	resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME,
 	CLASS_INIT_NAME,
@@ -111,9 +111,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							let found_env = scope_visitor.found_scope.unwrap();
 							let found_env = found_env.env.borrow();
 							let found_env = found_env.as_ref().unwrap();
-							let lookup_thing = found_env.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index);
+							let lookup_thing = found_env
+								.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
+								.ok();
 
-							if let Ok(lookup_thing) = lookup_thing {
+							if let Some((lookup_thing, _)) = lookup_thing {
 								match lookup_thing {
 									SymbolKind::Type(t) => {
 										return get_completions_from_type(&t, types, Some(found_env.phase), false);
@@ -147,8 +149,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						if udt.fields.is_empty() {
 							// this is probably a namespace
 							// `resolve_user_defined_type` will fail for namespaces, let's just look it up instead
-							let namespace = root_env.lookup_nested_str(&udt.root.name, scope_visitor.found_stmt_index);
-							if let Ok(namespace) = namespace {
+							let namespace = root_env
+								.lookup_nested_str(&udt.root.name, scope_visitor.found_stmt_index)
+								.ok();
+							if let Some((namespace, _)) = namespace {
 								if let SymbolKind::Namespace(namespace) = namespace {
 									return get_completions_from_namespace(namespace);
 								}
