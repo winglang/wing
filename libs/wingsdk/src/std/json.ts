@@ -184,7 +184,7 @@ export class MutJson {
   /**
    * Set element in MutJson Array with a specific key and value
    *
-   * @macro ((obj, args)) => { obj[args[0]] = args[1]; })($self$, [$args$])
+   * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
    *
    * @param value The value of the element to set
    */

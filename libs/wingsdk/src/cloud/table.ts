@@ -117,26 +117,26 @@ export interface ITableClient {
    * @param row data to be inserted.
    * @inflight
    */
-  insert(row: Json): void;
+  insert(row: Json): Promise<void>;
   /**
    * Update a row in the table.
    * @param row data to be updated.
    * @inflight
    */
-  update(row: Json): void;
+  update(row: Json): Promise<void>;
   /**
    * Delete a row from the table, by primary key.
    * @param key primary key to delete the row.
    * @inflight
    */
-  delete(key: string): void;
+  delete(key: string): Promise<void>;
   /**
    * Get a row from the table, by primary key.
    * @param key primary key to search.
    * @returns get the row from table.
    * @inflight
    */
-  get(key: string): any;
+  get(key: string): Promise<Json>;
   /**
    * List all rows in the table.
    * @returns list all row.

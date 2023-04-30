@@ -17,6 +17,7 @@ exports[`create a queue 1`] = `
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "retentionPeriod": 3600,
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -59,6 +60,231 @@ exports[`create a queue 1`] = `
           },
           "id": "my_queue",
           "path": "root/my_queue",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`messages are not requeued if the function fails after retention timeout 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Queue created.",
+  "wingsdk.sim.EventMapping created.",
+  "Push (message=BAD MESSAGE).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
+  "Subscriber error - returning 1 messages to queue: ERROR",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`messages are not requeued if the function fails after retention timeout 2`] = `
+{
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+    if (message === \\"BAD MESSAGE\\") {
+        throw new Error(\\"ERROR\\");
+    }
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue-AddConsumer-e645076f",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue",
+        "props": {
+          "initialMessages": [],
+          "retentionPeriod": 1,
+          "timeout": 2,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_queue-AddConsumer-e645076f",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_queue": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_queue-QueueEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_queue-QueueEventMapping-e645076f",
+              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+        "my_queue-AddConsumer-e645076f": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "add_consumer",
+                "resource": "root/my_queue",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
+        },
+        "my_queue-AddConsumerHandler-e645076f": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "hidden": true,
+          },
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -137,6 +363,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "retentionPeriod": 3600,
           "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
@@ -307,7 +534,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
-  "1 messages pushed back to queue after timeout.",
+  "1 messages pushed back to queue after visibility timeout.",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
@@ -365,6 +592,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "retentionPeriod": 3600,
           "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
@@ -556,6 +784,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "retentionPeriod": 3600,
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -683,6 +912,7 @@ async handle(message) {
             "E",
             "F",
           ],
+          "retentionPeriod": 3600,
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -909,6 +1139,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "retentionPeriod": 3600,
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",

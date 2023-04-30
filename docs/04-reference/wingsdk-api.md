@@ -2492,6 +2492,7 @@ let queue_props = cloud.QueueProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initial_messages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retention_period</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue retains a message. |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
 
 ---
@@ -2509,6 +2510,19 @@ Initialize the queue with a set of messages.
 
 ---
 
+##### `retention_period`<sup>Optional</sup> <a name="retention_period" id="@winglang/sdk.cloud.QueueProps.property.retentionPeriod"></a>
+
+```wing
+retention_period: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+How long a queue retains a message.
+
+---
+
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueProps.property.timeout"></a>
 
 ```wing
@@ -2516,7 +2530,7 @@ timeout: Duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* Duration.fromSeconds(10)
+- *Default:* undefined
 
 How long a queue's consumers have to process a message.
 
@@ -5729,7 +5743,7 @@ primary key to delete the row.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.ITableClient.get"></a>
 
 ```wing
-get(key: str): any
+get(key: str): Json
 ```
 
 **Inflight client:** [true](#true)

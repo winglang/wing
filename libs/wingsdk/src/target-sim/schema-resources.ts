@@ -73,6 +73,8 @@ export interface QueueSchema extends BaseResourceSchema {
   readonly props: {
     /** How long a queue's consumers have to process a message, in seconds */
     readonly timeout: number;
+    /** How long a queue retains a message, in seconds */
+    readonly retentionPeriod: number;
     /** Initial messages to be pushed to the queue. */
     readonly initialMessages: string[];
   };

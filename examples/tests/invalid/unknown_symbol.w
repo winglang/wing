@@ -9,7 +9,7 @@ let funky = new cloudy.Funktion(inflight () => { });
 let x = 2 + y;
           //^ Unknown symbol
 
-resource SomeResource {
+class SomeResource {
   _bucket: cloud.Bucket;
 
   init() {
