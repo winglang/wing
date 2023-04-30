@@ -55,7 +55,7 @@
         },
         "rest_api_id": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
         "triggers": {
-          "redeployment": "637f45045dd7b841ee6dca6afd481771016d8a76"
+          "redeployment": "67854313abc040abe4f906782a46948864d75773"
         }
       }
     },
@@ -400,6 +400,9 @@
           }
         },
         "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "depends_on": [
+          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
+        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.arn}/*\"]}]}"
       }
     },
@@ -469,21 +472,6 @@
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_cloudWebsite_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNon_6818AFCB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/File-basename(path, suffix) {\n    if (suffix !== undefined)\n      validateString(suffix, 'ext');\n    validateString(path, 'path');\n\n    let start = 0;\n    let end = -1;\n    let matchedSlash = true;\n\n    if (suffix !== undefined && suffix.length > 0 && suffix.length <= path.length) {\n      if (suffix === path)\n        return '';\n      let extIdx = suffix.length - 1;\n      let firstNonSlashEnd = -1;\n      for (let i = path.length - 1; i >= 0; --i) {\n        const code = StringPrototypeCharCodeAt(path, i);\n        if (code === CHAR_FORWARD_SLASH) {\n          ---- If we reached a path separator that was not part of a set of path\n          ---- separators at the end of the string, stop now\n          if (!matchedSlash) {\n            start = i + 1;\n            break;\n          }\n        } else {\n          if (firstNonSlashEnd === -1) {\n            ---- We saw the first non-path separator, remember this index in case\n            ---- we need it if the extension ends up not matching\n            matchedSlash = false;\n            firstNonSlashEnd = i + 1;\n          }\n          if (extIdx >= 0) {\n            ---- Try to match the explicit extension\n            if (code === StringPrototypeCharCodeAt(suffix, extIdx)) {\n              if (--extIdx === -1) {\n                ---- We matched the extension, so mark this as the end of our path\n                ---- component\n                end = i;\n              }\n            } else {\n              ---- Extension does not match, so our result is the entire path\n              ---- component\n              extIdx = -1;\n              end = firstNonSlashEnd;\n            }\n          }\n        }\n      }\n\n      if (start === end)\n        end = firstNonSlashEnd;\n      else if (end === -1)\n        end = path.length;\n      return StringPrototypeSlice(path, start, end);\n    }\n    for (let i = path.length - 1; i >= 0; --i) {\n      if (StringPrototypeCharCodeAt(path, i) === CHAR_FORWARD_SLASH) {\n        ---- If we reached a path separator that was not part of a set of path\n        ---- separators at the end of the string, stop now\n        if (!matchedSlash) {\n          start = i + 1;\n          break;\n        }\n      } else if (end === -1) {\n        ---- We saw the first non-path separator, mark this as the end of our\n        ---- path component\n        matchedSlash = false;\n        end = i + 1;\n      }\n    }\n\n    if (end === -1)\n      return '';\n    return StringPrototypeSlice(path, start, end);\n  }-5f51d630",
-            "uniqueId": "root_cloudWebsite_FilebasenamepathsuffixifsuffixundefinedvalidateStringsuffixextvalidateStringpathpathletstart0letend1letmatchedSlashtrueifsuffixundefinedsuffixlength0suffixlengthpathlengthifsuffixpathreturnletextIdxsuffixlength1letfirstNon_6818AFCB"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
-        "content_type": "text/html; charset=utf-8",
-        "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
-        ],
-        "key": "/index.html",
-        "source": "<SOURCE>"
-      },
       "root_cloudWebsite_Fileconfigjson_366296B1": {
         "//": {
           "metadata": {
@@ -498,6 +486,21 @@
           "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
         ],
         "key": "config.json"
+      },
+      "root_cloudWebsite_Fileindexhtml_A07B6D26": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/File--index.html",
+            "uniqueId": "root_cloudWebsite_Fileindexhtml_A07B6D26"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
+        ],
+        "key": "/index.html",
+        "source": "<SOURCE>"
       }
     }
   }

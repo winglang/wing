@@ -61,6 +61,9 @@ exports[`default website behavior 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_Website_PublicPolicy_F4A65951\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -322,6 +325,9 @@ exports[`website with add_json 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_Website_PublicPolicy_F4A65951\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.arn}/*\\\\\\"]}]}\\"
       }
     },

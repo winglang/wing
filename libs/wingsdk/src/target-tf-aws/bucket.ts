@@ -195,6 +195,7 @@ export function createEncryptedBucket(
     new S3BucketPolicy(scope, "PublicPolicy", {
       bucket: bucket.bucket,
       policy: JSON.stringify(policy),
+      dependsOn: [bucket],
     });
   } else {
     new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
