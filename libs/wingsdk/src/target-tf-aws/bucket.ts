@@ -11,7 +11,6 @@ import { App } from "./app";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
-import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
@@ -22,9 +21,9 @@ import {
 } from "../utils/resource-names";
 
 const EVENTS = {
-  [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
-  [BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
-  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
+  [cloud.BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
+  [cloud.BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
+  [cloud.BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
 };
 
 /**
@@ -130,10 +129,13 @@ export class Bucket extends cloud.Bucket {
   }
 
   protected eventHandlerLocation(): string {
-    return join(__dirname, "bucket.onevent.inflight.js");
+    return join(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      "bucket.onevent.inflight.js"
+    );
   }
 
-  protected createTopic(actionType: BucketEventType): Topic {
+  protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {
     const handler = super.createTopic(actionType);
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function

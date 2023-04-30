@@ -1,16 +1,26 @@
+import { join } from "path";
 import { RemovalPolicy } from "aws-cdk-lib";
 import {
   BlockPublicAccess,
   BucketEncryption,
+  EventType,
   Bucket as S3Bucket,
 } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
+import { SnsDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
+import { IInflightHost, Resource } from "../std";
+
+const EVENTS = {
+  [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
+  [cloud.BucketEventType.CREATE]: EventType.OBJECT_CREATED_PUT,
+  [cloud.BucketEventType.UPDATE]: EventType.OBJECT_CREATED_POST,
+};
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -41,6 +51,38 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
+  protected eventHandlerLocation(): string {
+    return join(
+      __dirname.replace("target-awscdk", "shared-aws"),
+      "bucket.onevent.inflight.js"
+    );
+  }
+
+  protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {
+    const handler = cloud.Topic._newTopic(
+      this,
+      `${this.node.id}-on_${actionType.toLowerCase()}`
+    );
+
+    Resource.addConnection({
+      from: this,
+      to: handler,
+      relationship: actionType,
+    });
+
+    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
+    if (!(handler instanceof AWSTopic)) {
+      throw new Error("Topic only supports creating tfaws.Function right now");
+    }
+
+    this.bucket.addEventNotification(
+      EVENTS[actionType],
+      new SnsDestination(handler._topic)
+    );
+
+    return handler;
+  }
+
   /** @internal */
   public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
@@ -64,8 +106,15 @@ export class Bucket extends cloud.Bucket {
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "BucketClient",
-      [`process.env["${this.envName()}"]`]
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.isPublicEnvName()}"]`,
+      ]
     );
+  }
+
+  private isPublicEnvName(): string {
+    return `${this.envName()}_IS_PUBLIC`;
   }
 
   private envName(): string {

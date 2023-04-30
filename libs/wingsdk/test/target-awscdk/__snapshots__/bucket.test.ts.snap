@@ -91,6 +91,1842 @@ exports[`bucket is public 1`] = `
 }
 `;
 
+exports[`bucket with onCreate method 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691": {
+      "DependsOn": [
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "import boto3  # type: ignore
+import json
+import logging
+import urllib.request
+
+s3 = boto3.client(\\"s3\\")
+
+EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
+
+CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+
+def handler(event: dict, context):
+  response_status = \\"SUCCESS\\"
+  error_message = \\"\\"
+  try:
+    props = event[\\"ResourceProperties\\"]
+    bucket = props[\\"BucketName\\"]
+    notification_configuration = props[\\"NotificationConfiguration\\"]
+    request_type = event[\\"RequestType\\"]
+    managed = props.get('Managed', 'true').lower() == 'true'
+    stack_id = event['StackId']
+
+    if managed:
+      config = handle_managed(request_type, notification_configuration)
+    else:
+      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
+
+    put_bucket_notification_configuration(bucket, config)
+  except Exception as e:
+    logging.exception(\\"Failed to put bucket notification configuration\\")
+    response_status = \\"FAILED\\"
+    error_message = f\\"Error: {str(e)}. \\"
+  finally:
+    submit_response(event, context, response_status, error_message)
+
+def handle_managed(request_type, notification_configuration):
+  if request_type == 'Delete':
+    return {}
+  return notification_configuration
+
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
+  external_notifications = find_external_notifications(bucket, stack_id)
+
+  if request_type == 'Delete':
+    return external_notifications
+
+  def with_id(notification):
+    notification['Id'] = f\\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\\"
+    return notification
+
+  notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external = external_notifications.get(t, [])
+    incoming = [with_id(n) for n in notification_configuration.get(t, [])]
+    notifications[t] = external + incoming
+
+  if EVENTBRIDGE_CONFIGURATION in notification_configuration:
+    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]
+  elif EVENTBRIDGE_CONFIGURATION in external_notifications:
+    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return notifications
+
+def find_external_notifications(bucket, stack_id):
+  existing_notifications = get_bucket_notification_configuration(bucket)
+  external_notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\\"{stack_id}-\\")]
+
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return external_notifications
+
+def get_bucket_notification_configuration(bucket):
+  return s3.get_bucket_notification_configuration(Bucket=bucket)
+
+def put_bucket_notification_configuration(bucket, notification_configuration):
+  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
+
+def submit_response(event: dict, context, response_status: str, error_message: str):
+  response_body = json.dumps(
+    {
+      \\"Status\\": response_status,
+      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
+      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
+      \\"StackId\\": event[\\"StackId\\"],
+      \\"RequestId\\": event[\\"RequestId\\"],
+      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
+      \\"NoEcho\\": False,
+    }
+  ).encode(\\"utf-8\\")
+  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  try:
+    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    with urllib.request.urlopen(req) as response:
+      print(response.read().decode(\\"utf-8\\"))
+    print(\\"Status code: \\" + response.reason)
+  except Exception as e:
+      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+",
+        },
+        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.9",
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutBucketNotification",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "Roles": [
+          {
+            "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mybucketD601CBAA": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "mybucketNotificationsB76B6B79": {
+      "DependsOn": [
+        "mybucketmybucketoncreateTopicPolicyB33830D6",
+        "mybucketmybucketoncreateTopic433C7365",
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "mybucketD601CBAA",
+        },
+        "Managed": true,
+        "NotificationConfiguration": {
+          "TopicConfigurations": [
+            {
+              "Events": [
+                "s3:ObjectCreated:Put",
+              ],
+              "TopicArn": {
+                "Ref": "mybucketmybucketoncreateTopic433C7365",
+              },
+            },
+          ],
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3BucketNotifications",
+    },
+    "mybucketmybucketoncreateOnMessagee556c41c8F9B8424": {
+      "DependsOn": [
+        "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketmybucketoncreateOnMessagee556c41cAllowInvokemyprojectmybucketmybucketoncreateTopic6BA44E9889C1709A": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketmybucketoncreateOnMessagee556c41c8F9B8424",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "mybucketmybucketoncreateTopic433C7365",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketmybucketoncreateOnMessagee556c41cTopic0D41E8E6": {
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "mybucketmybucketoncreateOnMessagee556c41c8F9B8424",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "mybucketmybucketoncreateTopic433C7365",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "mybucketmybucketoncreateTopic433C7365": {
+      "Type": "AWS::SNS::Topic",
+    },
+    "mybucketmybucketoncreateTopicPolicyB33830D6": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Condition": {
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "mybucketD601CBAA",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com",
+              },
+              "Resource": {
+                "Ref": "mybucketmybucketoncreateTopic433C7365",
+              },
+              "Sid": "0",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Topics": [
+          {
+            "Ref": "mybucketmybucketoncreateTopic433C7365",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::TopicPolicy",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`bucket with onDelete method 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691": {
+      "DependsOn": [
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "import boto3  # type: ignore
+import json
+import logging
+import urllib.request
+
+s3 = boto3.client(\\"s3\\")
+
+EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
+
+CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+
+def handler(event: dict, context):
+  response_status = \\"SUCCESS\\"
+  error_message = \\"\\"
+  try:
+    props = event[\\"ResourceProperties\\"]
+    bucket = props[\\"BucketName\\"]
+    notification_configuration = props[\\"NotificationConfiguration\\"]
+    request_type = event[\\"RequestType\\"]
+    managed = props.get('Managed', 'true').lower() == 'true'
+    stack_id = event['StackId']
+
+    if managed:
+      config = handle_managed(request_type, notification_configuration)
+    else:
+      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
+
+    put_bucket_notification_configuration(bucket, config)
+  except Exception as e:
+    logging.exception(\\"Failed to put bucket notification configuration\\")
+    response_status = \\"FAILED\\"
+    error_message = f\\"Error: {str(e)}. \\"
+  finally:
+    submit_response(event, context, response_status, error_message)
+
+def handle_managed(request_type, notification_configuration):
+  if request_type == 'Delete':
+    return {}
+  return notification_configuration
+
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
+  external_notifications = find_external_notifications(bucket, stack_id)
+
+  if request_type == 'Delete':
+    return external_notifications
+
+  def with_id(notification):
+    notification['Id'] = f\\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\\"
+    return notification
+
+  notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external = external_notifications.get(t, [])
+    incoming = [with_id(n) for n in notification_configuration.get(t, [])]
+    notifications[t] = external + incoming
+
+  if EVENTBRIDGE_CONFIGURATION in notification_configuration:
+    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]
+  elif EVENTBRIDGE_CONFIGURATION in external_notifications:
+    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return notifications
+
+def find_external_notifications(bucket, stack_id):
+  existing_notifications = get_bucket_notification_configuration(bucket)
+  external_notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\\"{stack_id}-\\")]
+
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return external_notifications
+
+def get_bucket_notification_configuration(bucket):
+  return s3.get_bucket_notification_configuration(Bucket=bucket)
+
+def put_bucket_notification_configuration(bucket, notification_configuration):
+  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
+
+def submit_response(event: dict, context, response_status: str, error_message: str):
+  response_body = json.dumps(
+    {
+      \\"Status\\": response_status,
+      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
+      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
+      \\"StackId\\": event[\\"StackId\\"],
+      \\"RequestId\\": event[\\"RequestId\\"],
+      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
+      \\"NoEcho\\": False,
+    }
+  ).encode(\\"utf-8\\")
+  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  try:
+    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    with urllib.request.urlopen(req) as response:
+      print(response.read().decode(\\"utf-8\\"))
+    print(\\"Status code: \\" + response.reason)
+  except Exception as e:
+      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+",
+        },
+        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.9",
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutBucketNotification",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "Roles": [
+          {
+            "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mybucketD601CBAA": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "mybucketNotificationsB76B6B79": {
+      "DependsOn": [
+        "mybucketmybucketondeleteTopicPolicy2D3F2DB5",
+        "mybucketmybucketondeleteTopic8EB28EDB",
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "mybucketD601CBAA",
+        },
+        "Managed": true,
+        "NotificationConfiguration": {
+          "TopicConfigurations": [
+            {
+              "Events": [
+                "s3:ObjectRemoved:*",
+              ],
+              "TopicArn": {
+                "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+              },
+            },
+          ],
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3BucketNotifications",
+    },
+    "mybucketmybucketondeleteOnMessage9b0c156917D0373F": {
+      "DependsOn": [
+        "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketmybucketondeleteOnMessage9b0c1569AllowInvokemyprojectmybucketmybucketondeleteTopicC901E12172EE9293": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketmybucketondeleteOnMessage9b0c156917D0373F",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketmybucketondeleteOnMessage9b0c1569TopicEB6EC37E": {
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "mybucketmybucketondeleteOnMessage9b0c156917D0373F",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "mybucketmybucketondeleteTopic8EB28EDB": {
+      "Type": "AWS::SNS::Topic",
+    },
+    "mybucketmybucketondeleteTopicPolicy2D3F2DB5": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Condition": {
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "mybucketD601CBAA",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com",
+              },
+              "Resource": {
+                "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+              },
+              "Sid": "0",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Topics": [
+          {
+            "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::TopicPolicy",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`bucket with onEvent method 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691": {
+      "DependsOn": [
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "import boto3  # type: ignore
+import json
+import logging
+import urllib.request
+
+s3 = boto3.client(\\"s3\\")
+
+EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
+
+CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+
+def handler(event: dict, context):
+  response_status = \\"SUCCESS\\"
+  error_message = \\"\\"
+  try:
+    props = event[\\"ResourceProperties\\"]
+    bucket = props[\\"BucketName\\"]
+    notification_configuration = props[\\"NotificationConfiguration\\"]
+    request_type = event[\\"RequestType\\"]
+    managed = props.get('Managed', 'true').lower() == 'true'
+    stack_id = event['StackId']
+
+    if managed:
+      config = handle_managed(request_type, notification_configuration)
+    else:
+      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
+
+    put_bucket_notification_configuration(bucket, config)
+  except Exception as e:
+    logging.exception(\\"Failed to put bucket notification configuration\\")
+    response_status = \\"FAILED\\"
+    error_message = f\\"Error: {str(e)}. \\"
+  finally:
+    submit_response(event, context, response_status, error_message)
+
+def handle_managed(request_type, notification_configuration):
+  if request_type == 'Delete':
+    return {}
+  return notification_configuration
+
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
+  external_notifications = find_external_notifications(bucket, stack_id)
+
+  if request_type == 'Delete':
+    return external_notifications
+
+  def with_id(notification):
+    notification['Id'] = f\\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\\"
+    return notification
+
+  notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external = external_notifications.get(t, [])
+    incoming = [with_id(n) for n in notification_configuration.get(t, [])]
+    notifications[t] = external + incoming
+
+  if EVENTBRIDGE_CONFIGURATION in notification_configuration:
+    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]
+  elif EVENTBRIDGE_CONFIGURATION in external_notifications:
+    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return notifications
+
+def find_external_notifications(bucket, stack_id):
+  existing_notifications = get_bucket_notification_configuration(bucket)
+  external_notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\\"{stack_id}-\\")]
+
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return external_notifications
+
+def get_bucket_notification_configuration(bucket):
+  return s3.get_bucket_notification_configuration(Bucket=bucket)
+
+def put_bucket_notification_configuration(bucket, notification_configuration):
+  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
+
+def submit_response(event: dict, context, response_status: str, error_message: str):
+  response_body = json.dumps(
+    {
+      \\"Status\\": response_status,
+      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
+      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
+      \\"StackId\\": event[\\"StackId\\"],
+      \\"RequestId\\": event[\\"RequestId\\"],
+      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
+      \\"NoEcho\\": False,
+    }
+  ).encode(\\"utf-8\\")
+  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  try:
+    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    with urllib.request.urlopen(req) as response:
+      print(response.read().decode(\\"utf-8\\"))
+    print(\\"Status code: \\" + response.reason)
+  except Exception as e:
+      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+",
+        },
+        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.9",
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutBucketNotification",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "Roles": [
+          {
+            "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mybucketD601CBAA": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "mybucketNotificationsB76B6B79": {
+      "DependsOn": [
+        "mybucketmybucketoncreateTopicPolicyB33830D6",
+        "mybucketmybucketoncreateTopic433C7365",
+        "mybucketmybucketondeleteTopicPolicy2D3F2DB5",
+        "mybucketmybucketondeleteTopic8EB28EDB",
+        "mybucketmybucketonupdateTopicPolicy2487AA4F",
+        "mybucketmybucketonupdateTopicD63E039F",
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "mybucketD601CBAA",
+        },
+        "Managed": true,
+        "NotificationConfiguration": {
+          "TopicConfigurations": [
+            {
+              "Events": [
+                "s3:ObjectCreated:Put",
+              ],
+              "TopicArn": {
+                "Ref": "mybucketmybucketoncreateTopic433C7365",
+              },
+            },
+            {
+              "Events": [
+                "s3:ObjectCreated:Post",
+              ],
+              "TopicArn": {
+                "Ref": "mybucketmybucketonupdateTopicD63E039F",
+              },
+            },
+            {
+              "Events": [
+                "s3:ObjectRemoved:*",
+              ],
+              "TopicArn": {
+                "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+              },
+            },
+          ],
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3BucketNotifications",
+    },
+    "mybucketmybucketoncreateOnMessagee556c41c8F9B8424": {
+      "DependsOn": [
+        "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketmybucketoncreateOnMessagee556c41cAllowInvokemyprojectmybucketmybucketoncreateTopic6BA44E9889C1709A": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketmybucketoncreateOnMessagee556c41c8F9B8424",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "mybucketmybucketoncreateTopic433C7365",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketmybucketoncreateOnMessagee556c41cTopic0D41E8E6": {
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "mybucketmybucketoncreateOnMessagee556c41c8F9B8424",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "mybucketmybucketoncreateTopic433C7365",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "mybucketmybucketoncreateTopic433C7365": {
+      "Type": "AWS::SNS::Topic",
+    },
+    "mybucketmybucketoncreateTopicPolicyB33830D6": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Condition": {
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "mybucketD601CBAA",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com",
+              },
+              "Resource": {
+                "Ref": "mybucketmybucketoncreateTopic433C7365",
+              },
+              "Sid": "0",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Topics": [
+          {
+            "Ref": "mybucketmybucketoncreateTopic433C7365",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::TopicPolicy",
+    },
+    "mybucketmybucketondeleteOnMessage9b0c156917D0373F": {
+      "DependsOn": [
+        "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketmybucketondeleteOnMessage9b0c1569AllowInvokemyprojectmybucketmybucketondeleteTopicC901E12172EE9293": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketmybucketondeleteOnMessage9b0c156917D0373F",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketmybucketondeleteOnMessage9b0c1569TopicEB6EC37E": {
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "mybucketmybucketondeleteOnMessage9b0c156917D0373F",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "mybucketmybucketondeleteTopic8EB28EDB": {
+      "Type": "AWS::SNS::Topic",
+    },
+    "mybucketmybucketondeleteTopicPolicy2D3F2DB5": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Condition": {
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "mybucketD601CBAA",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com",
+              },
+              "Resource": {
+                "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+              },
+              "Sid": "0",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Topics": [
+          {
+            "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::TopicPolicy",
+    },
+    "mybucketmybucketonupdateOnMessagef51cc46c4A62B889": {
+      "DependsOn": [
+        "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketmybucketonupdateOnMessagef51cc46cAllowInvokemyprojectmybucketmybucketonupdateTopic6F3E4B24E908269E": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketmybucketonupdateOnMessagef51cc46c4A62B889",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "mybucketmybucketonupdateTopicD63E039F",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketmybucketonupdateOnMessagef51cc46cTopic1566EEDE": {
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "mybucketmybucketonupdateOnMessagef51cc46c4A62B889",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "mybucketmybucketonupdateTopicD63E039F",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "mybucketmybucketonupdateTopicD63E039F": {
+      "Type": "AWS::SNS::Topic",
+    },
+    "mybucketmybucketonupdateTopicPolicy2487AA4F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Condition": {
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "mybucketD601CBAA",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com",
+              },
+              "Resource": {
+                "Ref": "mybucketmybucketonupdateTopicD63E039F",
+              },
+              "Sid": "0",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Topics": [
+          {
+            "Ref": "mybucketmybucketonupdateTopicD63E039F",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::TopicPolicy",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`bucket with onUpdate method 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691": {
+      "DependsOn": [
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "import boto3  # type: ignore
+import json
+import logging
+import urllib.request
+
+s3 = boto3.client(\\"s3\\")
+
+EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
+
+CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+
+def handler(event: dict, context):
+  response_status = \\"SUCCESS\\"
+  error_message = \\"\\"
+  try:
+    props = event[\\"ResourceProperties\\"]
+    bucket = props[\\"BucketName\\"]
+    notification_configuration = props[\\"NotificationConfiguration\\"]
+    request_type = event[\\"RequestType\\"]
+    managed = props.get('Managed', 'true').lower() == 'true'
+    stack_id = event['StackId']
+
+    if managed:
+      config = handle_managed(request_type, notification_configuration)
+    else:
+      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
+
+    put_bucket_notification_configuration(bucket, config)
+  except Exception as e:
+    logging.exception(\\"Failed to put bucket notification configuration\\")
+    response_status = \\"FAILED\\"
+    error_message = f\\"Error: {str(e)}. \\"
+  finally:
+    submit_response(event, context, response_status, error_message)
+
+def handle_managed(request_type, notification_configuration):
+  if request_type == 'Delete':
+    return {}
+  return notification_configuration
+
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
+  external_notifications = find_external_notifications(bucket, stack_id)
+
+  if request_type == 'Delete':
+    return external_notifications
+
+  def with_id(notification):
+    notification['Id'] = f\\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\\"
+    return notification
+
+  notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external = external_notifications.get(t, [])
+    incoming = [with_id(n) for n in notification_configuration.get(t, [])]
+    notifications[t] = external + incoming
+
+  if EVENTBRIDGE_CONFIGURATION in notification_configuration:
+    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]
+  elif EVENTBRIDGE_CONFIGURATION in external_notifications:
+    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return notifications
+
+def find_external_notifications(bucket, stack_id):
+  existing_notifications = get_bucket_notification_configuration(bucket)
+  external_notifications = {}
+  for t in CONFIGURATION_TYPES:
+    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\\"{stack_id}-\\")]
+
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
+
+  return external_notifications
+
+def get_bucket_notification_configuration(bucket):
+  return s3.get_bucket_notification_configuration(Bucket=bucket)
+
+def put_bucket_notification_configuration(bucket, notification_configuration):
+  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
+
+def submit_response(event: dict, context, response_status: str, error_message: str):
+  response_body = json.dumps(
+    {
+      \\"Status\\": response_status,
+      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
+      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
+      \\"StackId\\": event[\\"StackId\\"],
+      \\"RequestId\\": event[\\"RequestId\\"],
+      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
+      \\"NoEcho\\": False,
+    }
+  ).encode(\\"utf-8\\")
+  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  try:
+    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    with urllib.request.urlopen(req) as response:
+      print(response.read().decode(\\"utf-8\\"))
+    print(\\"Status code: \\" + response.reason)
+  except Exception as e:
+      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+",
+        },
+        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.9",
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutBucketNotification",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "Roles": [
+          {
+            "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mybucketD601CBAA": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "mybucketNotificationsB76B6B79": {
+      "DependsOn": [
+        "mybucketmybucketonupdateTopicPolicy2487AA4F",
+        "mybucketmybucketonupdateTopicD63E039F",
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "mybucketD601CBAA",
+        },
+        "Managed": true,
+        "NotificationConfiguration": {
+          "TopicConfigurations": [
+            {
+              "Events": [
+                "s3:ObjectCreated:Post",
+              ],
+              "TopicArn": {
+                "Ref": "mybucketmybucketonupdateTopicD63E039F",
+              },
+            },
+          ],
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3BucketNotifications",
+    },
+    "mybucketmybucketonupdateOnMessagef51cc46c4A62B889": {
+      "DependsOn": [
+        "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketmybucketonupdateOnMessagef51cc46cAllowInvokemyprojectmybucketmybucketonupdateTopic6F3E4B24E908269E": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketmybucketonupdateOnMessagef51cc46c4A62B889",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "mybucketmybucketonupdateTopicD63E039F",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketmybucketonupdateOnMessagef51cc46cTopic1566EEDE": {
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "mybucketmybucketonupdateOnMessagef51cc46c4A62B889",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "mybucketmybucketonupdateTopicD63E039F",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "mybucketmybucketonupdateTopicD63E039F": {
+      "Type": "AWS::SNS::Topic",
+    },
+    "mybucketmybucketonupdateTopicPolicy2487AA4F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Condition": {
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "mybucketD601CBAA",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "s3.amazonaws.com",
+              },
+              "Resource": {
+                "Ref": "mybucketmybucketonupdateTopicD63E039F",
+              },
+              "Sid": "0",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Topics": [
+          {
+            "Ref": "mybucketmybucketonupdateTopicD63E039F",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::TopicPolicy",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`bucket with two preflight objects 1`] = `
 {
   "Parameters": {
