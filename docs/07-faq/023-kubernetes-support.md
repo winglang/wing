@@ -8,7 +8,9 @@ The short answer us that we don't support Kubernetes yet, but we will in the fut
 Our roadmap is [here](https://docs.winglang.io/status#roadmap).
 
 The longer answer is that there are a different kinds of Kubernetes support with varying levels of maturity in Wing:
-1. Creation and configuration of K8S clusters through the [K8S Terraform Provider](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs). Since Wing supports any Terraform provider, it should work, but we habe not officially tested it yet.
+1. Creation and configuration of K8S clusters through the [K8S Terraform Provider](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs). These resources can be used by installing `@cdktf/provider-kubernetes` from npm and using the resources in Wing:
+
+(example code)
 2. Using Kubernetes to run long-running services. This is not yet supported. You can add your vote for it on [this issue](https://github.com/winglang/wing/issues/2319) to help increase its priority.
 3. Using Kubernetes as a provisioning engine though crossplane. You can add your vote for it on [this issue](https://github.com/winglang/wing/issues/2066) to help increase its priority. 
 
