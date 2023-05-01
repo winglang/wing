@@ -143,7 +143,7 @@ export interface ITableClient {
    * @inflight
    */
   // TODO: change the return type to Iterator<Map<string, Json>> in the future.
-  list(): any;
+  list(): Promise<Array<Json>>;
 }
 
 /**
