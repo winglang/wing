@@ -15,12 +15,12 @@ Wing aims to address various pain points at both the developer and organization 
 
 **Organization pain points:**
 
-1. **Dev/ops friction**: Poor separation of concerns between development and operations teams can cause tension.
+1. **Dev/ops friction**: Poor separation of concerns between development and operations teams result in inefficient flows.
 2. **Error-prone security/observability**: Ensuring security and observability can be challenging and prone to mistakes.
 3. **Cloud vendor lock-in**: Reliance on a single cloud provider can limit flexibility and increase risk.
 4. **Need for multi-cloud**: Organizations require the ability to deploy and manage applications across multiple cloud providers.
 
-With Wing, the goal is to improve the developer experience by treating the entire cloud as its target computer and bringing the benefits of smart compilers that handle the lower levels of the stack to cloud development. This approach helps developers focus on creating value for users, be more independent, and enjoy instant feedback with faster iteration cycles, making cloud application development more enjoyable and efficient.
+With Wing, the goal is to improve the developer experience by treating the entire cloud as its target computer and bringing the benefits of compilers that handle the lower levels of the stack to cloud development. This approach helps developers focus on creating value for users, be more independent, and enjoy instant feedback with faster iteration cycles, making cloud application development more enjoyable and efficient.
 
 Developers should be able to write code with a "pencil" rather than a "pen," iterating quickly and learning from their mistakes. With Wing, developers can make a change and test it within milliseconds, even in an airplane with no WiFi, just like in the 90s. By addressing these pain points, Wing aims to revolutionize cloud development and create a better developer experience.
 
