@@ -5574,7 +5574,7 @@ data to be inserted.
 ##### `list` <a name="list" id="@winglang/sdk.cloud.ITableClient.list"></a>
 
 ```wing
-list(): any
+list(): MutArray<Json>
 ```
 
 **Inflight client:** [true](#true)
