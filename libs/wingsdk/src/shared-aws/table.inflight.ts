@@ -7,7 +7,8 @@ import {
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { ColumnType, ITableClient } from "../cloud";
+import { ITableClient } from "../cloud";
+import { validateRow } from "../shared-targets/table";
 import { Json } from "../std";
 
 export class TableClient implements ITableClient {
@@ -19,7 +20,7 @@ export class TableClient implements ITableClient {
   ) {}
 
   public async insert(key: string, row: Json): Promise<void> {
-    this.validateRow(row);
+    validateRow(row, JSON.parse(this.columns));
     let insertRow = { [this.primaryKey]: key, ...row };
     const command = new PutItemCommand({
       TableName: this.tableName,
@@ -29,7 +30,7 @@ export class TableClient implements ITableClient {
   }
 
   public async update(key: String, row: Json): Promise<void> {
-    this.validateRow(row);
+    validateRow(row, JSON.parse(this.columns));
     let itemKey = { [this.primaryKey]: key };
     let updateExpression: string[] = [];
     let expressionAttributes: any = {};
@@ -79,37 +80,5 @@ export class TableClient implements ITableClient {
       response.push(unmarshall(item));
     }
     return response;
-  }
-
-  private validateRow(row: Json) {
-    const columns = JSON.parse(this.columns);
-    for (const [key, value] of Object.entries(row)) {
-      if (!columns.hasOwnProperty(key)) {
-        throw new Error(`"${key}" is not a valid column in the table.`);
-      }
-      switch (columns[key]) {
-        case ColumnType.STRING:
-        case ColumnType.DATE:
-          if (typeof value !== "string") {
-            throw new Error(`"${key}" value is not a valid string.`);
-          }
-          break;
-        case ColumnType.NUMBER:
-          if (typeof value !== "number") {
-            throw new Error(`"${key}" value is not a valid number.`);
-          }
-          break;
-        case ColumnType.BOOLEAN:
-          if (typeof value !== "boolean") {
-            throw new Error(`"${key}" value is not a valid bool.`);
-          }
-          break;
-        case ColumnType.JSON:
-          if (typeof value !== "object") {
-            throw new Error(`"${key}" value is not a valid json.`);
-          }
-          break;
-      }
-    }
   }
 }

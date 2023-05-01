@@ -1,5 +1,6 @@
 import { TableAttributes, TableSchema } from "./schema-resources";
 import { ColumnType, ITableClient } from "../cloud";
+import { validateRow } from "../shared-targets/table";
 import { Json } from "../std";
 import {
   ISimulatorContext,
@@ -28,7 +29,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {}
 
   public async insert(key: string, row: Json): Promise<void> {
-    this.validateRow(row);
+    validateRow(row, this.columns);
     const anyRow = row as any;
     return this.context.withTrace({
       message: `insert row ${key} into the table ${this.name}.`,
@@ -48,7 +49,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     });
   }
   public async update(key: string, row: Json): Promise<void> {
-    this.validateRow(row);
+    validateRow(row, this.columns);
     const anyRow = row as any;
     return this.context.withTrace({
       message: `update row ${key} in table ${this.name}.`,
@@ -95,37 +96,5 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
         return Array.from(this.table.values());
       },
     });
-  }
-
-  private validateRow(row: Json) {
-    const columns = this.columns;
-    for (const [key, value] of Object.entries(row)) {
-      if (!columns.hasOwnProperty(key)) {
-        throw new Error(`"${key}" is not a valid column in the table.`);
-      }
-      switch (columns[key]) {
-        case ColumnType.STRING:
-        case ColumnType.DATE:
-          if (typeof value !== "string") {
-            throw new Error(`"${key}" value is not a valid string.`);
-          }
-          break;
-        case ColumnType.NUMBER:
-          if (typeof value !== "number") {
-            throw new Error(`"${key}" value is not a valid number.`);
-          }
-          break;
-        case ColumnType.BOOLEAN:
-          if (typeof value !== "boolean") {
-            throw new Error(`"${key}" value is not a valid bool.`);
-          }
-          break;
-        case ColumnType.JSON:
-          if (typeof value !== "object") {
-            throw new Error(`"${key}" value is not a valid json.`);
-          }
-          break;
-      }
-    }
   }
 }
