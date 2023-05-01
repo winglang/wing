@@ -427,20 +427,34 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 
 exports[`inflight_ref_resource_sub_method.w > stderr 1`] = `
 "error: Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:11:12
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:13:12
    |
-11 |     return this.my_queue;
+13 |     return this.my_queue;
    |            ^^^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
+
+
+error: Unable to qualify which operations are performed on 'global_queue' of type 'Queue'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:18:12
+   |
+18 |     return global_queue;
+   |            ^^^^^^^^^^^^ Unable to qualify which operations are performed on 'global_queue' of type 'Queue'. This is not supported yet.
 
 "
 `;
 
 exports[`inflight_ref_unknown_op.w > stderr 1`] = `
 "error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:11:13
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:13:13
    |
-11 |     let x = this.b;
+13 |     let x = this.b;
    |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+
+
+error: Unable to qualify which operations are performed on 'global_b' of type 'Bucket'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:17:13
+   |
+17 |     let y = global_b;
+   |             ^^^^^^^^ Unable to qualify which operations are performed on 'global_b' of type 'Bucket'. This is not supported yet.
 
 "
 `;
