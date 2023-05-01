@@ -7,7 +7,6 @@ queue_rules:
         - status-success=Quality Gate
         - -files~=^(?!docs/|logo/)(?!.*\.md$)
 
-
 pull_request_rules:
   - name: automatic merge
     actions:
