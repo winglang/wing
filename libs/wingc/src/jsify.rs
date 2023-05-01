@@ -1105,7 +1105,7 @@ impl<'a> JSifier<'a> {
 		captured_fields: &[String],
 		free_inflight_variables: &BTreeSet<String>,
 	) -> CodeMaker {
-		let client_path = Self::js_resolve_path(&format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name));
+		let client_path = Self::js_resolve_path(&format!("{INFLIGHT_CLIENTS_DIR}/{}.inflight.js", resource_name.name));
 
 		let mut code = CodeMaker::default();
 
@@ -1208,7 +1208,7 @@ impl<'a> JSifier<'a> {
 			match &*t {
 				Type::Resource(_) => {
 					let client_path = format!("\"./{type_name}.inflight.js\"");
-					class_code.line(format!("const {type_name} = require({client_path}).{type_name};"));
+					class_code.line(format!("const {type_name} = require({client_path})();"));
 				}
 				Type::Enum(e) => class_code.add_code(self.jsify_enum(&e.name, &e.values)),
 				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
@@ -1283,7 +1283,7 @@ impl<'a> JSifier<'a> {
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());
+		let clients_dir = format!("{}/{INFLIGHT_CLIENTS_DIR}", self.out_dir.to_string_lossy());
 		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
 		let client_file_name = format!("{name}.inflight.js");
 		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
