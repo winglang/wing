@@ -12,7 +12,7 @@ let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 let test_invalid_path = (path:str) => {
   let var error = "";
-  let expected = "Invalid route ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".";
+  let expected = "Invalid path ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".";
   try {
     api.get(path, handler);
   } catch e {
