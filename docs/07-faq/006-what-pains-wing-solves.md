@@ -20,9 +20,8 @@ Wing aims to address various pain points at both the developer and organization 
 3. **Cloud vendor lock-in**: Reliance on a single cloud provider can limit flexibility and increase risk.
 4. **Need for multi-cloud**: Organizations require the ability to deploy and manage applications across multiple cloud providers.
 
-With Wing, the goal is to improve the developer experience by treating the entire cloud as its target computer and bringing the benefits of compilers that handle the lower levels of the stack to cloud development. This approach helps developers focus on creating value for users, be more independent, and enjoy instant feedback with faster iteration cycles, making cloud application development more enjoyable and efficient.
+Wing aims to enhance the developer experience by treating the entire cloud as its target computer, bringing the benefits of compilers that handle lower stack levels to cloud development. This approach enables developers to focus on creating user value, enjoy greater independence, and experience instant feedback with faster iteration cycles, making cloud application development more enjoyable and efficient.
 
-Developers should be able to write code with a "pencil" rather than a "pen," iterating quickly and learning from their mistakes. With Wing, developers can make a change and test it within milliseconds, even in an airplane with no WiFi, just like in the 90s. By addressing these pain points, Wing aims to revolutionize cloud development and create a better developer experience.
+We'd like developers be able to write code with a "pencil" rather than a "pen," iterating quickly and learning from their mistakes. They could make a change and test it within milliseconds, even without WiFi.
 
-You can experience how Wing solves the above pain points and improves the developemnt experience in our [playground](https://play.winglang.io).
-
+You can experience how far Wing has advanced on its journey to solve the above pain points and enhance the cloud developement experience in our [playground](https://play.winglang.io).
