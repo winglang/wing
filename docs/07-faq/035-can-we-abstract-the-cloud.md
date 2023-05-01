@@ -5,11 +5,13 @@ keywords: [faq, abstraction, winglang, Wing programming language, Wing language,
 ---
 
 This question often arises in various forms, such as:
+- Why do I need another abstraction layer?
 - How do you abstract services that differ significantly across cloud providers?
 - Wouldn't I lose control of crucial finer details?
 - How do you handle API incompatibility? Does your API only include the lowest common denominator or does it fail when targeting a cloud with a missing feature?
 - Won't Wing always lag behind hosted API feature capabilities, being a step behind Terraform and the cloud providers themselves?
 - What if a Terraform provider you depend on fails?
+- Why would I want the compiler to generate IAM policies?
 
 We understand your concerns and acknowledge the challenges in achieving a higher level of cloud abstraction. However, as with the evolution of software development, abstraction layers are continuously added to increase development velocity and focus on solving business needs. We believe that, through incremental progress, it's possible to abstract the cloud just as we've done with single machines.
 
