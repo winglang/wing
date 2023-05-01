@@ -5,9 +5,13 @@ on:
     types:
       - opened
       - synchronize
+    paths-ignore:
+      - docs/**
   push:
     branches:
       - main
+    paths-ignore:
+      - docs/**
   workflow_dispatch: {}
 
 concurrency:
@@ -224,7 +228,6 @@ jobs:
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
     needs:
       - quality-gate
-      - build
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
