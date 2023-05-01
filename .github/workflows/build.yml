@@ -6,9 +6,9 @@ on:
       - opened
       - synchronize
     paths-ignore:
-      - docs/**
-      - logo/**
-      - *.md
+      - "docs/**"
+      - "logo/**"
+      - "*.md"
   push:
     branches:
       - main
