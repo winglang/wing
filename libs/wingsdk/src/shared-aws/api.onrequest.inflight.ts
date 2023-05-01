@@ -36,7 +36,7 @@ function mapCloudApiResponseToApigatewayResponse(
     body: resp.body ? JSON.stringify(resp.body) : "",
     headers: {
       "Content-Type": "application/json",
-       ...resp.headers,
+      ...resp.headers,
     },
   };
 }
