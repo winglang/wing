@@ -1,5 +1,5 @@
 ---
-title: Can I import custom Terraform Modules into Wing?
+title: How can I use Terraform providers and Terraform modules in Wing?
 id: import-custom-terraform-modules
 keywords: [faq, winglang, Wing programming language, Wing language, Terraform]
 ---
