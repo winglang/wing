@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.14.5
-        version: 0.14.5(constructs@10.2.11)
+        specifier: ^0.14.6
+        version: 0.14.6(constructs@10.2.12)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -86,8 +86,8 @@ importers:
         specifier: ^2.3.2
         version: 2.3.2
       constructs:
-        specifier: ^10.2.11
-        version: 10.2.11
+        specifier: ^10.2.12
+        version: 10.2.12
       dmg-license:
         specifier: ^1.0.11
         version: 1.0.11
@@ -275,14 +275,14 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.14.5
-        version: 0.14.5(constructs@10.2.11)
+        specifier: ^0.14.6
+        version: 0.14.6(constructs@10.2.12)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
       constructs:
-        specifier: ^10.2.11
-        version: 10.2.11
+        specifier: ^10.2.12
+        version: 10.2.12
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -416,8 +416,8 @@ importers:
         specifier: ^2.3.2
         version: 2.3.2
       constructs:
-        specifier: ^10.2.11
-        version: 10.2.11
+        specifier: ^10.2.12
+        version: 10.2.12
       d3-selection:
         specifier: ^3.0.0
         version: 3.0.0
@@ -5323,13 +5323,13 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.14.5(constructs@10.2.11):
-    resolution: {integrity: sha512-sLQ0cRwUXE4dzhlQSBEzQrp+14rU4bG03AiDiN2X/shp2USMD97AhM+A6GYtwukGYV3tPHEFr2FY/cL22TFPlQ==}
+  /@winglang/sdk@0.14.6(constructs@10.2.12):
+    resolution: {integrity: sha512-cY3RoD6JPqGvxh0uJ0vwykX3V+dAriL2CUFjjwnUSo8adsSdnCMUzuDrK/5UIxZ2mFh/CbH84bxD6P4l/UQnrQ==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
     dependencies:
-      constructs: 10.2.11
+      constructs: 10.2.12
     dev: true
     bundledDependencies:
       - '@aws-sdk/client-cloudwatch-logs'
@@ -6542,8 +6542,8 @@ packages:
     resolution: {integrity: sha512-ty/fTekppD2fIwRvnZAVdeOiGd1c7YXEixbgJTNzqcxJWKQnjJ/V1bNEEE6hygpM3WjwHFUVK6HTjWSzV4a8sQ==}
     dev: true
 
-  /constructs@10.2.11:
-    resolution: {integrity: sha512-p1xAd9MJUHx58RjRr54drcUzU25E5vpZe1HylCohCoOdyCm6PyhhTgAowkm8Jsd/k0bFrWEr5vfQBM4ajgH7Yg==}
+  /constructs@10.2.12:
+    resolution: {integrity: sha512-aBX/fxAgJgZaX2SL6rdUap8UIWAY1lv6xK/stB1EJ3TFpSEDApd6ZCG40hvK/243H13m0MilvCrmyfyKTdiPlQ==}
     engines: {node: '>= 14.17.0'}
     dev: true
 
