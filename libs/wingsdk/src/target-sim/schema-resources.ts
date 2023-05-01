@@ -96,7 +96,6 @@ export interface ScheduleTask extends EventSubscription {
   readonly functionHandle: FunctionHandle;
 }
 
-
 export interface EventSubscription {}
 
 /** Schema for sim.EventMapping */

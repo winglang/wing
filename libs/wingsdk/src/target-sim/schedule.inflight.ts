@@ -6,15 +6,13 @@ import { CronExpression, parseExpression } from "cron-parser";
 
 export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IEventPublisher {
   private readonly context: ISimulatorContext;
-  // private readonly intervalId: NodeJS.Timeout;
   private tasks = new Array<ScheduleTask>();
   private interval: CronExpression;
+  private intervalTimeout?: NodeJS.Timeout;
 
   constructor(props: ScheduleSchema["props"], context: ISimulatorContext) {
-    props;
     this.context = context;
     this.interval = parseExpression(props.cronExpression);
-    // this.intervalId = setInterval(() => this.runTasks(), 1000); // every 1 second TODO: care about cron expression
     this.scheduleFunction();
   }
 
@@ -23,21 +21,20 @@ export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IE
     return interval.next().toDate().getTime() - Date.now();
   }
 
-  // Schedule the function to be executed based on the cron expression
+  // Recursively schedule the function to be executed
   private async scheduleFunction() {
-    setTimeout(() => {
+    this.intervalTimeout = setTimeout(() => {
       this.runTasks();
       this.scheduleFunction();
     }, await this.nextDelay(this.interval));
   }
-
 
   public async init(): Promise<ScheduleAttributes> {
     return {};
   }
 
   public async cleanup(): Promise<void> {
-    // clearInterval(this.intervalId);
+    clearTimeout(this.intervalTimeout);
   }
 
   public async addEventSubscription(subscriber: string, subscriptionProps: EventSubscription) {
@@ -68,7 +65,6 @@ export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IE
       });
 
       void (await fnClient.invoke("").catch((err) => {
-        console.log(err);
         this.context.addTrace({
           data: {
             message: `Schedule error: ${err}`,
