@@ -7,10 +7,9 @@ import { join } from "path";
 import { EventMapping } from "./event-mapping";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "../testing";
-import { IInflightHost, Resource } from "../std";
+import { Duration, IInflightHost, Resource } from "../std";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { SCHEDULE_TYPE, ScheduleSchema } from "./schema-resources";
-
 
 /**
  * Simulator implementation of `cloud.Schedule`.
@@ -18,12 +17,42 @@ import { SCHEDULE_TYPE, ScheduleSchema } from "./schema-resources";
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
 export class Schedule extends cloud.Schedule implements ISimulatorResource {
-  private readonly scheduleExpression: string;
+  private readonly cronExpression: string;
   
   constructor(scope: Construct, id: string, props: cloud.ScheduleProps = {}) {
     super(scope, id, props)
-    // TODO: support rate
-    this.scheduleExpression = props.cron!;
+    const { rate, cron } = props;
+
+    if (rate && cron) {
+      throw new Error("rate and cron cannot be configured simultaneously.");
+    }
+    if (!rate && !cron) {
+      throw new Error("rate or cron need to be filled.");
+    }
+    if (rate && rate.seconds < 60) {
+      throw new Error("rate can not be set to less than 1 minute.");
+    }
+    if (cron && cron.split(" ").length > 5) {
+      throw new Error(
+        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
+      );
+    }
+
+    this.cronExpression = cron ?? this.convertDurationToCron(rate!);
+  }
+
+  private convertDurationToCron(dur: Duration): string {
+    const minutes = Math.floor(dur.minutes);
+    const hours = Math.floor(dur.hours);
+
+    if (hours === 0 && minutes === 0) {
+      // For durations less than 1 minute, return a cron string that runs every minute
+      return '* * * * *';
+    }
+
+    // Generate cron string based on the duration
+    const cronString = `*/${minutes} */${hours} * * *`;
+    return cronString;
   }
 
   public onTick(
@@ -35,7 +64,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       this.node.scope!,
       `${this.node.id}OnTickHandler${hash}`,
       inflight,
-      join(__dirname, "schedule.ontick.inflight.ts"),
+      join(__dirname, "schedule.ontick.inflight.js"),
       "ScheduleOnTickHandlerClient"
     );
 
@@ -66,7 +95,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       type: SCHEDULE_TYPE,
       path: this.node.path,
       props: {
-        cronExpression: this.scheduleExpression
+        cronExpression: this.cronExpression
       },
       attrs: {} as any
     };

@@ -236,6 +236,10 @@
       "type": "bundled"
     },
     {
+      "name": "cron-parser",
+      "type": "bundled"
+    },
+    {
       "name": "debug",
       "type": "bundled"
     },

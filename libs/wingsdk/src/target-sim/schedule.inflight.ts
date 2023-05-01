@@ -2,24 +2,42 @@ import { IFunctionClient, IScheduleClient, TraceType } from "../cloud";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../testing";
 import { IEventPublisher } from "./event-mapping";
 import { EventSubscription, SCHEDULE_TYPE, ScheduleAttributes, ScheduleSchema, ScheduleTask } from "./schema-resources";
+import { CronExpression, parseExpression } from "cron-parser";
 
 export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IEventPublisher {
   private readonly context: ISimulatorContext;
-  private readonly intervalId: NodeJS.Timeout;
+  // private readonly intervalId: NodeJS.Timeout;
   private tasks = new Array<ScheduleTask>();
+  private interval: CronExpression;
 
   constructor(props: ScheduleSchema["props"], context: ISimulatorContext) {
     props;
     this.context = context;
-    this.intervalId = setInterval(() => this.runTasks(), 1000); // every 1 second TODO: care about cron expression
+    this.interval = parseExpression(props.cronExpression);
+    // this.intervalId = setInterval(() => this.runTasks(), 1000); // every 1 second TODO: care about cron expression
+    this.scheduleFunction();
   }
+
+  // Calculate the delay for the next execution
+  private async nextDelay(interval: CronExpression) {
+    return interval.next().toDate().getTime() - Date.now();
+  }
+
+  // Schedule the function to be executed based on the cron expression
+  private async scheduleFunction() {
+    setTimeout(() => {
+      this.runTasks();
+      this.scheduleFunction();
+    }, await this.nextDelay(this.interval));
+  }
+
 
   public async init(): Promise<ScheduleAttributes> {
     return {};
   }
 
   public async cleanup(): Promise<void> {
-    clearInterval(this.intervalId);
+    // clearInterval(this.intervalId);
   }
 
   public async addEventSubscription(subscriber: string, subscriptionProps: EventSubscription) {
@@ -42,7 +60,7 @@ export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IE
       this.context.addTrace({
         type: TraceType.RESOURCE,
         data: {
-          message: `Running task for function ${task.functionHandle}.`,
+          message: `Running task with function handle: ${task.functionHandle}.`,
         },
         sourcePath: this.context.resourcePath,
         sourceType: SCHEDULE_TYPE,
