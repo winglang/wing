@@ -24,5 +24,5 @@ With Wing, the goal is to improve the developer experience by treating the entir
 
 Developers should be able to write code with a "pencil" rather than a "pen," iterating quickly and learning from their mistakes. With Wing, developers can make a change and test it within milliseconds, even in an airplane with no WiFi, just like in the 90s. By addressing these pain points, Wing aims to revolutionize cloud development and create a better developer experience.
 
-You can experience Wing's benefits with zero friction in our [playground](https://play.winglang.io).
+You can experience how Wing solves the above pain points and improves the developemnt experience in our [playground](https://play.winglang.io).
 
