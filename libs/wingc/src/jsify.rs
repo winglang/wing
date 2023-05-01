@@ -410,6 +410,11 @@ impl<'a> JSifier<'a> {
 								// set `needs_case_conversion` to true for `any` and builtin types, and I'm not sure why..
 								needs_case_conversion = false;
 							}
+						} else if let Reference::TypeMember { .. } = reference {
+							let st_type = expression.evaluated_type.borrow().unwrap();
+							if let Some(class) = st_type.as_class_or_resource() {
+								needs_case_conversion = class.should_case_convert_jsii;
+							}
 						}
 						self.jsify_reference(reference, Some(needs_case_conversion), context)
 					}
