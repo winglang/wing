@@ -4,10 +4,14 @@ import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { SCHEDULE_TYPE, ScheduleSchema } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClient,
+  convertDurationToCronExpression,
+} from "./util";
 import * as cloud from "../cloud";
 import { Code } from "../core";
-import { Duration, IInflightHost, Resource } from "../std";
+import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing";
 import { convertBetweenHandlers } from "../utils/convert";
 
@@ -23,41 +27,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     super(scope, id, props);
     const { rate, cron } = props;
 
-    if (rate && cron) {
-      throw new Error("rate and cron cannot be configured simultaneously.");
-    }
-    if (!rate && !cron) {
-      throw new Error("rate or cron need to be filled.");
-    }
-    if (rate && rate.seconds < 60) {
-      throw new Error("rate can not be set to less than 1 minute.");
-    }
-    if (cron && cron.split(" ").length > 5) {
-      throw new Error(
-        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-      );
-    }
-
-    this.cronExpression = cron ?? this.convertDurationToCron(rate!);
-  }
-
-  // helper function to convert duration to a cron string
-  // maybe this belongs in a util library but for now it's here
-  private convertDurationToCron(dur: Duration): string {
-    const m = Math.floor(dur.minutes);
-    const h = Math.floor(m / 60);
-
-    const minute = m % 60 != 0 ? `*/${m}` : "*";
-    const hour = h != 0 ? `*/${h}` : "*";
-    // TODO: Support longer durations once we implement https://github.com/winglang/wing/issues/2243
-    // for now we just use * for day, month and year
-    const day = "*";
-    const month = "*";
-    const year = "*";
-
-    // Generate cron string based on the duration
-    const cronString = `${minute} ${hour} ${day} ${month} ${year}`;
-    return cronString;
+    this.cronExpression = cron ?? convertDurationToCronExpression(rate!);
   }
 
   public onTick(
@@ -75,7 +45,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
     const fn = Function._newFunction(
       this.node.scope!,
-      `${this.node.id}-OnTickFunction-${hash}`,
+      `${this.node.id}-OnTick-${hash}`,
       functionHandler,
       props
     );
