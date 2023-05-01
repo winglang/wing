@@ -34,8 +34,8 @@ Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the
 Existing languages are unable to express the distributed and infrastructure-heavy nature of cloud 
 applications, which are fundamentally different from applications that run on a single machine. 
 They are distributed systems which rely on cloud infrastructure to achieve their goals. The primary
-motivation for a new langugae is to allow developers to express both cloud infrastructure *and*
-application through a unified programming model.
+motivation for a new language is to allow developers to express both cloud infrastructure *and*
+application logic through a unified programming model.
 
 To allow Winglang code to express both infrastructure and application, the language introduces the concept of *execution phases*. 
 The "preflight" phase is where you define your cloud infrastructure and the "inflight" phase is where you define your application logic.
@@ -68,7 +68,7 @@ Now comes the cool part: the code that runs inside the inflight function interac
 through the *inflight methods* of these objects (`counter.inc()` and `bucket.put()`). These methods can only be
 called from inflight scopes. In existing languages, where there is no way to distinguish between multiple execution phases,
 it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific
-execution phase.
+execution phase in a type-safe manner.
 
 > ### Note for cloud experts 🤓
 >
