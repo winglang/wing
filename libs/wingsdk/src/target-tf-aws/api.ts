@@ -1,15 +1,15 @@
 import { createHash } from "crypto";
 import { join } from "path";
-import { ApiGatewayDeployment } from "@cdktf/provider-aws/lib/api-gateway-deployment";
-import { ApiGatewayRestApi } from "@cdktf/provider-aws/lib/api-gateway-rest-api";
-import { ApiGatewayStage } from "@cdktf/provider-aws/lib/api-gateway-stage";
-import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 
 import { Lazy } from "cdktf/lib/tokens";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
+import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
+import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
+import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
+import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { Code } from "../core/inflight";
