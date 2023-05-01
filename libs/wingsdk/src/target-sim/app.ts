@@ -8,6 +8,7 @@ import { Function } from "./function";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
+import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
@@ -30,7 +31,6 @@ import { preSynthesizeAllConstructs } from "../core/app";
 import { REDIS_FQN } from "../redis";
 import { WingSimulatorSchema } from "../testing/simulator";
 import { SIMULATOR_FILE_PATH } from "../util";
-import { Schedule } from "./schedule";
 
 /**
  * A construct that knows how to synthesize simulator resources into a
@@ -91,7 +91,7 @@ export class App extends core.App {
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
-      
+
       case SCHEDULE_FQN:
         return new Schedule(scope, id, args[0]);
     }

@@ -1,26 +1,26 @@
+import { join } from "path";
 import { Construct } from "constructs";
+import { EventMapping } from "./event-mapping";
+import { Function } from "./function";
+import { ISimulatorResource } from "./resource";
+import { SCHEDULE_TYPE, ScheduleSchema } from "./schema-resources";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { Code } from "../core";
-import { Function } from "./function";
-import { convertBetweenHandlers } from "../utils/convert";
-import { join } from "path";
-import { EventMapping } from "./event-mapping";
-import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "../testing";
 import { Duration, IInflightHost, Resource } from "../std";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import { SCHEDULE_TYPE, ScheduleSchema } from "./schema-resources";
+import { BaseResourceSchema } from "../testing";
+import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * Simulator implementation of `cloud.Schedule`.
- * 
+ *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
 export class Schedule extends cloud.Schedule implements ISimulatorResource {
   private readonly cronExpression: string;
-  
+
   constructor(scope: Construct, id: string, props: cloud.ScheduleProps = {}) {
-    super(scope, id, props)
+    super(scope, id, props);
     const { rate, cron } = props;
 
     if (rate && cron) {
@@ -47,13 +47,13 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     const m = Math.floor(dur.minutes);
     const h = Math.floor(m / 60);
 
-    const minute = (m % 60) != 0 ? `*/${m}` : '*';
-    const hour = h != 0 ? `*/${h}` : '*';
+    const minute = m % 60 != 0 ? `*/${m}` : "*";
+    const hour = h != 0 ? `*/${h}` : "*";
     // TODO: Support longer durations once we implement https://github.com/winglang/wing/issues/2243
     // for now we just use * for day, month and year
-    const day = '*';
-    const month = '*';
-    const year = '*';
+    const day = "*";
+    const month = "*";
+    const year = "*";
 
     // Generate cron string based on the duration
     const cronString = `${minute} ${hour} ${day} ${month} ${year}`;
@@ -79,17 +79,17 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       functionHandler,
       props
     );
-      
+
     new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
       subscriber: fn,
       publisher: this,
-      subscriptionProps: {}
+      subscriptionProps: {},
     });
 
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_tick"
+      relationship: "on_tick",
     });
 
     return fn;
@@ -100,9 +100,9 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       type: SCHEDULE_TYPE,
       path: this.node.path,
       props: {
-        cronExpression: this.cronExpression
+        cronExpression: this.cronExpression,
       },
-      attrs: {} as any
+      attrs: {} as any,
     };
     return schema;
   }
@@ -117,5 +117,4 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
-
 }

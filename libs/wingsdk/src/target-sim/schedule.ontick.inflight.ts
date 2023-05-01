@@ -1,6 +1,6 @@
 import type {
   IFunctionHandlerClient,
-  IScheduleOnTickHandlerClient
+  IScheduleOnTickHandlerClient,
 } from "../cloud";
 
 export class ScheduleOnTickHandlerClient
@@ -12,6 +12,6 @@ export class ScheduleOnTickHandlerClient
   }
 
   public async handle() {
-    return await this.handler.handle("");
+    return this.handler.handle("");
   }
 }

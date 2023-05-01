@@ -83,7 +83,7 @@ export interface IScheduleOnTickHandler extends IResource {}
 /**
  * Inflight interface for `Schedule`.
  */
-export interface IScheduleClient { }
+export interface IScheduleClient {}
 
 /**
  * Inflight client for `IScheduleOnTickHandler`.

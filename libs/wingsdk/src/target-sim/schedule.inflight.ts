@@ -1,10 +1,18 @@
+import { CronExpression, parseExpression } from "cron-parser";
+import { IEventPublisher } from "./event-mapping";
+import {
+  EventSubscription,
+  SCHEDULE_TYPE,
+  ScheduleAttributes,
+  ScheduleSchema,
+  ScheduleTask,
+} from "./schema-resources";
 import { IFunctionClient, IScheduleClient, TraceType } from "../cloud";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../testing";
-import { IEventPublisher } from "./event-mapping";
-import { EventSubscription, SCHEDULE_TYPE, ScheduleAttributes, ScheduleSchema, ScheduleTask } from "./schema-resources";
-import { CronExpression, parseExpression } from "cron-parser";
 
-export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IEventPublisher {
+export class Schedule
+  implements IScheduleClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly context: ISimulatorContext;
   private tasks = new Array<ScheduleTask>();
   private interval: CronExpression;
@@ -17,16 +25,16 @@ export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IE
   }
 
   // Calculate the delay for the next execution
-  private async nextDelay(interval: CronExpression) {
+  private nextDelay(interval: CronExpression) {
     return interval.next().toDate().getTime() - Date.now();
   }
 
   // Recursively schedule the function to be executed
-  private async scheduleFunction() {
+  private scheduleFunction() {
     this.intervalTimeout = setTimeout(() => {
       this.runTasks();
       this.scheduleFunction();
-    }, await this.nextDelay(this.interval));
+    }, this.nextDelay(this.interval));
   }
 
   public async init(): Promise<ScheduleAttributes> {
@@ -37,15 +45,18 @@ export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IE
     clearTimeout(this.intervalTimeout);
   }
 
-  public async addEventSubscription(subscriber: string, subscriptionProps: EventSubscription) {
+  public async addEventSubscription(
+    subscriber: string,
+    subscriptionProps: EventSubscription
+  ) {
     const task = {
       functionHandle: subscriber,
       ...subscriptionProps,
     } as ScheduleTask;
     this.tasks.push(task);
-  };
+  }
 
-  private async runTasks() {
+  private runTasks() {
     for (const task of this.tasks) {
       const fnClient = this.context.findInstance(
         task.functionHandle!
@@ -64,7 +75,7 @@ export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IE
         timestamp: new Date().toISOString(),
       });
 
-      void (await fnClient.invoke("").catch((err) => {
+      void fnClient.invoke("").catch((err) => {
         this.context.addTrace({
           data: {
             message: `Schedule error: ${err}`,
@@ -73,9 +84,8 @@ export class Schedule implements IScheduleClient, ISimulatorResourceInstance, IE
           sourceType: SCHEDULE_TYPE,
           timestamp: new Date().toISOString(),
           type: TraceType.RESOURCE,
-        })
-      }))
+        });
+      });
     }
   }
-
 }

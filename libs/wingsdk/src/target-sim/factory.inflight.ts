@@ -5,6 +5,7 @@ import { EventMapping } from "./event-mapping.inflight";
 import { Function } from "./function.inflight";
 import { Queue } from "./queue.inflight";
 import { Redis } from "./redis.inflight";
+import { Schedule } from "./schedule.inflight";
 import {
   API_TYPE,
   BUCKET_TYPE,
@@ -28,7 +29,6 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
-import { Schedule } from "./schedule.inflight";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**

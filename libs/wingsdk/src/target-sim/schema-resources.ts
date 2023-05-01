@@ -87,7 +87,7 @@ export interface ScheduleSchema extends BaseResourceSchema {
   readonly props: {
     /** The cron expression that defines when the schedule should run. */
     readonly cronExpression: string;
-  }
+  };
 }
 
 /** Schema for cloud.Queue.props.subscribers */
