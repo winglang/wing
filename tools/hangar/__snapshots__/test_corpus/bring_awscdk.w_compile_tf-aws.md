@@ -1,21 +1,15 @@
-# [doubler.w](../../../../examples/tests/valid/doubler.w) | compile | tf-aws
+# [bring_awscdk.w](../../../../examples/tests/valid/bring_awscdk.w) | compile | tf-aws
 
-## clients/Doubler.inflight.js
+## clients/CdkDockerImageFunction.inflight.js
 ```js
 module.exports = function() {
-  class  Doubler {
-    constructor({ func, stateful }) {
-      this.func = func;
+  class  CdkDockerImageFunction {
+    constructor({ function, stateful }) {
+      this.function = function;
       this.stateful = stateful;
     }
-    async invoke(message)  {
-      {
-        (await this.func.handle(message));
-        (await this.func.handle(message));
-      }
-    }
   }
-  return Doubler;
+  return CdkDockerImageFunction;
 }
 
 ```
@@ -58,25 +52,26 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const awscdk = require("aws-cdk-lib");
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Doubler extends $stdlib.std.Resource {
-      constructor(scope, id, func) {
+    class CdkDockerImageFunction extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("invoke");
-        this.func = func;
+        this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",{
+        "code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts")),}
+        );
       }
       _toInflight() {
-        const func_client = this._lift(this.func);
+        const function_client = this._lift(this.function);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Doubler.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/CdkDockerImageFunction.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Doubler = require("${self_client_path}")({});
-            const client = new Doubler({
-              func: ${func_client},
+            const CdkDockerImageFunction = require("${self_client_path}")({});
+            const client = new CdkDockerImageFunction({
+              function: ${function_client},
               stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -86,26 +81,17 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.func, host, []);
+          this._registerBindObject(this.function, host, []);
           this._registerBindObject(this.stateful, host, []);
-        }
-        if (ops.includes("invoke")) {
-          this._registerBindObject(this.func, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const fn = new Doubler(this,"Doubler",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    );
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "doubler", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "bring_awscdk", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -119,15 +105,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(m) {
-  const {  } = this;
-  return `Hello ${m}!`;
-}
 
 ```
 
