@@ -5564,12 +5564,20 @@ primary key to search.
 ##### `insert` <a name="insert" id="@winglang/sdk.cloud.ITableClient.insert"></a>
 
 ```wing
-insert(row: Json): void
+insert(key: str, row: Json): void
 ```
 
 **Inflight client:** [true](#true)
 
 Insert a row into the table.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.insert.parameter.key"></a>
+
+- *Type:* str
+
+primary key to insert the row.
+
+---
 
 ###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.ITableClient.insert.parameter.row"></a>
 
@@ -5592,12 +5600,20 @@ List all rows in the table.
 ##### `update` <a name="update" id="@winglang/sdk.cloud.ITableClient.update"></a>
 
 ```wing
-update(row: Json): void
+update(key: str, row: Json): void
 ```
 
 **Inflight client:** [true](#true)
 
 Update a row in the table.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.update.parameter.key"></a>
+
+- *Type:* str
+
+primary key to update the row.
+
+---
 
 ###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.ITableClient.update.parameter.row"></a>
 
