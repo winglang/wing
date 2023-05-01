@@ -1,8 +1,8 @@
 import { join } from "path";
-import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
-import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-source-mapping";
+import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
