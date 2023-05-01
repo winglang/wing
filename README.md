@@ -31,14 +31,12 @@ Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the
 
 ## Why do we think the cloud needs a programming language? 🤔
 
-Existing languages are unable to express the distributed and infrastructure-heavy nature of cloud 
-applications, which are fundamentally different from applications that run on a single machine. 
-They are distributed systems which rely on cloud infrastructure to achieve their goals. The primary
-motivation for a new language is to allow developers to express both cloud infrastructure *and*
-application logic through a unified programming model.
+Cloud applications are are fundamentally different from applications that run on a single machine - 
+they are distributed systems that rely on cloud infrastructure to achieve their goals.
 
-To allow Winglang code to express both infrastructure and application, the language introduces the concept of *execution phases*. 
-The "preflight" phase is where you define your cloud infrastructure and the "inflight" phase is where you define your application logic.
+In order to be able to express both infrastructure and application logic in a safe and unified programming model, 
+Winglang has two execution phases: *Preflight* for infrastructure definitions and *inflight* is for runtime code.
+
 Preflight code is executed *during compilation* and produces the infrastructure configuration for your app (e.g. **Terraform**, **CloudFormation**, etc).
 Inflight code is compiled to **JavaScript** and executed on within cloud compute platforms in Node.js environments.
 
@@ -57,28 +55,24 @@ queue.add_consumer(inflight (message: str) => {
 });
 ```
 
-The `cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*. They represent
-cloud infrastructure resources. When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
-of these resources.
-
-The `queue.add_consumer()` method is a *preflight method* that configures the infrastructure to
+`cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*.
+They represent cloud infrastructure resources. 
+When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
+of these resources. The `queue.add_consumer()` method is a *preflight method* that configures the infrastructure to
 invoke a particular *inflight function* for each message in the queue.
 
 Now comes the cool part: the code that runs inside the inflight function interacts with the `counter` and the `bucket` objects
-through the *inflight methods* of these objects (`counter.inc()` and `bucket.put()`). These methods can only be
-called from inflight scopes. In existing languages, where there is no way to distinguish between multiple execution phases,
-it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific
-execution phase in a type-safe manner.
+through their *inflight methods* (`counter.inc()` and `bucket.put()`). These methods can only be
+called from inflight scopes.
 
-> ### Note for cloud experts 🤓
->
-> To give full control over how applications are deployed, Wing lets you customize **operational details** in a few ways:
->
-> 1. by creating a [compiler plugin](https://docs.winglang.io/reference/compiler-plugins) that modifies the generated Terraform, or 
-> 2. by providing implementations of built-in resources like `cloud.Bucket`, or
-> 3. by developing your own custom resources.
->
-> This layer of separation allows you to refactor code and write unit tests that focus on the business logic, while still having the flexibility to make changes under the hood.
+Winglang is shipped with a standard library of cloud resources, allowing you to work at a high level
+of abstraction and write cloud code that can be ported across cloud providers. However, you still have
+full control and can completely customize the infrastructure configuration of your application using
+[compiler plugins](https://docs.winglang.io/reference/compiler-plugins) and by using any
+resource in the Terraform ecosystem as first-class citizens in your app.
+
+While you can work at a very high level of abstraction, Winglang also gives you full control and
+customizablity over how applications are deployed.
 
 ## What makes Wing a good fit for cloud development? 🌟
 
