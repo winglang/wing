@@ -114,16 +114,18 @@ export abstract class Table extends Resource {
 export interface ITableClient {
   /**
    * Insert a row into the table.
+   * @param key primary key to insert the row.
    * @param row data to be inserted.
    * @inflight
    */
-  insert(row: Json): Promise<void>;
+  insert(key: string, row: Json): Promise<void>;
   /**
    * Update a row in the table.
+   * @param key primary key to update the row.
    * @param row data to be updated.
    * @inflight
    */
-  update(row: Json): Promise<void>;
+  update(key: string, row: Json): Promise<void>;
   /**
    * Delete a row from the table, by primary key.
    * @param key primary key to delete the row.
