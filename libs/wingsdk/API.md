@@ -30,30 +30,30 @@ new cloud.Api(props?: ApiProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given path. |
 
 ---
 
 ##### `connect` <a name="connect" id="@winglang/sdk.cloud.Api.connect"></a>
 
 ```wing
-connect(route: str, inflight: IApiEndpointHandler, props?: ApiConnectProps): void
+connect(path: str, inflight: IApiEndpointHandler, props?: ApiConnectProps): void
 ```
 
-Add a inflight handler to the api for CONNECT requests on the given route.
+Add a inflight handler to the api for CONNECT requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.connect.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.connect.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle CONNECT requests for.
+The path to handle CONNECT requests for.
 
 ---
 
@@ -76,16 +76,16 @@ Options for the route.
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.Api.delete"></a>
 
 ```wing
-delete(route: str, inflight: IApiEndpointHandler, props?: ApiDeleteProps): void
+delete(path: str, inflight: IApiEndpointHandler, props?: ApiDeleteProps): void
 ```
 
-Add a inflight handler to the api for DELETE requests on the given route.
+Add a inflight handler to the api for DELETE requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.delete.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.delete.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle DELETE requests for.
+The path to handle DELETE requests for.
 
 ---
 
@@ -108,16 +108,16 @@ Options for the route.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.Api.get"></a>
 
 ```wing
-get(route: str, inflight: IApiEndpointHandler, props?: ApiGetProps): void
+get(path: str, inflight: IApiEndpointHandler, props?: ApiGetProps): void
 ```
 
-Add a inflight handler to the api for GET requests on the given route.
+Add a inflight handler to the api for GET requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.get.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.get.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle GET requests for.
+The path to handle GET requests for.
 
 ---
 
@@ -140,16 +140,16 @@ Options for the route.
 ##### `head` <a name="head" id="@winglang/sdk.cloud.Api.head"></a>
 
 ```wing
-head(route: str, inflight: IApiEndpointHandler, props?: ApiHeadProps): void
+head(path: str, inflight: IApiEndpointHandler, props?: ApiHeadProps): void
 ```
 
-Add a inflight handler to the api for HEAD requests on the given route.
+Add a inflight handler to the api for HEAD requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.head.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.head.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle HEAD requests for.
+The path to handle HEAD requests for.
 
 ---
 
@@ -172,16 +172,16 @@ Options for the route.
 ##### `options` <a name="options" id="@winglang/sdk.cloud.Api.options"></a>
 
 ```wing
-options(route: str, inflight: IApiEndpointHandler, props?: ApiOptionsProps): void
+options(path: str, inflight: IApiEndpointHandler, props?: ApiOptionsProps): void
 ```
 
-Add a inflight handler to the api for OPTIONS requests on the given route.
+Add a inflight handler to the api for OPTIONS requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.options.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.options.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle OPTIONS requests for.
+The path to handle OPTIONS requests for.
 
 ---
 
@@ -204,16 +204,16 @@ Options for the route.
 ##### `patch` <a name="patch" id="@winglang/sdk.cloud.Api.patch"></a>
 
 ```wing
-patch(route: str, inflight: IApiEndpointHandler, props?: ApiPatchProps): void
+patch(path: str, inflight: IApiEndpointHandler, props?: ApiPatchProps): void
 ```
 
-Add a inflight handler to the api for PATCH requests on the given route.
+Add a inflight handler to the api for PATCH requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.patch.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.patch.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle PATCH requests for.
+The path to handle PATCH requests for.
 
 ---
 
@@ -236,16 +236,16 @@ Options for the route.
 ##### `post` <a name="post" id="@winglang/sdk.cloud.Api.post"></a>
 
 ```wing
-post(route: str, inflight: IApiEndpointHandler, props?: ApiPostProps): void
+post(path: str, inflight: IApiEndpointHandler, props?: ApiPostProps): void
 ```
 
-Add a inflight handler to the api for POST requests on the given route.
+Add a inflight handler to the api for POST requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.post.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.post.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle POST requests for.
+The path to handle POST requests for.
 
 ---
 
@@ -268,16 +268,16 @@ Options for the route.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.Api.put"></a>
 
 ```wing
-put(route: str, inflight: IApiEndpointHandler, props?: ApiPutProps): void
+put(path: str, inflight: IApiEndpointHandler, props?: ApiPutProps): void
 ```
 
-Add a inflight handler to the api for PUT requests on the given route.
+Add a inflight handler to the api for PUT requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.put.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.put.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle PUT requests for.
+The path to handle PUT requests for.
 
 ---
 

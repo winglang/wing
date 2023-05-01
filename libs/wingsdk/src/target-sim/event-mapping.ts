@@ -46,16 +46,20 @@ export interface EventMappingProps {
  */
 export class EventMapping extends Resource implements ISimulatorResource {
   public readonly stateful = true;
-  private readonly eventProps: EventMappingProps;
+  private readonly _eventProps: EventMappingProps;
 
   constructor(scope: Construct, id: string, props: EventMappingProps) {
     super(scope, id);
-    this.eventProps = props;
+    this._eventProps = props;
     this.display.hidden = true;
 
     // Add dependencies to the publisher and subscriber
     this.node.addDependency(props.subscriber);
     this.node.addDependency(props.publisher);
+  }
+
+  public get eventProps(): EventMappingProps {
+    return this._eventProps;
   }
 
   public toSimulator(): BaseResourceSchema {
