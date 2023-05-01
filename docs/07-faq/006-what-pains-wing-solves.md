@@ -15,8 +15,8 @@ Wing aims to address various pain points at both the developer and organization 
 
 **Organization pain points:**
 
-1. **Dev/ops friction**: Poor separation of concerns between development and operations teams result in inefficient flows.
-2. **Error-prone security/observability**: Ensuring security and observability can be challenging and prone to mistakes.
+1. **Dev/ops friction**: Poor separation of concerns between development and operations teams can cause tension due to the mutual reliance of developers and DevOps on each other. Developers and operations teams need to be in sync and often have to wait for one another, as they are involved in each other's workflows. This interdependence can lead to miscommunication, delays, and frustration on both sides.
+2. **Error-prone security/observability**: Ensuring security and observability can be challenging and prone to mistakes, as observability dashboards and IAM policies are often written by hand. Errors can occur, and the need for frequent updates whenever code changes exacerbate the problem. Additionally, those responsible for writing and updating these policies and dashboards are usually not the developers who write the code, which can contribute to misalignments and misunderstandings.
 3. **Cloud vendor lock-in**: Reliance on a single cloud provider can limit flexibility and increase risk.
 4. **Need for multi-cloud**: Organizations require the ability to deploy and manage applications across multiple cloud providers.
 
