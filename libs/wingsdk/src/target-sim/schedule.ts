@@ -42,11 +42,12 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   }
 
   // helper function to convert duration to a cron string
+  // maybe this belongs in a util library but for now it's here
   private convertDurationToCron(dur: Duration): string {
     const m = Math.floor(dur.minutes);
-    const h = Math.floor(dur.hours);
+    const h = Math.floor(m / 60);
 
-    const minute = m != 0 ? `*/${m}` : '*';
+    const minute = (m % 60) != 0 ? `*/${m}` : '*';
     const hour = h != 0 ? `*/${h}` : '*';
     // TODO: Support longer durations once we implement https://github.com/winglang/wing/issues/2243
     // for now we just use * for day, month and year

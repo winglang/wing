@@ -15,7 +15,8 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 test("create a schedule", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Schedule._newSchedule(app, "my_schedule", {cron: '*/1 * * * *'});
+  const cron = '*/1 * * * *';
+  cloud.Schedule._newSchedule(app, "my_schedule", {cron});
   const s = await app.startSimulator();
   
   // THEN
@@ -24,7 +25,9 @@ test("create a schedule", async () => {
       handle: expect.any(String),
     },
     path: "root/my_schedule",
-    props: {},
+    props: {
+      cronExpression: cron
+    },
     type: SCHEDULE_TYPE,
   });
   await s.stop();
@@ -49,25 +52,50 @@ test("schedule with one task with cron", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("schedule with one task using rate", async () => {
+test("schedule with one task using rate of 10m", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const schedule = cloud.Schedule._newSchedule(app, "my_schedule", {rate: Duration.fromSeconds(1)});
+  const schedule = cloud.Schedule._newSchedule(app, "my_schedule", {rate: Duration.fromMinutes(10)});
+  const expectedCron = "*/10 * * * *"; // every 10 minutes cron expression
   schedule.onTick(handler);
   const s = await app.startSimulator();
-
-  // WHEN
 
   // THEN
   await s.stop();
   expect(app.snapshot()).toMatchSnapshot();
-  expect(
-    s.listTraces()
-    .filter((v) => v.sourceType == SCHEDULE_TYPE)
-    .map((trace) => trace.data.message)
-  ).toEqual([
-    "wingsdk.cloud.Schedule created.",
-    "wingsdk.cloud.Schedule deleted."
-  ])
+  expect(s.getResourceConfig("/my_schedule")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_schedule",
+    props: {
+      cronExpression: expectedCron
+    },
+    type: SCHEDULE_TYPE,
+  });
+});
+
+test("schedule with one task using rate of 3h", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const schedule = cloud.Schedule._newSchedule(app, "my_schedule", {rate: Duration.fromHours(3)});
+  const expectedCron = "* */3 * * *"; // every 3 hours cron expression
+  schedule.onTick(handler);
+  const s = await app.startSimulator();
+
+  // THEN
+  await s.stop();
+  expect(app.snapshot()).toMatchSnapshot();
+  expect(s.getResourceConfig("/my_schedule")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_schedule",
+    props: {
+      cronExpression: expectedCron
+    },
+    type: SCHEDULE_TYPE,
+  });
 });
