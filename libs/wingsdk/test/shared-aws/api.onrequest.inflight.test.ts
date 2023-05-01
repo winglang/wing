@@ -40,6 +40,7 @@ describe("ApiResponseMapper", () => {
       statusCode: 200,
       body: JSON.stringify({ key: "value" }),
       headers: {
+        "Content-Type": "application/json",
         "header-1": "value-1",
       },
     });
@@ -76,7 +77,9 @@ describe("ApiResponseMapper", () => {
     expect(response).toEqual({
       statusCode: 200,
       body: JSON.stringify({ key: "value" }),
-      headers: undefined,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   });
 
@@ -110,6 +113,9 @@ describe("ApiResponseMapper", () => {
     expect(response).toEqual({
       statusCode: 200,
       body: "",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   });
 });
