@@ -3,7 +3,7 @@ bring cloud;
 let table = new cloud.Table( 
     name: "users", 
     primary_key: "name", 
-    columns: Map<cloud.ColumnType> { name: cloud.ColumnType.STRING, gender: cloud.ColumnType.STRING } 
+    columns: { gender: cloud.ColumnType.STRING } 
 );
 
 
