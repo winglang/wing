@@ -30,6 +30,7 @@
       }
     },
     "bench": {
+      "executor": "nx:run-commands",
       "dependsOn": ["^build", "^package"],
       "inputs": ["default", "^default", "examples-tests"],
       "outputs": ["${projectRoot}/reports/**"],

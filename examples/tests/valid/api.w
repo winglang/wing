@@ -33,3 +33,21 @@ class Foo impl cloud.IFunctionHandler {
 }
 
 new cloud.Function(new Foo(api)) as "test";
+
+// Initialize the API in resource
+class A {
+  api: cloud.Api;
+  init() {
+    this.api = new cloud.Api();
+    this.api.get("/endpoint1", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+      let text = "${this.api.url}/endpoint2";
+      return cloud.ApiResponse {
+        status: 200,
+        body: Json text,
+      };
+    });
+  }
+}
+
+new A();
+

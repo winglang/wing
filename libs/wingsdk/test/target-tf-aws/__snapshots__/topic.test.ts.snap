@@ -33,8 +33,8 @@ exports[`default topic behavior 2`] = `
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Topic/Default",
@@ -53,8 +53,8 @@ exports[`default topic behavior 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -155,8 +155,8 @@ exports[`replace invalid character from queue name 2`] = `
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The%Spectacular@Topic/Default",
@@ -175,8 +175,8 @@ exports[`replace invalid character from queue name 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -277,8 +277,8 @@ exports[`topic name valid 2`] = `
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The-Spectacular_Topic-01/Default",
@@ -297,8 +297,8 @@ exports[`topic name valid 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -473,8 +473,8 @@ exports[`topic with subscriber function 3`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -518,16 +518,16 @@ exports[`topic with subscriber function 3`] = `
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Topic/Default",
                   },
                   "Topic-TopicSubscription-c5395e41": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Topic-TopicSubscription-c5395e41",
                     "path": "root/Default/Topic/Topic-TopicSubscription-c5395e41",
@@ -573,48 +573,48 @@ exports[`topic with subscriber function 3`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Topic-OnMessage-c5395e41/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Topic-OnMessage-c5395e41/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Topic-OnMessage-c5395e41/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Topic-OnMessage-c5395e41/IamRolePolicyAttachment",
                   },
                   "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
                     "path": "root/Default/Topic-OnMessage-c5395e41/InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Topic-OnMessage-c5395e41/S3Object",
@@ -648,8 +648,8 @@ exports[`topic with subscriber function 3`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
