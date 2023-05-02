@@ -69,6 +69,13 @@ exports[`bring.w > stderr 1`] = `
 1 | bring std;
   | ^^^^^^^^^^ Redundant bring of \\"std\\"
 
+
+error: \\"cloud\\" is already defined
+  --> ../../../examples/tests/invalid/bring.w:3:7
+  |
+3 | bring cloud;
+  |       ^^^^^ \\"cloud\\" is already defined
+
 "
 `;
 

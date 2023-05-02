@@ -2637,15 +2637,23 @@ impl<'a> TypeChecker<'a> {
 				.expect("Expected to find the just-added jsii import spec")
 		};
 
-		let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
+		// check if we've already defined the given alias in the current scope
+		if env.lookup(&jsii.alias, Some(jsii.import_statement_idx)).is_ok() {
+			self.type_error(TypeError {
+				message: format!("\"{}\" is already defined", alias.name),
+				span: alias.span.clone(),
+			});
+		} else {
+			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
-		// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
-		// because they aren't typically resolved through the same process as other types
-		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
-			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+			// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
+			// because they aren't typically resolved through the same process as other types
+			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
+				importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+			}
+
+			importer.import_submodules_to_env(env);
 		}
-
-		importer.import_submodules_to_env(env);
 	}
 
 	/// Add function arguments to the function's environment
