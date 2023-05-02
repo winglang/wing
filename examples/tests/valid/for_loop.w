@@ -166,3 +166,13 @@ new cloud.Function(inflight(event:str): str => {
     log("${x}");
   }
 });
+
+// for loop in a class
+class Foo {
+  init() {}
+  inflight hello() {
+    for p in ["hello"] {
+      log(p);
+    }
+  }
+}
