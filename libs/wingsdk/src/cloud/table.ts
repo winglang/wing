@@ -76,7 +76,6 @@ export abstract class Table extends Resource {
    */
   public readonly columns: { [key: string]: ColumnType };
 
-  public readonly stateful = true;
   constructor(scope: Construct, id: string, props: TableProps) {
     super(scope, id);
 

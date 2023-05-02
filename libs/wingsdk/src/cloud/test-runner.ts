@@ -42,8 +42,6 @@ export abstract class TestRunner extends Resource {
     return regex.test(c.node.path);
   }
 
-  public readonly stateful = false;
-
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     super(scope, id);
 

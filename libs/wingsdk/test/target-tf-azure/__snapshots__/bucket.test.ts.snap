@@ -64,7 +64,6 @@ exports[`bucket is public 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Bucket": {
@@ -179,7 +178,6 @@ exports[`bucket name valid 2`] = `
               "The-Uncanny-Bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Bucket": {
@@ -326,7 +324,6 @@ exports[`bucket with two preflight objects 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Blob-file1.txt": {
@@ -465,7 +462,6 @@ exports[`create a bucket 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Bucket": {
@@ -593,7 +589,6 @@ exports[`create multiple buckets 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Bucket": {
@@ -619,7 +614,6 @@ exports[`create multiple buckets 2`] = `
               "my_bucket2": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Bucket": {
