@@ -28,7 +28,6 @@ exports[`default topic behavior 2`] = `
               "Topic": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -62,7 +61,6 @@ exports[`default topic behavior 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -150,7 +148,6 @@ exports[`replace invalid character from queue name 2`] = `
               "The%Spectacular@Topic": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -184,7 +181,6 @@ exports[`replace invalid character from queue name 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -272,7 +268,6 @@ exports[`topic name valid 2`] = `
               "The-Spectacular_Topic-01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -306,7 +301,6 @@ exports[`topic name valid 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -489,7 +483,6 @@ exports[`topic with subscriber function 3`] = `
                       "resource": "root/Default/Topic-OnMessage-c5395e41",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -513,7 +506,6 @@ exports[`topic with subscriber function 3`] = `
                       "resource": "root/Default/Topic-OnMessage-c5395e41",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -560,7 +552,6 @@ exports[`topic with subscriber function 3`] = `
                       "resource": "root/Default/Topic",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -634,7 +625,6 @@ exports[`topic with subscriber function 3`] = `
               "Topic-OnMessageHandler-c5395e41": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -657,7 +647,6 @@ exports[`topic with subscriber function 3`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {

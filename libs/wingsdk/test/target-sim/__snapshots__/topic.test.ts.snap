@@ -27,7 +27,6 @@ exports[`create a topic 1`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -44,7 +43,6 @@ exports[`create a topic 1`] = `
         "my_topic": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

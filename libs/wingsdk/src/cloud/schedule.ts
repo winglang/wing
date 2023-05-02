@@ -47,7 +47,6 @@ export abstract class Schedule extends Resource {
     return App.of(scope).newAbstract(SCHEDULE_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
     super(scope, id);
 
@@ -55,7 +54,22 @@ export abstract class Schedule extends Resource {
     this.display.description =
       "A cloud schedule to trigger events at regular intervals";
 
-    props;
+    const { cron, rate } = props;
+
+    if (rate && cron) {
+      throw new Error("rate and cron cannot be configured simultaneously.");
+    }
+    if (!rate && !cron) {
+      throw new Error("rate or cron need to be filled.");
+    }
+    if (rate && rate.seconds < 60) {
+      throw new Error("rate can not be set to less than 1 minute.");
+    }
+    if (cron && cron.split(" ").length > 5) {
+      throw new Error(
+        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
+      );
+    }
   }
 
   /**
@@ -79,6 +93,11 @@ export interface ScheduleOnTickProps extends FunctionProps {}
  * @inflight `@winglang/sdk.cloud.IScheduleOnTickHandlerClient`
  */
 export interface IScheduleOnTickHandler extends IResource {}
+
+/**
+ * Inflight interface for `Schedule`.
+ */
+export interface IScheduleClient {}
 
 /**
  * Inflight client for `IScheduleOnTickHandler`.

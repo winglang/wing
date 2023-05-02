@@ -57,8 +57,6 @@ export abstract class Function extends Resource implements IInflightHost {
 
   private readonly _env: Record<string, string> = {};
 
-  public readonly stateful = false;
-
   /**
    * The path to the entrypoint source code of the function.
    */

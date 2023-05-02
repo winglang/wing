@@ -19,13 +19,11 @@ exports[`tree.json for an app with many resources 1`] = `
               "Default": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "$Inflight4": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
@@ -42,7 +40,6 @@ exports[`tree.json for an app with many resources 1`] = `
                   "$Inflight5": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
@@ -66,7 +63,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/test",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Foo": {
@@ -85,7 +81,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "children": {
                           "cloud.Counter": {
@@ -110,7 +105,6 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "resource": "root/Default/Default/test",
                                 },
                               ],
-                              "wing:resource:stateful": true,
                             },
                             "children": {
                               "Default": {
@@ -201,7 +195,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/test: dependency cycles",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "$Inflight1": {
@@ -214,7 +207,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -238,7 +230,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -262,7 +253,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -310,7 +300,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test: dependency cycles",
                             },
                           ],
-                          "wing:resource:stateful": true,
                         },
                         "children": {
                           "Default": {
@@ -361,7 +350,6 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
                                 },
                               ],
-                              "wing:resource:stateful": true,
                             },
                             "children": {
                               "Default": {
@@ -458,7 +446,6 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "resource": "root/Default/Default/BigPublisher/b2/b2-on_create",
                                 },
                               ],
-                              "wing:resource:stateful": false,
                             },
                             "children": {
                               "Asset": {
@@ -532,7 +519,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "b2-on_create-OnMessageHandler-a754ef69": {
                             "attributes": {
                               "wing:resource:connections": [],
-                              "wing:resource:stateful": false,
                             },
                             "constructInfo": {
                               "fqn": "@winglang/sdk.std.Resource",
@@ -566,7 +552,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -606,7 +591,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test: dependency cycles",
                             },
                           ],
-                          "wing:resource:stateful": true,
                         },
                         "children": {
                           "Default": {
@@ -679,7 +663,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test: dependency cycles",
                             },
                           ],
-                          "wing:resource:stateful": true,
                         },
                         "children": {
                           "Default": {
@@ -762,7 +745,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "children": {
                           "Asset": {
@@ -828,7 +810,6 @@ exports[`tree.json for an app with many resources 1`] = `
                       "cloud.Queue-AddConsumerHandler-c351460f": {
                         "attributes": {
                           "wing:resource:connections": [],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -874,7 +855,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test: dependency cycles",
                             },
                           ],
-                          "wing:resource:stateful": true,
                         },
                         "children": {
                           "Default": {
@@ -957,7 +937,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/cloud.Topic",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "children": {
                           "Asset": {
@@ -1031,7 +1010,6 @@ exports[`tree.json for an app with many resources 1`] = `
                       "cloud.Topic-OnMessageHandler-cb235724": {
                         "attributes": {
                           "wing:resource:connections": [],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -1097,7 +1075,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/test",
                         },
                       ],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Default": {
@@ -1218,7 +1195,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/Bar",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -1321,7 +1297,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/BigPublisher",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -1403,7 +1378,6 @@ exports[`tree.json for an app with many resources 1`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
