@@ -4,9 +4,8 @@
 ```js
 module.exports = function() {
   class  CdkDockerImageFunction {
-    constructor({ function, stateful }) {
+    constructor({ function }) {
       this.function = function;
-      this.stateful = stateful;
     }
   }
   return CdkDockerImageFunction;
@@ -65,14 +64,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const function_client = this._lift(this.function);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/CdkDockerImageFunction.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const CdkDockerImageFunction = require("${self_client_path}")({});
             const client = new CdkDockerImageFunction({
               function: ${function_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -82,7 +79,6 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.function, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         super._registerBind(host, ops);
       }

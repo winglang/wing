@@ -4,11 +4,10 @@
 ```js
 module.exports = function() {
   class  Bar {
-    constructor({ b, foo, name, stateful }) {
+    constructor({ b, foo, name }) {
       this.b = b;
       this.foo = foo;
       this.name = name;
-      this.stateful = stateful;
     }
     async my_method()  {
       {
@@ -27,12 +26,11 @@ module.exports = function() {
 ```js
 module.exports = function() {
   class  BigPublisher {
-    constructor({ b, b2, q, t, stateful }) {
+    constructor({ b, b2, q, t }) {
       this.b = b;
       this.b2 = b2;
       this.q = q;
       this.t = t;
-      this.stateful = stateful;
     }
     async publish(s)  {
       {
@@ -56,9 +54,8 @@ module.exports = function() {
 ```js
 module.exports = function() {
   class  Foo {
-    constructor({ c, stateful }) {
+    constructor({ c }) {
       this.c = c;
-      this.stateful = stateful;
     }
     async $inflight_init()  {
       {
@@ -776,14 +773,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const c_client = this._lift(this.c);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const Foo = require("${self_client_path}")({});
             const client = new Foo({
               c: ${c_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -793,7 +788,6 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.c, host, ["dec", "inc"]);
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("foo_get")) {
           this._registerBindObject(this.c, host, ["peek"]);
@@ -816,7 +810,6 @@ class $Root extends $stdlib.std.Resource {
         const b_client = this._lift(this.b);
         const foo_client = this._lift(this.foo);
         const name_client = this._lift(this.name);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
@@ -825,7 +818,6 @@ class $Root extends $stdlib.std.Resource {
               b: ${b_client},
               foo: ${foo_client},
               name: ${name_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -837,7 +829,6 @@ class $Root extends $stdlib.std.Resource {
           this._registerBindObject(this.b, host, []);
           this._registerBindObject(this.foo, host, []);
           this._registerBindObject(this.name, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("my_method")) {
           this._registerBindObject(this.b, host, ["get", "put"]);
@@ -890,7 +881,6 @@ class $Root extends $stdlib.std.Resource {
         const b2_client = this._lift(this.b2);
         const q_client = this._lift(this.q);
         const t_client = this._lift(this.t);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
@@ -900,7 +890,6 @@ class $Root extends $stdlib.std.Resource {
               b2: ${b2_client},
               q: ${q_client},
               t: ${t_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -912,7 +901,6 @@ class $Root extends $stdlib.std.Resource {
           this._registerBindObject(this.b, host, []);
           this._registerBindObject(this.b2, host, []);
           this._registerBindObject(this.q, host, []);
-          this._registerBindObject(this.stateful, host, []);
           this._registerBindObject(this.t, host, []);
         }
         if (ops.includes("getObjectCount")) {
