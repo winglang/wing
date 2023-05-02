@@ -5389,6 +5389,14 @@ Information on how to display a resource in the UI.
 
 ---
 
+### IScheduleClient <a name="IScheduleClient" id="@winglang/sdk.cloud.IScheduleClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IScheduleClient">IScheduleClient</a>
+
+Inflight interface for `Schedule`.
+
+
+
 ### IScheduleOnTickHandler <a name="IScheduleOnTickHandler" id="@winglang/sdk.cloud.IScheduleOnTickHandler"></a>
 
 - *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
