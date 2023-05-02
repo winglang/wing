@@ -5,7 +5,7 @@ import { IConstruct } from "constructs";
 import { Function } from "./function";
 import { simulatorHandleToken } from "./tokens";
 import { NodeJsCode } from "../core";
-import { IInflightHost, Resource } from "../std";
+import { Duration, IInflightHost, Resource } from "../std";
 
 /**
  * Check if a file exists for an specific path
@@ -60,4 +60,30 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
         return $simulator.findInstance(handle);
       })("${env}")`
   );
+}
+
+// helper function to convert duration to a cron string
+// maybe this belongs in a util library but for now it's here
+export function convertDurationToCronExpression(dur: Duration): string {
+  if (dur.minutes % 1 !== 0) {
+    // our cron expression format is [minute] [hour] [day] [month] [year]
+    throw new Error("Cron expressions with second precision are not supported");
+  }
+
+  const totalInMinutes = Math.floor(dur.minutes);
+
+  const h = Math.floor(totalInMinutes / 60);
+  const m = totalInMinutes % 60;
+
+  const minute = m != 0 ? `*/${m}` : "*";
+  const hour = h != 0 ? `*/${h}` : "*";
+  // TODO: Support longer durations once we implement https://github.com/winglang/wing/issues/2243
+  // for now we just use * for day, month, and year
+  const day = "*";
+  const month = "*";
+  const year = "*";
+
+  // Generate cron string based on the duration
+  const cronString = `${minute} ${hour} ${day} ${month} ${year}`;
+  return cronString;
 }

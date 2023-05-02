@@ -1,9 +1,9 @@
-import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
-import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
-import { StorageContainer } from "@cdktf/provider-azurerm/lib/storage-container";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
+import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
+import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
+import { StorageContainer } from "../.gen/providers/azurerm/storage-container";
 import * as cloud from "../cloud";
 import {
   BucketOnDeleteProps,

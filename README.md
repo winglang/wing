@@ -29,77 +29,50 @@ Our mission is to bring back your creative flow and close the gap between imagin
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
-## What's so special about Wing? 🤔
+## Why do we think the cloud needs a programming language? 🤔
 
-Wing takes a unique approach to cloud development - instead of thinking about computers as individuals machines, it treats the ***entire cloud as the computer***.
-By abstracting the cloud, Wing allows anyone building cloud applications to focus on their business logic and choose the target cloud at compile time.
+Cloud applications are are fundamentally different from applications that run on a single machine - 
+they are distributed systems that rely on cloud infrastructure to achieve their goals.
 
-The result? While your main code is written in Wing, the compilation artifacts are JavaScript and Terraform (with more provisioning engines on the way), meaning Wing can fit seamlessly into your existing stack!
+In order to be able to express both infrastructure and application logic in a safe and unified programming model, 
+Winglang has two execution phases: *Preflight* for infrastructure definitions and *inflight* is for runtime code.
 
-In addition, Wing provides a built-in local simulator, and an observability & debugging [console](https://docs.winglang.io/getting-started/console), making it easier for you to reduce cognitive load and context switching, enabling you to stay in your creative flow.
+Preflight code is executed *during compilation* and produces the infrastructure configuration for your app (e.g. **Terraform**, **CloudFormation**, etc).
+Inflight code is compiled to **JavaScript** and executed on within cloud compute platforms in Node.js environments.
 
-Here's a taste of what Wing code looks like:
+Let's look at a simple example:
 
 ```js
 bring cloud;
 
-// This code defines a bucket as part of your application.
-// At compile time, it will be substituted by an implementation
-// for the target cloud provider.
+let queue = new cloud.Queue();
+let counter = new cloud.Counter();
 let bucket = new cloud.Bucket();
 
-// Here we are able to interact with infra config of the bucket
-bucket.public = true;
-
-// An `inflight` represents code that runs later, on other machines,
-// and can interact with any cloud resources
-let hello_world = inflight () => {
-  bucket.put("hello.txt", "Hello, World!");
-};
-
-// We can deploy the inflight as a serverless function
-// (or in the future as a long-running service, etc.)
-new cloud.Function(hello_world);
+queue.add_consumer(inflight (message: str) => {
+  let i = counter.inc();
+  bucket.put("file-${i}.txt", message);
+});
 ```
 
-> ### Note for cloud experts 🤓
->
-> To give full control over how applications are deployed, Wing lets you customize **operational details** in a few ways:
->
-> 1. by creating a [compiler plugin](https://docs.winglang.io/reference/compiler-plugins) that modifies the generated Terraform, or 
-> 2. by providing implementations of built-in resources like `cloud.Bucket`, or
-> 3. by developing your own custom resources.
->
-> This layer of separation allows you to refactor code and write unit tests that focus on the business logic, while still having the flexibility to make changes under the hood.
+`cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*.
+They represent cloud infrastructure resources. 
+When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
+of these resources. The `queue.add_consumer()` method is a *preflight method* that configures the infrastructure to
+invoke a particular *inflight function* for each message in the queue.
 
-## Getting started 🛠️
+Now comes the cool part: the code that runs inside the inflight function interacts with the `counter` and the `bucket` objects
+through their *inflight methods* (`counter.inc()` and `bucket.put()`). These methods can only be
+called from inflight scopes.
 
-> 🚧 Wing is still in alpha, and not recommended for production use. But we're excited for anyone to take part in shaping our 
-> roadmap and contributing in any way. Our [project status](https://docs.winglang.io/status) page includes more information about 
-> stability and roadmap.
+Winglang is shipped with a standard library of cloud resources, allowing you to work at a high level
+of abstraction and write cloud code that can be ported across cloud providers. However, you still have
+full control and can completely customize the infrastructure configuration of your application using
+[compiler plugins](https://docs.winglang.io/reference/compiler-plugins) and by using any
+resource in the Terraform ecosystem as first-class citizens in your app.
 
-You can install Wing in a few simple steps:
-
-1. Check out the [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites).
-2. Install the [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli).
-3. Get the [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension) for your favorite editor.
-4. Launch the [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console) and take it for a spin!
-
-For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/getting-started) guide.
-It's a once-in-a-lifetime adventure into the Wing rabbit hole!
-
-## Deeper dive 🤿
-
-To learn more about Wing concepts such as resources and inflights, jump over to the [Concepts](https://docs.winglang.io/category/concepts) section in our docs.
-
-For a comprehensive reference of the language, check out the [Wing Language Specification](https://docs.winglang.io/reference/spec) and the [API Reference](https://docs.winglang.io/reference/sdk).
-
-## Why is Wing a language, not just another library or framework? 🤔
-
-We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) to fully utilize it.
-While it is possible to use this new paradigm with existing languages, we believe that a language that natively supports it will make using it much easier by streamlining common patterns, in a way that is impossible to accomplish with existing ones. Kind of like what C++ did for object orientation.
-
-You can find more details with concrete examples of things that cannot be done with existing languages [here](https://docs.winglang.io/faq/why-a-language).
+While you can work at a very high level of abstraction, Winglang also gives you full control and
+customizablity over how applications are deployed.
 
 ## What makes Wing a good fit for cloud development? 🌟
 
@@ -117,6 +90,22 @@ It includes an assembly of different features that serve that purpose:
 * [Implicit async](https://docs.winglang.io/reference/spec#113-asynchronous-model), explicit defer.
 
 For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/).
+
+## Getting started 🛠️
+
+> 🚧 Wing is still in alpha, and not recommended for production use. But we're excited for anyone to take part in shaping our 
+> roadmap and contributing in any way. Our [project status](https://docs.winglang.io/status) page includes more information about 
+> stability and roadmap.
+
+You can install Wing in a few simple steps:
+
+1. Check out the [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites).
+2. Install the [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli).
+3. Get the [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension) for your favorite editor.
+4. Launch the [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console) and take it for a spin!
+
+For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/getting-started) guide.
+It's a once-in-a-lifetime adventure into the Wing rabbit hole!
 
 ## FAQs ❓
 

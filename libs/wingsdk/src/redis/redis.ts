@@ -22,8 +22,6 @@ export abstract class Redis extends Resource {
     return App.of(scope).newAbstract(REDIS_FQN, scope, id);
   }
 
-  public readonly stateful = false; // TODO: redis persistence
-
   constructor(scope: Construct, id: string) {
     super(scope, id);
 

@@ -50,7 +50,6 @@ export abstract class Queue extends Resource {
     return App.of(scope).newAbstract(QUEUE_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
 

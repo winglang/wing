@@ -7,7 +7,6 @@ exports[`provides raw tree data 1`] = `
       "cloud.TestRunner": {
         "attributes": {
           "wing:resource:connections": [],
-          "wing:resource:stateful": false,
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
@@ -24,7 +23,6 @@ exports[`provides raw tree data 1`] = `
       "test": {
         "attributes": {
           "wing:resource:connections": [],
-          "wing:resource:stateful": false,
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
@@ -40,7 +38,6 @@ exports[`provides raw tree data 1`] = `
       "test.handler": {
         "attributes": {
           "wing:resource:connections": [],
-          "wing:resource:stateful": false,
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
