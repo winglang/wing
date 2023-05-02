@@ -11,6 +11,17 @@ const CDKTF_PROVIDERS = [
   "google@~>4.0",
 ];
 
+// defines the list of dependencies required for each compilation target that is not built into the
+// compiler (like Terraform targets).
+const TARGET_DEPS = {
+  awscdk: ["aws-cdk-lib@^2.64.0"],
+};
+
+// we treat all the non-builtin dependencies as "side loaded". this means that we will remove them
+// from the "package.json" just before we bundle the package and the Wing CLI will require the user
+// to install them at runtime
+const sideLoad = Object.values(TARGET_DEPS).flat();
+
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
   author: "Monada, Inc.",
@@ -25,6 +36,7 @@ const project = new cdk.JsiiProject({
   deps: [...JSII_DEPS],
   bundledDeps: [
     `cdktf@${CDKTF_VERSION}`,
+    ...sideLoad,
     // preflight dependencies
     "debug",
     "esbuild-wasm",
@@ -74,7 +86,6 @@ const project = new cdk.JsiiProject({
     "vitest",
     "@types/uuid",
     "@vitest/coverage-c8",
-    "aws-cdk-lib",
   ],
   jest: false,
   prettier: true,
@@ -222,5 +233,20 @@ new JsonFile(project, "cdktf.json", {
 project.gitignore.addPatterns("src/.gen/providers");
 
 project.preCompileTask.exec("cdktf get");
+
+const packageJsonBack = "package.json.bak";
+const removeBundledDeps = project.addTask("remove-bundled-deps");
+removeBundledDeps.exec(`cp package.json ${packageJsonBack}`);
+for (const dep of sideLoad) {
+  removeBundledDeps.exec(
+    `./scripts/remove-bundled-dep.js ${dep.split("@")[0]}`
+  );
+}
+
+const restoreBundleDeps = project.addTask("restore-bundled-deps");
+restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
+
+project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
+project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
 project.synth();
