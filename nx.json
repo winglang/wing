@@ -12,12 +12,12 @@
   "namedInputs": {
     "default": [
       "!{projectRoot}/node_modules/**",
-      "{workspaceRoot}/.cargo/**",
-      "{workspaceRoot}/.vscode/**",
       "!{workspaceRoot}/README.md",
       "!{projectRoot}/README.md",
       "{workspaceRoot}/*",
-      "{projectRoot}/**/*"
+      "{projectRoot}/**/*",
+      "{workspaceRoot}/.cargo/**",
+      "{workspaceRoot}/.vscode/**"
     ],
     "exclude-tests": [
       "!{projectRoot}/test/**",
