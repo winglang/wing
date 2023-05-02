@@ -20,6 +20,12 @@ export const StatusBar = ({
   const theme = useTheme();
   const loading =
     cloudAppState === "loadingSimulator" || cloudAppState === "compiling";
+  const cloudAppStateString = {
+    compiling: "compiling",
+    loadingSimulator: "loading simulator",
+    success: "success",
+    error: "error",
+  };
   return (
     <footer
       className={classNames(
@@ -46,7 +52,7 @@ export const StatusBar = ({
               ])}
             >
               {loading && <Loader size="1rem" />}
-              {cloudAppState}
+              {cloudAppStateString[cloudAppState]}
             </span>
           </span>
         </div>
