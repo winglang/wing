@@ -1,6 +1,6 @@
 import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 
 import { Button } from "../../design-system/Button.js";
 import { Combobox } from "../../design-system/Combobox.js";
@@ -13,57 +13,14 @@ import { Tabs } from "../../design-system/Tabs.js";
 import { TextArea } from "../../design-system/TextArea.js";
 import { trpc } from "../../utils/trpc.js";
 import { AttributeView } from "../AttributeView.js";
-import { JsonResponseInput } from "../JsonResponseInput.js";
-import { ResponseInput } from "../ResponseInput.js";
+
+import { ApiResponse, HTTP_HEADERS, HTTP_METHODS } from "./api-helper.js";
+import { ApiResponseBodyPanel } from "./ApiResponseBodyPanel.js";
+import { ApiResponseHeadersPanel } from "./ApiResponseHeadersPanel.js";
 
 export interface ApiViewProps {
   resourcePath: string;
 }
-
-const HTTP_METHODS = [
-  "GET",
-  "HEAD",
-  "POST",
-  "PUT",
-  "DELETE",
-  "CONNECT",
-  "OPTIONS",
-  "PATCH",
-];
-
-const HTTP_HEADERS = {
-  accept: [
-    "text/html",
-    "text/plain",
-    "application/json",
-    "application/xml",
-    "application/javascript",
-    "application/octet-stream",
-    "multipart/form-data",
-    "application/x-www-form-urlencoded",
-  ],
-  "accept-charset": ["utf8", "iso-8859-1", "windows-1252"],
-  "accept-encoding": ["gzip", "deflate", "br"],
-  authorization: [],
-  "cache-control": [
-    "no-cache",
-    "no-store",
-    "max-age=<seconds>",
-    "max-stale=<seconds>",
-    "min-fresh=<seconds>",
-    "only-if-cached",
-  ],
-  connection: ["keep-alive", "close"],
-  "content-length": [],
-  "content-type": [
-    "application/json",
-    "application/x-www-form-urlencoded",
-    "multipart/form-data",
-  ],
-  cookie: [],
-  origin: [],
-  "user-agent": [],
-};
 
 const getHeaderValues = (header: string): string[] => {
   const key = header as keyof typeof HTTP_HEADERS;
@@ -71,22 +28,6 @@ const getHeaderValues = (header: string): string[] => {
     return HTTP_HEADERS[key];
   }
   return [];
-};
-
-const getResponseColor: (status: number) => string = (status) => {
-  if (status >= 200 && status < 300) {
-    return "text-green-500";
-  }
-  if (status >= 300 && status < 400) {
-    return "text-blue-500";
-  }
-  if (status >= 400 && status < 500) {
-    return "text-orange-500";
-  }
-  if (status >= 500 && status < 600) {
-    return "text-red-500";
-  }
-  return "gray";
 };
 
 export interface ApiRoute {
@@ -109,16 +50,7 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
   const [currentOptionsTab, setCurrentOptionsTab] = useState("headers");
   const [currentResponseTab, setCurrentResponseTab] = useState("body");
 
-  const [response, setResponse] = useState<{
-    status: number;
-    statusText: string;
-    textResponse: string;
-    duration: number;
-    headers: {
-      key: string;
-      value: string;
-    }[];
-  }>();
+  const [response, setResponse] = useState<ApiResponse>();
 
   const bodyId = useId();
 
@@ -127,6 +59,7 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
     addItem: addHeader,
     removeItem: removeHeader,
     editItem: editHeader,
+    removeAll: removeAllHeaders,
   } = useKeyValueList();
 
   const {
@@ -135,13 +68,27 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
     removeItem: removeQueryParameter,
     editItem: editQueryParameter,
     setItems: setQueryParameters,
+    removeAll: removeAllQueryParameters,
   } = useKeyValueList();
 
   const {
     items: pathVariables,
     editItem: editPathVariable,
     setItems: setPathVariables,
+    removeAll: removeAllPathVariables,
   } = useKeyValueList();
+
+  const resetApiState = () => {
+    setCurrentRoute("");
+    setCurrentMethod("GET");
+    setBody("");
+    setCurrentHeaderKey("");
+    setValuesList([]);
+    setResponse(undefined);
+    removeAllHeaders();
+    removeAllQueryParameters();
+    removeAllPathVariables();
+  };
 
   const apiFetch = trpc["api.fetch"].useMutation();
   const schema = trpc["api.schema"].useQuery({ resourcePath });
@@ -234,6 +181,7 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
     if (!schema.data) {
       return;
     }
+    resetApiState();
     setUrl(schema.data.attrs.url);
     setRoutes(schema.data.props.routes);
 
@@ -395,7 +343,6 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
                     </div>
                   ),
                 },
-
                 {
                   id: "body",
                   name: `Body`,
@@ -430,57 +377,20 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
                     id: "body",
                     name: "Body",
                     panel: (
-                      <div className="pt-2 relative">
-                        {response && (
-                          <div
-                            className={classNames(
-                              "gap-x-1 truncate items-center absolute -top-[12px] right-[2px] max-w-full z-10",
-                            )}
-                          >
-                            <span
-                              className={classNames(
-                                getResponseColor(response.status),
-                                "text-xs ml-1 truncate",
-                              )}
-                            >
-                              {response.status} {response.statusText}
-                            </span>
-                            {response.duration >= 0 && (
-                              <span
-                                className={classNames(
-                                  theme.text2,
-                                  "text-xs ml-1 truncate",
-                                )}
-                              >
-                                {response.duration}ms
-                              </span>
-                            )}
-                          </div>
-                        )}
-                        <JsonResponseInput
-                          value={response?.textResponse || ""}
-                          loading={apiFetch.isLoading}
-                          placeholder="No response"
-                          json={true}
-                        />
-                      </div>
+                      <ApiResponseBodyPanel
+                        response={response}
+                        isLoading={apiFetch.isLoading}
+                      />
                     ),
                   },
                   {
                     id: "headers",
                     name: "Headers",
                     panel: (
-                      <div className="pt-2">
-                        <ResponseInput
-                          empty={!response?.headers}
-                          loading={apiFetch.isLoading}
-                        >
-                          <KeyValueList
-                            items={response?.headers || []}
-                            readonly
-                          />
-                        </ResponseInput>
-                      </div>
+                      <ApiResponseHeadersPanel
+                        headers={response?.headers ?? []}
+                        isLoading={apiFetch.isLoading}
+                      />
                     ),
                   },
                 ]}
