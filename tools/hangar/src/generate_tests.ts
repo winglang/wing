@@ -49,6 +49,7 @@ function generateTests(
       skipText = ".skip";
     }
 
+    // ensure windows paths are escaped
     const escapedSourceDir = sourceDir.replace(/\\/g, "\\\\");
 
     const fileContents = `\
