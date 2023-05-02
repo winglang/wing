@@ -140,7 +140,9 @@ test("api supports every method type", async () => {
   const responses = await Promise.all(
     METHODS.map((method) => fetch(apiUrl + ROUTE, { method }))
   );
-  const eventMappings = s.getEventMappingResourceConfigByPublisher(api.node.path);
+  const eventMappings = s.getEventMappingResourceConfigByPublisher(
+    api.node.path
+  );
 
   // THEN
   await s.stop();
@@ -223,7 +225,9 @@ test("api with multiple routes", async () => {
   const apiUrl = getApiUrl(s, "/my_api");
   const response1 = await fetch(`${apiUrl}${ROUTE1}`, { method: "GET" });
   const response2 = await fetch(`${apiUrl}${ROUTE2}`, { method: "GET" });
-  const eventMappings = s.getEventMappingResourceConfigByPublisher(api.node.path);
+  const eventMappings = s.getEventMappingResourceConfigByPublisher(
+    api.node.path
+  );
 
   // THEN
   await s.stop();
@@ -236,7 +240,7 @@ test("api with multiple routes", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
-  
+
   expect(eventMappings.length).toEqual(2);
 });
 
