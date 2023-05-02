@@ -88,7 +88,6 @@ exports[`basic function 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -101,16 +100,16 @@ exports[`basic function 2`] = `
                   },
                   "CodeBlob": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
                   },
                   "Function": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -118,13 +117,12 @@ exports[`basic function 2`] = `
                   "FunctionBucket": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Bucket": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -143,8 +141,8 @@ exports[`basic function 2`] = `
                   },
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -164,7 +162,6 @@ exports[`basic function 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -180,32 +177,32 @@ exports[`basic function 2`] = `
               },
               "ResourceGroup": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
               "ServicePlan": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
               "StorageAccount": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
               "azure": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -336,7 +333,6 @@ exports[`basic function with environment variables 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -349,16 +345,16 @@ exports[`basic function with environment variables 2`] = `
                   },
                   "CodeBlob": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
                   },
                   "Function": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -366,13 +362,12 @@ exports[`basic function with environment variables 2`] = `
                   "FunctionBucket": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Bucket": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -391,8 +386,8 @@ exports[`basic function with environment variables 2`] = `
                   },
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -412,7 +407,6 @@ exports[`basic function with environment variables 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -428,32 +422,32 @@ exports[`basic function with environment variables 2`] = `
               },
               "ResourceGroup": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
               "ServicePlan": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
               "StorageAccount": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
               "azure": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -582,7 +576,6 @@ exports[`replace invalid character from function name 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -598,32 +591,32 @@ exports[`replace invalid character from function name 2`] = `
               },
               "ResourceGroup": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
               "ServicePlan": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
               "StorageAccount": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
               "azure": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -631,7 +624,6 @@ exports[`replace invalid character from function name 2`] = `
               "someFunction01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -644,16 +636,16 @@ exports[`replace invalid character from function name 2`] = `
                   },
                   "CodeBlob": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/someFunction01/CodeBlob",
                   },
                   "Function": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Function",
                     "path": "root/Default/someFunction01/Function",
@@ -661,13 +653,12 @@ exports[`replace invalid character from function name 2`] = `
                   "FunctionBucket": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Bucket": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Bucket",
                         "path": "root/Default/someFunction01/FunctionBucket/Bucket",
@@ -686,8 +677,8 @@ exports[`replace invalid character from function name 2`] = `
                   },
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/someFunction01/ReadLambdaCodeAssignment",
