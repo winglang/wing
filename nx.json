@@ -37,8 +37,8 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "inputs": [
         "default-build",
         "^default-build"
@@ -58,16 +58,16 @@
       ]
     },
     "package": {
-      "dependsOn": ["^build"],
       "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
       "inputs": [
         "default-build",
         "^default-build"
       ]
     },
     "dev": {
-      "dependsOn": ["build", "^build"],
       "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
       "inputs": [
         "default-build",
         "^default-build"
