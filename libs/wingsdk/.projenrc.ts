@@ -25,7 +25,6 @@ const project = new cdk.JsiiProject({
   deps: [...JSII_DEPS],
   bundledDeps: [
     `cdktf@${CDKTF_VERSION}`,
-    "aws-cdk-lib@^2.64.0",
     // preflight dependencies
     "debug",
     "esbuild-wasm",
@@ -75,6 +74,7 @@ const project = new cdk.JsiiProject({
     "vitest",
     "@types/uuid",
     "@vitest/coverage-c8",
+    "aws-cdk-lib",
   ],
   jest: false,
   prettier: true,

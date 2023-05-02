@@ -59,6 +59,10 @@
       "type": "build"
     },
     {
+      "name": "aws-cdk-lib",
+      "type": "build"
+    },
+    {
       "name": "aws-sdk-client-mock",
       "type": "build"
     },
@@ -223,11 +227,6 @@
     {
       "name": "@azure/storage-blob",
       "version": "12.14.0",
-      "type": "bundled"
-    },
-    {
-      "name": "aws-cdk-lib",
-      "version": "^2.64.0",
       "type": "bundled"
     },
     {
