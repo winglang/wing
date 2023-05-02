@@ -1,5 +1,24 @@
 # [for_loop.w](../../../../examples/tests/valid/for_loop.w) | compile | tf-aws
 
+## clients/Foo.inflight.js
+```js
+module.exports = function() {
+  class  Foo {
+    constructor({  }) {
+    }
+    async hello()  {
+      {
+        for (const p of Object.freeze(["hello"])) {
+          {console.log(p)};
+        }
+      }
+    }
+  }
+  return Foo;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -130,6 +149,31 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class Foo extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("hello");
+      }
+      _toInflight() {
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const Foo = require("${self_client_path}")({});
+            const client = new Foo({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("hello")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const words = Object.freeze(["wing", "lang", "dang"]);
     const unique_numbers = Object.freeze(new Set([1, 2, 3]));
     for (const word of words) {
