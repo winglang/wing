@@ -46,7 +46,6 @@ exports[`bucket is public 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -180,7 +179,6 @@ exports[`bucket with two preflight objects 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -310,7 +308,6 @@ exports[`create a bucket 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -433,7 +430,6 @@ exports[`two buckets 2`] = `
               "my_bucket1": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -467,7 +463,6 @@ exports[`two buckets 2`] = `
               "my_bucket2": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {

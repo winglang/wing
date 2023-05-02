@@ -45,7 +45,6 @@ export interface EventMappingProps {
  * @inflight `@winglang/sdk.sim.EventMapping`
  */
 export class EventMapping extends Resource implements ISimulatorResource {
-  public readonly stateful = true;
   private readonly _eventProps: EventMappingProps;
 
   constructor(scope: Construct, id: string, props: EventMappingProps) {

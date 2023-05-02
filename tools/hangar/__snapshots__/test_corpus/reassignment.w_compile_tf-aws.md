@@ -4,9 +4,8 @@
 ```js
 module.exports = function() {
   class  R {
-    constructor({ f1, stateful }) {
+    constructor({ f1 }) {
       this.f1 = f1;
-      this.stateful = stateful;
     }
   }
   return R;
@@ -70,14 +69,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const f1_client = this._lift(this.f1);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const R = require("${self_client_path}")({});
             const client = new R({
               f1: ${f1_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -87,7 +84,6 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.f1, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         super._registerBind(host, ops);
       }

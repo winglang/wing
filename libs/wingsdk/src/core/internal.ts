@@ -23,8 +23,6 @@ export function makeHandler(
 
   // implements IFunctionHandler
   class Handler extends Resource {
-    public readonly stateful = false;
-
     constructor() {
       super(scope, id);
 

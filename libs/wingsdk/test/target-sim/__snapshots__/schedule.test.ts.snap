@@ -29,7 +29,6 @@ exports[`create a schedule 1`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -46,7 +45,6 @@ exports[`create a schedule 1`] = `
         "my_schedule": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -146,7 +144,6 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -163,7 +160,6 @@ console.log(\\"Hello from schedule!\\");
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -187,13 +183,11 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "my_schedule-OnTickMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -233,7 +227,6 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -249,7 +242,6 @@ console.log(\\"Hello from schedule!\\");
         "my_scheduleOnTickHandlere645076f": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -348,7 +340,6 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -365,7 +356,6 @@ console.log(\\"Hello from schedule!\\");
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -389,13 +379,11 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "my_schedule-OnTickMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -435,7 +423,6 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -451,7 +438,6 @@ console.log(\\"Hello from schedule!\\");
         "my_scheduleOnTickHandlere645076f": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -550,7 +536,6 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -567,7 +552,6 @@ console.log(\\"Hello from schedule!\\");
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -591,13 +575,11 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "my_schedule-OnTickMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -637,7 +619,6 @@ console.log(\\"Hello from schedule!\\");
                 "resource": "root/my_schedule",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -653,7 +634,6 @@ console.log(\\"Hello from schedule!\\");
         "my_scheduleOnTickHandlere645076f": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
