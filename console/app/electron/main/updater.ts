@@ -54,7 +54,11 @@ export const updater: Updater = {
     return status;
   },
   async checkForUpdates() {
-    await autoUpdater.checkForUpdatesAndNotify();
+    // https://github.com/electron-userland/electron-builder/blob/53327d51101b83641ece9f497577c3ac93d3e91d/packages/electron-updater/src/AppUpdater.ts#L323
+    await autoUpdater.checkForUpdatesAndNotify({
+      title: "A new update is ready to install",
+      body: `Wing Console version {version} has been downloaded and will be automatically installed on exit`,
+    });
   },
   addEventListener(event, listener) {
     log.info("auto-updater: addEventListener", event, listener);
