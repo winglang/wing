@@ -1297,12 +1297,12 @@ resource Table {
   /**
    * Insert a row into the table.
    */
-  inflight insert(row: Map<Json>): void;
+  inflight insert(key: str, row: Json): void;
 
   /**
    * Update a row in the table.
    */
-  inflight update(row: Map<Json>): void;
+  inflight update(key: str, row: Json): void;
 
   /**
    * Delete a row from the table, by primary key.
@@ -1312,12 +1312,12 @@ resource Table {
   /**
    * Get a row from the table, by primary key.
    */
-  inflight get(key: str): Map<Json>;
+  inflight get(key: str): Json;
 
   /**
    * List all rows in the table.
    */
-  inflight list(): Iterator<Map<Json>>;
+  inflight list(): Iterator<Json>;
 }
 ```
 

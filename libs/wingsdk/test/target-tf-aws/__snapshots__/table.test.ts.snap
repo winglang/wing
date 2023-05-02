@@ -146,7 +146,6 @@ exports[`function with a table binding 3`] = `
                       "resource": "root/Default/Table",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -212,7 +211,6 @@ exports[`function with a table binding 3`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -236,7 +234,6 @@ exports[`function with a table binding 3`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -270,7 +267,6 @@ exports[`function with a table binding 3`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {

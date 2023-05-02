@@ -87,7 +87,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -104,7 +103,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -128,13 +126,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -156,7 +152,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -281,7 +276,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -298,7 +292,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -322,13 +315,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -350,7 +341,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -475,7 +465,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -492,7 +481,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -516,13 +504,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -544,7 +530,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -711,7 +696,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -728,7 +712,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -788,13 +771,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -852,7 +833,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -963,7 +943,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -980,7 +959,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1004,13 +982,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1032,7 +1008,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1206,7 +1181,6 @@ return class Handler {
         "Handler1": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1223,7 +1197,6 @@ return class Handler {
         "Handler2": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1240,7 +1213,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1270,13 +1242,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-f6d90a7f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-7c48a9f0": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1291,7 +1261,6 @@ return class Handler {
             "ApiEventMapping-f6d90a7f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1313,7 +1282,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1336,7 +1304,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1510,7 +1477,6 @@ return class Handler {
         "Handler1": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1527,7 +1493,6 @@ return class Handler {
         "Handler2": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1544,7 +1509,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1574,13 +1538,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-f6d90a7f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-7c48a9f0": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1595,7 +1557,6 @@ return class Handler {
             "ApiEventMapping-f6d90a7f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1617,7 +1578,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1640,7 +1600,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1765,7 +1724,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1782,7 +1740,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1806,13 +1763,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1834,7 +1789,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1959,7 +1913,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1976,7 +1929,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2000,13 +1952,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2028,7 +1978,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2153,7 +2102,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2170,7 +2118,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2194,13 +2141,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2222,7 +2167,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2347,7 +2291,6 @@ return class Handler {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2364,7 +2307,6 @@ return class Handler {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2388,13 +2330,11 @@ return class Handler {
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "ApiEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2416,7 +2356,6 @@ return class Handler {
                     "resource": "root/my_api",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2481,7 +2420,6 @@ exports[`create an api 1`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2498,7 +2436,6 @@ exports[`create an api 1`] = `
         "my_api": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

@@ -4,8 +4,7 @@
 ```js
 module.exports = function() {
   class  Fetch {
-    constructor({ stateful }) {
-      this.stateful = stateful;
+    constructor({  }) {
     }
     async get(url)  {
       return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
@@ -287,13 +286,11 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("get");
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Fetch.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const Fetch = require("${self_client_path}")({});
             const client = new Fetch({
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -302,7 +299,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("get")) {
         }

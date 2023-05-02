@@ -81,7 +81,6 @@ exports[`basic function 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -147,7 +146,6 @@ exports[`basic function 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -172,7 +170,6 @@ exports[`basic function 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -315,7 +312,6 @@ exports[`basic function with environment variables 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -381,7 +377,6 @@ exports[`basic function with environment variables 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -406,7 +401,6 @@ exports[`basic function with environment variables 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -548,7 +542,6 @@ exports[`basic function with memory size specified 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -614,7 +607,6 @@ exports[`basic function with memory size specified 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -639,7 +631,6 @@ exports[`basic function with memory size specified 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -780,7 +771,6 @@ exports[`basic function with timeout explicitly set 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -846,7 +836,6 @@ exports[`basic function with timeout explicitly set 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -871,7 +860,6 @@ exports[`basic function with timeout explicitly set 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1012,7 +1000,6 @@ exports[`function name valid 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1029,7 +1016,6 @@ exports[`function name valid 2`] = `
               "The-Mighty_Function-01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1103,7 +1089,6 @@ exports[`function name valid 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1244,7 +1229,6 @@ exports[`replace invalid character from function name 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1261,7 +1245,6 @@ exports[`replace invalid character from function name 2`] = `
               "The%Mighty$Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1335,7 +1318,6 @@ exports[`replace invalid character from function name 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {

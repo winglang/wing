@@ -31,7 +31,6 @@ exports[`create a queue 1`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -48,7 +47,6 @@ exports[`create a queue 1`] = `
         "my_queue": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -171,7 +169,6 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -188,7 +185,6 @@ async handle(message) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -212,13 +208,11 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -258,7 +252,6 @@ async handle(message) {
                 "resource": "root/my_queue",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -274,7 +267,6 @@ async handle(message) {
         "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -396,7 +388,6 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -413,7 +404,6 @@ async handle(message) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -437,13 +427,11 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -483,7 +471,6 @@ async handle(message) {
                 "resource": "root/my_queue",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -499,7 +486,6 @@ async handle(message) {
         "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -625,7 +611,6 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -642,7 +627,6 @@ async handle(message) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -666,13 +650,11 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -712,7 +694,6 @@ async handle(message) {
                 "resource": "root/my_queue",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -728,7 +709,6 @@ async handle(message) {
         "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -798,7 +778,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -815,7 +794,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "my_queue": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -945,7 +923,6 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -962,7 +939,6 @@ async handle(message) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -986,13 +962,11 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1032,7 +1006,6 @@ async handle(message) {
                 "resource": "root/my_queue",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1048,7 +1021,6 @@ async handle(message) {
         "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1172,7 +1144,6 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1189,7 +1160,6 @@ async handle(message) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1213,13 +1183,11 @@ async handle(message) {
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
-            "wing:resource:stateful": true,
           },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1259,7 +1227,6 @@ async handle(message) {
                 "resource": "root/my_queue",
               },
             ],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1275,7 +1242,6 @@ async handle(message) {
         "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

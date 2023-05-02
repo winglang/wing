@@ -61,7 +61,6 @@ async handle(event) {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -78,7 +77,6 @@ async handle(event) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -95,7 +93,6 @@ async handle(event) {
         "my_function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -190,7 +187,6 @@ async handle(event) {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -207,7 +203,6 @@ async handle(event) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -224,7 +219,6 @@ async handle(event) {
         "my_function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -319,7 +313,6 @@ async handle(event) {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -336,7 +329,6 @@ async handle(event) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -353,7 +345,6 @@ async handle(event) {
         "my_function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -450,7 +441,6 @@ async handle(event) {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -467,7 +457,6 @@ async handle(event) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -484,7 +473,6 @@ async handle(event) {
         "my_function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -569,7 +557,6 @@ async handle() {
         "Handler": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -586,7 +573,6 @@ async handle() {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -603,7 +589,6 @@ async handle() {
         "my_function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
