@@ -83,34 +83,106 @@ describe("Plugin examples", () => {
       ).toEqual(2); // 2 replica rules
     });
 
-    test("tf-s3-backend.js", async () => {
-      const plugin = path.join(pluginsDir, "tf-s3-backend.js");
-      const tfBackendBucket = "my-wing-bucket";
-      const tfBackendBucketRegion = "us-east-1";
-      const stateFile = "some-state-file.tfstate";
-      process.env.TF_BACKEND_BUCKET = tfBackendBucket;
-      process.env.TF_BACKEND_BUCKET_REGION = tfBackendBucketRegion;
-      process.env.STATE_FILE = stateFile;
-
-      await runWingCommand({
-        cwd: tmpDir,
-        wingFile: appFile,
-        args,
-        shouldSucceed: true,
-        plugins: [plugin],
+    describe("tf-backend-configuration.js", () => {
+      test("s3 backend", async () => {
+        const plugin = path.join(pluginsDir, "tf-backend-configuration.js");
+        const tfBackend = "s3";
+        const tfBackendBucket = "my-wing-bucket";
+        const tfBackendBucketRegion = "us-east-1";
+        const stateFile = "some-state-file.tfstate";
+        process.env.TF_BACKEND = tfBackend;
+        process.env.TF_BACKEND_BUCKET = tfBackendBucket;
+        process.env.TF_BACKEND_BUCKET_REGION = tfBackendBucketRegion;
+        process.env.STATE_FILE = stateFile;
+  
+        await runWingCommand({
+          cwd: tmpDir,
+          wingFile: appFile,
+          args,
+          shouldSucceed: true,
+          plugins: [plugin],
+        });
+  
+        const tfPath = path.join(targetDir, "main.tf.json");
+        const terraformOutput = sanitize_json_paths(tfPath);
+        const unsanitizedTerraformOutput = fs.readJsonSync(tfPath);
+  
+        expect(terraformOutput).toMatchSnapshot();
+        expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
+          s3: {
+            bucket: tfBackendBucket,
+            region: tfBackendBucketRegion,
+            key: stateFile,
+          },
+        });
       });
 
-      const tfPath = path.join(targetDir, "main.tf.json");
-      const terraformOutput = sanitize_json_paths(tfPath);
-      const unsanitizedTerraformOutput = fs.readJsonSync(tfPath);
+      test("gcp backend", async () => {
+        const plugin = path.join(pluginsDir, "tf-backend-configuration.js");
+        const tfBackend = "gcs";
+        const tfBackendBucket = "my-wing-bucket";
+        const stateFile = "some-state-file.tfstate";
+        process.env.TF_BACKEND = tfBackend;
+        process.env.TF_BACKEND_BUCKET = tfBackendBucket;
+        process.env.STATE_FILE = stateFile;
+  
+        await runWingCommand({
+          cwd: tmpDir,
+          wingFile: appFile,
+          args,
+          shouldSucceed: true,
+          plugins: [plugin],
+        });
+  
+        const tfPath = path.join(targetDir, "main.tf.json");
+        const terraformOutput = sanitize_json_paths(tfPath);
+        const unsanitizedTerraformOutput = fs.readJsonSync(tfPath);
+  
+        expect(terraformOutput).toMatchSnapshot();
+        expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
+          gcs: {
+            bucket: tfBackendBucket,
+            prefix: stateFile,
+          },
+        });
+      });
 
-      expect(terraformOutput).toMatchSnapshot();
-      expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
-        s3: {
-          bucket: tfBackendBucket,
-          region: tfBackendBucketRegion,
-          key: stateFile,
-        },
+      test("azurerm backend", async () => {
+        const plugin = path.join(pluginsDir, "tf-backend-configuration.js");
+        const tfBackend = "azurerm";
+        const tfBackendStorageAccountName = "my-wing-storage-account";
+        const tfBackendContainerName = "my-wing-container";
+        const tfBackendResourceGroupName = "my-wing-resource-group";
+        const tfBackendBucket = "my-wing-bucket";
+        const stateFile = "some-state-file.tfstate";
+        process.env.TF_BACKEND = tfBackend;
+        process.env.TF_BACKEND_BUCKET = tfBackendBucket;
+        process.env.TF_BACKEND_STORAGE_ACCOUNT_NAME = tfBackendStorageAccountName;
+        process.env.TF_BACKEND_CONTAINER_NAME = tfBackendContainerName;
+        process.env.TF_BACKEND_RESOURCE_GROUP_NAME = tfBackendResourceGroupName;
+        process.env.STATE_FILE = stateFile;
+  
+        await runWingCommand({
+          cwd: tmpDir,
+          wingFile: appFile,
+          args,
+          shouldSucceed: true,
+          plugins: [plugin],
+        });
+  
+        const tfPath = path.join(targetDir, "main.tf.json");
+        const terraformOutput = sanitize_json_paths(tfPath);
+        const unsanitizedTerraformOutput = fs.readJsonSync(tfPath);
+  
+        expect(terraformOutput).toMatchSnapshot();
+        expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
+          azurerm: {
+            resource_group_name: tfBackendResourceGroupName,
+            storage_account_name: tfBackendStorageAccountName,
+            container_name: tfBackendContainerName,
+            key: stateFile,
+          },
+        });
       });
     });
   });
