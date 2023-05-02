@@ -71,9 +71,9 @@ exports[`bring.w > stderr 1`] = `
 
 
 error: \\"cloud\\" is already defined
-  --> ../../../examples/tests/invalid/bring.w:3:7
+  --> ../../../examples/tests/invalid/bring.w:4:7
   |
-3 | bring cloud;
+4 | bring cloud;
   |       ^^^^^ \\"cloud\\" is already defined
 
 "
