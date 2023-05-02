@@ -63,7 +63,13 @@ async function startLanguageServer(context: ExtensionContext) {
   }
 
   const args =
-    wingBin === "npx" ? ["-y", "-q", `winglang@${extVersion}`, "lsp"] : ["lsp"];
+    wingBin === "npx"
+      ? ["-y", "-q", `winglang@${extVersion}`, "--no-update-check"]
+      : ["--no-update-check"];
+
+  await updateStatusBar(wingBin, args);
+
+  args.push("lsp");
 
   const run: Executable = {
     command: wingBin,
@@ -129,6 +135,32 @@ async function guidedWingInstallation(version: string) {
         });
     }
   );
+}
+
+async function updateStatusBar(wingBin: string, args?: string[]) {
+  let clean_args = args ? [...args] : [];
+  clean_args.push("-V");
+
+  // get current wing version
+  const version = await new Promise<string>((resolve, reject) => {
+    exec(`${wingBin} ${clean_args.join(" ")}`, (error, stdout) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(stdout.trim());
+      }
+    });
+  }).catch(() => "unknown");
+
+  if (version === "unknown") {
+    return;
+  }
+
+  // update status bar
+  const status = `Wing v${version}`;
+  const statusItem = window.createStatusBarItem();
+  statusItem.text = status;
+  statusItem.show();
 }
 
 /**
