@@ -6,8 +6,8 @@ import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
+import { EventMappingSchema } from "../target-sim/schema-resources";
 import { readJsonSync } from "../util";
-
 /**
  * Props for `Simulator`.
  */
@@ -362,6 +362,26 @@ export class Simulator {
       throw new Error(`Resource "${path}" not found.`);
     }
     return config;
+  }
+
+  /**
+   * Obtain a list of event mapping resource configs for a given publisher.
+   * @param publisherPath The publisher resource path
+   * @returns List of event mapping resource configs
+   */
+  public getEventMappingResourceConfigByPublisher(
+    publisherPath: string
+  ): BaseResourceSchema[] {
+    const configs: BaseResourceSchema[] = [];
+    for (const resourceConfig of this._config.resources) {
+      if ("publisher_path" in resourceConfig) {
+        const eventConfig = resourceConfig as EventMappingSchema;
+        if (eventConfig.publisher_path === publisherPath) {
+          configs.push(resourceConfig);
+        }
+      }
+    }
+    return configs;
   }
 
   /**

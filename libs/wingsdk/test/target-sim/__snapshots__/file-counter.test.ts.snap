@@ -95,6 +95,8 @@ bucket: (function(env) {
             "batchSize": 1,
           },
         },
+        "publisher_path": "root/HelloWorld/Queue",
+        "subscriber_path": "root/HelloWorld/Queue-AddConsumer-401ee792",
         "type": "wingsdk.sim.EventMapping",
       },
     ],

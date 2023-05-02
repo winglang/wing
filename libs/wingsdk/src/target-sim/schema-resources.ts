@@ -101,6 +101,10 @@ export interface EventSubscription {}
 /** Schema for sim.EventMapping */
 export interface EventMappingSchema extends BaseResourceSchema {
   readonly type: typeof EVENT_MAPPING_TYPE;
+  /** Publisher's simulator path */
+  readonly publisher_path: string;
+  /** Subscribers's simulator path */
+  readonly subscriber_path: string;
   readonly props: {
     /** Function handle to call for subscriber */
     subscriber: FunctionHandle;
