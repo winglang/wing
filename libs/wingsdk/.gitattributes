@@ -10,6 +10,7 @@
 /.projen/files.json linguist-generated
 /.projen/tasks.json linguist-generated
 /API.md linguist-generated
+/cdktf.json linguist-generated
 /LICENSE linguist-generated
 /package-lock.json linguist-generated
 /package.json linguist-generated

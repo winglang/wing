@@ -36,13 +36,12 @@ exports[`counter name valid 2`] = `
               "The.Amazing-Counter_01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The.Amazing-Counter_01/Default",
@@ -61,8 +60,8 @@ exports[`counter name valid 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -70,7 +69,6 @@ exports[`counter name valid 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -166,13 +164,12 @@ exports[`counter with initial value 2`] = `
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -191,8 +188,8 @@ exports[`counter with initial value 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -200,7 +197,6 @@ exports[`counter with initial value 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -346,8 +342,8 @@ exports[`dec() policy statement 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -362,13 +358,12 @@ exports[`dec() policy statement 2`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -395,7 +390,6 @@ exports[`dec() policy statement 2`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -408,40 +402,40 @@ exports[`dec() policy statement 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -461,7 +455,6 @@ exports[`dec() policy statement 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -477,8 +470,8 @@ exports[`dec() policy statement 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -486,7 +479,6 @@ exports[`dec() policy statement 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -675,8 +667,8 @@ exports[`function with a counter binding 3`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -691,13 +683,12 @@ exports[`function with a counter binding 3`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -724,7 +715,6 @@ exports[`function with a counter binding 3`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -737,40 +727,40 @@ exports[`function with a counter binding 3`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -790,7 +780,6 @@ exports[`function with a counter binding 3`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -806,8 +795,8 @@ exports[`function with a counter binding 3`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -815,7 +804,6 @@ exports[`function with a counter binding 3`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -961,8 +949,8 @@ exports[`inc() policy statement 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -977,13 +965,12 @@ exports[`inc() policy statement 2`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -1010,7 +997,6 @@ exports[`inc() policy statement 2`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1023,40 +1009,40 @@ exports[`inc() policy statement 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -1076,7 +1062,6 @@ exports[`inc() policy statement 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1092,8 +1077,8 @@ exports[`inc() policy statement 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1101,7 +1086,6 @@ exports[`inc() policy statement 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1247,8 +1231,8 @@ exports[`peek() policy statement 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1263,13 +1247,12 @@ exports[`peek() policy statement 2`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -1296,7 +1279,6 @@ exports[`peek() policy statement 2`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1309,40 +1291,40 @@ exports[`peek() policy statement 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -1362,7 +1344,6 @@ exports[`peek() policy statement 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1378,8 +1359,8 @@ exports[`peek() policy statement 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1387,7 +1368,6 @@ exports[`peek() policy statement 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1483,13 +1463,12 @@ exports[`replace invalid character from counter name 2`] = `
               "The*Amazing%Counter@01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The*Amazing%Counter@01/Default",
@@ -1508,8 +1487,8 @@ exports[`replace invalid character from counter name 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1517,7 +1496,6 @@ exports[`replace invalid character from counter name 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1663,8 +1641,8 @@ exports[`reset() policy statement 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1679,13 +1657,12 @@ exports[`reset() policy statement 2`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -1712,7 +1689,6 @@ exports[`reset() policy statement 2`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1725,40 +1701,40 @@ exports[`reset() policy statement 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -1778,7 +1754,6 @@ exports[`reset() policy statement 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1794,8 +1769,8 @@ exports[`reset() policy statement 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1803,7 +1778,6 @@ exports[`reset() policy statement 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {

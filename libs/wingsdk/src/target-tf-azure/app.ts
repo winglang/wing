@@ -1,11 +1,11 @@
-import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
-import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
-import { ServicePlan } from "@cdktf/provider-azurerm/lib/service-plan";
-import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
 import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
+import { AzurermProvider } from "../.gen/providers/azurerm/provider";
+import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
+import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
+import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { CdktfApp, AppProps } from "../core";
 import {

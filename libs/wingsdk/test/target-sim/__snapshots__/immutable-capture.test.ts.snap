@@ -51,7 +51,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -67,7 +66,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -84,7 +82,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -200,7 +197,6 @@ my_buckets: [(function(env) {
         "B1": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -216,7 +212,6 @@ my_buckets: [(function(env) {
         "B2": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -232,7 +227,6 @@ my_buckets: [(function(env) {
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -248,7 +242,6 @@ my_buckets: [(function(env) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -265,7 +258,6 @@ my_buckets: [(function(env) {
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -343,7 +335,6 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -359,7 +350,6 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -376,7 +366,6 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -453,7 +442,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -469,7 +457,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -486,7 +473,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -562,7 +548,6 @@ my_capture: false
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -578,7 +563,6 @@ my_capture: false
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -595,7 +579,6 @@ my_capture: false
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -673,7 +656,6 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -689,7 +671,6 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -706,7 +687,6 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -786,7 +766,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -802,7 +781,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -819,7 +797,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -901,7 +878,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -917,7 +893,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -934,7 +909,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1013,7 +987,6 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1029,7 +1002,6 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1046,7 +1018,6 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1159,7 +1130,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "B1": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1175,7 +1145,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "B2": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1191,7 +1160,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1207,7 +1175,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1224,7 +1191,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1300,7 +1266,6 @@ my_capture: 123
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1316,7 +1281,6 @@ my_capture: 123
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1333,7 +1297,6 @@ my_capture: 123
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1412,7 +1375,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1428,7 +1390,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1445,7 +1406,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1523,7 +1483,6 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1539,7 +1498,6 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1556,7 +1514,6 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1633,7 +1590,6 @@ my_capture: \\"bam bam bam\\"
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1649,7 +1605,6 @@ my_capture: \\"bam bam bam\\"
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1666,7 +1621,6 @@ my_capture: \\"bam bam bam\\"
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1745,7 +1699,6 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1761,7 +1714,6 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1778,7 +1730,6 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1857,7 +1808,6 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1873,7 +1823,6 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1890,7 +1839,6 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2059,7 +2007,6 @@ my_struct: {bucky: (function(env) {
         "B1": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2075,7 +2022,6 @@ my_struct: {bucky: (function(env) {
         "B2": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2091,7 +2037,6 @@ my_struct: {bucky: (function(env) {
         "B3": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2107,7 +2052,6 @@ my_struct: {bucky: (function(env) {
         "B4": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2123,7 +2067,6 @@ my_struct: {bucky: (function(env) {
         "B5": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2139,7 +2082,6 @@ my_struct: {bucky: (function(env) {
         "Function": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2155,7 +2097,6 @@ my_struct: {bucky: (function(env) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2172,7 +2113,6 @@ my_struct: {bucky: (function(env) {
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

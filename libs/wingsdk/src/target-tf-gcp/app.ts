@@ -1,7 +1,7 @@
-import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
-import { RandomProvider } from "@cdktf/provider-random/lib/provider";
 import { Construct } from "constructs";
 import { Bucket } from "./bucket";
+import { GoogleProvider } from "../.gen/providers/google/provider";
+import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN } from "../cloud";
 import { AppProps as CdktfAppProps, CdktfApp } from "../core";
 

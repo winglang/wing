@@ -29,7 +29,6 @@ exports[`create a counter 1`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -46,7 +45,6 @@ exports[`create a counter 1`] = `
         "my_counter": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -114,7 +112,6 @@ exports[`dec 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -131,7 +128,6 @@ exports[`dec 2`] = `
         "my_counter": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -199,7 +195,6 @@ exports[`inc 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -216,7 +211,6 @@ exports[`inc 2`] = `
         "my_counter": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -282,7 +276,6 @@ exports[`reset with initial value 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -299,7 +292,6 @@ exports[`reset with initial value 2`] = `
         "my_counter": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -365,7 +357,6 @@ exports[`reset without initial value 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -382,7 +373,6 @@ exports[`reset without initial value 2`] = `
         "my_counter": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
