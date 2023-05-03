@@ -47,7 +47,6 @@ export abstract class Schedule extends Resource {
     return App.of(scope).newAbstract(SCHEDULE_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
     super(scope, id);
 

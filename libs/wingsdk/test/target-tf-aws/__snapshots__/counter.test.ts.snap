@@ -36,7 +36,6 @@ exports[`counter name valid 2`] = `
               "The.Amazing-Counter_01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -70,7 +69,6 @@ exports[`counter name valid 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -166,7 +164,6 @@ exports[`counter with initial value 2`] = `
               "Counter": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -200,7 +197,6 @@ exports[`counter with initial value 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -362,7 +358,6 @@ exports[`dec() policy statement 2`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -395,7 +390,6 @@ exports[`dec() policy statement 2`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -461,7 +455,6 @@ exports[`dec() policy statement 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -486,7 +479,6 @@ exports[`dec() policy statement 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -691,7 +683,6 @@ exports[`function with a counter binding 3`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -724,7 +715,6 @@ exports[`function with a counter binding 3`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -790,7 +780,6 @@ exports[`function with a counter binding 3`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -815,7 +804,6 @@ exports[`function with a counter binding 3`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -977,7 +965,6 @@ exports[`inc() policy statement 2`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -1010,7 +997,6 @@ exports[`inc() policy statement 2`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1076,7 +1062,6 @@ exports[`inc() policy statement 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1101,7 +1086,6 @@ exports[`inc() policy statement 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1263,7 +1247,6 @@ exports[`peek() policy statement 2`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -1296,7 +1279,6 @@ exports[`peek() policy statement 2`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1362,7 +1344,6 @@ exports[`peek() policy statement 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1387,7 +1368,6 @@ exports[`peek() policy statement 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1483,7 +1463,6 @@ exports[`replace invalid character from counter name 2`] = `
               "The*Amazing%Counter@01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -1517,7 +1496,6 @@ exports[`replace invalid character from counter name 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1679,7 +1657,6 @@ exports[`reset() policy statement 2`] = `
                       "resource": "root/Default/Function",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
@@ -1712,7 +1689,6 @@ exports[`reset() policy statement 2`] = `
                       "resource": "root/Default/Counter",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1778,7 +1754,6 @@ exports[`reset() policy statement 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1803,7 +1778,6 @@ exports[`reset() policy statement 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {

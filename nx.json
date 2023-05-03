@@ -12,20 +12,24 @@
   "namedInputs": {
     "default": [
       "!{projectRoot}/node_modules/**",
-      "{projectRoot}/**/*",
-      "{workspaceRoot}/*",
-      "{workspaceRoot}/.cargo/**",
-      "{workspaceRoot}/.vscode/**",
       "!{workspaceRoot}/README.md",
       "!{projectRoot}/README.md",
+      "{workspaceRoot}/*",
+      "{projectRoot}/**/*",
+      "{workspaceRoot}/.cargo/**",
+      "{workspaceRoot}/.vscode/**"
+    ],
+    "exclude-tests": [
       "!{projectRoot}/test/**",
       "!{projectRoot}/**/*.test.*"
     ],
+    "default-build": [
+      "default",
+      "exclude-tests"
+    ],
     "default-test": [
       "default",
-      "examples-tests",
-      "{projectRoot}/test/**",
-      "{projectRoot}/**/*.test.*"
+      "examples-tests"
     ],
     "examples-tests": [
       "{workspaceRoot}/examples/tests/**/*.w"
@@ -33,18 +37,18 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "inputs": [
-        "default",
-        "^default"
+        "default-build",
+        "^default-build"
       ]
     },
     "test": {
       "executor": "nx:run-commands",
       "inputs": [
-        "default-test",
-        "^default-test"
+        "^default-build",
+        "default-test"
       ]
     },
     "lint": {
@@ -54,27 +58,26 @@
       ]
     },
     "package": {
-      "dependsOn": ["^build"],
       "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
       "inputs": [
-        "default",
-        "^default"
+        "default-build",
+        "^default-build"
       ]
     },
     "dev": {
-      "dependsOn": ["build", "^build"],
       "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
       "inputs": [
-        "default",
-        "^default"
+        "default-build",
+        "^default-build"
       ]
     },
     "copy": {
       "dependsOn": ["^build"],
       "executor": "nx:run-commands",
       "inputs": [
-        "default",
-        "^default"
+        "^default-build"
       ]
     }
   },

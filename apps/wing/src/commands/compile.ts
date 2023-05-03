@@ -219,54 +219,43 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   try {
     vm.runInContext(artifact, context);
-  } catch (e) {
-    console.error(
-      chalk.bold.red("preflight error:") + " " + (e as any).message
-    );
+  } catch (e: any) {
+    console.error(e.message);
 
-    if (
-      (e as any).stack &&
-      (e as any).stack.includes("evalmachine.<anonymous>:")
-    ) {
-      console.log();
-      console.log(
-        "  " +
-        chalk.bold.white("note:") +
-        " " +
-        chalk.white(`intermediate javascript code (${artifactPath}):`)
-      );
-      const lineNumber =
-        Number.parseInt(
-          (e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]
-        ) - 1;
-      const lines = artifact.split("\n");
-      let startLine = Math.max(lineNumber - 2, 0);
-      let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+    if (process.env.DEBUG) {
+      if (
+        (e as any).stack &&
+        (e as any).stack.includes("evalmachine.<anonymous>:")
+      ) {
+        console.log();
+        console.log(
+          "  " +
+          chalk.bold.white("note:") +
+          " " +
+          chalk.white(`intermediate javascript code (${artifactPath}):`)
+        );
+        const lineNumber =
+          Number.parseInt(
+            (e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]
+          ) - 1;
+        const lines = artifact.split("\n");
+        let startLine = Math.max(lineNumber - 2, 0);
+        let finishLine = Math.min(lineNumber + 2, lines.length - 1);
 
-      // print line and its surrounding lines
-      for (let i = startLine; i <= finishLine; i++) {
-        if (i === lineNumber) {
-          console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
-        } else {
-          console.log("   " + chalk.dim(lines[i]));
+        // print line and its surrounding lines
+        for (let i = startLine; i <= finishLine; i++) {
+          if (i === lineNumber) {
+            console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
+          } else {
+            console.log("   " + chalk.dim(lines[i]));
+          }
         }
       }
-    }
 
-    if (process.env.NODE_STACKTRACE) {
       console.error(
         "--------------------------------- STACK TRACE ---------------------------------"
       );
       console.error((e as any).stack);
-    } else {
-      console.log(
-        "  " +
-        chalk.bold.white("note:") +
-        " " +
-        chalk.white(
-          "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-        )
-      );
     }
 
     return process.exit(1);

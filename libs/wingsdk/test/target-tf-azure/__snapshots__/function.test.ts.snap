@@ -88,7 +88,6 @@ exports[`basic function 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -118,7 +117,6 @@ exports[`basic function 2`] = `
                   "FunctionBucket": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Bucket": {
@@ -164,7 +162,6 @@ exports[`basic function 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -336,7 +333,6 @@ exports[`basic function with environment variables 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -366,7 +362,6 @@ exports[`basic function with environment variables 2`] = `
                   "FunctionBucket": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Bucket": {
@@ -412,7 +407,6 @@ exports[`basic function with environment variables 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -582,7 +576,6 @@ exports[`replace invalid character from function name 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -631,7 +624,6 @@ exports[`replace invalid character from function name 2`] = `
               "someFunction01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -661,7 +653,6 @@ exports[`replace invalid character from function name 2`] = `
                   "FunctionBucket": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Bucket": {

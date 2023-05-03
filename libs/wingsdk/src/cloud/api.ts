@@ -43,8 +43,6 @@ export abstract class Api extends Resource {
     return App.of(scope).newAbstract(API_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
-
   /**
    * The base URL of the API endpoint.
    */
