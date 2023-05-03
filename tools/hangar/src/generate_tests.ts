@@ -44,7 +44,7 @@ function generateTests(
     if (
       (metaComment?.skipPlatforms?.includes(process.platform) &&
         process.env.CI) ||
-      metaComment?.skipTest
+      metaComment?.skip
     ) {
       skipText = ".skip";
     }
