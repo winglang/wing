@@ -2542,7 +2542,7 @@ impl<'a> TypeChecker<'a> {
 		return fields;
 	}
 
-	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &Vec<ClassField>) {
+	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &[ClassField]) {
 		let init_fields = self.list_fields_on_init(statements);
 		for field in fields.iter() {
 			// inflight or static fields cannot be initialized in the initializer
