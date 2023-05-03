@@ -1,6 +1,6 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
-use crate::ast::{self, FunctionBodyRef, TypeAnnotationKind};
+use crate::ast::{self, ClassField, FunctionBodyRef, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
@@ -2233,6 +2233,9 @@ impl<'a> TypeChecker<'a> {
 				// Type check constructor
 				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
 
+				// Verify if all fields of a class/resource are initialized in the initializer.
+				self.check_class_field_initialization(&initializer.statements, fields);
+
 				// Type check the inflight initializer
 				if let Some(inflight_initializer) = inflight_initializer {
 					self.type_check_method(
@@ -2479,6 +2482,79 @@ impl<'a> TypeChecker<'a> {
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
+			}
+		}
+	}
+
+	fn list_fields_on_init(&mut self, statements: &Scope) -> Vec<String> {
+		let mut fields: Vec<String> = Vec::new();
+		for stmt in &statements.statements {
+			match &stmt.kind {
+				StmtKind::Assignment { variable, value: _ } => match &variable {
+					Reference::InstanceMember { property, object: _ } => {
+						fields.push(property.name.clone());
+					}
+					_ => (),
+				},
+				StmtKind::If {
+					condition: _,
+					statements,
+					elif_statements,
+					else_statements,
+				} => {
+					fields.append(&mut self.list_fields_on_init(&statements));
+					for elif_scope in elif_statements {
+						fields.append(&mut self.list_fields_on_init(&elif_scope.statements));
+					}
+					if let Some(else_statements) = else_statements {
+						fields.append(&mut self.list_fields_on_init(&else_statements));
+					}
+				}
+				StmtKind::While {
+					condition: _,
+					statements,
+				} => {
+					fields.append(&mut self.list_fields_on_init(&statements));
+				}
+				StmtKind::ForLoop {
+					iterator: _,
+					iterable: _,
+					statements,
+				} => {
+					fields.append(&mut self.list_fields_on_init(&statements));
+				}
+				StmtKind::TryCatch {
+					try_statements,
+					catch_block,
+					finally_statements,
+				} => {
+					fields.append(&mut self.list_fields_on_init(&try_statements));
+					if let Some(catch_block) = catch_block {
+						fields.append(&mut self.list_fields_on_init(&catch_block.statements));
+					}
+					if let Some(finally_statements) = finally_statements {
+						fields.append(&mut self.list_fields_on_init(&finally_statements));
+					}
+				}
+				_ => (),
+			}
+		}
+		return fields;
+	}
+
+	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &Vec<ClassField>) {
+		let init_fields = self.list_fields_on_init(statements);
+		for field in fields.iter() {
+			// inflight or static fields cannot be initialized in the initializer
+			if field.phase == Phase::Inflight || field.is_static {
+				continue;
+			}
+			if !init_fields.contains(&field.name.name) {
+				self.type_error(TypeError {
+					message: format!("\"{}\" is not initialized", field.name.name),
+					span: field.name.span.clone(),
+				});
+			} else {
 			}
 		}
 	}

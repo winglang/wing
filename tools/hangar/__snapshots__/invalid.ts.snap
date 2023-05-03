@@ -144,6 +144,30 @@ exports[`capture_reassignable.w > stderr 1`] = `
 "
 `;
 
+exports[`class.w > stderr 1`] = `
+"error: \\"x\\" is not initialized
+  --> ../../../examples/tests/invalid/class.w:2:4
+  |
+2 |    x:num;
+  |    ^ \\"x\\" is not initialized
+
+
+error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
+  --> ../../../examples/tests/invalid/class.w:7:1
+  |
+7 | new C2(1);
+  | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/class.w:13:14
+   |
+13 |     this.x = \\"Hi\\";
+   |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+"
+`;
+
 exports[`cloud_function_expects_inflight.w > stderr 1`] = `
 "error: Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20
@@ -366,9 +390,9 @@ exports[`impl_interface.w > stderr 1`] = `
 
 
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
-  --> ../../../examples/tests/invalid/impl_interface.w:8:7
+  --> ../../../examples/tests/invalid/impl_interface.w:7:7
   |
-8 | class B impl cloud.IQueueAddConsumerHandler {
+7 | class B impl cloud.IQueueAddConsumerHandler {
   |       ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
 
 
@@ -376,23 +400,23 @@ error: Expected an interface, instead found type \\"Bucket\\"
 
 
 error: Class \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:7
+   --> ../../../examples/tests/invalid/impl_interface.w:30:7
    |
-33 | class r impl I3 {
+30 | class r impl I3 {
    |       ^ Class \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
 
 
 error: Class \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:7
+   --> ../../../examples/tests/invalid/impl_interface.w:30:7
    |
-33 | class r impl I3 {
+30 | class r impl I3 {
    |       ^ Class \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
 
 
 error: Class \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.w:33:7
+   --> ../../../examples/tests/invalid/impl_interface.w:30:7
    |
-33 | class r impl I3 {
+30 | class r impl I3 {
    |       ^ Class \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
 
 "
@@ -400,9 +424,9 @@ error: Class \\"r\\" does not implement method \\"method_3\\" of interface \\"I3
 
 exports[`inflight_in_class.w > stderr 1`] = `
 "error: Class cannot have inflight fields
-  --> ../../../examples/tests/invalid/inflight_in_class.w:3:3
+  --> ../../../examples/tests/invalid/inflight_in_class.w:2:3
   |
-3 |   inflight field: num; // No inflight fields in classes (only in resources)
+2 |   inflight field: num; // No inflight fields in classes (only in resources)
   |   ^^^^^^^^ Class cannot have inflight fields
 
 "
@@ -485,16 +509,16 @@ error: Expected an interface, instead found type \\"ISomeClass\\"
 
 
 error: Symbol \\"foo\\" already defined in this scope
-   --> ../../../examples/tests/invalid/interface.w:25:5
+   --> ../../../examples/tests/invalid/interface.w:23:5
    |
-25 |     foo();
+23 |     foo();
    |     ^^^ Symbol \\"foo\\" already defined in this scope
 
 
 error: Symbol \\"foo\\" already defined in this scope
-   --> ../../../examples/tests/invalid/interface.w:27:5
+   --> ../../../examples/tests/invalid/interface.w:25:5
    |
-27 |     foo(): num;
+25 |     foo(): num;
    |     ^^^ Symbol \\"foo\\" already defined in this scope
 
 "
@@ -745,16 +769,16 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:35:18
+   --> ../../../examples/tests/invalid/optionals.w:32:18
    |
-35 | optional_sub1 ?? new Sub2();
+32 | optional_sub1 ?? new Sub2();
    |                  ^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
 
 
 error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:37:18
+   --> ../../../examples/tests/invalid/optionals.w:34:18
    |
-37 | optional_sub1 ?? new Super();
+34 | optional_sub1 ?? new Super();
    |                  ^^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Super\\" instead
 
 "
@@ -762,9 +786,9 @@ error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
 
 exports[`preflight_from_inflight.w > stderr 1`] = `
 "error: Cannot call into preflight phase while inflight
-   --> ../../../examples/tests/invalid/preflight_from_inflight.w:19:5
+   --> ../../../examples/tests/invalid/preflight_from_inflight.w:15:5
    |
-19 |     this.r.my_preflight();
+15 |     this.r.my_preflight();
    |     ^^^^^^^^^^^^^^^^^^^^^ Cannot call into preflight phase while inflight
 
 "
@@ -810,30 +834,30 @@ exports[`reassign_to_nonreassignable.w > stderr 1`] = `
 
 
 error: Variable this.f is not reassignable 
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:29:5
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:28:5
    |
-29 |     this.f = this.f + 1;
+28 |     this.f = this.f + 1;
    |     ^^^^^^^^^^^^^^^^^^^^ Variable this.f is not reassignable 
 
 
 error: Variable this.inner_r.inner is not reassignable 
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:31:5
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:30:5
    |
-31 |     this.inner_r.inner = 2;
+30 |     this.inner_r.inner = 2;
    |     ^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inner_r.inner is not reassignable 
 
 
 error: Variable this.inflight_f is not reassignable 
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:36:5
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:35:5
    |
-36 |     this.inflight_f = this.inflight_f + 1;
+35 |     this.inflight_f = this.inflight_f + 1;
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inflight_f is not reassignable 
 
 
 error: Variable arg is not reassignable 
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:43:3
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:42:3
    |
-43 |   arg = 0;
+42 |   arg = 0;
    |   ^^^^^^^^ Variable arg is not reassignable 
 
 "
@@ -841,9 +865,9 @@ error: Variable arg is not reassignable
 
 exports[`resource_access_field_as_method.w > stderr 1`] = `
 "error: should be a function or method
-  --> ../../../examples/tests/invalid/resource_access_field_as_method.w:8:1
+  --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:1
   |
-8 | x.name();
+9 | x.name();
   | ^^^^^^ should be a function or method
 
 "
@@ -851,30 +875,23 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
 
 exports[`resource_captures.w > stderr 1`] = `
 "error: Cannot capture reassignable field 'reassignable'
-   --> ../../../examples/tests/invalid/resource_captures.w:17:12
+   --> ../../../examples/tests/invalid/resource_captures.w:16:12
    |
-17 |     log(\\"\${this.reassignable}\\");
+16 |     log(\\"\${this.reassignable}\\");
    |            ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
 
 
 error: Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
-   --> ../../../examples/tests/invalid/resource_captures.w:19:9
+   --> ../../../examples/tests/invalid/resource_captures.w:18:9
    |
-19 |     log(this.mut_array.at(0));
+18 |     log(this.mut_array.at(0));
    |         ^^^^^^^^^^^^^^ Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
 
 
-error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/resource_captures.w:22:13
-   |
-22 |     let b = this.bucket;
-   |             ^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
-
-
 error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
-   --> ../../../examples/tests/invalid/resource_captures.w:26:5
+   --> ../../../examples/tests/invalid/resource_captures.w:21:5
    |
-26 |     this.collection_of_resources.at(0).put(\\"hello\\", \\"world\\");
+21 |     this.collection_of_resources.at(0).put(\\"hello\\", \\"world\\");
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
 
 "
@@ -928,7 +945,7 @@ exports[`sorted_errors_no_span.w > stderr 1`] = `
 error: Expected 'b' to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
-3 | inflight class c extends b {
+3 | inflight class c extends b {}
   |                          ^ Expected 'b' to be a type but it's a variable
 
 
@@ -936,20 +953,20 @@ error: Inflight class c (at ../../../examples/tests/invalid/sorted_errors_no_spa
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:6:14
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:4:14
   |
-6 | let d: num = \\"s\\";
+4 | let d: num = \\"s\\";
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected 'b' to be a type but it's a variable
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:7:26
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:5:26
   |
-7 | inflight class e extends b {
+5 | inflight class e extends b {}
   |                          ^ Expected 'b' to be a type but it's a variable
 
 
-error: Inflight class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:16)'s parent \\"any\\" is not a class
+error: Inflight class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:5:16)'s parent \\"any\\" is not a class
 
 "
 `;
