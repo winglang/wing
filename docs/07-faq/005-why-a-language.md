@@ -56,7 +56,7 @@ import CodeComparison from '../src/components/CodeComparison';
 |----------------------------|-----------------------|-------------------------|------------------------|------------------------|
 | Language                   | Wing                  | YAML + your choice      | HCL + your choice      | Your choice            |
 | Line of code               | 7                     | 98                      | 122                    | 72                     |
-| Cloud Mechanics (IAM, N/W) | Generated automatically from intent | Manual              | Manual                 | Manual                 |
+| Cloud Mechanics (IAM, Networking) | Generated automatically from intent | Manual              | Manual                 | Manual                 |
 
 **This table contains some more differences that cannot fit in a small code sample :)**
 
@@ -65,8 +65,8 @@ import CodeComparison from '../src/components/CodeComparison';
 | Extensibility                | Custom resources                              | Custom/dynamic providers                | Custom modules                         | Custom Constructs / Resource Providers |
 | Customizing lower levels     | Compiler plugins to customize generated Terraform | Direct access to cloud-provider APIs | No need since working at low level     | Escape hatches to modify underlying CloudFormation |
 | Local simulation             | Built-in functional local simulator with instant hot reloading | No | No | No |
-| Cross-cloud support          | Same code compiles to different clouds        | No (need to write different code for different clouds) | No (need to write different code for different clouds) | No (need to write different code for different clouds) |
-| Provisioning engine          | Same code compiles to Terraform and AWS-CDK (CloudFormation) | Proprietary | Terraform | CloudFormation (CDKTF is used for Terraform, but you cannot compile the same code to different engines) |
+| Cross-cloud support          | Same code compiles to different clouds (for supported resources)      | No (need to write different code for different clouds) | No (need to write different code for different clouds) | No (need to write different code for different clouds) |
+| Provisioning engine          | Terraform / CloudFormation through AWS-CDK (Extensible solution that supports adding more engines) | Proprietary | Terraform | CloudFormation (CDKTF is used for Terraform, but you cannot compile the same code to different engines) |
 | Testing                      | Same tests run on local simulator and cloud, without mocks | Need mocks for local testing | Need mocks for local testing | Need mocks for local testing |
 
 ## Anything else?
