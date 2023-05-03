@@ -223,9 +223,13 @@ jobs:
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
+        with:
+          name: wing
+          path: /wing
 
       - run: ls -al /home/runner/work/wing/wing
       - run: ls -al /home/runner/work/wing/wing/wing
+      - run: ls -al /wing
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -242,7 +246,7 @@ jobs:
           install-command: npm ci
 
       - name: Link Wing CLI
-        run: ln -s ${{ github.workspace }}/wing/bin/wing /usr/local/bin/wing
+        run: ln -s /wing/bin/wing /usr/local/bin/wing
 
       - name: Check Wing Version
         run: wing --version
