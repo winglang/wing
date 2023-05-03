@@ -221,19 +221,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
         with:
           name: wing
           path: wing
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Unzip Wing
+        run: tar zxvf wing/winglang-*.tgz
 
       - name: Link Wing CLI
-        run: npm i -g ${{ github.workspace }}/wing/winglang-0.0.0-4870927123.1.tgz
+        run: npm i -g ./package
 
       - name: Check Wing Version
         run: wing --version
