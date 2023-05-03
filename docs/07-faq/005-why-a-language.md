@@ -35,7 +35,7 @@ queue.add_consumer(inflight (message: str) => {
 
 In existing languages, where there is no way to distinguish between multiple execution phases, it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific execution phase.
 
-In addition, other parts of Wing's *cloud-oriented* cannot be represented naturally without native support from the language. Wwe've seen some worthy efforts in projects like [Pulumi's Function Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/) and [Functionless](https://functionless.org/). But although these efforts come close, they either have to make compromises in safety (e.g. it is possible to capture mutable objects) or in the programming model (e.g. type system is too complex).
+In addition, other parts of Wing's *cloud-oriented* cannot be represented naturally without native support from the language. We've seen some worthy efforts in projects like [Pulumi's Function Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/) and [Functionless](https://functionless.org/). But although these efforts come close, they either have to make compromises in safety (e.g. it is possible to capture mutable objects) or in the programming model (e.g. type system is too complex).
 
 We believe that Wing, a language that natively supports this paradigm, will make using it much easier by streamlining common patterns, in a way that is impossible to accomplish with existing ones. Kind of like what C++ did for object orientation. You could write object-oriented code in C, but you had to work hard to make it work without native support from the language.
 
