@@ -6,11 +6,14 @@ import FileCodeBlock from './FileCodeBlock';
 import helloWPath from '!file-loader!../examples/function-upload-to-bucket/wing/hello.w';
 
 import getExamplePlatforms from '../examples/getExamplePlatforms';
+import getExampleWingFile from '../examples/getExampleWingFile';
+
 // Import the CSS module
 import styles from './CodeComparison.module.css';
 
 const CodeComparison = ({exampleName, desiredPlatformLabels}) => {
   const filteredPlatforms = getExamplePlatforms(exampleName, desiredPlatformLabels);
+  const wingFile = getExampleWingFile(exampleName);
 
   return (
     <div className={styles.codeComparisonContainer}>
@@ -23,8 +26,8 @@ const CodeComparison = ({exampleName, desiredPlatformLabels}) => {
           ]}
         >
             <TabItem value="wing">
-                hello.w
-                <FileCodeBlock filePath={helloWPath} codeType="language-javascript" />
+                {wingFile.name}
+                <FileCodeBlock filePath={wingFile.path} codeType="language-javascript" />
             </TabItem>
         </Tabs>
       </div>
