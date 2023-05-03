@@ -36,8 +36,6 @@ export abstract class Counter extends Resource {
     return App.of(scope).newAbstract(COUNTER_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
-
   /**
    * The initial value of the counter.
    */
