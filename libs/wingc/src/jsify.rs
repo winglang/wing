@@ -1602,34 +1602,57 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 			ExprKind::Reference(Reference::InstanceMember { object, property }) => {
 				let obj_type = object.evaluated_type.borrow().unwrap();
-				let var = if let Some(cls) = obj_type.as_class_or_resource() {
-					Some(
+				let var = match &*obj_type {
+					Type::Void => unreachable!("cannot reference a member of void"),
+					Type::Function(_) => unreachable!("cannot reference a member of a function"),
+					Type::Optional(_) => unreachable!("cannot reference a member of an optional"),
+					// all fields / methods / values of these types are phase-independent so we can skip them
+					Type::Anything => return vec![],
+					Type::Number => return vec![],
+					Type::String => return vec![],
+					Type::Duration => return vec![],
+					Type::Boolean => return vec![],
+					Type::Json => return vec![],
+					Type::MutJson => return vec![],
+					Type::Enum(_) => return vec![],
+					// TODO: collection types are unsupported for now
+					Type::Array(_) => None,
+					Type::MutArray(_) => None,
+					Type::Map(_) => None,
+					Type::MutMap(_) => None,
+					Type::Set(_) => None,
+					Type::MutSet(_) => None,
+					Type::Class(cls) => Some(
 						cls
 							.env
 							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
-					)
-				} else if let Some(iface) = obj_type.as_interface() {
-					Some(
+					),
+					Type::Resource(cls) => Some(
+						cls
+							.env
+							.lookup(&property, None)
+							.expect("covered by type checking")
+							.as_variable()
+							.unwrap(),
+					),
+					Type::Interface(iface) => Some(
 						iface
 							.env
 							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
-					)
-				} else if let Some(s) = obj_type.as_struct() {
-					Some(
-						s.env
+					),
+					Type::Struct(st) => Some(
+						st.env
 							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
-					)
-				} else {
-					None
+					),
 				};
 
 				let prop = vec![Component {
