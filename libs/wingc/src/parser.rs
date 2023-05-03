@@ -643,7 +643,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			initializer: initializer,
+			initializer,
 			is_resource,
 			inflight_initializer,
 		}))
