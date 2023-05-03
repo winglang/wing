@@ -65,8 +65,15 @@ export abstract class App extends Construct {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       return require(`../target-${target}/app`).App;
-    } catch {
-      throw new Error(`Unknown compilation target: "${target}"`);
+    } catch (e: any) {
+      if (e.code === "MODULE_NOT_FOUND") {
+        const cannotFindModule = e.message.split("\n")[0];
+        throw new Error(
+          `${cannotFindModule}. The target "${target}" requires this module to be installed.`
+        );
+      }
+
+      throw new Error(`Unknown compilation target: "${target}": ${e.message}`);
     }
   }
 
