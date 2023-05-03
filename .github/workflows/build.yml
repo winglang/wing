@@ -224,6 +224,9 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
+      - name: Link Wing CLI
+        run: ln -s ${{ github.workspace }}/apps/wing/bin/wing /usr/local/bin/wing
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
