@@ -2,16 +2,24 @@ import path from "node:path";
 
 import { createConsoleServer } from "@wingconsole/server";
 import { config } from "dotenv";
-import { app, BrowserWindow, dialog, Menu, screen, shell } from "electron";
+import { app, BrowserWindow, dialog, screen, nativeTheme } from "electron";
 import log from "electron-log";
 import fixPath from "fix-path";
 
+import { initApplicationMenu, setApplicationMenu } from "./appMenu.js";
+import { AppConfig, ThemeMode } from "./config.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
+import { ThemeStore } from "./themStore.js";
 import { updater } from "./updater.js";
 
 config();
 fixPath();
+
+const appConfig = new AppConfig();
+const themeStore = new ThemeStore();
+// set initial theme mode
+appConfig.set("themeMode", themeStore.getThemeMode());
 
 log.info("Application entrypoint");
 
@@ -46,6 +54,7 @@ async function createWindow(options: { title?: string; port: number }) {
     webPreferences: {
       devTools: import.meta.env.DEV,
     },
+    titleBarStyle: "hidden",
   });
 
   if (import.meta.env.DEV) {
@@ -55,7 +64,11 @@ async function createWindow(options: { title?: string; port: number }) {
       `${import.meta.env.BASE_URL}?port=${options.port}`,
     );
     void window
-      .loadURL(`${import.meta.env.BASE_URL}?port=${options.port}`)
+      .loadURL(
+        `${import.meta.env.BASE_URL}?port=${options.port}&title=${
+          options.title ?? "Wing Console"
+        }`,
+      )
       .then(() => {
         if (
           !process.env.PLAYWRIGHT_TEST &&
@@ -71,6 +84,7 @@ async function createWindow(options: { title?: string; port: number }) {
     void window.loadFile(path.join(ROOT_PATH.dist, "index.html"), {
       query: {
         port: options.port.toString(),
+        title: options.title ?? "Wing Console",
       },
     });
   }
@@ -115,6 +129,7 @@ function createWindowManager() {
         wingfile,
         log,
         updater,
+        config: appConfig,
       });
 
       newWindow = await createWindow({
@@ -266,103 +281,41 @@ async function main() {
   await app.whenReady();
   log.info("app is ready");
 
-  // The default menu from Electron come with very useful items.
-  // File menu, which is the second entry on the list and Help menu (which is the last) are being modified
-  const defaultMenuItems = Menu.getApplicationMenu()?.items!;
-  // remove default Help menu
-  defaultMenuItems.pop();
+  const getThemeMode = (): ThemeMode => {
+    return appConfig.get<ThemeMode>("themeMode");
+  };
 
-  const checkForUpdatesItemId = "check-for-updates-menu-item";
-  const menuTemplateArray = [
-    {
-      ...defaultMenuItems[0]!,
-      submenu: defaultMenuItems[0]!.submenu!.items.map((item) => ({
-        ...item,
-        label: item.label.replace("@wingconsole/app", "Wing Console"),
-      })) as any,
+  const setThemeMode = (themeMode: ThemeMode) => {
+    themeStore.setThemeMode(themeMode);
+    appConfig.set("themeMode", themeMode);
+  };
+
+  const getApplicationMenuOptions = () => ({
+    themeMode: getThemeMode(),
+    onFileOpen: (wingfile: string) => {
+      void windowManager.open(wingfile);
     },
-    {
-      label: "File",
-      submenu: [
-        {
-          label: "Open",
-          accelerator: "Command+O",
-          async click() {
-            const { canceled, filePaths } = await dialog.showOpenDialog({
-              properties: ["openFile"],
-              filters: [{ name: "Wing File", extensions: ["w"] }],
-            });
-            if (canceled) {
-              return;
-            }
-
-            const [wingfile] = filePaths;
-            if (wingfile) {
-              void windowManager.open(wingfile);
-            }
-          },
-        },
-        { type: "separator" },
-        {
-          label: "Close Window",
-          accelerator: "Command+W",
-          click() {
-            BrowserWindow.getFocusedWindow()?.close();
-          },
-        },
-      ],
+    updater,
+    onThemeModeChange: (themeMode: ThemeMode) => {
+      setThemeMode(themeMode);
     },
-    ...defaultMenuItems.slice(2),
-    {
-      role: "help",
-      submenu: [
-        {
-          label: "Learn More",
-          click: async () => {
-            await shell.openExternal("https://winglang.io");
-          },
-        },
-        {
-          label: "Documentation",
-          click: async () => {
-            await shell.openExternal("https://docs.winglang.io");
-          },
-        },
-        {
-          label: "Open an Issue",
-          click: async () => {
-            await shell.openExternal(
-              "https://github.com/winglang/wing/issues/new/choose",
-            );
-          },
-        },
-        {
-          label: "Check for Updates",
-          id: checkForUpdatesItemId,
-          enabled: false,
-          click: async () => {
-            await updater.checkForUpdates();
-          },
-        },
-      ],
-    },
-  ];
+    publicPath: ROOT_PATH.public,
+  });
 
-  if (process.platform !== "darwin") {
-    // remove the first menu item on windows and linux
-    menuTemplateArray.shift();
-  }
-
-  const appMenu = Menu.buildFromTemplate(menuTemplateArray as any);
-  Menu.setApplicationMenu(appMenu);
+  initApplicationMenu();
+  setApplicationMenu(getApplicationMenuOptions());
 
   // update check for updates menu item enabled state
   updater.addEventListener("status-change", () => {
-    appMenu.getMenuItemById(checkForUpdatesItemId)!.enabled = [
-      "initial",
-      "update-not-available",
-      "error",
-    ].includes(updater.status().status);
+    setApplicationMenu(getApplicationMenuOptions());
+  });
+
+  appConfig.addEventListener("config-change", () => {
+    setApplicationMenu(getApplicationMenuOptions());
+  });
+
+  nativeTheme.on("updated", () => {
+    setApplicationMenu(getApplicationMenuOptions());
   });
 
   if (import.meta.env.DEV || process.env.PLAYWRIGHT_TEST || process.env.CI) {

@@ -15,7 +15,7 @@ export const ToolbarButton = ({
   onClick,
   children,
 }: PropsWithChildren<ToolbarButtonProps>) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <button
       className={classNames(

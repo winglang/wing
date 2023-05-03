@@ -16,7 +16,7 @@ export interface CheckboxProps {
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, disabled, ...props }, ref) => {
-    const theme = useTheme();
+    const { theme } = useTheme();
 
     return (
       <input

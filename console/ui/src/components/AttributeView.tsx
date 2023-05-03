@@ -20,7 +20,7 @@ export const AttributeView = ({
   children,
   noLeftPadding = false,
 }: PropsWithChildren<AttributeViewProps>) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const id = useId();
   return (
     <div

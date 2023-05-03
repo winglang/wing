@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { trpc } from "../utils/trpc.js";
 
 export const AutoUpdater = () => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const enabled = trpc["updater.enabled"].useQuery();
   const { data: currentStatus } = trpc["updater.currentStatus"].useQuery(

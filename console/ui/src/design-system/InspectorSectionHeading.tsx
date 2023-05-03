@@ -23,7 +23,7 @@ export const InspectorSectionHeading = ({
   bold = true,
   className,
 }: InspectorSectionHeadingProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const ChevronIcon = open ? ChevronDownIcon : ChevronRightIcon;
   return (
     <button

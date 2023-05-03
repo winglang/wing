@@ -32,7 +32,7 @@ const canBePreviewed = (fileName: string) => {
 };
 
 export const BucketView = ({ resourcePath }: BucketViewProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
   const putFile = trpc["bucket.put"].useMutation();

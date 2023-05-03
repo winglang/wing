@@ -46,7 +46,7 @@ const LogEntryRow = ({
   onRowClick,
   onResourceClick,
 }: LogEntryProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const [expanded, setExpanded] = useState(false);
   const expandableRef = useRef<HTMLElement>(null);
@@ -211,7 +211,7 @@ export const ConsoleLogs = ({
   onResourceClick,
   showIcons = true,
 }: ConsoleLogsProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <div className="w-full gap-x-2 text-2xs font-mono">

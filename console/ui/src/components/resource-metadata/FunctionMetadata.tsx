@@ -9,7 +9,7 @@ export interface FunctionMetadataProps {
 }
 
 export const FunctionMetadata = ({ node }: FunctionMetadataProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <div
       className={classNames(

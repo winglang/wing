@@ -7,6 +7,7 @@ import express from "express";
 import getPort from "get-port";
 import { WebSocketServer } from "ws";
 
+import { Config } from "./config.js";
 import { ConsoleLogger } from "./consoleLogger.js";
 import { mergeAllRouters } from "./router/index.js";
 import { State } from "./types.js";
@@ -22,6 +23,7 @@ export interface CreateExpressServerOptions {
   emitter: Emittery<{ invalidateQuery: string | undefined }>;
   log: LogInterface;
   updater?: Updater;
+  config: Config;
   requestedPort?: number;
   appState(): State;
 }
@@ -33,6 +35,7 @@ export const createExpressServer = async ({
   emitter,
   log,
   updater,
+  config,
   requestedPort,
   appState,
 }: CreateExpressServerOptions) => {
@@ -56,6 +59,7 @@ export const createExpressServer = async ({
       logger: consoleLogger,
       emitter,
       updater,
+      config,
       appState,
     };
   };

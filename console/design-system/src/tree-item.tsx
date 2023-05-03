@@ -22,7 +22,7 @@ export const TreeItem = ({
   children,
   ...props
 }: PropsWithChildren<TreeItemProps>) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <HeadlessTreeItem

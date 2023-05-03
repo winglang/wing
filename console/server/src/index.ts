@@ -1,6 +1,7 @@
 import { inferRouterInputs } from "@trpc/server";
 import Emittery from "emittery";
 
+import { Config } from "./config.js";
 import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
 import { Router } from "./router/index.js";
@@ -15,6 +16,7 @@ export type { ExplorerItem } from "./router/app.js";
 export type { State } from "./types.js";
 export type { WingSimulatorSchema, BaseResourceSchema } from "./wingsdk.js";
 export type { Updater, UpdaterStatus } from "./updater.js";
+export type { Config } from "./config.js";
 export type { Router } from "./router/index.js";
 
 type RouteNames = keyof inferRouterInputs<Router> | undefined;
@@ -23,6 +25,7 @@ export interface CreateConsoleServerOptions {
   wingfile: string;
   log: LogInterface;
   updater?: Updater;
+  config: Config;
   requestedPort?: number;
 }
 
@@ -30,6 +33,7 @@ export const createConsoleServer = async ({
   wingfile,
   log,
   updater,
+  config,
   requestedPort,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
@@ -44,6 +48,11 @@ export const createConsoleServer = async ({
     await invalidateQuery("updater.currentStatus");
   };
   updater?.addEventListener("status-change", invalidateUpdaterStatus);
+
+  const invalidateConfig = async () => {
+    await invalidateQuery("config.getThemeMode");
+  };
+  config?.addEventListener("config-change", invalidateConfig);
 
   const consoleLogger: ConsoleLogger = createConsoleLogger({
     onLog: (level, message) => {
@@ -133,6 +142,7 @@ export const createConsoleServer = async ({
     emitter: emitter as Emittery<{ invalidateQuery: string | undefined }>,
     log,
     updater,
+    config,
     requestedPort,
     appState() {
       return appState;
@@ -142,6 +152,7 @@ export const createConsoleServer = async ({
   const close = async () => {
     try {
       updater?.removeEventListener("status-change", invalidateUpdaterStatus);
+      config?.removeEventListener("config-change", invalidateConfig);
       await Promise.allSettled([
         server.close(),
         compiler.stop(),

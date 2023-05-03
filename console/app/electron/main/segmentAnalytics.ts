@@ -8,6 +8,7 @@ export class SegmentAnalytics {
   constructor(writeKey: string) {
     this.analytics = new Segment(writeKey);
     const store = new Store({
+      name: "wing-console-analytics",
       schema: {
         userId: {
           type: "string",

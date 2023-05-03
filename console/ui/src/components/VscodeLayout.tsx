@@ -1,6 +1,8 @@
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
+import { useContext } from "react";
 
+import { AppContext } from "../AppContext.js";
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
@@ -49,6 +51,8 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     defaultLogLevels: ["info", "warn", "error"],
   });
 
+  const { title } = useContext(AppContext);
+
   return (
     <div
       data-testid="vscode-layout"
@@ -58,6 +62,16 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
         theme.text2,
       )}
     >
+      <div
+        className={classNames(
+          "w-full h-8 draggable-frame border-b flex items-center justify-center",
+          theme.bg3,
+          theme.border3,
+          theme.text2,
+        )}
+      >
+        <div>{title}</div>
+      </div>
       <div className="flex-1 flex relative">
         {loading && (
           <div

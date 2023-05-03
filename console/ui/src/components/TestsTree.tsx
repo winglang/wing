@@ -39,7 +39,7 @@ export interface TestItem {
 type RouterOutput = inferRouterOutputs<Router>;
 
 export const TestsTree = () => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const [testTree, setTestTree] = useState<TestItem[]>([]);
 
   const testListQuery = trpc["test.list"].useQuery();

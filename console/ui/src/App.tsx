@@ -1,4 +1,5 @@
-import { ThemeProvider } from "@wingconsole/design-system";
+import { DefaultTheme, ThemeProvider } from "@wingconsole/design-system";
+import { useEffect } from "react";
 
 import { NotificationsProvider } from "./design-system/Notification.js";
 import { LayoutProvider, LayoutType } from "./utils/layout-provider.js";
@@ -26,9 +27,10 @@ export const App = ({ layout }: AppProps) => {
 
   const appDetails = trpc["app.details"].useQuery();
   const appState = trpc["app.state"].useQuery();
+  const themeMode = trpc["config.getThemeMode"].useQuery();
 
   return (
-    <ThemeProvider>
+    <ThemeProvider mode={themeMode?.data?.mode} theme={DefaultTheme}>
       <NotificationsProvider>
         <TestsContextProvider>
           <LayoutProvider

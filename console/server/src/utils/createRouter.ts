@@ -2,6 +2,7 @@ import { initTRPC } from "@trpc/server";
 import { testing } from "@winglang/sdk";
 import Emittery from "emittery";
 
+import { Config } from "../config.js";
 import { ConsoleLogger } from "../consoleLogger.js";
 import { State } from "../types.js";
 import { Updater } from "../updater.js";
@@ -13,6 +14,7 @@ export type QueryNames = {
     | "app.state"
     | "queue.approxSize"
     | "updater.currentStatus"
+    | "config.getThemeMode"
     | undefined;
 };
 
@@ -30,6 +32,7 @@ export interface RouterContext {
   appState(): State;
   logger: ConsoleLogger;
   updater?: Updater;
+  config?: Config;
 }
 
 const t = initTRPC.context<RouterContext>().create();

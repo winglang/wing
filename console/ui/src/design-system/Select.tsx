@@ -32,7 +32,7 @@ export default function Select({
   btnClassName,
   showSelected = true,
 }: SelectProps) {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(
     // eslint-disable-next-line unicorn/no-null

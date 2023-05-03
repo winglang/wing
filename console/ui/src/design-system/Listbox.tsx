@@ -36,7 +36,7 @@ export const Listbox = ({
   onChange,
   disabled = false,
 }: ListboxProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(
     // eslint-disable-next-line unicorn/no-null

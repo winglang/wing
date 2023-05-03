@@ -7,7 +7,7 @@ import { Button } from "../design-system/Button.js";
 import { TestsContext } from "../utils/tests-context.js";
 
 export const MapToolbarMenu = () => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const { showTests, setShowTests } = useContext(TestsContext);
   const Icon = showTests ? EyeSlashIcon : EyeIcon;
   return (

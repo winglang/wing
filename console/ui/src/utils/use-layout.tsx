@@ -15,7 +15,7 @@ export const useLayout = ({
   cloudAppState,
   defaultLogLevels,
 }: UseLayoutProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const {
     items,
@@ -97,7 +97,6 @@ export const useLayout = ({
     expand,
     expandAll,
     collapseAll,
-
     theme,
     errorMessage,
     loading,

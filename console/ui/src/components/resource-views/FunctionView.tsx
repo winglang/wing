@@ -14,7 +14,7 @@ export interface FunctionViewProps {
 }
 
 export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const { appMode } = useContext(AppContext);
   const [response, setResponse] = useState("");

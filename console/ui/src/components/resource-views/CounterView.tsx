@@ -15,7 +15,7 @@ export interface CounterViewProps {
 }
 
 export const CounterView = ({ resourcePath }: CounterViewProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const incrementCounter = trpc["counter.inc"].useMutation();
   const decreaseCounter = trpc["counter.dec"].useMutation();

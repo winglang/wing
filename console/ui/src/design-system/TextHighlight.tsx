@@ -49,7 +49,7 @@ export const TextHighlight = ({
   className = "",
   json = true,
 }: TextHighlightProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const [highlightedText, setHighlightedText] = useState<string | undefined>(
     text,
@@ -61,7 +61,7 @@ export const TextHighlight = ({
       return;
     }
     setHighlightedText(highlightJson(text, theme));
-  }, [text, json]);
+  }, [text, json, theme]);
 
   return (
     <div className={className}>

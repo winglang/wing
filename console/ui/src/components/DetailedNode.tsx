@@ -19,7 +19,7 @@ const RelationshipButton = ({
   justifyEnd?: boolean;
   onClick?: (path: string) => void;
 }) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <div className="py-1 flex min-w-0 items-center">
       <button
@@ -50,7 +50,7 @@ const ResourceButton = ({
   onClick?: (path: string) => void;
   children?: React.ReactNode;
 }) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     // TODO: Fix a11y
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -128,7 +128,7 @@ export const DetailedNode = ({
   outbound,
   onClick,
 }: DetailedNodeProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const inboundCount = inbound.length;
   const relationshipCount = inboundCount + outbound.length;

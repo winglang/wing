@@ -14,7 +14,7 @@ export interface BreadcrumbsProps {
 }
 
 export const Breadcrumbs = (props: BreadcrumbsProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const { breadcrumbs, onBreadcrumbClicked } = props;
   const numberBreadcrumbs = breadcrumbs.length;

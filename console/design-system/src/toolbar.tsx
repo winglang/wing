@@ -11,7 +11,7 @@ export const Toolbar = ({
   title,
   children,
 }: PropsWithChildren<ToolbarProps>) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <div
       className={classNames(

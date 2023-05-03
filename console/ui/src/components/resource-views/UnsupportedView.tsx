@@ -10,7 +10,7 @@ export interface UnsupportedViewProps {
   resourcePath: string;
 }
 export const UnsupportedView = ({ resourceType }: UnsupportedViewProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const newIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 

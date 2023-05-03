@@ -14,7 +14,7 @@ export const ScrollableArea = forwardRef<HTMLDivElement, ScrollableAreaProps>(
     { className, scrollbarSize = "sm", overflowX, overflowY, children },
     ref,
   ) => {
-    const theme = useTheme();
+    const { theme } = useTheme();
     return (
       <div
         ref={ref}

@@ -9,7 +9,7 @@ export const EmptyConstructView = ({
   resourceType,
   resourcePath,
 }: EmptyConstructViewProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <div className="text-center px-4">

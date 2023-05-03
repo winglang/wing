@@ -17,7 +17,7 @@ export const ResponseInput = ({
   placeholder = "No response",
   children,
 }: PropsWithChildren<ResponseInputProps>) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <>
       {loading && (

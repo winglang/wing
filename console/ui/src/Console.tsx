@@ -9,8 +9,10 @@ import { trpc } from "./utils/trpc.js";
 export const Console = ({
   port,
   layout,
+  title,
 }: {
   port?: number;
+  title?: string;
   layout?: LayoutType;
 }) => {
   const url = `http://localhost:${port}`;
@@ -45,8 +47,10 @@ export const Console = ({
     ],
   });
 
+  let windowTitle = title ?? "Wing Console";
+
   return (
-    <AppContext.Provider value={{ appMode: "electron" }}>
+    <AppContext.Provider value={{ appMode: "electron", title: windowTitle }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
           <App layout={layout} />

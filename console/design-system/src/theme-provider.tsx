@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext } from "react";
+import { createContext, PropsWithChildren, useContext, useEffect } from "react";
 
 export interface Theme {
   bg1: string;
@@ -27,7 +27,11 @@ export interface Theme {
   scrollbar: string;
 }
 
-export const BrighterTheme: Theme = {
+export type Mode = "dark" | "light" | "auto";
+
+const localStorageThemeKey = "console-theme";
+
+export const DefaultTheme: Theme = {
   bg1: "bg-slate-300 dark:bg-slate-800",
   bg2: "bg-slate-200 dark:bg-slate-800",
   bg3: "bg-slate-100 dark:bg-slate-700",
@@ -58,16 +62,70 @@ export const BrighterTheme: Theme = {
     "scrollbar hover:scrollbar-bg-slate-500/10 hover:scrollbar-thumb-slate-700/30 scrollbar-thumb-hover-slate-700/40 scrollbar-thumb-active-slate-700/60 dark:hover:scrollbar-bg-slate-400/10 dark:hover:scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-hover-slate-400/40 dark:scrollbar-thumb-active-slate-400/60 transition-colors ease-in-out duration-700",
 };
 
-const ThemeContext = createContext(BrighterTheme);
+const ThemeContext = createContext<ThemeProviderProps>({
+  theme: DefaultTheme,
+});
 
 export interface ThemeProviderProps {
-  theme?: Theme;
+  theme: Theme;
+  mode?: Mode;
 }
 
-export const ThemeProvider = (props: PropsWithChildren<ThemeProviderProps>) => {
+const setModeInLocalStorage = (mode: Mode) => {
+  localStorage.setItem(localStorageThemeKey, JSON.stringify({ mode: mode }));
+};
+
+const updateDomClassList = (mode: Mode) => {
+  if (mode === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+};
+
+const setThemeMode = (selectedMode?: Mode) => {
+  const mediaTheme = window?.matchMedia("(prefers-color-scheme: dark)")?.matches
+    ? "dark"
+    : "light";
+  if (selectedMode) {
+    setModeInLocalStorage(selectedMode);
+    updateDomClassList(selectedMode === "auto" ? mediaTheme : selectedMode);
+    return;
+  }
+  const localThemeObject = localStorage.getItem(localStorageThemeKey);
+  if (!localThemeObject) {
+    updateDomClassList(mediaTheme);
+    return;
+  }
+  const mode = JSON.parse(localThemeObject)?.mode ?? mediaTheme;
+  return updateDomClassList(mode === "auto" ? mediaTheme : mode);
+};
+
+export const ThemeProvider = ({
+  theme,
+  mode,
+  children,
+}: PropsWithChildren<ThemeProviderProps>) => {
+  setThemeMode(mode);
+
+  useEffect(() => {
+    const reloadThemeMode = () => {
+      setThemeMode();
+    };
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", reloadThemeMode);
+
+    return () => {
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .removeEventListener("change", reloadThemeMode);
+    };
+  }, []);
+
   return (
-    <ThemeContext.Provider value={props.theme ?? BrighterTheme}>
-      {props.children}
+    <ThemeContext.Provider value={{ theme: theme ?? DefaultTheme, mode: mode }}>
+      {children}
     </ThemeContext.Provider>
   );
 };

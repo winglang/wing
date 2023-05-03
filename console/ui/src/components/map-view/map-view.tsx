@@ -19,7 +19,7 @@ export const MapView = (props: MapViewProps) => {
   const map = trpc["app.map"].useQuery({
     showTests: props.showTests,
   });
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <ZoomPaneProvider>
       <div className="h-full flex flex-col">

@@ -29,7 +29,7 @@ export const ApiResponseBodyPanel = ({
   response,
   isLoading,
 }: ApiBodyPanelProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <div className="pt-2 relative">
       {response && (

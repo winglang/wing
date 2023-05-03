@@ -81,7 +81,7 @@ test("map view", async () => {
   const window = await electronApp.firstWindow();
   window.on("console", console.log);
   await window.setViewportSize({ width: 1920, height: 1080 });
-
+  await pause(5000);
   const mapView = window.getByTestId("map-view");
   expect(await mapView.screenshot()).toMatchSnapshot("map-view.png", {
     maxDiffPixelRatio: 0.3,

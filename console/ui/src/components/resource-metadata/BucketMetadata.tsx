@@ -9,7 +9,7 @@ export interface BucketMetadataProps {
 }
 
 export const BucketMetadata = ({ node }: BucketMetadataProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <div
       className={classNames(

@@ -20,7 +20,7 @@ export const MapControls = ({}: MapControlsProps) => {
 
   const { showTests, setShowTests } = useContext(TestsContext);
 
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <div className={classNames("flex justify-normal items-center", theme.bg3)}>

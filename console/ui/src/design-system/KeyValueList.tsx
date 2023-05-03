@@ -76,7 +76,7 @@ export const KeyValueList = ({
   readonly = false,
   placeholder = "No items",
 }: KeyValueListProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const [editItems, setEditItems] = useState<KeyValueItem[]>([]);
 

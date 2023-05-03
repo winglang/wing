@@ -10,7 +10,7 @@ export const Pill = ({
   children,
   textSize = "base",
 }: PropsWithChildren<PillProps>) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <span
       className={classNames(

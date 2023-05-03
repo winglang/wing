@@ -24,7 +24,7 @@ export interface TabsProps {
 }
 
 export const Tabs = (props: TabsProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const [currentTabId, setCurrentTabId] = useState(props.currentTabId);
 
   useEffect(() => {

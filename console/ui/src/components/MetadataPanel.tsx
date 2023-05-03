@@ -73,7 +73,7 @@ export const MetadataPanel = ({
   outbound,
   onConnectionNodeClick,
 }: MetadataProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const [openInspectorSections, setOpenInspectorSections] = useState(() => [
     "interact",
     "interact-actions",

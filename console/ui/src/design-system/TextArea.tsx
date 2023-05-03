@@ -18,7 +18,7 @@ export interface TextAreaProps {
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, containerClassName, ...props }, ref) => {
-    const theme = useTheme();
+    const { theme } = useTheme();
     return (
       <div className={classNames("relative rounded-md", containerClassName)}>
         <textarea

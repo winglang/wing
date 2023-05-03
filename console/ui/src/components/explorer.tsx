@@ -64,7 +64,7 @@ export interface ExplorerProps {
 }
 
 export const Explorer = (props: ExplorerProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <div
       className={classNames("w-full h-full flex flex-col", theme.bg3)}

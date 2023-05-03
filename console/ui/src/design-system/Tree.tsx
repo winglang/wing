@@ -147,7 +147,7 @@ export const Tree = ({
   onCurrentChange,
   className,
 }: TreeProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const {
     selectTo,

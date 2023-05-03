@@ -17,7 +17,7 @@ export const StatusBar = ({
   cloudAppState,
   isError = false,
 }: StatusBarProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const loading =
     cloudAppState === "loadingSimulator" || cloudAppState === "compiling";
   const cloudAppStateString = {

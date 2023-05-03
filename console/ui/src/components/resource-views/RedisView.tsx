@@ -12,7 +12,7 @@ export interface RedisViewProps {
 const REDIS_PROMPT = "redis>";
 
 export const RedisView = ({ resourcePath }: RedisViewProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const [loading, setLoading] = useState(false);
   const inputId = useId();

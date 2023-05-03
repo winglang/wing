@@ -25,7 +25,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     { leftIcon: LeftIcon, className, containerClassName, disabled, ...props },
     ref,
   ) => {
-    const theme = useTheme();
+    const { theme } = useTheme();
     return (
       <div className={classNames("relative rounded", containerClassName)}>
         {LeftIcon && (

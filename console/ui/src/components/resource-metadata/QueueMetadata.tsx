@@ -13,7 +13,7 @@ export interface QueueMetadataProps {
 }
 
 export const QueueMetadata = ({ node }: QueueMetadataProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const { showNotification } = useNotifications();
 

@@ -41,7 +41,7 @@ export const Combobox = ({
   showSelected = true,
   renderItem,
 }: ComboboxProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const [filtered, setFiltered] = useState<Item[]>(items ?? []);
   const buttonRef = useRef<HTMLButtonElement>(null);

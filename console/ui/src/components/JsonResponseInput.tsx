@@ -20,7 +20,7 @@ export const JsonResponseInput = ({
   placeholder = "No value",
   className,
 }: JsonResponseInputProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <ResponseInput empty={!value} loading={loading} placeholder={placeholder}>
       <TextHighlight

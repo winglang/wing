@@ -11,7 +11,7 @@ export interface CounterResourceDetailsProps {
 }
 
 export const CounterValue = ({ resource }: CounterResourceDetailsProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const resourcePath = resource.path;
   const incrementCounter = trpc["counter.inc"].useMutation();

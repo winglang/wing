@@ -10,7 +10,7 @@ export interface ModalProps {
 }
 
 export function Modal({ visible, setVisible, children }: ModalProps) {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   return (
     <Transition.Root show={visible} as={Fragment}>

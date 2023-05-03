@@ -22,7 +22,7 @@ export const ProgressBar = ({
   progress = 0,
   size = "md",
 }: ProgressBarProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const height = {
     sm: "h-1",

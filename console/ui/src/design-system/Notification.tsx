@@ -60,7 +60,7 @@ export function useNotifications() {
 }
 
 function NotificationsContainer() {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const { notifications, closeNotification, removeNotification } =
     usePrivateNotifications();
 

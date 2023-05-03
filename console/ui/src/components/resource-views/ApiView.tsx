@@ -36,7 +36,7 @@ export interface ApiRoute {
 }
 
 export const ApiView = ({ resourcePath }: ApiViewProps) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   const [url, setUrl] = useState<string>("");
 

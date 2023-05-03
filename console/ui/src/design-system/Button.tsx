@@ -39,7 +39,7 @@ export const Button = forwardRef<
     },
     ref,
   ) => {
-    const theme = useTheme();
+    const { theme } = useTheme();
 
     return (
       <button
