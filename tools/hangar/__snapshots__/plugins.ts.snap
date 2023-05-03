@@ -565,7 +565,7 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
 }
 `;
 
-exports[`Plugin examples > AWS target plugins > tf-backend-configuration.js > azurerm backend 1`] = `
+exports[`Plugin examples > AWS target plugins > tf-backend.js > azurerm backend 1`] = `
 {
   "//": {
     "metadata": {
@@ -753,7 +753,7 @@ exports[`Plugin examples > AWS target plugins > tf-backend-configuration.js > az
 }
 `;
 
-exports[`Plugin examples > AWS target plugins > tf-backend-configuration.js > gcp backend 1`] = `
+exports[`Plugin examples > AWS target plugins > tf-backend.js > gcp backend 1`] = `
 {
   "//": {
     "metadata": {
@@ -941,7 +941,7 @@ exports[`Plugin examples > AWS target plugins > tf-backend-configuration.js > gc
 }
 `;
 
-exports[`Plugin examples > AWS target plugins > tf-backend-configuration.js > s3 backend 1`] = `
+exports[`Plugin examples > AWS target plugins > tf-backend.js > s3 backend 1`] = `
 {
   "//": {
     "metadata": {

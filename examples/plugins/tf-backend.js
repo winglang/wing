@@ -1,5 +1,5 @@
 /**
- * Plugin: tf-backend-configuration
+ * Plugin: tf-backend
  * 
  * Description: 
  * Allow dev to specify the use of a alternate backends for Terraform state file. Replaces 

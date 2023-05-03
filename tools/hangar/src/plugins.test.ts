@@ -83,9 +83,10 @@ describe("Plugin examples", () => {
       ).toEqual(2); // 2 replica rules
     });
 
-    describe("tf-backend-configuration.js", () => {
+    describe("tf-backend.js", () => {
+      const tfBackendPluginName = "tf-backend.js";
       test("s3 backend", async () => {
-        const plugin = path.join(pluginsDir, "tf-backend-configuration.js");
+        const plugin = path.join(pluginsDir, tfBackendPluginName);
         const tfBackend = "s3";
         const tfBackendBucket = "my-wing-bucket";
         const tfBackendBucketRegion = "us-east-1";
@@ -118,7 +119,7 @@ describe("Plugin examples", () => {
       });
 
       test("gcp backend", async () => {
-        const plugin = path.join(pluginsDir, "tf-backend-configuration.js");
+        const plugin = path.join(pluginsDir, tfBackendPluginName);
         const tfBackend = "gcs";
         const tfBackendBucket = "my-wing-bucket";
         const stateFile = "some-state-file.tfstate";
@@ -148,7 +149,7 @@ describe("Plugin examples", () => {
       });
 
       test("azurerm backend", async () => {
-        const plugin = path.join(pluginsDir, "tf-backend-configuration.js");
+        const plugin = path.join(pluginsDir, tfBackendPluginName);
         const tfBackend = "azurerm";
         const tfBackendStorageAccountName = "my-wing-storage-account";
         const tfBackendContainerName = "my-wing-container";
