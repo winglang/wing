@@ -118,6 +118,7 @@ pub enum TypeAnnotationKind {
 	Duration,
 	Json,
 	MutJson,
+	Resource,
 	Optional(Box<TypeAnnotation>),
 	Array(Box<TypeAnnotation>),
 	MutArray(Box<TypeAnnotation>),
@@ -164,6 +165,7 @@ impl Display for TypeAnnotationKind {
 			TypeAnnotationKind::String => write!(f, "str"),
 			TypeAnnotationKind::Bool => write!(f, "bool"),
 			TypeAnnotationKind::Duration => write!(f, "duration"),
+			TypeAnnotationKind::Resource => write!(f, "resource"),
 			TypeAnnotationKind::Json => write!(f, "Json"),
 			TypeAnnotationKind::MutJson => write!(f, "MutJson"),
 			TypeAnnotationKind::Optional(t) => write!(f, "{}?", t),
@@ -589,6 +591,14 @@ pub struct Scope {
 }
 
 impl Scope {
+	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+		Self {
+			statements,
+			span,
+			env: RefCell::new(None),
+		}
+	}
+
 	pub fn set_env(&self, new_env: SymbolEnv) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());

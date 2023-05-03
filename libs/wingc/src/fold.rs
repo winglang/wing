@@ -420,6 +420,7 @@ where
 		TypeAnnotationKind::Duration => TypeAnnotationKind::Duration,
 		TypeAnnotationKind::Json => TypeAnnotationKind::Json,
 		TypeAnnotationKind::MutJson => TypeAnnotationKind::MutJson,
+		TypeAnnotationKind::Resource => TypeAnnotationKind::Resource,
 		TypeAnnotationKind::Optional(t) => TypeAnnotationKind::Optional(Box::new(f.fold_type_annotation(*t))),
 		TypeAnnotationKind::Array(t) => TypeAnnotationKind::Array(Box::new(f.fold_type_annotation(*t))),
 		TypeAnnotationKind::MutArray(t) => TypeAnnotationKind::MutArray(Box::new(f.fold_type_annotation(*t))),

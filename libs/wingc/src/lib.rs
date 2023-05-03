@@ -10,6 +10,9 @@ extern crate lazy_static;
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
+use env_reset::EnvResetter;
+use fold::Fold;
+use inflight_transform::InflightTransformer;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -34,7 +37,9 @@ pub mod ast;
 pub mod capture;
 pub mod debug;
 pub mod diagnostic;
+pub mod env_reset;
 pub mod fold;
+pub mod inflight_transform;
 pub mod jsify;
 pub mod lsp;
 pub mod parser;
@@ -288,7 +293,7 @@ pub fn compile(
 	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = if scope.statements.len() > 0 {
+	if scope.statements.len() > 0 {
 		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
 	} else {
 		// empty scope, no type checking needed
@@ -296,6 +301,26 @@ pub fn compile(
 	};
 
 	// Validate that every Expr has an evaluated_type
+	let mut tc_assert = TypeCheckAssert;
+	tc_assert.visit_scope(&scope);
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = InflightTransformer::new();
+	let mut scope = inflight_transformer.fold_scope(scope);
+
+	// Reset symbol environments
+	let mut env_resetter = EnvResetter;
+	scope = env_resetter.fold_scope(scope);
+
+	// Type check everything again
+	let type_check_diagnostics = if scope.statements.len() > 0 {
+		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
+	} else {
+		// empty scope, no type checking needed
+		Diagnostics::new()
+	};
+
+	// Validate again that every Expr has an evaluated_type
 	let mut tc_assert = TypeCheckAssert;
 	tc_assert.visit_scope(&scope);
 
