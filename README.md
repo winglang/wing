@@ -68,7 +68,7 @@ called from inflight scopes.
 
 ### Very cool, but what here cannot be done by a library or compiler extension?
 In existing languages, where there is no way to distinguish between multiple execution phases, it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific execution phase.
-You are welcome to read more about it [here]((https://docs.winglang.io/faq/why-a-language)) (including code samples that show the same app built in Wing vs. other solutions).
+You are welcome to read more about it [here](https://docs.winglang.io/faq/why-a-language) (including code samples that show the same app built in Wing vs. other solutions).
 
 ## What makes Wing a good fit for cloud development? 🌟
 
