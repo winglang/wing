@@ -41,10 +41,13 @@ function generateTests(
 
     let skipText = "";
 
+    if (metaComment?.skip) {
+      continue;
+    }
+
     if (
-      (metaComment?.skipPlatforms?.includes(process.platform) &&
-        process.env.CI) ||
-      metaComment?.skipTest
+      metaComment?.skipPlatforms?.includes(process.platform) &&
+      process.env.CI
     ) {
       skipText = ".skip";
     }
