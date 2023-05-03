@@ -224,12 +224,6 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
-      - name: Link Wing CLI
-        run: ln -s ${{ github.workspace }}/apps/wing/bin/wing /usr/local/bin/wing
-
-      - name: Check Wing Version
-        run: wing --version
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -243,6 +237,12 @@ jobs:
             examples/tests/valid
             examples/tests/invalid
           install-command: npm ci
+
+      - name: Link Wing CLI
+        run: ln -s ${{ github.workspace }}/apps/wing/bin/wing /usr/local/bin/wing
+
+      - name: Check Wing Version
+        run: wing --version
 
       - name: Clone Console
         run: git clone https://${GITHUB_TOKEN}@github.com/winglang/console
