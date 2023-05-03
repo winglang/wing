@@ -24,6 +24,8 @@
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
     "release": "npx projen release",
+    "remove-bundled-deps": "npx projen remove-bundled-deps",
+    "restore-bundled-deps": "npx projen restore-bundled-deps",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
     "unbump": "npx projen unbump",
