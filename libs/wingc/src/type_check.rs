@@ -2554,7 +2554,6 @@ impl<'a> TypeChecker<'a> {
 					message: format!("\"{}\" is not initialized", field.name.name),
 					span: field.name.span.clone(),
 				});
-			} else {
 			}
 		}
 	}
