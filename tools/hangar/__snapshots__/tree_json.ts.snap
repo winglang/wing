@@ -10,8 +10,8 @@ exports[`tree.json for an app with many resources 1`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -19,13 +19,11 @@ exports[`tree.json for an app with many resources 1`] = `
               "Default": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "$Inflight4": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
@@ -42,7 +40,6 @@ exports[`tree.json for an app with many resources 1`] = `
                   "$Inflight5": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
@@ -66,7 +63,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/test",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Foo": {
@@ -85,7 +81,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "children": {
                           "cloud.Counter": {
@@ -110,13 +105,12 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "resource": "root/Default/Default/test",
                                 },
                               ],
-                              "wing:resource:stateful": true,
                             },
                             "children": {
                               "Default": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "Default",
                                 "path": "root/Default/Default/Bar/Foo/cloud.Counter/Default",
@@ -201,7 +195,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/test: dependency cycles",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "$Inflight1": {
@@ -214,7 +207,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -238,7 +230,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -262,7 +253,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -310,37 +300,36 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test: dependency cycles",
                             },
                           ],
-                          "wing:resource:stateful": true,
                         },
                         "children": {
                           "Default": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/b2/Default",
                           },
                           "Encryption": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "Encryption",
                             "path": "root/Default/Default/BigPublisher/b2/Encryption",
                           },
                           "PublicAccessBlock": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "PublicAccessBlock",
                             "path": "root/Default/Default/BigPublisher/b2/PublicAccessBlock",
                           },
                           "S3Object_on_create_notifier": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "S3Object_on_create_notifier",
                             "path": "root/Default/Default/BigPublisher/b2/S3Object_on_create_notifier",
@@ -361,29 +350,28 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
                                 },
                               ],
-                              "wing:resource:stateful": true,
                             },
                             "children": {
                               "Default": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "Default",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create/Default",
                               },
                               "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
                               },
                               "b2-on_create-TopicSubscription-a754ef69": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "b2-on_create-TopicSubscription-a754ef69",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create/b2-on_create-TopicSubscription-a754ef69",
@@ -458,7 +446,6 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "resource": "root/Default/Default/BigPublisher/b2/b2-on_create",
                                 },
                               ],
-                              "wing:resource:stateful": false,
                             },
                             "children": {
                               "Asset": {
@@ -471,48 +458,48 @@ exports[`tree.json for an app with many resources 1`] = `
                               },
                               "Default": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "Default",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/Default",
                               },
                               "IamRole": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "IamRole",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/IamRole",
                               },
                               "IamRolePolicy": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "IamRolePolicy",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/IamRolePolicy",
                               },
                               "IamRolePolicyAttachment": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "IamRolePolicyAttachment",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/IamRolePolicyAttachment",
                               },
                               "InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
                               },
                               "S3Object": {
                                 "constructInfo": {
-                                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                                  "version": "12.0.2",
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.15.2",
                                 },
                                 "id": "S3Object",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69/S3Object",
@@ -532,7 +519,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "b2-on_create-OnMessageHandler-a754ef69": {
                             "attributes": {
                               "wing:resource:connections": [],
-                              "wing:resource:stateful": false,
                             },
                             "constructInfo": {
                               "fqn": "@winglang/sdk.std.Resource",
@@ -566,7 +552,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a754ef69",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -606,29 +591,28 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test: dependency cycles",
                             },
                           ],
-                          "wing:resource:stateful": true,
                         },
                         "children": {
                           "Default": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Bucket/Default",
                           },
                           "Encryption": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "Encryption",
                             "path": "root/Default/Default/BigPublisher/cloud.Bucket/Encryption",
                           },
                           "PublicAccessBlock": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "PublicAccessBlock",
                             "path": "root/Default/Default/BigPublisher/cloud.Bucket/PublicAccessBlock",
@@ -679,21 +663,20 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test: dependency cycles",
                             },
                           ],
-                          "wing:resource:stateful": true,
                         },
                         "children": {
                           "Default": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue/Default",
                           },
                           "EventSourceMapping": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.lambdaEventSourceMapping.LambdaEventSourceMapping",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "EventSourceMapping",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue/EventSourceMapping",
@@ -762,7 +745,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "children": {
                           "Asset": {
@@ -775,40 +757,40 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                           "Default": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/Default",
                           },
                           "IamRole": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "IamRole",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/IamRole",
                           },
                           "IamRolePolicy": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "IamRolePolicy",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/IamRolePolicy",
                           },
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "IamRolePolicyAttachment",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/IamRolePolicyAttachment",
                           },
                           "S3Object": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "S3Object",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f/S3Object",
@@ -828,7 +810,6 @@ exports[`tree.json for an app with many resources 1`] = `
                       "cloud.Queue-AddConsumerHandler-c351460f": {
                         "attributes": {
                           "wing:resource:connections": [],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -874,21 +855,20 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/test: dependency cycles",
                             },
                           ],
-                          "wing:resource:stateful": true,
                         },
                         "children": {
                           "Default": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic/Default",
                           },
                           "cloud.Topic-TopicSubscription-cb235724": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "cloud.Topic-TopicSubscription-cb235724",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-TopicSubscription-cb235724",
@@ -957,7 +937,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "resource": "root/Default/Default/BigPublisher/cloud.Topic",
                             },
                           ],
-                          "wing:resource:stateful": false,
                         },
                         "children": {
                           "Asset": {
@@ -970,48 +949,48 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                           "Default": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/Default",
                           },
                           "IamRole": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "IamRole",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/IamRole",
                           },
                           "IamRolePolicy": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "IamRolePolicy",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/IamRolePolicy",
                           },
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "IamRolePolicyAttachment",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/IamRolePolicyAttachment",
                           },
                           "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
                           },
                           "S3Object": {
                             "constructInfo": {
-                              "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                              "version": "12.0.2",
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
                             },
                             "id": "S3Object",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-cb235724/S3Object",
@@ -1031,7 +1010,6 @@ exports[`tree.json for an app with many resources 1`] = `
                       "cloud.Topic-OnMessageHandler-cb235724": {
                         "attributes": {
                           "wing:resource:connections": [],
-                          "wing:resource:stateful": false,
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
@@ -1097,29 +1075,28 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/test",
                         },
                       ],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/Default/cloud.Bucket/Default",
                       },
                       "Encryption": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Encryption",
                         "path": "root/Default/Default/cloud.Bucket/Encryption",
                       },
                       "PublicAccessBlock": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "PublicAccessBlock",
                         "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
@@ -1218,7 +1195,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/Bar",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -1231,40 +1207,40 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/Default/test/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRole",
                         "path": "root/Default/Default/test/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/Default/test/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/Default/test/IamRolePolicyAttachment",
                       },
                       "S3Object": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "S3Object",
                         "path": "root/Default/Default/test/S3Object",
@@ -1321,7 +1297,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           "resource": "root/Default/Default/BigPublisher",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -1334,40 +1309,40 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/Default/test: dependency cycles/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRole",
                         "path": "root/Default/Default/test: dependency cycles/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/Default/test: dependency cycles/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/Default/test: dependency cycles/IamRolePolicyAttachment",
                       },
                       "S3Object": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "S3Object",
                         "path": "root/Default/Default/test: dependency cycles/S3Object",
@@ -1394,8 +1369,8 @@ exports[`tree.json for an app with many resources 1`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1403,7 +1378,6 @@ exports[`tree.json for an app with many resources 1`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1429,7 +1403,7 @@ exports[`tree.json for an app with many resources 1`] = `
               },
             },
             "constructInfo": {
-              "fqn": "@winglang/sdk.core.CdktfApp",
+              "fqn": "@winglang/sdk.core.App",
               "version": "0.0.0",
             },
             "id": "Default",

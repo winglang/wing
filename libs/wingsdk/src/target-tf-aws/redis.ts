@@ -1,10 +1,10 @@
-import { ElasticacheCluster } from "@cdktf/provider-aws/lib/elasticache-cluster";
-import { ElasticacheSubnetGroup } from "@cdktf/provider-aws/lib/elasticache-subnet-group";
-import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
-import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
+import { ElasticacheCluster } from "../.gen/providers/aws/elasticache-cluster";
+import { ElasticacheSubnetGroup } from "../.gen/providers/aws/elasticache-subnet-group";
+import { SecurityGroup } from "../.gen/providers/aws/security-group";
+import { Subnet } from "../.gen/providers/aws/subnet";
 import { Code } from "../core";
 import * as core from "../core";
 import * as redis from "../redis";

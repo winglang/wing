@@ -1,8 +1,8 @@
 import { join } from "path";
-import { CloudwatchEventRule } from "@cdktf/provider-aws/lib/cloudwatch-event-rule";
-import { CloudwatchEventTarget } from "@cdktf/provider-aws/lib/cloudwatch-event-target";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule";
+import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Resource } from "../std";
@@ -21,21 +21,6 @@ export class Schedule extends cloud.Schedule {
     super(scope, id, props);
 
     const { rate, cron } = props;
-
-    if (rate && cron) {
-      throw new Error("rate and cron cannot be configured simultaneously.");
-    }
-    if (!rate && !cron) {
-      throw new Error("rate or cron need to be filled.");
-    }
-    if (rate && rate.seconds < 60) {
-      throw new Error("rate can not be set to less than 1 minute.");
-    }
-    if (cron && cron.split(" ").length > 5) {
-      throw new Error(
-        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-      );
-    }
 
     /*
      * The schedule cron string is Unix cron format: [minute] [hour] [day of month] [month] [day of week]
