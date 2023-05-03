@@ -18,113 +18,15 @@ These are the main differences between the two:
 To get a deeper understanging of the differences, let's see the same app built in both Wing and Pulumi.
 This simple app uses a Function to upload a text file to a Bucket,
 
-<details open>
-  <summary>Wing</summary>
+import CodeComparison from '../src/components/CodeComparison';
 
-
-    `hello.w`
-
-```ts
-bring cloud;
-
-let bucket = new cloud.Bucket();
-
-new cloud.Function(inflight () => {
-bucket.put("hello.txt", "world!");
-});
-```
-
-</details>
+<CodeComparison 
+  exampleName="function-upload-to-bucket"
+  desiredPlatformLabels="['AWSCDK']"
+/>
 <br/>
 
-<details>
-  <summary>AWS-CDK</summary>
-
-`index.js`
-
-```js
-const AWS = require('aws-sdk');
-const S3 = new AWS.S3();
-
-exports.handler = async (event) => {
-  const bucketName = process.env.BUCKET_NAME;
-  const key = 'hello.txt';
-  const content = 'Hello world!';
-
-  const params = {
-    Bucket: bucketName,
-    Key: key,
-    Body: content,
-  };
-
-  try {
-    await S3.putObject(params).promise();
-    return {
-      statusCode: 200,
-      body: JSON.stringify('File uploaded successfully.'),
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify('Error uploading the file.'),
-    };
-  }
-};
-```
-
-`hello.js`
-
-```js
-const cdk = require('@aws-cdk/core');
-const lambda = require('@aws-cdk/aws-lambda');
-const s3 = require('@aws-cdk/aws-s3');
-const iam = require('@aws-cdk/aws-iam');
-
-class YourProjectNameStack extends cdk.Stack {
-  constructor(scope, id, props) {
-    super(scope, id, props);
-
-    const bucket = new s3.Bucket(this, 'MyBucket', {
-      versioned: false,
-    });
-
-    const lambdaRole = new iam.Role(this, 'LambdaRole', {
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-    });
-
-    lambdaRole.addToPolicy(
-      new iam.PolicyStatement({
-        actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
-        resources: ['arn:aws:logs:*:*:*'],
-      }),
-    );
-
-    lambdaRole.addToPolicy(
-      new iam.PolicyStatement({
-        actions: ['s3:PutObject'],
-        resources: [`${bucket.bucketArn}/*`],
-      }),
-    );
-
-    const uploadFunction = new lambda.Function(this, 'UploadFunction', {
-      runtime: lambda.Runtime.NODEJS_14_X,
-      handler: 'index.handler',
-      code: lambda.Code.fromAsset('path/to/your/index.js'),
-      role: lambdaRole,
-      environment: {
-        BUCKET_NAME: bucket.bucketName,
-      },
-    });
-  }
-}
-
-module.exports = { YourProjectNameStack };
-```
-</details>
-<br/>
-
-The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)
+**The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)**
 
 | Feature                                         | Wing                                                      | AWS CDK                                      |
 |-------------------------------------------------|-----------------------------------------------------------|----------------------------------------------|

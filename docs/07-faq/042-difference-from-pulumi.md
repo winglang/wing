@@ -16,147 +16,15 @@ The main differences between them are:
 To get a deeper understanging of the differences, let's see the same app built in both Wing and Pulumi.
 This simple app uses a Function to upload a text file to a Bucket,
 
-<details open>
-  <summary>Wing</summary>
+import CodeComparison from '../src/components/CodeComparison';
 
-
-    `hello.w`
-
-```ts
-bring cloud;
-
-let bucket = new cloud.Bucket();
-
-new cloud.Function(inflight () => {
-bucket.put("hello.txt", "world!");
-});
-```
-
-</details>
+<CodeComparison 
+  exampleName="function-upload-to-bucket"
+  desiredPlatformLabels="['Pulumi']"
+/>
 <br/>
 
-<details>
-  <summary>Pulumi</summary>
-
-`index.js`
-
-```js
-const AWS = require('aws-sdk');
-const S3 = new AWS.S3();
-
-exports.handler = async (event) => {
-  const bucketName = process.env.BUCKET_NAME;
-  const key = 'hello.txt';
-  const content = 'Hello world!';
-
-  const params = {
-    Bucket: bucketName,
-    Key: key,
-    Body: content,
-  };
-
-  try {
-    await S3.putObject(params).promise();
-    return {
-      statusCode: 200,
-      body: JSON.stringify('File uploaded successfully.'),
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify('Error uploading the file.'),
-    };
-  }
-};
-```
-
-`main.ts`
-
-```ts
-import * as pulumi from "@pulumi/pulumi";
-import * as aws from "@pulumi/aws";
-import * as fs from "fs";
-import * as mime from "mime";
-import * as path from "path";
-
-const config = new pulumi.Config();
-const region = config.require("aws:region");
-
-const bucket = new aws.s3.Bucket("s3-bucket");
-
-const role = new aws.iam.Role("lambdaRole", {
-  assumeRolePolicy: JSON.stringify({
-    Version: "2012-10-17",
-    Statement: [
-      {
-        Action: "sts:AssumeRole",
-        Effect: "Allow",
-        Principal: {
-          Service: "lambda.amazonaws.com",
-        },
-      },
-    ],
-  }),
-});
-
-const policy = new aws.iam.RolePolicy("lambdaPolicy", {
-  role: role,
-  policy: JSON.stringify({
-    Version: "2012-10-17",
-    Statement: [
-      {
-        Action: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
-        Effect: "Allow",
-        Resource: "arn:aws:logs:*:*:*",
-      },
-      {
-        Action: ["s3:PutObject"],
-        Effect: "Allow",
-        Resource: `${bucket.arn}/*`,
-      },
-    ],
-  }),
-});
-
-const lambdaFunction = new aws.lambda.Function("s3UploaderLambda", {
-  runtime: "nodejs14.x",
-  code: new pulumi.asset.AssetArchive({
-    ".": new pulumi.asset.FileArchive("./"),
-  }),
-  timeout: 10,
-  handler: "index.handler",
-  role: role.arn,
-  environment: {
-    variables: {
-      BUCKET_NAME: bucket.bucket,
-    },
-  },
-});
-
-export const bucketName = bucket.bucket;
-export const lambdaFunctionName = lambdaFunction.name;
-```
-
-`pulumi.yaml`
-
-```yaml
-name: s3-lambda-pulumi
-runtime: nodejs
-description: A simple example that uploads a file to an S3 bucket using a Lambda function
-template:
-  config:
-    aws:region:
-      description: The AWS region to deploy into
-      default: us-west-2
-```
-
-
-</details>
-
-<br/>
-
-The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)
+**The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)**
 
 | Feature                                         | Wing                                                      | Pulumi                                        |
 |-------------------------------------------------|-----------------------------------------------------------|-----------------------------------------------|
