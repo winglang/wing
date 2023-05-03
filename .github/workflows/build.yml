@@ -225,28 +225,28 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: wing
-          path: /wing
+          path: wing
 
-      - run: ls -al /home/runner/work/wing/wing
-      - run: ls -al /home/runner/work/wing/wing/wing
-      - run: ls -al /wing
+      # - run: ls -al /home/runner/work/wing/wing
+      # - run: ls -al /home/runner/work/wing/wing/wing
+      - run: ls -al ${{ github.workspace }}/wing
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: |
-            tools/hangar
-            examples/tests/valid
-            examples/tests/invalid
-          install-command: npm ci
+      # - name: Install Dependencies
+      #   uses: bahmutov/npm-install@v1
+      #   with:
+      #     working-directory: |
+      #       tools/hangar
+      #       examples/tests/valid
+      #       examples/tests/invalid
+      #     install-command: npm ci
 
       - name: Link Wing CLI
-        run: ln -s /wing/bin/wing /usr/local/bin/wing
+        run: ln -s ${{ github.workspace }}/bin/wing /usr/local/bin/wing
 
       - name: Check Wing Version
         run: wing --version
