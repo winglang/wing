@@ -238,6 +238,7 @@ jobs:
       - name: Install & Link Wing CLI
         run: |
           cd package
+          jq '.version |= "0.0.0"' package.json > tmp.json && mv tmp.json package.json
           npm i
           npm i -g ./
 
