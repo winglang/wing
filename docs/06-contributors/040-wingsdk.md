@@ -18,6 +18,9 @@ The SDK is built using a couple of extra libraries and tools:
 
 Everything in the SDK can be built by running `npm run build` from `libs/wingsdk`. You can also run `npm run test` to just run tests.
 
+In order to work on the source code, you will need to the build at least once so that TypeScript bindings for Terraform resources will be automatically generated.
+These files are not checked in because they are quite large.
+
 (If you have any issues building the package, please open an issue and let us know!)
 
 [CDK for Terraform]: https://github.com/hashicorp/terraform-cdk
@@ -44,6 +47,16 @@ Here is an example of adding a package named "fast-json-stringify" pinned to maj
 ```
 
 > [2] JSII libraries are npm packages that are compiled with JSII. They are usually published to npm with the `cdk` keyword, and they will have a `.jsii` file at their root.
+
+## 🧱 How do I add a new Terraform provider for use in the SDK?
+
+The SDK uses [CDK for Terraform] to generate Terraform files.
+This means that you can generate bindings for any Terraform provider and reference in in the SDK using TypeScript.
+
+To add a new provider, go to `libs/wingsdk/.projenrc.ts` and edit the section
+that says "CDKTF_BINDINGS" to add the new provider.
+Then, run `npx projen` to update the project.
+One that has finished, you can run `npm run build` and the new bindings should be generated inside `libs/wingsdk/src/.gen`.
 
 ## 🧩 How do I add a resource to the SDK?
 

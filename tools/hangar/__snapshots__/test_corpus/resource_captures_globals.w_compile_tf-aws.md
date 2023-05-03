@@ -4,10 +4,9 @@
 ```js
 module.exports = function({ global_counter }) {
   class  Another {
-    constructor({ first, my_field, stateful }) {
+    constructor({ first, my_field }) {
       this.first = first;
       this.my_field = my_field;
-      this.stateful = stateful;
     }
     async $inflight_init()  {
       {
@@ -30,9 +29,8 @@ module.exports = function({ global_counter }) {
 ```js
 module.exports = function() {
   class  First {
-    constructor({ my_resource, stateful }) {
+    constructor({ my_resource }) {
       this.my_resource = my_resource;
-      this.stateful = stateful;
     }
   }
   return First;
@@ -44,10 +42,9 @@ module.exports = function() {
 ```js
 module.exports = function({ global_another, global_array_of_str, global_bool, global_bucket, global_counter, global_map_of_num, global_num, global_set_of_str, global_str }) {
   class  MyResource {
-    constructor({ local_counter, local_topic, stateful }) {
+    constructor({ local_counter, local_topic }) {
       this.local_counter = local_counter;
       this.local_topic = local_topic;
-      this.stateful = stateful;
     }
     async my_put()  {
       {
@@ -74,8 +71,7 @@ module.exports = function({ global_another, global_array_of_str, global_bool, gl
 ```js
 module.exports = function({ $parent_this, global_counter }) {
   class  R {
-    constructor({ stateful }) {
-      this.stateful = stateful;
+    constructor({  }) {
     }
     async handle()  {
       {
@@ -456,14 +452,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const my_resource_client = this._lift(this.my_resource);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const First = require("${self_client_path}")({});
             const client = new First({
               my_resource: ${my_resource_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -473,7 +467,6 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.my_resource, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -488,7 +481,6 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const first_client = this._lift(this.first);
         const my_field_client = this._lift(this.my_field);
-        const stateful_client = this._lift(this.stateful);
         const global_counter_client = this._lift(global_counter);
         const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -499,7 +491,6 @@ class $Root extends $stdlib.std.Resource {
             const client = new Another({
               first: ${first_client},
               my_field: ${my_field_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -511,7 +502,6 @@ class $Root extends $stdlib.std.Resource {
           this._registerBindObject(global_counter, host, ["peek"]);
           this._registerBindObject(this.first, host, []);
           this._registerBindObject(this.my_field, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("my_method")) {
           this._registerBindObject(global_counter, host, ["inc", "peek"]);
@@ -532,7 +522,6 @@ class $Root extends $stdlib.std.Resource {
             this._addInflightOps("handle");
           }
           _toInflight() {
-            const stateful_client = this._lift(this.stateful);
             const $parent_this_client = this._lift($parent_this);
             const global_counter_client = this._lift(global_counter);
             const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
@@ -543,7 +532,6 @@ class $Root extends $stdlib.std.Resource {
                   global_counter: ${global_counter_client},
                 });
                 const client = new R({
-                  stateful: ${stateful_client},
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
@@ -552,7 +540,6 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              this._registerBindObject(this.stateful, host, []);
             }
             if (ops.includes("handle")) {
               this._registerBindObject($parent_this.local_counter, host, ["inc"]);
@@ -566,7 +553,6 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const local_counter_client = this._lift(this.local_counter);
         const local_topic_client = this._lift(this.local_topic);
-        const stateful_client = this._lift(this.stateful);
         const global_another_client = this._lift(global_another);
         const global_array_of_str_client = this._lift(global_array_of_str);
         const global_bool_client = this._lift(global_bool);
@@ -593,7 +579,6 @@ class $Root extends $stdlib.std.Resource {
             const client = new MyResource({
               local_counter: ${local_counter_client},
               local_topic: ${local_topic_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -604,7 +589,6 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.local_counter, host, []);
           this._registerBindObject(this.local_topic, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("my_put")) {
           this._registerBindObject(global_another, host, ["my_method"]);

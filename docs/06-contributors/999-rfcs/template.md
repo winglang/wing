@@ -5,13 +5,13 @@ description: Template for creating a new RFC
 
 # #{RFC Number} - {RFC_TITLE}
 
-* **Author(s):**: @{AUTHOR}, @{AUTHOR}
-* **Submission Date**: {YYYY-MM-DD}
-* **Stage**: {RFC Stage}
-* **Stage Date**: {YYYY-MM-DD}
+- **Author(s):**: @{AUTHOR}, @{AUTHOR}
+- **Submission Date**: {YYYY-MM-DD}
+- **Stage**: {RFC Stage}
+- **Stage Date**: {YYYY-MM-DD}
 
-<!--- 
-Directions for above: 
+<!---
+Directions for above:
 
 Author(s): Git tag for PR authors and contributors
 Submission Date: Fill in with date of initial submission, YYYY-MM-DD
@@ -34,12 +34,14 @@ This section works backwards from an the end user. It is written as one or more 
 
 ## Requirements
 
-<!-- 
+<!--
 This section is a "shopping list" of requirements for this feature.
 
-We try to start by identifing the use cases that are expected to be addressed by this RFC. 
+We try to start by identifying the use cases that are expected to be addressed by this RFC.
 Ideally they should not inform the design or implementation but rather state the problems/pains/results
 that our users expect to achieve with this RFC.
+
+The requirements are the "contract" of the feature you're developing - "what does it do?" (as opposed to "how does it do it" - the implementation). The requirements usually specify use cases as well as edge case scenarios and the desired behavior of the software described.
 
 NOTES:
 * It is highly recommended to split functional and non-functional requirements.
@@ -49,23 +51,22 @@ NOTES:
 
 ### Functional
 
-* REQ01 (P1): bla bla bla
-* REQ02 (P0): another requirement
+- REQ01 (P1): bla bla bla
+- REQ02 (P0): another requirement
 
 ### Non-Functional
 
-* REQ03 (P1): bla bla bla
-
+- REQ03 (P1): bla bla bla
 
 ## Implementation
 
 <!--
 This section has a list of topics related to the implementation. We have some examples/ideas for topics below. Feel free to add as needed
 
-The goal of this section is to help decide if this RFC should be implemented. 
-It should include answers to questions that the team is likely ask. 
-Contrary to the rest of the RFC, answers should be written "from the present" and likely 
-discuss approach, implementation plans, alternative considered and other considerations that will 
+The goal of this section is to help decide if this RFC should be implemented.
+It should include answers to questions that the team is likely ask.
+Contrary to the rest of the RFC, answers should be written "from the present" and likely
+discuss approach, implementation plans, alternative considered and other considerations that will
 help decide if this RFC should be implemented.
 -->
 

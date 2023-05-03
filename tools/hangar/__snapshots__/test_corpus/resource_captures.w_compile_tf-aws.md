@@ -4,10 +4,9 @@
 ```js
 module.exports = function() {
   class  Another {
-    constructor({ first, my_field, stateful }) {
+    constructor({ first, my_field }) {
       this.first = first;
       this.my_field = my_field;
-      this.stateful = stateful;
     }
     async meaning_of_life()  {
       {
@@ -29,9 +28,8 @@ module.exports = function() {
 ```js
 module.exports = function() {
   class  First {
-    constructor({ my_resource, stateful }) {
+    constructor({ my_resource }) {
       this.my_resource = my_resource;
-      this.stateful = stateful;
     }
   }
   return First;
@@ -43,7 +41,7 @@ module.exports = function() {
 ```js
 module.exports = function() {
   class  MyResource {
-    constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_opt_str, my_queue, my_resource, my_str, set_of_str, unused_resource, stateful }) {
+    constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_opt_str, my_queue, my_resource, my_str, set_of_str, unused_resource }) {
       this.another = another;
       this.array_of_str = array_of_str;
       this.ext_bucket = ext_bucket;
@@ -57,7 +55,6 @@ module.exports = function() {
       this.my_str = my_str;
       this.set_of_str = set_of_str;
       this.unused_resource = unused_resource;
-      this.stateful = stateful;
     }
     async test_no_capture()  {
       {
@@ -435,14 +432,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const my_resource_client = this._lift(this.my_resource);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const First = require("${self_client_path}")({});
             const client = new First({
               my_resource: ${my_resource_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -452,7 +447,6 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.my_resource, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -467,7 +461,6 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const first_client = this._lift(this.first);
         const my_field_client = this._lift(this.my_field);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
@@ -475,7 +468,6 @@ class $Root extends $stdlib.std.Resource {
             const client = new Another({
               first: ${first_client},
               my_field: ${my_field_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -486,7 +478,6 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.first, host, []);
           this._registerBindObject(this.my_field, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("another_func")) {
         }
@@ -532,7 +523,6 @@ class $Root extends $stdlib.std.Resource {
         const my_str_client = this._lift(this.my_str);
         const set_of_str_client = this._lift(this.set_of_str);
         const unused_resource_client = this._lift(this.unused_resource);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
@@ -551,7 +541,6 @@ class $Root extends $stdlib.std.Resource {
               my_str: ${my_str_client},
               set_of_str: ${set_of_str_client},
               unused_resource: ${unused_resource_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -572,7 +561,6 @@ class $Root extends $stdlib.std.Resource {
           this._registerBindObject(this.my_resource, host, []);
           this._registerBindObject(this.my_str, host, []);
           this._registerBindObject(this.set_of_str, host, []);
-          this._registerBindObject(this.stateful, host, []);
           this._registerBindObject(this.unused_resource, host, []);
         }
         if (ops.includes("test_capture_collections_of_data")) {
