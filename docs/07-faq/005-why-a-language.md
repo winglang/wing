@@ -47,7 +47,10 @@ Below we've written the same simple demo app in Wing and other solutions. This s
 
 import CodeComparison from '../src/components/CodeComparison';
 
-<CodeComparison />
+<CodeComparison 
+  exampleName="function-upload-to-bucket"
+  desiredPlatformLabels="['Pulumi', 'Terraform', 'AWSCDK', 'CDKTF', 'Cloudformation']"
+/>
 <br/>
 
 **The below table contains the main differences that you can see in the code examples:**

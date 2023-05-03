@@ -33,7 +33,7 @@ bucket.put("hello.txt", "world!");
 ```
 
 </details>
-</br>
+<br/>
 
 <details>
   <summary>Pulumi</summary>
@@ -154,7 +154,7 @@ template:
 
 </details>
 
-</br>
+<br/>
 
 The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)
 

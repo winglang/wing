@@ -1,6 +1,6 @@
 ---
 title: What are the main differences between Wing and CDKTF?
-id: differences-from-awscdk
+id: differences-from-cdktf
 keywords: [faq, who is behind wing, winglang, Wing programming language, Wing language, CDKTF]
 ---
 
@@ -33,7 +33,7 @@ bucket.put("hello.txt", "world!");
 ```
 
 </details>
-</br>
+<br/>
 
 <details>
   <summary>CDKTF</summary>
@@ -155,7 +155,7 @@ app.synth();
 
 ```
 </details>
-</br>
+<br/>
 
 The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)
 
