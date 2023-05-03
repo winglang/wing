@@ -32,7 +32,7 @@ export interface MetaComment {
    *
    * @default - Will not be skipped
    */
-  skipTest?: boolean;
+  skip?: boolean;
 }
 
 export function parseMetaCommentFromPath(testPath: string) {
