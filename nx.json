@@ -10,27 +10,76 @@
     "libsDir": "libs"
   },
   "namedInputs": {
-    "src": [
-      "{projectRoot}/src/**/*"
+    "default": [
+      "!{projectRoot}/node_modules/**",
+      "!{workspaceRoot}/README.md",
+      "!{projectRoot}/README.md",
+      "{workspaceRoot}/*",
+      "{projectRoot}/**/*",
+      "{workspaceRoot}/.cargo/**",
+      "{workspaceRoot}/.vscode/**"
     ],
-    "project-files": [
-      "{projectRoot}/*"
+    "exclude-tests": [
+      "!{projectRoot}/test/**",
+      "!{projectRoot}/**/*.test.*"
     ],
-    "workspace-files": [
-      "{workspaceRoot}/*"
+    "default-build": [
+      "default",
+      "exclude-tests"
     ],
-    "test": [
-      "{projectRoot}/test/**/*"
+    "default-test": [
+      "default",
+      "examples-tests"
     ],
     "examples-tests": [
       "{workspaceRoot}/examples/tests/**/*.w"
-    ],
-    "rust-target": [
-      "{workspaceRoot}/target/**"
-    ],
-    "dist": [
-      "{projectRoot}/dist/**/*"
     ]
+  },
+  "targetDefaults": {
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "inputs": [
+        "default-build",
+        "^default-build"
+      ]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "inputs": [
+        "^default-build",
+        "default-test"
+      ]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "inputs": [
+        "default"
+      ]
+    },
+    "package": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
+      "inputs": [
+        "default-build",
+        "^default-build"
+      ]
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
+      "inputs": [
+        "default-build",
+        "^default-build"
+      ]
+    },
+    "copy": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "inputs": [
+        "^default-build"
+      ]
+    }
   },
   "tasksRunnerOptions": {
     "default": {
@@ -45,38 +94,6 @@
           "generate"
         ]
       }
-    }
-  },
-  "targetDefaults": {
-    "build": {
-      "inputs": [
-        "project-files",
-        "workspace-files",
-        "src"
-      ],
-      "outputs": [
-        "{workspaceRoot}/dist"
-      ],
-      "dependsOn": [
-        "^build"
-      ]
-    },
-    "test": {
-      "inputs": [
-        "project-files",
-        "workspace-files",
-        "src",
-        "test",
-        "examples-tests"
-      ]
-    },
-    "lint": {
-      "inputs": [
-        "project-files",
-        "workspace-files",
-        "src",
-        "test"
-      ]
     }
   }
 }

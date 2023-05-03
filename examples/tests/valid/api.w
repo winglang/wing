@@ -21,7 +21,7 @@ let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
 
 api.get("/hello/world", handler);
 
-resource Foo impl cloud.IFunctionHandler {
+class Foo impl cloud.IFunctionHandler {
   api: cloud.Api;
   init(api: cloud.Api) {
     this.api = api;
@@ -33,3 +33,21 @@ resource Foo impl cloud.IFunctionHandler {
 }
 
 new cloud.Function(new Foo(api)) as "test";
+
+// Initialize the API in resource
+class A {
+  api: cloud.Api;
+  init() {
+    this.api = new cloud.Api();
+    this.api.get("/endpoint1", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+      let text = "${this.api.url}/endpoint2";
+      return cloud.ApiResponse {
+        status: 200,
+        body: Json text,
+      };
+    });
+  }
+}
+
+new A();
+

@@ -36,7 +36,7 @@ exports[`basic function 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
+        \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
@@ -72,8 +72,8 @@ exports[`basic function 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -81,7 +81,6 @@ exports[`basic function 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -94,40 +93,40 @@ exports[`basic function 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -147,7 +146,6 @@ exports[`basic function 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -163,8 +161,8 @@ exports[`basic function 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -172,7 +170,6 @@ exports[`basic function 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -270,7 +267,7 @@ exports[`basic function with environment variables 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
+        \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
@@ -306,8 +303,8 @@ exports[`basic function with environment variables 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -315,7 +312,6 @@ exports[`basic function with environment variables 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -328,40 +324,40 @@ exports[`basic function with environment variables 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -381,7 +377,6 @@ exports[`basic function with environment variables 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -397,8 +392,8 @@ exports[`basic function with environment variables 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -406,7 +401,6 @@ exports[`basic function with environment variables 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -503,7 +497,7 @@ exports[`basic function with memory size specified 1`] = `
         \\"memory_size\\": 512,
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
+        \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
@@ -539,8 +533,8 @@ exports[`basic function with memory size specified 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -548,7 +542,6 @@ exports[`basic function with memory size specified 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -561,40 +554,40 @@ exports[`basic function with memory size specified 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -614,7 +607,6 @@ exports[`basic function with memory size specified 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -630,8 +622,8 @@ exports[`basic function with memory size specified 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -639,7 +631,6 @@ exports[`basic function with memory size specified 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -735,7 +726,7 @@ exports[`basic function with timeout explicitly set 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
+        \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
         \\"timeout\\": 30,
@@ -771,8 +762,8 @@ exports[`basic function with timeout explicitly set 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -780,7 +771,6 @@ exports[`basic function with timeout explicitly set 2`] = `
               "Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -793,40 +783,40 @@ exports[`basic function with timeout explicitly set 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -846,7 +836,6 @@ exports[`basic function with timeout explicitly set 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -862,8 +851,8 @@ exports[`basic function with timeout explicitly set 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -871,7 +860,6 @@ exports[`basic function with timeout explicitly set 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -967,7 +955,7 @@ exports[`function name valid 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_TheMightyFunction01_IamRole_34EB69E9.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
+        \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_TheMightyFunction01_S3Object_6949E35F.key}\\",
         \\"timeout\\": 30,
@@ -1003,8 +991,8 @@ exports[`function name valid 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1012,7 +1000,6 @@ exports[`function name valid 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1029,7 +1016,6 @@ exports[`function name valid 2`] = `
               "The-Mighty_Function-01": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1042,40 +1028,40 @@ exports[`function name valid 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The-Mighty_Function-01/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/The-Mighty_Function-01/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/The-Mighty_Function-01/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/The-Mighty_Function-01/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/The-Mighty_Function-01/S3Object",
@@ -1094,8 +1080,8 @@ exports[`function name valid 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1103,7 +1089,6 @@ exports[`function name valid 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1199,7 +1184,7 @@ exports[`replace invalid character from function name 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_TheMightyFunction_IamRole_DF8277B4.arn}\\",
-        \\"runtime\\": \\"nodejs16.x\\",
+        \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_TheMightyFunction_S3Object_D0A75871.key}\\",
         \\"timeout\\": 30,
@@ -1235,8 +1220,8 @@ exports[`replace invalid character from function name 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1244,7 +1229,6 @@ exports[`replace invalid character from function name 2`] = `
               "Handler": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1261,7 +1245,6 @@ exports[`replace invalid character from function name 2`] = `
               "The%Mighty$Function": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "Asset": {
@@ -1274,40 +1257,40 @@ exports[`replace invalid character from function name 2`] = `
                   },
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The%Mighty$Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/The%Mighty$Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/The%Mighty$Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/The%Mighty$Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/The%Mighty$Function/S3Object",
@@ -1326,8 +1309,8 @@ exports[`replace invalid character from function name 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1335,7 +1318,6 @@ exports[`replace invalid character from function name 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {

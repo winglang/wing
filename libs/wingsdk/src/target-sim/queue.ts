@@ -18,11 +18,20 @@ import { convertBetweenHandlers } from "../utils/convert";
  */
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
+  private readonly retentionPeriod: Duration;
   private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
     this.timeout = props.timeout ?? Duration.fromSeconds(10);
+    this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
+
+    if (this.retentionPeriod < this.timeout) {
+      throw new Error(
+        "Retention period must be greater than or equal to timeout"
+      );
+    }
+
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
@@ -92,6 +101,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       path: this.node.path,
       props: {
         timeout: this.timeout.seconds,
+        retentionPeriod: this.retentionPeriod.seconds,
         initialMessages: this.initialMessages,
       },
       attrs: {} as any,
@@ -110,7 +120,3 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});

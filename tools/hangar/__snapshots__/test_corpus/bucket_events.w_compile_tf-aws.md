@@ -345,7 +345,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_b_boncreateOnMessage8588493f_IamRole_F4D6A039.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_b_boncreateOnMessage8588493f_S3Object_B05EA5EC.key}",
         "timeout": 30,
@@ -370,7 +370,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_b_boncreateOnMessage88f6f7aa_IamRole_94993205.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_b_boncreateOnMessage88f6f7aa_S3Object_27A1B997.key}",
         "timeout": 30,
@@ -395,7 +395,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_b_bondeleteOnMessage6e8b2f6c_IamRole_935D5999.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_b_bondeleteOnMessage6e8b2f6c_S3Object_AA587BEA.key}",
         "timeout": 30,
@@ -422,7 +422,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_b_bondeleteOnMessagedece1815_IamRole_0A3F666E.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_b_bondeleteOnMessagedece1815_S3Object_9F2FF12D.key}",
         "timeout": 30,
@@ -447,7 +447,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_b_bonupdateOnMessage8b441417_IamRole_5980156B.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_b_bonupdateOnMessage8b441417_S3Object_E72D02CB.key}",
         "timeout": 30,
@@ -474,7 +474,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_b_bonupdateOnMessagec7d8cc3e_IamRole_1B0D38A4.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_b_bonupdateOnMessagec7d8cc3e_S3Object_A082E479.key}",
         "timeout": 30,
@@ -499,7 +499,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_other_otheroncreateOnMessage1a259cac_IamRole_B903D23C.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_other_otheroncreateOnMessage1a259cac_S3Object_61C37281.key}",
         "timeout": 30,
@@ -524,7 +524,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_other_otherondeleteOnMessage2e31a750_IamRole_45188816.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_other_otherondeleteOnMessage2e31a750_S3Object_5A3687E9.key}",
         "timeout": 30,
@@ -549,7 +549,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_other_otheronupdateOnMessage02fb2142_IamRole_9D20DEAB.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_other_otheronupdateOnMessage02fb2142_S3Object_7641A6CE.key}",
         "timeout": 30,
@@ -576,7 +576,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
@@ -742,7 +742,7 @@
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Post"
+              "s3:ObjectCreated:Put"
             ],
             "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
           }
@@ -782,7 +782,7 @@
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Put"
+              "s3:ObjectCreated:Post"
             ],
             "topic_arn": "${aws_sns_topic.root_b_bonupdate_F11B4439.arn}"
           }
@@ -802,7 +802,7 @@
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Post"
+              "s3:ObjectCreated:Put"
             ],
             "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
           }
@@ -842,7 +842,7 @@
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Put"
+              "s3:ObjectCreated:Post"
             ],
             "topic_arn": "${aws_sns_topic.root_other_otheronupdate_3B763057.arn}"
           }

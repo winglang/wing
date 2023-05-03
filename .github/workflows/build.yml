@@ -5,6 +5,10 @@ on:
     types:
       - opened
       - synchronize
+    paths-ignore:
+      - "docs/**"
+      - "logo/**"
+      - "*.md"
   push:
     branches:
       - main
@@ -52,9 +56,6 @@ jobs:
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
-
-      - name: Lint Nx Configuration
-        run: npx nx workspace-lint
 
       - name: Changelog Generation
         id: changelog

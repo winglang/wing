@@ -37,6 +37,7 @@
     "organization": true
   },
   "devDependencies": {
+    "@cdktf/provider-aws": "^12.0.1",
     "@types/aws-lambda": "^8.10.109",
     "@types/debug": "^4.1.7",
     "@types/express": "^4.17.17",
@@ -51,6 +52,7 @@
     "@winglang/wing-api-checker": "file:../../apps/wing-api-checker",
     "aws-sdk-client-mock": "^2.0.1",
     "aws-sdk-client-mock-jest": "^2.0.1",
+    "cdktf-cli": "0.15.2",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-node": "^0.3.7",
@@ -90,13 +92,10 @@
     "@azure/core-paging": "^1.4.0",
     "@azure/identity": "3.1.3",
     "@azure/storage-blob": "12.14.0",
-    "@cdktf/provider-aws": "^12.0.1",
-    "@cdktf/provider-azurerm": "^5.0.1",
-    "@cdktf/provider-google": "^5.0.2",
-    "@cdktf/provider-random": "^5.0.0",
     "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.15.2",
     "constructs": "~10.1.228",
+    "cron-parser": "^4.8.1",
     "debug": "^4.3.4",
     "esbuild-wasm": "^0.17.4",
     "express": "^4.18.2",
@@ -122,12 +121,9 @@
     "@azure/core-paging",
     "@azure/identity",
     "@azure/storage-blob",
-    "@cdktf/provider-aws",
-    "@cdktf/provider-azurerm",
-    "@cdktf/provider-google",
-    "@cdktf/provider-random",
     "aws-cdk-lib",
     "cdktf",
+    "cron-parser",
     "debug",
     "esbuild-wasm",
     "express",
@@ -151,10 +147,7 @@
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"
-    },
-    "excludeTypescript": [
-      "src/**/*.inflight.ts"
-    ]
+    }
   },
   "volta": {
     "node": "18.12.1",

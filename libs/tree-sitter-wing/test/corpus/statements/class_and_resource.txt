@@ -1,8 +1,8 @@
-==================================
+================================================================================
 Class definition
-==================================
+================================================================================
 
-class A {
+inflight class A {
     init() {}
     inflight do_something() {}
     a_member: str;
@@ -12,71 +12,64 @@ class A {
     static static_method() {}
 }
 
----
-(source
-    (class_definition
-        name: (identifier)
-        implementation: (class_implementation
-            (initializer
-                parameter_list: (parameter_list)
-                block: (block))
-            (inflight_method_definition
-                name: (identifier)
-                parameter_list: (parameter_list)
-                block: (block)
-            )
-            (class_field
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (class_field
-                reassignable: (reassignable)
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (class_field
-                static: (static)
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (class_field
-                static: (static)
-                reassignable: (reassignable)
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (method_definition
-              static: (static)
-              name: (identifier)
-              parameter_list: (parameter_list)
-              block: (block)
-            )
-        )
-    )
-)
+--------------------------------------------------------------------------------
 
-==================================
+(source
+  (class_definition
+    (inflight_specifier)
+    name: (identifier)
+    implementation: (class_implementation
+      (initializer
+        parameter_list: (parameter_list)
+        block: (block))
+      (inflight_method_definition
+        phase_modifier: (inflight_specifier)
+        name: (identifier)
+        parameter_list: (parameter_list)
+        block: (block))
+      (class_field
+        name: (identifier)
+        type: (builtin_type))
+      (class_field
+        reassignable: (reassignable)
+        name: (identifier)
+        type: (builtin_type))
+      (class_field
+        static: (static)
+        name: (identifier)
+        type: (builtin_type))
+      (class_field
+        static: (static)
+        reassignable: (reassignable)
+        name: (identifier)
+        type: (builtin_type))
+      (method_definition
+        static: (static)
+        name: (identifier)
+        parameter_list: (parameter_list)
+        block: (block)))))
+
+================================================================================
 Class inheritance
-==================================
+================================================================================
 
-class A extends B {}
+inflight class A extends B {}
 
----
+--------------------------------------------------------------------------------
+
 (source
-    (class_definition
-        name: (identifier)
-        parent: (custom_type 
-            object: (identifier)
-        )
-        implementation: (class_implementation)
-    )
-)
+  (class_definition
+    (inflight_specifier)
+    name: (identifier)
+    parent: (custom_type
+      object: (type_identifier))
+    implementation: (class_implementation)))
 
-==================================
+================================================================================
 Resource definition
-==================================
+================================================================================
 
-resource A {
+class A {
     init() {}
     inflight init() {}
     preflight_func() {}
@@ -91,102 +84,92 @@ resource A {
     static inflight inflight_method() {}
 }
 
----
+--------------------------------------------------------------------------------
+
 (source
-    (resource_definition
+  (resource_definition
+    name: (identifier)
+    implementation: (resource_implementation
+      (initializer
+        parameter_list: (parameter_list)
+        block: (block))
+      (initializer
+        inflight: (inflight_specifier)
+        parameter_list: (parameter_list)
+        block: (block))
+      (method_definition
         name: (identifier)
-        implementation: (resource_implementation
-            (initializer
-                parameter_list: (parameter_list)
-                block: (block))
-            (initializer
-                parameter_list: (parameter_list)
-                block: (block)
-            )
-            (method_definition
-                name: (identifier)
-                parameter_list: (parameter_list)
-                block: (block)
-            )
-            (method_definition
-                async: (async_modifier)
-                name: (identifier)
-                parameter_list: (parameter_list)
-                block: (block)
-            )
-            (method_definition
-                access_modifier: (access_modifier)
-                name: (identifier)
-                parameter_list: (parameter_list)
-                block: (block)
-            )
-            (inflight_method_definition
-                name: (identifier)
-                parameter_list: (parameter_list)
-                block: (block)
-            )
-            (inflight_method_definition
-                access_modifier: (access_modifier)
-                name: (identifier)
-                parameter_list: (parameter_list)
-                type: (builtin_type)
-                block: (block)
-            )
-            (class_field
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (class_field
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (class_field
-                access_modifier: (access_modifier)
-                reassignable: (reassignable)
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (class_field
-                static: (static)
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (inflight_method_definition
-                static: (static)
-                name: (identifier)
-                parameter_list: (parameter_list)
-                block: (block)
-            )
-        )
-    )
-)
+        parameter_list: (parameter_list)
+        block: (block))
+      (method_definition
+        async: (async_modifier)
+        name: (identifier)
+        parameter_list: (parameter_list)
+        block: (block))
+      (method_definition
+        access_modifier: (access_modifier)
+        name: (identifier)
+        parameter_list: (parameter_list)
+        block: (block))
+      (inflight_method_definition
+        phase_modifier: (inflight_specifier)
+        name: (identifier)
+        parameter_list: (parameter_list)
+        block: (block))
+      (inflight_method_definition
+        access_modifier: (access_modifier)
+        phase_modifier: (inflight_specifier)
+        name: (identifier)
+        parameter_list: (parameter_list)
+        type: (builtin_type)
+        block: (block))
+      (class_field
+        name: (identifier)
+        type: (builtin_type))
+      (class_field
+        phase_modifier: (inflight_specifier)
+        name: (identifier)
+        type: (builtin_type))
+      (class_field
+        access_modifier: (access_modifier)
+        phase_modifier: (inflight_specifier)
+        reassignable: (reassignable)
+        name: (identifier)
+        type: (builtin_type))
+      (class_field
+        static: (static)
+        phase_modifier: (inflight_specifier)
+        name: (identifier)
+        type: (builtin_type))
+      (inflight_method_definition
+        static: (static)
+        phase_modifier: (inflight_specifier)
+        name: (identifier)
+        parameter_list: (parameter_list)
+        block: (block)))))
 
-==================================
-Resource inheritance
-==================================
+================================================================================
+Preflight class inheritance
+================================================================================
 
-resource A extends B impl C, D {}
+class A extends B impl C, D {}
 
----
+--------------------------------------------------------------------------------
+
 (source
-    (resource_definition
-        name: (identifier)
-        parent: (custom_type 
-            object: (identifier)
-        )
-        implements: (custom_type
-            object: (identifier)
-        )
-        implements: (custom_type
-            object: (identifier)
-        )
-        implementation: (resource_implementation)
-    )
-)
+  (resource_definition
+    name: (identifier)
+    parent: (custom_type
+      object: (type_identifier))
+    implements: (custom_type
+      object: (type_identifier))
+    implements: (custom_type
+      object: (type_identifier))
+    implementation: (resource_implementation)))
 
-==================================
+================================================================================
 Interface definition
-==================================
+================================================================================
 
 interface A extends B, C {
     do_something();
@@ -195,19 +178,21 @@ interface A extends B, C {
     inflight b_member: num;
 }
 
----
+--------------------------------------------------------------------------------
+
 (source
   (interface_definition
     name: (identifier)
     extends: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     extends: (custom_type
-      object: (identifier))
+      object: (type_identifier))
     implementation: (interface_implementation
       (method_signature
         name: (identifier)
         parameter_list: (parameter_list))
       (inflight_method_signature
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         parameter_list: (parameter_list
           (parameter_definition
@@ -218,5 +203,6 @@ interface A extends B, C {
         name: (identifier)
         type: (builtin_type))
       (class_field
+        phase_modifier: (inflight_specifier)
         name: (identifier)
         type: (builtin_type)))))

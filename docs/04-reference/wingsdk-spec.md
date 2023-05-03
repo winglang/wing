@@ -766,37 +766,37 @@ resource Api {
   cors: ApiCorsProps;
 
   /**
-   * Run an inflight whenever a GET request is made to the specified route.
+   * Run an inflight whenever a GET request is made to the specified path.
    */
-  get(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
+  get(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
 
   /**
-   * Run an inflight whenever a POST request is made to the specified route.
+   * Run an inflight whenever a POST request is made to the specified path.
    */
-  post(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
+  post(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
 
   /**
-   * Run an inflight whenever a PUT request is made to the specified route.
+   * Run an inflight whenever a PUT request is made to the specified path.
    */
-  put(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
+  put(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
 
   /**
-   * Run an inflight whenever a DELETE request is made to the specified route.
+   * Run an inflight whenever a DELETE request is made to the specified path.
    */
-  delete(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
+  delete(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
 
   /**
-   * Run an inflight whenever a PATCH request is made to the specified route.
+   * Run an inflight whenever a PATCH request is made to the specified path.
    */
-  patch(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
+  patch(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
 
   /**
-   * Run an inflight whenever any request is made to the specified route.
+   * Run an inflight whenever any request is made to the specified path.
    */
-  any(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnAnyProps?): void;
+  any(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnAnyProps?): void;
 
   /**
-   * Make a request to the specified route. Throws if the route hasn't been
+   * Make a request to the specified path. Throws if the path hasn't been
    * defined.
    */
   inflight request(req: ApiRequest): ApiResponse;
@@ -1005,6 +1005,72 @@ enum ComparisonOperator {
 Future extensions:
 
 - support for derived metrics? (e.g. `metric1 + metric2`)
+
+## Secret
+
+Secret represents a securely stored value that is encrypted at rest.
+Secrets are useful for storing sensitive information, like API keys and passwords, and are usually preferable over storing them in environment variables or hardcoding them in code, since they can be rotated and revoked.
+
+When using a secret in Wing's simulator, a secrets file is generated in your home directory at `~/.wing/secrets.json`. Here, your secrets should be saved in the JSON format:
+
+```json
+// secrets.json
+{
+  "my-api-key": "1234567890"
+}
+```
+
+Then, you can access the secrets in Wing like so:
+
+```js
+bring cloud;
+
+let secret = new cloud.Secret(name: "my-api-key");
+
+new cloud.Function(inflight () => {
+  // securely retrieve key value at runtime
+  let api_key = secret.value();
+});
+```
+
+When the `Secret` is compiled to a cloud provider, it is provisioned using the provider's native secret management service.
+For example, on AWS, this would be AWS Secrets Manager.
+To use it, you must manually create a secret with a matching name on the provider before deploying your application.
+
+**Stateful:** Yes
+
+```ts
+struct SecretProps {
+  /**
+   * The secret's name.
+   * 
+   * If no name is provided then a new secret is provisioned in the target.
+   * If a name is provided then the resource will reference an existing
+   * secret in the target.
+   *
+   * @default - a new secret is provisioned with a generated name
+   */
+  name: str;
+
+  /**
+   * Retrieve the value of the secret.
+   * @throws if the secret doesn't exist.
+   * @returns the secret value as string.
+   */
+  inflight value(): str;
+
+  /**
+   * Retrieve the value of the secret and parse it as JSON.
+   * @throws if the secret doesn't exist or cannot be parsed as JSON
+   * @returns the secret value parsed as JSON
+   */
+  value_json(options?: GetSecretValueOptions): Promise<Json>;
+}
+```
+
+Future extensions:
+
+- support for secret rotation?
 
 ## Service
 
@@ -1235,12 +1301,12 @@ resource Table {
   /**
    * Insert a row into the table.
    */
-  inflight insert(row: Map<Json>): void;
+  inflight insert(key: str, row: Json): void;
 
   /**
    * Update a row in the table.
    */
-  inflight update(row: Map<Json>): void;
+  inflight update(key: str, row: Json): void;
 
   /**
    * Delete a row from the table, by primary key.
@@ -1250,12 +1316,12 @@ resource Table {
   /**
    * Get a row from the table, by primary key.
    */
-  inflight get(key: str): Map<Json>;
+  inflight get(key: str): Json;
 
   /**
    * List all rows in the table.
    */
-  inflight list(): Iterator<Map<Json>>;
+  inflight list(): Iterator<Json>;
 }
 ```
 

@@ -136,7 +136,7 @@
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequeste46e5cb7_IamRole_15046B29.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_cloudApi_cloudApiOnRequeste46e5cb7_S3Object_69EE2256.key}",
         "timeout": 30,
@@ -261,7 +261,7 @@ class $Root extends $stdlib.std.Resource {
     const test_invalid_path =  (path) =>  {
       {
         let error = "";
-        const expected = `Invalid route ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".`;
+        const expected = `Invalid path ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".`;
         try {
           (api.get(path,handler));
         }

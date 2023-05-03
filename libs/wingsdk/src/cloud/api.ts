@@ -43,8 +43,6 @@ export abstract class Api extends Resource {
     return App.of(scope).newAbstract(API_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
-
   /**
    * The base URL of the API endpoint.
    */
@@ -65,136 +63,137 @@ export abstract class Api extends Resource {
     this.display.description = "A REST API endpoint";
   }
   /**
-   * Add a inflight handler to the api for GET requests on the given route.
-   * @param route The route to handle GET requests for.
+   * Add a inflight handler to the api for GET requests on the given path.
+   * @param path The path to handle GET requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
   public abstract get(
-    route: string,
+    path: string,
     inflight: IApiEndpointHandler,
     props?: ApiGetProps
   ): void;
 
   /**
-   * Add a inflight handler to the api for POST requests on the given route.
-   * @param route The route to handle POST requests for.
+   * Add a inflight handler to the api for POST requests on the given path.
+   * @param path The path to handle POST requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
   public abstract post(
-    route: string,
+    path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPostProps
   ): void;
 
   /**
-   * Add a inflight handler to the api for PUT requests on the given route.
-   * @param route The route to handle PUT requests for.
+   * Add a inflight handler to the api for PUT requests on the given path.
+   * @param path The path to handle PUT requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
   public abstract put(
-    route: string,
+    path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPutProps
   ): void;
 
   /**
-   * Add a inflight handler to the api for DELETE requests on the given route.
-   * @param route The route to handle DELETE requests for.
+   * Add a inflight handler to the api for DELETE requests on the given path.
+   * @param path The path to handle DELETE requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
   public abstract delete(
-    route: string,
+    path: string,
     inflight: IApiEndpointHandler,
     props?: ApiDeleteProps
   ): void;
 
   /**
-   * Add a inflight handler to the api for PATCH requests on the given route.
-   * @param route The route to handle PATCH requests for.
+   * Add a inflight handler to the api for PATCH requests on the given path.
+   * @param path The path to handle PATCH requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
   public abstract patch(
-    route: string,
+    path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPatchProps
   ): void;
 
   /**
-   * Add a inflight handler to the api for OPTIONS requests on the given route.
-   * @param route The route to handle OPTIONS requests for.
+   * Add a inflight handler to the api for OPTIONS requests on the given path.
+   * @param path The path to handle OPTIONS requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
   public abstract options(
-    route: string,
+    path: string,
     inflight: IApiEndpointHandler,
     props?: ApiOptionsProps
   ): void;
 
   /**
-   * Add a inflight handler to the api for HEAD requests on the given route.
-   * @param route The route to handle HEAD requests for.
+   * Add a inflight handler to the api for HEAD requests on the given path.
+   * @param path The path to handle HEAD requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
   public abstract head(
-    route: string,
+    path: string,
     inflight: IApiEndpointHandler,
     props?: ApiHeadProps
   ): void;
 
   /**
-   * Add a inflight handler to the api for CONNECT requests on the given route.
-   * @param route The route to handle CONNECT requests for.
+   * Add a inflight handler to the api for CONNECT requests on the given path.
+   * @param path The path to handle CONNECT requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
   public abstract connect(
-    route: string,
+    path: string,
     inflight: IApiEndpointHandler,
     props?: ApiConnectProps
   ): void;
   /**
-   * validating route:
+   * validating path:
    * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
-   * @param route
-   * @throws if the route is invalid
+   * @param path
+   * @throws if the path is invalid
+   * @internal
    */
-  protected validateRoute(route: string) {
-    if (!/^([^\{\}\:\n]|.+\/\{\w+\}(\/|$))*$/g.test(route)) {
+  protected _validatePath(path: string) {
+    if (!/^([^\{\}\:\n]|.+\/\{\w+\}(\/|$))*$/g.test(path)) {
       throw new Error(
-        `Invalid route ${route}. Url cannot contain ":", params contains only alpha-numeric chars or "_".`
+        `Invalid path ${path}. Url cannot contain ":", params contains only alpha-numeric chars or "_".`
       );
     }
   }
 
   /**
    * Add a route to the api spec.
-   * @param route The route to add.
+   * @param path The path to add.
    * @param method The method to add.
    * @param apiSpecExtension The extension to add to the api spec for this route and method.
    *
    * @internal
    * */
   public _addToSpec(
-    route: string,
+    path: string,
     method: string,
     apiSpecExtension: OpenApiSpecExtension
   ) {
-    if (this.apiSpec.paths[route]?.[method.toLowerCase()]) {
+    if (this.apiSpec.paths[path]?.[method.toLowerCase()]) {
       throw new Error(
-        `Endpoint for path '${route}' and method '${method}' already exists`
+        `Endpoint for path '${path}' and method '${method}' already exists`
       );
     }
     const operationId = `${method.toLowerCase()}${
-      route === "/" ? "" : route.replace("/", "-")
+      path === "/" ? "" : path.replace("/", "-")
     }`;
-    const pathParams = route.match(/{(.*?)}/g);
+    const pathParams = path.match(/{(.*?)}/g);
     const pathParameters: any[] = [];
     if (pathParams) {
       pathParams.forEach((param) => {
@@ -222,8 +221,8 @@ export abstract class Api extends Resource {
         ...apiSpecExtension,
       },
     };
-    this.apiSpec.paths[route] = {
-      ...this.apiSpec.paths[route],
+    this.apiSpec.paths[path] = {
+      ...this.apiSpec.paths[path],
       ...methodSpec,
     };
   }

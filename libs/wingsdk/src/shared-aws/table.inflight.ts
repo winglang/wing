@@ -7,7 +7,8 @@ import {
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { ColumnType, ITableClient } from "../cloud";
+import { ITableClient } from "../cloud";
+import { validateRow } from "../shared-targets/table";
 import { Json } from "../std";
 
 export class TableClient implements ITableClient {
@@ -18,32 +19,31 @@ export class TableClient implements ITableClient {
     private readonly client = new DynamoDBClient({})
   ) {}
 
-  public async insert(row: Json): Promise<void> {
-    this.validateRow(row);
+  public async insert(key: string, row: Json): Promise<void> {
+    validateRow(row, JSON.parse(this.columns));
+    let insertRow = { [this.primaryKey]: key, ...row };
     const command = new PutItemCommand({
       TableName: this.tableName,
-      Item: marshall(row),
+      Item: marshall(insertRow),
     });
     await this.client.send(command);
   }
 
-  public async update(row: Json): Promise<void> {
-    this.validateRow(row);
-    let itemKey = {};
+  public async update(key: String, row: Json): Promise<void> {
+    validateRow(row, JSON.parse(this.columns));
+    let itemKey = { [this.primaryKey]: key };
     let updateExpression: string[] = [];
     let expressionAttributes: any = {};
     const item = marshall(row);
-    for (const [key, value] of Object.entries(item)) {
-      if (key === this.primaryKey) {
-        itemKey = { [key]: value };
-      } else {
-        updateExpression.push(`${key} = :${key}`);
-        expressionAttributes[`:${key}`] = value;
+    for (const [id, value] of Object.entries(item)) {
+      if (id !== this.primaryKey) {
+        updateExpression.push(`${id} = :${id}`);
+        expressionAttributes[`:${id}`] = value;
       }
     }
     const command = new UpdateItemCommand({
       TableName: this.tableName,
-      Key: itemKey,
+      Key: marshall(itemKey),
       UpdateExpression: `set ${updateExpression.toString()}`,
       ExpressionAttributeValues: expressionAttributes,
     });
@@ -58,16 +58,16 @@ export class TableClient implements ITableClient {
     await this.client.send(command);
   }
 
-  public async get(key: string): Promise<any> {
+  public async get(key: string): Promise<Json> {
     const command = new GetItemCommand({
       TableName: this.tableName,
       Key: { [this.primaryKey]: { S: key } },
     });
     const result = await this.client.send(command);
     if (result.Item) {
-      return unmarshall(result.Item);
+      return unmarshall(result.Item) as Json;
     }
-    return null;
+    return {} as Json;
   }
 
   public async list(): Promise<any> {
@@ -80,35 +80,5 @@ export class TableClient implements ITableClient {
       response.push(unmarshall(item));
     }
     return response;
-  }
-
-  private validateRow(row: Json) {
-    const columns = JSON.parse(this.columns);
-    for (const [key, value] of Object.entries(columns)) {
-      switch (value) {
-        case ColumnType.STRING:
-        case ColumnType.DATE:
-          if (typeof (row as any)[key] !== "string") {
-            throw new Error(`${key} is not a valid string.`);
-          }
-          break;
-        case ColumnType.NUMBER:
-          if (typeof (row as any)[key] !== "number") {
-            throw new Error(`${key} is not a valid number.`);
-          }
-          break;
-        case ColumnType.BOOLEAN:
-          if (typeof (row as any)[key] !== "boolean") {
-            throw new Error(`${key} is not a valid bool.`);
-          }
-          break;
-        case ColumnType.JSON:
-          if (typeof (row as any)[key] !== "object") {
-            throw new Error(`${key} is not a valid json.`);
-          }
-          break;
-      }
-    }
-    return false;
   }
 }

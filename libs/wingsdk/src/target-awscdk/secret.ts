@@ -1,4 +1,8 @@
-import { Secret as CdkSecret } from "aws-cdk-lib/aws-secretsmanager";
+import { CfnOutput } from "aws-cdk-lib";
+import {
+  ISecret as ICdkSecret,
+  Secret as CdkSecret,
+} from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
@@ -12,14 +16,22 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret {
-  private readonly secret: CdkSecret;
+  private readonly secret: ICdkSecret;
+  private readonly arnForPolicies: string;
 
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
-    this.secret = new CdkSecret(this, "Default", {
-      secretName: props.name,
-    });
+    if (props.name) {
+      this.secret = CdkSecret.fromSecretNameV2(this, "Default", props.name);
+      this.arnForPolicies = `${this.secret.secretArn}-??????`;
+    } else {
+      this.secret = new CdkSecret(this, "Default");
+
+      this.arnForPolicies = this.secret.secretArn;
+
+      new CfnOutput(this, "SecretArn", { value: this.secret.secretName });
+    }
   }
 
   /**
@@ -36,7 +48,7 @@ export class Secret extends cloud.Secret {
     }
 
     host.addPolicyStatements(
-      ...calculateSecretPermissions(this.secret.secretArn, ops)
+      ...calculateSecretPermissions(this.arnForPolicies, ops)
     );
 
     host.addEnvironment(this.envName(), this.secret.secretArn);
@@ -58,6 +70,3 @@ export class Secret extends cloud.Secret {
     return `SECRET_ARN_${this.node.addr.slice(-8)}`;
   }
 }
-
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE, {});
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE_JSON, {});

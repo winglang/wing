@@ -36,8 +36,6 @@ export abstract class Counter extends Resource {
     return App.of(scope).newAbstract(COUNTER_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
-
   /**
    * The initial value of the counter.
    */
@@ -48,6 +46,13 @@ export abstract class Counter extends Resource {
 
     this.display.title = "Counter";
     this.display.description = "A distributed atomic counter";
+
+    this._addInflightOps(
+      CounterInflightMethods.INC,
+      CounterInflightMethods.DEC,
+      CounterInflightMethods.PEEK,
+      CounterInflightMethods.RESET
+    );
 
     this.initial = props.initial ?? 0;
   }

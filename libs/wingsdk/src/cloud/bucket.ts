@@ -41,13 +41,22 @@ export abstract class Bucket extends Resource {
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
-  public readonly stateful = true;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
     this.display.title = "Bucket";
     this.display.description = "A cloud object store";
+
+    this._addInflightOps(
+      BucketInflightMethods.DELETE,
+      BucketInflightMethods.GET,
+      BucketInflightMethods.GET_JSON,
+      BucketInflightMethods.LIST,
+      BucketInflightMethods.PUT,
+      BucketInflightMethods.PUT_JSON,
+      BucketInflightMethods.PUBLIC_URL
+    );
 
     props;
   }

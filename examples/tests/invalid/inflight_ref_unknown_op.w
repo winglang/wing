@@ -1,6 +1,8 @@
 bring cloud;
 
-resource Test {
+let global_b = new cloud.Bucket();
+
+class Test {
   b: cloud.Bucket;
 
   init() {
@@ -9,8 +11,12 @@ resource Test {
 
   inflight test() {
     let x = this.b;
-//               ^ Cannot qualify which operations are performed on resource
+//               ^ Cannot qualify which operations are performed on object
     x.put("hello", "world");
+
+    let y = global_b;
+//          ^ Cannot qualify which operations are performed on object
+    y.put("boom", "shakalaka");
   }
 }
 

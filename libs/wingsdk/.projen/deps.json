@@ -1,6 +1,11 @@
 {
   "dependencies": [
     {
+      "name": "@cdktf/provider-aws",
+      "version": "^12.0.1",
+      "type": "build"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "build"
     },
@@ -59,6 +64,11 @@
     },
     {
       "name": "aws-sdk-client-mock-jest",
+      "type": "build"
+    },
+    {
+      "name": "cdktf-cli",
+      "version": "0.15.2",
       "type": "build"
     },
     {
@@ -216,26 +226,6 @@
       "type": "bundled"
     },
     {
-      "name": "@cdktf/provider-aws",
-      "version": "^12.0.1",
-      "type": "bundled"
-    },
-    {
-      "name": "@cdktf/provider-azurerm",
-      "version": "^5.0.1",
-      "type": "bundled"
-    },
-    {
-      "name": "@cdktf/provider-google",
-      "version": "^5.0.2",
-      "type": "bundled"
-    },
-    {
-      "name": "@cdktf/provider-random",
-      "version": "^5.0.0",
-      "type": "bundled"
-    },
-    {
       "name": "aws-cdk-lib",
       "version": "^2.64.0",
       "type": "bundled"
@@ -243,6 +233,10 @@
     {
       "name": "cdktf",
       "version": "0.15.2",
+      "type": "bundled"
+    },
+    {
+      "name": "cron-parser",
       "type": "bundled"
     },
     {

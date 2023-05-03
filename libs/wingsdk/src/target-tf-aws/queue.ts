@@ -1,8 +1,8 @@
 import { join } from "path";
-import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
-import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-source-mapping";
+import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
@@ -32,6 +32,7 @@ export class Queue extends cloud.Queue {
 
     this.queue = new SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
+      messageRetentionSeconds: props.retentionPeriod?.seconds,
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
 
@@ -127,7 +128,3 @@ export class Queue extends cloud.Queue {
     return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
 }
-
-Queue._annotateInflight(cloud.QueueInflightMethods.PUSH, {});
-Queue._annotateInflight(cloud.QueueInflightMethods.PURGE, {});
-Queue._annotateInflight(cloud.QueueInflightMethods.APPROX_SIZE, {});

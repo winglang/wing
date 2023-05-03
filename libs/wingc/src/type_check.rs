@@ -1,6 +1,6 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
-use crate::ast::{self, FunctionBodyRef};
+use crate::ast::{self, FunctionBodyRef, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
@@ -160,7 +160,7 @@ pub enum Type {
 	Enum(Enum),
 }
 
-const CLASS_INIT_NAME: &'static str = "init";
+pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 #[derive(Derivative)]
@@ -478,12 +478,6 @@ impl Subtype for Type {
 			}
 			(Self::MutArray(l0), Self::MutArray(r0)) => {
 				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
-				let l: &Type = l0;
-				let r: &Type = r0;
-				l.is_subtype_of(r)
-			}
-			(Self::MutArray(l0), Self::Array(r0)) => {
-				// A MutArray type is a subtype of an Array type if the value type is a subtype of the other value type
 				let l: &Type = l0;
 				let r: &Type = r0;
 				l.is_subtype_of(r)
@@ -814,7 +808,15 @@ impl TypeRef {
 			Type::Map(v) => v.is_capturable(),
 			Type::Set(v) => v.is_capturable(),
 			Type::Struct(_) => true,
-			_ => false,
+			Type::Optional(v) => v.is_capturable(),
+			Type::Anything => false,
+			Type::Void => false,
+			Type::MutJson => false,
+			Type::MutArray(_) => false,
+			Type::MutMap(_) => false,
+			Type::MutSet(_) => false,
+			Type::Function(_) => false, // TODO: https://github.com/winglang/wing/issues/2236
+			Type::Class(_) => false,
 		}
 	}
 
@@ -1279,7 +1281,7 @@ impl<'a> TypeChecker<'a> {
 							(&class.env, &class.name)
 						} else {
 							return self.general_type_error(format!(
-								"Cannot create the resource \"{}\" in inflight phase",
+								"Cannot create preflight class \"{}\" in inflight phase",
 								class.name
 							));
 						}
@@ -1289,7 +1291,7 @@ impl<'a> TypeChecker<'a> {
 							return self.types.anything();
 						} else {
 							return self.general_type_error(format!(
-								"Cannot instantiate type \"{}\" because it is not a class or resource",
+								"Cannot instantiate type \"{}\" because it is not a class",
 								type_
 							));
 						}
@@ -1356,7 +1358,7 @@ impl<'a> TypeChecker<'a> {
 					let obj_scope_type = if let Some(obj_scope) = obj_scope {
 						Some(self.type_check_exp(obj_scope, env))
 					} else {
-						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
+						// If this returns None, this means we're instantiating a preflight object in the global scope, which is valid
 						env
 							.try_lookup("this", Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
@@ -1368,7 +1370,7 @@ impl<'a> TypeChecker<'a> {
 							self.expr_error(
 								exp,
 								format!(
-									"Expected scope to be a resource object, instead found \"{}\"",
+									"Expected scope to be a preflight object, instead found \"{}\"",
 									obj_scope_type
 								),
 							);
@@ -1455,8 +1457,12 @@ impl<'a> TypeChecker<'a> {
 					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env);
 					self.types.add_type(Type::Array(some_val_type))
 				} else {
-					self.expr_error(exp, "Cannot infer type of empty array".to_owned());
-					self.types.add_type(Type::Array(self.types.anything()))
+					if self.in_json > 0 {
+						self.types.add_type(Type::Array(self.types.json()))
+					} else {
+						self.expr_error(exp, "Cannot infer type of empty array".to_owned());
+						self.types.add_type(Type::Array(self.types.anything()))
+					}
 				};
 
 				let element_type = match *container_type {
@@ -1542,8 +1548,12 @@ impl<'a> TypeChecker<'a> {
 					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env);
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
-					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
-					self.types.add_type(Type::Map(self.types.anything()))
+					if self.in_json > 0 {
+						self.types.add_type(Type::Map(self.types.json()))
+					} else {
+						self.expr_error(exp, "Cannot infer type of empty map".to_owned());
+						self.types.add_type(Type::Map(self.types.anything()))
+					}
 				};
 
 				let value_type = match *container_type {
@@ -1754,18 +1764,18 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn resolve_type_annotation(&mut self, annotation: &TypeAnnotation, env: &SymbolEnv) -> TypeRef {
-		match annotation {
-			TypeAnnotation::Number => self.types.number(),
-			TypeAnnotation::String => self.types.string(),
-			TypeAnnotation::Bool => self.types.bool(),
-			TypeAnnotation::Duration => self.types.duration(),
-			TypeAnnotation::Json => self.types.json(),
-			TypeAnnotation::MutJson => self.types.mut_json(),
-			TypeAnnotation::Optional(v) => {
+		match &annotation.kind {
+			TypeAnnotationKind::Number => self.types.number(),
+			TypeAnnotationKind::String => self.types.string(),
+			TypeAnnotationKind::Bool => self.types.bool(),
+			TypeAnnotationKind::Duration => self.types.duration(),
+			TypeAnnotationKind::Json => self.types.json(),
+			TypeAnnotationKind::MutJson => self.types.mut_json(),
+			TypeAnnotationKind::Optional(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				self.types.add_type(Type::Optional(value_type))
 			}
-			TypeAnnotation::Function(ast_sig) => {
+			TypeAnnotationKind::Function(ast_sig) => {
 				let mut args = vec![];
 				for arg in ast_sig.param_types.iter() {
 					args.push(self.resolve_type_annotation(arg, env));
@@ -1783,35 +1793,35 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
 			}
-			TypeAnnotation::UserDefined(user_defined_type) => self
+			TypeAnnotationKind::UserDefined(user_defined_type) => self
 				.resolve_user_defined_type(user_defined_type, env, self.statement_idx)
 				.unwrap_or_else(|e| self.type_error(e)),
-			TypeAnnotation::Array(v) => {
+			TypeAnnotationKind::Array(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
 			}
-			TypeAnnotation::MutArray(v) => {
+			TypeAnnotationKind::MutArray(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::MutArray(value_type))
 			}
-			TypeAnnotation::Set(v) => {
+			TypeAnnotationKind::Set(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::Set(value_type))
 			}
-			TypeAnnotation::MutSet(v) => {
+			TypeAnnotationKind::MutSet(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::MutSet(value_type))
 			}
-			TypeAnnotation::Map(v) => {
+			TypeAnnotationKind::Map(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::Map(value_type))
 			}
-			TypeAnnotation::MutMap(v) => {
+			TypeAnnotationKind::MutMap(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
@@ -2073,7 +2083,7 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						self.stmt_error(
 							stmt,
-							"Return statement outside of function cannot return a value.".to_string(),
+							"Return statement outside of function cannot return a value".to_string(),
 						);
 					}
 				} else {
@@ -2107,13 +2117,13 @@ impl<'a> TypeChecker<'a> {
 						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
 						} else {
-							panic!("Resource {}'s parent {} is not a resource", name, t);
+							panic!("Preflight class {}'s parent {} is not a preflight class", name, t);
 						}
 					} else {
 						if let Type::Class(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
 						} else {
-							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
+							self.general_type_error(format!("Inflight class {}'s parent \"{}\" is not a class", name, t));
 							(None, None)
 						}
 					}
@@ -2261,7 +2271,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							self.type_error(TypeError {
 								message: format!(
-									"Resource \"{}\" does not implement method \"{}\" of interface \"{}\"",
+									"Class \"{}\" does not implement method \"{}\" of interface \"{}\"",
 									name.name, method_name, interface_type.name.name
 								),
 								span: name.span.clone(),
@@ -2277,7 +2287,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							self.type_error(TypeError {
 								message: format!(
-									"Resource \"{}\" does not implement field \"{}\" of interface \"{}\"",
+									"Class \"{}\" does not implement field \"{}\" of interface \"{}\"",
 									name.name, field_name, interface_type.name.name
 								),
 								span: name.span.clone(),
@@ -2627,15 +2637,23 @@ impl<'a> TypeChecker<'a> {
 				.expect("Expected to find the just-added jsii import spec")
 		};
 
-		let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
+		// check if we've already defined the given alias in the current scope
+		if env.lookup(&jsii.alias, Some(jsii.import_statement_idx)).is_ok() {
+			self.type_error(TypeError {
+				message: format!("\"{}\" is already defined", alias.name),
+				span: alias.span.clone(),
+			});
+		} else {
+			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
-		// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
-		// because they aren't typically resolved through the same process as other types
-		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
-			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+			// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
+			// because they aren't typically resolved through the same process as other types
+			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
+				importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+			}
+
+			importer.import_submodules_to_env(env);
 		}
-
-		importer.import_submodules_to_env(env);
 	}
 
 	/// Add function arguments to the function's environment
@@ -3296,7 +3314,7 @@ pub fn resolve_user_defined_type(
 			} else {
 				let symb = nested_name.last().unwrap();
 				Err(TypeError {
-					message: format!("Expected {} to be a type but it's a {}", symb, _type),
+					message: format!("Expected '{}' to be a type but it's a {}", symb.name, _type),
 					span: symb.span.clone(),
 				})
 			}

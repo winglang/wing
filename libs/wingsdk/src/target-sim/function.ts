@@ -61,5 +61,3 @@ export class Function extends cloud.Function implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Function._annotateInflight("invoke", {});

@@ -1,5 +1,6 @@
 import { TableAttributes, TableSchema } from "./schema-resources";
 import { ColumnType, ITableClient } from "../cloud";
+import { validateRow } from "../shared-targets/table";
 import { Json } from "../std";
 import {
   ISimulatorContext,
@@ -27,36 +28,44 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {}
 
-  public async insert(row: Json): Promise<void> {
+  public async insert(key: string, row: Json): Promise<void> {
+    validateRow(row, this.columns);
     const anyRow = row as any;
     return this.context.withTrace({
-      message: `insert row ${anyRow[this.primaryKey]} into the table ${
-        this.name
-      }.`,
+      message: `insert row ${key} into the table ${this.name}.`,
       activity: async () => {
-        let item: Record<string, any> = {};
-        const pk = anyRow[this.primaryKey];
-        item[this.primaryKey] = anyRow[this.primaryKey];
-        for (const key of Object.keys(this.columns)) {
-          item[key] = anyRow[key];
+        if (await this.get(key)) {
+          throw new Error(
+            `The primary key "${key}" already exists in the "${this.name}" table.`
+          );
         }
-        this.table.set(pk, item);
+        let item: Record<string, any> = {};
+        item[this.primaryKey] = key;
+        for (const column of Object.keys(this.columns)) {
+          item[column] = anyRow[column];
+        }
+        this.table.set(key, item);
       },
     });
   }
-  public async update(row: Json): Promise<void> {
+  public async update(key: string, row: Json): Promise<void> {
+    validateRow(row, this.columns);
     const anyRow = row as any;
     return this.context.withTrace({
-      message: `update row ${anyRow[this.primaryKey]} in table ${this.name}.`,
+      message: `update row ${key} in table ${this.name}.`,
       activity: async () => {
-        const pk = anyRow[this.primaryKey];
-        let item = await this.get(pk);
-        for (const key of Object.keys(this.columns)) {
-          if (anyRow[key]) {
-            item[key] = anyRow[key];
+        let item: any = await this.get(key);
+        if (!item) {
+          throw new Error(
+            `The primary key "${key}" was not found in the "${this.name}" table.`
+          );
+        }
+        for (const column of Object.keys(this.columns)) {
+          if (anyRow[column]) {
+            item[column] = anyRow[column];
           }
         }
-        this.table.set(pk, item);
+        this.table.set(key, item);
       },
     });
   }
@@ -64,11 +73,15 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `remove row ${key} from table ${this.name}.`,
       activity: async () => {
-        this.table.delete(key);
+        if (!this.table.delete(key)) {
+          throw new Error(
+            `The primary key "${key}" not found in the "${this.name}" table.`
+          );
+        }
       },
     });
   }
-  public async get(key: string): Promise<any> {
+  public async get(key: string): Promise<Json> {
     return this.context.withTrace({
       message: `get row ${key} from table ${this.name}.`,
       activity: async () => {

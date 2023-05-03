@@ -2,13 +2,14 @@
 
 ## clients/Foo.inflight.js
 ```js
-class  Foo {
-  constructor({ _sum_str, stateful }) {
-    this._sum_str = _sum_str;
-    this.stateful = stateful;
+module.exports = function() {
+  class  Foo {
+    constructor({ _sum_str }) {
+      this._sum_str = _sum_str;
+    }
   }
+  return Foo;
 }
-exports.Foo = Foo;
 
 ```
 
@@ -60,21 +61,25 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const _sum_str_client = this._lift(this._sum_str);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            const Foo = require("${self_client_path}")({});
+            const client = new Foo({
               _sum_str: ${_sum_str_client},
-              stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this._sum_str, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this._sum_str": { ops: [] },"this.stateful": { ops: [] }});
     const json_number = 123;
     const json_bool = true;
     const json_array = [1, 2, 3];
@@ -113,6 +118,20 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((arr)[2] === b)'`)})(((arr)[2] === b))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((arr)[7])[0] === "shut")'`)})((((arr)[7])[0] === "shut"))};
     Object.freeze({"a":[1, 2, "world"],"b":[1, 2, "world"]});
+    const empty_json = Object.freeze({});
+    const empty_json_arr = [];
+    const empty_mut_json = {};
+    const empty_mut_json_arr = [];
+    ((obj, args) => { obj[args[0]] = args[1]; })(empty_mut_json, ["cool",{"a":1,"b":2}]);
+    ((obj, args) => { obj[args[0]] = args[1]; })((empty_mut_json)["cool"], ["a",3]);
+    ((obj, args) => { obj[args[0]] = args[1]; })(empty_mut_json_arr, [0,{"a":1,"b":2}]);
+    ((obj, args) => { obj[args[0]] = args[1]; })((empty_mut_json_arr)[0], ["a",3]);
+    const the_tower_of_json = {"a":{},"b":{"c":{},"d":[[[{}]]]},"e":{"f":{"g":{},"h":[{}, []]}}};
+    ((obj, args) => { obj[args[0]] = args[1]; })(((((the_tower_of_json)["e"])["f"])["h"])[0], ["a",1]);
+    const that_super_nested_value = (((((the_tower_of_json)["e"])["f"])["h"])[0])["a"];
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(that_super_nested_value) === 1)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(that_super_nested_value) === 1))};
+    const unested_json_arr = [1, 2, 3];
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((unested_json_arr)[0] === 1)'`)})(((unested_json_arr)[0] === 1))};
   }
 }
 class $App extends $AppBase {

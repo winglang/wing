@@ -1,6 +1,6 @@
 bring cloud;
 
-resource Another {
+class Another {
   my_queue: cloud.Queue;
   another_str: str;
 
@@ -15,7 +15,7 @@ resource Another {
   }
 }
 
-resource Test {
+class Test {
   just_bucket: cloud.Bucket;
   b: cloud.Bucket;
   another: Another;

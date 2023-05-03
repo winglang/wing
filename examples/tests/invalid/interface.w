@@ -12,7 +12,7 @@ interface IExist extends IDontExist {
 }
 
 // interface extends class
-class ISomeClass {
+inflight class ISomeClass {
     init(){}
 }
 interface ISomeInterface extends ISomeClass {

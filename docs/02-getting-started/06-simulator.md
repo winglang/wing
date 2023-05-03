@@ -70,14 +70,14 @@ Now that our app is running, lets trigger a message on the queue
 For example, we can list all the resources in the app:
 
 ```js
- const queue = simulator.getResource("root/cloud.Queue"); // retrieve the queue resource
+ const queue = simulator.getResource("root/Default/cloud.Queue"); // retrieve the queue resource
  await queue.push("Wing")
 ```
 
 ## Viewing generated file
 
 ```js
-const bucket = simulator.getResource("root/cloud.Bucket"); // retrieve the bucket resource
+const bucket = simulator.getResource("root/Default/cloud.Bucket"); // retrieve the bucket resource
 await bucket.list() // will show available files
 await bucket.get("wing.txt") // will show the file content
 ```
@@ -92,7 +92,12 @@ The result of the last two function calls will be
 
 ## Congratulations! :rocket:
 
-You've just tested your cloud application through the `Simulator` class
+You've just tested your cloud application through the `Simulator` class in NodeJS.
 
+If you're done playing with the simulator, you can clean up and uninstall the SDK (Wing's CLI already has a copy of it bundled).
+
+```sh
+npm uninstall @winglang/sdk
+```
 
 [Node.js REPL]: https://nodejs.org/api/repl.html

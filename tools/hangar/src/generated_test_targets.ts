@@ -1,5 +1,5 @@
 import { mkdir, readFile } from "fs-extra";
-import { tmpDir, validTestDir, walkdir } from "./paths";
+import { tmpDir, walkdir } from "./paths";
 import { basename, join, relative } from "path";
 import {
   createMarkdownSnapshot,
@@ -7,20 +7,20 @@ import {
   sanitize_json_paths,
 } from "./utils";
 
-export async function compileTest(wingFile: string) {
+export async function compileTest(sourceDir: string, wingFile: string) {
   const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
   const args = ["compile", "--target", "tf-aws"];
   const targetDir = join(
-    validTestDir,
+    sourceDir,
     "target",
     `${wingBasename.replace(".w", "")}.tfaws`
   );
   const tf_json = join(targetDir, "main.tf.json");
 
   await runWingCommand({
-    cwd: validTestDir,
-    wingFile: join(validTestDir, wingBasename),
+    cwd: sourceDir,
+    wingFile: join(sourceDir, wingBasename),
     args,
     shouldSucceed: true,
   });
@@ -52,7 +52,7 @@ export async function compileTest(wingFile: string) {
   await createMarkdownSnapshot(fileMap, wingFile, "compile", "tf-aws");
 }
 
-export async function testTest(wingFile: string) {
+export async function testTest(sourceDir: string, wingFile: string) {
   const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
@@ -60,7 +60,7 @@ export async function testTest(wingFile: string) {
 
   const out = await runWingCommand({
     cwd: testDir,
-    wingFile: join(validTestDir, wingFile),
+    wingFile: join(sourceDir, wingFile),
     args,
     shouldSucceed: true,
   });

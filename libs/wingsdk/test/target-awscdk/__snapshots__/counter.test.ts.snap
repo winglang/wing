@@ -119,7 +119,7 @@ exports[`dec() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "679cbd764536cde778046a96e51a2ce4ab2a2d953f0d4b8174bf7efa17722fcf.zip",
+          "S3Key": "d174587e26d6bd09b28662b7c96ff951ab547ff6c2c0bc984eff473b6fe2a9ab.zip",
         },
         "Environment": {
           "Variables": {
@@ -135,7 +135,7 @@ exports[`dec() policy statement 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
@@ -347,7 +347,7 @@ exports[`function with a counter binding 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b3034d766b4e7702b1d0622656f1c653df0f95a875019cced934cdd79da02ed8.zip",
+          "S3Key": "3d64d7542c5890ba7e12812c5a9459c0542ec7cd80a2ec95af62dcdff1e43c5c.zip",
         },
         "Environment": {
           "Variables": {
@@ -363,7 +363,7 @@ exports[`function with a counter binding 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
@@ -514,7 +514,7 @@ exports[`inc() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b3034d766b4e7702b1d0622656f1c653df0f95a875019cced934cdd79da02ed8.zip",
+          "S3Key": "3d64d7542c5890ba7e12812c5a9459c0542ec7cd80a2ec95af62dcdff1e43c5c.zip",
         },
         "Environment": {
           "Variables": {
@@ -530,7 +530,7 @@ exports[`inc() policy statement 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
@@ -681,7 +681,7 @@ exports[`peek() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "412d6a4e77282dae4f49ebe45b27943a5e8caf374920a05073521d9dcae84201.zip",
+          "S3Key": "b0b042b09fc862f8ab2695b4829286b3d78eb3b5dc9b9fb34effe1fc45242e58.zip",
         },
         "Environment": {
           "Variables": {
@@ -697,7 +697,7 @@ exports[`peek() policy statement 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
@@ -848,7 +848,7 @@ exports[`reset() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b5eb11ccb22a1757e7af1c0a90e293527b5fcdb642c5a58d4edac963d0e42143.zip",
+          "S3Key": "cd423c36be1ef48afbdbd118ac2d1e96cae1310759e04a52298ca0c2c644dd5c.zip",
         },
         "Environment": {
           "Variables": {
@@ -864,7 +864,7 @@ exports[`reset() policy statement 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",

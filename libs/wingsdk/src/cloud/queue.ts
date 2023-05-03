@@ -15,9 +15,15 @@ export const QUEUE_FQN = fqnForType("cloud.Queue");
 export interface QueueProps {
   /**
    * How long a queue's consumers have to process a message.
-   * @default Duration.fromSeconds(10)
+   * @default undefined
    */
   readonly timeout?: Duration;
+
+  /**
+   * How long a queue retains a message.
+   * @default undefined
+   */
+  readonly retentionPeriod?: Duration;
 
   /**
    * Initialize the queue with a set of messages.
@@ -44,12 +50,17 @@ export abstract class Queue extends Resource {
     return App.of(scope).newAbstract(QUEUE_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
 
     this.display.title = "Queue";
     this.display.description = "A distributed message queue";
+
+    this._addInflightOps(
+      QueueInflightMethods.PUSH,
+      QueueInflightMethods.PURGE,
+      QueueInflightMethods.APPROX_SIZE
+    );
 
     props;
   }

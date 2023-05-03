@@ -1,6 +1,6 @@
 bring cloud;
 
-resource MyResource {
+class MyResource {
   init() {
 
   }
@@ -8,7 +8,7 @@ resource MyResource {
   my_preflight() { }
 }
 
-resource Test {
+class Test {
   r: MyResource;
 
   init() {

@@ -96,7 +96,7 @@ exports[`topic with multiple subscribers 3`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "c195f3e583aef1c8e9ae42d8847b8f823252dced3e7bb3e41888548920fb5b33.zip",
+          "S3Key": "70c96f4eb085d5d4284b479242d4d486d9bda405b98f6fc817ece5ead39f2bf2.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -105,7 +105,7 @@ exports[`topic with multiple subscribers 3`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
@@ -181,7 +181,7 @@ exports[`topic with multiple subscribers 3`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "d5b8db618dff7b39ab32c5fbc419a8507bf83270033eb01fe8055c59352fa227.zip",
+          "S3Key": "15c5f36c8226db19dde5bfd00330127a4accccaa3e12cc960aab9c3de7ad1709.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -190,7 +190,7 @@ exports[`topic with multiple subscribers 3`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
@@ -325,7 +325,7 @@ exports[`topic with subscriber function 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "44204424f8c22e0657f59753f9370401c83c5a1a9cb30cb05cedc3650130cf41.zip",
+          "S3Key": "4cb297fb007d66c747b23d2179881c6d2bb17d6f9c074160f22414c1d5c700d0.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -334,7 +334,7 @@ exports[`topic with subscriber function 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",

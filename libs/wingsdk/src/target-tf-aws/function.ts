@@ -1,13 +1,13 @@
 import { resolve } from "path";
-import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
-import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
-import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
-import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
-import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
-import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { IamRole } from "../.gen/providers/aws/iam-role";
+import { IamRolePolicy } from "../.gen/providers/aws/iam-role-policy";
+import { IamRolePolicyAttachment } from "../.gen/providers/aws/iam-role-policy-attachment";
+import { LambdaFunction } from "../.gen/providers/aws/lambda-function";
+import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
+import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { PolicyStatement } from "../shared-aws";
@@ -188,7 +188,7 @@ export class Function extends cloud.Function {
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
-      runtime: "nodejs16.x",
+      runtime: "nodejs18.x",
       role: this.role.arn,
       publish: true,
       vpcConfig: {
@@ -312,5 +312,3 @@ export class Function extends cloud.Function {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Function._annotateInflight(cloud.FunctionInflightMethods.INVOKE, {});

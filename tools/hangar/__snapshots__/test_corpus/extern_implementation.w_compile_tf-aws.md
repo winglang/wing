@@ -2,32 +2,33 @@
 
 ## clients/Foo.inflight.js
 ```js
-class  Foo {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  static async regex_inflight(pattern, text)  {
-    return (require("<ABSOLUTE_PATH>/external_js.js")["regex_inflight"])(pattern, text)
-  }
-  static async get_uuid()  {
-    return (require("<ABSOLUTE_PATH>/external_js.js")["get_uuid"])()
-  }
-  static async get_data()  {
-    return (require("<ABSOLUTE_PATH>/external_js.js")["get_data"])()
-  }
-  async print(msg)  {
-    return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
-  }
-  async call()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regex_inflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regex_inflight("[a-z]+-\\d+","abc-123")))};
-      const uuid = (await Foo.get_uuid());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.get_data()) === "Cool data!")'`)})(((await Foo.get_data()) === "Cool data!"))};
+module.exports = function() {
+  class  Foo {
+    constructor({  }) {
+    }
+    static async regex_inflight(pattern, text)  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["regex_inflight"])(pattern, text)
+    }
+    static async get_uuid()  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["get_uuid"])()
+    }
+    static async get_data()  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["get_data"])()
+    }
+    async print(msg)  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
+    }
+    async call()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regex_inflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regex_inflight("[a-z]+-\\d+","abc-123")))};
+        const uuid = (await Foo.get_uuid());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.get_data()) === "Cool data!")'`)})(((await Foo.get_data()) === "Cool data!"))};
+      }
     }
   }
+  return Foo;
 }
-exports.Foo = Foo;
 
 ```
 
@@ -142,7 +143,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_testcall_IamRole_ACAC0DA1.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testcall_S3Object_7FFD9CF8.key}",
         "timeout": 30,
@@ -167,7 +168,7 @@ exports.Foo = Foo;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_testconsole_IamRole_73B3A70E.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testconsole_S3Object_DC38E410.key}",
         "timeout": 30,
@@ -229,6 +230,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("regex_inflight", "get_uuid", "get_data", "print", "call");
       }
       static get_greeting(name)  {
         return (require("<ABSOLUTE_PATH>/external_js.js")["get_greeting"])(name)
@@ -237,25 +239,33 @@ class $Root extends $stdlib.std.Resource {
         return (require("<ABSOLUTE_PATH>/index.js")["v4"])()
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
-              stateful: ${stateful_client},
+            const Foo = require("${self_client_path}")({});
+            const client = new Foo({
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("call")) {
+        }
+        if (ops.includes("get_data")) {
+        }
+        if (ops.includes("get_uuid")) {
+        }
+        if (ops.includes("print")) {
+        }
+        if (ops.includes("regex_inflight")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Foo._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
-    Foo._annotateInflight("call", {});
-    Foo._annotateInflight("get_data", {});
-    Foo._annotateInflight("get_uuid", {});
-    Foo._annotateInflight("print", {});
-    Foo._annotateInflight("regex_inflight", {});
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.get_greeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");
