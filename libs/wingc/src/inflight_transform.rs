@@ -5,39 +5,55 @@ use indexmap::IndexMap;
 use crate::{
 	ast::{
 		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
-		Phase, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	fold::{self, Fold},
 };
 
+const PARENT_THIS_NAME: &str = "__parent_this";
+
 pub struct InflightTransformer {
+	// Whether the transformer is inside a preflight or inflight scope.
+	// Only inflight closures defined in preflight scopes need to be transformed.
 	curr_phase: Phase,
+	// Whether the transformer is inside a resource or not. If we are, we transform
+	// inflight closures with an extra `let __parent_this = this;` statement so
+	// that they can access the parent resource's fields.
+	is_inside_resource: bool,
 	// Helper state for generating unique class names for resources
-	inflight_counter: RefCell<usize>,
+	inflight_counter: usize,
 }
 
 impl InflightTransformer {
 	pub fn new() -> Self {
 		Self {
 			curr_phase: Phase::Preflight,
-			inflight_counter: RefCell::new(0),
+			is_inside_resource: false,
+			inflight_counter: 0,
 		}
 	}
 }
 
 impl Fold for InflightTransformer {
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
-		let old_phase = self.curr_phase;
+		let prev_phase = self.curr_phase;
 		self.curr_phase = node.signature.phase;
 		let new_node = fold::fold_function_definition(self, node);
-		self.curr_phase = old_phase;
+		self.curr_phase = prev_phase;
+		new_node
+	}
+
+	fn fold_class(&mut self, node: Class) -> Class {
+		let prev_is_inside_resource = self.is_inside_resource;
+		self.is_inside_resource = true;
+		let new_node = fold::fold_class(self, node);
+		self.is_inside_resource = prev_is_inside_resource;
 		new_node
 	}
 
 	fn fold_expr(&mut self, expr: Expr) -> Expr {
-		// No preflight scopes can exist inside an inflight scope, so
-		// we know that if we encounter any inflight closures, they won't
-		// need to be transformed.
+		// Inflight closures that are themselves defined inflight do not need
+		// to be transformed, since they are not created in preflight.
 		if self.curr_phase == Phase::Inflight {
 			return expr;
 		}
@@ -53,15 +69,22 @@ impl Fold for InflightTransformer {
 
 		match expr.kind {
 			ExprKind::FunctionClosure(def) => {
-				let mut inflight_counter = self.inflight_counter.borrow_mut();
-				*inflight_counter += 1;
+				self.inflight_counter += 1;
 
 				let resource_name = Symbol {
-					name: format!("$Inflight{}", inflight_counter),
+					name: format!("$Inflight{}", self.inflight_counter),
 					span: expr.span.clone(),
 				};
 				let handle_name = Symbol {
 					name: "handle".to_string(),
+					span: expr.span.clone(),
+				};
+				let parent_this_name = Symbol {
+					name: PARENT_THIS_NAME.to_string(),
+					span: expr.span.clone(),
+				};
+				let this_name = Symbol {
+					name: "this".to_string(),
 					span: expr.span.clone(),
 				};
 
@@ -76,13 +99,23 @@ impl Fold for InflightTransformer {
 				let resource_fields: Vec<ClassField> = vec![];
 				let resource_init_params: Vec<FunctionParameter> = vec![];
 
-				// resource_def = resource {
-				//   <resource_fields>
+				let new_def = if self.is_inside_resource {
+					// transform all occurrences of "this" into "__parent_this"
+					let mut this_transform = ThisTransformer;
+					this_transform.fold_function_definition(def)
+				} else {
+					def
+				};
+
+				// resource_def :=
+				// ```
+				// resource {
 				//   init(<resource_init_params>) {<resource_init_body>}
 				//   inflight handle() {
-				//     <def>
+				//     <transformed_def>
 				//   }
 				// }
+				// ```
 				let resource_def = Stmt {
 					kind: StmtKind::Class(Class {
 						name: resource_name.clone(),
@@ -99,14 +132,17 @@ impl Fold for InflightTransformer {
 						fields: resource_fields,
 						implements: vec![],
 						parent: None,
-						methods: vec![(handle_name.clone(), def)],
+						methods: vec![(handle_name.clone(), new_def)],
 						inflight_initializer: None,
 					}),
-					idx: 0,
+					idx: 1,
 					span: expr.span.clone(),
 				};
 
-				// return_resource_instance = return new <resource_name>();
+				// return_resource_instance :=
+				// ```
+				// return new <resource_name>();
+				// ```
 				let return_resource_instance = Stmt {
 					kind: StmtKind::Return(Some(Expr::new(
 						ExprKind::New {
@@ -120,17 +156,46 @@ impl Fold for InflightTransformer {
 						},
 						expr.span.clone(),
 					))),
-					idx: 1,
+					idx: 2,
 					span: expr.span.clone(),
 				};
 
-				// make_resource_body = {
+				// make_resource_body :=
+				// ```
+				// {
+				//   <parent_this_def>? // only if we are inside a resource
 				//   <resource_def>
 				//   <return_resource_instance>
 				// }
-				let make_resource_body = Scope::new(vec![resource_def, return_resource_instance], expr.span.clone());
+				// ```
+				let make_resource_body = if self.is_inside_resource {
+					// parent_this_def :=
+					// ```
+					// let __parent_this = this;
+					// ```
+					let parent_this_def = Stmt {
+						kind: StmtKind::VariableDef {
+							reassignable: false,
+							var_name: parent_this_name,
+							initial_value: Expr::new(ExprKind::Reference(Reference::Identifier(this_name)), expr.span.clone()),
+							type_: None, // thank god we have type inference
+						},
+						idx: 0,
+						span: expr.span.clone(),
+					};
 
-				// make_resource_closure = (): resource => { ...<make_resource_body> }
+					Scope::new(
+						vec![parent_this_def, resource_def, return_resource_instance],
+						expr.span.clone(),
+					)
+				} else {
+					Scope::new(vec![resource_def, return_resource_instance], expr.span.clone())
+				};
+
+				// make_resource_closure :=
+				// ```
+				// (): resource => { ...<make_resource_body> }
+				// ```
 				let make_resource_closure = Expr::new(
 					ExprKind::FunctionClosure(FunctionDefinition {
 						signature: FunctionSignature {
@@ -149,7 +214,10 @@ impl Fold for InflightTransformer {
 					expr.span.clone(),
 				);
 
-				// call_expr = <make_resource_closure>()
+				// call_expr :=
+				// ```
+				// <make_resource_closure>()
+				// ```
 				let call_expr = Expr::new(
 					ExprKind::Call {
 						function: Box::new(make_resource_closure),
@@ -160,6 +228,28 @@ impl Fold for InflightTransformer {
 				call_expr
 			}
 			_ => fold::fold_expr(self, expr),
+		}
+	}
+}
+
+/// Transform usages of "this.<field>" into "__parent_this.<field>"
+struct ThisTransformer;
+
+impl Fold for ThisTransformer {
+	fn fold_reference(&mut self, node: Reference) -> Reference {
+		match node {
+			Reference::Identifier(ident) => {
+				if ident.name == "this" {
+					Reference::Identifier(Symbol {
+						name: PARENT_THIS_NAME.to_string(),
+						span: ident.span,
+					})
+				} else {
+					Reference::Identifier(ident)
+				}
+			}
+			Reference::InstanceMember { .. } => fold::fold_reference(self, node),
+			Reference::TypeMember { .. } => fold::fold_reference(self, node),
 		}
 	}
 }
