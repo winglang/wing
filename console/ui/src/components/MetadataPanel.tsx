@@ -95,7 +95,7 @@ export const MetadataPanel = ({
         case "wingsdk.cloud.Queue": {
           resourceGroup = {
             groupName: "Queue",
-            actionName: "Send Message",
+            actionName: "Push Message",
             icon,
           };
 
