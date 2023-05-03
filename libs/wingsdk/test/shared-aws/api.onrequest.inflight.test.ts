@@ -118,6 +118,45 @@ describe("ApiResponseMapper", () => {
       },
     });
   });
+
+  test("handle different content-type from default one", async () => {
+    // GIVEN
+    const apiRequestEvent: Partial<APIGatewayProxyEvent> = {
+      body: JSON.stringify({}),
+      headers: {},
+      path: "/",
+      httpMethod: "GET",
+    };
+
+    const handlerResponse: ApiResponse = {
+      status: 200,
+      body: { key: "value" },
+      headers: {
+        "Content-Type": "application/octet-stream",
+      },
+    };
+    const requestHandlerClient = new ApiOnRequestHandlerClient({
+      handler: {
+        handle: async () => {
+          return handlerResponse;
+        },
+      },
+    });
+
+    // WHEN
+    const response = await requestHandlerClient.handle(
+      apiRequestEvent as APIGatewayProxyEvent
+    );
+
+    // THEN
+    expect(response).toEqual({
+      statusCode: 200,
+      body: JSON.stringify({ key: "value" }),
+      headers: {
+        "Content-Type": "application/octet-stream",
+      },
+    });
+  });
 });
 
 describe("ApiRequest", () => {
