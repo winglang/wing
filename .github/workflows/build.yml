@@ -235,8 +235,11 @@ jobs:
       - name: Unzip Wing
         run: tar zxvf wing/winglang-*.tgz
 
-      - name: Link Wing CLI
-        run: npm i -g ./package
+      - name: Install & Link Wing CLI
+        run: |
+          cd package
+          npm i
+          npm i -g ./
 
       - name: Check Wing Version
         run: wing --version
