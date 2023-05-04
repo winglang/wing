@@ -976,13 +976,13 @@ impl<'a> JSifier<'a> {
 		let resource_type = env.lookup(&class.name.name, None).unwrap().as_type().unwrap();
 
 		// Find all free variables in the resource, and return a list of their symbols
-		let free_vars = self.find_free_vars(class);
+		//let free_vars = self.find_free_vars(class);
 
 		// Get all references between inflight methods and preflight values
-		let mut refs = self.find_inflight_references(class, &free_vars);
+		let mut refs = self.find_inflight_references(class);
 
 		// After calling find_inflight_references, we don't really need the exact symbols anymore, only their names
-		let free_vars: BTreeSet<String> = free_vars.iter().map(|s| s.name.clone()).into_iter().collect();
+		//let free_vars: BTreeSet<String> = free_vars.iter().map(|s| s.name.clone()).into_iter().collect();
 
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_capturable_field_names(resource_type);
@@ -998,6 +998,8 @@ impl<'a> JSifier<'a> {
 				init_refs_entry.insert(k, v);
 			}
 		}
+
+		let free_vars = self.get_free_vars_in_resource(class);
 
 		// Jsify inflight client
 		let inflight_methods = class
@@ -1034,6 +1036,7 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_function(Some(&n.name), m, context));
 		}
 
+//		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars)); // 		// Add referenced types!
 		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields, &free_vars));
 
 		let mut bind_method = CodeMaker::default();
@@ -1103,7 +1106,7 @@ impl<'a> JSifier<'a> {
 		&mut self,
 		resource_name: &Symbol,
 		captured_fields: &[String],
-		free_inflight_variables: &BTreeSet<String>,
+		free_inflight_variables: &IndexSet<String>,
 	) -> CodeMaker {
 		let client_path = Self::js_resolve_path(&format!("{INFLIGHT_CLIENTS_DIR}/{}.inflight.js", resource_name.name));
 
@@ -1167,6 +1170,23 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
+	/// Get all free vars used by methods of the given resource
+	fn get_free_vars_in_resource(&self, resource: &AstClass) -> IndexSet<String> {
+		let mut free_vars = IndexSet::new();
+		for (_, method_def) in &resource.methods {
+			free_vars.extend(
+				method_def
+					.captures
+					.borrow()
+					.as_ref()
+					.unwrap()
+					.iter()
+					.map(|c| c.symbol.name.clone()),
+			);
+		}
+		free_vars
+	}
+
 	// Write a client class to a file for the given resource
 	fn jsify_resource_client(
 		&mut self,
@@ -1174,7 +1194,7 @@ impl<'a> JSifier<'a> {
 		resource: &AstClass,
 		captured_fields: &[String],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		free_variables: &BTreeSet<String>,
+		free_variables: &IndexSet<String>,
 		context: &JSifyContext,
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
@@ -1273,6 +1293,7 @@ impl<'a> JSifier<'a> {
 
 		// export the main class from this file
 		let mut code = CodeMaker::default();
+		// TODO: redundant if
 		if free_variables.len() > 0 {
 			let free_variables_str = free_variables.iter().join(", ");
 			code.open(format!("module.exports = function({{ {free_variables_str} }}) {{"));
@@ -1325,7 +1346,7 @@ impl<'a> JSifier<'a> {
 	fn find_inflight_references(
 		&mut self,
 		resource_class: &AstClass,
-		free_vars: &[Symbol],
+		//free_vars: &[Symbol],
 	) -> BTreeMap<String, BTreeMap<String, BTreeSet<String>>> {
 		let inflight_methods = resource_class
 			.methods
@@ -1336,7 +1357,23 @@ impl<'a> JSifier<'a> {
 
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
-			let visitor = FieldReferenceVisitor::new(&function_def, free_vars);
+			// println!(
+			// 	"Finding inflight references for method {}.{}\n
+			// 	free vars are: {}\n
+			// 	captures are: {}",
+			// 	resource_class.name.name,
+			// 	method_name.name,
+			// 	free_vars.iter().map(|s| &s.name).join(","),
+			// 	function_def
+			// 		.captures
+			// 		.borrow()
+			// 		.as_ref()
+			// 		.unwrap()
+			// 		.iter()
+			// 		.map(|c| &c.symbol.name)
+			// 		.join(",")
+			// );
+			let visitor = FieldReferenceVisitor::new(&function_def);
 			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
@@ -1347,7 +1384,7 @@ impl<'a> JSifier<'a> {
 
 		// Also add field rerferences from the inflight initializer
 		if let Some(inflight_init) = &resource_class.inflight_initializer {
-			let visitor = FieldReferenceVisitor::new(inflight_init, free_vars);
+			let visitor = FieldReferenceVisitor::new(inflight_init);
 			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
@@ -1406,17 +1443,16 @@ struct FieldReferenceVisitor<'a> {
 	/// A list of free variables preloaded into the visitor. Whenever the visitor encounters a
 	/// reference to a free variable, it will be added to list of references since the
 	/// resource needs to bind to it.
-	free_vars: &'a [Symbol],
-
+	//free_vars: &'a [Symbol],
 	diagnostics: Diagnostics,
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(function_def: &'a FunctionDefinition, free_vars: &'a [Symbol]) -> Self {
+	pub fn new(function_def: &'a FunctionDefinition) -> Self {
 		Self {
 			references: BTreeMap::new(),
 			function_def,
-			free_vars,
+			//free_vars,
 			diagnostics: Diagnostics::new(),
 		}
 	}
@@ -1439,7 +1475,14 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 		};
 
 		let is_free_var = match parts.first() {
-			Some(first) => self.free_vars.iter().any(|v| v.same(&first.symbol)),
+			Some(first) => self
+				.function_def
+				.captures
+				.borrow()
+				.as_ref()
+				.unwrap()
+				.iter()
+				.any(|c| c.symbol.same(&first.symbol)),
 			None => false,
 		};
 
@@ -1695,8 +1738,10 @@ impl<'a> PreflightTypeRefVisitor<'a> {
 
 impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 	fn visit_scope(&mut self, node: &'ast Scope) {
+		let backup_env = self.env;
 		self.env = node.env.borrow().as_ref().unwrap().get_ref();
 		visit::visit_scope(self, node);
+		self.env = backup_env;
 	}
 
 	fn visit_reference(&mut self, node: &'ast Reference) {
