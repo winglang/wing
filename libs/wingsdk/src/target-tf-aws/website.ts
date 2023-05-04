@@ -1,14 +1,14 @@
 import { readdirSync } from "fs";
 import { extname, join, resolve } from "path";
-import { CloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront-distribution";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 
-import { S3BucketWebsiteConfiguration } from "@cdktf/provider-aws/lib/s3-bucket-website-configuration";
-import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
 import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
+import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
+import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
+import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { Json } from "../std";
 

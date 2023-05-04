@@ -26,8 +26,7 @@ export abstract class Website extends Resource {
   ): Website {
     return App.of(scope).newAbstract(WEBSITE_FQN, scope, id, props);
   }
-
-  public readonly stateful = false;
+  /** @internal */
   private readonly _path: string;
 
   /** @internal */

@@ -1365,7 +1365,6 @@ the data to write to the file.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Website.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Absolute local path to the website's static files. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
 
@@ -1392,22 +1391,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Website.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 

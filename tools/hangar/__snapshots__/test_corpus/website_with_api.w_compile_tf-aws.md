@@ -594,7 +594,7 @@ async handle(req) {
     "status": 400,}
     ;
   }
-  (await users_table.insert(body));
+  (await users_table.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
   return {
   "body": Object.freeze({"user":(body)["id"]}),
   "status": 201,}
