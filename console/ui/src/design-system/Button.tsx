@@ -47,7 +47,7 @@ export const Button = forwardRef<
         ref={ref}
         type={type}
         className={classNames(
-          "inline-flex gap-2 items-center text-xs font-medium outline-none transition ease-in-out rounded",
+          "inline-flex gap-2 items-center text-xs font-medium outline-none rounded",
           theme.focusInput,
           primary &&
             !transparent && [
