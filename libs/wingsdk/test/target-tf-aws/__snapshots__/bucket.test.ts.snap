@@ -49,8 +49,8 @@ exports[`bucket is public 2`] = `
             "children": {
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -58,7 +58,6 @@ exports[`bucket is public 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -85,29 +84,28 @@ exports[`bucket is public 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -210,29 +208,28 @@ exports[`bucket prefix must be lowercase 2`] = `
               "The-Uncanny.Bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The-Uncanny.Bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/The-Uncanny.Bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/The-Uncanny.Bucket/PublicAccessBlock",
@@ -251,8 +248,8 @@ exports[`bucket prefix must be lowercase 2`] = `
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -260,7 +257,6 @@ exports[`bucket prefix must be lowercase 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -369,8 +365,8 @@ exports[`bucket prefix valid 2`] = `
             "children": {
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -378,7 +374,6 @@ exports[`bucket prefix valid 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -405,29 +400,28 @@ exports[`bucket prefix valid 2`] = `
               "the-uncanny.bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/the-uncanny.bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/the-uncanny.bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/the-uncanny.bucket/PublicAccessBlock",
@@ -619,16 +613,16 @@ exports[`bucket with onCreate method 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -636,7 +630,6 @@ exports[`bucket with onCreate method 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -670,7 +663,6 @@ exports[`bucket with onCreate method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -694,37 +686,36 @@ exports[`bucket with onCreate method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_create",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
                   "S3Object_on_create_notifier": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object_on_create_notifier",
                     "path": "root/Default/my_bucket/S3Object_on_create_notifier",
@@ -745,29 +736,28 @@ exports[`bucket with onCreate method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                         },
                       ],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_create/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-on_create/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
                       "my_bucket-on_create-TopicSubscription-2c90a36b": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "my_bucket-on_create-TopicSubscription-2c90a36b",
                         "path": "root/Default/my_bucket/my_bucket-on_create/my_bucket-on_create-TopicSubscription-2c90a36b",
@@ -806,7 +796,6 @@ exports[`bucket with onCreate method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_create",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -819,48 +808,48 @@ exports[`bucket with onCreate method 2`] = `
                       },
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190",
                       },
                       "S3Object": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/S3Object",
@@ -880,7 +869,6 @@ exports[`bucket with onCreate method 2`] = `
                   "my_bucket-on_create-OnMessageHandler-2c90a36b": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
@@ -914,7 +902,6 @@ exports[`bucket with onCreate method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1101,16 +1088,16 @@ exports[`bucket with onDelete method 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1118,7 +1105,6 @@ exports[`bucket with onDelete method 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1152,7 +1138,6 @@ exports[`bucket with onDelete method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1176,37 +1161,36 @@ exports[`bucket with onDelete method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_delete",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
                   "S3Object_on_delete_notifier": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object_on_delete_notifier",
                     "path": "root/Default/my_bucket/S3Object_on_delete_notifier",
@@ -1227,29 +1211,28 @@ exports[`bucket with onDelete method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                         },
                       ],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_delete/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-on_delete/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
                       "my_bucket-on_delete-TopicSubscription-f22c8a47": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "my_bucket-on_delete-TopicSubscription-f22c8a47",
                         "path": "root/Default/my_bucket/my_bucket-on_delete/my_bucket-on_delete-TopicSubscription-f22c8a47",
@@ -1288,7 +1271,6 @@ exports[`bucket with onDelete method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_delete",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -1301,48 +1283,48 @@ exports[`bucket with onDelete method 2`] = `
                       },
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc",
                       },
                       "S3Object": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/S3Object",
@@ -1362,7 +1344,6 @@ exports[`bucket with onDelete method 2`] = `
                   "my_bucket-on_delete-OnMessageHandler-f22c8a47": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
@@ -1396,7 +1377,6 @@ exports[`bucket with onDelete method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1717,16 +1697,16 @@ exports[`bucket with onEvent method 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1734,7 +1714,6 @@ exports[`bucket with onEvent method 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -1780,7 +1759,6 @@ exports[`bucket with onEvent method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -1816,53 +1794,52 @@ exports[`bucket with onEvent method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_delete",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
                   "S3Object_on_create_notifier": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object_on_create_notifier",
                     "path": "root/Default/my_bucket/S3Object_on_create_notifier",
                   },
                   "S3Object_on_delete_notifier": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object_on_delete_notifier",
                     "path": "root/Default/my_bucket/S3Object_on_delete_notifier",
                   },
                   "S3Object_on_update_notifier": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object_on_update_notifier",
                     "path": "root/Default/my_bucket/S3Object_on_update_notifier",
@@ -1883,29 +1860,28 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                         },
                       ],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_create/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-on_create/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
                       "my_bucket-on_create-TopicSubscription-2c90a36b": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "my_bucket-on_create-TopicSubscription-2c90a36b",
                         "path": "root/Default/my_bucket/my_bucket-on_create/my_bucket-on_create-TopicSubscription-2c90a36b",
@@ -1944,7 +1920,6 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_create",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -1957,48 +1932,48 @@ exports[`bucket with onEvent method 2`] = `
                       },
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190",
                       },
                       "S3Object": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/S3Object",
@@ -2018,7 +1993,6 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-on_create-OnMessageHandler-2c90a36b": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
@@ -2046,29 +2020,28 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                         },
                       ],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_delete/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-on_delete/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
                       "my_bucket-on_delete-TopicSubscription-f22c8a47": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "my_bucket-on_delete-TopicSubscription-f22c8a47",
                         "path": "root/Default/my_bucket/my_bucket-on_delete/my_bucket-on_delete-TopicSubscription-f22c8a47",
@@ -2107,7 +2080,6 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_delete",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -2120,48 +2092,48 @@ exports[`bucket with onEvent method 2`] = `
                       },
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc",
                       },
                       "S3Object": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/S3Object",
@@ -2181,7 +2153,6 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-on_delete-OnMessageHandler-f22c8a47": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
@@ -2209,29 +2180,28 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                         },
                       ],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_update/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-on_update/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
                       "my_bucket-on_update-TopicSubscription-32b7a290": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "my_bucket-on_update-TopicSubscription-32b7a290",
                         "path": "root/Default/my_bucket/my_bucket-on_update/my_bucket-on_update-TopicSubscription-32b7a290",
@@ -2270,7 +2240,6 @@ exports[`bucket with onEvent method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_update",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -2283,48 +2252,48 @@ exports[`bucket with onEvent method 2`] = `
                       },
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833",
                       },
                       "S3Object": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/S3Object",
@@ -2344,7 +2313,6 @@ exports[`bucket with onEvent method 2`] = `
                   "my_bucket-on_update-OnMessageHandler-32b7a290": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
@@ -2378,7 +2346,6 @@ exports[`bucket with onEvent method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -2400,7 +2367,6 @@ exports[`bucket with onEvent method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -2422,7 +2388,6 @@ exports[`bucket with onEvent method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -2609,16 +2574,16 @@ exports[`bucket with onUpdate method 2`] = `
             "children": {
               "Code": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.15.2",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
               },
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -2626,7 +2591,6 @@ exports[`bucket with onUpdate method 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -2660,7 +2624,6 @@ exports[`bucket with onUpdate method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -2684,37 +2647,36 @@ exports[`bucket with onUpdate method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_update",
                     },
                   ],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
                   "S3Object_on_update_notifier": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketNotification.S3BucketNotification",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object_on_update_notifier",
                     "path": "root/Default/my_bucket/S3Object_on_update_notifier",
@@ -2735,29 +2697,28 @@ exports[`bucket with onUpdate method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                         },
                       ],
-                      "wing:resource:stateful": true,
                     },
                     "children": {
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_update/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicPolicy.SnsTopicPolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                         "path": "root/Default/my_bucket/my_bucket-on_update/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
                       "my_bucket-on_update-TopicSubscription-32b7a290": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "my_bucket-on_update-TopicSubscription-32b7a290",
                         "path": "root/Default/my_bucket/my_bucket-on_update/my_bucket-on_update-TopicSubscription-32b7a290",
@@ -2796,7 +2757,6 @@ exports[`bucket with onUpdate method 2`] = `
                           "resource": "root/Default/my_bucket/my_bucket-on_update",
                         },
                       ],
-                      "wing:resource:stateful": false,
                     },
                     "children": {
                       "Asset": {
@@ -2809,48 +2769,48 @@ exports[`bucket with onUpdate method 2`] = `
                       },
                       "Default": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "Default",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRole",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833",
                       },
                       "S3Object": {
                         "constructInfo": {
-                          "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                          "version": "12.0.2",
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.15.2",
                         },
                         "id": "S3Object",
                         "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/S3Object",
@@ -2870,7 +2830,6 @@ exports[`bucket with onUpdate method 2`] = `
                   "my_bucket-on_update-OnMessageHandler-32b7a290": {
                     "attributes": {
                       "wing:resource:connections": [],
-                      "wing:resource:stateful": false,
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
@@ -2904,7 +2863,6 @@ exports[`bucket with onUpdate method 2`] = `
                       "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                     },
                   ],
-                  "wing:resource:stateful": false,
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -3013,8 +2971,8 @@ exports[`bucket with two preflight objects 2`] = `
             "children": {
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -3022,7 +2980,6 @@ exports[`bucket with two preflight objects 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -3049,45 +3006,44 @@ exports[`bucket with two preflight objects 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
                   "S3Object-file1.txt": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object-file1.txt",
                     "path": "root/Default/my_bucket/S3Object-file1.txt",
                   },
                   "S3Object-file2.txt": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "S3Object-file2.txt",
                     "path": "root/Default/my_bucket/S3Object-file2.txt",
@@ -3189,8 +3145,8 @@ exports[`create a bucket 2`] = `
             "children": {
               "aws": {
                 "constructInfo": {
-                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.2",
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -3198,7 +3154,6 @@ exports[`create a bucket 2`] = `
               "cloud.TestRunner": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": false,
                 },
                 "children": {
                   "TestFunctionArns": {
@@ -3225,29 +3180,28 @@ exports[`create a bucket 2`] = `
               "my_bucket": {
                 "attributes": {
                   "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
                   "Encryption": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
                   "PublicAccessBlock": {
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                      "version": "12.0.2",
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",

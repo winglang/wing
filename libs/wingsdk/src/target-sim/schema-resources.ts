@@ -1,5 +1,5 @@
-import { ColumnType, HttpMethod } from "../cloud";
 import { Json } from "../std";
+import { ColumnType, HttpMethod, OpenApiSpec } from "../cloud";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -27,10 +27,14 @@ export type PublisherHandle = string;
 export interface ApiSchema extends BaseResourceSchema {
   readonly type: typeof API_TYPE;
   readonly props: {
-    /** The routes that the API should handle. */
-    readonly routes: ApiRoute[];
+    openApiSpec: OpenApiSpec;
   };
   readonly attrs: ApiAttributes & BaseResourceAttributes;
+}
+
+export interface ApiEventSubscription extends EventSubscription {
+  /** Subscribed routes */
+  readonly routes: ApiRoute[];
 }
 
 /** Runtime attributes for cloud.Api */
@@ -41,12 +45,10 @@ export interface ApiAttributes {
 
 /** Schema for cloud.Api.props.routes */
 export interface ApiRoute {
-  /** The route to handle. */
-  readonly route: string;
+  /** The path to handle. */
+  readonly path: string;
   /** The HTTP method to handle. */
   readonly method: HttpMethod;
-  /** The function that should be called when the route is hit. */
-  readonly functionHandle: FunctionHandle;
 }
 
 /** Schema for cloud.Function */
@@ -78,6 +80,24 @@ export interface QueueSchema extends BaseResourceSchema {
     /** Initial messages to be pushed to the queue. */
     readonly initialMessages: string[];
   };
+}
+
+/** Runtime attributes for cloud.Schedule */
+export interface ScheduleAttributes {}
+
+/** Schema for cloud.Schedule */
+export interface ScheduleSchema extends BaseResourceSchema {
+  readonly type: typeof SCHEDULE_TYPE;
+  readonly props: {
+    /** The cron expression that defines when the schedule should run. */
+    readonly cronExpression: string;
+  };
+}
+
+/** Schema for cloud.Queue.props.subscribers */
+export interface ScheduleTask extends EventSubscription {
+  /** Function that should be called. */
+  readonly functionHandle: FunctionHandle;
 }
 
 export interface EventSubscription {}

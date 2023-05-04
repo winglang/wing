@@ -27,7 +27,14 @@ async function main() {
 
   const program = new Command();
 
-  program.name("wing").version(PACKAGE_VERSION);
+  program
+    .name("wing")
+    .version(PACKAGE_VERSION);
+
+  program
+    .option("--debug", "Enable debug logging (same as DEBUG=1)", () => {
+      process.env.DEBUG = "1";
+    });
 
   program
     .option("--no-update-check", "Skip checking for toolchain updates")

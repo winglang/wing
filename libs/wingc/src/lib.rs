@@ -388,7 +388,10 @@ mod sanity {
 			println!("\n=== {} ===\n", test_file.display());
 
 			let mut out_dir = test_file.parent().unwrap().to_path_buf();
-			out_dir.push(format!("{}.out", test_file.file_name().unwrap().to_str().unwrap()));
+			out_dir.push(format!(
+				"target/wingc/{}.out",
+				test_file.file_name().unwrap().to_str().unwrap()
+			));
 
 			// reset out_dir
 			if out_dir.exists() {

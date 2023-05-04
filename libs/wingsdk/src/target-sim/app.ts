@@ -8,6 +8,7 @@ import { Function } from "./function";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
+import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
@@ -19,6 +20,7 @@ import {
   COUNTER_FQN,
   FUNCTION_FQN,
   QUEUE_FQN,
+  SCHEDULE_FQN,
   SECRET_FQN,
   TABLE_FQN,
   TEST_RUNNER_FQN,
@@ -94,6 +96,9 @@ export class App extends core.App {
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
+
+      case SCHEDULE_FQN:
+        return new Schedule(scope, id, args[0]);
     }
 
     return undefined;

@@ -1,15 +1,15 @@
 import { join } from "path";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
-import { S3BucketNotification } from "@cdktf/provider-aws/lib/s3-bucket-notification";
-
-import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
-import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
-import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
-import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
+import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import { S3BucketNotification } from "../.gen/providers/aws/s3-bucket-notification";
+
+import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
+import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-public-access-block";
+import { S3BucketServerSideEncryptionConfigurationA } from "../.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
+import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
