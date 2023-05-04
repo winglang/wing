@@ -7,6 +7,7 @@ use crate::ast::{
 	Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
+use crate::visit::{self, Visit};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
@@ -27,6 +28,41 @@ use wingii::type_system::TypeSystem;
 
 use self::jsii_importer::JsiiImportSpec;
 use self::symbol_env::SymbolEnvIter;
+
+/// Visitor Pattern for listing the variables that are initialized in the class constructor.
+struct VisitClassInit<'a> {
+	fields: &'a mut Vec<String>,
+}
+
+impl<'a> VisitClassInit<'a> {
+	pub fn new(fields: &'a mut Vec<String>) -> Self {
+		Self { fields }
+	}
+}
+
+impl<'ast> Visit<'ast> for VisitClassInit<'ast> {
+	fn visit_scope(&mut self, node: &'ast Scope) {
+		for stmt in &node.statements {
+			visit::visit_stmt(self, stmt);
+		}
+	}
+
+	fn visit_stmt(&mut self, node: &'ast Stmt) {
+		match &node.kind {
+			StmtKind::Assignment { variable, value: _ } => {
+				visit::visit_reference(self, variable);
+			}
+			_ => (),
+		}
+	}
+
+	fn visit_reference(&mut self, node: &'ast Reference) {
+		match node {
+			Reference::InstanceMember { property, object: _ } => self.fields.push(property.name.clone()),
+			_ => (),
+		}
+	}
+}
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -2486,70 +2522,23 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn list_fields_on_init(&mut self, statements: &Scope) -> Vec<String> {
-		let mut fields: Vec<String> = Vec::new();
-		for stmt in &statements.statements {
-			match &stmt.kind {
-				StmtKind::Assignment { variable, value: _ } => match &variable {
-					Reference::InstanceMember { property, object: _ } => {
-						fields.push(property.name.clone());
-					}
-					_ => (),
-				},
-				StmtKind::If {
-					condition: _,
-					statements,
-					elif_statements,
-					else_statements,
-				} => {
-					fields.append(&mut self.list_fields_on_init(&statements));
-					for elif_scope in elif_statements {
-						fields.append(&mut self.list_fields_on_init(&elif_scope.statements));
-					}
-					if let Some(else_statements) = else_statements {
-						fields.append(&mut self.list_fields_on_init(&else_statements));
-					}
-				}
-				StmtKind::While {
-					condition: _,
-					statements,
-				} => {
-					fields.append(&mut self.list_fields_on_init(&statements));
-				}
-				StmtKind::ForLoop {
-					iterator: _,
-					iterable: _,
-					statements,
-				} => {
-					fields.append(&mut self.list_fields_on_init(&statements));
-				}
-				StmtKind::TryCatch {
-					try_statements,
-					catch_block,
-					finally_statements,
-				} => {
-					fields.append(&mut self.list_fields_on_init(&try_statements));
-					if let Some(catch_block) = catch_block {
-						fields.append(&mut self.list_fields_on_init(&catch_block.statements));
-					}
-					if let Some(finally_statements) = finally_statements {
-						fields.append(&mut self.list_fields_on_init(&finally_statements));
-					}
-				}
-				_ => (),
-			}
-		}
-		return fields;
-	}
-
+	/// Validate if the fields of a class are initialized in the constructor (init).
+	///
+	/// # Arguments
+	///
+	/// * `statements` - The constructor scope (init)
+	/// * `fields` - All fields of a class
+	///
 	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &[ClassField]) {
-		let init_fields = self.list_fields_on_init(statements);
+		let mut binding = Vec::new();
+		let mut visit_init = VisitClassInit::new(&mut binding);
+		visit_init.visit_scope(statements);
 		for field in fields.iter() {
 			// inflight or static fields cannot be initialized in the initializer
 			if field.phase == Phase::Inflight || field.is_static {
 				continue;
 			}
-			if !init_fields.contains(&field.name.name) {
+			if !visit_init.fields.contains(&field.name.name) {
 				self.type_error(TypeError {
 					message: format!("\"{}\" is not initialized", field.name.name),
 					span: field.name.span.clone(),
