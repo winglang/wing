@@ -686,7 +686,13 @@ impl<'a> JSifier<'a> {
 				// This is a no-op in JS
 				CodeMaker::default()
 			}
-			StmtKind::Enum { name, values } => self.jsify_enum(name, values),
+			StmtKind::Enum { name, values } => {
+				let mut code = CodeMaker::default();
+				code.open(format!("const {} = ", self.jsify_symbol(name)));
+				code.add_code(self.jsify_enum(values));
+				code.close(";");
+				code
+			}
 			StmtKind::TryCatch {
 				try_statements,
 				catch_block,
@@ -724,25 +730,24 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_enum(&mut self, name: &Symbol, values: &IndexSet<Symbol>) -> CodeMaker {
+	fn jsify_enum(&mut self, values: &IndexSet<Symbol>) -> CodeMaker {
 		let mut code = CodeMaker::default();
-		let name = self.jsify_symbol(name);
 		let mut value_index = 0;
 
-		code.open(format!("const {name} = Object.freeze((function ({name}) {{"));
+		code.open(format!("Object.freeze((function (tmp) {{"));
 
 		for value in values {
 			code.line(format!(
-				"{name}[{name}[\"{}\"] = {}] = \"{}\";",
+				"tmp[tmp[\"{}\"] = {}] = \"{}\";",
 				value.name, value_index, value.name
 			));
 
 			value_index = value_index + 1;
 		}
 
-		code.line(format!("return {name};"));
+		code.line("return tmp;");
 
-		code.close("})({}));");
+		code.close("})({}))");
 		code
 	}
 
@@ -1007,7 +1012,17 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect_vec();
-		self.jsify_resource_client(env, &class, &captured_fields, &inflight_methods, &free_vars, context);
+		let referenced_preflight_types = self.get_preflight_types_referenced_in_resource(class, &inflight_methods);
+		self.jsify_resource_client(
+			env,
+			&class,
+			&captured_fields,
+			&inflight_methods,
+			free_vars
+				.iter()
+				.chain(referenced_preflight_types.iter().map(|(n, _)| n)),
+			context,
+		);
 
 		// Get all preflight methods to be jsified to the preflight class
 		let preflight_methods = class
@@ -1036,8 +1051,8 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_function(Some(&n.name), m, context));
 		}
 
-//		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars)); // 		// Add referenced types!
-		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields, &free_vars));
+		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
+		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
 
 		let mut bind_method = CodeMaker::default();
 		bind_method.open("_registerBind(host, ops) {");
@@ -1102,14 +1117,58 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_toinflight_method(
+	fn jsify_to_inflight_type_method(
 		&mut self,
 		resource_name: &Symbol,
-		captured_fields: &[String],
 		free_inflight_variables: &IndexSet<String>,
+		referenced_preflight_types: &IndexMap<String, TypeRef>,
 	) -> CodeMaker {
 		let client_path = Self::js_resolve_path(&format!("{INFLIGHT_CLIENTS_DIR}/{}.inflight.js", resource_name.name));
 
+		let mut code = CodeMaker::default();
+
+		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
+
+		code.line(format!("const self_client_path = {client_path};"));
+
+		// create an inflight client for each object that is captured from the environment
+		for var_name in free_inflight_variables {
+			code.line(format!("const {var_name}_client = context._lift({var_name});",));
+		}
+
+		// create an inflight type for each referenced preflight type
+		for (n, t) in referenced_preflight_types {
+			match &**t {
+				Type::Resource(_) => {
+					code.line(format!("const {n}Client = {n}._toInflightType(context);"));
+				}
+				Type::Enum(e) => {
+					code.open(format!("const {n}Client = {STDLIB}.core.NodeJsCode.fromInline(`"));
+					code.add_code(self.jsify_enum(&e.values));
+					code.close("`);");
+				}
+				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
+			}
+		}
+
+		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
+
+		code.open("require(\"${self_client_path}\")({");
+		for var_name in free_inflight_variables {
+			code.line(format!("{var_name}: ${{{var_name}_client}},"));
+		}
+		for (type_name, _) in referenced_preflight_types {
+			code.line(format!("{type_name}: ${{{type_name}Client.text}},"));
+		}
+		code.close("})");
+
+		code.close("`);");
+
+		code.close("}");
+		code
+	}
+
+	fn jsify_toinflight_method(&mut self, resource_name: &Symbol, captured_fields: &[String]) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		code.open("_toInflight() {");
@@ -1122,37 +1181,19 @@ impl<'a> JSifier<'a> {
 			));
 		}
 
-		// create an inflight client for each object that is captured from the environment
-		for var_name in free_inflight_variables {
-			code.line(format!("const {var_name}_client = this._lift({var_name});",));
-		}
-
-		code.line(format!("const self_client_path = {client_path};"));
-
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
 		code.open("(await (async () => {");
 
-		if free_inflight_variables.len() > 0 {
-			code.open(format!(
-				"const {} = require(\"${{self_client_path}}\")({{",
-				resource_name.name
-			));
-			for var_name in free_inflight_variables {
-				code.line(format!("{var_name}: ${{{var_name}_client}},"));
-			}
-			code.close("});");
-		} else {
-			code.line(format!(
-				"const {} = require(\"${{self_client_path}}\")({{}});",
-				resource_name.name
-			));
-		}
+		code.line(format!(
+			"const {}Client = ${{{}._toInflightType(this).text}};",
+			resource_name.name, resource_name.name,
+		));
 
-		code.open(format!("const client = new {}({{", resource_name.name));
+		code.open(format!("const client = new {}Client({{", resource_name.name));
 
 		for inner_member_name in captured_fields {
-			code.line(format!("{}: ${{{}_client}},", inner_member_name, inner_member_name));
+			code.line(format!("{inner_member_name}: ${{{inner_member_name}_client}},"));
 		}
 
 		code.close("});");
@@ -1187,6 +1228,25 @@ impl<'a> JSifier<'a> {
 		free_vars
 	}
 
+	/// Get preflight types that are referenced by the given resource
+	fn get_preflight_types_referenced_in_resource(
+		&self,
+		resource: &AstClass,
+		inflight_methods: &[&(Symbol, FunctionDefinition)],
+	) -> IndexMap<String, TypeRef> {
+		let mut referenced_preflight_types = indexmap![];
+		for (_, m) in inflight_methods {
+			if let FunctionBody::Statements(scope) = &m.body {
+				let preflight_ref_visitor = PreflightTypeRefVisitor::new(scope);
+				let refs = preflight_ref_visitor.find_preflight_type_refs();
+				referenced_preflight_types.extend(refs);
+			}
+		}
+		// Remove myself from the list of referenced preflight types because I don't need to import myself
+		referenced_preflight_types.remove(&resource.name.name);
+		referenced_preflight_types
+	}
+
 	// Write a client class to a file for the given resource
 	fn jsify_resource_client(
 		&mut self,
@@ -1194,7 +1254,7 @@ impl<'a> JSifier<'a> {
 		resource: &AstClass,
 		captured_fields: &[String],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		free_variables: &IndexSet<String>,
+		input_symbols: impl Iterator<Item = impl Display>,
 		context: &JSifyContext,
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
@@ -1210,30 +1270,7 @@ impl<'a> JSifier<'a> {
 			.filter(|name| !parent_captures.iter().any(|n| n == *name))
 			.collect_vec();
 
-		let mut referenced_preflight_types = indexmap![];
-		for (_, m) in inflight_methods {
-			if let FunctionBody::Statements(scope) = &m.body {
-				let preflight_ref_visitor = PreflightTypeRefVisitor::new(scope);
-				let refs = preflight_ref_visitor.find_preflight_type_refs();
-				referenced_preflight_types.extend(refs);
-			}
-		}
-		// Remove myself from the list of referenced preflight types because I don't need to import myself
-		referenced_preflight_types.remove(&resource.name.name);
-
 		let mut class_code = CodeMaker::default();
-
-		// Import all referenced types to this client
-		for (type_name, t) in referenced_preflight_types {
-			match &*t {
-				Type::Resource(_) => {
-					let client_path = format!("\"./{type_name}.inflight.js\"");
-					class_code.line(format!("const {type_name} = require({client_path})();"));
-				}
-				Type::Enum(e) => class_code.add_code(self.jsify_enum(&e.name, &e.values)),
-				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
-			}
-		}
 
 		let name = &resource.name.name;
 		class_code.open(format!(
@@ -1293,13 +1330,8 @@ impl<'a> JSifier<'a> {
 
 		// export the main class from this file
 		let mut code = CodeMaker::default();
-		// TODO: redundant if
-		if free_variables.len() > 0 {
-			let free_variables_str = free_variables.iter().join(", ");
-			code.open(format!("module.exports = function({{ {free_variables_str} }}) {{"));
-		} else {
-			code.open("module.exports = function() {");
-		}
+		let inputs = input_symbols.map(|i| format!("{}", i)).collect_vec().join(", ");
+		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(class_code);
 		code.line(format!("return {name};"));
 		code.close("}");
@@ -1409,17 +1441,6 @@ impl<'a> JSifier<'a> {
 			})
 			.map(|(name, ..)| name)
 			.collect_vec()
-	}
-
-	fn find_free_vars(&self, class: &AstClass) -> Vec<Symbol> {
-		let mut globals = UtilityFunctions::all()
-			.iter()
-			.map(|f| Symbol::global(f.to_string()))
-			.collect_vec();
-		globals.push(Symbol::global("this".to_string()));
-		let mut scanner = FreeVariableScanner::new(globals);
-		scanner.visit_class(class);
-		scanner.free_vars
 	}
 }
 

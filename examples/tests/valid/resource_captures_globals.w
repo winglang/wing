@@ -34,6 +34,10 @@ class Another {
     global_counter.inc();
     return global_counter.peek();
   }
+
+  static inflight my_static_method(): num {
+    return global_counter.peek();
+  }
 }
 
 let global_another = new Another();
@@ -68,6 +72,7 @@ class MyResource {
     assert(global_another.my_field == "hello!");
     global_another.first.my_resource.put("key", "value");
     assert(global_another.my_method() > 0);
+    assert(Another.my_static_method() > 0);
   }
 }
 
