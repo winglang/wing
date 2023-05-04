@@ -84,14 +84,14 @@ impl Fold for InflightTransformer {
 		// If we encounter a non-inflight closure, we can don't need to
 		// transform it into a resource, but we still want to recurse
 		// in case its body contains any inflight closures.
-		if let ExprKind::FunctionClosure(ref def) = expr.kind {
-			if def.signature.phase != Phase::Inflight {
+		if let ExprKind::FunctionClosure(ref func_def) = expr.kind {
+			if func_def.signature.phase != Phase::Inflight {
 				return fold::fold_expr(self, expr);
 			}
 		}
 
 		match expr.kind {
-			ExprKind::FunctionClosure(def) => {
+			ExprKind::FunctionClosure(func_def) => {
 				self.inflight_counter += 1;
 
 				let resource_name = Symbol {
@@ -122,12 +122,12 @@ impl Fold for InflightTransformer {
 				let resource_fields: Vec<ClassField> = vec![];
 				let resource_init_params: Vec<FunctionParameter> = vec![];
 
-				let new_def = if self.is_inside_resource {
+				let new_func_def = if self.is_inside_resource {
 					// transform all occurrences of "this" into "__parent_this"
 					let mut this_transform = ThisTransformer;
-					this_transform.fold_function_definition(def)
+					this_transform.fold_function_definition(func_def)
 				} else {
-					def
+					func_def
 				};
 
 				// resource_def :=
@@ -155,7 +155,7 @@ impl Fold for InflightTransformer {
 						fields: resource_fields,
 						implements: vec![],
 						parent: None,
-						methods: vec![(handle_name.clone(), new_def)],
+						methods: vec![(handle_name.clone(), new_func_def)],
 						inflight_initializer: None,
 					}),
 					idx: 1,
