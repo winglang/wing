@@ -568,12 +568,30 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
-		if initializer.is_none() {
-			self.add_error::<Node>(
-				format!("No constructor defined in class {:?}", statement_node),
-				&statement_node,
-			)?;
-		}
+
+		let initializer = match initializer {
+			Some(init) => init,
+			// add a default initializer if none is defined
+			None => Initializer {
+				signature: FunctionSignature {
+					parameters: vec![],
+					return_type: Some(Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+							root: name.clone(),
+							fields: vec![],
+						}),
+						span: name.span.clone(),
+					})),
+					phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
+				},
+				statements: Scope {
+					env: RefCell::new(None),
+					statements: vec![],
+					span: name.span.clone(),
+				},
+				span: name.span.clone(),
+			},
+		};
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(&parent_node)?;
@@ -624,7 +642,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			initializer: initializer.unwrap(),
+			initializer,
 			is_resource,
 			inflight_initializer,
 		}))
