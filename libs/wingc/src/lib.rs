@@ -301,7 +301,7 @@ pub fn compile(
 		Diagnostics::new()
 	};
 
-	// Validate again that every Expr has an evaluated_type
+	// Validate that every Expr has an evaluated_type
 	let mut tc_assert = TypeCheckAssert;
 	tc_assert.visit_scope(&scope);
 
