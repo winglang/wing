@@ -70,7 +70,7 @@ export class TableClient implements ITableClient {
     return {} as Json;
   }
 
-  public async list(): Promise<any> {
+  public async list(): Promise<Array<Json>> {
     const command = new ScanCommand({
       TableName: this.tableName,
     });
