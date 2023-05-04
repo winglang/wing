@@ -1214,15 +1214,9 @@ impl<'a> JSifier<'a> {
 	fn get_free_vars_in_resource(&self, inflight_methods: &[&(Symbol, FunctionDefinition)]) -> IndexSet<String> {
 		let mut free_vars = IndexSet::new();
 		for (_, method_def) in inflight_methods {
-			free_vars.extend(
-				method_def
-					.captures
-					.borrow()
-					.as_ref()
-					.unwrap()
-					.iter()
-					.map(|c| c.symbol.name.clone()),
-			);
+			if let Some(captures) = method_def.captures.borrow().as_ref() {
+				free_vars.extend(captures.iter().map(|c| c.symbol.name.clone()));
+			}
 		}
 		free_vars
 	}
