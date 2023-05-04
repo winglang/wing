@@ -48,4 +48,4 @@ new cloud.Function(inflight () => {
   q.push("hello");
   q.push("world");
   js.assert(predicate);
-}) as "test:on_message";
+}) as "test:add_consumer";
