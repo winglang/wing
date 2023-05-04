@@ -51,18 +51,6 @@ module.exports = function() {
 
 ```
 
-## clients/Class1.inflight.js
-```js
-module.exports = function() {
-  class  Class1 {
-    constructor({  }) {
-    }
-  }
-  return Class1;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
