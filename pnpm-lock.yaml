@@ -44,8 +44,8 @@ importers:
         specifier: ^18.16.3
         version: 18.16.3
       '@types/react':
-        specifier: ^18.2.4
-        version: 18.2.4
+        specifier: ^18.2.5
+        version: 18.2.5
       '@types/react-dom':
         specifier: ^18.2.3
         version: 18.2.3
@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.15.12
-        version: 0.15.12(constructs@10.2.15)
+        specifier: ^0.15.13
+        version: 0.15.13(constructs@10.2.15)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -188,8 +188,8 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
       '@types/react':
-        specifier: ^18.2.4
-        version: 18.2.4
+        specifier: ^18.2.5
+        version: 18.2.5
       '@types/react-dom':
         specifier: ^18.2.3
         version: 18.2.3
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.15.12
-        version: 0.15.12(constructs@10.2.15)
+        specifier: ^0.15.13
+        version: 0.15.13(constructs@10.2.15)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -392,8 +392,8 @@ importers:
         specifier: ^4.7.7
         version: 4.7.7
       '@types/react':
-        specifier: ^18.2.4
-        version: 18.2.4
+        specifier: ^18.2.5
+        version: 18.2.5
       '@types/react-dom':
         specifier: ^18.2.3
         version: 18.2.3
@@ -3367,7 +3367,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.5
-      '@types/react': 18.2.4
+      '@types/react': 18.2.5
       react: 18.2.0
     dev: true
 
@@ -4927,11 +4927,11 @@ packages:
   /@types/react-dom@18.2.3:
     resolution: {integrity: sha512-hxXEXWxFJXbY0LMj/T69mznqOZJXNtQMqVxIiirVAZnnpeYiD4zt+lPsgcr/cfWg2VLsxZ1y26vigG03prYB+Q==}
     dependencies:
-      '@types/react': 18.2.4
+      '@types/react': 18.2.5
     dev: true
 
-  /@types/react@18.2.4:
-    resolution: {integrity: sha512-IvAIhJTmKAAJmCIcaa6+5uagjyh+9GvcJ/thPZcw+i+vx+22eHlTy2Q1bJg/prES57jehjebq9DnIhOTtIhmLw==}
+  /@types/react@18.2.5:
+    resolution: {integrity: sha512-RuoMedzJ5AOh23Dvws13LU9jpZHIc/k90AgmK7CecAYeWmSr3553L4u5rk4sWAPBuQosfT7HmTfG4Rg5o4nGEA==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
@@ -5323,8 +5323,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.15.12(constructs@10.2.15):
-    resolution: {integrity: sha512-MWOfBpZAP8FyJQv/jTs2PPOq9b7fGVrDfplyFtNxiRfT0y99xDMaTsvQv+ftTXeV1yNGnCAWK8j723sNRlbFuQ==}
+  /@winglang/sdk@0.15.13(constructs@10.2.15):
+    resolution: {integrity: sha512-WEhDj9hOp7NSmD2SEm4gC/wx9ecarSstzeP1zVsNxRXBB0IzTqPBZRzVBE2vrmgdgB7Ql2dUBwrs2AMYCcadAQ==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
