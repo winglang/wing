@@ -1,4 +1,4 @@
-import { ColumnType, HttpMethod } from "../cloud";
+import { ColumnType, HttpMethod, OpenApiSpec } from "../cloud";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -24,7 +24,9 @@ export type PublisherHandle = string;
 /** Schema for cloud.Api */
 export interface ApiSchema extends BaseResourceSchema {
   readonly type: typeof API_TYPE;
-  readonly props: {};
+  readonly props: {
+    openApiSpec: OpenApiSpec;
+  };
   readonly attrs: ApiAttributes & BaseResourceAttributes;
 }
 
