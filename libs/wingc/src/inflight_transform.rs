@@ -34,7 +34,7 @@ const PARENT_THIS_NAME: &str = "__parent_this";
 ///     }
 ///   }
 ///   return new $Inflight1();
-/// });
+/// })();
 pub struct InflightTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
