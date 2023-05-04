@@ -15,13 +15,13 @@
     }
   
     .leftPanel {
-      width: 38%;
+      width: 42%;
       margin-right: 2%;
     }
   
     .rightPanel {
-      width: 58%;
-      margin-left: 2%;
+      width: 55%;
+      margin-left: 1%;
     }
   }
   

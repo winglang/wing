@@ -1,5 +1,6 @@
 ---
 title: Why is Wing a language, not just another library or framework? 🤔
+sidebar_label: Why is Wing a language? 🤔
 id: why-a-language
 keywords: [faq, why language, library, winglang, Wing programming language, Wing language]
 ---
@@ -47,7 +48,10 @@ Below we've written the same simple demo app in Wing and other solutions. This s
 
 import CodeComparison from '../src/components/CodeComparison';
 
-<CodeComparison />
+<CodeComparison 
+  exampleName="function-upload-to-bucket"
+  desiredPlatformLabels="['Pulumi', 'Terraform', 'AWSCDK', 'CDKTF', 'CFN']"
+/>
 <br/>
 
 **The below table contains the main differences that you can see in the code examples:**
