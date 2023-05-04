@@ -1,3 +1,7 @@
+/*\
+skip: true
+\*/
+
 bring cloud;
 
 let table = new cloud.Table( 

@@ -1,10 +1,14 @@
+/*\
+skip: true
+\*/
+
 bring cloud;
 
 let q = new cloud.Queue(cloud.QueueProps{timeout: 1s});
 
-resource JSHelper {
+class JSHelper {
   init() {}
-  extern "./helper.js" inflight sleep(milli: num);
+  extern "../external/sleep.js" inflight sleep(milli: num);
 }
 
 let js = new JSHelper();

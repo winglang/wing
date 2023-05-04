@@ -5,7 +5,7 @@ let c = new cloud.Counter();
 
 // workaround for $stdlib is not defined compiler error
 // had to wrap the inflight ():bool => { c.peek == 2 } inflight method with a the Predicate resource
-resource Predicate {
+class Predicate {
   c: cloud.Counter;
   init(c: cloud.Counter){
     this.c = c;
@@ -16,9 +16,9 @@ resource Predicate {
   }
 }
 
-resource TestHelper {
+class TestHelper {
   init(){}
-  extern "./helper.js" static inflight sleep(milli: num);
+  extern "../external/sleep.js" static inflight sleep(milli: num);
   
   /** 
    * test predicate every 100 miliseconds until a minute passes
