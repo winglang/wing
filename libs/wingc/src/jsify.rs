@@ -413,6 +413,11 @@ impl<'a> JSifier<'a> {
 								// set `needs_case_conversion` to true for `any` and builtin types, and I'm not sure why..
 								needs_case_conversion = false;
 							}
+						} else if let Reference::TypeMember { .. } = reference {
+							let st_type = expression.evaluated_type.borrow().unwrap();
+							if let Some(class) = st_type.as_class_or_resource() {
+								needs_case_conversion = class.should_case_convert_jsii;
+							}
 						}
 						self.jsify_reference(reference, Some(needs_case_conversion), context)
 					}
@@ -1651,6 +1656,12 @@ impl<'a> FieldReferenceVisitor<'a> {
 	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
 		match &node.kind {
 			ExprKind::Reference(Reference::Identifier(x)) => {
+				// If the reference isn't "this" or a free variable, then it couldn't have been
+				// defined in preflight, so skip it.
+				if x.name != "this" && !self.free_vars.contains(&x) {
+					return vec![];
+				}
+
 				// We know the expr we're analyzing is inside of a function. To obtain
 				// information about the variable we're referencing (like its type and
 				// whether it's reassignable), we look it up in the function's symbol environment.

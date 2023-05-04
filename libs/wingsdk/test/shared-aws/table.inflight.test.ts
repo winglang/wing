@@ -27,9 +27,10 @@ const PRIMARY_KEY = "id";
 const dynamoMock = mockClient(DynamoDBClient);
 
 describe("inflight table tests", () => {
-  let client, row;
+  let client, row, key;
   beforeEach(() => {
-    row = { id: "test", somenumber: 1 };
+    key = "test";
+    row = { somenumber: 1 };
     const columns = {
       somenumber: ColumnType.NUMBER,
     };
@@ -45,7 +46,7 @@ describe("inflight table tests", () => {
     const expectedRequest: PutItemCommandInput = {
       TableName: MOCK_TABLE_NAME,
       Item: {
-        id: { S: row.id },
+        id: { S: key },
         somenumber: { N: String(row.somenumber) },
       },
     };
@@ -54,7 +55,7 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(PutItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.insert(row as any);
+    const response = await client.insert(key, row as any);
     // THEN
     expect(response).toEqual(undefined);
   });
@@ -63,7 +64,7 @@ describe("inflight table tests", () => {
     // GIVEN
     const expectedRequest: UpdateItemCommandInput = {
       TableName: MOCK_TABLE_NAME,
-      Key: { id: { S: row.id } },
+      Key: { id: { S: key } },
       UpdateExpression: `SET somenumber = :somenumber`,
       ExpressionAttributeValues: {
         ":somenumber": { N: `${row.somenumber}` },
@@ -74,7 +75,7 @@ describe("inflight table tests", () => {
     };
     dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.update(row as any);
+    const response = await client.update(key, row as any);
     // THEN
     expect(response).toEqual(undefined);
   });
@@ -99,14 +100,14 @@ describe("inflight table tests", () => {
     // GIVEN
     const expectedRequest: GetItemCommandInput = {
       TableName: MOCK_TABLE_NAME,
-      Key: { id: { S: row.id } },
+      Key: { id: { S: key } },
     };
     const mockResponse: GetItemCommandOutput = {
       $metadata: {},
     };
     dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.get(row.id);
+    const response = await client.get(key);
     // THEN
     expect(response).toEqual({});
   });
@@ -116,21 +117,21 @@ describe("inflight table tests", () => {
     const expectedRequest: GetItemCommandInput = {
       TableName: MOCK_TABLE_NAME,
       Key: {
-        id: { S: row.id },
+        id: { S: key },
       },
     };
     const mockResponse: GetItemCommandOutput = {
       $metadata: {},
       Item: {
-        id: { S: `${row.id}` },
+        id: { S: `${key}` },
         somenumber: { N: `${row.somenumber}` },
       },
     };
     dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const response = await client.get(row.id);
+    const response = await client.get(key);
     // THEN
-    expect(response).toEqual({ id: row.id, somenumber: row.somenumber });
+    expect(response).toEqual({ id: key, somenumber: row.somenumber });
   });
 
   test("list", async () => {

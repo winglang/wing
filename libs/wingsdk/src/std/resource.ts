@@ -1,9 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from ".";
-import {
-  WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
-  WING_ATTRIBUTE_RESOURCE_STATEFUL,
-} from "../core/attributes";
+import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
 import { serializeImmutableData } from "../core/internal";
 import { IInspectable, TreeInspector } from "../core/tree";
@@ -134,16 +131,6 @@ export abstract class Resource extends Construct implements IResource {
    * Information on how to display a resource in the UI.
    */
   public readonly display = new Display();
-
-  /**
-   * Whether a resource is stateful, i.e. it stores information that is not
-   * defined by your application.
-   *
-   * A non-stateful resource does not remember information about past
-   * transactions or events, and can typically be replaced by a cloud provider
-   * with a fresh copy without any consequences.
-   */
-  public readonly stateful: boolean = false;
 
   /**
    * Record that this resource supports the given inflight operation.
@@ -317,7 +304,6 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _inspect(inspector: TreeInspector): void {
-    inspector.addAttribute(WING_ATTRIBUTE_RESOURCE_STATEFUL, this.stateful);
     inspector.addAttribute(
       WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
       this._connections.map((conn) => ({
