@@ -8,14 +8,21 @@ module.exports = {
   themeConfig: {
     // ...
   },
-  configureWebpack: {
-    module: {
-      rules: [
-        {
-          test: /\.(w|js|ts|tf)$/,
-          use: 'file-loader',
-        },
-      ],
-    },
+  configureWebpack: (config, isServer, utils) => {
+    const { getCacheLoader } = utils;
+    return {
+      module: {
+        rules: [
+          {
+            test: /\.(w|js|ts|tf)$/,
+            use: 'file-loader',
+          },
+        ],
+      },
+      optimization: {
+        ...config.optimization,
+        minimize: false, // Disables JavaScript minification
+      },
+    };
   },
 };
