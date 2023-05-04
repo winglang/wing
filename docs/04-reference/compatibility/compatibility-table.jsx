@@ -54,7 +54,7 @@ export const Table = () => {
             </td>
             {Object.keys(compatibilityData[item]).map((method) => (
               <tr key={method}>
-                <td className="highlight">
+                <td className="highlight" rowSpan={1}>
                   <code>{method}</code>
                 </td>
                 {headline.map((target) => (
