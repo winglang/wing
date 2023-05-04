@@ -1,5 +1,6 @@
 ---
 title: What are the main differences between Wing and Pulumi?
+sidebar_label: Pulumi
 id: differences-from-pulumi
 keywords: [faq, who is behind wing, winglang, Wing programming language, Wing language, Pulumi]
 ---
@@ -16,7 +17,7 @@ The main differences between them are:
 To get a deeper understanging of the differences, let's see the same app built in both Wing and Pulumi.
 This simple app uses a Function to upload a text file to a Bucket,
 
-import CodeComparison from '../src/components/CodeComparison';
+import CodeComparison from '../../src/components/CodeComparison';
 
 <CodeComparison 
   exampleName="function-upload-to-bucket"

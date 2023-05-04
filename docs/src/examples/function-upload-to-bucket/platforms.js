@@ -51,7 +51,7 @@ const allPlatforms = [
     ],
   },
   {
-    label: 'Cloudformation',
+    label: 'CFN',
     value: 'cloudformation',
     files: [
         { name: 'template.yaml', path: cloudformationTemplatePath, codeType: 'language-yaml' },

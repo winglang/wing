@@ -1,5 +1,6 @@
 ---
 title: What are the main differences between Wing and AWS-CDK?
+sidebar_label: AWS-CDK
 id: differences-from-awscdk
 keywords: [faq, who is behind wing, winglang, Wing programming language, Wing language, CDK, AWS-CDK]
 ---
@@ -18,7 +19,7 @@ These are the main differences between the two:
 To get a deeper understanging of the differences, let's see the same app built in both Wing and Pulumi.
 This simple app uses a Function to upload a text file to a Bucket,
 
-import CodeComparison from '../src/components/CodeComparison';
+import CodeComparison from '../../src/components/CodeComparison';
 
 <CodeComparison 
   exampleName="function-upload-to-bucket"
