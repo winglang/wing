@@ -1,5 +1,22 @@
 # [impl_interface.w](../../../../examples/tests/valid/impl_interface.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ x }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await x.handle("hello world!"));
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/A.inflight.js
 ```js
 module.exports = function() {
@@ -179,16 +196,41 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const x = new A(this,"A");
-    const y = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        x: {
-          obj: x,
-          ops: []
-        },
+    const y = (( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const x_client = this._lift(x);
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({
+                  x: ${x_client},
+                });
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(x, host, ["handle"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    ;
+    }
+    )());
     const z = new Dog(this,"Dog");
   }
 }

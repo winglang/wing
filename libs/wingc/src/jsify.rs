@@ -1003,6 +1003,9 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect_vec();
+
+		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
+
 		self.jsify_resource_client(env, &class, &captured_fields, &inflight_methods, &free_vars, ctx);
 
 		// Get all preflight methods to be jsified to the preflight class
@@ -1021,7 +1024,13 @@ impl<'a> JSifier<'a> {
 		};
 
 		code.open(format!("class {}{} {{", self.jsify_symbol(&class.name), extends));
-		code.add_code(self.jsify_resource_constructor(&class.initializer, class.parent.is_none(), &inflight_methods, ctx));
+		code.add_code(self.jsify_resource_constructor(
+			&class.initializer,
+			class.parent.is_none(),
+			&inflight_methods,
+			&inflight_fields,
+			ctx,
+		));
 
 		for (n, m) in preflight_methods {
 			code.add_code(self.jsify_function(Some(&n.name), m, ctx));
@@ -1055,6 +1064,7 @@ impl<'a> JSifier<'a> {
 		constructor: &Initializer,
 		no_parent: bool,
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
+		inflight_fields: &[&ClassField],
 		ctx: &JSifyContext,
 	) -> CodeMaker {
 		let mut code = CodeMaker::default();
@@ -1072,10 +1082,13 @@ impl<'a> JSifier<'a> {
 			code.line("super(scope, id);");
 		}
 
-		if inflight_methods.len() > 0 {
-			let inflight_ops_string = inflight_methods
+		if inflight_methods.len() + inflight_fields.len() > 0 {
+			let inflight_method_names = inflight_methods.iter().map(|(name, _)| name.name.clone()).collect_vec();
+			let inflight_field_names = inflight_fields.iter().map(|f| f.name.name.clone()).collect_vec();
+			let inflight_ops_string = inflight_method_names
 				.iter()
-				.map(|(name, _)| format!("\"{}\"", name.name))
+				.chain(inflight_field_names.iter())
+				.map(|name| format!("\"{}\"", name))
 				.join(", ");
 			code.line(format!("this._addInflightOps({inflight_ops_string});"));
 		}

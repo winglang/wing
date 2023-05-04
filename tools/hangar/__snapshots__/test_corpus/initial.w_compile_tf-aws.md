@@ -1,5 +1,56 @@
 # [initial.w](../../../../examples/tests/valid/initial.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ counterA }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterA.peek()) === 0)'`)})(((await counterA.peek()) === 0))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({ counterB }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterB.peek()) === 500)'`)})(((await counterB.peek()) === 500))};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
+## clients/$Inflight3.inflight.js
+```js
+module.exports = function({ counterC }) {
+  class  $Inflight3 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterC.peek()) === (-198))'`)})(((await counterC.peek()) === (-198)))};
+      }
+    }
+  }
+  return $Inflight3;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -120,7 +171,7 @@
             "uniqueId": "root_testinitialdefault_IamRolePolicy_4F54C0B2"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterA_FE83A0AC.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterA_FE83A0AC.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterA_FE83A0AC.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testinitialdefault_IamRole_0C9F829C.name}"
       },
       "root_testinitialnegativevalue_IamRolePolicy_2F38CD01": {
@@ -130,7 +181,7 @@
             "uniqueId": "root_testinitialnegativevalue_IamRolePolicy_2F38CD01"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterC_5BAA0CEC.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterC_5BAA0CEC.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterC_5BAA0CEC.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testinitialnegativevalue_IamRole_1A6EDBCE.name}"
       },
       "root_testinitialpositivevalue_IamRolePolicy_668CB553": {
@@ -140,7 +191,7 @@
             "uniqueId": "root_testinitialpositivevalue_IamRolePolicy_668CB553"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterB_3EAEEDE1.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterB_3EAEEDE1.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterB_3EAEEDE1.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testinitialpositivevalue_IamRole_1BB7220A.name}"
       }
     },
@@ -319,36 +370,111 @@ class $Root extends $stdlib.std.Resource {
     const counterA = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterA");
     const counterB = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterB",{ initial: 500 });
     const counterC = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterC",{ initial: (-198) });
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:default",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        counterA: {
-          obj: counterA,
-          ops: ["dec","inc","peek","reset"]
-        },
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:default",(( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const counterA_client = this._lift(counterA);
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({
+                  counterA: ${counterA_client},
+                });
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(counterA, host, ["peek"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    );
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:positive-value",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        counterB: {
-          obj: counterB,
-          ops: ["dec","inc","peek","reset"]
-        },
+    }
+    )()));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:positive-value",(( () =>  {
+      {
+        class $Inflight2 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const counterB_client = this._lift(counterB);
+            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight2 = require("${self_client_path}")({
+                  counterB: ${counterB_client},
+                });
+                const client = new $Inflight2({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(counterB, host, ["peek"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight2(this,"$Inflight2");
       }
-    })
-    );
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:negative-value",new $stdlib.core.Inflight(this, "$Inflight3", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc3/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        counterC: {
-          obj: counterC,
-          ops: ["dec","inc","peek","reset"]
-        },
+    }
+    )()));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:negative-value",(( () =>  {
+      {
+        class $Inflight3 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const counterC_client = this._lift(counterC);
+            const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight3 = require("${self_client_path}")({
+                  counterC: ${counterC_client},
+                });
+                const client = new $Inflight3({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(counterC, host, ["peek"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight3(this,"$Inflight3");
       }
-    })
-    );
+    }
+    )()));
   }
 }
 class $App extends $AppBase {
@@ -367,33 +493,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { counterA } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterA.peek()) === 0)'`)})(((await counterA.peek()) === 0))};
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const { counterB } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterB.peek()) === 500)'`)})(((await counterB.peek()) === 500))};
-}
-
-```
-
-## proc3/index.js
-```js
-async handle() {
-  const { counterC } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterC.peek()) === (-198))'`)})(((await counterC.peek()) === (-198)))};
-}
 
 ```
 

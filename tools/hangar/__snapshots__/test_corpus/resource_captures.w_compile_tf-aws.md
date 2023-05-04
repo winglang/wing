@@ -1,5 +1,32 @@
 # [resource_captures.w](../../../../examples/tests/valid/resource_captures.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ r }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await r.test_no_capture());
+        (await r.test_capture_collections_of_data());
+        (await r.test_capture_primitives());
+        (await r.test_capture_optional());
+        (await r.test_capture_resource());
+        (await r.test_nested_preflight_field());
+        (await r.test_nested_resource());
+        (await r.test_expression_recursive());
+        (await r.test_external());
+        (await r.test_user_defined_resource());
+        (await r.test_inflight_field());
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/Another.inflight.js
 ```js
 module.exports = function() {
@@ -489,7 +516,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, external_bucket, external_num) {
         super(scope, id);
-        this._addInflightOps("test_no_capture", "test_capture_collections_of_data", "test_capture_primitives", "test_capture_optional", "test_capture_resource", "test_nested_preflight_field", "test_nested_resource", "test_expression_recursive", "test_external", "test_user_defined_resource", "test_inflight_field");
+        this._addInflightOps("test_no_capture", "test_capture_collections_of_data", "test_capture_primitives", "test_capture_optional", "test_capture_resource", "test_nested_preflight_field", "test_nested_resource", "test_expression_recursive", "test_external", "test_user_defined_resource", "test_inflight_field", "inflight_field");
         this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.my_str = "my_string";
         this.my_num = 42;
@@ -606,16 +633,41 @@ class $Root extends $stdlib.std.Resource {
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const r = new MyResource(this,"MyResource",b,12);
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        r: {
-          obj: r,
-          ops: ["test_capture_collections_of_data","test_capture_optional","test_capture_primitives","test_capture_resource","test_expression_recursive","test_external","test_inflight_field","test_nested_preflight_field","test_nested_resource","test_no_capture","test_user_defined_resource"]
-        },
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",(( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const r_client = this._lift(r);
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({
+                  r: ${r_client},
+                });
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(r, host, ["test_capture_collections_of_data", "test_capture_optional", "test_capture_primitives", "test_capture_resource", "test_expression_recursive", "test_external", "test_inflight_field", "test_nested_preflight_field", "test_nested_resource", "test_no_capture", "test_user_defined_resource"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    );
+    }
+    )()));
   }
 }
 class $App extends $AppBase {

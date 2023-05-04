@@ -1,5 +1,26 @@
 # [for_loop.w](../../../../examples/tests/valid/for_loop.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function() {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(event)  {
+      {
+        for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(x <= 0)'`)})((x <= 0))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(x > 10)'`)})((x > 10))};
+          {console.log(`${x}`)};
+        }
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/Foo.inflight.js
 ```js
 module.exports = function() {
@@ -313,12 +334,37 @@ class $Root extends $stdlib.std.Resource {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(x > 0)'`)})((x > 0))};
       {console.log(`${x}`)};
     }
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",(( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({});
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    );
+    }
+    )()));
   }
 }
 class $App extends $AppBase {

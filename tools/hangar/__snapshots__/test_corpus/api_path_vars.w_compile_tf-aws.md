@@ -1,5 +1,46 @@
 # [api_path_vars.w](../../../../examples/tests/valid/api_path_vars.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function() {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(req)  {
+      {
+        const vars = (req.vars ?? Object.freeze({"name":""}));
+        return {
+        "body": Object.freeze({"user":(vars)["name"]}),
+        "status": 200,}
+        ;
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({ api, f }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        const username = "tsuf";
+        const res = (await f.get(`${api.url}/users/${username}`));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
 ## clients/Fetch.inflight.js
 ```js
 module.exports = function() {
@@ -198,7 +239,6 @@ module.exports = function() {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "test-c8b6eece"
           }
         },
@@ -306,28 +346,77 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
+    const handler = (( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({});
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    ;
+    }
+    )());
     (api.get("/users/{name}",handler));
     const f = new Fetch(this,"Fetch");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        api: {
-          obj: api,
-          ops: []
-        },
-        f: {
-          obj: f,
-          ops: ["get"]
-        },
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",(( () =>  {
+      {
+        class $Inflight2 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const api_client = this._lift(api);
+            const f_client = this._lift(f);
+            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight2 = require("${self_client_path}")({
+                  api: ${api_client},
+                  f: ${f_client},
+                });
+                const client = new $Inflight2({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(api.url, host, []);
+              this._registerBindObject(f, host, ["get"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight2(this,"$Inflight2");
       }
-    })
-    );
+    }
+    )()));
   }
 }
 class $App extends $AppBase {

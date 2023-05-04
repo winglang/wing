@@ -1,5 +1,22 @@
 # [bring_jsii_path.w](../../../../examples/tests/valid/bring_jsii_path.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ greeting }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(m)  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(greeting === "Hello, wingnuts")'`)})((greeting === "Hello, wingnuts"))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -133,16 +150,41 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const hello = new jsii_code_samples.HelloWorld();
     const greeting = (hello.sayHello("wingnuts"));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:say_hello",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        greeting: {
-          obj: greeting,
-          ops: []
-        },
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:say_hello",(( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const greeting_client = this._lift(greeting);
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({
+                  greeting: ${greeting_client},
+                });
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(greeting, host, []);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    );
+    }
+    )()));
   }
 }
 class $App extends $AppBase {

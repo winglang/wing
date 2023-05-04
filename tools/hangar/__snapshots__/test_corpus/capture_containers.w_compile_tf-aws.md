@@ -1,5 +1,30 @@
 # [capture_containers.w](../../../../examples/tests/valid/capture_containers.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ arr, arr_of_map, j, my_map, my_set }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(s)  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(0)) === "hello")'`)})(((await arr.at(0)) === "hello"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(1)) === "world")'`)})(((await arr.at(1)) === "world"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 2)'`)})((arr.length === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await my_set.has("my"))'`)})((await my_set.has("my")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(my_set.size === 2)'`)})((my_set.size === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (my_map))'`)})(("world" in (my_map)))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(my_map).length === 2)'`)})((Object.keys(my_map).length === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arr_of_map.at(0))))'`)})(("bang" in ((await arr_of_map.at(0)))))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -135,32 +160,53 @@ class $Root extends $stdlib.std.Resource {
     const my_map = Object.freeze({"hello":123,"world":999});
     const arr_of_map = Object.freeze([Object.freeze({"bang":123})]);
     const j = Object.freeze({"a":"hello","b":"world"});
-    const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        arr: {
-          obj: arr,
-          ops: []
-        },
-        arr_of_map: {
-          obj: arr_of_map,
-          ops: []
-        },
-        j: {
-          obj: j,
-          ops: []
-        },
-        my_map: {
-          obj: my_map,
-          ops: []
-        },
-        my_set: {
-          obj: my_set,
-          ops: []
-        },
+    const handler = (( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const arr_client = this._lift(arr);
+            const arr_of_map_client = this._lift(arr_of_map);
+            const j_client = this._lift(j);
+            const my_map_client = this._lift(my_map);
+            const my_set_client = this._lift(my_set);
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({
+                  arr: ${arr_client},
+                  arr_of_map: ${arr_of_map_client},
+                  j: ${j_client},
+                  my_map: ${my_map_client},
+                  my_set: ${my_set_client},
+                });
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(arr, host, ["at", "length"]);
+              this._registerBindObject(arr_of_map, host, ["at"]);
+              this._registerBindObject(j, host, []);
+              this._registerBindObject(my_map, host, ["has", "size"]);
+              this._registerBindObject(my_set, host, ["has", "size"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    ;
+    }
+    )());
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",handler);
   }
 }

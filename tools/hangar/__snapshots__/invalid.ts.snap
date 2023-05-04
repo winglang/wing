@@ -154,17 +154,6 @@ exports[`cloud_function_expects_inflight.w > stderr 1`] = `
 5 | | });
   | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
 
-
-error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
-   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:16
-   |  
- 9 |   q.add_consumer(inflight (x: num) => {
-   | /----------------^
-10 | |                     // ^ \\"num\\" doesn't match the expected type \\"str\\"
-11 | |     return;
-12 | | });
-   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
-
 "
 `;
 
@@ -309,13 +298,6 @@ exports[`enums.w > stderr 1`] = `
   |
 5 | let four = SomeEnum.FOUR;
   |                     ^^^^ Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
-
-
-error: Property access unsupported on type \\"SomeEnum\\"
-  --> ../../../examples/tests/invalid/enums.w:8:11
-  |
-8 | let two = SomeEnum.TWO.TWO;
-  |           ^^^^^^^^^^^^ Property access unsupported on type \\"SomeEnum\\"
 
 "
 `;

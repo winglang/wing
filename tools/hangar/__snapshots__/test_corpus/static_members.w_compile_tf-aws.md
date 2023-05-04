@@ -1,5 +1,38 @@
 # [static_members.w](../../../../examples/tests/valid/static_members.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function() {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(s)  {
+      {
+        class InflightClass {
+          constructor()  {
+          }
+          async inflight_method()  {
+            {
+              return "Inflight method";
+            }
+          }
+          static async static_inflight_method()  {
+            {
+              return "Static inflight method";
+            }
+          }
+        }
+        const inflight_class = new InflightClass();
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflight_class.inflight_method()) === "Inflight method")'`)})(((await inflight_class.inflight_method()) === "Inflight method"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.static_inflight_method()) === "Static inflight method")'`)})(((await InflightClass.static_inflight_method()) === "Static inflight method"))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/Foo.inflight.js
 ```js
 module.exports = function() {
@@ -185,12 +218,37 @@ class $Root extends $stdlib.std.Resource {
     const foo = new Foo(this,"Foo");
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instance_field === 100)'`)})((foo.instance_field === 100))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.m()) === 99)'`)})(((Foo.m()) === 99))};
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",(( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({});
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    );
+    }
+    )()));
   }
 }
 class $App extends $AppBase {
