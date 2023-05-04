@@ -72,11 +72,19 @@ jobs:
       # - name: Test
       #   run: npm run test:ci
 
-      - name: Upload Wing CLI
+      - name: Upload Dist Files
         uses: actions/upload-artifact@v3
         with:
-          name: wing
-          path: apps/wing/*.tgz
+          name: dist
+          path: |
+            apps/wing/dist
+            libs/wingsdk/lib
+
+      # - name: Upload Wing CLI
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: wing
+      #     path: apps/wing/*.tgz
 
       # - name: Upload WingSDK
       #   uses: actions/upload-artifact@v3
@@ -226,21 +234,16 @@ jobs:
         with:
           node-version: 18
 
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Download Dist Files
+        uses: actions/download-artifact@v3
         with:
-          name: wing
-          path: wing
+          name: dist
 
-      - name: Unzip Wing
-        run: tar zxvf wing/winglang-*.tgz
-
-      - name: Install & Link Wing CLI
-        run: |
-          cd package
-          jq '.version |= "0.0.0"' package.json > tmp.json && mv tmp.json package.json
-          npm i
-          npm i -g ./
+      - name: Link Wing CLI
+        run: npm i -g ./apps/wing
 
       - name: Check Wing Version
         run: wing --version
