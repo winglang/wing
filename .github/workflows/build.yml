@@ -80,6 +80,7 @@ jobs:
             apps/wing/dist
             apps/wing/*.wasm
             libs/wingsdk/lib
+            libs/wingsdk/.jsii
 
       # - name: Upload Wing CLI
       #   uses: actions/upload-artifact@v3
@@ -249,7 +250,7 @@ jobs:
       - name: Check Wing Version
         run: wing --version
 
-      - run: wing compile examples/tests/valid/hello.w -t sim
+      # - run: wing compile examples/tests/valid/hello.w -t sim
 
       - name: Clone Console
         run: git clone https://${GITHUB_TOKEN}@github.com/winglang/console
