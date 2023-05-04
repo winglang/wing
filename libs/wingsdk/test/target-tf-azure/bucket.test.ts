@@ -1,9 +1,8 @@
 import * as cdktf from "cdktf";
-import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { Bucket, IBucketEventHandler } from "../../src/cloud";
-import { Inflight, NodeJsCode } from "../../src/core";
+import { Bucket } from "../../src/cloud";
 import * as tfazure from "../../src/target-tf-azure";
+import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import {
   tfResourcesOf,
@@ -11,15 +10,6 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
-
-class InflightBucketEventHandler
-  extends Inflight
-  implements IBucketEventHandler
-{
-  constructor(scope: Construct, id: string) {
-    super(scope, id, { code: NodeJsCode.fromInline("null") });
-  }
-}
 
 test("create a bucket", () => {
   // GIVEN
@@ -139,7 +129,7 @@ test("bucket onEvent is not implemented yet", () => {
   try {
     const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
     const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-    const testInflight = new InflightBucketEventHandler(app, "bucket-inflight");
+    const testInflight = Testing.makeHandler(app, "bucket-inflight", "null");
     bucket.onEvent(testInflight);
     app.synth();
   } catch (err) {
