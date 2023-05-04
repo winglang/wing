@@ -10,6 +10,31 @@ use crate::{
 
 const PARENT_THIS_NAME: &str = "__parent_this";
 
+/// Transforms inflight closures defined in preflight scopes into resources.
+///
+/// This is done by wrapping the closure's code in a preflight class with a single method,
+/// and replacing the closure with a reference to an instance of that class.
+/// The class is given a unique name to avoid collisions.
+///
+/// For example, the following code:
+/// ```wing
+/// let b = new cloud.Bucket();
+/// let f = inflight (message: str) => {
+///   b.put("file.txt", message);
+/// };
+/// ```
+/// is transformed into:
+/// ```wing
+/// let b = new cloud.Bucket();
+/// let f = ((): core.Resource => {
+///   class $Inflight1 {
+///     init() {}
+///     inflight handle(message: str) {
+///       b.put("file.txt", message);
+///     }
+///   }
+///   return new $Inflight1();
+/// });
 pub struct InflightTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
