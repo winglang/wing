@@ -10,7 +10,7 @@ Since Wing is in early stages of development, it officially only supports the Te
 Have other provisioning engines you would like to use with Wing? Let us know by leaving a comment [here](https://github.com/winglang/wing/issues/2066)!
 
 ## How to check specific service support for each provisioning engine
-Check out our [different roadmaps](https://docs.winglang.io/status#roadmap) to see which services are supported now on which provisioning engines, and when they are expected to be supported if they aren't supported now.
+Check out our [compatibility matrix](https://docs.winglang.io/reference/compatibility-matrix) to see which services are supported now on which provisioning engines, and when they are expected to be supported if they aren't supported now.
 
 ## How to compile to different provisioning engines
 Check out our [CLI reference](https://docs.winglang.io/reference/cli) for instructions on how to compile your wing code for the different provisioning engines.
