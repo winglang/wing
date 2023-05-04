@@ -47,18 +47,18 @@ export const Table = () => {
       <tbody>
         {Object.keys(compatibilityData).map((item) => (
           <>
-            <td className="highlight" rowSpan={Object.keys(compatibilityData[item]).length + 1}>
+            <td key={`${item}_main`} className="highlight" rowSpan={Object.keys(compatibilityData[item]).length + 1}>
               <a target="_blank" href={`/reference/wingsdk-spec#${item.toLowerCase()}`}>
                 {item}
               </a>
             </td>
             {Object.keys(compatibilityData[item]).map((method) => (
-              <tr key={method}>
+              <tr key={`${item}_${method}`}>
                 <td className="highlight" rowSpan={1}>
                   <code>{method}</code>
                 </td>
                 {headline.map((target) => (
-                  <Cell key={target} item={compatibilityData[item][method][target]} />
+                  <Cell key={`${item}_${method}_${target}`} item={compatibilityData[item][method][target]} />
                 ))}
               </tr>
             ))}
