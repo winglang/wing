@@ -557,7 +557,10 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.phase {
-				Phase::Inflight => self.jsify_function(None, func_def, ctx).to_string(),
+				Phase::Inflight => {
+					assert!(ctx.phase == Phase::Inflight, "inflight closures should have been transformed into resources by now");
+					self.jsify_function(None, func_def, ctx).to_string()
+				},
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, ctx).to_string(),
 			},
