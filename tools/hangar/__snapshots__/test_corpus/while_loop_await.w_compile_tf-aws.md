@@ -9,11 +9,11 @@ module.exports = function() {
     async handle(body)  {
       {
         const i = 0;
-        const iterator = new $stdlib.core.Inflight(this, "$Inflight1", {
-          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-          bindings: {
+        const iterator = async (j) =>  {
+          {
+            return (j + 1);
           }
-        })
+        }
         ;
         while (((await iterator(i)) < 3)) {
           {console.log(`${i}`)};

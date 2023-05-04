@@ -9,7 +9,6 @@ extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
-use env_reset::EnvResetter;
 use fold::Fold;
 use inflight_transform::InflightTransformer;
 use jsify::JSifier;
@@ -35,7 +34,6 @@ use crate::type_check::{TypeChecker, Types};
 pub mod ast;
 pub mod debug;
 pub mod diagnostic;
-pub mod env_reset;
 pub mod fold;
 pub mod inflight_transform;
 pub mod jsify;
@@ -284,39 +282,44 @@ pub fn compile(
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
-	// Create universal types collection (need to keep this alive during entire compilation)
-	let mut types = Types::new();
 	// Build our AST
-	let (mut scope, parse_diagnostics) = parse(&source_path);
-	let mut jsii_types = TypeSystem::new();
-
-	// Type check everything and build typed symbol environment
-	if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
-	} else {
-		// empty scope, no type checking needed
-		Diagnostics::new()
-	};
-
-	// Validate that every Expr has an evaluated_type
-	let mut tc_assert = TypeCheckAssert;
-	tc_assert.visit_scope(&scope);
+	let (scope, parse_diagnostics) = parse(&source_path);
 
 	// Transform all inflight closures defined in preflight into single-method resources
 	let mut inflight_transformer = InflightTransformer::new();
 	let mut scope = inflight_transformer.fold_scope(scope);
 
-	// Reset symbol environments
-	let mut env_resetter = EnvResetter;
-	scope = env_resetter.fold_scope(scope);
+	// Create universal types collection (need to keep this alive during entire compilation)
+	let mut types = Types::new();
+	let mut jsii_types = TypeSystem::new();
 
-	// Type check everything again
+	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = if scope.statements.len() > 0 {
 		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
 	} else {
 		// empty scope, no type checking needed
 		Diagnostics::new()
 	};
+
+	// // Validate that every Expr has an evaluated_type
+	// let mut tc_assert = TypeCheckAssert;
+	// tc_assert.visit_scope(&scope);
+
+	// // Transform all inflight closures defined in preflight into single-method resources
+	// let mut inflight_transformer = InflightTransformer::new();
+	// let mut scope = inflight_transformer.fold_scope(scope);
+
+	// // Reset symbol environments
+	// let mut env_resetter = EnvResetter;
+	// scope = env_resetter.fold_scope(scope);
+
+	// // Type check everything again
+	// let type_check_diagnostics = if scope.statements.len() > 0 {
+	// 	type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
+	// } else {
+	// 	// empty scope, no type checking needed
+	// 	Diagnostics::new()
+	// };
 
 	// Validate again that every Expr has an evaluated_type
 	let mut tc_assert = TypeCheckAssert;

@@ -97,49 +97,42 @@ error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"fo
 `;
 
 exports[`capture_mutables.w > stderr 1`] = `
-"error: Unknown symbol \\"size\\"
-   --> ../../../examples/tests/invalid/capture_mutables.w:14:19
-   |
-14 |   assert(a_cloned.size == 1);
-   |                   ^^^^ Unknown symbol \\"size\\"
-
-
-error: Cannot reference 'a' of type 'MutArray<str>' from an inflight context
+"error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
   --> ../../../examples/tests/invalid/capture_mutables.w:8:10
   |
 8 |   assert(a.length == 1);
-  |          ^ Cannot reference 'a' of type 'MutArray<str>' from an inflight context
+  |          ^ Cannot capture field 'a' with non-capturable type 'MutArray<str>'
 
 
-error: Cannot reference 's' of type 'MutSet<num>' from an inflight context
+error: Cannot capture field 's' with non-capturable type 'MutSet<num>'
    --> ../../../examples/tests/invalid/capture_mutables.w:10:10
    |
 10 |   assert(s.size == 1);
-   |          ^ Cannot reference 's' of type 'MutSet<num>' from an inflight context
+   |          ^ Cannot capture field 's' with non-capturable type 'MutSet<num>'
 
 
-error: Cannot reference 'm' of type 'MutMap<bool>' from an inflight context
+error: Cannot capture field 'm' with non-capturable type 'MutMap<bool>'
    --> ../../../examples/tests/invalid/capture_mutables.w:12:10
    |
 12 |   assert(m.size() == 1);
-   |          ^ Cannot reference 'm' of type 'MutMap<bool>' from an inflight context
+   |          ^ Cannot capture field 'm' with non-capturable type 'MutMap<bool>'
 
 
-error: Cannot reference 'a_cloned' of type 'MutArray<str>' from an inflight context
+error: Cannot capture field 'a_cloned' with non-capturable type 'MutArray<str>'
    --> ../../../examples/tests/invalid/capture_mutables.w:14:10
    |
-14 |   assert(a_cloned.size == 1);
-   |          ^^^^^^^^ Cannot reference 'a_cloned' of type 'MutArray<str>' from an inflight context
+14 |   assert(a_cloned.length == 1);
+   |          ^^^^^^^^ Cannot capture field 'a_cloned' with non-capturable type 'MutArray<str>'
 
 "
 `;
 
 exports[`capture_reassignable.w > stderr 1`] = `
-"error: Cannot capture a reassignable variable \\"x\\"
+"error: Cannot capture reassignable field 'x'
   --> ../../../examples/tests/invalid/capture_reassignable.w:6:15
   |
 6 |     log(\\"x: \${x}\\");
-  |               ^ Cannot capture a reassignable variable \\"x\\"
+  |               ^ Cannot capture reassignable field 'x'
 
 "
 `;
@@ -298,6 +291,13 @@ exports[`enums.w > stderr 1`] = `
   |
 5 | let four = SomeEnum.FOUR;
   |                     ^^^^ Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
+
+
+error: Property access unsupported on type \\"SomeEnum\\"
+  --> ../../../examples/tests/invalid/enums.w:8:11
+  |
+8 | let two = SomeEnum.TWO.TWO;
+  |           ^^^^^^^^^^^^ Property access unsupported on type \\"SomeEnum\\"
 
 "
 `;
