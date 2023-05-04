@@ -2,7 +2,7 @@
 title: What are the main differences between Wing and AWS-CDK?
 sidebar_label: AWS-CDK
 id: differences-from-awscdk
-keywords: [faq, who is behind wing, winglang, Wing programming language, Wing language, CDK, AWS-CDK]
+keywords: [faq, winglang, Wing programming language, Wing language, CDK, AWS-CDK, IAC]
 ---
 
 Wing is a general purpose programming language, designed to develop entire cloud applications - including their infrastructure and application code. 
@@ -33,7 +33,7 @@ import CodeComparison from '../../src/components/CodeComparison';
 |-------------------------------------------------|-----------------------------------------------------------|----------------------------------------------|
 | Language                                        | Wing                                                      | Your choice                                  |
 | Line of code                                    | 7                                                         | 72                                           |
-| Cloud Mechanics (IAM, N/W)                      | Generated automatically from intent                       | Manual                                       |
+| Cloud Mechanics (IAM, Networking)                      | Generated automatically from intent                       | Manual                                       |
 | Extensibility                                   | Custom resources                                          | Custom Constructs / Resource Providers       |
 | Customizing lower levels                        | Compiler plugins to customize generated Terraform         | Escape hatches to modify underlying CloudFormation |
 | Local simulation                                | Built-in functional local simulator with instant hot reloading | No                                |

@@ -2,7 +2,7 @@
 title: What are the main differences between Wing and Terraform?
 sidebar_label: Terraform
 id: differences-from-terraform
-keywords: [faq, who is behind wing, winglang, Wing programming language, Wing language, TF, Terraform]
+keywords: [faq, winglang, Wing programming language, Wing language, TF, Terraform, IAC]
 ---
 
 Wing is a general purpose programming language, designed to develop entire cloud applications - including their infrastructure and application code. Terraform is an infrastructure as code tool that focuses on the infrastructure part of the application. You then need a way to stitch together that infrastructrute and the application code.
@@ -32,7 +32,7 @@ import CodeComparison from '../../src/components/CodeComparison';
 |-------------------------------------------------|-----------------------------------------------------------|----------------------------------------------|
 | Language                                        | Wing                                                      | HCL + your choice                            |
 | Line of code                                    | 7                                                         | 122                                          |
-| Cloud Mechanics (IAM, Network)                      | Generated automatically from intent                       | Manual                                       |
+| Cloud Mechanics (IAM, Networking)                      | Generated automatically from intent                       | Manual                                       |
 | Extensibility                                   | Custom resources                                          | Custom modules                               |
 | Customizing lower levels                        | Compiler plugins to customize generated Terraform         | No need since working at low level           |
 | Local simulation                                | Built-in functional local simulator with instant hot reloading | No                                |

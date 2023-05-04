@@ -2,7 +2,7 @@
 title: What are the main differences between Wing and Pulumi?
 sidebar_label: Pulumi
 id: differences-from-pulumi
-keywords: [faq, who is behind wing, winglang, Wing programming language, Wing language, Pulumi]
+keywords: [faq, winglang, Wing programming language, Wing language, Pulumi, IAC]
 ---
 
 Wing is a general purpose programming language, designed to develop entire cloud applications - including their infrastructure and application code. Pulumi is an infrastructure as code tool that focuses on the infrastructure part of the application. You then need a way to stitch together that infrastructure and the application code.
@@ -31,7 +31,7 @@ import CodeComparison from '../../src/components/CodeComparison';
 |-------------------------------------------------|-----------------------------------------------------------|-----------------------------------------------|
 | Language                                        | Wing                                                      | YAML + your choice                            |
 | Line of code                                    | 7                                                         | 98                                            |
-| Cloud Mechanics (IAM, N/W)                      | Generated automatically from intent                       | Manual                                        |
+| Cloud Mechanics (IAM, Networking)                      | Generated automatically from intent                       | Manual                                        |
 | Extensibility                                   | Custom resources                                          | Custom/dynamic providers                      |
 | Customizing lower levels                        | Compiler plugins to customize generated Terraform         | Direct access to cloud-provider APIs          |
 | Local simulation                                | Built-in functional local simulator with instant hot reloading | No                                   |
