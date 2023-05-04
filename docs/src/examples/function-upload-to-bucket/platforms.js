@@ -1,19 +1,21 @@
 // We cannot parse the folder structure at runtime because of Docusaurus and webpack limitations
 
-import pulumiIndexPath from '!file-loader!./pulumi/index.js';
+// Also js files are js.txt files until we find a way to make Docusaurus not minify them
+
+import pulumiIndexPath from '!file-loader!./pulumi/index.js.txt';
 import pulumiMainPath from '!file-loader!./pulumi/main.ts';
 import pulumiPulumiPath from '!file-loader!./pulumi/pulumi.yaml';
 
-import terraformIndexPath from '!file-loader!./terraform/index.js';
+import terraformIndexPath from '!file-loader!./terraform/index.js.txt';
 import terraformMainPath from '!file-loader!./terraform/main.tf';
 
-import cdkHelloPath from '!file-loader!./aws-cdk/hello.js';
-import cdkIndexPath from '!file-loader!./aws-cdk/index.js';
+import cdkHelloPath from '!file-loader!./aws-cdk/hello.js.txt';
+import cdkIndexPath from '!file-loader!./aws-cdk/index.js.txt';
 
-import cdktfIndexPath from '!file-loader!./cdktf/index.js';
+import cdktfIndexPath from '!file-loader!./cdktf/index.js.txt';
 import cdktfMainPath from '!file-loader!./cdktf/main.ts';
 
-import cloudformationIndexPath from '!file-loader!./cloudformation/index.js';
+import cloudformationIndexPath from '!file-loader!./cloudformation/index.js.txt';
 import cloudformationTemplatePath from '!file-loader!./cloudformation/template.yaml';
 
 const allPlatforms = [
