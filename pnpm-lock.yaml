@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.14.6
-        version: 0.14.6(constructs@10.2.12)
+        specifier: ^0.15.9
+        version: 0.15.9(constructs@10.2.12)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.14.6
-        version: 0.14.6(constructs@10.2.12)
+        specifier: ^0.15.9
+        version: 0.15.9(constructs@10.2.12)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -5323,8 +5323,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.14.6(constructs@10.2.12):
-    resolution: {integrity: sha512-cY3RoD6JPqGvxh0uJ0vwykX3V+dAriL2CUFjjwnUSo8adsSdnCMUzuDrK/5UIxZ2mFh/CbH84bxD6P4l/UQnrQ==}
+  /@winglang/sdk@0.15.9(constructs@10.2.12):
+    resolution: {integrity: sha512-QcAOQ6H0/HYI/Ss13D+w1cp2zQkkMY50TOy/RjamzTaYPI7dScMOmk2XHneldciL8TxQYHInLTaQktY+ek0QFQ==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
@@ -5347,12 +5347,8 @@ packages:
       - '@azure/core-paging'
       - '@azure/identity'
       - '@azure/storage-blob'
-      - '@cdktf/provider-aws'
-      - '@cdktf/provider-azurerm'
-      - '@cdktf/provider-google'
-      - '@cdktf/provider-random'
-      - aws-cdk-lib
       - cdktf
+      - cron-parser
       - debug
       - esbuild-wasm
       - express

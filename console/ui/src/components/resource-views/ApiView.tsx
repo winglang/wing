@@ -1,4 +1,5 @@
 import { useTheme } from "@wingconsole/design-system";
+import { OpenApiSpec } from "@wingconsole/server/src/wingsdk.js";
 import classNames from "classnames";
 import { useCallback, useEffect, useId, useState } from "react";
 
@@ -34,6 +35,20 @@ export interface ApiRoute {
   method: string;
   route: string;
 }
+
+const getRoutesFromOpenApi = (openApi: OpenApiSpec): ApiRoute[] => {
+  let routes: ApiRoute[] = [];
+  for (const route of Object.keys(openApi.paths)) {
+    const methods = Object.keys(openApi.paths[route]);
+    for (const method of methods) {
+      routes.push({
+        method: method.replace(/^\//, "").toUpperCase(),
+        route,
+      });
+    }
+  }
+  return routes;
+};
 
 export const ApiView = ({ resourcePath }: ApiViewProps) => {
   const { theme } = useTheme();
@@ -182,10 +197,10 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
       return;
     }
     resetApiState();
-    setUrl(schema.data.attrs.url);
-    setRoutes(schema.data.props.routes);
-
-    const methods = schema.data.props.routes
+    setUrl(schema.data.url);
+    const routes = getRoutesFromOpenApi(schema.data.openApiSpec);
+    setRoutes(routes);
+    const methods = routes
       .filter((item) => {
         return item.route === currentRoute;
       })

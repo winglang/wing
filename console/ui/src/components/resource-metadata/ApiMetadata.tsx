@@ -13,7 +13,7 @@ export const ApiMetadata = ({ node }: ApiMetadataProps) => {
 
   return (
     <>
-      <AttributeView name="URL" value={schema.data?.attrs.url} />
+      <AttributeView name="URL" value={schema.data?.url} />
     </>
   );
 };

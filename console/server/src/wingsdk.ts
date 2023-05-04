@@ -12,6 +12,7 @@ export type {
   ITopicClient,
   IApiClient,
   ITestRunnerClient,
+  OpenApiSpec,
 } from "@winglang/sdk/lib/cloud/index.js";
 
 export type { IRedisClient } from "@winglang/sdk/lib/redis/index.js";

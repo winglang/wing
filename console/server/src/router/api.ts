@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { ApiSchema } from "../wingsdk.js";
+import { ApiSchema, OpenApiSpec } from "../wingsdk.js";
 
 export const createApiRouter = () => {
   return createRouter({
@@ -15,7 +15,14 @@ export const createApiRouter = () => {
       )
       .query(async ({ input, ctx }) => {
         const simulator = await ctx.simulator();
-        return simulator.getResourceConfig(input.resourcePath) as ApiSchema;
+        const config = simulator.getResourceConfig(
+          input.resourcePath,
+        ) as ApiSchema;
+        return {
+          url: config.attrs.url,
+          // TODO: remove this cast when https://github.com/winglang/wing/blob/a0ee4a0ae81ffb88d87464c6d54f8cd7e2371008/libs/wingsdk/src/cloud/api.ts#L20 is done
+          openApiSpec: config.props.openApiSpec as unknown,
+        };
       }),
 
     "api.fetch": createProcedure
