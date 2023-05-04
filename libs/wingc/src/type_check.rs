@@ -1,12 +1,13 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
-use crate::ast::{self, FunctionBodyRef, TypeAnnotationKind};
+use crate::ast::{self, ClassField, FunctionBodyRef, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
 	Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
+use crate::visit::{self, Visit};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
@@ -27,6 +28,30 @@ use wingii::type_system::TypeSystem;
 
 use self::jsii_importer::JsiiImportSpec;
 use self::symbol_env::SymbolEnvIter;
+
+/// Visitor Pattern for listing the variables that are initialized in the class constructor.
+pub struct VisitClassInit {
+	fields: Vec<String>,
+}
+impl Visit<'_> for VisitClassInit {
+	fn visit_stmt(&mut self, node: &Stmt) {
+		match &node.kind {
+			StmtKind::Assignment { variable, value: _ } => {
+				visit::visit_reference(self, variable);
+			}
+			_ => (),
+		}
+		visit::visit_stmt(self, node);
+	}
+
+	fn visit_reference(&mut self, node: &Reference) {
+		match node {
+			Reference::InstanceMember { property, object: _ } => self.fields.push(property.name.clone()),
+			_ => (),
+		}
+		visit::visit_reference(self, node);
+	}
+}
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -2233,6 +2258,9 @@ impl<'a> TypeChecker<'a> {
 				// Type check constructor
 				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
 
+				// Verify if all fields of a class/resource are initialized in the initializer.
+				self.check_class_field_initialization(&initializer.statements, fields);
+
 				// Type check the inflight initializer
 				if let Some(inflight_initializer) = inflight_initializer {
 					self.type_check_method(
@@ -2479,6 +2507,30 @@ impl<'a> TypeChecker<'a> {
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
+			}
+		}
+	}
+
+	/// Validate if the fields of a class are initialized in the constructor (init).
+	///
+	/// # Arguments
+	///
+	/// * `statements` - The constructor scope (init)
+	/// * `fields` - All fields of a class
+	///
+	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &[ClassField]) {
+		let mut visit_init = VisitClassInit { fields: Vec::new() };
+		visit_init.visit_scope(statements);
+		for field in fields.iter() {
+			// inflight or static fields cannot be initialized in the initializer
+			if field.phase == Phase::Inflight || field.is_static {
+				continue;
+			}
+			if !visit_init.fields.contains(&field.name.name) {
+				self.type_error(TypeError {
+					message: format!("\"{}\" is not initialized", field.name.name),
+					span: field.name.span.clone(),
+				});
 			}
 		}
 	}
