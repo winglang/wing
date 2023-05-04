@@ -8,6 +8,12 @@ keywords: [template, runbook]
 
 Short description and relevant issue link(s).
 
+### Prerequisites
+
+What is required to follow this runbook? e.g.
+- What tools are needed?
+- What permissions are required?
+
 ### Recognize
 
 Describe the scenario that this runbook is for. What are the symptoms? What are the causes? What are the effects?
@@ -21,6 +27,9 @@ What are the steps to investigate this scenario? What are the tools to use? What
 
 What is the immediate response to this scenario? This should be a detailed step-by-step guide to resolving the issue.
 
+### Verify
+
+What are the steps to verify that the issue is resolved?
 
 ### Escalate
 
