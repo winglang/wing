@@ -301,26 +301,6 @@ pub fn compile(
 		Diagnostics::new()
 	};
 
-	// // Validate that every Expr has an evaluated_type
-	// let mut tc_assert = TypeCheckAssert;
-	// tc_assert.visit_scope(&scope);
-
-	// // Transform all inflight closures defined in preflight into single-method resources
-	// let mut inflight_transformer = InflightTransformer::new();
-	// let mut scope = inflight_transformer.fold_scope(scope);
-
-	// // Reset symbol environments
-	// let mut env_resetter = EnvResetter;
-	// scope = env_resetter.fold_scope(scope);
-
-	// // Type check everything again
-	// let type_check_diagnostics = if scope.statements.len() > 0 {
-	// 	type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
-	// } else {
-	// 	// empty scope, no type checking needed
-	// 	Diagnostics::new()
-	// };
-
 	// Validate again that every Expr has an evaluated_type
 	let mut tc_assert = TypeCheckAssert;
 	tc_assert.visit_scope(&scope);
