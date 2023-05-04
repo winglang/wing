@@ -58,7 +58,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "get": {
+                  "operationId": "get-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -247,7 +265,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "get": {
+                  "operationId": "get-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -436,7 +472,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "get": {
+                  "operationId": "get-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -643,7 +697,85 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "delete": {
+                  "operationId": "delete-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "get": {
+                  "operationId": "get-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "head": {
+                  "operationId": "head-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "options": {
+                  "operationId": "options-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "patch": {
+                  "operationId": "patch-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "post": {
+                  "operationId": "post-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "put": {
+                  "operationId": "put-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -910,7 +1042,37 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello/bat": {
+                "get": {
+                  "operationId": "get-hello/bat",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+              "/hello/foo": {
+                "get": {
+                  "operationId": "get-hello/foo",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -1124,7 +1286,35 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "get": {
+                  "operationId": "get-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "post": {
+                  "operationId": "post-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -1420,7 +1610,37 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello/wingnuts": {
+                "get": {
+                  "operationId": "get-hello/wingnuts",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+              "/hello/world": {
+                "get": {
+                  "operationId": "get-hello/world",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -1695,7 +1915,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "get": {
+                  "operationId": "get-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -1884,7 +2122,34 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/users/{name}": {
+                "get": {
+                  "operationId": "get-users/{name}",
+                  "parameters": [
+                    {
+                      "in": "path",
+                      "name": "name",
+                      "required": true,
+                      "schema": {
+                        "type": "string",
+                      },
+                    },
+                  ],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -2073,7 +2338,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "post": {
+                  "operationId": "post-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -2262,7 +2545,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "post": {
+                  "operationId": "post-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
       {
@@ -2408,7 +2709,12 @@ exports[`create an api 1`] = `
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {},
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {},
+          },
+        },
         "type": "wingsdk.cloud.Api",
       },
     ],
