@@ -20,7 +20,7 @@ use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionBodyRef,
 		FunctionDefinition, Initializer, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType, UtilityFunctions,
+		StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
@@ -1004,14 +1004,13 @@ impl<'a> JSifier<'a> {
 			}
 		}
 
-		let free_vars = self.get_free_vars_in_resource(class);
-
 		// Jsify inflight client
 		let inflight_methods = class
 			.methods
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect_vec();
+		let free_vars = self.get_free_vars_in_resource(&inflight_methods);
 		let referenced_preflight_types = self.get_preflight_types_referenced_in_resource(class, &inflight_methods);
 		self.jsify_resource_client(
 			env,
@@ -1212,9 +1211,9 @@ impl<'a> JSifier<'a> {
 	}
 
 	/// Get all free vars used by methods of the given resource
-	fn get_free_vars_in_resource(&self, resource: &AstClass) -> IndexSet<String> {
+	fn get_free_vars_in_resource(&self, inflight_methods: &[&(Symbol, FunctionDefinition)]) -> IndexSet<String> {
 		let mut free_vars = IndexSet::new();
-		for (_, method_def) in &resource.methods {
+		for (_, method_def) in inflight_methods {
 			free_vars.extend(
 				method_def
 					.captures
