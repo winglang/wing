@@ -1607,21 +1607,16 @@ impl<'a> FieldReferenceVisitor<'a> {
 					Type::Function(_) => unreachable!("cannot reference a member of a function"),
 					Type::Optional(_) => unreachable!("cannot reference a member of an optional"),
 					// all fields / methods / values of these types are phase-independent so we can skip them
-					Type::Anything => return vec![],
-					Type::Number => return vec![],
-					Type::String => return vec![],
-					Type::Duration => return vec![],
-					Type::Boolean => return vec![],
-					Type::Json => return vec![],
-					Type::MutJson => return vec![],
-					Type::Enum(_) => return vec![],
+					Type::Anything
+					| Type::Number
+					| Type::String
+					| Type::Duration
+					| Type::Boolean
+					| Type::Json
+					| Type::MutJson
+					| Type::Enum(_) => return vec![],
 					// TODO: collection types are unsupported for now
-					Type::Array(_) => None,
-					Type::MutArray(_) => None,
-					Type::Map(_) => None,
-					Type::MutMap(_) => None,
-					Type::Set(_) => None,
-					Type::MutSet(_) => None,
+					Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => None,
 					Type::Class(cls) => Some(
 						cls
 							.env
