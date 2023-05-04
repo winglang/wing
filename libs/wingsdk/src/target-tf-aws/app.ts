@@ -33,8 +33,9 @@ import {
   TEST_RUNNER_FQN,
   TOPIC_FQN,
 } from "../cloud";
-import { CdktfApp, AppProps } from "../core";
+import { AppProps } from "../core";
 import { REDIS_FQN } from "../redis";
+import { CdktfApp } from "../shared-tf/app";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
