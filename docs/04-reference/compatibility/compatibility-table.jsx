@@ -1,4 +1,4 @@
-import React, {useMemo, Fragment} from "react";
+import React, {useMemo} from "react";
 import compatibilityData from "./compatibility.json";
 import "./style.css";
 
