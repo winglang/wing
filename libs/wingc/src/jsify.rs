@@ -26,7 +26,7 @@ use crate::{
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{
 		resolve_user_defined_type,
-		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
+		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef, SymbolLookupInfo},
 		SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
 	},
 	utilities::snake_case_to_camel_case,
@@ -1459,10 +1459,12 @@ struct FieldReferenceVisitor<'a> {
 	/// The resource type's symbol env (used to resolve field types)
 	function_def: &'a FunctionDefinition,
 
-	/// A list of free variables preloaded into the visitor. Whenever the visitor encounters a
-	/// reference to a free variable, it will be added to list of references since the
-	/// resource needs to bind to it.
-	//free_vars: &'a [Symbol],
+	/// The current symbol env, option just so we can initialize it to None
+	env: Option<SymbolEnvRef>,
+
+	/// The current statement index
+	statement_index: usize,
+
 	diagnostics: Diagnostics,
 }
 
@@ -1471,8 +1473,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 		Self {
 			references: BTreeMap::new(),
 			function_def,
-			//free_vars,
 			diagnostics: Diagnostics::new(),
+			env: None,
+			statement_index: 0,
 		}
 	}
 
@@ -1485,6 +1488,18 @@ impl<'a> FieldReferenceVisitor<'a> {
 }
 
 impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
+	fn visit_scope(&mut self, node: &'ast Scope) {
+		let backup_env = self.env;
+		self.env = Some(node.env.borrow().as_ref().unwrap().get_ref());
+		visit::visit_scope(self, node);
+		self.env = backup_env;
+	}
+
+	fn visit_stmt(&mut self, node: &'ast Stmt) {
+		self.statement_index = node.idx;
+		visit::visit_stmt(self, node);
+	}
+
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		let parts = self.analyze_expr(node);
 
@@ -1656,26 +1671,25 @@ impl<'a> FieldReferenceVisitor<'a> {
 	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
 		match &node.kind {
 			ExprKind::Reference(Reference::Identifier(x)) => {
-				// If the reference isn't "this" or a free variable, then it couldn't have been
-				// defined in preflight, so skip it.
-				if x.name != "this" && !self.free_vars.contains(&x) {
+				let env = self.env.unwrap();
+
+				// To obtain information about the variable we're referencing (like its type and
+				// whether it's reassignable), we look it up in the function's symbol environment.
+				let lookup_res = env.lookup_ext(&x.name, Some(self.statement_index));
+				let (var, lookup_info) = match lookup_res {
+					LookupResult::Found(kind, info) => {
+						let var = kind.as_variable().expect("reference to a non-variable");
+						(var, info)
+					}
+					_ => {
+						panic!("covered by type checking");
+					}
+				};
+
+				// If the reference isn't a preflight (lifted) variable then skip it
+				if lookup_info.phase != Phase::Preflight {
 					return vec![];
 				}
-
-				// We know the expr we're analyzing is inside of a function. To obtain
-				// information about the variable we're referencing (like its type and
-				// whether it's reassignable), we look it up in the function's symbol environment.
-				let scope = match &self.function_def.body {
-					FunctionBody::Statements(scope) => scope,
-					FunctionBody::External(_) => panic!("unexpected expression inside body of extern functions"),
-				};
-				let env = scope.env.borrow();
-				let env = env.as_ref().expect("scope should have an env");
-				let var = env
-					.lookup(&x.name, None)
-					.expect("covered by type checking")
-					.as_variable()
-					.expect("reference to a non-variable");
 
 				return vec![Component {
 					expr: node,

@@ -2641,7 +2641,7 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// check if we've already defined the given alias in the current scope
-		if env.lookup(&jsii.alias, Some(jsii.import_statement_idx)).is_ok() {
+		if env.lookup(&jsii.alias.name, Some(jsii.import_statement_idx)).is_some() {
 			self.type_error(TypeError {
 				message: format!("\"{}\" is already defined", alias.name),
 				span: alias.span.clone(),
