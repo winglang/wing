@@ -1675,19 +1675,14 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 				// To obtain information about the variable we're referencing (like its type and
 				// whether it's reassignable), we look it up in the function's symbol environment.
-				let lookup_res = env.lookup_ext(&x.name, Some(self.statement_index));
-				let (var, lookup_info) = match lookup_res {
-					LookupResult::Found(kind, info) => {
-						let var = kind.as_variable().expect("reference to a non-variable");
-						(var, info)
-					}
-					_ => {
-						panic!("covered by type checking");
-					}
-				};
+				let var = env
+					.lookup(&x.name, Some(self.statement_index))
+					.expect("covered by type checking")
+					.as_variable()
+					.expect("reference to a non-variable");
 
 				// If the reference isn't a preflight (lifted) variable then skip it
-				if lookup_info.phase != Phase::Preflight {
+				if var.phase != Phase::Preflight {
 					return vec![];
 				}
 
