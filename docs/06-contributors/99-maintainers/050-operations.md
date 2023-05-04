@@ -51,10 +51,10 @@ The severity level is determined by the impact of the incident on user experienc
 
 ### Acknowledgement
 
-Acknowledgment signifies that someone is taking ownership over the incident.
+Acknowledgement signifies that someone is taking ownership over the incident.
 This does not mean that the person acknowledging the incident is who will be resolving it, but they will at least be responsible for triage and communication or escalation if needed.
 
-Depending on the issue type, the acknowledgment may be automated through tooling (e.g., BetterUptime, Sentry, etc.).
+Depending on the issue type, the acknowledgement may be automated through tooling (e.g., BetterUptime, Sentry, etc.).
 If not automated, the responder should create a thread in the #alert channel in Slack to make sure others are aware.
 
 ### Response
