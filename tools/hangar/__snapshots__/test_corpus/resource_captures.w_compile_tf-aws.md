@@ -2,134 +2,137 @@
 
 ## clients/Another.inflight.js
 ```js
-class  Another {
-  constructor({ first, my_field, stateful }) {
-    this.first = first;
-    this.my_field = my_field;
-    this.stateful = stateful;
-  }
-  async meaning_of_life()  {
-    {
-      return 42;
+module.exports = function() {
+  class  Another {
+    constructor({ first, my_field }) {
+      this.first = first;
+      this.my_field = my_field;
+    }
+    async meaning_of_life()  {
+      {
+        return 42;
+      }
+    }
+    async another_func()  {
+      {
+        return "42";
+      }
     }
   }
-  async another_func()  {
-    {
-      return "42";
-    }
-  }
+  return Another;
 }
-exports.Another = Another;
 
 ```
 
 ## clients/First.inflight.js
 ```js
-class  First {
-  constructor({ my_resource, stateful }) {
-    this.my_resource = my_resource;
-    this.stateful = stateful;
+module.exports = function() {
+  class  First {
+    constructor({ my_resource }) {
+      this.my_resource = my_resource;
+    }
   }
+  return First;
 }
-exports.First = First;
 
 ```
 
 ## clients/MyResource.inflight.js
 ```js
-class  MyResource {
-  constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_opt_str, my_queue, my_resource, my_str, set_of_str, unused_resource, stateful }) {
-    this.another = another;
-    this.array_of_str = array_of_str;
-    this.ext_bucket = ext_bucket;
-    this.ext_num = ext_num;
-    this.map_of_num = map_of_num;
-    this.my_bool = my_bool;
-    this.my_num = my_num;
-    this.my_opt_str = my_opt_str;
-    this.my_queue = my_queue;
-    this.my_resource = my_resource;
-    this.my_str = my_str;
-    this.set_of_str = set_of_str;
-    this.unused_resource = unused_resource;
-    this.stateful = stateful;
-  }
-  async test_no_capture()  {
-    {
-      const arr = Object.freeze([1, 2, 3]);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 3)'`)})((arr.length === 3))};
-      {console.log(`array.len=${arr.length}`)};
+module.exports = function() {
+  class  MyResource {
+    constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_opt_str, my_queue, my_resource, my_str, set_of_str, unused_resource }) {
+      this.another = another;
+      this.array_of_str = array_of_str;
+      this.ext_bucket = ext_bucket;
+      this.ext_num = ext_num;
+      this.map_of_num = map_of_num;
+      this.my_bool = my_bool;
+      this.my_num = my_num;
+      this.my_opt_str = my_opt_str;
+      this.my_queue = my_queue;
+      this.my_resource = my_resource;
+      this.my_str = my_str;
+      this.set_of_str = set_of_str;
+      this.unused_resource = unused_resource;
+    }
+    async test_no_capture()  {
+      {
+        const arr = Object.freeze([1, 2, 3]);
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 3)'`)})((arr.length === 3))};
+        {console.log(`array.len=${arr.length}`)};
+      }
+    }
+    async test_capture_collections_of_data()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.array_of_str.length === 2)'`)})((this.array_of_str.length === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.array_of_str.at(0)) === "s1")'`)})(((await this.array_of_str.at(0)) === "s1"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.array_of_str.at(1)) === "s2")'`)})(((await this.array_of_str.at(1)) === "s2"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.map_of_num)["k1"] === 11)'`)})(((this.map_of_num)["k1"] === 11))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.map_of_num)["k2"] === 22)'`)})(((this.map_of_num)["k2"] === 22))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.set_of_str.has("s1"))'`)})((await this.set_of_str.has("s1")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.set_of_str.has("s2"))'`)})((await this.set_of_str.has("s2")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await this.set_of_str.has("s3")))'`)})((!(await this.set_of_str.has("s3"))))};
+      }
+    }
+    async test_capture_primitives()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_str === "my_string")'`)})((this.my_str === "my_string"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_num === 42)'`)})((this.my_num === 42))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_bool === true)'`)})((this.my_bool === true))};
+      }
+    }
+    async test_capture_optional()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.my_opt_str ?? "") === "my_opt_string")'`)})(((this.my_opt_str ?? "") === "my_opt_string"))};
+      }
+    }
+    async test_capture_resource()  {
+      {
+        (await this.my_resource.put("f1.txt","f1"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.my_resource.get("f1.txt")) === "f1")'`)})(((await this.my_resource.get("f1.txt")) === "f1"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.my_resource.list()).length === 1)'`)})(((await this.my_resource.list()).length === 1))};
+      }
+    }
+    async test_nested_preflight_field()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.another.my_field === "hello!")'`)})((this.another.my_field === "hello!"))};
+        {console.log(`field=${this.another.my_field}`)};
+      }
+    }
+    async test_nested_resource()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.first.my_resource.list()).length === 0)'`)})(((await this.another.first.my_resource.list()).length === 0))};
+        (await this.another.first.my_resource.put("hello",this.my_str));
+        {console.log(`this.another.first.my_resource:${(await this.another.first.my_resource.get("hello"))}`)};
+      }
+    }
+    async test_expression_recursive()  {
+      {
+        (await this.my_queue.push(this.my_str));
+      }
+    }
+    async test_external()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.ext_bucket.list()).length === 0)'`)})(((await this.ext_bucket.list()).length === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.ext_num === 12)'`)})((this.ext_num === 12))};
+      }
+    }
+    async test_user_defined_resource()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.meaning_of_life()) === 42)'`)})(((await this.another.meaning_of_life()) === 42))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.another_func()) === "42")'`)})(((await this.another.another_func()) === "42"))};
+      }
+    }
+    async test_inflight_field()  {
+      {
+        this.inflight_field = 123;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.inflight_field === 123)'`)})((this.inflight_field === 123))};
+      }
     }
   }
-  async test_capture_collections_of_data()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.array_of_str.length === 2)'`)})((this.array_of_str.length === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.array_of_str.at(0)) === "s1")'`)})(((await this.array_of_str.at(0)) === "s1"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.array_of_str.at(1)) === "s2")'`)})(((await this.array_of_str.at(1)) === "s2"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.map_of_num)["k1"] === 11)'`)})(((this.map_of_num)["k1"] === 11))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.map_of_num)["k2"] === 22)'`)})(((this.map_of_num)["k2"] === 22))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.set_of_str.has("s1"))'`)})((await this.set_of_str.has("s1")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.set_of_str.has("s2"))'`)})((await this.set_of_str.has("s2")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await this.set_of_str.has("s3")))'`)})((!(await this.set_of_str.has("s3"))))};
-    }
-  }
-  async test_capture_primitives()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_str === "my_string")'`)})((this.my_str === "my_string"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_num === 42)'`)})((this.my_num === 42))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_bool === true)'`)})((this.my_bool === true))};
-    }
-  }
-  async test_capture_optional()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.my_opt_str ?? "") === "my_opt_string")'`)})(((this.my_opt_str ?? "") === "my_opt_string"))};
-    }
-  }
-  async test_capture_resource()  {
-    {
-      (await this.my_resource.put("f1.txt","f1"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.my_resource.get("f1.txt")) === "f1")'`)})(((await this.my_resource.get("f1.txt")) === "f1"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.my_resource.list()).length === 1)'`)})(((await this.my_resource.list()).length === 1))};
-    }
-  }
-  async test_nested_preflight_field()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.another.my_field === "hello!")'`)})((this.another.my_field === "hello!"))};
-      {console.log(`field=${this.another.my_field}`)};
-    }
-  }
-  async test_nested_resource()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.first.my_resource.list()).length === 0)'`)})(((await this.another.first.my_resource.list()).length === 0))};
-      (await this.another.first.my_resource.put("hello",this.my_str));
-      {console.log(`this.another.first.my_resource:${(await this.another.first.my_resource.get("hello"))}`)};
-    }
-  }
-  async test_expression_recursive()  {
-    {
-      (await this.my_queue.push(this.my_str));
-    }
-  }
-  async test_external()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.ext_bucket.list()).length === 0)'`)})(((await this.ext_bucket.list()).length === 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.ext_num === 12)'`)})((this.ext_num === 12))};
-    }
-  }
-  async test_user_defined_resource()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.meaning_of_life()) === 42)'`)})(((await this.another.meaning_of_life()) === 42))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.another_func()) === "42")'`)})(((await this.another.another_func()) === "42"))};
-    }
-  }
-  async test_inflight_field()  {
-    {
-      this.inflight_field = 123;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.inflight_field === 123)'`)})((this.inflight_field === 123))};
-    }
-  }
+  return MyResource;
 }
-exports.MyResource = MyResource;
 
 ```
 
@@ -242,7 +245,7 @@ exports.MyResource = MyResource;
         "handler": "index.handler",
         "publish": true,
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
+        "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
@@ -429,51 +432,64 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const my_resource_client = this._lift(this.my_resource);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).First({
+            const First = require("${self_client_path}")({});
+            const client = new First({
               my_resource: ${my_resource_client},
-              stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.my_resource, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    First._annotateInflight("$inflight_init", {"this.my_resource": { ops: [] },"this.stateful": { ops: [] }});
     class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("meaning_of_life", "another_func");
         this.my_field = "hello!";
         this.first = new First(this,"First");
       }
       _toInflight() {
         const first_client = this._lift(this.first);
         const my_field_client = this._lift(this.my_field);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Another({
+            const Another = require("${self_client_path}")({});
+            const client = new Another({
               first: ${first_client},
               my_field: ${my_field_client},
-              stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.first, host, []);
+          this._registerBindObject(this.my_field, host, []);
+        }
+        if (ops.includes("another_func")) {
+        }
+        if (ops.includes("meaning_of_life")) {
+        }
+        super._registerBind(host, ops);
+      }
     }
-    Another._annotateInflight("$inflight_init", {"this.first": { ops: [] },"this.my_field": { ops: [] },"this.stateful": { ops: [] }});
-    Another._annotateInflight("another_func", {});
-    Another._annotateInflight("meaning_of_life", {});
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, external_bucket, external_num) {
         super(scope, id);
+        this._addInflightOps("test_no_capture", "test_capture_collections_of_data", "test_capture_primitives", "test_capture_optional", "test_capture_resource", "test_nested_preflight_field", "test_nested_resource", "test_expression_recursive", "test_external", "test_user_defined_resource", "test_inflight_field");
         this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.my_str = "my_string";
         this.my_num = 42;
@@ -507,11 +523,11 @@ class $Root extends $stdlib.std.Resource {
         const my_str_client = this._lift(this.my_str);
         const set_of_str_client = this._lift(this.set_of_str);
         const unused_resource_client = this._lift(this.unused_resource);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).MyResource({
+            const MyResource = require("${self_client_path}")({});
+            const client = new MyResource({
               another: ${another_client},
               array_of_str: ${array_of_str_client},
               ext_bucket: ${ext_bucket_client},
@@ -525,26 +541,69 @@ class $Root extends $stdlib.std.Resource {
               my_str: ${my_str_client},
               set_of_str: ${set_of_str_client},
               unused_resource: ${unused_resource_client},
-              stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.another, host, []);
+          this._registerBindObject(this.array_of_str, host, []);
+          this._registerBindObject(this.ext_bucket, host, []);
+          this._registerBindObject(this.ext_num, host, []);
+          this._registerBindObject(this.map_of_num, host, []);
+          this._registerBindObject(this.my_bool, host, []);
+          this._registerBindObject(this.my_num, host, []);
+          this._registerBindObject(this.my_opt_str, host, []);
+          this._registerBindObject(this.my_queue, host, []);
+          this._registerBindObject(this.my_resource, host, []);
+          this._registerBindObject(this.my_str, host, []);
+          this._registerBindObject(this.set_of_str, host, []);
+          this._registerBindObject(this.unused_resource, host, []);
+        }
+        if (ops.includes("test_capture_collections_of_data")) {
+          this._registerBindObject(this.array_of_str, host, ["at", "length"]);
+          this._registerBindObject(this.map_of_num, host, ["get"]);
+          this._registerBindObject(this.set_of_str, host, ["has"]);
+        }
+        if (ops.includes("test_capture_optional")) {
+          this._registerBindObject(this.my_opt_str, host, []);
+        }
+        if (ops.includes("test_capture_primitives")) {
+          this._registerBindObject(this.my_bool, host, []);
+          this._registerBindObject(this.my_num, host, []);
+          this._registerBindObject(this.my_str, host, []);
+        }
+        if (ops.includes("test_capture_resource")) {
+          this._registerBindObject(this.my_resource, host, ["get", "list", "put"]);
+        }
+        if (ops.includes("test_expression_recursive")) {
+          this._registerBindObject(this.my_queue, host, ["push"]);
+          this._registerBindObject(this.my_str, host, []);
+        }
+        if (ops.includes("test_external")) {
+          this._registerBindObject(this.ext_bucket, host, ["list"]);
+          this._registerBindObject(this.ext_num, host, []);
+        }
+        if (ops.includes("test_inflight_field")) {
+        }
+        if (ops.includes("test_nested_preflight_field")) {
+          this._registerBindObject(this.another.my_field, host, []);
+        }
+        if (ops.includes("test_nested_resource")) {
+          this._registerBindObject(this.another.first.my_resource, host, ["get", "list", "put"]);
+          this._registerBindObject(this.my_str, host, []);
+        }
+        if (ops.includes("test_no_capture")) {
+        }
+        if (ops.includes("test_user_defined_resource")) {
+          this._registerBindObject(this.another, host, ["another_func", "meaning_of_life"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
-    MyResource._annotateInflight("$inflight_init", {"this.another": { ops: [] },"this.array_of_str": { ops: [] },"this.ext_bucket": { ops: [] },"this.ext_num": { ops: [] },"this.map_of_num": { ops: [] },"this.my_bool": { ops: [] },"this.my_num": { ops: [] },"this.my_opt_str": { ops: [] },"this.my_queue": { ops: [] },"this.my_resource": { ops: [] },"this.my_str": { ops: [] },"this.set_of_str": { ops: [] },"this.stateful": { ops: [] },"this.unused_resource": { ops: [] }});
-    MyResource._annotateInflight("test_capture_collections_of_data", {"this.array_of_str": { ops: ["at","length"] },"this.map_of_num": { ops: ["get"] },"this.set_of_str": { ops: ["has"] }});
-    MyResource._annotateInflight("test_capture_optional", {"this.my_opt_str": { ops: [] }});
-    MyResource._annotateInflight("test_capture_primitives", {"this.my_bool": { ops: [] },"this.my_num": { ops: [] },"this.my_str": { ops: [] }});
-    MyResource._annotateInflight("test_capture_resource", {"this.my_resource": { ops: ["get","list","put"] }});
-    MyResource._annotateInflight("test_expression_recursive", {"this.my_queue": { ops: ["push"] },"this.my_str": { ops: [] }});
-    MyResource._annotateInflight("test_external", {"this.ext_bucket": { ops: ["list"] },"this.ext_num": { ops: [] }});
-    MyResource._annotateInflight("test_inflight_field", {});
-    MyResource._annotateInflight("test_nested_preflight_field", {"this.another.my_field": { ops: [] }});
-    MyResource._annotateInflight("test_nested_resource", {"this.another.first.my_resource": { ops: ["get","list","put"] },"this.my_str": { ops: [] }});
-    MyResource._annotateInflight("test_no_capture", {});
-    MyResource._annotateInflight("test_user_defined_resource", {"this.another": { ops: ["another_func","meaning_of_life"] }});
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const r = new MyResource(this,"MyResource",b,12);
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {

@@ -27,3 +27,5 @@ let j_arr = Json [bkt];
 let json_obj = Json { boom: bkt };
 //                          ^^^ Expected "Json" elements to be Json Value (https://www.json.org/json-en.html), but got "Bucket" which is not Json Value
 
+let json_incomplete = Json;
+//                    ^^^^ Expected a "Json" element

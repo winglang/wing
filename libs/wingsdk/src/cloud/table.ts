@@ -76,7 +76,6 @@ export abstract class Table extends Resource {
    */
   public readonly columns: { [key: string]: ColumnType };
 
-  public readonly stateful = true;
   constructor(scope: Construct, id: string, props: TableProps) {
     super(scope, id);
 
@@ -97,6 +96,14 @@ export abstract class Table extends Resource {
       throw new Error("No column is defined");
     }
     this.columns = props.columns;
+
+    this._addInflightOps(
+      TableInflightMethods.INSERT,
+      TableInflightMethods.UPDATE,
+      TableInflightMethods.DELETE,
+      TableInflightMethods.GET,
+      TableInflightMethods.LIST
+    );
   }
 }
 
@@ -106,36 +113,38 @@ export abstract class Table extends Resource {
 export interface ITableClient {
   /**
    * Insert a row into the table.
+   * @param key primary key to insert the row.
    * @param row data to be inserted.
    * @inflight
    */
-  insert(row: Json): void;
+  insert(key: string, row: Json): Promise<void>;
   /**
    * Update a row in the table.
+   * @param key primary key to update the row.
    * @param row data to be updated.
    * @inflight
    */
-  update(row: Json): void;
+  update(key: string, row: Json): Promise<void>;
   /**
    * Delete a row from the table, by primary key.
    * @param key primary key to delete the row.
    * @inflight
    */
-  delete(key: string): void;
+  delete(key: string): Promise<void>;
   /**
    * Get a row from the table, by primary key.
    * @param key primary key to search.
    * @returns get the row from table.
    * @inflight
    */
-  get(key: string): any;
+  get(key: string): Promise<Json>;
   /**
    * List all rows in the table.
    * @returns list all row.
    * @inflight
    */
   // TODO: change the return type to Iterator<Map<string, Json>> in the future.
-  list(): any;
+  list(): Promise<Array<Json>>;
 }
 
 /**

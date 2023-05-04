@@ -1,9 +1,9 @@
 import { join } from "path";
-import { SnsTopic } from "@cdktf/provider-aws/lib/sns-topic";
-import { SnsTopicPolicy } from "@cdktf/provider-aws/lib/sns-topic-policy";
-import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { SnsTopic } from "../.gen/providers/aws/sns-topic";
+import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
+import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
@@ -161,5 +161,3 @@ export class Topic extends cloud.Topic {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 }
-
-Topic._annotateInflight(cloud.TopicInflightMethods.PUBLISH, {});

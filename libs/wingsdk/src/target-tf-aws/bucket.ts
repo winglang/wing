@@ -1,15 +1,15 @@
 import { join } from "path";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
-import { S3BucketNotification } from "@cdktf/provider-aws/lib/s3-bucket-notification";
-
-import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
-import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
-import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
-import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
+import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import { S3BucketNotification } from "../.gen/providers/aws/s3-bucket-notification";
+
+import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
+import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-public-access-block";
+import { S3BucketServerSideEncryptionConfigurationA } from "../.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
+import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
@@ -23,8 +23,8 @@ import {
 
 const EVENTS = {
   [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
-  [BucketEventType.CREATE]: ["s3:ObjectCreated:Post"],
-  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Put"],
+  [BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
+  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
 };
 
 /**
@@ -200,11 +200,3 @@ export class Bucket extends cloud.Bucket {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.DELETE, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.LIST, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUBLIC_URL, {});

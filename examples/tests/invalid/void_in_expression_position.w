@@ -1,5 +1,5 @@
 log("hey").get("x");
-// ^^^^^^^^^ Expression must be a class or resource instance to access property "get", instead found type "void"
+// ^^^^^^^^^ Expression must be a class to access property "get", instead found type "void"
 
 let x = "my name is ${log("mister cloud")}";
 //      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be one of "str,num", but got "void" instead

@@ -12,24 +12,24 @@
       }
     },
     "lint": {
-      "executor": "nx:run-commands",
       "options": {
-        "commands": ["cargo fmt", "cargo clippy --no-deps --fix --allow-dirty"],
+        "commands": [
+          "cargo fmt",
+          "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi"
+        ],
         "cwd": "libs/wingc",
         "parallel": false
       },
       "configurations": {
         "release": {
-          "commands": ["cargo fmt --check", "cargo clippy --no-deps --release"]
+          "commands": [
+            "cargo fmt",
+            "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"
+          ]
         }
       }
     },
     "build": {
-      "executor": "nx:run-commands",
-      "outputs": [
-        "{workspaceRoot}/target/wasm32-wasi/debug/wingc.wasm",
-        "{workspaceRoot}/target/wasm32-wasi/release/wingc.wasm"
-      ],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingc"
@@ -41,8 +41,6 @@
       }
     },
     "dev": {
-      "dependsOn": ["^build", "build"],
-      "executor": "nx:run-commands",
       "options": {
         "command": "cargo run --example compile",
         "cwd": "libs/wingc"

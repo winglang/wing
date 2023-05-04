@@ -1,8 +1,8 @@
-import { DataAwsSecretsmanagerSecret } from "@cdktf/provider-aws/lib/data-aws-secretsmanager-secret";
-import { SecretsmanagerSecret } from "@cdktf/provider-aws/lib/secretsmanager-secret";
 import { TerraformOutput } from "cdktf";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { DataAwsSecretsmanagerSecret } from "../.gen/providers/aws/data-aws-secretsmanager-secret";
+import { SecretsmanagerSecret } from "../.gen/providers/aws/secretsmanager-secret";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateSecretPermissions } from "../shared-aws/permissions";
@@ -78,6 +78,3 @@ export class Secret extends cloud.Secret {
     return `SECRET_ARN_${this.node.addr.slice(-8)}`;
   }
 }
-
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE, {});
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE_JSON, {});

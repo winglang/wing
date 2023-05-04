@@ -1,10 +1,10 @@
-import { ElasticacheCluster } from "@cdktf/provider-aws/lib/elasticache-cluster";
-import { ElasticacheSubnetGroup } from "@cdktf/provider-aws/lib/elasticache-subnet-group";
-import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
-import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
+import { ElasticacheCluster } from "../.gen/providers/aws/elasticache-cluster";
+import { ElasticacheSubnetGroup } from "../.gen/providers/aws/elasticache-subnet-group";
+import { SecurityGroup } from "../.gen/providers/aws/security-group";
+import { Subnet } from "../.gen/providers/aws/subnet";
 import { Code } from "../core";
 import * as core from "../core";
 import * as redis from "../redis";
@@ -129,13 +129,3 @@ export class Redis extends redis.Redis {
     return `REDIS_CLUSTER_ID_${this.node.addr.slice(-8)}`;
   }
 }
-
-Redis._annotateInflight("raw_client", {});
-Redis._annotateInflight("url", {});
-Redis._annotateInflight("get", {});
-Redis._annotateInflight("set", {});
-Redis._annotateInflight("hset", {});
-Redis._annotateInflight("hget", {});
-Redis._annotateInflight("sadd", {});
-Redis._annotateInflight("smembers", {});
-Redis._annotateInflight("del", {});

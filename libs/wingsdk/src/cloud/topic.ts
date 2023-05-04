@@ -29,13 +29,13 @@ export abstract class Topic extends Resource {
     return App.of(scope).newAbstract(TOPIC_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
-
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     super(scope, id);
 
     this.display.title = "Topic";
     this.display.description = "A pub/sub notification topic";
+
+    this._addInflightOps(TopicInflightMethods.PUBLISH);
 
     props;
   }

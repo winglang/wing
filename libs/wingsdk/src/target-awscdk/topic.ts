@@ -98,5 +98,3 @@ export class Topic extends cloud.Topic {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 }
-
-Topic._annotateInflight(cloud.TopicInflightMethods.PUBLISH, {});

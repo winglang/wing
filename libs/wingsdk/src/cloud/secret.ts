@@ -42,13 +42,16 @@ export abstract class Secret extends Resource {
     return App.of(scope).newAbstract(SECRET_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
-
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     super(scope, id);
 
     this.display.title = "Secret";
     this.display.description = "A cloud secret";
+
+    this._addInflightOps(
+      SecretInflightMethods.VALUE,
+      SecretInflightMethods.VALUE_JSON
+    );
 
     props;
   }

@@ -16,7 +16,6 @@ class InflightBucketEventHandler
   extends Inflight
   implements IBucketEventHandler
 {
-  public stateful: boolean;
   constructor(scope: Construct, id: string) {
     super(scope, id, { code: NodeJsCode.fromInline("null") });
   }
