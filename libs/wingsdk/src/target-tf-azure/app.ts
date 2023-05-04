@@ -7,7 +7,8 @@ import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
-import { CdktfApp, AppProps } from "../core";
+import { AppProps } from "../core";
+import { CdktfApp } from "../shared-tf/app";
 import {
   CaseConventions,
   NameOptions,

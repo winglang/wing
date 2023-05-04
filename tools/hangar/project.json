@@ -17,7 +17,7 @@
     },
     "test": {
       "dependsOn": ["^build", "^package", "generate"],
-      "inputs": ["default", "^default", "examples-tests", "!{projectRoot}/tmp/**"],
+      "inputs": ["!{projectRoot}/tmp/**", "default-test", "^default-build"],
       "outputs": ["${projectRoot}/reports/**"],
       "options": {
         "command": "npm run test:update",
@@ -32,7 +32,7 @@
     "bench": {
       "executor": "nx:run-commands",
       "dependsOn": ["^build", "^package"],
-      "inputs": ["default", "^default", "examples-tests"],
+      "inputs": ["!{projectRoot}/tmp/**", "default-test", "^default-build"],
       "outputs": ["${projectRoot}/reports/**"],
       "options": {
         "command": "npm run bench",
