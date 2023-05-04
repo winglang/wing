@@ -3310,7 +3310,7 @@ where
 	T: Locatable + Display,
 {
 	let msg = match lookup_result {
-		LookupResult::NotFound => format!("Unknown symbol \"{looked_up_object}\""),
+		LookupResult::NotFound(s) => format!("Unknown symbol \"{s}\""),
 		LookupResult::DefinedLater => format!("Symbol \"{looked_up_object}\" used before being defined"),
 		LookupResult::ExpectedNamespace(ns_name) => {
 			format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace")
@@ -3340,7 +3340,7 @@ pub fn resolve_user_defined_type(
 		} else {
 			let symb = nested_name.last().unwrap();
 			Err(TypeError {
-				message: format!("Expected {} to be a type but it's a {symb_kind}", symb.name),
+				message: format!("Expected '{}' to be a type but it's a {symb_kind}", symb.name),
 				span: symb.span.clone(),
 			})
 		}
