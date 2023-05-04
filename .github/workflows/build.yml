@@ -78,6 +78,7 @@ jobs:
           name: dist
           path: |
             apps/wing/dist
+            apps/wing/*.wasm
             libs/wingsdk/lib
 
       # - name: Upload Wing CLI
