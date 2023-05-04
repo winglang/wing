@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Expr, FunctionDefinition, Scope},
+	ast::{Expr, Scope},
 	fold::{self, Fold},
 };
 
@@ -16,11 +16,5 @@ impl Fold for EnvResetter {
 		let scope = fold::fold_scope(self, node);
 		scope.env.borrow_mut().take();
 		scope
-	}
-
-	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
-		let func_def = fold::fold_function_definition(self, node);
-		func_def.captures.borrow_mut().take();
-		func_def
 	}
 }

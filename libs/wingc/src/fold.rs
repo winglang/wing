@@ -365,7 +365,6 @@ where
 		signature: f.fold_function_signature(node.signature),
 		is_static: node.is_static,
 		span: node.span,
-		captures: node.captures,
 	}
 }
 

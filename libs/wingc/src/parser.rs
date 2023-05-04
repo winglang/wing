@@ -539,7 +539,6 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
-							captures: RefCell::new(None),
 						})
 					} else {
 						initializer = Some(Initializer {
@@ -731,7 +730,6 @@ impl<'s> Parser<'s> {
 			body: statements,
 			signature,
 			is_static: func_def_node.child_by_field_name("static").is_some(),
-			captures: RefCell::new(None),
 			span: self.node_span(func_def_node),
 		})
 	}

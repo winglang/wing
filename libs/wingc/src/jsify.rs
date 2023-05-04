@@ -5,7 +5,6 @@ use const_format::formatcp;
 use itertools::Itertools;
 
 use std::{
-	cell::RefCell,
 	cmp::Ordering,
 	collections::{BTreeMap, BTreeSet},
 	fmt::Display,
@@ -49,8 +48,6 @@ const APP_BASE_CLASS: &str = "$AppBase";
 
 const ROOT_CLASS: &str = "$Root";
 
-const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
-
 pub struct JSifyContext {
 	pub in_json: bool,
 	/// The current execution phase of the AST traversal.
@@ -65,8 +62,6 @@ pub struct JSifier<'a> {
 	absolute_project_root: &'a Path,
 	shim: bool,
 	app_name: String,
-	inflight_counter: RefCell<usize>,
-	proc_counter: RefCell<usize>,
 }
 
 impl<'a> JSifier<'a> {
@@ -76,8 +71,6 @@ impl<'a> JSifier<'a> {
 			out_dir,
 			shim,
 			app_name: app_name.to_string(),
-			inflight_counter: RefCell::new(0),
-			proc_counter: RefCell::new(0),
 			absolute_project_root,
 		}
 	}
@@ -564,7 +557,7 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.phase {
-				Phase::Inflight => self.jsify_inflight_function(func_def, ctx).to_string(),
+				Phase::Inflight => self.jsify_function(None, func_def, ctx).to_string(),
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, ctx).to_string(),
 			},
@@ -747,82 +740,6 @@ impl<'a> JSifier<'a> {
 				code
 			}
 		}
-	}
-
-	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, ctx: &JSifyContext) -> CodeMaker {
-		let parameters = func_def
-			.parameters()
-			.iter()
-			.map(|p| self.jsify_symbol(&p.name))
-			.join(", ");
-
-		let block = match &func_def.body {
-			FunctionBody::Statements(scope) => self.jsify_scope_body(
-				scope,
-				&JSifyContext {
-					in_json: ctx.in_json,
-					phase: Phase::Inflight,
-				},
-			),
-			FunctionBody::External(_) => CodeMaker::one_line("throw new Error(\"extern with closures is not supported\");"),
-		};
-
-		let mut bindings = vec![];
-		let mut capture_names = vec![];
-
-		for capture in func_def.captures.borrow().as_ref().unwrap().iter() {
-			capture_names.push(capture.symbol.name.clone());
-
-			let mut binding = CodeMaker::default();
-			binding.open(format!("{}: {{", capture.symbol.name));
-			binding.line(format!("obj: {},", capture.symbol.name));
-			binding.line(format!(
-				"ops: [{}]",
-				capture.ops.iter().map(|x| format!("\"{}\"", x.member)).join(",")
-			));
-			binding.close("},");
-			bindings.push(binding);
-		}
-
-		let mut proc_source = CodeMaker::default();
-		proc_source.open(format!("async handle({parameters}) {{"));
-		proc_source.line(format!("const {{ {} }} = this;", capture_names.join(", ")));
-		proc_source.add_code(block);
-		proc_source.close("}");
-
-		let mut proc_counter = self.proc_counter.borrow_mut();
-		*proc_counter += 1;
-		let proc_dir = format!("{}/proc{}", self.out_dir.to_string_lossy(), proc_counter);
-		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
-		let file_path = format!("{}/index.js", proc_dir);
-		let relative_file_path = format!("proc{}/index.js", proc_counter);
-		fs::write(&file_path, proc_source.to_string()).expect("Writing inflight proc source");
-
-		let mut props_block = CodeMaker::default();
-		props_block.line(format!(
-			"code: {}.core.NodeJsCode.fromFile(require.resolve({})),",
-			STDLIB,
-			Self::js_resolve_path(&relative_file_path)
-		));
-		props_block.open("bindings: {");
-		for binding in bindings {
-			props_block.add_code(binding);
-		}
-		props_block.close("}");
-
-		let mut inflight_counter = self.inflight_counter.borrow_mut();
-		*inflight_counter += 1;
-		let inflight_obj_id = format!("{}{}", INFLIGHT_OBJ_PREFIX, inflight_counter);
-
-		let mut code = CodeMaker::default();
-		code.open(format!(
-			"new {}.core.Inflight(this, \"{}\", {{",
-			STDLIB, inflight_obj_id
-		));
-		code.add_code(props_block);
-		code.close("})");
-
-		code
 	}
 
 	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Initializer, ctx: &JSifyContext) -> CodeMaker {
@@ -1851,7 +1768,6 @@ impl Visit<'_> for FreeVariableScanner {
 		let FunctionDefinition {
 			signature,
 			body,
-			captures: _,
 			is_static: _,
 			span: _,
 		} = node;

@@ -8,7 +8,6 @@
 extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
-use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use env_reset::EnvResetter;
 use fold::Fold;
@@ -34,7 +33,6 @@ use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
-pub mod capture;
 pub mod debug;
 pub mod diagnostic;
 pub mod env_reset;
@@ -331,11 +329,6 @@ pub fn compile(
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
-
-	// Analyze inflight captures
-	let mut capture_visitor = CaptureVisitor::new();
-	capture_visitor.visit_scope(&scope);
-	diagnostics.extend(capture_visitor.diagnostics);
 
 	// Filter diagnostics to only errors
 	let errors = diagnostics

@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-
 use indexmap::IndexMap;
 
 use crate::{
@@ -207,7 +205,6 @@ impl Fold for InflightTransformer {
 							phase: Phase::Preflight,
 						},
 						body: crate::ast::FunctionBody::Statements(make_resource_body),
-						captures: RefCell::new(None),
 						is_static: false,
 						span: expr.span.clone(),
 					}),

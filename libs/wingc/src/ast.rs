@@ -5,7 +5,6 @@ use std::hash::{Hash, Hasher};
 use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 
-use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::TypeRef;
@@ -267,8 +266,7 @@ pub trait MethodLike<'a> {
 	fn span(&self) -> WingSpan;
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct FunctionDefinition {
 	/// The function implementation.
 	pub body: FunctionBody,
@@ -278,9 +276,6 @@ pub struct FunctionDefinition {
 	pub is_static: bool,
 
 	pub span: WingSpan,
-
-	#[derivative(Debug = "ignore")]
-	pub captures: RefCell<Option<Captures>>,
 }
 
 impl MethodLike<'_> for FunctionDefinition {
