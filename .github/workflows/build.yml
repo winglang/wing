@@ -250,8 +250,6 @@ jobs:
       - name: Check Wing Version
         run: wing --version
 
-      # - run: wing compile examples/tests/valid/hello.w -t sim
-
       - name: Clone Console
         run: git clone https://${GITHUB_TOKEN}@github.com/winglang/console
         env:
@@ -265,6 +263,14 @@ jobs:
       - name: Install dependencies
         working-directory: console
         run: pnpm install
+
+      - name: Link @winglang/sdk to console/app
+        working-directory: console/console/app
+        run: pnpm link ../../../libs/wingsdk
+
+      - name: Link @winglang/sdk to console/server
+        working-directory: console/console/server
+        run: pnpm link ../../../libs/wingsdk
 
       - name: Build
         working-directory: console
