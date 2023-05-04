@@ -1162,7 +1162,7 @@ exports[`tree.json for an app with many resources 1`] = `
               },
             },
             "constructInfo": {
-              "fqn": "@winglang/sdk.core.CdktfApp",
+              "fqn": "@winglang/sdk.core.App",
               "version": "0.0.0",
             },
             "id": "Default",

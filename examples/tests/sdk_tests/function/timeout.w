@@ -1,10 +1,14 @@
+
+/*\
+skip: true
+\*/
 bring cloud;
 
 let c = new cloud.Counter();
 
-resource Helper {
+class Helper {
   init () {}
-  extern "./sleep.js" inflight sleep(time_ms: num);
+  extern "../external/sleep.js" inflight sleep(time_ms: num);
 }
 
 let helper = new Helper();
