@@ -30,37 +30,26 @@ use self::jsii_importer::JsiiImportSpec;
 use self::symbol_env::SymbolEnvIter;
 
 /// Visitor Pattern for listing the variables that are initialized in the class constructor.
-struct VisitClassInit<'a> {
-	fields: &'a mut Vec<String>,
+pub struct VisitClassInit {
+	fields: Vec<String>,
 }
-
-impl<'a> VisitClassInit<'a> {
-	pub fn new(fields: &'a mut Vec<String>) -> Self {
-		Self { fields }
-	}
-}
-
-impl<'ast> Visit<'ast> for VisitClassInit<'ast> {
-	fn visit_scope(&mut self, node: &'ast Scope) {
-		for stmt in &node.statements {
-			visit::visit_stmt(self, stmt);
-		}
-	}
-
-	fn visit_stmt(&mut self, node: &'ast Stmt) {
+impl Visit<'_> for VisitClassInit {
+	fn visit_stmt(&mut self, node: &Stmt) {
 		match &node.kind {
 			StmtKind::Assignment { variable, value: _ } => {
 				visit::visit_reference(self, variable);
 			}
 			_ => (),
 		}
+		visit::visit_stmt(self, node);
 	}
 
-	fn visit_reference(&mut self, node: &'ast Reference) {
+	fn visit_reference(&mut self, node: &Reference) {
 		match node {
 			Reference::InstanceMember { property, object: _ } => self.fields.push(property.name.clone()),
 			_ => (),
 		}
+		visit::visit_reference(self, node);
 	}
 }
 
@@ -2530,8 +2519,7 @@ impl<'a> TypeChecker<'a> {
 	/// * `fields` - All fields of a class
 	///
 	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &[ClassField]) {
-		let mut binding = Vec::new();
-		let mut visit_init = VisitClassInit::new(&mut binding);
+		let mut visit_init = VisitClassInit { fields: Vec::new() };
 		visit_init.visit_scope(statements);
 		for field in fields.iter() {
 			// inflight or static fields cannot be initialized in the initializer
