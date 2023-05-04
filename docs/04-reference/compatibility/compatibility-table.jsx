@@ -45,25 +45,25 @@ export const Table = () => {
         </tr>
       </thead>
       <tbody>
-        {Object.keys(compatibilityData).map((item) => (
-          <>
-            <td key={`${item}_main`} className="highlight" rowSpan={Object.keys(compatibilityData[item]).length + 1}>
-              <a target="_blank" href={`/reference/wingsdk-spec#${item.toLowerCase()}`}>
-                {item}
-              </a>
-            </td>
-            {Object.keys(compatibilityData[item]).map((method) => (
-              <tr key={`${item}_${method}`}>
-                <td className="highlight" rowSpan={1}>
-                  <code>{method}</code>
+        {Object.keys(compatibilityData).map((item) =>
+          Object.keys(compatibilityData[item]).map((method, index) => (
+            <tr key={`${item}_${method}`}>
+              {index === 0 && (
+                <td className="highlight" key={`${item}_main`} rowSpan={Object.keys(compatibilityData[item]).length}>
+                  <a target="_blank" href={`/reference/wingsdk-spec#${item.toLowerCase()}`}>
+                    {item}
+                  </a>
                 </td>
-                {headline.map((target) => (
-                  <Cell key={`${item}_${method}_${target}`} item={compatibilityData[item][method][target]} />
-                ))}
-              </tr>
-            ))}
-          </>
-        ))}
+              )}
+              <td className="highlight" rowSpan={1}>
+                <code>{method}</code>
+              </td>
+              {headline.map((target) => (
+                <Cell key={`${item}_${method}_${target}`} item={compatibilityData[item][method][target]} />
+              ))}
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );
