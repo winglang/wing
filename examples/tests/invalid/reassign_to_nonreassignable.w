@@ -4,7 +4,6 @@ x = x + 1;
 
 class InnerR {
   inflight inner: num;
-  init() {}
   inflight init() {
     this.inner = 1;
   }
