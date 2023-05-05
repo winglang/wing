@@ -8,7 +8,7 @@ import { mkdtemp } from "../../src/util";
 import { tfResourcesOfCount } from "../util";
 
 const PLUGIN_CODE = `
-var s3_bucket = require("@cdktf/provider-aws/lib/s3-bucket");
+var s3_bucket = require("../.gen/providers/aws/s3-bucket");
 
 exports.preSynth = function(app) {
   new s3_bucket.S3Bucket(app, "PluginBucket", {bucket: "plugin-bucket"})  

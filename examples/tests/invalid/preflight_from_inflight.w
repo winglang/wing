@@ -1,10 +1,6 @@
 bring cloud;
 
 class MyResource {
-  init() {
-
-  }
-
   my_preflight() { }
 }
 
