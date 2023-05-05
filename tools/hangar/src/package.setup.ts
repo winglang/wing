@@ -11,17 +11,6 @@ import {
   wingBin,
 } from "./paths";
 
-const basePackageJson = {
-  name: "hangar-test",
-  description: "",
-  version: "0.0.0",
-  dependencies: {
-    "@winglang/sdk": `${targetWingSDKSpec}`,
-    winglang: `${targetWingSpec}`,
-  },
-  devDependencies: {},
-};
-
 const shellEnv = {
   ...process.env,
   npm_config_audit: "false",
@@ -42,23 +31,40 @@ export default async function () {
   // reset tmpDir
   fs.removeSync(tmpDir);
   fs.mkdirpSync(tmpDir);
-  fs.writeJsonSync(path.join(tmpDir, "package.json"), basePackageJson);
+
+  // create symlink in tmpDir to wingsdk
+  // for non-production builds, the wingcli pulls wingsdk from `./winglang-sdk.tgz`
+  if (targetWingSDKSpec.startsWith("file:")) {
+    fs.symlinkSync(
+      path.join(targetWingSDKSpec.replace("file:", "")),
+      path.join(tmpDir, "winglang-sdk.tgz")
+    );
+  }
+
+  await execa(npmBin, ["init", "-y"], {
+    cwd: tmpDir,
+  });
 
   // use execSync to install npm deps in tmpDir
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  const installArgs = ["install", "--no-package-lock", "--install-links=false"];
-
+  const installArgs = [
+    "install",
+    "--no-package-lock",
+    "--install-links=false",
+    targetWingSpec,
+  ];
   const installResult = await execa(npmBin, installArgs, {
     cwd: tmpDir,
   });
 
   const allowedInstallHooks: RegExp[] = []; // Leaving this mechanism in place in case we need it in the future
 
-  const installHooks = installResult.stdout.match(/>.*/g)?.filter((hook) => {
-    return !allowedInstallHooks.some((allowedHook) => {
-      return allowedHook.test(hook);
-    });
-  }) ?? [];
+  const installHooks =
+    installResult.stdout.match(/>.*/g)?.filter((hook) => {
+      return !allowedInstallHooks.some((allowedHook) => {
+        return allowedHook.test(hook);
+      });
+    }) ?? [];
 
   assert.equal(
     installHooks.length,
