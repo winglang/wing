@@ -1,5 +1,6 @@
 ---
 title: Which clouds are supported by Wing?
+sidebar_label: Supported Clouds
 id: supported-clouds
 keywords: [faq, supported clouds, winglang, Wing programming language, Wing language, AWS, GCP, Azure]
 ---
