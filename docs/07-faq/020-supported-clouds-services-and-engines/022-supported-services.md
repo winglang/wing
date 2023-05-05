@@ -1,6 +1,6 @@
 ---
 title: Which cloud services are supported by Wing?
-sidebar_label: Supported services
+sidebar_label: Cloud Services
 id: supported-services
 keywords: [faq, supported service, winglang, Wing programming language, Wing language, AWS, GCP, Azure, Function, Bucket, Queue, Topic, API]
 ---
