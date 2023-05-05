@@ -76,7 +76,7 @@ import TOCInline from '@theme/TOCInline';
 
 > `any` is only available to JSII imported modules.
 
-User defined explicit "any" is supported if declared by the user.  
+User defined explicit "any" is supported iff declared by the user.  
 Almost all types can be implicitly resolved by the compiler except for "any".  
 "any" must be explicitly declared and annotated.
 
@@ -827,7 +827,7 @@ Visibility inference is done with the following rules:
 
 Accessing fields, members, or structured data is done with `.`.
 
-Visibility modifiers can be applied to members of the classes.
+Visibility modifiers can be applied to members of classes.
 Mixing `protected` and `internal` is not allowed.
 
 [`▲ top`][top]
@@ -1101,7 +1101,7 @@ if my_person.address == nil {
 
 #### 1.7.3 Unwrapping using `if let`
 
-The `if let` statement can be used to test if an optional is defined and *unwrap*s it into a
+The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
 non-optional variable defined inside the block:
 
 ```js
@@ -1173,7 +1173,7 @@ All defined symbols are immutable (constant) by default.
 Type casting is generally not allowed unless otherwise specified.
 
 Function arguments and their return type is always required. Function argument
-type is inferred if a default value is provided.
+type is inferred iff a default value is provided.
 
 > ```TS
 > let i = 5;
@@ -1205,7 +1205,7 @@ type is inferred if a default value is provided.
 
 ### 1.9 Error Handling
 
-Exceptions and `try/catch/finally` are the error mechanisms. Mechanics directly
+Exceptions and `try/catch/finally` are the error mechanism. Mechanics directly
 translate to JavaScript. You can create a new exception with a `throw` call.
 
 In the presence of `try`, both `catch` and `finally` are optional but at least one of them must be present.
@@ -1786,7 +1786,7 @@ class Boo extends Foo {
 ```
 
 Classes can inherit and extend other classes using the `extends` keyword.  
-Classes can implement interfaces if the interfaces do not contain `inflight`.
+Classes can implement interfaces iff the interfaces do not contain `inflight`.
 You can use the keyword `final` to stop the inheritance chain.
 
 ```TS
@@ -1817,7 +1817,7 @@ Child class must not introduce additional signatures (overloads) for overridden
 (virtual) methods.
 
 Multiple inheritance is invalid and forbidden.  
-Multiple implementations of various interfaces are allowed.  
+Multiple implementations of various interfaces is allowed.  
 Multiple implementations of the same interface is invalid and forbidden.
 
 In methods if return type is missing, `: void` is assumed.
@@ -1867,7 +1867,7 @@ Preflight objects all have a scope and a unique ID. Compiler provides an implici
 and ID for each object, both overrideable by user-defined ones in constructor.
 
 The default for scope is `this`, which means the scope in which the object was
-defined (instantiated). The implicit ID is the type name of the class if the type
+defined (instantiated). The implicit ID is the type name of the class iff the type
 is the only preflight object of this type being used in the current scope. In other words, if
 there are multiple preflight objects of the same type defined in the same scope, they
 must all have an explicit id.
@@ -2287,7 +2287,7 @@ class Rect {
 ## 4. Module System
 
 The module system in Wing uses the `bring` expression to reuse code.  
-**bring** expression allow code to "import" functions, classes, and variables
+**bring** expression allows code to "import" functions, classes, and variables
 from other files, to allow reusability.  
 **bring** expression is only allowed at the top of the file before any other
 code. Comments before the first bring expression are valid.
