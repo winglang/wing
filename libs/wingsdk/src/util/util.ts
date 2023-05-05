@@ -1,3 +1,5 @@
+import { Duration } from "../std";
+
 /**
  * Utility functions.
  */
@@ -21,5 +23,14 @@ export class Util {
    */
   public static tryEnv(name: string): string | undefined {
     return process.env[name];
+  }
+
+  /**
+   * Suspends execution for a given duration.
+   *
+   * @param duration The duration that has to pass before the Promise is resolved.
+   */
+  public static async sleep(duration: Duration): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, duration.milliseconds));
   }
 }
