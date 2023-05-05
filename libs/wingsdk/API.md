@@ -3277,10 +3277,29 @@ Represents a length of time.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.Duration.fromDays">fromDays</a></code> | Create a Duration representing an amount of days. |
 | <code><a href="#@winglang/sdk.std.Duration.fromHours">fromHours</a></code> | Create a Duration representing an amount of hours. |
 | <code><a href="#@winglang/sdk.std.Duration.fromMinutes">fromMinutes</a></code> | Create a Duration representing an amount of minutes. |
 | <code><a href="#@winglang/sdk.std.Duration.fromSeconds">fromSeconds</a></code> | Create a Duration representing an amount of seconds. |
 | <code><a href="#@winglang/sdk.std.Duration.fromMilliseconds">fromMilliseconds</a></code> | Create a Duration representing an amount of milliseconds. |
+
+---
+
+##### `fromDays` <a name="fromDays" id="@winglang/sdk.std.Duration.fromDays"></a>
+
+```wing
+bring std;
+
+std.Duration.fromDays(amount: num)
+```
+
+Create a Duration representing an amount of days.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromDays.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of Days the `Duration` will represent.
 
 ---
 
@@ -3360,10 +3379,23 @@ the amount of Seconds the `Duration` will represent.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Duration.property.days">days</a></code> | <code>num</code> | Return the total number of days in this Duration. |
 | <code><a href="#@winglang/sdk.std.Duration.property.hours">hours</a></code> | <code>num</code> | Return the total number of hours in this Duration. |
 | <code><a href="#@winglang/sdk.std.Duration.property.milliseconds">milliseconds</a></code> | <code>num</code> | Return the total number of milliseconds in this Duration. |
 | <code><a href="#@winglang/sdk.std.Duration.property.minutes">minutes</a></code> | <code>num</code> | Return the total number of minutes in this Duration. |
-| <code><a href="#@winglang/sdk.std.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of milliseconds in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of seconds in this Duration. |
+
+---
+
+##### `days`<sup>Required</sup> <a name="days" id="@winglang/sdk.std.Duration.property.days"></a>
+
+```wing
+days: num;
+```
+
+- *Type:* num
+
+Return the total number of days in this Duration.
 
 ---
 
@@ -3411,7 +3443,7 @@ seconds: num;
 
 - *Type:* num
 
-Return the total number of milliseconds in this Duration.
+Return the total number of seconds in this Duration.
 
 ---
 
