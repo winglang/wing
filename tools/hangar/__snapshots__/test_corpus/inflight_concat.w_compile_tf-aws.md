@@ -1,11 +1,16 @@
-# [forward_decl.w](../../../../examples/tests/valid/forward_decl.w) | compile | tf-aws
+# [inflight_concat.w](../../../../examples/tests/valid/inflight_concat.w) | compile | tf-aws
 
 ## clients/R.inflight.js
 ```js
 module.exports = function() {
   class  R {
-    constructor({ f }) {
-      this.f = f;
+    constructor({ s1 }) {
+      this.s1 = s1;
+    }
+    async foo()  {
+      {
+        {console.log((await this.s1.concat(" world")))};
+      }
     }
   }
   return R;
@@ -51,33 +56,24 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.f = "Hello World!!!";
-      }
-       method2()  {
-        {
-          (this.method1());
-          {console.log(`${this.f}`)};
-          (this.method2());
-        }
-      }
-       method1()  {
-        {
-        }
+        this._addInflightOps("foo");
+        this.s1 = "hello";
       }
       _toInflight() {
-        const f_client = this._lift(this.f);
+        const s1_client = this._lift(this.s1);
         const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const R = require("${self_client_path}")({});
             const client = new R({
-              f: ${f_client},
+              s1: ${s1_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -86,21 +82,20 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.f, host, []);
+          this._registerBindObject(this.s1, host, []);
+        }
+        if (ops.includes("foo")) {
+          this._registerBindObject(this.s1, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const x = "hi";
-    if (true) {
-      {console.log(`${x}`)};
-      const y = new R(this,"R");
-    }
+    const r = new R(this,"R");
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "forward_decl", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "inflight_concat", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
