@@ -36,7 +36,7 @@ export default async function () {
   // for non-production builds, the wingcli pulls wingsdk from `./winglang-sdk.tgz`
   if (targetWingSDKSpec.startsWith("file:")) {
     fs.symlinkSync(
-      path.join(targetWingSDKSpec.replace("file:", "")),
+      targetWingSDKSpec.replace("file:", ""),
       path.join(tmpDir, "winglang-sdk.tgz")
     );
   }

@@ -8,7 +8,7 @@ const newVersion = process.env.PROJEN_BUMP_VERSION ?? defaultVersion;
 // for dev builds, assume the user will provide a local at winglang-sdk.tgz
 // Note: this can also be a symlink to a local tarball (or even just a directory)
 const newSdkVersion =
-  newVersion === defaultVersion ? "file:winglang-sdk.tgz" : newVersion;
+  newVersion === defaultVersion ? "file:./winglang-sdk.tgz" : newVersion;
 
 assert(
   typeof pJson.dependencies["@winglang/sdk"] === "string",
