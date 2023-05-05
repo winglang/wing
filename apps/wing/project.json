@@ -42,7 +42,7 @@
     "wing": {
       "dependsOn": ["build", "^build"],
       "executor": "nx:run-commands",
-      "inputs": ["default", "^default"],
+      "inputs": ["default-build", "^default-build"],
       "options": {
         "command": "./bin/wing",
         "cwd": "apps/wing"

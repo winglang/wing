@@ -7,6 +7,7 @@ class Foo {
   collection_of_resources: Array<cloud.Bucket>;
 
   init() {
+    this.bucket = new cloud.Bucket();
     this.mut_array = MutArray<str>[];
     this.mut_array.push("hello");
     this.reassignable = 42;

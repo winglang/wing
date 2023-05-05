@@ -1,0 +1,27 @@
+/* CodeComparison.module.css */
+.codeComparisonContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .leftPanel,
+  .rightPanel {
+    width: 100%;
+  }
+  
+  @media (min-width: 768px) {
+    .codeComparisonContainer {
+      flex-direction: row;
+    }
+  
+    .leftPanel {
+      width: 42%;
+      margin-right: 2%;
+    }
+  
+    .rightPanel {
+      width: 55%;
+      margin-left: 1%;
+    }
+  }
+  

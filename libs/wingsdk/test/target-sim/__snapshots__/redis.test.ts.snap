@@ -27,7 +27,6 @@ exports[`create a Redis resource 1`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -44,7 +43,6 @@ exports[`create a Redis resource 1`] = `
         "my_redis": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

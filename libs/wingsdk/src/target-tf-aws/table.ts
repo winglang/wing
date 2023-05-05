@@ -1,6 +1,6 @@
-import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost } from "../std";
