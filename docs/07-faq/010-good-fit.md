@@ -1,5 +1,6 @@
 ---
 title: What makes Wing a good fit for cloud development? 🌟
+sidebar_label: Why Wing is ideal for Cloud dev.
 id: good-fit
 keywords: [faq, main features, winglang, Wing programming language, Wing language]
 ---

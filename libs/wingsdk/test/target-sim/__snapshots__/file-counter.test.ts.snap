@@ -115,7 +115,6 @@ bucket: (function(env) {
                     "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -138,7 +137,6 @@ bucket: (function(env) {
                     "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
-                "wing:resource:stateful": true,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -161,7 +159,6 @@ bucket: (function(env) {
                     "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -185,13 +182,11 @@ bucket: (function(env) {
                     "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
-                "wing:resource:stateful": true,
               },
               "children": {
                 "Queue-QueueEventMapping-401ee792": {
                   "attributes": {
                     "wing:resource:connections": [],
-                    "wing:resource:stateful": true,
                   },
                   "constructInfo": {
                     "fqn": "constructs.Construct",
@@ -243,7 +238,6 @@ bucket: (function(env) {
                     "resource": "root/HelloWorld/Queue",
                   },
                 ],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -259,7 +253,6 @@ bucket: (function(env) {
             "Queue-AddConsumerHandler-401ee792": {
               "attributes": {
                 "wing:resource:connections": [],
-                "wing:resource:stateful": false,
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -282,7 +275,6 @@ bucket: (function(env) {
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

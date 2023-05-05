@@ -25,7 +25,14 @@ export interface MetaComment {
    *
    * @default - Will not be skipped
    */
-  skipPlatforms?: typeof process.platform[];
+  skipPlatforms?: (typeof process.platform)[];
+
+  /**
+   * Should the test be skipped at all platform, all environments
+   *
+   * @default - Will not be skipped
+   */
+  skip?: boolean;
 }
 
 export function parseMetaCommentFromPath(testPath: string) {

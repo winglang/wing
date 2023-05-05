@@ -1,9 +1,9 @@
 import { join } from "path";
-import { SnsTopic } from "@cdktf/provider-aws/lib/sns-topic";
-import { SnsTopicPolicy } from "@cdktf/provider-aws/lib/sns-topic-policy";
-import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { SnsTopic } from "../.gen/providers/aws/sns-topic";
+import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
+import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateTopicPermissions } from "../shared-aws/permissions";

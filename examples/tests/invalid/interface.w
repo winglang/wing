@@ -12,9 +12,7 @@ interface IExist extends IDontExist {
 }
 
 // interface extends class
-inflight class ISomeClass {
-    init(){}
-}
+inflight class ISomeClass {}
 interface ISomeInterface extends ISomeClass {
                       // Interface "ISomeInterface (at ../../examples/tests/invalid/interface.w:21:11)" extends "ISomeClass", which is not an interface
 }
