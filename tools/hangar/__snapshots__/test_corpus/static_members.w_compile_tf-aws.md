@@ -4,9 +4,8 @@
 ```js
 module.exports = function() {
   class  Foo {
-    constructor({ instance_field, stateful }) {
+    constructor({ instance_field }) {
       this.instance_field = instance_field;
-      this.stateful = stateful;
     }
     static async get_123()  {
       {
@@ -162,14 +161,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const instance_field_client = this._lift(this.instance_field);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const Foo = require("${self_client_path}")({});
             const client = new Foo({
               instance_field: ${instance_field_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -179,7 +176,6 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.instance_field, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("get_123")) {
         }

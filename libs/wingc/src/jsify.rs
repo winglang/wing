@@ -410,6 +410,11 @@ impl<'a> JSifier<'a> {
 								// set `needs_case_conversion` to true for `any` and builtin types, and I'm not sure why..
 								needs_case_conversion = false;
 							}
+						} else if let Reference::TypeMember { .. } = reference {
+							let st_type = expression.evaluated_type.borrow().unwrap();
+							if let Some(class) = st_type.as_class_or_resource() {
+								needs_case_conversion = class.should_case_convert_jsii;
+							}
 						}
 						self.jsify_reference(reference, Some(needs_case_conversion), context)
 					}
@@ -1566,6 +1571,12 @@ impl<'a> FieldReferenceVisitor<'a> {
 	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
 		match &node.kind {
 			ExprKind::Reference(Reference::Identifier(x)) => {
+				// If the reference isn't "this" or a free variable, then it couldn't have been
+				// defined in preflight, so skip it.
+				if x.name != "this" && !self.free_vars.contains(&x) {
+					return vec![];
+				}
+
 				// We know the expr we're analyzing is inside of a function. To obtain
 				// information about the variable we're referencing (like its type and
 				// whether it's reassignable), we look it up in the function's symbol environment.
@@ -1591,34 +1602,52 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 			ExprKind::Reference(Reference::InstanceMember { object, property }) => {
 				let obj_type = object.evaluated_type.borrow().unwrap();
-				let var = if let Some(cls) = obj_type.as_class_or_resource() {
-					Some(
+				let var = match &*obj_type {
+					Type::Void => unreachable!("cannot reference a member of void"),
+					Type::Function(_) => unreachable!("cannot reference a member of a function"),
+					Type::Optional(_) => unreachable!("cannot reference a member of an optional"),
+					// all fields / methods / values of these types are phase-independent so we can skip them
+					Type::Anything
+					| Type::Number
+					| Type::String
+					| Type::Duration
+					| Type::Boolean
+					| Type::Json
+					| Type::MutJson
+					| Type::Enum(_) => return vec![],
+					// TODO: collection types are unsupported for now
+					Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => None,
+					Type::Class(cls) => Some(
 						cls
 							.env
 							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
-					)
-				} else if let Some(iface) = obj_type.as_interface() {
-					Some(
+					),
+					Type::Resource(cls) => Some(
+						cls
+							.env
+							.lookup(&property, None)
+							.expect("covered by type checking")
+							.as_variable()
+							.unwrap(),
+					),
+					Type::Interface(iface) => Some(
 						iface
 							.env
 							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
-					)
-				} else if let Some(s) = obj_type.as_struct() {
-					Some(
-						s.env
+					),
+					Type::Struct(st) => Some(
+						st.env
 							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
-					)
-				} else {
-					None
+					),
 				};
 
 				let prop = vec![Component {

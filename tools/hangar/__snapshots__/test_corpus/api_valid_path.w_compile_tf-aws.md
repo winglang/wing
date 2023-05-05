@@ -261,7 +261,7 @@ class $Root extends $stdlib.std.Resource {
     const test_invalid_path =  (path) =>  {
       {
         let error = "";
-        const expected = `Invalid route ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".`;
+        const expected = `Invalid path ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".`;
         try {
           (api.get(path,handler));
         }

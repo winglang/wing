@@ -20,7 +20,7 @@ class PermissionBoundaryAspect {
   }
 
   visit(node) {
-    if (node instanceof iam_role.IamRole) {
+    if (node.terraformResourceType === "aws_iam_role") {
       node.permissionsBoundary = this.permissionBoundaryArn;
     }
   }
