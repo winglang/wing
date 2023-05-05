@@ -1,5 +1,6 @@
 ---
 title: How does Wing handle secrets securely?
+sidebar_label: How does Wing handle secrets?
 id: handling-secrets
 keywords: [faq, winglang, Wing programming language, Wing language, secrets, secret management]
 ---

@@ -1,5 +1,6 @@
 ---
 title: Isn't trying to abstract the cloud a bad idea?
+sidebar_label: Abstracting the cloud - good idea?
 id: why-cloud-abstraction
 keywords: [faq, abstraction, winglang, Wing programming language, Wing language, Terraform]
 ---

@@ -1,5 +1,6 @@
 ---
 title: How does Wing handle state?
+sidebar_label: How does Wing handle state?
 id: how-wing-handles-state
 keywords: [faq, state, winglang, Wing programming language, Wing language]
 ---

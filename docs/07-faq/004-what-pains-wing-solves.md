@@ -1,5 +1,6 @@
 ---
 title: What pains does Wing aim to solve for developers and organizations?
+sidebar_label: What pains Wing solves?
 id: pains-wing-aims-to-solve
 keywords: [faq, winglang, Wing programming language, Wing language, developer experience, pain points]
 ---
