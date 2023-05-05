@@ -3,23 +3,13 @@
  */
 export class Duration {
   /**
-   * Create a Duration representing an amount of minutes
+   * Create a Duration representing an amount of milliseconds
    *
-   * @param amount the amount of Minutes the `Duration` will represent.
-   * @returns a new `Duration` representing `amount` Minutes.
+   * @param amount the amount of milliseconds the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` milliseconds.
    */
-  public static fromMinutes(amount: number): Duration {
-    return new Duration(amount * 60 * 1000);
-  }
-
-  /**
-   * Create a Duration representing an amount of hours
-   *
-   * @param amount the amount of Hours the `Duration` will represent.
-   * @returns a new `Duration` representing `amount` Hours.
-   */
-  public static fromHours(amount: number): Duration {
-    return new Duration(amount * 60 * 60 * 1000);
+  public static fromMilliseconds(amount: number): Duration {
+    return new Duration(amount);
   }
 
   /**
@@ -29,17 +19,37 @@ export class Duration {
    * @returns a new `Duration` representing `amount` Seconds.
    */
   public static fromSeconds(amount: number): Duration {
-    return new Duration(amount * 1000);
+    return this.fromMilliseconds(amount * 1000);
   }
 
   /**
-   * Create a Duration representing an amount of milliseconds
+   * Create a Duration representing an amount of minutes
    *
-   * @param amount the amount of milliseconds the `Duration` will represent.
-   * @returns a new `Duration` representing `amount` milliseconds.
+   * @param amount the amount of Minutes the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` Minutes.
    */
-  public static fromMilliseconds(amount: number): Duration {
-    return new Duration(amount);
+  public static fromMinutes(amount: number): Duration {
+    return this.fromSeconds(amount * 60);
+  }
+
+  /**
+   * Create a Duration representing an amount of hours
+   *
+   * @param amount the amount of Hours the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` Hours.
+   */
+  public static fromHours(amount: number): Duration {
+    return this.fromMinutes(amount * 60);
+  }
+
+  /**
+   * Create a Duration representing an amount of days
+   *
+   * @param amount the amount of Days the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` Days.
+   */
+  public static fromDays(amount: number): Duration {
+    return this.fromHours(amount * 24);
   }
 
   /**
@@ -51,6 +61,15 @@ export class Duration {
 
   private constructor(milliseconds: number) {
     this.milliseconds = milliseconds;
+  }
+
+  /**
+   * Return the total number of seconds in this Duration
+   *
+   * @returns the value of this `Duration` expressed in Seconds.
+   */
+  public get seconds() {
+    return this.milliseconds / 1000;
   }
 
   /**
@@ -72,11 +91,11 @@ export class Duration {
   }
 
   /**
-   * Return the total number of milliseconds in this Duration
+   * Return the total number of days in this Duration
    *
-   * @returns the value of this `Duration` expressed in Milliseconds.
+   * @returns the value of this `Duration` expressed in Days.
    */
-  public get seconds() {
-    return this.milliseconds / 1000;
+  public get days() {
+    return this.hours / 24;
   }
 }
