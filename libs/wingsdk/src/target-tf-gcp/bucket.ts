@@ -1,9 +1,9 @@
-import { StorageBucket } from "@cdktf/provider-google/lib/storage-bucket";
-import { StorageBucketIamMember } from "@cdktf/provider-google/lib/storage-bucket-iam-member";
-import { StorageBucketObject } from "@cdktf/provider-google/lib/storage-bucket-object";
-import { Id } from "@cdktf/provider-random/lib/id";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { StorageBucket } from "../.gen/providers/google/storage-bucket";
+import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
+import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
+import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost } from "../std";

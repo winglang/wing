@@ -29,5 +29,5 @@ test("unsupported resource in target", async ({ expect }) => {
         GOOGLE_STORAGE_LOCATION: "us-central1",
       }
     })
-  ).rejects.toThrowErrorMatchingInlineSnapshot('"preflight error: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target"');
+  ).rejects.toThrowErrorMatchingInlineSnapshot('"Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target"');
 });

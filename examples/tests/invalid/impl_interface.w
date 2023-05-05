@@ -2,11 +2,9 @@ bring cloud;
 
 class A impl cloud.IQueueAddConsumerHandler {
   // Error: A does not implement "handle" method of cloud.IQueueAddConsumerHandler
-  init() {}
 }
 
 class B impl cloud.IQueueAddConsumerHandler {
-  init() {}
   inflight handle(x: num) {
     // Error: Expected type to be "inflight (str): void", but got "inflight (num): void" instead
     return;
@@ -15,7 +13,6 @@ class B impl cloud.IQueueAddConsumerHandler {
 
 class C impl cloud.Bucket {
               // ^^^^^^^^^^^ Error: cloud.Bucket is a resource, not an interface
-  init() {}
 }
 
 interface I1 {
@@ -34,5 +31,4 @@ class r impl I3 {
       // ^ Resource "r" does not implement method "method_1" of interface "I3"
       // ^ Resource "r" does not implement method "method_2" of interface "I3"
       // ^ Resource "r" does not implement method "method_3" of interface "I3"
-  init() {}
 }

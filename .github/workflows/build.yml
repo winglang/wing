@@ -5,6 +5,10 @@ on:
     types:
       - opened
       - synchronize
+    paths-ignore:
+      - "docs/**"
+      - "logo/**"
+      - "*.md"
   push:
     branches:
       - main

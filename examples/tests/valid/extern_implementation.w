@@ -8,8 +8,6 @@ class Foo {
   extern "./external_js.js" inflight print(msg: str);
   extern "uuid" static v4(): str;
 
-  init(){}
-
   inflight call() {
     assert(Foo.regex_inflight("[a-z]+-\\d+", "abc-123"));
     let uuid = Foo.get_uuid();

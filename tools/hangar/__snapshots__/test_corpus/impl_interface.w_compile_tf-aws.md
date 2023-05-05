@@ -4,8 +4,7 @@
 ```js
 module.exports = function() {
   class  A {
-    constructor({ stateful }) {
-      this.stateful = stateful;
+    constructor({  }) {
     }
     async handle(msg)  {
       {
@@ -22,8 +21,7 @@ module.exports = function() {
 ```js
 module.exports = function() {
   class  Dog {
-    constructor({ stateful }) {
-      this.stateful = stateful;
+    constructor({  }) {
     }
     async eat()  {
       {
@@ -40,8 +38,7 @@ module.exports = function() {
 ```js
 module.exports = function() {
   class  r {
-    constructor({ stateful }) {
-      this.stateful = stateful;
+    constructor({  }) {
     }
     async method_2(x)  {
       {
@@ -102,13 +99,11 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("handle");
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const A = require("${self_client_path}")({});
             const client = new A({
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -117,7 +112,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("handle")) {
         }
@@ -140,13 +134,11 @@ class $Root extends $stdlib.std.Resource {
         }
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const r = require("${self_client_path}")({});
             const client = new r({
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -155,7 +147,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("method_2")) {
         }
@@ -168,13 +159,11 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("eat");
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const Dog = require("${self_client_path}")({});
             const client = new Dog({
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -183,7 +172,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("eat")) {
         }
