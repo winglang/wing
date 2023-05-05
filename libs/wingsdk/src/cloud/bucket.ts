@@ -41,7 +41,6 @@ export abstract class Bucket extends Resource {
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
-  public readonly stateful = true;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);

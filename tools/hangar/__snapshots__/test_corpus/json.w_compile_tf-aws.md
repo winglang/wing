@@ -4,9 +4,8 @@
 ```js
 module.exports = function() {
   class  Foo {
-    constructor({ _sum_str, stateful }) {
+    constructor({ _sum_str }) {
       this._sum_str = _sum_str;
-      this.stateful = stateful;
     }
   }
   return Foo;
@@ -62,14 +61,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const _sum_str_client = this._lift(this._sum_str);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const Foo = require("${self_client_path}")({});
             const client = new Foo({
               _sum_str: ${_sum_str_client},
-              stateful: ${stateful_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -79,7 +76,6 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this._sum_str, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         super._registerBind(host, ops);
       }

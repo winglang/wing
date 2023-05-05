@@ -28,7 +28,7 @@ class ReplicateS3Aspect {
   }
 
   visit(node) {
-    if (node instanceof s3_bucket.S3Bucket) {
+    if (node.terraformResourceType === "aws_s3_bucket") {
       const scope = node.node.scope;
       const replicaBucket = new s3_bucket.S3Bucket(scope, `Replica${node.node.id}`, {
         bucket: `${this.replicaPrefix}${node.bucket}`
