@@ -1,5 +1,6 @@
 ---
 title: Why start with JavaScript interop and not some other language?
+sidebar_label: Why start with JavaScript interop?
 id: why-start-with-js-interop
 keywords: [faq, winglang, Wing programming language, Wing language, JavaScript, Interop]
 ---
