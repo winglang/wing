@@ -32,22 +32,6 @@ export default async function () {
   fs.removeSync(tmpDir);
   fs.mkdirpSync(tmpDir);
 
-  // create symlink in tmpDir to given packages
-  // for non-production builds, the wingcli pulls wingsdk from `./winglang-sdk.tgz`
-  // we symlink both to make sure that relative path resolution works
-  if (targetWingSpec.startsWith("file:")) {
-    fs.symlinkSync(
-      targetWingSpec.replace("file:", ""),
-      path.join(tmpDir, "winglang.tgz")
-    );
-  }
-  if (targetWingSDKSpec.startsWith("file:")) {
-    fs.symlinkSync(
-      targetWingSDKSpec.replace("file:", ""),
-      path.join(tmpDir, "winglang-sdk.tgz")
-    );
-  }
-
 
   await execa(npmBin, ["init", "-y"], {
     cwd: tmpDir,
@@ -59,6 +43,7 @@ export default async function () {
     "install",
     "--no-package-lock",
     "--install-links=false",
+    targetWingSDKSpec,
     targetWingSpec,
   ];
   const installResult = await execa(npmBin, installArgs, {
