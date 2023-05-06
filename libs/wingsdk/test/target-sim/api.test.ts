@@ -287,6 +287,9 @@ test("api with one POST route, with body urlencoded", async () => {
   const response = await fetch(apiUrl + ROUTE, {
     method: "POST",
     body: params,
+    headers: {
+      "Content-Type": "application/octet-stream",
+    },
   });
 
   // THEN
