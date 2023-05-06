@@ -156,7 +156,7 @@ fn scan_captures_in_expression(
 		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
-				let x = env.lookup_ext(&symbol.name, Some(statement_idx));
+				let x = env.lookup_ext(symbol, Some(statement_idx));
 
 				// we ignore errors here because if the lookup symbol
 				// wasn't found, a error diagnostic is already emitted
@@ -231,7 +231,7 @@ fn scan_captures_in_expression(
 
 				// If the expression evaluates to a resource we should check what method of the resource we're accessing
 				if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
-					let (_, _flight) = if let LookupResult::Found(prop_type, li) = resource.env.lookup_ext(&property.name, None) {
+					let (_, _flight) = if let LookupResult::Found(prop_type, li) = resource.env.lookup_ext(&property, None) {
 						(
 							prop_type
 								.as_variable()

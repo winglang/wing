@@ -72,6 +72,12 @@ impl Equivalent<Symbol> for str {
 	}
 }
 
+impl From<&str> for Symbol {
+	fn from(s: &str) -> Self {
+		Symbol::global(s)
+	}
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Phase {
 	Inflight,

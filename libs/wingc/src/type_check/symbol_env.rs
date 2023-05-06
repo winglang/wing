@@ -47,7 +47,7 @@ pub enum LookupResult<'a> {
 	/// The kind of symbol and useful metadata associated with its lookup
 	Found(reference([a], [SymbolKind]), SymbolLookupInfo),
 	/// The symbol was not found in the environment, contains the name of the symbol or part of it that was not found
-	NotFound(String),
+	NotFound(Symbol),
 	/// The symbol exists in the environment but it's not defined yet (based on the statement
 	/// index passed to the lookup)
 	DefinedLater,
@@ -154,13 +154,10 @@ impl SymbolEnv {
 	/// just `None`.
 	pub fn lookup(
 		self: reference([Self]),
-		symbol_name: &str,
+		symbol: &Symbol,
 		not_after_stmt_idx: Option<usize>,
 	) -> Option<reference([SymbolKind])> {
-		self
-			.lookup_ext(symbol_name, not_after_stmt_idx)
-			.ok()
-			.map(|(kind, _)| kind)
+		self.lookup_ext(symbol, not_after_stmt_idx).ok().map(|(kind, _)| kind)
 	}
 
 	#[allow(clippy::needless_arbitrary_self_type)]
@@ -172,8 +169,8 @@ impl SymbolEnv {
 	/// Lookup a symbol in the environment, returning a `LookupResult`. Note that the symbol name
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
-	pub fn lookup_ext(self: reference([Self]), symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		if let Some((definition_idx, kind)) = self.symbol_map.map_get(symbol_name) {
+	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
+		if let Some((definition_idx, kind)) = self.symbol_map.map_get(&symbol.name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
 				if let StatementIdx::Index(definition_idx) = definition_idx {
 					if *definition_idx > not_after_stmt_idx {
@@ -189,9 +186,9 @@ impl SymbolEnv {
 				},
 			)
 		} else if let Some(ref_annotation([parent_env])) = self.parent {
-			parent_env.lookup_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
+			parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
-			LookupResult::NotFound(symbol_name.to_string())
+			LookupResult::NotFound(symbol.clone())
 		}
 	}
 
@@ -208,7 +205,7 @@ impl SymbolEnv {
 
 		let symb = *it.next().unwrap();
 
-		let res = self.lookup_ext(&symb.name, statement_idx);
+		let res = self.lookup_ext(symb, statement_idx);
 		let mut res = if let LookupResult::Found(k, i) = res {
 			(k, i)
 		} else {
@@ -232,7 +229,7 @@ impl SymbolEnv {
 				return LookupResult::ExpectedNamespace(prev_symb.clone());
 			};
 
-			let lookup_result = ns.env.lookup_ext(&next_symb.name, statement_idx);
+			let lookup_result = ns.env.lookup_ext(next_symb, statement_idx);
 			prev_symb = *next_symb;
 
 			if let LookupResult::Found(k, i) = lookup_result {
@@ -526,7 +523,7 @@ mod tests {
 		let res = child_env.lookup_nested_str("ns1.ns2.non_existent", None);
 		match res {
 			LookupResult::NotFound(s) => {
-				assert!(s == "non_existent")
+				assert!(s.name == "non_existent")
 			}
 			_ => panic!("Expected LookupResult::NotFount(_) but got {:?}", res),
 		}
@@ -535,7 +532,7 @@ mod tests {
 		let res = child_env.lookup_nested_str("ns1.non_existent.ns2_var", None);
 		match res {
 			LookupResult::NotFound(s) => {
-				assert!(s == "non_existent")
+				assert!(s.name == "non_existent")
 			}
 			_ => panic!("Expected LookupResult::NotFount(_) but got {:?}", res),
 		}

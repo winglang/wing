@@ -739,7 +739,7 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 		let mut value_index = 0;
 
-		code.open(format!("Object.freeze((function (tmp) {{"));
+		code.open("Object.freeze((function (tmp) {");
 
 		for value in values {
 			code.line(format!(
@@ -983,7 +983,7 @@ impl<'a> JSifier<'a> {
 		assert!(context.phase == Phase::Preflight);
 
 		// Lookup the resource type
-		let resource_type = env.lookup(&class.name.name, None).unwrap().as_type().unwrap();
+		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// Find all free variables in the resource, and return a list of their symbols
 		//let free_vars = self.find_free_vars(class);
@@ -1676,7 +1676,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				// To obtain information about the variable we're referencing (like its type and
 				// whether it's reassignable), we look it up in the function's symbol environment.
 				let var = env
-					.lookup(&x.name, Some(self.statement_index))
+					.lookup(&x, Some(self.statement_index))
 					.expect("covered by type checking")
 					.as_variable()
 					.expect("reference to a non-variable");
@@ -1700,7 +1700,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					Some(
 						cls
 							.env
-							.lookup(&property.name, None)
+							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
@@ -1709,7 +1709,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					Some(
 						iface
 							.env
-							.lookup(&property.name, None)
+							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
@@ -1717,7 +1717,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				} else if let Some(s) = obj_type.as_struct() {
 					Some(
 						s.env
-							.lookup(&property.name, None)
+							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),

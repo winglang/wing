@@ -235,7 +235,7 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 				.borrow();
 			let env = env.as_ref().expect("All scopes should have a symbol environment");
 
-			let symbol_lookup = env.lookup_ext(&symbol.name, None);
+			let symbol_lookup = env.lookup_ext(symbol, None);
 
 			let hover_string = if let LookupResult::Found(kind, info) = symbol_lookup {
 				format_symbol_with_lookup(&symbol.name, (kind, info))
