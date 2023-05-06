@@ -2,7 +2,7 @@
 
 ## clients/Another.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Another {
     constructor({ first, my_field }) {
       this.first = first;
@@ -26,7 +26,7 @@ module.exports = function() {
 
 ## clients/First.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  First {
     constructor({ my_resource }) {
       this.my_resource = my_resource;
@@ -39,7 +39,7 @@ module.exports = function() {
 
 ## clients/MyResource.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  MyResource {
     constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_opt_str, my_queue, my_resource, my_str, set_of_str, unused_resource }) {
       this.another = another;
@@ -430,13 +430,19 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
-      _toInflight() {
-        const my_resource_client = this._lift(this.my_resource);
+      static _toInflightType(context) {
         const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const my_resource_client = this._lift(this.my_resource);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const First = require("${self_client_path}")({});
-            const client = new First({
+            const FirstClient = ${First._toInflightType(this).text};
+            const client = new FirstClient({
               my_resource: ${my_resource_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -458,14 +464,20 @@ class $Root extends $stdlib.std.Resource {
         this.my_field = "hello!";
         this.first = new First(this,"First");
       }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
       _toInflight() {
         const first_client = this._lift(this.first);
         const my_field_client = this._lift(this.my_field);
-        const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Another = require("${self_client_path}")({});
-            const client = new Another({
+            const AnotherClient = ${Another._toInflightType(this).text};
+            const client = new AnotherClient({
               first: ${first_client},
               my_field: ${my_field_client},
             });
@@ -509,6 +521,13 @@ class $Root extends $stdlib.std.Resource {
           return this.another;
         }
       }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
       _toInflight() {
         const another_client = this._lift(this.another);
         const array_of_str_client = this._lift(this.array_of_str);
@@ -523,11 +542,10 @@ class $Root extends $stdlib.std.Resource {
         const my_str_client = this._lift(this.my_str);
         const set_of_str_client = this._lift(this.set_of_str);
         const unused_resource_client = this._lift(this.unused_resource);
-        const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const MyResource = require("${self_client_path}")({});
-            const client = new MyResource({
+            const MyResourceClient = ${MyResource._toInflightType(this).text};
+            const client = new MyResourceClient({
               another: ${another_client},
               array_of_str: ${array_of_str_client},
               ext_bucket: ${ext_bucket_client},

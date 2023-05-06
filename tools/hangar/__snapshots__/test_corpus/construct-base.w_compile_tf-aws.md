@@ -2,7 +2,7 @@
 
 ## clients/WingResource.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  WingResource {
     constructor({  }) {
     }
@@ -73,12 +73,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         {console.log(`my id is ${this.node.id}`)};
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/WingResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const WingResource = require("${self_client_path}")({});
-            const client = new WingResource({
+            const WingResourceClient = ${WingResource._toInflightType(this).text};
+            const client = new WingResourceClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

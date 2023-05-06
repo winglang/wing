@@ -2,7 +2,7 @@
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
     constructor({ _sum_str }) {
       this._sum_str = _sum_str;
@@ -59,13 +59,19 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._sum_str = "wow!";
       }
-      _toInflight() {
-        const _sum_str_client = this._lift(this._sum_str);
+      static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const _sum_str_client = this._lift(this._sum_str);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
               _sum_str: ${_sum_str_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
