@@ -452,6 +452,34 @@ test("api response returns Content-Type header from inflight", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("api response returns default Content-Type header", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, {
+    method: "GET",
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(response.headers.get("Content-Type")).toEqual(
+    "application/json; charset=utf-8"
+  );
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 function getApiUrl(s: Simulator, path: string): string {
   const apiAttrs = s.getResourceConfig(path).attrs as ApiAttributes;
   return apiAttrs.url;
