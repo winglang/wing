@@ -119,7 +119,7 @@ describe("ApiResponseMapper", () => {
     });
   });
 
-  test("handle different content-type from default one", async () => {
+  test("api response returns Content-Type header from inflight`", async () => {
     // GIVEN
     const apiRequestEvent: Partial<APIGatewayProxyEvent> = {
       body: JSON.stringify({}),
