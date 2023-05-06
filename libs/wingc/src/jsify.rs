@@ -985,14 +985,8 @@ impl<'a> JSifier<'a> {
 		// Lookup the resource type
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
-		// Find all free variables in the resource, and return a list of their symbols
-		//let free_vars = self.find_free_vars(class);
-
 		// Get all references between inflight methods and preflight values
 		let mut refs = self.find_inflight_references(class);
-
-		// After calling find_inflight_references, we don't really need the exact symbols anymore, only their names
-		//let free_vars: BTreeSet<String> = free_vars.iter().map(|s| s.name.clone()).into_iter().collect();
 
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_capturable_field_names(resource_type);
