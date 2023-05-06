@@ -1,5 +1,3 @@
-exports.sleep = async function (timeMs) {
-  return new Promise(function (resolve) {
-    return setTimeout(resolve, timeMs);
-  });
+exports.sleep = function (ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
