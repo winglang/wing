@@ -24,13 +24,20 @@ Wing programs can be executed locally (*yes, no internet required*) using a full
 
 Our mission is to bring back your creative flow and close the gap between imagination and creation. Wing elevates your cloud development experience to new heights (the puns are just inevitable so bear with us)! 🚀
 
+We fullfil this mission by reducing cognitive load and increasing iteration speeds. How? by enabling you to work at a higher level of abstraction, letting you focus on business logic instead of cloud mechanics, and write much less code (90%-95% less!). We also provide you with a set of tools that let you test your code 100 times faster than before.
+
 <a href="https://youtu.be/vHy1TM2JzUQ" target="_blank" align="left">
     <img src="./logo/demo.gif" alt="Wing Demo" height="300px">
 </a>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
-## Why do we think the cloud needs a programming language? 🤔
+## What pains does Wing aim to solve? 
+Developing for the cloud today requires mastering various layers of cloud stack, IAM roles, networking, and numerous tools, along with finding creative ways to test and debug code. In addition, long deployment times hinder iteration cycles and take developers out of their creative flow. 
+
+This is just the tip of the iceberg, if for some reason you like pain, you can find some more [here](https://docs.winglang.io/faq/pains-wing-aims-to-solve) ;)
+
+## Why we think the cloud needs a programming language to solve these pains? 🤔
 
 Cloud applications are are fundamentally different from applications that run on a single machine - 
 they are distributed systems that rely on cloud infrastructure to achieve their goals.
