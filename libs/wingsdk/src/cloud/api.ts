@@ -313,7 +313,7 @@ export interface ApiRequest {
   /** The request's query string values. */
   readonly query: Record<string, string>;
   /** The path variables. */
-  readonly vars?: Record<string, string>;
+  readonly vars: Record<string, string> = {};
   /** The request's body. */
   readonly body?: object; // JSII sees this as "json" type
   /** The request's headers. */
