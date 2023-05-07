@@ -605,7 +605,7 @@ pub enum UnaryOperator {
 
 #[derive(Debug)]
 pub enum BinaryOperator {
-	Add,
+	AddOrConcat,
 	Sub,
 	Mul,
 	Div,
