@@ -199,7 +199,9 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const schema: ApiSchema = {
       type: API_TYPE,
       path: this.node.path,
-      props: {},
+      props: {
+        openApiSpec: this._getApiSpec(),
+      },
       attrs: {} as any,
     };
     return schema;

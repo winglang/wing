@@ -10,13 +10,7 @@ const inAction = process.env.GITHUB_ACTIONS === "true";
 async function getData() {
   // If we want to generate a version, skip changelogen logic
   if (process.env.GENERATE_VERSION !== "false") {
-    let version = "0.0.0";
-    if (inAction) {
-      const runId = process.env.GITHUB_RUN_ID;
-      const runAttempt = process.env.GITHUB_RUN_ATTEMPT;
-
-      version += `-${runId}.${runAttempt}`;
-    }
+    const version = "0.0.0";
 
     return {
       lastVersion: version,

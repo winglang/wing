@@ -24,6 +24,8 @@
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
     "release": "npx projen release",
+    "remove-bundled-deps": "npx projen remove-bundled-deps",
+    "restore-bundled-deps": "npx projen restore-bundled-deps",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
     "unbump": "npx projen unbump",
@@ -100,7 +102,7 @@
     "esbuild-wasm": "^0.17.4",
     "express": "^4.18.2",
     "ioredis": "^5.3.1",
-    "safe-stable-stringify": "*",
+    "safe-stable-stringify": "^1.0.1",
     "tar": "^6.1.13",
     "uuid": "^8.3.2",
     "vm2": "^3.9.16"
