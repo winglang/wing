@@ -22,8 +22,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          # ref: tsuf/sdk-tests-github-action
           repository: winglang/wing
+          ref: tsuf/sdk-tests-github-action
+      # - name: move
+      #   run: git checkout origin/tsuf/sdk-tests-github-action
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -39,6 +41,7 @@ jobs:
           npm install -g winglang@${{ steps.get-version.outputs.version }}
       - name: Run tests
         run: |
+          ls
           cd examples/tests/sdk_tests
           find . -type f -name "*.w" | while read file; do
             wing test -t tf-aws "$file"
