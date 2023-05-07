@@ -102,7 +102,7 @@
     "esbuild-wasm": "^0.17.4",
     "express": "^4.18.2",
     "ioredis": "^5.3.1",
-    "safe-stable-stringify": "*",
+    "safe-stable-stringify": "^1.0.1",
     "tar": "^6.1.13",
     "uuid": "^8.3.2",
     "vm2": "^3.9.16"
