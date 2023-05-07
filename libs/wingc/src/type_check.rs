@@ -1208,7 +1208,7 @@ impl<'a> TypeChecker<'a> {
 							self.diagnostics.borrow_mut().push(Diagnostic {
 								message: format!(
 									"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
-									ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(), 
+									ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
 								),
 								span: Some(exp.span()),
 								level: DiagnosticLevel::Error,
@@ -1216,7 +1216,7 @@ impl<'a> TypeChecker<'a> {
 							self.types.anything() // TODO: return error type
 						}
 					}
-					| BinaryOperator::Sub
+					BinaryOperator::Sub
 					| BinaryOperator::Mul
 					| BinaryOperator::Div
 					| BinaryOperator::FloorDiv
