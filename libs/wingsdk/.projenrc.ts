@@ -5,10 +5,10 @@ const JSII_DEPS = ["constructs@~10.1.228"];
 const CDKTF_VERSION = "0.15.2";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>4.0",
-  "random@~>3.1",
-  "azurerm@~>3.10",
-  "google@~>4.0",
+  "aws@~>4.65.0",
+  "random@~>3.5.1",
+  "azurerm@~>3.54.0",
+  "google@~>4.63.1",
 ];
 
 // defines the list of dependencies required for each compilation target that is not built into the
