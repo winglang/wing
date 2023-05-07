@@ -10,7 +10,7 @@ use crate::{
 
 const PARENT_THIS_NAME: &str = "__parent_this";
 
-/// Transforms inflight closures defined in preflight scopes into resources.
+/// Transforms inflight closures defined in preflight scopes into preflight classes.
 ///
 /// This is done by wrapping the closure's code in a preflight class with a single method,
 /// and replacing the closure with a reference to an instance of that class.
@@ -39,11 +39,9 @@ pub struct ClosureTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
 	curr_phase: Phase,
-	// Whether the transformer is inside a resource or not. If we are, we transform
-	// inflight closures with an extra `let __parent_this = this;` statement so
-	// that they can access the parent resource's fields.
-	is_inside_resource: bool,
-	// Helper state for generating unique class names for resources
+	// Whether the transformer is inside a class or not.
+	is_inside_class: bool,
+	// Helper state for generating unique class names
 	inflight_counter: usize,
 }
 
@@ -51,7 +49,7 @@ impl ClosureTransformer {
 	pub fn new() -> Self {
 		Self {
 			curr_phase: Phase::Preflight,
-			is_inside_resource: false,
+			is_inside_class: false,
 			inflight_counter: 0,
 		}
 	}
@@ -67,10 +65,10 @@ impl Fold for ClosureTransformer {
 	}
 
 	fn fold_class(&mut self, node: Class) -> Class {
-		let prev_is_inside_resource = self.is_inside_resource;
-		self.is_inside_resource = true;
+		let prev_is_inside_class = self.is_inside_class;
+		self.is_inside_class = true;
 		let new_node = fold::fold_class(self, node);
-		self.is_inside_resource = prev_is_inside_resource;
+		self.is_inside_class = prev_is_inside_class;
 		new_node
 	}
 
@@ -81,8 +79,8 @@ impl Fold for ClosureTransformer {
 			return expr;
 		}
 
-		// If we encounter a non-inflight closure, we can don't need to
-		// transform it into a resource, but we still want to recurse
+		// If we encounter a preflight closure, we don't need to
+		// transform it into a preflight class, but we still want to recurse
 		// in case its body contains any inflight closures.
 		if let ExprKind::FunctionClosure(ref func_def) = expr.kind {
 			if func_def.signature.phase != Phase::Inflight {
@@ -94,7 +92,7 @@ impl Fold for ClosureTransformer {
 			ExprKind::FunctionClosure(func_def) => {
 				self.inflight_counter += 1;
 
-				let resource_name = Symbol {
+				let new_class_name = Symbol {
 					name: format!("$Inflight{}", self.inflight_counter),
 					span: expr.span.clone(),
 				};
@@ -111,48 +109,53 @@ impl Fold for ClosureTransformer {
 					span: expr.span.clone(),
 				};
 
-				let resource_type_annotation = TypeAnnotation {
+				let class_type_annotation = TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-						root: resource_name.clone(),
+						root: new_class_name.clone(),
 						fields: vec![],
 					}),
 					span: expr.span.clone(),
 				};
 
-				let resource_fields: Vec<ClassField> = vec![];
-				let resource_init_params: Vec<FunctionParameter> = vec![];
+				let class_fields: Vec<ClassField> = vec![];
+				let class_init_params: Vec<FunctionParameter> = vec![];
 
-				let new_func_def = if self.is_inside_resource {
-					// transform all occurrences of "this" into "__parent_this"
-					let mut this_transform = ThisTransformer;
+				let new_func_def = if self.is_inside_class {
+					// If we are inside a class, we transform inflight closures with an extra
+					// `let __parent_this = this;` statement before the class definition, and replace all references
+					// of `this` with `__parent_this` so that they can access the parent class's fields.
+					let mut this_transform = RenameIdentifierTransformer {
+						from: "this",
+						to: PARENT_THIS_NAME,
+					};
 					this_transform.fold_function_definition(func_def)
 				} else {
 					func_def
 				};
 
-				// resource_def :=
+				// class_def :=
 				// ```
-				// resource {
-				//   init(<resource_init_params>) {<resource_init_body>}
+				// class <new_class_name> {
+				//   init(<class_init_params>) {<class_init_body>}
 				//   inflight handle() {
 				//     <transformed_def>
 				//   }
 				// }
 				// ```
-				let resource_def = Stmt {
+				let class_def = Stmt {
 					kind: StmtKind::Class(Class {
-						name: resource_name.clone(),
+						name: new_class_name.clone(),
 						is_resource: true,
 						initializer: Initializer {
 							signature: FunctionSignature {
-								parameters: resource_init_params,
-								return_type: Some(Box::new(resource_type_annotation.clone())),
+								parameters: class_init_params,
+								return_type: Some(Box::new(class_type_annotation.clone())),
 								phase: Phase::Preflight,
 							},
 							statements: Scope::new(vec![], expr.span.clone()),
 							span: expr.span.clone(),
 						},
-						fields: resource_fields,
+						fields: class_fields,
 						implements: vec![],
 						parent: None,
 						methods: vec![(handle_name.clone(), new_func_def)],
@@ -162,14 +165,14 @@ impl Fold for ClosureTransformer {
 					span: expr.span.clone(),
 				};
 
-				// return_resource_instance :=
+				// return_class_instance :=
 				// ```
-				// return new <resource_name>();
+				// return new <new_class_name>();
 				// ```
-				let return_resource_instance = Stmt {
+				let return_class_instance = Stmt {
 					kind: StmtKind::Return(Some(Expr::new(
 						ExprKind::New {
-							class: resource_type_annotation,
+							class: class_type_annotation,
 							arg_list: ArgList {
 								named_args: IndexMap::new(),
 								pos_args: vec![],
@@ -183,15 +186,15 @@ impl Fold for ClosureTransformer {
 					span: expr.span.clone(),
 				};
 
-				// make_resource_body :=
+				// make_class_body :=
 				// ```
 				// {
-				//   <parent_this_def>? // only if we are inside a resource
-				//   <resource_def>
-				//   <return_resource_instance>
+				//   <parent_this_def>? // only if we are inside a class
+				//   <class_def>
+				//   <return_class_instance>
 				// }
 				// ```
-				let make_resource_body = if self.is_inside_resource {
+				let make_class_body = if self.is_inside_class {
 					// parent_this_def :=
 					// ```
 					// let __parent_this = this;
@@ -208,18 +211,18 @@ impl Fold for ClosureTransformer {
 					};
 
 					Scope::new(
-						vec![parent_this_def, resource_def, return_resource_instance],
+						vec![parent_this_def, class_def, return_class_instance],
 						expr.span.clone(),
 					)
 				} else {
-					Scope::new(vec![resource_def, return_resource_instance], expr.span.clone())
+					Scope::new(vec![class_def, return_class_instance], expr.span.clone())
 				};
 
-				// make_resource_closure :=
+				// make_class_closure :=
 				// ```
-				// (): resource => { ...<make_resource_body> }
+				// (): resource => { ...<make_class_body> }
 				// ```
-				let make_resource_closure = Expr::new(
+				let make_class_closure = Expr::new(
 					ExprKind::FunctionClosure(FunctionDefinition {
 						signature: FunctionSignature {
 							parameters: vec![],
@@ -229,7 +232,7 @@ impl Fold for ClosureTransformer {
 							})),
 							phase: Phase::Preflight,
 						},
-						body: crate::ast::FunctionBody::Statements(make_resource_body),
+						body: crate::ast::FunctionBody::Statements(make_class_body),
 						is_static: false,
 						span: expr.span.clone(),
 					}),
@@ -238,11 +241,11 @@ impl Fold for ClosureTransformer {
 
 				// call_expr :=
 				// ```
-				// <make_resource_closure>()
+				// <make_class_closure>()
 				// ```
 				let call_expr = Expr::new(
 					ExprKind::Call {
-						function: Box::new(make_resource_closure),
+						function: Box::new(make_class_closure),
 						arg_list: ArgList::new(),
 					},
 					expr.span,
@@ -254,16 +257,19 @@ impl Fold for ClosureTransformer {
 	}
 }
 
-/// Transform usages of "this.<field>" into "__parent_this.<field>"
-struct ThisTransformer;
+/// Rename all occurrences of an identifier to a new name.
+struct RenameIdentifierTransformer<'a> {
+	from: &'a str,
+	to: &'a str,
+}
 
-impl Fold for ThisTransformer {
+impl<'a> Fold for RenameIdentifierTransformer<'a> {
 	fn fold_reference(&mut self, node: Reference) -> Reference {
 		match node {
 			Reference::Identifier(ident) => {
-				if ident.name == "this" {
+				if ident.name == self.from {
 					Reference::Identifier(Symbol {
-						name: PARENT_THIS_NAME.to_string(),
+						name: self.to.to_string(),
 						span: ident.span,
 					})
 				} else {
