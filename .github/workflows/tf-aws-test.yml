@@ -28,6 +28,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 19
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
       - name: Get Latest Wing Version
         id: get-version
         run: |
@@ -37,8 +39,7 @@ jobs:
           npm install -g winglang@${{ steps.get-version.outputs.version }}
       - name: Run tests
         run: |
-          ls
           cd examples/tests/sdk_tests
           find . -type f -name "*.w" | while read file; do
-            wing test "$file"
+            wing test -t tf-aws "$file"
           done
