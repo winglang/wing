@@ -40,6 +40,7 @@ describe("ApiResponseMapper", () => {
       statusCode: 200,
       body: JSON.stringify({ key: "value" }),
       headers: {
+        "Content-Type": "application/json",
         "header-1": "value-1",
       },
     });
@@ -76,7 +77,9 @@ describe("ApiResponseMapper", () => {
     expect(response).toEqual({
       statusCode: 200,
       body: JSON.stringify({ key: "value" }),
-      headers: undefined,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   });
 
@@ -110,6 +113,48 @@ describe("ApiResponseMapper", () => {
     expect(response).toEqual({
       statusCode: 200,
       body: "",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  });
+
+  test("api response returns Content-Type header from inflight`", async () => {
+    // GIVEN
+    const apiRequestEvent: Partial<APIGatewayProxyEvent> = {
+      body: JSON.stringify({}),
+      headers: {},
+      path: "/",
+      httpMethod: "GET",
+    };
+
+    const handlerResponse: ApiResponse = {
+      status: 200,
+      body: { key: "value" },
+      headers: {
+        "Content-Type": "application/octet-stream",
+      },
+    };
+    const requestHandlerClient = new ApiOnRequestHandlerClient({
+      handler: {
+        handle: async () => {
+          return handlerResponse;
+        },
+      },
+    });
+
+    // WHEN
+    const response = await requestHandlerClient.handle(
+      apiRequestEvent as APIGatewayProxyEvent
+    );
+
+    // THEN
+    expect(response).toEqual({
+      statusCode: 200,
+      body: JSON.stringify({ key: "value" }),
+      headers: {
+        "Content-Type": "application/octet-stream",
+      },
     });
   });
 });
