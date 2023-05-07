@@ -29,7 +29,6 @@
     "unbump": "node unversion.js"
   },
   "dependencies": {
-    "@winglang/sdk": "file:../../libs/wingsdk",
     "chalk": "^4.1.2",
     "codespan-wasm": "0.3.0",
     "commander": "^10.0.0",
@@ -39,7 +38,8 @@
     "ora": "^5.4.1",
     "update-notifier": "^6.0.2",
     "vscode-languageserver": "^8.0.2",
-    "wasi-js": "^1.7.3"
+    "wasi-js": "^1.7.3",
+    "@winglang/sdk": "file:../../libs/wingsdk"
   },
   "bundleDependencies": [
     "wasi-js"
