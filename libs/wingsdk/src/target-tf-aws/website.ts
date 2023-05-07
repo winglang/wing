@@ -1,5 +1,5 @@
 import { readdirSync } from "fs";
-import { extname, join, resolve } from "path";
+import { extname, join, posix, resolve, sep } from "path";
 
 import { Construct } from "constructs";
 import mime from "mime-types";
@@ -89,7 +89,7 @@ export class Website extends cloud.Website {
       content: JSON.stringify(data),
       bucket: this.bucket.bucket,
       contentType: "application/json",
-      key: path,
+      key: this.formatPath(path),
     });
 
     return `${this.url}/${path}`;
@@ -101,7 +101,7 @@ export class Website extends cloud.Website {
 
     new S3Object(this, `File${fileKey.replace(/[\/\\]/g, "--")}`, {
       dependsOn: [this.bucket],
-      key: filePath.replace(this.path, ""),
+      key: this.formatPath(filePath.replace(this.path, "")),
       bucket: this.bucket.bucket,
       source: resolve(filePath),
       contentType: mime.contentType(extname(filePath)) || undefined,
@@ -118,6 +118,10 @@ export class Website extends cloud.Website {
         this.uploadFile(filename);
       }
     }
+  }
+
+  private formatPath(path: string): string {
+    return path.split(sep).join(posix.sep);
   }
 
   /** @internal */
