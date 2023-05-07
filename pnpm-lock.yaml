@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.15.25
-        version: 0.15.25(constructs@10.2.17)
+        specifier: ^0.15.26
+        version: 0.15.26(constructs@10.2.17)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.15.25
-        version: 0.15.25(constructs@10.2.17)
+        specifier: ^0.15.26
+        version: 0.15.26(constructs@10.2.17)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -5327,8 +5327,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.15.25(constructs@10.2.17):
-    resolution: {integrity: sha512-PHfu31T/yTZV+A4z48EP6HaOT0ga3TrCqz4aslX7c/i6wuL/CmfKLvlxfIn/asJD17yd9SHH5RmXiHQfD2ml0Q==}
+  /@winglang/sdk@0.15.26(constructs@10.2.17):
+    resolution: {integrity: sha512-vdV/PX6CWK71J8LpFDDdx4YQBLnFlW+W2P5C1TR+56DXWiHd5xsznnGAl/iWr73MWSZystsHp5Qt7j+IxMvMYg==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
@@ -5357,6 +5357,7 @@ packages:
       - esbuild-wasm
       - express
       - ioredis
+      - mime-types
       - safe-stable-stringify
       - tar
       - uuid
