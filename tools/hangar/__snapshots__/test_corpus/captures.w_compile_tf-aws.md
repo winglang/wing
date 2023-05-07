@@ -281,6 +281,9 @@
           }
         },
         "bucket": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+        "depends_on": [
+          "aws_s3_bucket.root_PublicBucket_73AE6C59"
+        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"]}]}"
       }
     },
