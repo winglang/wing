@@ -8,9 +8,9 @@
 extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
+use closure_transform::ClosureTransformer;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use fold::Fold;
-use inflight_transform::InflightTransformer;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -32,10 +32,10 @@ use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
+pub mod closure_transform;
 pub mod debug;
 pub mod diagnostic;
 pub mod fold;
-pub mod inflight_transform;
 pub mod jsify;
 pub mod lsp;
 pub mod parser;
@@ -282,12 +282,16 @@ pub fn compile(
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
-	// Build our AST
+	// -- PARSING PHASE --
 	let (scope, parse_diagnostics) = parse(&source_path);
 
+	// -- DESUGARING PHASE --
+
 	// Transform all inflight closures defined in preflight into single-method resources
-	let mut inflight_transformer = InflightTransformer::new();
+	let mut inflight_transformer = ClosureTransformer::new();
 	let mut scope = inflight_transformer.fold_scope(scope);
+
+	// -- TYPECHECKING PHASE --
 
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
@@ -324,6 +328,8 @@ pub fn compile(
 	if errors.len() > 0 {
 		return Err(errors);
 	}
+
+	// -- JSIFICATION PHASE --
 
 	// Prepare output directory for support inflight code
 	fs::create_dir_all(out_dir).expect("create output dir");

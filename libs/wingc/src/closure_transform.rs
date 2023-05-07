@@ -35,7 +35,7 @@ const PARENT_THIS_NAME: &str = "__parent_this";
 ///   }
 ///   return new $Inflight1();
 /// })();
-pub struct InflightTransformer {
+pub struct ClosureTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
 	curr_phase: Phase,
@@ -47,7 +47,7 @@ pub struct InflightTransformer {
 	inflight_counter: usize,
 }
 
-impl InflightTransformer {
+impl ClosureTransformer {
 	pub fn new() -> Self {
 		Self {
 			curr_phase: Phase::Preflight,
@@ -57,7 +57,7 @@ impl InflightTransformer {
 	}
 }
 
-impl Fold for InflightTransformer {
+impl Fold for ClosureTransformer {
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
 		let prev_phase = self.curr_phase;
 		self.curr_phase = node.signature.phase;
