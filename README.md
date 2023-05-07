@@ -34,7 +34,7 @@ We fulfill our mission by reducing cognitive load and increasing iteration speed
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
-## Why we think the cloud needs a programming language to solve these pains? 🤔
+## Why we think the cloud needs a programming language? 🤔
 
 Cloud applications are are fundamentally different from applications that run on a single machine - 
 they are distributed systems that rely on cloud infrastructure to achieve their goals.
