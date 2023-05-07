@@ -18,11 +18,11 @@ export function tfResourcesOfCount(
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
-export function tfResourcesOfWithProperty(
+export function tfResourcesWithProperty(
   templateStr: string,
   resourceId: string,
   properties: Record<string, string>
-) {
+): Record<string, string> | undefined {
   return (
     Object.values(JSON.parse(templateStr).resource[resourceId]) as Record<
       string,

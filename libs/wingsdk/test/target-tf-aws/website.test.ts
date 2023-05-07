@@ -6,7 +6,7 @@ import { mkdtemp } from "../../src/util";
 import {
   tfResourcesOf,
   tfResourcesOfCount,
-  tfResourcesOfWithProperty,
+  tfResourcesWithProperty,
   tfSanitize,
   treeJsonOf,
 } from "../util";
@@ -30,12 +30,12 @@ test("default website behavior", () => {
   ]);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
   expect(
-    tfResourcesOfWithProperty(output, "aws_s3_object", {
+    tfResourcesWithProperty(output, "aws_s3_object", {
       key: "/inner-folder/a.html",
     })
   ).not.toBeUndefined();
   expect(
-    tfResourcesOfWithProperty(output, "aws_s3_object", { key: "/b.html" })
+    tfResourcesWithProperty(output, "aws_s3_object", { key: "/b.html" })
   ).not.toBeUndefined();
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -76,15 +76,15 @@ test("website with add_json", () => {
   ]);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(3);
   expect(
-    tfResourcesOfWithProperty(output, "aws_s3_object", {
+    tfResourcesWithProperty(output, "aws_s3_object", {
       key: "/inner-folder/a.html",
     })
   ).not.toBeUndefined();
   expect(
-    tfResourcesOfWithProperty(output, "aws_s3_object", { key: "/b.html" })
+    tfResourcesWithProperty(output, "aws_s3_object", { key: "/b.html" })
   ).not.toBeUndefined();
   expect(
-    tfResourcesOfWithProperty(output, "aws_s3_object", { key: "config.json" })
+    tfResourcesWithProperty(output, "aws_s3_object", { key: "config.json" })
   ).not.toBeUndefined();
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -102,7 +102,7 @@ test("website with invalid path should throw error", () => {
       Object({ version: "8.31.0" })
     );
     app.synth();
-  }).toThrowError("key must have a .json suffix: txt");
+  }).toThrowError('key must have a .json suffix. (current: "txt")');
 
   // THEN
 });

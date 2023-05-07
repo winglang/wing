@@ -21,7 +21,9 @@ export class Website extends cloud.Website implements ISimulatorResource {
 
   public addJson(path: string, data: Json): string {
     if (!path.endsWith(".json")) {
-      throw new Error(`key must have a .json suffix: ${path.split(".").pop()}`);
+      throw new Error(
+        `key must have a .json suffix: (current: "${path.split(".").pop()}")}`
+      );
     }
     this.jsonRoutes[path] = data;
 

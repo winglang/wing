@@ -67,13 +67,14 @@ test("website is serving dynamic json content", async () => {
 });
 
 test("addJson throws an error for no json path", async () => {
+  const jsonConfig = { version: "3.3.5" };
+  const jsonPath = "not a json Path";
+  const app = new SimApp();
+  const website = cloud.Website._newWebsite(app, "website", {
+    path: resolve(__dirname, "website"),
+  });
+
   expect(() => {
-    const jsonConfig = { version: "3.3.5" };
-    const jsonPath = "not a json Path.csv";
-    const app = new SimApp();
-    const website = cloud.Website._newWebsite(app, "website", {
-      path: resolve(__dirname, "website"),
-    });
     website.addJson(jsonPath, Object(jsonConfig));
-  }).toThrowError("key must have a .json suffix: csv");
+  }).toThrowError('key must have a .json suffix: (current: "not a json Path")');
 });
