@@ -1,0 +1,38 @@
+name: SDK Spec Testing
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch: {}
+  release:
+    types:
+      - published
+
+jobs:
+  install:
+    name: Installation User Flow
+    strategy:
+      fail-fast: true
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          repository: winglang/wing
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+      - name: Get Latest Wing Version
+        id: get-version
+        run: |
+          echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
+      - name: Install Wing
+        run: |
+          npm install -g winglang@${{ steps.get-version.outputs.version }}
+      - name: Run tests
+        run: |
+          cd wing/examples/tests/sdk_tests
+          find . -type f -name "*.w" | while read file; do
+            wing test "$file"
+          done
+      
