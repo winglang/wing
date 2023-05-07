@@ -1515,9 +1515,9 @@ let api_request = cloud.ApiRequest{ ... }
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>json</code> | The request's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
 
 ---
 
@@ -1557,6 +1557,18 @@ The request's query string values.
 
 ---
 
+##### `vars`<sup>Required</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
+
+```wing
+vars: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The path variables.
+
+---
+
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
 
 ```wing
@@ -1578,18 +1590,6 @@ headers: MutMap<str>;
 - *Type:* MutMap&lt;str&gt;
 
 The request's headers.
-
----
-
-##### `vars`<sup>Optional</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
-
-```wing
-vars: MutMap<str>;
-```
-
-- *Type:* MutMap&lt;str&gt;
-
-The path variables.
 
 ---
 
