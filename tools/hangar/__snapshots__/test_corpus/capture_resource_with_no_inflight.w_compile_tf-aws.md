@@ -2,13 +2,14 @@
 
 ## clients/A.inflight.js
 ```js
-class  A {
-  constructor({ field, stateful }) {
-    this.field = field;
-    this.stateful = stateful;
+module.exports = function() {
+  class  A {
+    constructor({ field }) {
+      this.field = field;
+    }
   }
+  return A;
 }
-exports.A = A;
 
 ```
 
@@ -149,23 +150,21 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const field_client = this._lift(this.field);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).A({
+            const A = require("${self_client_path}")({});
+            const client = new A({
               field: ${field_client},
-              stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.field, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         super._registerBind(host, ops);
       }

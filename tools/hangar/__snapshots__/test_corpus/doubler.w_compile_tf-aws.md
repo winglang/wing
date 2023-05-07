@@ -2,19 +2,20 @@
 
 ## clients/Doubler.inflight.js
 ```js
-class  Doubler {
-  constructor({ func, stateful }) {
-    this.func = func;
-    this.stateful = stateful;
-  }
-  async invoke(message)  {
-    {
-      (await this.func.handle(message));
-      (await this.func.handle(message));
+module.exports = function() {
+  class  Doubler {
+    constructor({ func }) {
+      this.func = func;
+    }
+    async invoke(message)  {
+      {
+        (await this.func.handle(message));
+        (await this.func.handle(message));
+      }
     }
   }
+  return Doubler;
 }
-exports.Doubler = Doubler;
 
 ```
 
@@ -68,23 +69,21 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const func_client = this._lift(this.func);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Doubler.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Doubler({
+            const Doubler = require("${self_client_path}")({});
+            const client = new Doubler({
               func: ${func_client},
-              stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.func, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("invoke")) {
           this._registerBindObject(this.func, host, ["handle"]);

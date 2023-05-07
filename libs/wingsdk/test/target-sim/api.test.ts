@@ -35,7 +35,10 @@ test("create an api", async () => {
     },
     path: "root/my_api",
     props: {
-      routes: [],
+      openApiSpec: {
+        openapi: expect.any(String),
+        paths: {},
+      },
     },
     type: "wingsdk.cloud.Api",
   });

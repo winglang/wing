@@ -2,17 +2,18 @@
 
 ## clients/Foo.inflight.js
 ```js
-class  Foo {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async handle(message)  {
-    {
-      return "hello world!";
+module.exports = function() {
+  class  Foo {
+    constructor({  }) {
+    }
+    async handle(message)  {
+      {
+        return "hello world!";
+      }
     }
   }
+  return Foo;
 }
-exports.Foo = Foo;
 
 ```
 
@@ -218,21 +219,19 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("handle");
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
-              stateful: ${stateful_client},
+            const Foo = require("${self_client_path}")({});
+            const client = new Foo({
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("handle")) {
         }

@@ -40,6 +40,7 @@ pub mod lsp;
 pub mod parser;
 pub mod type_check;
 pub mod type_check_assert;
+pub mod type_check_class_fields_init;
 pub mod utilities;
 pub mod visit;
 mod wasm_util;
@@ -388,7 +389,10 @@ mod sanity {
 			println!("\n=== {} ===\n", test_file.display());
 
 			let mut out_dir = test_file.parent().unwrap().to_path_buf();
-			out_dir.push(format!("{}.out", test_file.file_name().unwrap().to_str().unwrap()));
+			out_dir.push(format!(
+				"target/wingc/{}.out",
+				test_file.file_name().unwrap().to_str().unwrap()
+			));
 
 			// reset out_dir
 			if out_dir.exists() {

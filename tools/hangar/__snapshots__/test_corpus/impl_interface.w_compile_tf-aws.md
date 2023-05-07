@@ -2,49 +2,52 @@
 
 ## clients/A.inflight.js
 ```js
-class  A {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async handle(msg)  {
-    {
-      return;
+module.exports = function() {
+  class  A {
+    constructor({  }) {
+    }
+    async handle(msg)  {
+      {
+        return;
+      }
     }
   }
+  return A;
 }
-exports.A = A;
 
 ```
 
 ## clients/Dog.inflight.js
 ```js
-class  Dog {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async eat()  {
-    {
-      return;
+module.exports = function() {
+  class  Dog {
+    constructor({  }) {
+    }
+    async eat()  {
+      {
+        return;
+      }
     }
   }
+  return Dog;
 }
-exports.Dog = Dog;
 
 ```
 
 ## clients/r.inflight.js
 ```js
-class  r {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async method_2(x)  {
-    {
-      return x;
+module.exports = function() {
+  class  r {
+    constructor({  }) {
+    }
+    async method_2(x)  {
+      {
+        return x;
+      }
     }
   }
+  return r;
 }
-exports.r = r;
 
 ```
 
@@ -96,21 +99,19 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("handle");
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).A({
-              stateful: ${stateful_client},
+            const A = require("${self_client_path}")({});
+            const client = new A({
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("handle")) {
         }
@@ -133,21 +134,19 @@ class $Root extends $stdlib.std.Resource {
         }
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).r({
-              stateful: ${stateful_client},
+            const r = require("${self_client_path}")({});
+            const client = new r({
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("method_2")) {
         }
@@ -160,21 +159,19 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("eat");
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Dog({
-              stateful: ${stateful_client},
+            const Dog = require("${self_client_path}")({});
+            const client = new Dog({
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("eat")) {
         }

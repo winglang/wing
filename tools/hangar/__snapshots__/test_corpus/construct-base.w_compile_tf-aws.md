@@ -2,12 +2,13 @@
 
 ## clients/WingResource.inflight.js
 ```js
-class  WingResource {
-  constructor({ stateful }) {
-    this.stateful = stateful;
+module.exports = function() {
+  class  WingResource {
+    constructor({  }) {
+    }
   }
+  return WingResource;
 }
-exports.WingResource = WingResource;
 
 ```
 
@@ -73,21 +74,19 @@ class $Root extends $stdlib.std.Resource {
         {console.log(`my id is ${this.node.id}`)};
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/WingResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).WingResource({
-              stateful: ${stateful_client},
+            const WingResource = require("${self_client_path}")({});
+            const client = new WingResource({
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         super._registerBind(host, ops);
       }

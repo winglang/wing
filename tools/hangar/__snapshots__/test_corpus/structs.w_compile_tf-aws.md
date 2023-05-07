@@ -2,18 +2,19 @@
 
 ## clients/Foo.inflight.js
 ```js
-class  Foo {
-  constructor({ data, stateful }) {
-    this.data = data;
-    this.stateful = stateful;
-  }
-  async get_stuff()  {
-    {
-      return this.data.field0;
+module.exports = function() {
+  class  Foo {
+    constructor({ data }) {
+      this.data = data;
+    }
+    async get_stuff()  {
+      {
+        return this.data.field0;
+      }
     }
   }
+  return Foo;
 }
-exports.Foo = Foo;
 
 ```
 
@@ -66,23 +67,21 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const data_client = this._lift(this.data);
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            const Foo = require("${self_client_path}")({});
+            const client = new Foo({
               data: ${data_client},
-              stateful: ${stateful_client},
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.data, host, []);
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("get_stuff")) {
           this._registerBindObject(this.data.field0, host, []);

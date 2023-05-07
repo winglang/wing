@@ -23,6 +23,12 @@ impl Symbol {
 			span: Default::default(),
 		}
 	}
+
+	/// Returns true if the symbols refer to the same name AND location in the source code.
+	/// Use `eq` to compare symbols only by name.
+	pub fn same(&self, other: &Self) -> bool {
+		self.name == other.name && self.span == other.span
+	}
 }
 
 impl Ord for Symbol {
@@ -339,6 +345,18 @@ pub enum UtilityFunctions {
 	Panic,
 	Throw,
 	Assert,
+}
+
+impl UtilityFunctions {
+	/// Returns all utility functions.
+	pub fn all() -> Vec<UtilityFunctions> {
+		vec![
+			UtilityFunctions::Log,
+			UtilityFunctions::Panic,
+			UtilityFunctions::Throw,
+			UtilityFunctions::Assert,
+		]
+	}
 }
 
 impl Display for UtilityFunctions {

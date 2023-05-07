@@ -2,15 +2,16 @@
 
 ## clients/Fetch.inflight.js
 ```js
-class  Fetch {
-  constructor({ stateful }) {
-    this.stateful = stateful;
+module.exports = function() {
+  class  Fetch {
+    constructor({  }) {
+    }
+    async get(url)  {
+      return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
+    }
   }
-  async get(url)  {
-    return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
-  }
+  return Fetch;
 }
-exports.Fetch = Fetch;
 
 ```
 
@@ -285,21 +286,19 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("get");
       }
       _toInflight() {
-        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Fetch.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Fetch({
-              stateful: ${stateful_client},
+            const Fetch = require("${self_client_path}")({});
+            const client = new Fetch({
             });
-            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-            return tmp;
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
           })())
         `);
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.stateful, host, []);
         }
         if (ops.includes("get")) {
         }
