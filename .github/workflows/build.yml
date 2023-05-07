@@ -12,6 +12,10 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "docs/**"
+      - "logo/**"
+      - "*.md"
   workflow_dispatch: {}
 
 concurrency:
