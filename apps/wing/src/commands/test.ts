@@ -1,13 +1,13 @@
-import { basename } from "path";
-import { compile, CompileOptions } from "./compile";
+import {basename} from "path";
+import {compile, CompileOptions} from "./compile";
 import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
-import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
-import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";
+import {ITestRunnerClient} from "@winglang/sdk/lib/cloud";
+import {TestRunnerClient as TfawsTestRunnerClient} from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";
 import * as cp from "child_process";
 import debug from "debug";
-import { promisify } from "util";
-import { withSpinner } from "../util";
+import {promisify} from "util";
+import {withSpinner} from "../util";
 
 const log = debug("wing:test");
 
@@ -25,10 +25,17 @@ export async function test(entrypoints: string[], options: TestOptions) {
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () => compile(entrypoint, {
-    ...options,
-    testing: true,
-  }));
+  if (entrypoint.includes(".skip")) {
+    console.log(`skipping file ${entrypoint}`);
+    return;
+  }
+
+  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () =>
+    compile(entrypoint, {
+      ...options,
+      testing: true,
+    })
+  );
 
   switch (options.target) {
     case "sim":
@@ -51,18 +58,14 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
   let hasFailures = false;
 
   // find the longest `path` of all the tests
-  const longestPath = results.reduce(
-    (longest, result) =>
-      result.path.length > longest ? result.path.length : longest,
-    0
-  );
+  const longestPath = results.reduce((longest, result) => (result.path.length > longest ? result.path.length : longest), 0);
 
   // if there are no inflight tests, add a dummy "pass" result
   // to indicate that compilation and preflight checks passed
   if (results.length === 0) {
     results.push({
       pass: true,
-      path: '',
+      path: "",
       traces: [],
     });
   }
@@ -73,13 +76,13 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
     const details = new Array<string>();
 
     // add any log messages that were emitted during the test
-    for (const log of result.traces.filter(t => t.type == "log")) {
+    for (const log of result.traces.filter((t) => t.type == "log")) {
       details.push(chalk.gray(log.data.message));
     }
 
     // if the test failed, add the error message and trace
     if (result.error) {
-      details.push(...result.error.split("\n").map(l => chalk.red(l)));
+      details.push(...result.error.split("\n").map((l) => chalk.red(l)));
     }
 
     // construct the first row of the test result by collecting the various components and joining
@@ -102,7 +105,6 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
       firstRow.push(chalk.whiteBright(result.path.padEnd(longestPath)));
     } else {
       firstRow.push(chalk.gray("(no tests)"));
-
     }
 
     // okay we are ready to print the test result
@@ -122,10 +124,10 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
   }
 
   return hasFailures;
-};
+}
 
 async function testSimulator(synthDir: string) {
-  const s = new sdk.testing.Simulator({ simfile: synthDir });
+  const s = new sdk.testing.Simulator({simfile: synthDir});
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as ITestRunnerClient;
@@ -148,9 +150,7 @@ async function testSimulator(synthDir: string) {
 
 async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
   if (!isTerraformInstalled(synthDir)) {
-    throw new Error(
-      "Terraform is not installed. Please install Terraform to run tests in the cloud."
-    );
+    throw new Error("Terraform is not installed. Please install Terraform to run tests in the cloud.");
   }
 
   await withSpinner("terraform init", () => terraformInit(synthDir));
@@ -187,17 +187,15 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
 }
 
 async function isTerraformInstalled(synthDir: string) {
-  const output = await execCapture("terraform version", { cwd: synthDir });
+  const output = await execCapture("terraform version", {cwd: synthDir});
   return output.startsWith("Terraform v");
 }
 
 async function checkTerraformStateIsEmpty(synthDir: string) {
   try {
-    const output = await execCapture("terraform state list", { cwd: synthDir });
+    const output = await execCapture("terraform state list", {cwd: synthDir});
     if (output.length > 0) {
-      throw new Error(
-        `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
-      );
+      throw new Error(`Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`);
     }
   } catch (err) {
     if ((err as any).stderr.includes("No state file was found")) {
@@ -210,19 +208,19 @@ async function checkTerraformStateIsEmpty(synthDir: string) {
 }
 
 async function terraformInit(synthDir: string) {
-  await execCapture("terraform init", { cwd: synthDir });
+  await execCapture("terraform init", {cwd: synthDir});
 }
 
 async function terraformApply(synthDir: string) {
-  await execCapture("terraform apply -auto-approve", { cwd: synthDir });
+  await execCapture("terraform apply -auto-approve", {cwd: synthDir});
 }
 
 async function terraformDestroy(synthDir: string) {
-  await execCapture("terraform destroy -auto-approve", { cwd: synthDir });
+  await execCapture("terraform destroy -auto-approve", {cwd: synthDir});
 }
 
 async function terraformOutput(synthDir: string, name: string) {
-  const output = await execCapture("terraform output -json", { cwd: synthDir });
+  const output = await execCapture("terraform output -json", {cwd: synthDir});
   const parsed = JSON.parse(output);
   if (!parsed[name]) {
     throw new Error(`terraform output ${name} not found`);
@@ -255,9 +253,9 @@ function pickOneTestPerEnvironment(testPaths: string[]) {
   const envs = new Set<string>();
 
   for (const testPath of testPaths) {
-    const testSuffix = testPath.substring(testPath.indexOf('env') + 1); // "<env #>/<path to test>"
-    const env = testSuffix.substring(0, testSuffix.indexOf('/')); // "<env #>"
-    const test = testSuffix.substring(testSuffix.indexOf('/') + 1); // "<path to test>"
+    const testSuffix = testPath.substring(testPath.indexOf("env") + 1); // "<env #>/<path to test>"
+    const env = testSuffix.substring(0, testSuffix.indexOf("/")); // "<env #>"
+    const test = testSuffix.substring(testSuffix.indexOf("/") + 1); // "<path to test>"
 
     if (envs.has(env)) {
       continue;
@@ -289,10 +287,10 @@ const MAX_BUFFER = 10 * 1024 * 1024;
 /**
  * Executes command and returns STDOUT. If the command fails (non-zero), throws an error.
  */
-async function execCapture(command: string, options: { cwd: string }) {
+async function execCapture(command: string, options: {cwd: string}) {
   log(command);
   const exec = promisify(cp.exec);
-  const { stdout, stderr } = await exec(command, {
+  const {stdout, stderr} = await exec(command, {
     cwd: options.cwd,
     maxBuffer: MAX_BUFFER,
   });

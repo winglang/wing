@@ -1,11 +1,16 @@
 name: SDK Spec Testing
+# on:
+#   schedule:
+#     - cron: "0 * * * *"
+#   workflow_dispatch: {}
+#   release:
+#     types:
+#       - published
+
 on:
-  schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch: {}
-  release:
-    types:
-      - published
+  push:
+    branches:
+      - main
 
 jobs:
   install:
@@ -14,9 +19,10 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
     steps:
-     - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
+          ref: tsuf/sdk-tests-github-action
           repository: winglang/wing
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -31,8 +37,8 @@ jobs:
           npm install -g winglang@${{ steps.get-version.outputs.version }}
       - name: Run tests
         run: |
-          cd wing/examples/tests/sdk_tests
+          ls
+          cd examples/tests/sdk_tests
           find . -type f -name "*.w" | while read file; do
             wing test "$file"
           done
-      
