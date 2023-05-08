@@ -51,6 +51,7 @@ const WINGSDK_STD_MODULE: &'static str = "std";
 const WINGSDK_FS_MODULE: &'static str = "fs";
 const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
+const WINGSDK_UTIL_MODULE: &'static str = "util";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.ImmutableMap";

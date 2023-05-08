@@ -10,10 +10,6 @@
       "type": "build"
     },
     {
-      "name": "@types/debug",
-      "type": "build"
-    },
-    {
       "name": "@types/express",
       "type": "build"
     },
@@ -241,10 +237,6 @@
     },
     {
       "name": "cron-parser",
-      "type": "bundled"
-    },
-    {
-      "name": "debug",
       "type": "bundled"
     },
     {

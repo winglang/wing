@@ -4,8 +4,7 @@ import { Function } from "../../src/cloud";
 import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 

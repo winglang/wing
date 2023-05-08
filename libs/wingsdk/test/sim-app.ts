@@ -1,6 +1,7 @@
+import { directorySnapshot } from "./util";
 import * as sim from "../src/target-sim";
 import { Simulator } from "../src/testing";
-import { directorySnapshot, mkdtemp } from "../src/util";
+import { mkdtemp } from "../src/utils/misc";
 
 /**
  * A simulated app.

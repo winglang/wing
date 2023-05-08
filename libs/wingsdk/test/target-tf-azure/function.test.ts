@@ -3,8 +3,7 @@ import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import * as tfazure from "../../src/target-tf-azure";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 

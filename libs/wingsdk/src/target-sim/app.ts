@@ -32,7 +32,11 @@ import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { REDIS_FQN } from "../redis";
 import { WingSimulatorSchema } from "../testing/simulator";
-import { SIMULATOR_FILE_PATH } from "../util";
+
+/**
+ * Path of the simulator configuration file in every .wsim tarball.
+ */
+export const SIMULATOR_FILE_PATH = "simulator.json";
 
 /**
  * A construct that knows how to synthesize simulator resources into a
