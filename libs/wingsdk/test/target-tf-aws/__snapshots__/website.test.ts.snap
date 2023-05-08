@@ -61,10 +61,16 @@ exports[`default website behavior 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_Website_PublicPolicy_F4A65951\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
-        \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
-        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_Website_PublicAccessBlock_1B1D8C0A\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
@@ -163,6 +169,14 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "File--inner-folder--a.html",
                     "path": "root/Default/Website/File--inner-folder--a.html",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/Website/PublicAccessBlock",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
@@ -323,10 +337,16 @@ exports[`website with add_json 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_Website_PublicPolicy_F4A65951\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
-        \\"depends_on\\": [
-          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
-        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_Website_PublicAccessBlock_1B1D8C0A\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
@@ -442,6 +462,14 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "File-config.json",
                     "path": "root/Default/Website/File-config.json",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/Website/PublicAccessBlock",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
