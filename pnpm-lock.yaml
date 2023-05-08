@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.15.26
-        version: 0.15.26(constructs@10.2.17)
+        specifier: ^0.15.27
+        version: 0.15.27(constructs@10.2.17)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.15.26
-        version: 0.15.26(constructs@10.2.17)
+        specifier: ^0.15.27
+        version: 0.15.27(constructs@10.2.17)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -398,8 +398,8 @@ importers:
         specifier: ^18.2.4
         version: 18.2.4
       '@vitejs/plugin-react-swc':
-        specifier: ^3.3.0
-        version: 3.3.0(vite@4.3.5)
+        specifier: ^3.3.1
+        version: 3.3.1(vite@4.3.5)
       '@wingconsole/design-system':
         specifier: workspace:^
         version: link:../design-system
@@ -5144,8 +5144,8 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: false
 
-  /@vitejs/plugin-react-swc@3.3.0(vite@4.3.5):
-    resolution: {integrity: sha512-Ycg+n2eyCOTpn/wRy+evVo859+hw7qCj9iaX5CMny6x1fx1Uoq0xBG+a98lFtwLNGfGEnpI0F26YigRuxCRkwg==}
+  /@vitejs/plugin-react-swc@3.3.1(vite@4.3.5):
+    resolution: {integrity: sha512-ZoYjGxMniXP7X+5ry/W1tpY7w0OeLUEsBF5RHFPmAhpgwwNWie8OF4056MRXRi9QgvYYoZPDzdOXGK3wlCoTfQ==}
     peerDependencies:
       vite: ^4
     dependencies:
@@ -5327,8 +5327,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.15.26(constructs@10.2.17):
-    resolution: {integrity: sha512-vdV/PX6CWK71J8LpFDDdx4YQBLnFlW+W2P5C1TR+56DXWiHd5xsznnGAl/iWr73MWSZystsHp5Qt7j+IxMvMYg==}
+  /@winglang/sdk@0.15.27(constructs@10.2.17):
+    resolution: {integrity: sha512-ajTtm0wDbvRuCfFkuYMcwbjBg4lJIyIDlv9vK1EUsXBTpUvyoYduqQ5/JTGQ5aEBuyNBLSTXyHzVx4oCRrx9Kg==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228

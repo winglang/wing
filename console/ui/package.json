@@ -35,7 +35,7 @@
     "@types/lodash.uniqby": "^4.7.7",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
-    "@vitejs/plugin-react-swc": "^3.3.0",
+    "@vitejs/plugin-react-swc": "^3.3.1",
     "@wingconsole/design-system": "workspace:^",
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/server": "workspace:^",
