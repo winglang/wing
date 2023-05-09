@@ -8,16 +8,21 @@
 
 import assert from "node:assert";
 import { execSync } from "node:child_process";
-import { chmodSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import {
+  chmodSync,
+  mkdirSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 
 let currentDir = dirname(new URL(import.meta.url).pathname);
-if(process.platform === "win32") {
+if (process.platform === "win32") {
   // for some reason, dirname returns a path with a leading slash on windows
   currentDir = currentDir.slice(1);
 }
-
 
 let targetWingSDKSpec = join(currentDir, "../libs/wingsdk");
 let targetWingSpec = join(currentDir, "../apps/wing");
@@ -156,11 +161,11 @@ if (global) {
   console.log(`"wing" installed globally`);
 } else {
   if (process.platform === "win32") {
-    // Can't trust symlinks on windows
-    // Instead create a wrapper module that requires the cli
-    // Adds minor overhead, but not really a functional difference
+    // Can't trust symlinks on windows.
+    // Instead create a wrapper module that requires the cli.
+    // Adds minor overhead, but not really a functional difference.
     const wrapperContents = `#!/usr/bin/env node
-require("${wingCliBin}");`;
+require("${wingCliBin.replace(/\\/g, "\\\\")}");`;
     writeFileSync(wingCliLink, wrapperContents);
     chmodSync(wingCliLink, 0o755);
   } else {
