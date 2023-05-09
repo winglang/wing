@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.15.28
-        version: 0.15.28(constructs@10.2.17)
+        specifier: ^0.15.30
+        version: 0.15.30(constructs@10.2.17)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.15.28
-        version: 0.15.28(constructs@10.2.17)
+        specifier: ^0.15.30
+        version: 0.15.30(constructs@10.2.17)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -434,8 +434,8 @@ importers:
         specifier: ^8.40.0
         version: 8.40.0
       framer-motion:
-        specifier: ^10.12.8
-        version: 10.12.8(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^10.12.9
+        version: 10.12.9(react-dom@18.2.0)(react@18.2.0)
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -4077,7 +4077,7 @@ packages:
       globby: 11.1.0
       ip: 2.0.0
       lodash: 4.17.21
-      node-fetch: 2.6.10
+      node-fetch: 2.6.11
       open: 8.4.2
       pretty-hrtime: 1.0.3
       prompts: 2.4.2
@@ -5327,8 +5327,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.15.28(constructs@10.2.17):
-    resolution: {integrity: sha512-Srbqes8w1Iz+smS/1mU/EjrPH1fyeTrGvKykQY9vJmhuKqcSsVvBwjPX0Uy+ouodz1dVwQaoi9qj9ElReWovYA==}
+  /@winglang/sdk@0.15.30(constructs@10.2.17):
+    resolution: {integrity: sha512-2UNTjs6Fe/drgDe/uF0rQRxSC0hnOXiKkelyh6YIjtxfRtxYNZWuSAFZbjVOr16UgN5oQN19C0TQTSFMZI0O9Q==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
@@ -8269,8 +8269,8 @@ packages:
     resolution: {integrity: sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==}
     dev: true
 
-  /framer-motion@10.12.8(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-ylobYq3tGFjjAmRdBs5pL/R1+4AmOm69g/JbF5DcNETfRe8L9CjaX4acG83MjYdIsbsTGJmtR5qKx4glNmXO4A==}
+  /framer-motion@10.12.9(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-diLij2xjOn8RS1xz66wNDTa6nezR3bRRBB9J0r1a5xeJjcSdJpOkk2U7pTzhg1v54bzZ7HBLJ4gKo8aAQM0U3w==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
@@ -9220,7 +9220,7 @@ packages:
   /isomorphic-unfetch@3.1.0:
     resolution: {integrity: sha512-geDJjpoZ8N0kWexiwkX8F9NkTsXhetLPVbZFQ+JTW239QNOwvB0gniuR1Wc6f0AMTn7/mFGyXvHTifrCp/GH8Q==}
     dependencies:
-      node-fetch: 2.6.10
+      node-fetch: 2.6.11
       unfetch: 4.2.0
     transitivePeerDependencies:
       - encoding
@@ -10081,8 +10081,8 @@ packages:
     resolution: {integrity: sha512-9VvspTSUp2Sxbl+9vbZTlFGq9lHwE8GDVVekxx6YsNd1YH59sb3Ba8v3Y3cD8PkLNcileGGcA21PFjVl0jzDaw==}
     dev: true
 
-  /node-fetch@2.6.10:
-    resolution: {integrity: sha512-5YytjUVbwzjE/BX4N62vnPPkGNxlJPwdA9/ArUc4pcM6cYS4Hinuv4VazzwjMGgnWuiQqcemOanib/5PpcsGug==}
+  /node-fetch@2.6.11:
+    resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
       encoding: ^0.1.0
