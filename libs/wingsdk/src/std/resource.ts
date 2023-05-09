@@ -4,6 +4,7 @@ import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
 import { serializeImmutableData } from "../core/internal";
 import { IInspectable, TreeInspector } from "../core/tree";
+import { log } from "../utils/log";
 
 /**
  * A resource that can run inflight code.
@@ -167,6 +168,12 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
+    log(
+      `Registering a binding for a resource (${this.node.path}) to a host (${
+        host.node.path
+      }) with ops: ${JSON.stringify(ops)}`
+    );
+
     for (const op of ops) {
       if (!this.inflightOps.includes(op)) {
         throw new Error(
