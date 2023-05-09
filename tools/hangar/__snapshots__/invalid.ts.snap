@@ -1143,38 +1143,24 @@ exports[`try_no_catch_or_finally.w > stderr 1`] = `
 `;
 
 exports[`types_strings_arithmetic.w > stderr 1`] = `
-"error: Expected type to be \\"num\\", but got \\"str\\" instead
+"error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
   --> ../../../examples/tests/invalid/types_strings_arithmetic.w:1:10
   |
-1 | let e0 = \\"2\\" + \\"2\\";
-  |          ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+1 | let e1 = 2 + \\"2\\";
+  |          ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/types_strings_arithmetic.w:1:16
+  --> ../../../examples/tests/invalid/types_strings_arithmetic.w:4:10
   |
-1 | let e0 = \\"2\\" + \\"2\\";
-  |                ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/types_strings_arithmetic.w:4:14
-  |
-4 | let e1 = 2 + \\"2\\";
-  |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/types_strings_arithmetic.w:7:10
-  |
-7 | let e2 = 2 == \\"2\\";
+4 | let e2 = 2 == \\"2\\";
   |          ^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/types_strings_arithmetic.w:13:10
+   --> ../../../examples/tests/invalid/types_strings_arithmetic.w:10:10
    |
-13 | let e3 = \\"\${str_example}!\\" * num_example;
+10 | let e3 = \\"\${str_example}!\\" * num_example;
    |          ^^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 "
@@ -1247,11 +1233,11 @@ error: Unknown symbol \\"assert\\"
    |                  ^^^^^^ Unknown symbol \\"assert\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/unknown_symbol.w:20:29
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+   --> ../../../examples/tests/invalid/unknown_symbol.w:20:25
    |
 20 |     this._bucket.assert(2 + \\"2\\");
-   |                             ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+   |                         ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
 
 
 error: Unknown symbol \\"method_which_is_not_part_of_bucket_api\\"
@@ -1298,11 +1284,11 @@ exports[`void_in_expression_position.w > stderr 1`] = `
   | ^^^^^^^^^^ Property access unsupported on type \\"void\\"
 
 
-error: Expected type to be \\"num\\", but got \\"void\\" instead
-  --> ../../../examples/tests/invalid/void_in_expression_position.w:7:13
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
+  --> ../../../examples/tests/invalid/void_in_expression_position.w:7:9
   |
 7 | let y = 5 + log(\\"hello\\");
-  |             ^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"void\\" instead
+  |         ^^^^^^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
 
 
 error: Cannot assign expression of type \\"void\\" to a variable

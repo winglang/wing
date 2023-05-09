@@ -115,6 +115,7 @@ export class Api
           }
 
           res.status(response.status);
+          res.set("Content-Type", "application/json");
           for (const [key, value] of Object.entries(response.headers ?? {})) {
             res.set(key, value);
           }

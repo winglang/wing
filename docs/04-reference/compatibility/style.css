@@ -22,12 +22,13 @@
   color: var(--ifm-color-emphasis-500);
 }
 
-#compatibility-table tr,
-code {
+#compatibility-table tr {
   background-color: transparent;
 }
+
 #compatibility-table code {
   border: none;
+  background-color: transparent;
 }
 
 #compatibility-table .highlight {

@@ -17,6 +17,9 @@ exports[`bucket is public 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_mybucket_E5DAA363\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -553,6 +556,9 @@ exports[`bucket with onCreate method 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_mybucket_E5DAA363\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -1025,6 +1031,9 @@ exports[`bucket with onDelete method 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_mybucket_E5DAA363\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -1597,6 +1606,9 @@ exports[`bucket with onEvent method 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_mybucket_E5DAA363\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -2505,6 +2517,9 @@ exports[`bucket with onUpdate method 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_mybucket_E5DAA363\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -2912,6 +2927,9 @@ exports[`bucket with two preflight objects 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_mybucket_E5DAA363\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
       }
     },

@@ -175,6 +175,7 @@ class $Root extends $stdlib.std.Resource {
     class C4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("y");
       }
       static m()  {
         {

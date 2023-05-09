@@ -41,6 +41,7 @@ pub mod lsp;
 pub mod parser;
 pub mod type_check;
 pub mod type_check_assert;
+pub mod type_check_class_fields_init;
 pub mod utilities;
 pub mod visit;
 mod wasm_util;

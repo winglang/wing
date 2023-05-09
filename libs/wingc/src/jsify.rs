@@ -454,7 +454,7 @@ impl<'a> JSifier<'a> {
 				let js_right = self.jsify_expression(right, ctx);
 
 				let js_op = match op {
-					BinaryOperator::Add => "+",
+					BinaryOperator::AddOrConcat => "+",
 					BinaryOperator::Sub => "-",
 					BinaryOperator::Mul => "*",
 					BinaryOperator::Div => "/",

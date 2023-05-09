@@ -1,8 +1,9 @@
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import { join, relative } from "path";
 
 export default defineConfig({
   test: {
+    exclude: [...configDefaults.exclude, "**/tmp/**"],
     reporters: ["verbose"],
     benchmark: {
       reporters: ["default", "json"],

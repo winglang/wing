@@ -7,7 +7,8 @@ use crate::ast::{
 	Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
-use crate::visit::{self, Visit};
+use crate::type_check_class_fields_init::VisitClassInit;
+use crate::visit::Visit;
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
@@ -28,30 +29,6 @@ use wingii::type_system::TypeSystem;
 
 use self::jsii_importer::JsiiImportSpec;
 use self::symbol_env::SymbolEnvIter;
-
-/// Visitor Pattern for listing the variables that are initialized in the class constructor.
-pub struct VisitClassInit {
-	fields: Vec<String>,
-}
-impl Visit<'_> for VisitClassInit {
-	fn visit_stmt(&mut self, node: &Stmt) {
-		match &node.kind {
-			StmtKind::Assignment { variable, value: _ } => {
-				visit::visit_reference(self, variable);
-			}
-			_ => (),
-		}
-		visit::visit_stmt(self, node);
-	}
-
-	fn visit_reference(&mut self, node: &Reference) {
-		match node {
-			Reference::InstanceMember { property, object: _ } => self.fields.push(property.name.clone()),
-			_ => (),
-		}
-		visit::visit_reference(self, node);
-	}
-}
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -1222,8 +1199,24 @@ impl<'a> TypeChecker<'a> {
 						self.validate_type(rtype, self.types.bool(), right);
 						self.types.bool()
 					}
-					BinaryOperator::Add
-					| BinaryOperator::Sub
+					BinaryOperator::AddOrConcat => {
+						if ltype.is_subtype_of(&self.types.number()) && rtype.is_subtype_of(&self.types.number()) {
+							self.types.number()
+						} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
+							self.types.string()
+						} else {
+							self.diagnostics.borrow_mut().push(Diagnostic {
+								message: format!(
+									"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
+									ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
+								),
+								span: Some(exp.span()),
+								level: DiagnosticLevel::Error,
+							});
+							self.types.anything() // TODO: return error type
+						}
+					}
+					BinaryOperator::Sub
 					| BinaryOperator::Mul
 					| BinaryOperator::Div
 					| BinaryOperator::FloorDiv

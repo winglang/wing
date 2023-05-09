@@ -8,9 +8,8 @@ module.exports = function() {
     }
     async handle(req)  {
       {
-        const vars = (req.vars ?? Object.freeze({"name":""}));
         return {
-        "body": Object.freeze({"user":(vars)["name"]}),
+        "body": Object.freeze({"user":(req.vars)["name"]}),
         "status": 200,}
         ;
       }

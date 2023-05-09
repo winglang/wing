@@ -1,5 +1,50 @@
 # [add_consumer.w](../../../../examples/tests/valid/add_consumer.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ c }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(msg)  {
+      {
+        (await c.inc());
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({ predicate, q }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await q.push("hello"));
+        (await q.push("world"));
+        let i = 0;
+        while ((i < 600)) {
+          i = (i + 1);
+          if ((await predicate.test())) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+            return;
+          }
+          (await TestHelper.sleep(100));
+        }
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
 ## clients/Predicate.inflight.js
 ```js
 module.exports = function() {
@@ -26,20 +71,6 @@ module.exports = function() {
     }
     static async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-    async assert(predicate)  {
-      {
-        let i = 0;
-        while ((i < 600)) {
-          i = (i + 1);
-          if ((await predicate.test())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
-            return;
-          }
-          (await TestHelper.sleep(100));
-        }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
-      }
     }
   }
   return TestHelper;
@@ -124,7 +155,7 @@ module.exports = function() {
             "uniqueId": "root_cloudQueueAddConsumere46e5cb7_IamRolePolicy_756548A7"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE.name}"
       },
       "root_testaddconsumer_IamRolePolicy_A17608E4": {
@@ -134,7 +165,7 @@ module.exports = function() {
             "uniqueId": "root_testaddconsumer_IamRolePolicy_A17608E4"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:PurgeQueue\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testaddconsumer_IamRole_0F141310.name}"
       }
     },
@@ -321,7 +352,7 @@ class $Root extends $stdlib.std.Resource {
     class TestHelper extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("sleep", "assert");
+        this._addInflightOps("sleep");
       }
       _toInflight() {
         const self_client_path = "./clients/TestHelper.inflight.js".replace(/\\/g, "/");
@@ -338,8 +369,6 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
-        if (ops.includes("assert")) {
-        }
         if (ops.includes("sleep")) {
         }
         super._registerBind(host, ops);
@@ -347,36 +376,81 @@ class $Root extends $stdlib.std.Resource {
     }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    (q.addConsumer(new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        c: {
-          obj: c,
-          ops: ["dec","inc","peek","reset"]
-        },
+    (q.addConsumer((( () =>  {
+      {
+        class $Inflight1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const c_client = this._lift(c);
+            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight1 = require("${self_client_path}")({
+                  c: ${c_client},
+                });
+                const client = new $Inflight1({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(c, host, ["inc"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight1(this,"$Inflight1");
       }
-    })
-    ));
+    }
+    )())));
     const js = new TestHelper(this,"TestHelper");
     const predicate = new Predicate(this,"Predicate",c);
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:add_consumer",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        js: {
-          obj: js,
-          ops: ["assert","sleep"]
-        },
-        predicate: {
-          obj: predicate,
-          ops: ["test"]
-        },
-        q: {
-          obj: q,
-          ops: ["approx_size","purge","push"]
-        },
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:add_consumer",(( () =>  {
+      {
+        class $Inflight2 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const predicate_client = this._lift(predicate);
+            const q_client = this._lift(q);
+            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight2 = require("${self_client_path}")({
+                  predicate: ${predicate_client},
+                  q: ${q_client},
+                });
+                const client = new $Inflight2({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+            }
+            if (ops.includes("handle")) {
+              this._registerBindObject(predicate, host, ["test"]);
+              this._registerBindObject(q, host, ["push"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        return new $Inflight2(this,"$Inflight2");
       }
-    })
-    );
+    }
+    )()));
   }
 }
 class $App extends $AppBase {
@@ -395,26 +469,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(msg) {
-  const { c } = this;
-  (await c.inc());
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const { js, predicate, q } = this;
-  (await q.push("hello"));
-  (await q.push("world"));
-  (await js.assert(predicate));
-}
 
 ```
 
