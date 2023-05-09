@@ -42,12 +42,11 @@ pub struct ClosureTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
 	curr_phase: Phase,
-	// Whether the transformer is inside a class or not.
-	is_inside_class: bool,
+	// Whether the transformer is inside a scope where "this" is valid.
+	inside_scope_with_this: bool,
 	// Helper state for generating unique class names
 	inflight_counter: usize,
 	class_statements: Vec<Stmt>,
-	need_parent_this: bool,
 	nearest_stmt_idx: usize,
 }
 
@@ -55,10 +54,9 @@ impl ClosureTransformer {
 	pub fn new() -> Self {
 		Self {
 			curr_phase: Phase::Preflight,
-			is_inside_class: false,
+			inside_scope_with_this: false,
 			inflight_counter: 0,
 			class_statements: vec![],
-			need_parent_this: false,
 			nearest_stmt_idx: 0,
 		}
 	}
@@ -87,7 +85,7 @@ impl Fold for ClosureTransformer {
 
 		// If we are inside a class, add define `let __parent_this = this` that can be
 		// used by the newly-created preflight classes
-		if self.need_parent_this {
+		if self.inside_scope_with_this {
 			let parent_this_name = Symbol::global(PARENT_THIS_NAME); // TODO: can we use a span?
 			let this_name = Symbol::global("this"); // TODO: can we use a span?
 			let parent_this_def = Stmt {
@@ -108,8 +106,6 @@ impl Fold for ClosureTransformer {
 			statements.push(parent_this_def);
 		}
 
-		self.need_parent_this = false;
-
 		Scope {
 			statements,
 			span: node.span,
@@ -126,11 +122,50 @@ impl Fold for ClosureTransformer {
 	}
 
 	fn fold_class(&mut self, node: Class) -> Class {
-		let prev_is_inside_class = self.is_inside_class;
-		self.is_inside_class = true;
-		let new_node = fold::fold_class(self, node);
-		self.is_inside_class = prev_is_inside_class;
-		new_node
+		Class {
+			name: self.fold_symbol(node.name),
+			fields: node
+				.fields
+				.into_iter()
+				.map(|field| self.fold_class_field(field))
+				.collect(),
+			methods: node
+				.methods
+				.into_iter()
+				.map(|(name, def)| {
+					let new_symbol = self.fold_symbol(name);
+
+					let new_def = if !def.is_static {
+						let prev_inside_scope_with_this = self.inside_scope_with_this;
+						self.inside_scope_with_this = true;
+						let new_def = self.fold_function_definition(def);
+						self.inside_scope_with_this = prev_inside_scope_with_this;
+						new_def
+					} else {
+						self.fold_function_definition(def)
+					};
+
+					(new_symbol, new_def)
+				})
+				.collect(),
+			initializer: {
+				let prev_inside_scope_with_this = self.inside_scope_with_this;
+				self.inside_scope_with_this = true;
+				let new_constructor = self.fold_constructor(node.initializer);
+				self.inside_scope_with_this = prev_inside_scope_with_this;
+				new_constructor
+			},
+			parent: node.parent.map(|parent| self.fold_user_defined_type(parent)),
+			implements: node
+				.implements
+				.into_iter()
+				.map(|interface| self.fold_user_defined_type(interface))
+				.collect(),
+			is_resource: node.is_resource,
+			inflight_initializer: node
+				.inflight_initializer
+				.map(|init| self.fold_function_definition(init)),
+		}
 	}
 
 	fn fold_expr(&mut self, expr: Expr) -> Expr {
@@ -173,7 +208,7 @@ impl Fold for ClosureTransformer {
 				let class_fields: Vec<ClassField> = vec![];
 				let class_init_params: Vec<FunctionParameter> = vec![];
 
-				let new_func_def = if self.is_inside_class {
+				let new_func_def = if self.inside_scope_with_this {
 					// If we are inside a class, we transform inflight closures with an extra
 					// `let __parent_this = this;` statement before the class definition, and replace all references
 					// of `this` with `__parent_this` so that they can access the parent class's fields.
@@ -234,10 +269,6 @@ impl Fold for ClosureTransformer {
 					},
 					expr.span.clone(),
 				);
-
-				if self.is_inside_class {
-					self.need_parent_this = true;
-				}
 
 				self.class_statements.push(class_def);
 
