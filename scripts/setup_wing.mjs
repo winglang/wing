@@ -8,7 +8,7 @@
 
 import assert from "node:assert";
 import { execSync } from "node:child_process";
-import { mkdirSync, rmSync, symlinkSync } from "node:fs";
+import { chmodSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 
@@ -155,7 +155,17 @@ console.log("===");
 if (global) {
   console.log(`"wing" installed globally`);
 } else {
-  symlinkSync(wingCliBin, wingCliLink);
+  if (process.platform === "win32") {
+    // Can't trust symlinks on windows
+    // Instead create a wrapper module that requires the cli
+    // Adds minor overhead, but not really a functional difference
+    const wrapperContents = `#!/usr/bin/env node
+require("${wingCliBin}");`;
+    writeFileSync(wingCliLink, wrapperContents);
+    chmodSync(wingCliLink, 0o755);
+  } else {
+    symlinkSync(wingCliBin, wingCliLink);
+  }
 
   console.log(wingCliLink);
   console.log();

@@ -26,7 +26,7 @@ export default async function () {
 
   await execa(
     wingSetupScript,
-    ["--cli", targetWingSpec, "--sdk", targetWingSDKSpec, "--alias", "hangar"],
+    ["--cli", targetWingSpec, "--sdk", targetWingSDKSpec, "--output", wingBin],
     {
       cwd: tmpDir,
       stdio: "inherit",
