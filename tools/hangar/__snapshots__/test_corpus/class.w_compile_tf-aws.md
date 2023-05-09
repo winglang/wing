@@ -95,6 +95,7 @@ class $Root extends $stdlib.std.Resource {
     class C1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        const __parent_this = this;
       }
       _toInflight() {
         const self_client_path = "./clients/C1.inflight.js".replace(/\\/g, "/");
@@ -117,6 +118,7 @@ class $Root extends $stdlib.std.Resource {
     class C2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        const __parent_this = this;
         this.x = 1;
       }
       _toInflight() {
@@ -143,8 +145,10 @@ class $Root extends $stdlib.std.Resource {
     class C3 extends $stdlib.std.Resource {
       constructor(scope, id, a, b) {
         super(scope, id);
+        const __parent_this = this;
         this.x = a;
         if (true) {
+          const __parent_this = this;
           this.y = b;
         }
       }
@@ -176,6 +180,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("y");
+        const __parent_this = this;
       }
       static m()  {
         {

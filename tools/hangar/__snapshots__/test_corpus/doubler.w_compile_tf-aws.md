@@ -26,6 +26,7 @@ module.exports = function() {
     }
     async invoke(message)  {
       {
+        const __parent_this = this;
         (await this.func.handle(message));
         (await this.func.handle(message));
       }
@@ -82,6 +83,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, func) {
         super(scope, id);
         this._addInflightOps("invoke");
+        const __parent_this = this;
         this.func = func;
       }
       _toInflight() {
@@ -108,37 +110,32 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const fn = new Doubler(this,"Doubler",(( () =>  {
-      {
-        class $Inflight1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight1 = require("${self_client_path}")({});
-                const client = new $Inflight1({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-            }
-            super._registerBind(host, ops);
-          }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1 = require("${self_client_path}")({});
+            const client = new $Inflight1({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
         }
-        return new $Inflight1(this,"$Inflight1");
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
       }
     }
-    )()));
+    const fn = new Doubler(this,"Doubler",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

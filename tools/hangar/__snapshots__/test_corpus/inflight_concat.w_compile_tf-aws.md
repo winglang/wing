@@ -9,6 +9,7 @@ module.exports = function() {
     }
     async foo()  {
       {
+        const __parent_this = this;
         {console.log((await this.s1.concat(" world")))};
       }
     }
@@ -64,6 +65,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("foo");
+        const __parent_this = this;
         this.s1 = "hello";
       }
       _toInflight() {

@@ -239,47 +239,42 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const bucket_client = this._lift(bucket);
+        const counter_client = this._lift(counter);
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1 = require("${self_client_path}")({
+              bucket: ${bucket_client},
+              counter: ${counter_client},
+            });
+            const client = new $Inflight1({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(bucket, host, ["put"]);
+          this._registerBindObject(counter, host, ["inc"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 100 });
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
-    const handler = (( () =>  {
-      {
-        class $Inflight1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const bucket_client = this._lift(bucket);
-            const counter_client = this._lift(counter);
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight1 = require("${self_client_path}")({
-                  bucket: ${bucket_client},
-                  counter: ${counter_client},
-                });
-                const client = new $Inflight1({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(bucket, host, ["put"]);
-              this._registerBindObject(counter, host, ["inc"]);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight1(this,"$Inflight1");
-      }
-    }
-    )());
+    const handler = new $Inflight1(this,"$Inflight1");
     (queue.addConsumer(handler));
   }
 }

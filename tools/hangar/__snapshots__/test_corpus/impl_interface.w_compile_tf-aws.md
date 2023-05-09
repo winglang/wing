@@ -25,6 +25,7 @@ module.exports = function() {
     }
     async handle(msg)  {
       {
+        const __parent_this = this;
         return;
       }
     }
@@ -42,6 +43,7 @@ module.exports = function() {
     }
     async eat()  {
       {
+        const __parent_this = this;
         return;
       }
     }
@@ -59,6 +61,7 @@ module.exports = function() {
     }
     async method_2(x)  {
       {
+        const __parent_this = this;
         return x;
       }
     }
@@ -114,6 +117,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        const __parent_this = this;
       }
       _toInflight() {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
@@ -135,18 +139,50 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const x_client = this._lift(x);
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1 = require("${self_client_path}")({
+              x: ${x_client},
+            });
+            const client = new $Inflight1({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(x, host, ["handle"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("method_2");
+        const __parent_this = this;
       }
        method_1(x)  {
         {
+          const __parent_this = this;
           return x;
         }
       }
        method_3(x)  {
         {
+          const __parent_this = this;
           return x;
         }
       }
@@ -174,6 +210,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("eat");
+        const __parent_this = this;
       }
       _toInflight() {
         const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
@@ -196,41 +233,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const x = new A(this,"A");
-    const y = (( () =>  {
-      {
-        class $Inflight1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const x_client = this._lift(x);
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight1 = require("${self_client_path}")({
-                  x: ${x_client},
-                });
-                const client = new $Inflight1({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(x, host, ["handle"]);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight1(this,"$Inflight1");
-      }
-    }
-    )());
+    const y = new $Inflight1(this,"$Inflight1");
     const z = new Dog(this,"Dog");
   }
 }

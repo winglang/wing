@@ -100,6 +100,7 @@ module.exports = function() {
     }
     async my_method()  {
       {
+        const __parent_this = this;
         (await this.foo.foo_inc());
         (await this.b.put("foo",`counter is: ${(await this.foo.foo_get())}`));
         return (await this.b.get("foo"));
@@ -123,6 +124,7 @@ module.exports = function() {
     }
     async publish(s)  {
       {
+        const __parent_this = this;
         (await this.t.publish(s));
         (await this.q.push(s));
         (await this.b2.put("foo",s));
@@ -130,6 +132,7 @@ module.exports = function() {
     }
     async getObjectCount()  {
       {
+        const __parent_this = this;
         return (await this.b.list()).length;
       }
     }
@@ -155,11 +158,13 @@ module.exports = function() {
     }
     async foo_inc()  {
       {
+        const __parent_this = this;
         (await this.c.inc());
       }
     }
     async foo_get()  {
       {
+        const __parent_this = this;
         return (await this.c.peek());
       }
     }
@@ -845,6 +850,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("foo_inc", "foo_get", "inflight_field");
+        const __parent_this = this;
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       _toInflight() {
@@ -878,6 +884,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, name, b) {
         super(scope, id);
         this._addInflightOps("my_method");
+        const __parent_this = this;
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
@@ -913,122 +920,138 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const bucket_client = this._lift(bucket);
+        const res_client = this._lift(res);
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1 = require("${self_client_path}")({
+              bucket: ${bucket_client},
+              res: ${res_client},
+            });
+            const client = new $Inflight1({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(bucket, host, ["list"]);
+          this._registerBindObject(res, host, ["my_method"]);
+          this._registerBindObject(res.foo, host, ["inflight_field"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class BigPublisher extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("publish", "getObjectCount");
+        const __parent_this = this;
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b2");
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
         this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
-        (this.t.onMessage((( () =>  {
-          {
-            const __parent_this = this;
-            class $Inflight2 extends $stdlib.std.Resource {
-              constructor(scope, id, ) {
-                super(scope, id);
-                this._addInflightOps("handle");
-              }
-              _toInflight() {
-                const __parent_this_client = this._lift(__parent_this);
-                const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
-                return $stdlib.core.NodeJsCode.fromInline(`
-                  (await (async () => {
-                    const $Inflight2 = require("${self_client_path}")({
-                      __parent_this: ${__parent_this_client},
-                    });
-                    const client = new $Inflight2({
-                    });
-                    if (client.$inflight_init) { await client.$inflight_init(); }
-                    return client;
-                  })())
-                `);
-              }
-              _registerBind(host, ops) {
-                if (ops.includes("$inflight_init")) {
-                }
-                if (ops.includes("handle")) {
-                  this._registerBindObject(__parent_this.b, host, ["put"]);
-                }
-                super._registerBind(host, ops);
-              }
+        class $Inflight2 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const __parent_this_client = this._lift(__parent_this);
+            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight2 = require("${self_client_path}")({
+                  __parent_this: ${__parent_this_client},
+                });
+                const client = new $Inflight2({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
             }
-            return new $Inflight2(this,"$Inflight2");
+            if (ops.includes("handle")) {
+              this._registerBindObject(__parent_this.b, host, ["put"]);
+            }
+            super._registerBind(host, ops);
           }
         }
-        )())));
-        (this.q.addConsumer((( () =>  {
-          {
-            const __parent_this = this;
-            class $Inflight3 extends $stdlib.std.Resource {
-              constructor(scope, id, ) {
-                super(scope, id);
-                this._addInflightOps("handle");
-              }
-              _toInflight() {
-                const __parent_this_client = this._lift(__parent_this);
-                const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
-                return $stdlib.core.NodeJsCode.fromInline(`
-                  (await (async () => {
-                    const $Inflight3 = require("${self_client_path}")({
-                      __parent_this: ${__parent_this_client},
-                    });
-                    const client = new $Inflight3({
-                    });
-                    if (client.$inflight_init) { await client.$inflight_init(); }
-                    return client;
-                  })())
-                `);
-              }
-              _registerBind(host, ops) {
-                if (ops.includes("$inflight_init")) {
-                }
-                if (ops.includes("handle")) {
-                  this._registerBindObject(__parent_this.b, host, ["put"]);
-                }
-                super._registerBind(host, ops);
-              }
+        (this.t.onMessage(new $Inflight2(this,"$Inflight2")));
+        class $Inflight3 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const __parent_this_client = this._lift(__parent_this);
+            const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight3 = require("${self_client_path}")({
+                  __parent_this: ${__parent_this_client},
+                });
+                const client = new $Inflight3({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
             }
-            return new $Inflight3(this,"$Inflight3");
+            if (ops.includes("handle")) {
+              this._registerBindObject(__parent_this.b, host, ["put"]);
+            }
+            super._registerBind(host, ops);
           }
         }
-        )())));
-        (this.b2.onCreate((( () =>  {
-          {
-            const __parent_this = this;
-            class $Inflight4 extends $stdlib.std.Resource {
-              constructor(scope, id, ) {
-                super(scope, id);
-                this._addInflightOps("handle");
-              }
-              _toInflight() {
-                const __parent_this_client = this._lift(__parent_this);
-                const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
-                return $stdlib.core.NodeJsCode.fromInline(`
-                  (await (async () => {
-                    const $Inflight4 = require("${self_client_path}")({
-                      __parent_this: ${__parent_this_client},
-                    });
-                    const client = new $Inflight4({
-                    });
-                    if (client.$inflight_init) { await client.$inflight_init(); }
-                    return client;
-                  })())
-                `);
-              }
-              _registerBind(host, ops) {
-                if (ops.includes("$inflight_init")) {
-                }
-                if (ops.includes("handle")) {
-                  this._registerBindObject(__parent_this.q, host, ["push"]);
-                }
-                super._registerBind(host, ops);
-              }
+        (this.q.addConsumer(new $Inflight3(this,"$Inflight3")));
+        class $Inflight4 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+          }
+          _toInflight() {
+            const __parent_this_client = this._lift(__parent_this);
+            const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight4 = require("${self_client_path}")({
+                  __parent_this: ${__parent_this_client},
+                });
+                const client = new $Inflight4({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
             }
-            return new $Inflight4(this,"$Inflight4");
+            if (ops.includes("handle")) {
+              this._registerBindObject(__parent_this.q, host, ["push"]);
+            }
+            super._registerBind(host, ops);
           }
         }
-        )())));
+        (this.b2.onCreate(new $Inflight4(this,"$Inflight4")));
       }
       _toInflight() {
         const b_client = this._lift(this.b);
@@ -1068,83 +1091,40 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Inflight5 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const bigOlPublisher_client = this._lift(bigOlPublisher);
+        const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight5 = require("${self_client_path}")({
+              bigOlPublisher: ${bigOlPublisher_client},
+            });
+            const client = new $Inflight5({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket);
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",(( () =>  {
-      {
-        class $Inflight1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const bucket_client = this._lift(bucket);
-            const res_client = this._lift(res);
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight1 = require("${self_client_path}")({
-                  bucket: ${bucket_client},
-                  res: ${res_client},
-                });
-                const client = new $Inflight1({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(bucket, host, ["list"]);
-              this._registerBindObject(res, host, ["my_method"]);
-              this._registerBindObject(res.foo, host, ["inflight_field"]);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight1(this,"$Inflight1");
-      }
-    }
-    )()));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $Inflight1(this,"$Inflight1"));
     const bigOlPublisher = new BigPublisher(this,"BigPublisher");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test: dependency cycles",(( () =>  {
-      {
-        class $Inflight5 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const bigOlPublisher_client = this._lift(bigOlPublisher);
-            const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight5 = require("${self_client_path}")({
-                  bigOlPublisher: ${bigOlPublisher_client},
-                });
-                const client = new $Inflight5({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight5(this,"$Inflight5");
-      }
-    }
-    )()));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test: dependency cycles",new $Inflight5(this,"$Inflight5"));
   }
 }
 class $App extends $AppBase {

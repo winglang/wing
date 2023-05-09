@@ -57,10 +57,12 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        const __parent_this = this;
         this.f = "Hello World!!!";
       }
        method2()  {
         {
+          const __parent_this = this;
           (this.method1());
           {console.log(`${this.f}`)};
           (this.method2());
@@ -68,6 +70,7 @@ class $Root extends $stdlib.std.Resource {
       }
        method1()  {
         {
+          const __parent_this = this;
         }
       }
       _toInflight() {

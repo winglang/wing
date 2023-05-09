@@ -9,6 +9,7 @@ module.exports = function() {
     }
     async get_stuff()  {
       {
+        const __parent_this = this;
         return this.data.field0;
       }
     }
@@ -63,6 +64,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, b) {
         super(scope, id);
         this._addInflightOps("get_stuff");
+        const __parent_this = this;
         this.data = b;
       }
       _toInflight() {

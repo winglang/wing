@@ -367,114 +367,99 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const counterA_client = this._lift(counterA);
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1 = require("${self_client_path}")({
+              counterA: ${counterA_client},
+            });
+            const client = new $Inflight1({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(counterA, host, ["peek"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const counterB_client = this._lift(counterB);
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2 = require("${self_client_path}")({
+              counterB: ${counterB_client},
+            });
+            const client = new $Inflight2({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(counterB, host, ["peek"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight3 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const counterC_client = this._lift(counterC);
+        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight3 = require("${self_client_path}")({
+              counterC: ${counterC_client},
+            });
+            const client = new $Inflight3({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(counterC, host, ["peek"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const counterA = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterA");
     const counterB = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterB",{ initial: 500 });
     const counterC = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterC",{ initial: (-198) });
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:default",(( () =>  {
-      {
-        class $Inflight1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const counterA_client = this._lift(counterA);
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight1 = require("${self_client_path}")({
-                  counterA: ${counterA_client},
-                });
-                const client = new $Inflight1({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(counterA, host, ["peek"]);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight1(this,"$Inflight1");
-      }
-    }
-    )()));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:positive-value",(( () =>  {
-      {
-        class $Inflight2 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const counterB_client = this._lift(counterB);
-            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight2 = require("${self_client_path}")({
-                  counterB: ${counterB_client},
-                });
-                const client = new $Inflight2({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(counterB, host, ["peek"]);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight2(this,"$Inflight2");
-      }
-    }
-    )()));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:negative-value",(( () =>  {
-      {
-        class $Inflight3 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const counterC_client = this._lift(counterC);
-            const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight3 = require("${self_client_path}")({
-                  counterC: ${counterC_client},
-                });
-                const client = new $Inflight3({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(counterC, host, ["peek"]);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight3(this,"$Inflight3");
-      }
-    }
-    )()));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:default",new $Inflight1(this,"$Inflight1"));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:positive-value",new $Inflight2(this,"$Inflight2"));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:negative-value",new $Inflight3(this,"$Inflight3"));
   }
 }
 class $App extends $AppBase {

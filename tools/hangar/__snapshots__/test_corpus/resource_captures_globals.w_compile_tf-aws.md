@@ -32,6 +32,7 @@ module.exports = function({ global_counter }) {
     }
     async my_method()  {
       {
+        const __parent_this = this;
         (await global_counter.inc());
         return (await global_counter.peek());
       }
@@ -65,6 +66,7 @@ module.exports = function({ global_another, global_array_of_str, global_bool, gl
     }
     async my_put()  {
       {
+        const __parent_this = this;
         (await this.local_topic.publish("hello"));
         (await global_bucket.put("key","value"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_str === "hello")'`)})((global_str === "hello"))};
@@ -92,6 +94,7 @@ module.exports = function({ $parent_this, global_counter }) {
     }
     async handle()  {
       {
+        const __parent_this = this;
         (await global_counter.inc());
         (await $parent_this.local_counter.inc());
       }
@@ -465,6 +468,7 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        const __parent_this = this;
         this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       _toInflight() {
@@ -492,6 +496,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("my_method");
+        const __parent_this = this;
         this.my_field = "hello!";
         this.first = new First(this,"First");
       }
@@ -530,6 +535,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("my_put");
+        const __parent_this = this;
         this.local_topic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
         this.local_counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
         const $parent_this = this;
@@ -537,6 +543,7 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
+            const __parent_this = this;
           }
           _toInflight() {
             const $parent_this_client = this._lift($parent_this);
@@ -623,6 +630,35 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const res_client = this._lift(res);
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1 = require("${self_client_path}")({
+              res: ${res_client},
+            });
+            const client = new $Inflight1({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(res, host, ["my_put"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const global_bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const global_counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const global_str = "hello";
@@ -633,41 +669,7 @@ class $Root extends $stdlib.std.Resource {
     const global_set_of_str = Object.freeze(new Set(["a", "b"]));
     const global_another = new Another(this,"Another");
     const res = new MyResource(this,"MyResource");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",(( () =>  {
-      {
-        class $Inflight1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const res_client = this._lift(res);
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight1 = require("${self_client_path}")({
-                  res: ${res_client},
-                });
-                const client = new $Inflight1({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(res, host, ["my_put"]);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight1(this,"$Inflight1");
-      }
-    }
-    )()));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

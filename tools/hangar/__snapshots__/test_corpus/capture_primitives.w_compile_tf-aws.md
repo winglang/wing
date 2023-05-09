@@ -161,58 +161,53 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const my_bool_client = this._lift(my_bool);
+        const my_dur_client = this._lift(my_dur);
+        const my_num_client = this._lift(my_num);
+        const my_second_bool_client = this._lift(my_second_bool);
+        const my_str_client = this._lift(my_str);
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1 = require("${self_client_path}")({
+              my_bool: ${my_bool_client},
+              my_dur: ${my_dur_client},
+              my_num: ${my_num_client},
+              my_second_bool: ${my_second_bool_client},
+              my_str: ${my_str_client},
+            });
+            const client = new $Inflight1({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(my_bool, host, []);
+          this._registerBindObject(my_dur, host, []);
+          this._registerBindObject(my_num, host, []);
+          this._registerBindObject(my_second_bool, host, []);
+          this._registerBindObject(my_str, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const my_str = "hello, string";
     const my_num = 1234;
     const my_bool = true;
     const my_second_bool = false;
     const my_dur = $stdlib.std.Duration.fromSeconds(600);
-    const handler = (( () =>  {
-      {
-        class $Inflight1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const my_bool_client = this._lift(my_bool);
-            const my_dur_client = this._lift(my_dur);
-            const my_num_client = this._lift(my_num);
-            const my_second_bool_client = this._lift(my_second_bool);
-            const my_str_client = this._lift(my_str);
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight1 = require("${self_client_path}")({
-                  my_bool: ${my_bool_client},
-                  my_dur: ${my_dur_client},
-                  my_num: ${my_num_client},
-                  my_second_bool: ${my_second_bool_client},
-                  my_str: ${my_str_client},
-                });
-                const client = new $Inflight1({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(my_bool, host, []);
-              this._registerBindObject(my_dur, host, []);
-              this._registerBindObject(my_num, host, []);
-              this._registerBindObject(my_second_bool, host, []);
-              this._registerBindObject(my_str, host, []);
-            }
-            super._registerBind(host, ops);
-          }
-        }
-        return new $Inflight1(this,"$Inflight1");
-      }
-    }
-    )());
+    const handler = new $Inflight1(this,"$Inflight1");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler);
   }
 }

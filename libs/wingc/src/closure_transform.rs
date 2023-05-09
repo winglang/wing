@@ -29,15 +29,13 @@ const PARENT_THIS_NAME: &str = "__parent_this";
 /// is transformed into:
 /// ```wing
 /// let b = new cloud.Bucket();
-/// let f = ((): core.Resource => {
-///   class $Inflight1 {
-///     init() {}
-///     inflight handle(message: str) {
-///       b.put("file.txt", message);
-///     }
+/// class $Inflight1 {
+///   init() {}
+///   inflight handle(message: str) {
+///     b.put("file.txt", message);
 ///   }
-///   return new $Inflight1();
-/// })();
+/// }
+/// let f = new $Inflight1();
 pub struct ClosureTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
@@ -46,7 +44,10 @@ pub struct ClosureTransformer {
 	inside_scope_with_this: bool,
 	// Helper state for generating unique class names
 	inflight_counter: usize,
+	// Stores the list of class definitions that need to be added to the nearest scope
 	class_statements: Vec<Stmt>,
+	// Track the statement index of the nearest statement we're inside so that
+	// newly-inserted classes will have access to the correct state
 	nearest_stmt_idx: usize,
 }
 
@@ -66,24 +67,7 @@ impl Fold for ClosureTransformer {
 	fn fold_scope(&mut self, node: Scope) -> Scope {
 		let mut statements = vec![];
 
-		for stmt in node.statements {
-			let old_nearest_stmt_idx = self.nearest_stmt_idx;
-			self.nearest_stmt_idx = stmt.idx;
-			let new_stmt = self.fold_stmt(stmt);
-			self.nearest_stmt_idx = old_nearest_stmt_idx;
-
-			// Add any new statements we have accumulated that define temporary classes
-			statements.append(&mut self.class_statements);
-
-			// Push the folded statement last. This way it has access to all of the temporary
-			// classes we have defined.
-			statements.push(new_stmt);
-
-			// Reset scope-specific state
-			self.class_statements.clear();
-		}
-
-		// If we are inside a class, add define `let __parent_this = this` that can be
+		// If we are inside a scope with "this", add define `let __parent_this = this` which can be
 		// used by the newly-created preflight classes
 		if self.inside_scope_with_this {
 			let parent_this_name = Symbol::global(PARENT_THIS_NAME); // TODO: can we use a span?
@@ -104,6 +88,23 @@ impl Fold for ClosureTransformer {
 			};
 
 			statements.push(parent_this_def);
+		}
+
+		for stmt in node.statements {
+			let old_nearest_stmt_idx = self.nearest_stmt_idx;
+			self.nearest_stmt_idx = stmt.idx;
+			let new_stmt = self.fold_stmt(stmt);
+			self.nearest_stmt_idx = old_nearest_stmt_idx;
+
+			// Add any new statements we have accumulated that define temporary classes
+			statements.append(&mut self.class_statements);
+
+			// Push the folded statement last. This way it has access to all of the temporary
+			// classes we have defined.
+			statements.push(new_stmt);
+
+			// Reset scope-specific state
+			self.class_statements.clear();
 		}
 
 		Scope {

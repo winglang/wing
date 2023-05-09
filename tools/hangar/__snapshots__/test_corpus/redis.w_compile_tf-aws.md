@@ -477,46 +477,41 @@ const redis = require('@winglang/sdk').redis;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");
-    const r2 = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"r2");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",(( () =>  {
-      {
-        class $Inflight1 extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
-            super(scope, id);
-            this._addInflightOps("handle");
-          }
-          _toInflight() {
-            const r_client = this._lift(r);
-            const r2_client = this._lift(r2);
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-            return $stdlib.core.NodeJsCode.fromInline(`
-              (await (async () => {
-                const $Inflight1 = require("${self_client_path}")({
-                  r: ${r_client},
-                  r2: ${r2_client},
-                });
-                const client = new $Inflight1({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `);
-          }
-          _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-            }
-            if (ops.includes("handle")) {
-              this._registerBindObject(r, host, ["raw_client"]);
-              this._registerBindObject(r2, host, ["get", "set"]);
-            }
-            super._registerBind(host, ops);
-          }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      _toInflight() {
+        const r_client = this._lift(r);
+        const r2_client = this._lift(r2);
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1 = require("${self_client_path}")({
+              r: ${r_client},
+              r2: ${r2_client},
+            });
+            const client = new $Inflight1({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
         }
-        return new $Inflight1(this,"$Inflight1");
+        if (ops.includes("handle")) {
+          this._registerBindObject(r, host, ["raw_client"]);
+          this._registerBindObject(r2, host, ["get", "set"]);
+        }
+        super._registerBind(host, ops);
       }
     }
-    )()));
+    const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");
+    const r2 = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"r2");
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
