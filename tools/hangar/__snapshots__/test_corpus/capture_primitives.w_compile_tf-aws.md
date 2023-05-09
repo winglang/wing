@@ -130,32 +130,32 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const my_str = "hello, string";
-    const my_num = 1234;
-    const my_bool = true;
-    const my_second_bool = false;
-    const my_dur = $stdlib.std.Duration.fromSeconds(600);
+    const myStr = "hello, string";
+    const myNum = 1234;
+    const myBool = true;
+    const mySecondBool = false;
+    const myDur = $stdlib.std.Duration.fromSeconds(600);
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
-        my_bool: {
-          obj: my_bool,
+        myBool: {
+          obj: myBool,
           ops: []
         },
-        my_dur: {
-          obj: my_dur,
+        myDur: {
+          obj: myDur,
           ops: []
         },
-        my_num: {
-          obj: my_num,
+        myNum: {
+          obj: myNum,
           ops: []
         },
-        my_second_bool: {
-          obj: my_second_bool,
+        mySecondBool: {
+          obj: mySecondBool,
           ops: []
         },
-        my_str: {
-          obj: my_str,
+        myStr: {
+          obj: myStr,
           ops: []
         },
       }
@@ -186,20 +186,20 @@ new $App().synth();
 ## proc1/index.js
 ```js
 async handle(s) {
-  const { my_bool, my_dur, my_num, my_second_bool, my_str } = this;
-  {console.log(my_str)};
-  const n = my_num;
+  const { myBool, myDur, myNum, mySecondBool, myStr } = this;
+  {console.log(myStr)};
+  const n = myNum;
   {console.log(`${n}`)};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(my_second_bool === false)'`)})((my_second_bool === false))};
-  if (my_bool) {
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
+  if (myBool) {
     {console.log("bool=true")};
   }
   else {
     {console.log("bool=false")};
   }
-  const min = my_dur.minutes;
-  const sec = my_dur.seconds;
-  const hr = my_dur.hours;
+  const min = myDur.minutes;
+  const sec = myDur.seconds;
+  const hr = myDur.hours;
   const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
 }

@@ -1,16 +1,16 @@
 class Foo {
-  instance_field: num;
+  instanceField: num;
 
   static f: num;
 
   static m() {
-    this.instance_field = 1; // Can't access instance fields from static methods
+    this.instanceField = 1; // Can't access instance fields from static methods
     this.f = 1; // Can't access static fields through `this`
   }
 
 
   init() {
-    this.instance_field = 1;
+    this.instanceField = 1;
   }
 }
 

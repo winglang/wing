@@ -1202,8 +1202,24 @@ impl<'a> TypeChecker<'a> {
 						self.validate_type(rtype, self.types.bool(), right);
 						self.types.bool()
 					}
-					BinaryOperator::Add
-					| BinaryOperator::Sub
+					BinaryOperator::AddOrConcat => {
+						if ltype.is_subtype_of(&self.types.number()) && rtype.is_subtype_of(&self.types.number()) {
+							self.types.number()
+						} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
+							self.types.string()
+						} else {
+							self.diagnostics.borrow_mut().push(Diagnostic {
+								message: format!(
+									"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
+									ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
+								),
+								span: Some(exp.span()),
+								level: DiagnosticLevel::Error,
+							});
+							self.types.anything() // TODO: return error type
+						}
+					}
+					BinaryOperator::Sub
 					| BinaryOperator::Mul
 					| BinaryOperator::Div
 					| BinaryOperator::FloorDiv
@@ -2111,7 +2127,9 @@ impl<'a> TypeChecker<'a> {
 				inflight_initializer,
 			}) => {
 				// Resources cannot be defined inflight
-				assert!(!*is_resource || env.phase == Phase::Preflight);
+				if *is_resource && env.phase == Phase::Inflight {
+					self.stmt_error(stmt, "Cannot define a preflight class in inflight scope".to_string());
+				}
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {

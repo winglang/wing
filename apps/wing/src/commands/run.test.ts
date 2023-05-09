@@ -33,9 +33,7 @@ test("wing it with no file throws error for a directory with more than 1 .w file
     writeFileSync("foo.w", "bring cloud;");
     writeFileSync("bar.w", "bring cloud;");
 
-    await expect(run).rejects.toThrow(
-      "Please specify which file you want to run"
-    );
+    await expect(run).rejects.toThrow("Please specify which file you want to run");
   } finally {
     process.chdir(prevdir);
   }

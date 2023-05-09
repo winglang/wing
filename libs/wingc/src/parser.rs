@@ -1049,7 +1049,7 @@ impl<'s> Parser<'s> {
 					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
 					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-						"+" => BinaryOperator::Add,
+						"+" => BinaryOperator::AddOrConcat,
 						"-" => BinaryOperator::Sub,
 						"==" => BinaryOperator::Equal,
 						"!=" => BinaryOperator::NotEqual,

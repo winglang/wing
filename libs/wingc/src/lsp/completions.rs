@@ -154,7 +154,17 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								.ok();
 							if let Some((namespace, _)) = namespace {
 								if let SymbolKind::Namespace(namespace) = namespace {
-									return get_completions_from_namespace(namespace);
+									let completions = get_completions_from_namespace(namespace);
+									//for namespaces - return only classes
+									if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
+										return completions
+											.iter()
+											.filter(|c| matches!(c.kind, Some(CompletionItemKind::CLASS)))
+											.cloned()
+											.collect();
+									} else {
+										return completions;
+									}
 								}
 							}
 						}

@@ -1305,6 +1305,127 @@ Information on how to display a resource in the UI.
 ---
 
 
+### Website <a name="Website" id="@winglang/sdk.cloud.Website"></a>
+
+**Inflight client:** [@winglang/sdk.cloud.IWebsiteClient](#@winglang/sdk.cloud.IWebsiteClient)
+
+Represents a cloud static website.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Website.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.Website(props: WebsiteProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Website.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.addJson">add_json</a></code> | Add a JSON file with custom values during the website's deployment. |
+
+---
+
+##### `add_json` <a name="add_json" id="@winglang/sdk.cloud.Website.addJson"></a>
+
+```wing
+add_json(path: str, data: Json): str
+```
+
+Add a JSON file with custom values during the website's deployment.
+
+If the path conflicts with file path from the website's static assets, an error will be thrown.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.addJson.parameter.path"></a>
+
+- *Type:* str
+
+the file path it will be uploaded as.
+
+---
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.cloud.Website.addJson.parameter.data"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the data to write to the file.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Absolute local path to the website's static files. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Website.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Website.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+Absolute local path to the website's static files.
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.cloud.Website.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+The website's url.
+
+---
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### AddConnectionProps <a name="AddConnectionProps" id="@winglang/sdk.std.AddConnectionProps"></a>
@@ -1515,9 +1636,9 @@ let api_request = cloud.ApiRequest{ ... }
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>json</code> | The request's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
 
 ---
 
@@ -1557,6 +1678,18 @@ The request's query string values.
 
 ---
 
+##### `vars`<sup>Required</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
+
+```wing
+vars: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The path variables.
+
+---
+
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
 
 ```wing
@@ -1578,18 +1711,6 @@ headers: MutMap<str>;
 - *Type:* MutMap&lt;str&gt;
 
 The request's headers.
-
----
-
-##### `vars`<sup>Optional</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
-
-```wing
-vars: MutMap<str>;
-```
-
-- *Type:* MutMap&lt;str&gt;
-
-The path variables.
 
 ---
 
@@ -2684,6 +2805,66 @@ type: TraceType;
 The type of a trace.
 
 ---
+
+### WebsiteProps <a name="WebsiteProps" id="@winglang/sdk.cloud.WebsiteProps"></a>
+
+website props.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.WebsiteProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let website_props = cloud.WebsiteProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.WebsiteProps.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+Local path to the website's static files, relative to the Wing source file or absolute.
+
+---
+
+*Example*
+
+```wing
+"./dist"
+```
+
+
+##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.WebsiteProps.property.domain"></a>
+
+```wing
+domain: str;
+```
+
+- *Type:* str
+- *Default:* a domain is generated by the cloud provider
+
+The website's custom domain name.
+
+---
+
+*Example*
+
+```wing
+"example.com"
+```
+
 
 ## Classes <a name="Classes" id="Classes"></a>
 
@@ -5038,7 +5219,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueAddConsumerHandlerClient](#@winglang/sdk.cloud.IQueueAddConsumerHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Queue.add_consumer`.
+Represents a resource with an inflight "handle" method that can be passed to `Queue.addConsumer`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -5164,7 +5345,7 @@ Payload to send to the queue.
 
 - *Extends:* <a href="#@winglang/sdk.core.IInspectable">IInspectable</a>, constructs.IConstruct
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 Abstract interface for `Resource`.
 
@@ -5592,6 +5773,14 @@ Function that will be called when a message is received from the topic.
 - *Type:* str
 
 ---
+
+
+### IWebsiteClient <a name="IWebsiteClient" id="@winglang/sdk.cloud.IWebsiteClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IWebsiteClient">IWebsiteClient</a>
+
+Inflight methods and members of `cloud.Website`.
+
 
 
 ## Enums <a name="Enums" id="Enums"></a>

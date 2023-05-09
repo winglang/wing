@@ -12,28 +12,28 @@ class InnerR {
 // Assign to non-reassignable field
 class R {
   f: num;
-  inner_r: InnerR;
-  inflight inflight_f: num;
+  innerR: InnerR;
+  inflight inflightF: num;
   
   init() {
     this.f = 1;
-    this.inner_r = new InnerR();
+    this.innerR = new InnerR();
   }
 
   inflight init() {
-    this.inflight_f = 1;
+    this.inflightF = 1;
   }
   
   inc() {
     this.f = this.f + 1;
   //^^^^^^^^^^^^^^^^^^^^ Variable this.f is not reassignable
-    this.inner_r.inner = 2;
-  //^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inner_r.inner is not reassignable
+    this.innerR.inner = 2;
+  //^^^^^^^^^^^^^^^^^^^^^^^ Variable this.innerR.inner is not reassignable
 }
 
-  inflight inflight_inc() {
-    this.inflight_f = this.inflight_f + 1;
-  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inflight_f is not reassignable
+  inflight inflightInc() {
+    this.inflightF = this.inflightF + 1;
+  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inflightF is not reassignable
   }
 }
 

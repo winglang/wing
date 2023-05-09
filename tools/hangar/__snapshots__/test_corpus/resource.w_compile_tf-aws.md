@@ -10,16 +10,10 @@ module.exports = function({ Foo, MyEnum }) {
       this.foo = foo;
       this.name = name;
     }
-    static async bar_static()  {
+    async myMethod()  {
       {
-        return "bar static";
-      }
-    }
-    async my_method()  {
-      {
-        (await this.foo.foo_inc());
-        const s = (await Foo.foo_static());
-        (await this.b.put("foo",`counter is: ${(await this.foo.foo_get())}`));
+        (await this.foo.fooInc());
+        (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
         return (await this.b.get("foo"));
       }
     }
@@ -75,17 +69,17 @@ module.exports = function({  }) {
     }
     async $inflight_init()  {
       {
-        this.inflight_field = 123;
+        this.inflightField = 123;
         (await this.c.inc(110));
         (await this.c.dec(10));
       }
     }
-    async foo_inc()  {
+    async fooInc()  {
       {
         (await this.c.inc());
       }
     }
-    async foo_get()  {
+    async fooGet()  {
       {
         return (await this.c.peek());
       }
@@ -816,10 +810,10 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.c, host, ["dec", "inc"]);
         }
-        if (ops.includes("foo_get")) {
+        if (ops.includes("fooGet")) {
           this._registerBindObject(this.c, host, ["peek"]);
         }
-        if (ops.includes("foo_inc")) {
+        if (ops.includes("fooInc")) {
           this._registerBindObject(this.c, host, ["inc"]);
         }
         if (ops.includes("foo_static")) {
@@ -830,7 +824,7 @@ class $Root extends $stdlib.std.Resource {
     class Bar extends $stdlib.std.Resource {
       constructor(scope, id, name, b, e) {
         super(scope, id);
-        this._addInflightOps("bar_static", "my_method", "test_type_access");
+        this._addInflightOps("myMethod");
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
@@ -880,11 +874,9 @@ class $Root extends $stdlib.std.Resource {
           this._registerBindObject(this.foo, host, []);
           this._registerBindObject(this.name, host, []);
         }
-        if (ops.includes("bar_static")) {
-        }
-        if (ops.includes("my_method")) {
+        if (ops.includes("myMethod")) {
           this._registerBindObject(this.b, host, ["get", "put"]);
-          this._registerBindObject(this.foo, host, ["foo_get", "foo_inc"]);
+          this._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
         }
         if (ops.includes("test_type_access")) {
           this._registerBindObject(this.e, host, []);
@@ -990,7 +982,7 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         bucket: {
           obj: bucket,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
         res: {
           obj: res,
@@ -1062,7 +1054,7 @@ async handle() {
 ```js
 async handle() {
   const { bucket, res } = this;
-  const s = (await res.my_method());
+  const s = (await res.myMethod());
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflight_field === 123)'`)})((res.foo.inflight_field === 123))};

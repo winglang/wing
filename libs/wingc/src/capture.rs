@@ -330,8 +330,10 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 	let env_ref = scope.env.borrow();
 	let env = env_ref.as_ref().unwrap();
 
-	// Make sure we're looking for captures only in inflight code
-	assert!(matches!(env.phase, Phase::Inflight));
+	// Early bail-out if we're looking for captures in preflight code - an error will be reported in type checking.
+	if matches!(env.phase, Phase::Preflight) {
+		return res;
+	}
 
 	for s in scope.statements.iter() {
 		match &s.kind {

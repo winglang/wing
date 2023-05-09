@@ -131,9 +131,9 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const arr = Object.freeze(["hello", "world"]);
-    const my_set = Object.freeze(new Set(["my", "my", "set"]));
-    const my_map = Object.freeze({"hello":123,"world":999});
-    const arr_of_map = Object.freeze([Object.freeze({"bang":123})]);
+    const mySet = Object.freeze(new Set(["my", "my", "set"]));
+    const myMap = Object.freeze({"hello":123,"world":999});
+    const arrOfMap = Object.freeze([Object.freeze({"bang":123})]);
     const j = Object.freeze({"a":"hello","b":"world"});
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
@@ -142,20 +142,20 @@ class $Root extends $stdlib.std.Resource {
           obj: arr,
           ops: []
         },
-        arr_of_map: {
-          obj: arr_of_map,
+        arrOfMap: {
+          obj: arrOfMap,
           ops: []
         },
         j: {
           obj: j,
           ops: []
         },
-        my_map: {
-          obj: my_map,
+        myMap: {
+          obj: myMap,
           ops: []
         },
-        my_set: {
-          obj: my_set,
+        mySet: {
+          obj: mySet,
           ops: []
         },
       }
@@ -186,15 +186,15 @@ new $App().synth();
 ## proc1/index.js
 ```js
 async handle(s) {
-  const { arr, arr_of_map, j, my_map, my_set } = this;
+  const { arr, arrOfMap, j, myMap, mySet } = this;
   {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(0)) === "hello")'`)})(((await arr.at(0)) === "hello"))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(1)) === "world")'`)})(((await arr.at(1)) === "world"))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 2)'`)})((arr.length === 2))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(await my_set.has("my"))'`)})((await my_set.has("my")))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(my_set.size === 2)'`)})((my_set.size === 2))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (my_map))'`)})(("world" in (my_map)))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(my_map).length === 2)'`)})((Object.keys(my_map).length === 2))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arr_of_map.at(0))))'`)})(("bang" in ((await arr_of_map.at(0)))))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(await mySet.has("my"))'`)})((await mySet.has("my")))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySet.size === 2)'`)})((mySet.size === 2))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (myMap))'`)})(("world" in (myMap)))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(myMap).length === 2)'`)})((Object.keys(myMap).length === 2))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arrOfMap.at(0))))'`)})(("bang" in ((await arrOfMap.at(0)))))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
 }
 
