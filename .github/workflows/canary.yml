@@ -37,10 +37,6 @@ jobs:
       - name: Install Wing
         run: |
           ./scripts/setup_wing.mjs -g --version ${{ steps.get-version.outputs.version }}
-      - name: Download examples/tests/valid/test_bucket.w
-        run: |
-          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/test_bucket.w > test_bucket.w
-          cat test_bucket.w
       - name: Run Test
         run: |
-          wing test test_bucket.w
+          wing test examples/tests/valid/test_bucket.w
