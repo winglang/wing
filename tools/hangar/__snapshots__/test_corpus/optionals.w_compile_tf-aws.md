@@ -63,8 +63,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((x ?? 5) === 4)'`)})(((x ?? 5) === 4))};
     const y = (x ?? 5);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 4)'`)})((y === 4))};
-    const optional_sup = new Super();
-    const s = (optional_sup ?? new Sub());
+    const optionalSup = new Super();
+    const s = (optionalSup ?? new Sub());
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.name === "Super")'`)})((s.name === "Super"))};
   }
 }

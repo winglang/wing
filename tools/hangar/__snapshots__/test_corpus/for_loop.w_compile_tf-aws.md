@@ -175,9 +175,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const words = Object.freeze(["wing", "lang", "dang"]);
-    const unique_numbers = Object.freeze(new Set([1, 2, 3]));
+    const uniqueNumbers = Object.freeze(new Set([1, 2, 3]));
     for (const word of words) {
-      for (const number of unique_numbers) {
+      for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(number > 0)'`)})((number > 0))};
         {console.log(`${word}: ${number}`)};
       }
@@ -185,37 +185,37 @@ class $Root extends $stdlib.std.Resource {
     let i = 0;
     for (const word of words) {
       i = (i + 1);
-      let pre_break_hits = 0;
-      let post_break_hits = 0;
-      for (const number of unique_numbers) {
+      let preBreakHits = 0;
+      let postBreakHits = 0;
+      for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(number > 0)'`)})((number > 0))};
         {console.log(`${word}: ${number}`)};
-        pre_break_hits = (pre_break_hits + 1);
+        preBreakHits = (preBreakHits + 1);
         if ((number === 2)) {
           break;
         }
-        post_break_hits = (post_break_hits + 1);
+        postBreakHits = (postBreakHits + 1);
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(pre_break_hits === 2)'`)})((pre_break_hits === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(post_break_hits === 1)'`)})((post_break_hits === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(preBreakHits === 2)'`)})((preBreakHits === 2))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(postBreakHits === 1)'`)})((postBreakHits === 1))};
     }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(i === 3)'`)})((i === 3))};
     let j = 0;
     for (const word of words) {
       j = (j + 1);
-      let pre_continue_hits = 0;
-      let post_continue_hits = 0;
-      for (const number of unique_numbers) {
+      let preContinueHits = 0;
+      let postContinueHits = 0;
+      for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(number > 0)'`)})((number > 0))};
         {console.log(`${word}: ${number}`)};
-        pre_continue_hits = (pre_continue_hits + 1);
+        preContinueHits = (preContinueHits + 1);
         if ((number > 0)) {
           continue;
         }
-        post_continue_hits = (post_continue_hits + 1);
+        postContinueHits = (postContinueHits + 1);
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(pre_continue_hits === 3)'`)})((pre_continue_hits === 3))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(post_continue_hits === 0)'`)})((post_continue_hits === 0))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(preContinueHits === 3)'`)})((preContinueHits === 3))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(postContinueHits === 0)'`)})((postContinueHits === 0))};
     }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(j === 3)'`)})((j === 3))};
     {console.log("---\nfor x in 0..0 { ... }")};

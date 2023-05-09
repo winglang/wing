@@ -3,14 +3,14 @@ bring cloud;
 // User defined resource
 class Foo {
   c: cloud.Counter; // Use SDK built in resource in the user defined resource
-  inflight inflight_field: num;
+  inflight inflightField: num;
 
   init() {
     this.c = new cloud.Counter();
   }
 
   inflight init() {
-    this.inflight_field = 123;
+    this.inflightField = 123;
     // Access a cloud resource from inflight init
     this.c.inc(110);
     // Access a some method in the cloud resource's init that's not used anywhere else (to see reference binding works for init)
@@ -18,12 +18,12 @@ class Foo {
   }
 
   // Our resource has an inflight method
-  inflight foo_inc() {
+  inflight fooInc() {
     // Call the SDK built in resource's inflight method from our inflight code
     this.c.inc();
   }
 
-  inflight foo_get(): num {
+  inflight fooGet(): num {
     return this.c.peek(); 
   }
 }
@@ -40,11 +40,11 @@ class Bar {
     this.foo = new Foo();
   }
 
-  inflight my_method(): str {
+  inflight myMethod(): str {
     // Call user defined inflight code from another user defined resource
-    this.foo.foo_inc();
+    this.foo.fooInc();
     // Call SDK built in resource's client
-    this.b.put("foo", "counter is: ${this.foo.foo_get()}");
+    this.b.put("foo", "counter is: ${this.foo.fooGet()}");
     return this.b.get("foo");
   }
 }
@@ -52,10 +52,10 @@ class Bar {
 let bucket = new cloud.Bucket();
 let res = new Bar("Arr", bucket);
 new cloud.Function(inflight () => {
-  let s = res.my_method();
+  let s = res.myMethod();
   assert(s == "counter is: 101");
   assert(bucket.list().length == 1);
-  assert(res.foo.inflight_field == 123);
+  assert(res.foo.inflightField == 123);
 }) as "test";
 
 class BigPublisher {
@@ -70,15 +70,15 @@ class BigPublisher {
     this.q = new cloud.Queue();
     this.t = new cloud.Topic();
 
-    this.t.on_message(inflight () => {
+    this.t.onMessage(inflight () => {
       this.b.put("foo1.txt", "bar");
     });
 
-    this.q.add_consumer(inflight () => {
+    this.q.addConsumer(inflight () => {
       this.b.put("foo2.txt", "bar");
     });
 
-    this.b2.on_create(inflight () => {
+    this.b2.onCreate(inflight () => {
       this.q.push("foo");
     });
   }

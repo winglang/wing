@@ -37,7 +37,7 @@ class TestHelper {
   }
 }
 
-q.add_consumer(inflight (msg: str): str => {
+q.addConsumer(inflight (msg: str): str => {
   c.inc();
 });
 
@@ -48,4 +48,4 @@ new cloud.Function(inflight () => {
   q.push("hello");
   q.push("world");
   js.assert(predicate);
-}) as "test:add_consumer";
+}) as "test:addConsumer";
