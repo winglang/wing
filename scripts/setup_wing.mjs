@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * This script is used to create a temporary installation of the wing toolchain (wing cli and sdk)
+ * Creates a temporary installation of the wing toolchain (wing cli and sdk)
+ *
+ * --help to see options
  */
 
+import assert from "node:assert";
 import { execSync } from "node:child_process";
 import { mkdirSync, rmSync, symlinkSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -15,7 +18,7 @@ let targetWingSDKSpec = join(currentDir, "../libs/wingsdk");
 let targetWingSpec = join(currentDir, "../apps/wing");
 
 let {
-  values: { alias, version, sdk, cli },
+  values: { alias, version, sdk, cli, help, output },
 } = parseArgs({
   options: {
     alias: {
@@ -32,10 +35,32 @@ let {
     },
     cli: {
       type: "string",
-      short: "f",
+      short: "c",
     },
+    help: {
+      type: "boolean",
+      short: "h",
+    },
+    output: {
+      type: "string",
+      short: "o",
+    }
   },
 });
+
+if (help) {
+  console.log(`\
+Usage: setup_wing.mjs [options]
+
+Options:
+  -a, --alias <alias>     Alias for the installation (default: "dev", or version if specified)
+  -v, --version <version> Registry-available version of wing to install. Cannot be used with --sdk or --cli
+  -c, --cli <path>        Local path to wing cli to install. May be tarball or directory. Must be used with --sdk
+  -s, --sdk <path>        Local path to wing sdk to install. May be tarball or directory. Must be used with --sdk
+  -o, --output <path>     Path to symlink to the Wing CLI binary. (default: "scripts/_wing<alias>")
+`);
+  process.exit(0);
+}
 
 if (version !== undefined) {
   alias = alias ?? version;
@@ -63,31 +88,45 @@ const newWingName = `_wing${alias}`;
 const installDir = join(currentDir, "__wing_installs");
 const localInstallDir = join(installDir, alias);
 const wingCliBin = join(localInstallDir, "node_modules", ".bin", "wing");
-const wingCliLink = join(currentDir, newWingName);
+const wingCliLink = output ?? join(currentDir, newWingName);
 
 rmSync(localInstallDir, { recursive: true, force: true });
 rmSync(wingCliLink, { force: true });
 mkdirSync(localInstallDir, { recursive: true });
+console.log(`CLI: "${targetWingSpec}"`);
+console.log(`SDK: "${targetWingSDKSpec}"`);
 
-console.log(
-  `Installing...\n\tWing: "${targetWingSpec}"\n\tSDK: "${targetWingSDKSpec}"\nTo ${localInstallDir}\n\n====================`
-);
+console.log("Installing...");
 execSync(`npm init -y`, {
   cwd: localInstallDir,
   stdio: "ignore",
 });
-execSync(
-  `npm install --no-audit --no-fund --no-package-lock --install-links=false ${targetWingSpec} ${targetWingSDKSpec}`,
+const installOutput = execSync(
+  `npm install --no-audit --foreground-scripts --no-progress --no-fund --no-package-lock --install-links=false ${targetWingSpec} ${targetWingSDKSpec}`,
   {
     cwd: localInstallDir,
-    stdio: "inherit",
+    stdio: "pipe",
+    encoding: "utf-8",
   }
 );
+console.log(installOutput);
 
-console.log("\n====================\n\n");
+const installHooks = installOutput.match(/>.*/g)?.map((s) => s) ?? [];
+assert.equal(
+  installHooks.length,
+  0,
+  `Install contains unexpected script hooks: \n${installHooks}`
+);
+assert.doesNotMatch(
+  installOutput,
+  / warn /,
+  `Install contains unexpected warning`
+);
 
-// create symlink to point to the local wing cli
+console.log("===");
+
 symlinkSync(wingCliBin, wingCliLink);
 
-console.log(`Add local wings to path: export PATH="${currentDir}:$PATH"`);
-console.log(`Wing CLI "${alias}": ${wingCliLink}`);
+console.log(wingCliLink);
+console.log();
+console.log(`export PATH="${currentDir}:$PATH"`);

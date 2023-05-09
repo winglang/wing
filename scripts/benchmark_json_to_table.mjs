@@ -5,7 +5,7 @@
 // The JSON -> Markdown table converter is adapted to modern js from
 // https://github.com/tsuz/json-to-markdown-table/blob/master/app.js
 
-import { appendFileSync } from "fs";
+import { appendFileSync } from "node:fs";
 
 /**
  * @param {any} json

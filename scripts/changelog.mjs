@@ -2,8 +2,8 @@
 
 import * as changelogen from "changelogen";
 import * as semver from "semver";
-import { appendFileSync } from "fs";
-import { execSync } from "child_process";
+import { appendFileSync } from "node:fs";
+import { execSync } from "node:child_process";
 
 const inAction = process.env.GITHUB_ACTIONS === "true";
 
