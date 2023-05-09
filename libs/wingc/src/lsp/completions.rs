@@ -152,7 +152,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								if let SymbolKind::Namespace(namespace) = namespace {
 									let completions = get_completions_from_namespace(namespace);
 									//for namespaces - return only classes
-									if parent.parent().expect("Should have a parent's parent").kind() == "new_expression" {
+									if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
 										return completions
 											.iter()
 											.filter(|c| matches!(c.kind, Some(CompletionItemKind::CLASS)))
