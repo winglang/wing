@@ -37,30 +37,30 @@ new cloud.Api(props?: ApiProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given route. |
-| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given path. |
 
 ---
 
 ##### `connect` <a name="connect" id="@winglang/sdk.cloud.Api.connect"></a>
 
 ```wing
-connect(route: str, inflight: IApiEndpointHandler, props?: ApiConnectProps): void
+connect(path: str, inflight: IApiEndpointHandler, props?: ApiConnectProps): void
 ```
 
-Add a inflight handler to the api for CONNECT requests on the given route.
+Add a inflight handler to the api for CONNECT requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.connect.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.connect.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle CONNECT requests for.
+The path to handle CONNECT requests for.
 
 ---
 
@@ -83,16 +83,16 @@ Options for the route.
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.Api.delete"></a>
 
 ```wing
-delete(route: str, inflight: IApiEndpointHandler, props?: ApiDeleteProps): void
+delete(path: str, inflight: IApiEndpointHandler, props?: ApiDeleteProps): void
 ```
 
-Add a inflight handler to the api for DELETE requests on the given route.
+Add a inflight handler to the api for DELETE requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.delete.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.delete.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle DELETE requests for.
+The path to handle DELETE requests for.
 
 ---
 
@@ -115,16 +115,16 @@ Options for the route.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.Api.get"></a>
 
 ```wing
-get(route: str, inflight: IApiEndpointHandler, props?: ApiGetProps): void
+get(path: str, inflight: IApiEndpointHandler, props?: ApiGetProps): void
 ```
 
-Add a inflight handler to the api for GET requests on the given route.
+Add a inflight handler to the api for GET requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.get.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.get.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle GET requests for.
+The path to handle GET requests for.
 
 ---
 
@@ -147,16 +147,16 @@ Options for the route.
 ##### `head` <a name="head" id="@winglang/sdk.cloud.Api.head"></a>
 
 ```wing
-head(route: str, inflight: IApiEndpointHandler, props?: ApiHeadProps): void
+head(path: str, inflight: IApiEndpointHandler, props?: ApiHeadProps): void
 ```
 
-Add a inflight handler to the api for HEAD requests on the given route.
+Add a inflight handler to the api for HEAD requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.head.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.head.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle HEAD requests for.
+The path to handle HEAD requests for.
 
 ---
 
@@ -179,16 +179,16 @@ Options for the route.
 ##### `options` <a name="options" id="@winglang/sdk.cloud.Api.options"></a>
 
 ```wing
-options(route: str, inflight: IApiEndpointHandler, props?: ApiOptionsProps): void
+options(path: str, inflight: IApiEndpointHandler, props?: ApiOptionsProps): void
 ```
 
-Add a inflight handler to the api for OPTIONS requests on the given route.
+Add a inflight handler to the api for OPTIONS requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.options.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.options.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle OPTIONS requests for.
+The path to handle OPTIONS requests for.
 
 ---
 
@@ -211,16 +211,16 @@ Options for the route.
 ##### `patch` <a name="patch" id="@winglang/sdk.cloud.Api.patch"></a>
 
 ```wing
-patch(route: str, inflight: IApiEndpointHandler, props?: ApiPatchProps): void
+patch(path: str, inflight: IApiEndpointHandler, props?: ApiPatchProps): void
 ```
 
-Add a inflight handler to the api for PATCH requests on the given route.
+Add a inflight handler to the api for PATCH requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.patch.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.patch.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle PATCH requests for.
+The path to handle PATCH requests for.
 
 ---
 
@@ -243,16 +243,16 @@ Options for the route.
 ##### `post` <a name="post" id="@winglang/sdk.cloud.Api.post"></a>
 
 ```wing
-post(route: str, inflight: IApiEndpointHandler, props?: ApiPostProps): void
+post(path: str, inflight: IApiEndpointHandler, props?: ApiPostProps): void
 ```
 
-Add a inflight handler to the api for POST requests on the given route.
+Add a inflight handler to the api for POST requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.post.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.post.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle POST requests for.
+The path to handle POST requests for.
 
 ---
 
@@ -275,16 +275,16 @@ Options for the route.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.Api.put"></a>
 
 ```wing
-put(route: str, inflight: IApiEndpointHandler, props?: ApiPutProps): void
+put(path: str, inflight: IApiEndpointHandler, props?: ApiPutProps): void
 ```
 
-Add a inflight handler to the api for PUT requests on the given route.
+Add a inflight handler to the api for PUT requests on the given path.
 
-###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.put.parameter.route"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.put.parameter.path"></a>
 
 - *Type:* str
 
-The route to handle PUT requests for.
+The path to handle PUT requests for.
 
 ---
 
@@ -311,7 +311,6 @@ Options for the route.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Api.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Api.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Api.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Api.property.url">url</a></code> | <code>str</code> | The base URL of the API endpoint. |
 
 ---
@@ -337,22 +336,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Api.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -517,7 +500,6 @@ Run an inflight whenever a file is updated in the bucket.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -542,22 +524,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Bucket.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -596,7 +562,6 @@ new cloud.Counter(props?: CounterProps)
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
@@ -622,22 +587,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Counter.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -724,7 +673,6 @@ Add an environment variable to the function.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
 ---
@@ -750,22 +698,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Function.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -843,7 +775,6 @@ Create a function to consume messages from this queue.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Queue.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -868,22 +799,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Queue.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -915,7 +830,6 @@ new std.Resource()
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.std.Resource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.std.Resource.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.std.Resource.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -940,22 +854,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.std.Resource.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -1021,7 +919,6 @@ Create a function that runs when receiving the scheduled event.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Schedule.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Schedule.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Schedule.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -1046,22 +943,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Schedule.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -1100,7 +981,6 @@ new cloud.Secret(props?: SecretProps)
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Secret.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Secret.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Secret.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -1125,22 +1005,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Secret.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -1179,7 +1043,6 @@ new cloud.Table(props: TableProps)
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Table.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Table.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Table.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Table.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | Table columns. |
 | <code><a href="#@winglang/sdk.cloud.Table.property.name">name</a></code> | <code>str</code> | Table name. |
 | <code><a href="#@winglang/sdk.cloud.Table.property.primaryKey">primary_key</a></code> | <code>str</code> | Table primary key name. |
@@ -1207,22 +1070,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Table.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -1341,7 +1188,6 @@ A construct.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TestRunner.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.TestRunner.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.TestRunner.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -1366,22 +1212,6 @@ display: Display;
 - *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.TestRunner.property.stateful"></a>
-
-```wing
-stateful: bool;
-```
-
-- *Type:* bool
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
 
 ---
 
@@ -1447,7 +1277,6 @@ Run an inflight whenever an message is published to the topic.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Topic.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -1475,19 +1304,124 @@ Information on how to display a resource in the UI.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Topic.property.stateful"></a>
+
+### Website <a name="Website" id="@winglang/sdk.cloud.Website"></a>
+
+**Inflight client:** [@winglang/sdk.cloud.IWebsiteClient](#@winglang/sdk.cloud.IWebsiteClient)
+
+Represents a cloud static website.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Website.Initializer"></a>
 
 ```wing
-stateful: bool;
+bring cloud;
+
+new cloud.Website(props: WebsiteProps)
 ```
 
-- *Type:* bool
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a></code> | *No description.* |
 
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+---
 
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Website.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.addJson">add_json</a></code> | Add a JSON file with custom values during the website's deployment. |
+
+---
+
+##### `add_json` <a name="add_json" id="@winglang/sdk.cloud.Website.addJson"></a>
+
+```wing
+add_json(path: str, data: Json): str
+```
+
+Add a JSON file with custom values during the website's deployment.
+
+If the path conflicts with file path from the website's static assets, an error will be thrown.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.addJson.parameter.path"></a>
+
+- *Type:* str
+
+the file path it will be uploaded as.
+
+---
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.cloud.Website.addJson.parameter.data"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the data to write to the file.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Absolute local path to the website's static files. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Website.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Website.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+Absolute local path to the website's static files.
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.cloud.Website.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+The website's url.
 
 ---
 
@@ -1702,9 +1636,9 @@ let api_request = cloud.ApiRequest{ ... }
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>json</code> | The request's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
 
 ---
 
@@ -1744,6 +1678,18 @@ The request's query string values.
 
 ---
 
+##### `vars`<sup>Required</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
+
+```wing
+vars: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The path variables.
+
+---
+
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
 
 ```wing
@@ -1765,18 +1711,6 @@ headers: MutMap<str>;
 - *Type:* MutMap&lt;str&gt;
 
 The request's headers.
-
----
-
-##### `vars`<sup>Optional</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
-
-```wing
-vars: MutMap<str>;
-```
-
-- *Type:* MutMap&lt;str&gt;
-
-The path variables.
 
 ---
 
@@ -2354,6 +2288,7 @@ let queue_props = cloud.QueueProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initial_messages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retention_period</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue retains a message. |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
 
 ---
@@ -2371,6 +2306,19 @@ Initialize the queue with a set of messages.
 
 ---
 
+##### `retention_period`<sup>Optional</sup> <a name="retention_period" id="@winglang/sdk.cloud.QueueProps.property.retentionPeriod"></a>
+
+```wing
+retention_period: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+How long a queue retains a message.
+
+---
+
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueProps.property.timeout"></a>
 
 ```wing
@@ -2378,7 +2326,7 @@ timeout: Duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* Duration.fromSeconds(10)
+- *Default:* undefined
 
 How long a queue's consumers have to process a message.
 
@@ -2520,6 +2468,30 @@ bring cloud;
 let secret_props = cloud.SecretProps{ ... }
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.SecretProps.property.name">name</a></code> | <code>str</code> | The secret's name. |
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.cloud.SecretProps.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+- *Default:* a new secret is provisioned with a generated name
+
+The secret's name.
+
+If no name is provided then a new secret is provisioned in the target.
+If a name is provided then the resource will reference an existing
+secret in the target.
+
+---
 
 ### TableProps <a name="TableProps" id="@winglang/sdk.cloud.TableProps"></a>
 
@@ -2681,6 +2653,54 @@ bring cloud;
 let topic_on_message_props = cloud.TopicOnMessageProps{ ... }
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.TopicOnMessageProps.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.TopicOnMessageProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 128
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicOnMessageProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### TopicProps <a name="TopicProps" id="@winglang/sdk.cloud.TopicProps"></a>
 
@@ -2785,6 +2805,66 @@ type: TraceType;
 The type of a trace.
 
 ---
+
+### WebsiteProps <a name="WebsiteProps" id="@winglang/sdk.cloud.WebsiteProps"></a>
+
+website props.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.WebsiteProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let website_props = cloud.WebsiteProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.WebsiteProps.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+Local path to the website's static files, relative to the Wing source file or absolute.
+
+---
+
+*Example*
+
+```wing
+"./dist"
+```
+
+
+##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.WebsiteProps.property.domain"></a>
+
+```wing
+domain: str;
+```
+
+- *Type:* str
+- *Default:* a domain is generated by the cloud provider
+
+The website's custom domain name.
+
+---
+
+*Example*
+
+```wing
+"example.com"
+```
+
 
 ## Classes <a name="Classes" id="Classes"></a>
 
@@ -3291,6 +3371,7 @@ new std.ImmutableMap()
 | <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
@@ -3337,6 +3418,14 @@ Returns a boolean indicating whether an element with the specified key exists or
 The key of the element to test for presence.
 
 ---
+
+##### `keys` <a name="keys" id="@winglang/sdk.std.ImmutableMap.keys"></a>
+
+```wing
+keys(): ImmutableArray
+```
+
+Returns the keys of this map.
 
 ##### `size` <a name="size" id="@winglang/sdk.std.ImmutableMap.size"></a>
 
@@ -3491,6 +3580,7 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
+| <code><a href="#@winglang/sdk.std.Json.tryParse">try_parse</a></code> | Try to parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
 
 ---
@@ -3616,6 +3706,24 @@ to format as string.
 ###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.stringify.parameter.indent"></a>
 
 - *Type:* num
+
+---
+
+##### `try_parse` <a name="try_parse" id="@winglang/sdk.std.Json.tryParse"></a>
+
+```wing
+bring std;
+
+std.Json.try_parse(str: str)
+```
+
+Try to parse a string into a Json.
+
+###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.tryParse.parameter.str"></a>
+
+- *Type:* str
+
+to parse as Json.
 
 ---
 
@@ -5237,7 +5345,7 @@ Payload to send to the queue.
 
 - *Extends:* <a href="#@winglang/sdk.core.IInspectable">IInspectable</a>, constructs.IConstruct
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 Abstract interface for `Resource`.
 
@@ -5274,6 +5382,14 @@ display: Display;
 Information on how to display a resource in the UI.
 
 ---
+
+### IScheduleClient <a name="IScheduleClient" id="@winglang/sdk.cloud.IScheduleClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IScheduleClient">IScheduleClient</a>
+
+Inflight interface for `Schedule`.
+
+
 
 ### IScheduleOnTickHandler <a name="IScheduleOnTickHandler" id="@winglang/sdk.cloud.IScheduleOnTickHandler"></a>
 
@@ -5431,7 +5547,7 @@ primary key to delete the row.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.ITableClient.get"></a>
 
 ```wing
-get(key: str): any
+get(key: str): Json
 ```
 
 **Inflight client:** [true](#true)
@@ -5449,12 +5565,20 @@ primary key to search.
 ##### `insert` <a name="insert" id="@winglang/sdk.cloud.ITableClient.insert"></a>
 
 ```wing
-insert(row: Json): void
+insert(key: str, row: Json): void
 ```
 
 **Inflight client:** [true](#true)
 
 Insert a row into the table.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.insert.parameter.key"></a>
+
+- *Type:* str
+
+primary key to insert the row.
+
+---
 
 ###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.ITableClient.insert.parameter.row"></a>
 
@@ -5467,7 +5591,7 @@ data to be inserted.
 ##### `list` <a name="list" id="@winglang/sdk.cloud.ITableClient.list"></a>
 
 ```wing
-list(): any
+list(): MutArray<Json>
 ```
 
 **Inflight client:** [true](#true)
@@ -5477,12 +5601,20 @@ List all rows in the table.
 ##### `update` <a name="update" id="@winglang/sdk.cloud.ITableClient.update"></a>
 
 ```wing
-update(row: Json): void
+update(key: str, row: Json): void
 ```
 
 **Inflight client:** [true](#true)
 
 Update a row in the table.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.update.parameter.key"></a>
+
+- *Type:* str
+
+primary key to update the row.
+
+---
 
 ###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.ITableClient.update.parameter.row"></a>
 
@@ -5641,6 +5773,14 @@ Function that will be called when a message is received from the topic.
 - *Type:* str
 
 ---
+
+
+### IWebsiteClient <a name="IWebsiteClient" id="@winglang/sdk.cloud.IWebsiteClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IWebsiteClient">IWebsiteClient</a>
+
+Inflight methods and members of `cloud.Website`.
+
 
 
 ## Enums <a name="Enums" id="Enums"></a>

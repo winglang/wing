@@ -7,7 +7,7 @@ if true {
 // TODO:
 // let x = new R(); // forward reference a type in the same scope where it is defined
 
-resource R {
+class R {
   /**
   this is method2
   */
@@ -17,6 +17,8 @@ resource R {
     this.method2(); // we can call ourselves because we are defined in an outer scope
   }
   f: str;
-  init(/* empty */) {}
+  init(/* empty */) {
+    this.f = "Hello World!!!";
+  }
   method1() {}
 }

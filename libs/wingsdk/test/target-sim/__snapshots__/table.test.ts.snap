@@ -34,7 +34,6 @@ exports[`create a table 1`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -51,7 +50,6 @@ exports[`create a table 1`] = `
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -81,6 +79,7 @@ exports[`get row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
+  "get row joe-id from table my_get_table.",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
   "wingsdk.cloud.Table deleted.",
@@ -122,7 +121,6 @@ exports[`get row 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -139,7 +137,6 @@ exports[`get row 2`] = `
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -169,6 +166,7 @@ exports[`insert row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
+  "get row joe-id from table my_insert_table.",
   "insert row joe-id into the table my_insert_table.",
   "wingsdk.cloud.Table deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -209,7 +207,6 @@ exports[`insert row 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -226,7 +223,6 @@ exports[`insert row 2`] = `
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -256,7 +252,9 @@ exports[`list table 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
+  "get row joe-id from table my_list_table.",
   "insert row joe-id into the table my_list_table.",
+  "get row jane-id from table my_list_table.",
   "insert row jane-id into the table my_list_table.",
   "list all rows from table my_list_table.",
   "wingsdk.cloud.Table deleted.",
@@ -298,7 +296,6 @@ exports[`list table 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -315,7 +312,6 @@ exports[`list table 2`] = `
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -345,6 +341,7 @@ exports[`update row 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Table created.",
+  "get row joe-id from table my_update_table.",
   "insert row joe-id into the table my_update_table.",
   "get row joe-id from table my_update_table.",
   "get row joe-id from table my_update_table.",
@@ -389,7 +386,6 @@ exports[`update row 2`] = `
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": false,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -406,7 +402,6 @@ exports[`update row 2`] = `
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
-            "wing:resource:stateful": true,
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

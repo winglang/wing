@@ -8,8 +8,7 @@ import { Command, Option } from "commander";
 import { run_server } from "./commands/lsp";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
-const SUPPORTED_NODE_VERSION = require("../package.json").engines
-  .node as string;
+const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
 if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
@@ -29,6 +28,10 @@ async function main() {
 
   program.name("wing").version(PACKAGE_VERSION);
 
+  program.option("--debug", "Enable debug logging (same as DEBUG=1)", () => {
+    process.env.DEBUG = "1";
+  });
+
   program
     .option("--no-update-check", "Skip checking for toolchain updates")
     .hook("preAction", async (cmd) => {
@@ -46,10 +49,7 @@ async function main() {
     .argument("[simfile]", ".wsim simulator file")
     .action(run);
 
-  program
-    .command("lsp")
-    .description("Run the Wing language server on stdio")
-    .action(run_server);
+  program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
 
   program
     .command("compile")
@@ -77,10 +77,7 @@ async function main() {
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .action(actionErrorHandler(test));
 
-  program
-    .command("docs")
-    .description("Open the Wing documentation")
-    .action(docs);
+  program.command("docs").description("Open the Wing documentation").action(docs);
 
   program.parse();
 }

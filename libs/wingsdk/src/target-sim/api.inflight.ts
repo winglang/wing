@@ -1,11 +1,13 @@
 import { Server } from "http";
 import { AddressInfo } from "net";
 import express from "express";
+import { IEventPublisher } from "./event-mapping";
 import {
   ApiAttributes,
   ApiRoute,
   ApiSchema,
   API_TYPE,
+  EventSubscription,
 } from "./schema-resources";
 import {
   ApiRequest,
@@ -23,7 +25,9 @@ import {
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
-export class Api implements IApiClient, ISimulatorResourceInstance {
+export class Api
+  implements IApiClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly routes: ApiRoute[];
   private readonly context: ISimulatorContext;
   private readonly app: express.Application;
@@ -31,7 +35,8 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
   private url: string | undefined;
 
   constructor(props: ApiSchema["props"], context: ISimulatorContext) {
-    this.routes = props.routes ?? [];
+    props;
+    this.routes = [];
     this.context = context;
 
     // Set up an express server that handles the routes.
@@ -42,70 +47,85 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
     // https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
     this.app.use(express.json({ limit: "10mb" }));
     this.app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+  }
 
-    for (const route of this.routes) {
-      const method = route.method.toLowerCase() as
-        | "get"
-        | "post"
-        | "put"
-        | "delete"
-        | "head"
-        | "options"
-        | "patch"
-        | "connect";
+  public async addEventSubscription(
+    subscriber: string,
+    subscriptionProps: EventSubscription
+  ): Promise<void> {
+    const routes = (subscriptionProps as any).routes as ApiRoute[];
+    routes.forEach((r) => {
+      const s = {
+        functionHandle: subscriber,
+        method: r.method,
+        path: r.path,
+      };
+      this.routes.push(s);
+      this.populateRoute(s, subscriber);
+    });
+  }
 
-      const fnClient = this.context.findInstance(
-        route.functionHandle
-      ) as IFunctionClient & ISimulatorResourceInstance;
-      if (!fnClient) {
-        throw new Error("No function client found!");
-      }
+  private populateRoute(route: ApiRoute, functionHandle: string): void {
+    const method = route.method.toLowerCase() as
+      | "get"
+      | "post"
+      | "put"
+      | "delete"
+      | "head"
+      | "options"
+      | "patch"
+      | "connect";
 
-      this.app[method](
-        transformRoutePath(route.route),
-        async (
-          req: express.Request,
-          res: express.Response,
-          next: express.NextFunction
-        ) => {
-          const body = req.body;
-          this.addTrace(
-            `Processing "${route.method} ${route.route}" (body=${JSON.stringify(
-              body
-            )}, params=${JSON.stringify(req.params)}).`
+    const fnClient = this.context.findInstance(
+      functionHandle
+    ) as IFunctionClient & ISimulatorResourceInstance;
+    if (!fnClient) {
+      throw new Error("No function client found!");
+    }
+
+    this.app[method](
+      transformRoutePath(route.path),
+      async (
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+      ) => {
+        const body = req.body;
+        this.addTrace(
+          `Processing "${route.method} ${route.path}" (body=${JSON.stringify(
+            body
+          )}, params=${JSON.stringify(req.params)}).`
+        );
+
+        const apiRequest = transformRequest(req);
+
+        try {
+          const response = await fnClient.invoke(
+            // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
+            apiRequest as unknown as string
           );
 
-          const apiRequest = transformRequest(req);
-
-          try {
-            const response = await fnClient.invoke(
-              // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-              apiRequest as unknown as string
+          // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
+          if (!isApiResponse(response)) {
+            throw new Error(
+              `Expected an ApiResponse struct, found ${JSON.stringify(
+                response
+              )}`
             );
-
-            // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-            if (!isApiResponse(response)) {
-              throw new Error(
-                `Expected an ApiResponse struct, found ${JSON.stringify(
-                  response
-                )}`
-              );
-            }
-
-            res.status(response.status);
-            for (const [key, value] of Object.entries(response.headers ?? {})) {
-              res.set(key, value);
-            }
-            res.send(JSON.stringify(response.body));
-            this.addTrace(
-              `${route.method} ${route.route} - ${response.status}.`
-            );
-          } catch (err) {
-            return next(err);
           }
+
+          res.status(response.status);
+          res.set("Content-Type", "application/json");
+          for (const [key, value] of Object.entries(response.headers ?? {})) {
+            res.set(key, value);
+          }
+          res.send(JSON.stringify(response.body));
+          this.addTrace(`${route.method} ${route.path} - ${response.status}.`);
+        } catch (err) {
+          return next(err);
         }
-      );
-    }
+      }
+    );
   }
 
   public async init(): Promise<ApiAttributes> {

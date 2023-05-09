@@ -10,7 +10,7 @@ use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
 	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-	UnaryOperator, UserDefinedType,
+	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -32,13 +32,11 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"nil" => "see https://github.com/winglang/wing/issues/433",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
 	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
-	"inflight_closure" => "see https://github.com/winglang/wing/issues/474",
-	"pure_closure" => "see https://github.com/winglang/wing/issues/435",
+	"pure_closure" => "see https://github.com/winglang/wing/issues/474",
 	"storage_modifier" => "see https://github.com/winglang/wing/issues/107",
 	"access_modifier" => "see https://github.com/winglang/wing/issues/108",
 	"await_expression" => "see https://github.com/winglang/wing/issues/116",
 	"defer_expression" => "see https://github.com/winglang/wing/issues/116",
-	"for_in_loop" => "see https://github.com/winglang/wing/issues/118",
 	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
 
@@ -56,9 +54,11 @@ impl<'s> Parser<'s> {
 	pub fn wingit(&self, root: &Node) -> Scope {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root),
-			other => {
-				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
-			}
+			_ => Scope {
+				env: RefCell::new(None),
+				span: Default::default(),
+				statements: vec![],
+			},
 		};
 
 		self.report_unhandled_errors(&root);
@@ -327,10 +327,18 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_assignment_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		Ok(StmtKind::Assignment {
-			variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
-			value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-		})
+		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap())?;
+		if let ExprKind::Reference(r) = reference.kind {
+			Ok(StmtKind::Assignment {
+				variable: r,
+				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+			})
+		} else {
+			self.add_error(
+				"Expected a reference on the left hand side of an assignment",
+				statement_node,
+			)
+		}
 	}
 
 	fn build_struct_definition_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
@@ -352,8 +360,8 @@ impl<'s> Parser<'s> {
 		let mut extends = vec![];
 		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
 			let super_type = self.build_type_annotation(&super_node)?;
-			match super_type {
-				TypeAnnotation::UserDefined(t) => {
+			match super_type.kind {
+				TypeAnnotationKind::UserDefined(t) => {
 					extends.push(t);
 				}
 				_ => {
@@ -538,10 +546,13 @@ impl<'s> Parser<'s> {
 							statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 							signature: FunctionSignature {
 								parameters,
-								return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
-									root: name.clone(),
-									fields: vec![],
-								}))),
+								return_type: Some(Box::new(TypeAnnotation {
+									kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+										root: name.clone(),
+										fields: vec![],
+									}),
+									span: self.node_span(&class_element),
+								})),
 								phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 							},
 							span: self.node_span(&class_element),
@@ -554,30 +565,39 @@ impl<'s> Parser<'s> {
 						.err();
 				}
 				(other, _) => {
-					panic!(
-						"Unexpected {} element node type {} || {:#?}",
-						if is_resource { "resource" } else { "class" },
-						other,
-						class_element
-					);
+					panic!("Unexpected class element node type {} || {:#?}", other, class_element);
 				}
 			}
 		}
-		if initializer.is_none() {
-			self.add_error::<Node>(
-				format!(
-					"No constructor defined in {} {:?}",
-					if is_resource { "resource" } else { "class" },
-					statement_node
-				),
-				&statement_node,
-			)?;
-		}
+
+		let initializer = match initializer {
+			Some(init) => init,
+			// add a default initializer if none is defined
+			None => Initializer {
+				signature: FunctionSignature {
+					parameters: vec![],
+					return_type: Some(Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+							root: name.clone(),
+							fields: vec![],
+						}),
+						span: name.span.clone(),
+					})),
+					phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
+				},
+				statements: Scope {
+					env: RefCell::new(None),
+					statements: vec![],
+					span: name.span.clone(),
+				},
+				span: name.span.clone(),
+			},
+		};
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(&parent_node)?;
-			match parent_type {
-				TypeAnnotation::UserDefined(parent_type) => Some(parent_type),
+			match parent_type.kind {
+				TypeAnnotationKind::UserDefined(parent_type) => Some(parent_type),
 				_ => {
 					self.add_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -603,8 +623,8 @@ impl<'s> Parser<'s> {
 			}
 
 			let interface_type = self.build_type_annotation(&type_node)?;
-			match interface_type {
-				TypeAnnotation::UserDefined(interface_type) => implements.push(interface_type),
+			match interface_type.kind {
+				TypeAnnotationKind::UserDefined(interface_type) => implements.push(interface_type),
 				_ => {
 					self.add_error::<Node>(
 						format!(
@@ -623,7 +643,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			initializer: initializer.unwrap(),
+			initializer,
 			is_resource,
 			inflight_initializer,
 		}))
@@ -685,7 +705,11 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			if let Ok(TypeAnnotation::UserDefined(interface_type)) = self.build_udt_annotation(&extend) {
+			if let Ok(TypeAnnotation {
+				kind: TypeAnnotationKind::UserDefined(interface_type),
+				..
+			}) = self.build_udt_annotation(&extend)
+			{
 				extends.push(interface_type);
 			}
 		}
@@ -754,18 +778,34 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_type_annotation(&self, type_node: &Node) -> DiagnosticResult<TypeAnnotation> {
+		let span = self.node_span(type_node);
 		match type_node.kind() {
 			"builtin_type" => match self.node_text(type_node) {
-				"num" => Ok(TypeAnnotation::Number),
-				"str" => Ok(TypeAnnotation::String),
-				"bool" => Ok(TypeAnnotation::Bool),
-				"duration" => Ok(TypeAnnotation::Duration),
+				"num" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Number,
+					span,
+				}),
+				"str" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::String,
+					span,
+				}),
+				"bool" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Bool,
+					span,
+				}),
+				"duration" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Duration,
+					span,
+				}),
 				"ERROR" => self.add_error("Expected builtin type", type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
 				let inner_type = self.build_type_annotation(&type_node.named_child(0).unwrap()).unwrap();
-				Ok(TypeAnnotation::Optional(Box::new(inner_type)))
+				Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Optional(Box::new(inner_type)),
+					span,
+				})
 			}
 			"custom_type" => Ok(self.build_udt_annotation(&type_node)?),
 			"function_type" => {
@@ -778,7 +818,7 @@ impl<'s> Parser<'s> {
 				let return_type = type_node
 					.child_by_field_name("return_type")
 					.map(|n| Box::new(self.build_type_annotation(&n).unwrap()));
-				Ok(TypeAnnotation::Function(FunctionTypeAnnotation {
+				let kind = TypeAnnotationKind::Function(FunctionTypeAnnotation {
 					param_types,
 					return_type,
 					phase: if type_node.child_by_field_name("inflight").is_some() {
@@ -786,13 +826,20 @@ impl<'s> Parser<'s> {
 					} else {
 						Phase::Preflight
 					},
-				}))
+				});
+				Ok(TypeAnnotation { kind, span })
 			}
 			"json_container_type" => {
 				let container_type = self.node_text(&type_node);
 				match container_type {
-					"Json" => Ok(TypeAnnotation::Json),
-					"MutJson" => Ok(TypeAnnotation::MutJson),
+					"Json" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Json,
+						span,
+					}),
+					"MutJson" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::MutJson,
+						span,
+					}),
 					other => self.add_error(format!("invalid json container type {}", other), &type_node),
 				}
 			}
@@ -800,24 +847,30 @@ impl<'s> Parser<'s> {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
-					"Map" => Ok(TypeAnnotation::Map(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"MutMap" => Ok(TypeAnnotation::MutMap(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"Array" => Ok(TypeAnnotation::Array(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"MutArray" => Ok(TypeAnnotation::MutArray(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"Set" => Ok(TypeAnnotation::Set(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
-					"MutSet" => Ok(TypeAnnotation::MutSet(Box::new(
-						self.build_type_annotation(&element_type)?,
-					))),
+					"Map" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Map(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"MutMap" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::MutMap(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"Array" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Array(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"MutArray" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::MutArray(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"Set" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Set(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
+					"MutSet" => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::MutSet(Box::new(self.build_type_annotation(&element_type)?)),
+						span,
+					}),
 					"ERROR" => self.add_error("Expected builtin container type", type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
@@ -827,12 +880,14 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
+	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Expr> {
 		if nested_node.has_error() {
 			return self.add_error("Syntax error", &nested_node);
 		}
+
+		let object_expr = self.get_child_field(nested_node, "object")?;
+
 		if let Some(property) = nested_node.child_by_field_name("property") {
-			let object_expr = self.get_child_field(nested_node, "object")?;
 			let object_expr = if object_expr.kind() == "json_container_type" {
 				Expr {
 					kind: ExprKind::Reference(Reference::TypeMember {
@@ -849,40 +904,70 @@ impl<'s> Parser<'s> {
 					evaluated_type: RefCell::new(None),
 				}
 			} else {
-				self.build_expression(&nested_node.child_by_field_name("object").unwrap())?
+				self.build_expression(&object_expr)?
 			};
-			Ok(Reference::InstanceMember {
-				object: Box::new(object_expr),
-				property: self.node_symbol(&property)?,
+			Ok(Expr {
+				kind: ExprKind::Reference(Reference::InstanceMember {
+					object: Box::new(object_expr),
+					property: self.node_symbol(&property)?,
+				}),
+				span: self.node_span(&nested_node),
+				evaluated_type: RefCell::new(None),
 			})
 		} else {
-			self.add_error(
+			// we are missing the last property, but we can still parse the rest of the expression
+			let err = self.add_error(
 				"Expected property",
 				&nested_node
 					.child(nested_node.child_count() - 1)
 					.expect("Nested identifier should have at least one child"),
-			)
+			);
+			if object_expr.kind() == "reference" {
+				self.build_reference(&object_expr)
+			} else {
+				err
+			}
 		}
 	}
 
 	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
+		// check if last node is a "."
+		let last_child = nested_node
+			.child(nested_node.child_count() - 1)
+			.expect("If node is a custom type, it will have at least one child");
+		if last_child.kind() == "." {
+			// even though we're missing a field, we can still parse the rest of the type
+			let _ = self.add_error::<()>("Expected namespaced type", &last_child);
+		}
+
 		let mut cursor = nested_node.walk();
-		Ok(TypeAnnotation::UserDefined(UserDefinedType {
+		let kind = TypeAnnotationKind::UserDefined(UserDefinedType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
 			fields: nested_node
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
-		}))
+		});
+		Ok(TypeAnnotation {
+			kind,
+			span: self.node_span(&nested_node),
+		})
 	}
 
-	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
+	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Expr> {
 		let actual_node = reference_node.named_child(0).unwrap();
+		let actual_node_span = self.node_span(&actual_node);
 		match actual_node.kind() {
-			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
+			"reference_identifier" => Ok(Expr {
+				kind: ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
+				span: actual_node_span,
+				evaluated_type: RefCell::new(None),
+			}),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
-			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
-			other => self.report_unimplemented_grammar(other, "type node", &actual_node),
+			"structured_access_expression" => {
+				self.report_unimplemented_grammar("structured_access_expression", "reference", &actual_node)
+			}
+			other => self.add_error(format!("Expected reference, got {other}"), &actual_node),
 		}
 	}
 
@@ -930,7 +1015,7 @@ impl<'s> Parser<'s> {
 			"new_expression" => {
 				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap())?;
 
-				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
+				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node)
 				} else {
 					Ok(ArgList::new())
@@ -960,7 +1045,7 @@ impl<'s> Parser<'s> {
 					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
 					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-						"+" => BinaryOperator::Add,
+						"+" => BinaryOperator::AddOrConcat,
 						"-" => BinaryOperator::Sub,
 						"==" => BinaryOperator::Equal,
 						"!=" => BinaryOperator::NotEqual,
@@ -1098,14 +1183,7 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
-			"identifier" => Ok(Expr::new(
-				ExprKind::Reference(Reference::Identifier(self.node_symbol(&expression_node)?)),
-				expression_span,
-			)),
-			"nested_identifier" => Ok(Expr::new(
-				ExprKind::Reference(self.build_nested_identifier(&expression_node)?),
-				expression_span,
-			)),
+			"reference" => self.build_reference(&expression_node),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
@@ -1179,8 +1257,8 @@ impl<'s> Parser<'s> {
 
 				// Special case: empty {} (which is detected as map by tree-sitter) -
 				// if it is annotated as a Set/MutSet we should treat it as a set literal
-				if let Some(TypeAnnotation::Set(_)) | Some(TypeAnnotation::MutSet(_)) = map_type {
-					if fields.is_empty() {
+				if let Some(TypeAnnotation { kind, .. }) = &map_type {
+					if matches!(kind, TypeAnnotationKind::Set(_) | TypeAnnotationKind::MutSet(_)) && fields.is_empty() {
 						return self.build_set_literal(expression_node);
 					}
 				}
@@ -1205,7 +1283,24 @@ impl<'s> Parser<'s> {
 				let element_node = expression_node
 					.child_by_field_name("element")
 					.expect("Should always have element");
-				let element = Box::new(self.build_expression(&element_node)?);
+
+				let named_element_child = element_node.named_child(0);
+				let exp = if element_node.kind() == "reference"
+					&& named_element_child
+						.expect("references always have a child")
+						.is_missing()
+				{
+					_ = self.add_error::<()>("Json literal must have an element", &named_element_child.unwrap());
+					Expr {
+						evaluated_type: RefCell::new(None),
+						kind: ExprKind::Literal(Literal::Number(0.0)),
+						span: self.node_span(&element_node),
+					}
+				} else {
+					self.build_expression(&element_node)?
+				};
+
+				let element = Box::new(exp);
 
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
@@ -1270,19 +1365,21 @@ impl<'s> Parser<'s> {
 	fn report_unhandled_errors(&self, root: &Node) {
 		let iter = traverse(root.walk(), Order::Pre);
 		for node in iter {
-			if !self.error_nodes.borrow().contains(&node.id()) {
+			if node.kind() == "AUTOMATIC_SEMICOLON" {
+				_ = self.add_error::<()>("Expected ';'", &node);
+			} else if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
 					if node.named_child_count() == 0 {
-						_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+						_ = self.add_error::<()>(String::from("Unknown parser error"), &node);
 					} else {
 						let mut cursor = node.walk();
 						let children = node.named_children(&mut cursor);
 						for child in children {
-							_ = self.add_error::<()>(format!("Unexpected '{}'.", child.kind()), &child);
+							_ = self.add_error::<()>(format!("Unexpected '{}'", child.kind()), &child);
 						}
 					}
 				} else if node.is_missing() {
-					_ = self.add_error::<()>(format!("'{}' expected.", node.kind()), &node);
+					_ = self.add_error::<()>(format!("Expected '{}'", node.kind()), &node);
 				}
 			}
 		}

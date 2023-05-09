@@ -63,5 +63,5 @@ changelog. To that end, pull request titles must follow this convention:
 
 In PRs, by default we only run tests for the same OS and node version that we build with (Linux, Node 18 currently).
 
-If you want to run tests for all OSes, you can add the `pr/e2e-full` label to your PR. 
+If you want to run tests for all OSes, you can add the `🧪 pr/e2e-full` label to your PR. 
 This label must be present before the build job starts, so if you add it after the build job has started, you will need to manually re-trigger the build.

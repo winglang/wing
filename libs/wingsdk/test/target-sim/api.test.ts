@@ -20,6 +20,8 @@ const INFLIGHT_CODE_ECHO_QUERY = `async handle(req) { return { status: 200, body
 const INFLIGHT_CODE_ECHO_PARAMS = `async handle(req) { return { status: 200, body: req.vars ?? {} }; }`;
 // Handler that responds to a request with extra response headers
 const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
+// Handler that reseponds to a request with Content-Type different from default `application/json`
+const INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "Content-Type": "application/octet-stream; charset=utf-8" } }; }`;
 
 test("create an api", async () => {
   // GIVEN
@@ -35,7 +37,10 @@ test("create an api", async () => {
     },
     path: "root/my_api",
     props: {
-      routes: [],
+      openApiSpec: {
+        openapi: expect.any(String),
+        paths: {},
+      },
     },
     type: "wingsdk.cloud.Api",
   });
@@ -413,6 +418,66 @@ test("api url can be used as environment variable", async () => {
   await s.stop();
   expect(fnEnvironmentValue).toEqual("${root/my_api#attrs.url}");
   expect(response.startsWith("http://")).toEqual(true);
+});
+
+test("api response returns Content-Type header from inflight", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER
+  );
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, {
+    method: "GET",
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(response.headers.get("Content-Type")).toEqual(
+    "application/octet-stream; charset=utf-8"
+  );
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api response returns default Content-Type header", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, {
+    method: "GET",
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(response.headers.get("Content-Type")).toEqual(
+    "application/json; charset=utf-8"
+  );
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 function getApiUrl(s: Simulator, path: string): string {

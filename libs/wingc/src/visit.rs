@@ -1,7 +1,7 @@
 use crate::ast::{
 	ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
 	Interface, InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
-	UserDefinedType,
+	TypeAnnotationKind, UserDefinedType,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -422,21 +422,21 @@ pub fn visit_type_annotation<'ast, V>(v: &mut V, node: &'ast TypeAnnotation)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	match node {
-		TypeAnnotation::Number => {}
-		TypeAnnotation::String => {}
-		TypeAnnotation::Bool => {}
-		TypeAnnotation::Duration => {}
-		TypeAnnotation::Json => {}
-		TypeAnnotation::MutJson => {}
-		TypeAnnotation::Optional(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Array(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutArray(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Map(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutMap(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Set(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutSet(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Function(f) => {
+	match &node.kind {
+		TypeAnnotationKind::Number => {}
+		TypeAnnotationKind::String => {}
+		TypeAnnotationKind::Bool => {}
+		TypeAnnotationKind::Duration => {}
+		TypeAnnotationKind::Json => {}
+		TypeAnnotationKind::MutJson => {}
+		TypeAnnotationKind::Optional(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Array(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutArray(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Map(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutMap(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Set(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutSet(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Function(f) => {
 			for param in &f.param_types {
 				v.visit_type_annotation(&param);
 			}
@@ -444,7 +444,7 @@ where
 				v.visit_type_annotation(return_type);
 			}
 		}
-		TypeAnnotation::UserDefined(t) => {
+		TypeAnnotationKind::UserDefined(t) => {
 			v.visit_symbol(&t.root);
 			for field in &t.fields {
 				v.visit_symbol(field);

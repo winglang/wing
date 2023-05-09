@@ -23,24 +23,23 @@
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
     "build": "tsc",
     "watch": "tsc --watch",
-    "test": "vitest",
+    "test": "vitest run",
     "dev": "npm run build && ./bin/wing",
     "bump": "node version.js",
     "unbump": "node unversion.js"
   },
   "dependencies": {
-    "@winglang/sdk": "file:../../libs/wingsdk",
     "chalk": "^4.1.2",
     "codespan-wasm": "0.3.0",
     "commander": "^10.0.0",
     "compare-versions": "^5.0.3",
     "debug": "^4.3.4",
-    "fs-extra": "^11.1.1",
     "open": "^8.4.0",
     "ora": "^5.4.1",
     "update-notifier": "^6.0.2",
     "vscode-languageserver": "^8.0.2",
-    "wasi-js": "^1.7.3"
+    "wasi-js": "^1.7.3",
+    "@winglang/sdk": "file:../../libs/wingsdk"
   },
   "bundleDependencies": [
     "wasi-js"

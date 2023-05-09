@@ -1,6 +1,6 @@
 bring cloud;
 
-resource Foo {
+class Foo {
   instance_field: num;
 
   // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
@@ -25,7 +25,7 @@ assert(foo.instance_field == 100);
 assert(Foo.m() == 99);
 
 new cloud.Function(inflight (s:str): str => {
-  class InflightClass {
+  inflight class InflightClass {
     init() {}
     inflight inflight_method(): str {
       return "Inflight method";

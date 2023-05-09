@@ -1,7 +1,6 @@
 bring cloud;
 
-resource A impl cloud.IQueueAddConsumerHandler {
-  init() {}
+class A impl cloud.IQueueAddConsumerHandler {
   inflight handle(msg: str) {
     return;
   }
@@ -25,8 +24,7 @@ interface I3 extends I2 {
   method_3(x: Array<num>): Array<num>;
 }
 
-resource r impl I3 {
-  init() {}
+class r impl I3 {
   method_1(x: num): num {
     return x;
   }
@@ -43,8 +41,7 @@ interface IAnimal {
   inflight eat();
 }
 
-resource Dog impl IAnimal {
-  init(){}
+class Dog impl IAnimal {
   inflight eat() {
     return;
   }

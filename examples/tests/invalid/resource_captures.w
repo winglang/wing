@@ -1,12 +1,13 @@
 bring cloud;
 
-resource Foo {
+class Foo {
   bucket: cloud.Bucket;
   mut_array: MutArray<str>;
   var reassignable: num;
   collection_of_resources: Array<cloud.Bucket>;
 
   init() {
+    this.bucket = new cloud.Bucket();
     this.mut_array = MutArray<str>[];
     this.mut_array.push("hello");
     this.reassignable = 42;

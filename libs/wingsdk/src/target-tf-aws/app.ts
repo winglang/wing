@@ -1,14 +1,3 @@
-import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
-import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
-import { Eip } from "@cdktf/provider-aws/lib/eip";
-import { InternetGateway } from "@cdktf/provider-aws/lib/internet-gateway";
-import { NatGateway } from "@cdktf/provider-aws/lib/nat-gateway";
-import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
-import { RouteTable } from "@cdktf/provider-aws/lib/route-table";
-import { RouteTableAssociation } from "@cdktf/provider-aws/lib/route-table-association";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
-import { Subnet } from "@cdktf/provider-aws/lib/subnet";
-import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Construct } from "constructs";
 import { Api } from "./api";
 import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
@@ -21,6 +10,18 @@ import { Secret } from "./secret";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
+import { Website } from "./website";
+import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
+import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
+import { Eip } from "../.gen/providers/aws/eip";
+import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
+import { NatGateway } from "../.gen/providers/aws/nat-gateway";
+import { AwsProvider } from "../.gen/providers/aws/provider";
+import { RouteTable } from "../.gen/providers/aws/route-table";
+import { RouteTableAssociation } from "../.gen/providers/aws/route-table-association";
+import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import { Subnet } from "../.gen/providers/aws/subnet";
+import { Vpc } from "../.gen/providers/aws/vpc";
 import {
   API_FQN,
   BUCKET_FQN,
@@ -32,9 +33,11 @@ import {
   TABLE_FQN,
   TEST_RUNNER_FQN,
   TOPIC_FQN,
+  WEBSITE_FQN,
 } from "../cloud";
-import { CdktfApp, AppProps } from "../core";
+import { AppProps } from "../core";
 import { REDIS_FQN } from "../redis";
+import { CdktfApp } from "../shared-tf/app";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -102,6 +105,9 @@ export class App extends CdktfApp {
 
       case REDIS_FQN:
         return new Redis(scope, id);
+
+      case WEBSITE_FQN:
+        return new Website(scope, id, args[0]);
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);

@@ -1,6 +1,6 @@
-import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { COUNTER_HASH_KEY } from "../shared-aws/commons";
@@ -66,8 +66,3 @@ export class Counter extends cloud.Counter {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Counter._annotateInflight(cloud.CounterInflightMethods.INC, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.DEC, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.PEEK, {});
-Counter._annotateInflight(cloud.CounterInflightMethods.RESET, {});

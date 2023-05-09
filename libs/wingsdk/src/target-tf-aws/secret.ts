@@ -1,6 +1,8 @@
-import { SecretsmanagerSecret } from "@cdktf/provider-aws/lib/secretsmanager-secret";
+import { TerraformOutput } from "cdktf";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { DataAwsSecretsmanagerSecret } from "../.gen/providers/aws/data-aws-secretsmanager-secret";
+import { SecretsmanagerSecret } from "../.gen/providers/aws/secretsmanager-secret";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateSecretPermissions } from "../shared-aws/permissions";
@@ -20,14 +22,24 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret {
-  private readonly secret: SecretsmanagerSecret;
+  private readonly secret: DataAwsSecretsmanagerSecret | SecretsmanagerSecret;
 
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
-    this.secret = new SecretsmanagerSecret(this, "Default", {
-      name: props.name ?? ResourceNames.generateName(this, NAME_OPTS),
-    });
+    if (props.name) {
+      this.secret = new DataAwsSecretsmanagerSecret(this, "Default", {
+        name: props.name,
+      });
+    } else {
+      this.secret = new SecretsmanagerSecret(this, "Default", {
+        name: ResourceNames.generateName(this, NAME_OPTS),
+      });
+
+      new TerraformOutput(this, "SecretArn", {
+        value: this.secret.arn,
+      });
+    }
   }
 
   /**
@@ -66,6 +78,3 @@ export class Secret extends cloud.Secret {
     return `SECRET_ARN_${this.node.addr.slice(-8)}`;
   }
 }
-
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE, {});
-Secret._annotateInflight(cloud.SecretInflightMethods.VALUE_JSON, {});

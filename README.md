@@ -18,10 +18,15 @@
   <a href="https://docs.winglang.io/contributors/">Contribute</a>
 </p>
 
-**Winglang** is a new open-source programming language designed for the cloud (aka "*cloud-oriented*"). Wing enables developers to build distributed systems that leverage cloud services as first-class citizens by combining infrastructure ***and*** code.
+**Winglang** is a new open-source programming language designed for the cloud (aka "*cloud-oriented*"). 
+Wing enables developers to build distributed systems that leverage cloud services as first-class citizens by combining infrastructure ***and*** application code in a safe and unified programming model (aka "*cloud-oriented*").
 Wing programs can be executed locally (*yes, no internet required*) using a fully-functional simulator, or deployed to any cloud provider (*yes, Wing programs are portable across providers*).
 
-Our mission is to bring back your creative flow and close the gap between imagination and creation. Wing elevates your cloud development experience to new heights (the puns are just inevitable so bear with us)! 🚀
+Our mission is to bring back your creative flow and close the gap between imagination and creation. 
+
+Developing for the cloud today requires mastering various layers of cloud stack, IAM roles, networking, and numerous tools, along with finding creative ways to test and debug code. In addition, long deployment times hinder iteration cycles and take developers out of their creative flow. 
+
+We fulfill our mission by reducing cognitive load and increasing iteration speeds. How? by enabling you to work at a higher level of abstraction, letting you focus on business logic instead of cloud mechanics, and write much less code. We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
 <a href="https://youtu.be/vHy1TM2JzUQ" target="_blank" align="left">
     <img src="./logo/demo.gif" alt="Wing Demo" height="300px">
@@ -29,48 +34,64 @@ Our mission is to bring back your creative flow and close the gap between imagin
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
-## What's so special about Wing? 🤔
+## Why do we think the cloud needs a programming language? 🤔
 
-Wing takes a unique approach to cloud development - instead of thinking about computers as individuals machines, it treats the ***entire cloud as the computer***.
-By abstracting the cloud, Wing allows anyone building cloud applications to focus on their business logic and choose the target cloud at compile time.
+Cloud applications are are fundamentally different from applications that run on a single machine - 
+they are distributed systems that rely on cloud infrastructure to achieve their goals.
 
-The result? While your main code is written in Wing, the compilation artifacts are JavaScript and Terraform (with more provisioning engines on the way), meaning Wing can fit seamlessly into your existing stack!
+In order to be able to express both infrastructure and application logic in a safe and unified programming model, 
+Winglang has two execution phases: *Preflight* for infrastructure definitions and *inflight* is for runtime code.
 
-In addition, Wing provides a built-in local simulator, and an observability & debugging [console](https://docs.winglang.io/getting-started/console), making it easier for you to reduce cognitive load and context switching, enabling you to stay in your creative flow.
+Preflight code is executed *during compilation* and produces the infrastructure configuration for your app (e.g. **Terraform**, **CloudFormation**, etc).
+Inflight code is compiled to **JavaScript** and executed on within cloud compute platforms in Node.js environments.
 
-Here's a taste of what Wing code looks like:
+Let's look at a simple example:
 
 ```js
 bring cloud;
 
-// This code defines a bucket as part of your application.
-// At compile time, it will be substituted by an implementation
-// for the target cloud provider.
+let queue = new cloud.Queue();
+let counter = new cloud.Counter();
 let bucket = new cloud.Bucket();
 
-// Here we are able to interact with infra config of the bucket
-bucket.public = true;
-
-// An `inflight` represents code that runs later, on other machines,
-// and can interact with any cloud resources
-let hello_world = inflight () => {
-  bucket.put("hello.txt", "Hello, World!");
-};
-
-// We can deploy the inflight as a serverless function
-// (or in the future as a long-running service, etc.)
-new cloud.Function(hello_world);
+queue.add_consumer(inflight (message: str) => {
+  let i = counter.inc();
+  bucket.put("file-${i}.txt", message);
+});
 ```
 
-> ### Note for cloud experts 🤓
->
-> To give full control over how applications are deployed, Wing lets you customize **operational details** in a few ways:
->
-> 1. by creating a [compiler plugin](https://docs.winglang.io/reference/compiler-plugins) that modifies the generated Terraform, or 
-> 2. by providing implementations of built-in resources like `cloud.Bucket`, or
-> 3. by developing your own custom resources.
->
-> This layer of separation allows you to refactor code and write unit tests that focus on the business logic, while still having the flexibility to make changes under the hood.
+`cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*.
+They represent cloud infrastructure resources. 
+When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
+of these resources. The `queue.add_consumer()` method is a *preflight method* that configures the infrastructure to
+invoke a particular *inflight function* for each message in the queue.
+
+**Now comes the cool part:** the code that runs inside the inflight function interacts with the `counter` and the `bucket` objects
+through their *inflight methods* (`counter.inc()` and `bucket.put()`). These methods can only be
+called from inflight scopes.
+
+### Very cool, but what here cannot be done by a library or compiler extension?
+In existing languages, where there is no way to distinguish between multiple execution phases, it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific execution phase.
+You are welcome to read more about it [here](https://docs.winglang.io/faq/why-a-language) (including code samples that show the same app built in Wing vs. other solutions).
+
+## What makes Wing a good fit for cloud development? 🌟
+
+Wing was built from the ground up to make it an ideal choice for building applications on any cloud.
+It includes an assembly of different features that serve that purpose:
+
+* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
+* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/reference/wingsdk-spec) of cloud resources that lets you write cloud portable code.
+* [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that keep you in control by allowing you to customize the compilation output, such as infrastructure definitions.
+* Use any resource in the Terraform ecosystem as first-class citizen in your app.
+* [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
+* [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
+* Automatic generation of IAM policies and other cloud mechanics based on intent.
+* Local functional simulaor with a visualization and interaction [console](https://docs.winglang.io/getting-started/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
+* [Native JSON](https://docs.winglang.io/reference/spec#114-json-type) and schema validation support.
+* [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
+* [Implicit async](https://docs.winglang.io/reference/spec#113-asynchronous-model), explicit defer.
+
+For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/).
 
 ## Getting started 🛠️
 
@@ -88,39 +109,9 @@ You can install Wing in a few simple steps:
 For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/getting-started) guide.
 It's a once-in-a-lifetime adventure into the Wing rabbit hole!
 
-## Deeper dive 🤿
-
-To learn more about Wing concepts such as resources and inflights, jump over to the [Concepts](https://docs.winglang.io/category/concepts) section in our docs.
-
-For a comprehensive reference of the language, check out the [Wing Language Specification](https://docs.winglang.io/reference/spec) and the [API Reference](https://docs.winglang.io/reference/sdk).
-
-## Why is Wing a language, not just another library or framework? 🤔
-
-We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) to fully utilize it.
-While it is possible to use this new paradigm with existing languages, we believe that a language that natively supports it will make using it much easier by streamlining common patterns, in a way that is impossible to accomplish with existing ones. Kind of like what C++ did for object orientation.
-
-You can find more details with concrete examples of things that cannot be done with existing languages [here](https://docs.winglang.io/faq/why-a-language).
-
-## What makes Wing a good fit for cloud development? 🌟
-
-Wing was built from the ground up to make it an ideal choice for building applications on any cloud.
-It includes an assembly of different features that serve that purpose:
-
-* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
-* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/reference/wingsdk-spec).
-* [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
-* [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that can be used to customize the compilation output, such as infrastructure definitions.
-* [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
-* Automatic generation of IAM policies and other cloud mechanics based on intent.
-* [Native JSON](https://docs.winglang.io/reference/spec#114-json-type) and schema validation support.
-* [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
-* [Implicit async](https://docs.winglang.io/reference/spec#113-asynchronous-model), explicit defer.
-
-For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/).
-
 ## FAQs ❓
 
-Here are some questions we're commonly asked that are covered by our [FAQ](https://docs.winglang.io/faq):
+Here are some questions we're commonly asked that are covered by our [FAQ](https://docs.winglang.io/category/faq):
 
 * [Who is behind this project?](https://docs.winglang.io/faq/who-is-behind-wing)
 * [Which clouds are supported by Wing?](https://docs.winglang.io/faq/supported-clouds)

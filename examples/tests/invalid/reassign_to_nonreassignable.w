@@ -2,16 +2,15 @@
 let x = 5;
 x = x + 1;
 
-resource InnerR {
+class InnerR {
   inflight inner: num;
-  init() {}
   inflight init() {
     this.inner = 1;
   }
 }
 
 // Assign to non-reassignable field
-resource R {
+class R {
   f: num;
   inner_r: InnerR;
   inflight inflight_f: num;

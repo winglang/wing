@@ -41,9 +41,3 @@ export class Table extends cloud.Table implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
-
-Table._annotateInflight("insert", {});
-Table._annotateInflight("update", {});
-Table._annotateInflight("delete", {});
-Table._annotateInflight("get", {});
-Table._annotateInflight("list", {});

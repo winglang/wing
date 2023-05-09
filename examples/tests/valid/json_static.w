@@ -25,6 +25,11 @@ let s = "{\"a\": 123, \"b\": {\"c\": 456, \"d\": 789}}";
 let j = Json.parse(s);
 assert(Json.keys(j).length == 2);
 
+// Try parse string
+let invalid_json = "invalid";
+let try_parsed = Json.try_parse(invalid_json) ?? Json { key: "value" };
+assert(try_parsed.get("key") == "value");
+
 // Format to string
 let jj = Json {a: 123, b: {c: 456, d: 789}};
 let ss = Json.stringify(jj);

@@ -1,15 +1,15 @@
 import { join } from "path";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
-import { S3BucketNotification } from "@cdktf/provider-aws/lib/s3-bucket-notification";
-
-import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
-import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
-import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
-import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
+import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import { S3BucketNotification } from "../.gen/providers/aws/s3-bucket-notification";
+
+import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
+import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-public-access-block";
+import { S3BucketServerSideEncryptionConfigurationA } from "../.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
+import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
@@ -23,8 +23,8 @@ import {
 
 const EVENTS = {
   [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
-  [BucketEventType.CREATE]: ["s3:ObjectCreated:Post"],
-  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Put"],
+  [BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
+  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
 };
 
 /**
@@ -57,68 +57,7 @@ export class Bucket extends cloud.Bucket {
 
     this.public = props.public ?? false;
 
-    const bucketPrefix = ResourceNames.generateName(this, BUCKET_PREFIX_OPTS);
-
-    // names cannot begin with 'xn--'
-    if (bucketPrefix.startsWith("xn--")) {
-      throw new Error("AWS S3 bucket names cannot begin with 'xn--'.");
-    }
-
-    // names must begin with a letter or number
-    if (!/^[a-z0-9]/.test(bucketPrefix)) {
-      throw new Error(
-        "AWS S3 bucket names must begin with a letter or number."
-      );
-    }
-
-    // names cannot end with '-s3alias' and must end with a letter or number,
-    // but we do not need to handle these cases since we are generating the
-    // prefix only
-
-    const isTestEnvironment = App.of(this).isTestEnvironment;
-
-    this.bucket = new S3Bucket(this, "Default", {
-      bucketPrefix,
-      forceDestroy: isTestEnvironment ? true : false,
-    });
-
-    // best practice: (at-rest) data encryption with Amazon S3-managed keys
-    new S3BucketServerSideEncryptionConfigurationA(this, "Encryption", {
-      bucket: this.bucket.bucket,
-      rule: [
-        {
-          applyServerSideEncryptionByDefault: {
-            sseAlgorithm: "AES256",
-          },
-        },
-      ],
-    });
-
-    if (this.public) {
-      const policy = {
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Effect: "Allow",
-            Principal: "*",
-            Action: ["s3:GetObject"],
-            Resource: [`${this.bucket.arn}/*`],
-          },
-        ],
-      };
-      new S3BucketPolicy(this, "PublicPolicy", {
-        bucket: this.bucket.bucket,
-        policy: JSON.stringify(policy),
-      });
-    } else {
-      new S3BucketPublicAccessBlock(this, "PublicAccessBlock", {
-        bucket: this.bucket.bucket,
-        blockPublicAcls: true,
-        blockPublicPolicy: true,
-        ignorePublicAcls: true,
-        restrictPublicBuckets: true,
-      });
-    }
+    this.bucket = createEncryptedBucket(this, this.public);
   }
 
   public addObject(key: string, body: string): void {
@@ -201,10 +140,78 @@ export class Bucket extends cloud.Bucket {
   }
 }
 
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.DELETE, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.LIST, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUT_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.GET_JSON, {});
-Bucket._annotateInflight(cloud.BucketInflightMethods.PUBLIC_URL, {});
+export function createEncryptedBucket(
+  scope: Construct,
+  isPublic: boolean,
+  name: string = "Default"
+): S3Bucket {
+  const bucketPrefix = ResourceNames.generateName(scope, BUCKET_PREFIX_OPTS);
+
+  // names cannot begin with 'xn--'
+  if (bucketPrefix.startsWith("xn--")) {
+    throw new Error("AWS S3 bucket names cannot begin with 'xn--'.");
+  }
+
+  // names must begin with a letter or number
+  if (!/^[a-z0-9]/.test(bucketPrefix)) {
+    throw new Error("AWS S3 bucket names must begin with a letter or number.");
+  }
+
+  // names cannot end with '-s3alias' and must end with a letter or number,
+  // but we do not need to handle these cases since we are generating the
+  // prefix only
+
+  const isTestEnvironment = App.of(scope).isTestEnvironment;
+
+  const bucket = new S3Bucket(scope, name, {
+    bucketPrefix,
+    forceDestroy: isTestEnvironment ? true : false,
+  });
+
+  // best practice: (at-rest) data encryption with Amazon S3-managed keys
+  new S3BucketServerSideEncryptionConfigurationA(scope, "Encryption", {
+    bucket: bucket.bucket,
+    rule: [
+      {
+        applyServerSideEncryptionByDefault: {
+          sseAlgorithm: "AES256",
+        },
+      },
+    ],
+  });
+
+  if (isPublic) {
+    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
+      bucket: bucket.bucket,
+      blockPublicAcls: false,
+      blockPublicPolicy: false,
+      ignorePublicAcls: false,
+      restrictPublicBuckets: false,
+    });
+    const policy = {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Effect: "Allow",
+          Principal: "*",
+          Action: ["s3:GetObject"],
+          Resource: [`${bucket.arn}/*`],
+        },
+      ],
+    };
+    new S3BucketPolicy(scope, "PublicPolicy", {
+      bucket: bucket.bucket,
+      policy: JSON.stringify(policy),
+    });
+  } else {
+    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
+      bucket: bucket.bucket,
+      blockPublicAcls: true,
+      blockPublicPolicy: true,
+      ignorePublicAcls: true,
+      restrictPublicBuckets: true,
+    });
+  }
+
+  return bucket;
+}

@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { NodeJsCode } from "../core";
-import { IResource, Resource } from "../std";
+import { IInflightHost, IResource, Resource } from "../std";
 import { normalPath } from "../util";
 
 /**
@@ -19,13 +19,13 @@ export function convertBetweenHandlers(
   newHandlerClientClassName: string
 ): IResource {
   class NewHandler extends Resource {
-    public readonly stateful = false;
     private readonly handler: IResource;
 
     constructor(theScope: Construct, theId: string, handler: IResource) {
       super(theScope, theId);
       this.handler = handler;
       this.display.hidden = true;
+      this._addInflightOps("handle");
     }
 
     public _toInflight(): NodeJsCode {
@@ -36,11 +36,12 @@ export function convertBetweenHandlers(
         )}")).${newHandlerClientClassName}({ handler: ${handlerClient.text} })`
       );
     }
-  }
 
-  NewHandler._annotateInflight("handle", {
-    "this.handler": { ops: ["handle"] },
-  });
+    public _registerBind(host: IInflightHost, ops: string[]): void {
+      this._registerBindObject(this.handler, host, ["handle"]);
+      super._registerBind(host, ops);
+    }
+  }
 
   return new NewHandler(scope, id, baseHandler);
 }

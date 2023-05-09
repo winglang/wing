@@ -1,9 +1,5 @@
 let a: num = "s";
 let b =1;
-class c extends b {
-  init(){}
-}
+inflight class c extends b {}
 let d: num = "s";
-class e extends b {
-  init(){}
-}
+inflight class e extends b {}

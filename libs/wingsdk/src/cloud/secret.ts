@@ -14,7 +14,12 @@ export const SECRET_FQN = fqnForType("cloud.Secret");
 export interface SecretProps {
   /**
    * The secret's name.
-   * @default - a generated name
+   *
+   * If no name is provided then a new secret is provisioned in the target.
+   * If a name is provided then the resource will reference an existing
+   * secret in the target.
+   *
+   * @default - a new secret is provisioned with a generated name
    */
   readonly name?: string;
 }
@@ -37,13 +42,16 @@ export abstract class Secret extends Resource {
     return App.of(scope).newAbstract(SECRET_FQN, scope, id, props);
   }
 
-  public readonly stateful = true;
-
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     super(scope, id);
 
     this.display.title = "Secret";
     this.display.description = "A cloud secret";
+
+    this._addInflightOps(
+      SecretInflightMethods.VALUE,
+      SecretInflightMethods.VALUE_JSON
+    );
 
     props;
   }

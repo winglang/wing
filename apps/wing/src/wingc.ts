@@ -1,9 +1,10 @@
 import debug from "debug";
-import { readFileSync, existsSync } from "fs";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
 import { resolve } from "path";
 import wasiBindings from "wasi-js/dist/bindings/node";
+import { exec } from "child_process";
+import { promisify } from "util";
 
 const log = debug("wing:compile");
 
@@ -57,7 +58,7 @@ export interface WingCompilerLoadOptions {
    *
    * @default - The `fs` module from Node.js
    */
-  fs?: any;
+  fs?: typeof import("fs");
 
   /**
    * The bytes of the `wingc.wasm` data loaded into memory.
@@ -75,41 +76,81 @@ export interface WingCompilerLoadOptions {
 }
 
 export async function load(options: WingCompilerLoadOptions) {
+  const fs: typeof import("fs") = options.fs ?? require("fs");
   const WINGSDK_MANIFEST_ROOT =
     options.wingsdkManifestRoot ??
     // using resolve.call so webpack will ignore the sdk package
     resolve(require.resolve.call(null, "@winglang/sdk"), "../..");
 
-  const preopens = {
-    // .jsii access
-    [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
-    ...(options.preopens ?? {}),
-  } as Record<string, string>;
+  let preopens: Record<string, string> = {};
 
-  // preopen all existing global node_modules
-  for (const m of module.paths ?? []) {
-    if (existsSync(m)) {
-      preopens[m] = m;
-    }
-  }
+  // preopen everything
+  preopens["/"] = "/";
+  preopens["."] = resolve(".");
 
   if (process.platform === "win32") {
-    preopens["C:\\"] = "C:\\";
-    for (const [key, value] of Object.entries(preopens)) {
-      delete preopens[key];
-      preopens[normalPath(value)] = value;
+    const wmicCommand = await promisify(exec)("wmic logicaldisk get name");
+    if (wmicCommand.stderr) {
+      throw new Error(
+        `Unable to get available system drives to run WASM compiler: ${wmicCommand.stderr}`
+      );
+    }
+
+    const drives = wmicCommand.stdout
+      .split("\r\r\n")
+      .filter((value) => /[A-Za-z]:/.test(value))
+      .map((value) => value.trim());
+
+    for (const drive of drives) {
+      // drive will be something like "C:"
+      preopens[`${drive}/`] = `${drive}\\`;
+    }
+  } else {
+    // mapping the root is not sufficient on linux/mac
+    // we need to also map all directories in the root
+    const rootFiles = await fs.promises.readdir("/");
+    for (const file of rootFiles) {
+      // skip files and dot dirs
+      const fullPath = `/${file}`;
+      if (
+        !file.startsWith(".") &&
+        // include directories and symlinks to directories
+        (await fs.promises.stat(fullPath)).isDirectory()
+      ) {
+        try {
+          await fs.promises.access(fullPath, fs.constants.R_OK | fs.constants.F_OK);
+          preopens[fullPath] = fullPath;
+        } catch {
+          // can't access the file, don't bother preopening it
+        }
+      }
     }
   }
 
-  // for each provided preopen, add resolved paths in case any absolute paths are used
-  for (const [key, value] of Object.entries(preopens)) {
-    preopens[normalPath(resolve(key))] = value;
+  // Ensure all relative paths are preopened
+  // crawl up to the root and add .. for each
+  let dirI = 1;
+  while (true) {
+    const dir = "../".repeat(dirI++);
+    const resolvedDir = resolve(dir);
+    preopens[dir.slice(0, -1)] = resolvedDir;
+    if (resolvedDir === "/" || resolvedDir.match(/^[A-Z]:\\$/i)) {
+      break;
+    } else if (dirI > 100) {
+      throw new Error(`Unable to find root directory to preopen for WASM compiler`);
+    }
   }
+
+  // add provided preopens
+  preopens = {
+    ...preopens,
+    ...(options.preopens ?? {}),
+  };
 
   // check if running in browser
   const bindings = {
     ...wasiBindings,
-    fs: options.fs ?? require("fs"),
+    fs,
   };
 
   const wasi = new WASI({
@@ -127,7 +168,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_notification: () => { },
+      send_notification: () => {},
     },
     ...(options.imports ?? {}),
   } as any;
@@ -135,7 +176,7 @@ export async function load(options: WingCompilerLoadOptions) {
   log("compiling wingc WASM module");
   const binary =
     options.wingcWASMData ??
-    new Uint8Array(readFileSync(resolve(__dirname, "../wingc.wasm")));
+    new Uint8Array(await fs.promises.readFile(resolve(__dirname, "../wingc.wasm")));
   const mod = new WebAssembly.Module(binary);
 
   log("instantiating wingc WASM module with importObject: %o", importObject);
@@ -197,11 +238,7 @@ export function invoke(
   const toFree = [[argPointer, bytes.byteLength]];
 
   try {
-    const argMemoryBuffer = new Uint8Array(
-      exports.memory.buffer,
-      argPointer,
-      bytes.byteLength
-    );
+    const argMemoryBuffer = new Uint8Array(exports.memory.buffer, argPointer, bytes.byteLength);
     argMemoryBuffer.set(bytes);
 
     const result = exports[func](argPointer, bytes.byteLength);
@@ -213,10 +250,7 @@ export function invoke(
       const returnLen = Number(result & LOW_MASK);
 
       const entireMemoryBuffer = new Uint8Array(exports.memory.buffer);
-      const extractedBuffer = entireMemoryBuffer.slice(
-        returnPtr,
-        returnPtr + returnLen
-      );
+      const extractedBuffer = entireMemoryBuffer.slice(returnPtr, returnPtr + returnLen);
 
       toFree.push([returnPtr, returnLen]);
 

@@ -1,4 +1,5 @@
-import { ColumnType, HttpMethod } from "../cloud";
+import { ColumnType, HttpMethod, OpenApiSpec } from "../cloud";
+import { Json } from "../std";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -16,6 +17,7 @@ export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
 export const REDIS_TYPE = "wingsdk.redis.Redis";
+export const WEBSITE_TYPE = "wingsdk.cloud.Website";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 
 export type FunctionHandle = string;
@@ -25,10 +27,14 @@ export type PublisherHandle = string;
 export interface ApiSchema extends BaseResourceSchema {
   readonly type: typeof API_TYPE;
   readonly props: {
-    /** The routes that the API should handle. */
-    readonly routes: ApiRoute[];
+    openApiSpec: OpenApiSpec;
   };
   readonly attrs: ApiAttributes & BaseResourceAttributes;
+}
+
+export interface ApiEventSubscription extends EventSubscription {
+  /** Subscribed routes */
+  readonly routes: ApiRoute[];
 }
 
 /** Runtime attributes for cloud.Api */
@@ -39,12 +45,10 @@ export interface ApiAttributes {
 
 /** Schema for cloud.Api.props.routes */
 export interface ApiRoute {
-  /** The route to handle. */
-  readonly route: string;
+  /** The path to handle. */
+  readonly path: string;
   /** The HTTP method to handle. */
   readonly method: HttpMethod;
-  /** The function that should be called when the route is hit. */
-  readonly functionHandle: FunctionHandle;
 }
 
 /** Schema for cloud.Function */
@@ -71,9 +75,29 @@ export interface QueueSchema extends BaseResourceSchema {
   readonly props: {
     /** How long a queue's consumers have to process a message, in seconds */
     readonly timeout: number;
+    /** How long a queue retains a message, in seconds */
+    readonly retentionPeriod: number;
     /** Initial messages to be pushed to the queue. */
     readonly initialMessages: string[];
   };
+}
+
+/** Runtime attributes for cloud.Schedule */
+export interface ScheduleAttributes {}
+
+/** Schema for cloud.Schedule */
+export interface ScheduleSchema extends BaseResourceSchema {
+  readonly type: typeof SCHEDULE_TYPE;
+  readonly props: {
+    /** The cron expression that defines when the schedule should run. */
+    readonly cronExpression: string;
+  };
+}
+
+/** Schema for cloud.Queue.props.subscribers */
+export interface ScheduleTask extends EventSubscription {
+  /** Function that should be called. */
+  readonly functionHandle: FunctionHandle;
 }
 
 export interface EventSubscription {}
@@ -185,6 +209,17 @@ export interface TestRunnerAttributes {}
 export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_TYPE;
   readonly props: {};
+}
+
+/** Schema for cloud.Website */
+export interface WebsiteSchema extends BaseResourceSchema {
+  readonly type: typeof WEBSITE_TYPE;
+  readonly props: {
+    /** Path to the directory where all static files are hosted from */
+    staticFilesPath: string;
+    /** Map of `.json` file paths to dynamic content inserted from preflight */
+    jsonRoutes: Record<string, Json>;
+  };
 }
 
 export interface RedisAttributes {}

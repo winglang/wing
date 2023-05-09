@@ -1,14 +1,15 @@
 import * as vm from "vm";
 
-import { readFile, rmSync, mkdirp, mkdirpSync, copySync } from "fs-extra";
+import { rmSync, mkdirSync, promises as fsPromise } from "fs";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
 import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
-import { normalPath } from "../util";
+import { copyDir, normalPath } from "../util";
 import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
+import { existsSync } from "fs";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -57,14 +58,20 @@ export interface CompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(outDir: string, entrypoint: string, target: Target, testing: boolean = false, tmp: boolean = false) {
+function resolveSynthDir(
+  outDir: string,
+  entrypoint: string,
+  target: Target,
+  testing: boolean = false,
+  tmp: boolean = false
+) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (!targetDirSuffix) {
     throw new Error(`unsupported target ${target}`);
   }
   const entrypointName = basename(entrypoint, ".w");
   const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
-  const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`
+  const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`;
   if (testing) {
     return join(outDir, "test", lastPart);
   } else {
@@ -94,14 +101,27 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
 
+  process.env["WING_SOURCE_DIR"] = resolve(wingDir);
+  // from wingDir, find the nearest node_modules directory
+  let wingNodeModules = resolve(wingDir, "node_modules");
+  while (!existsSync(wingNodeModules)) {
+    wingNodeModules = dirname(dirname(wingNodeModules));
+
+    if (wingNodeModules === "/" || wingNodeModules.match(/^[A-Z]:\\/)) {
+      break;
+    }
+
+    wingNodeModules = resolve(wingNodeModules, "node_modules");
+  }
+
   process.env["WING_SYNTH_DIR"] = tmpSynthDir;
-  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
+  process.env["WING_NODE_MODULES"] = wingNodeModules;
   process.env["WING_TARGET"] = options.target;
   process.env["WING_IS_TEST"] = testing.toString();
 
   await Promise.all([
-    mkdirp(workDir),
-    mkdirp(tmpSynthDir),
+    fsPromise.mkdir(workDir, { recursive: true }),
+    fsPromise.mkdir(tmpSynthDir, { recursive: true }),
   ]);
 
   const wingc = await wingCompiler.load({
@@ -110,11 +130,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WING_SYNTH_DIR: normalPath(tmpSynthDir),
       WINGC_PREFLIGHT,
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
-    },
-    preopens: {
-      [wingDir]: wingDir, // for Rust's access to the source dir
-      [workDir]: workDir, // for Rust's access to the work directory
-      [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
     },
   });
 
@@ -126,7 +141,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   } catch (e) {
     // This is a bug in Wing, not the user's code.
     console.error(e);
-    console.log("\n\n" + chalk.bold.red("Internal error:") + " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.");
+    console.log(
+      "\n\n" +
+        chalk.bold.red("Internal error:") +
+        " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
+    );
     process.exit(1);
   }
   if (compileResult !== 0) {
@@ -142,29 +161,31 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
       if (span !== null) {
         // `span` should only be null if source file couldn't be read etc.
-        const source = await readFile(span.file_id, "utf8");
+        const source = await fsPromise.readFile(span.file_id, "utf8");
         const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
         const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
-        files.push({
-          name: span.file_id,
-          source,
-        });
+        files.push({ name: span.file_id, source });
         labels.push({
           fileId: span.file_id,
           rangeStart: start,
           rangeEnd: end,
           message,
-          style: "primary"
+          style: "primary",
         });
       }
 
-      const diagnosticText = await emitDiagnostic(files, {
-        message,
-        severity: level.toLowerCase() as Severity,
-        labels,
-      }, {
-        chars: CHARS_ASCII
-      }, coloring);
+      const diagnosticText = await emitDiagnostic(
+        files,
+        {
+          message,
+          severity: level.toLowerCase() as Severity,
+          labels,
+        },
+        {
+          chars: CHARS_ASCII,
+        },
+        coloring
+      );
       result.push(diagnosticText);
     }
     throw new Error(result.join("\n"));
@@ -172,14 +193,15 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
-  const artifact = await readFile(artifactPath, "utf-8");
+  const artifact = await fsPromise.readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
 
   // Try looking for dependencies not only in the current directory (wherever
   // the wing CLI was installed to), but also in the source code directory.
   // This is necessary because the Wing app may have installed dependencies in
   // the project directory.
-  const requireResolve = (path: string) => require.resolve(path, { paths: [workDir, __dirname, wingDir] });
+  const requireResolve = (path: string) =>
+    require.resolve(path, { paths: [workDir, __dirname, wingDir] });
   const preflightRequire = (path: string) => require(requireResolve(path));
   preflightRequire.resolve = requireResolve;
 
@@ -211,70 +233,54 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   try {
     vm.runInContext(artifact, context);
-  } catch (e) {
-    console.error(
-      chalk.bold.red("preflight error:") + " " + (e as any).message
-    );
+  } catch (e: any) {
+    console.error(e.message);
 
-    if (
-      (e as any).stack &&
-      (e as any).stack.includes("evalmachine.<anonymous>:")
-    ) {
-      console.log();
-      console.log(
-        "  " +
-        chalk.bold.white("note:") +
-        " " +
-        chalk.white(`intermediate javascript code (${artifactPath}):`)
-      );
-      const lineNumber =
-        Number.parseInt(
-          (e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]
-        ) - 1;
-      const lines = artifact.split("\n");
-      let startLine = Math.max(lineNumber - 2, 0);
-      let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+    if (process.env.DEBUG) {
+      if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
+        console.log();
+        console.log(
+          "  " +
+            chalk.bold.white("note:") +
+            " " +
+            chalk.white(`intermediate javascript code (${artifactPath}):`)
+        );
+        const lineNumber =
+          Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
+        const lines = artifact.split("\n");
+        let startLine = Math.max(lineNumber - 2, 0);
+        let finishLine = Math.min(lineNumber + 2, lines.length - 1);
 
-      // print line and its surrounding lines
-      for (let i = startLine; i <= finishLine; i++) {
-        if (i === lineNumber) {
-          console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
-        } else {
-          console.log("   " + chalk.dim(lines[i]));
+        // print line and its surrounding lines
+        for (let i = startLine; i <= finishLine; i++) {
+          if (i === lineNumber) {
+            console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
+          } else {
+            console.log("   " + chalk.dim(lines[i]));
+          }
         }
       }
-    }
 
-    if (process.env.NODE_STACKTRACE) {
       console.error(
         "--------------------------------- STACK TRACE ---------------------------------"
       );
       console.error((e as any).stack);
-    } else {
-      console.log(
-        "  " +
-        chalk.bold.white("note:") +
-        " " +
-        chalk.white(
-          "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-        )
-      );
     }
 
     return process.exit(1);
   }
 
-  if(os.platform() === "win32") {
+  if (os.platform() === "win32") {
     // Windows doesn't really support fully atomic moves.
     // So we just copy the directory instead.
     // Also only using sync methods to avoid possible async fs issues.
     rmSync(synthDir, { recursive: true, force: true });
-    mkdirpSync(synthDir);
-    copySync(tmpSynthDir, synthDir);
+    mkdirSync(synthDir, { recursive: true });
+    await copyDir(tmpSynthDir, synthDir);
     rmSync(tmpSynthDir, { recursive: true, force: true });
   } else {
     // Move the temporary directory to the final target location in an atomic operation
-    copySync(tmpSynthDir, synthDir, { overwrite: true } );
+    await copyDir(tmpSynthDir, synthDir);
     rmSync(tmpSynthDir, { recursive: true, force: true });
   }
 

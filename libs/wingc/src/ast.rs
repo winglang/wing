@@ -23,6 +23,12 @@ impl Symbol {
 			span: Default::default(),
 		}
 	}
+
+	/// Returns true if the symbols refer to the same name AND location in the source code.
+	/// Use `eq` to compare symbols only by name.
+	pub fn same(&self, other: &Self) -> bool {
+		self.name == other.name && self.span == other.span
+	}
 }
 
 impl Ord for Symbol {
@@ -99,7 +105,13 @@ impl Display for Phase {
 }
 
 #[derive(Debug, Clone)]
-pub enum TypeAnnotation {
+pub struct TypeAnnotation {
+	pub kind: TypeAnnotationKind,
+	pub span: WingSpan,
+}
+
+#[derive(Debug, Clone)]
+pub enum TypeAnnotationKind {
 	Number,
 	String,
 	Bool,
@@ -145,25 +157,31 @@ impl Display for UserDefinedType {
 	}
 }
 
-impl Display for TypeAnnotation {
+impl Display for TypeAnnotationKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			TypeAnnotation::Number => write!(f, "num"),
-			TypeAnnotation::String => write!(f, "str"),
-			TypeAnnotation::Bool => write!(f, "bool"),
-			TypeAnnotation::Duration => write!(f, "duration"),
-			TypeAnnotation::Json => write!(f, "Json"),
-			TypeAnnotation::MutJson => write!(f, "MutJson"),
-			TypeAnnotation::Optional(t) => write!(f, "{}?", t),
-			TypeAnnotation::Array(t) => write!(f, "Array<{}>", t),
-			TypeAnnotation::MutArray(t) => write!(f, "MutArray<{}>", t),
-			TypeAnnotation::Map(t) => write!(f, "Map<{}>", t),
-			TypeAnnotation::MutMap(t) => write!(f, "MutMap<{}>", t),
-			TypeAnnotation::Set(t) => write!(f, "Set<{}>", t),
-			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
-			TypeAnnotation::Function(t) => write!(f, "{}", t),
-			TypeAnnotation::UserDefined(user_defined_type) => write!(f, "{}", user_defined_type),
+			TypeAnnotationKind::Number => write!(f, "num"),
+			TypeAnnotationKind::String => write!(f, "str"),
+			TypeAnnotationKind::Bool => write!(f, "bool"),
+			TypeAnnotationKind::Duration => write!(f, "duration"),
+			TypeAnnotationKind::Json => write!(f, "Json"),
+			TypeAnnotationKind::MutJson => write!(f, "MutJson"),
+			TypeAnnotationKind::Optional(t) => write!(f, "{}?", t),
+			TypeAnnotationKind::Array(t) => write!(f, "Array<{}>", t),
+			TypeAnnotationKind::MutArray(t) => write!(f, "MutArray<{}>", t),
+			TypeAnnotationKind::Map(t) => write!(f, "Map<{}>", t),
+			TypeAnnotationKind::MutMap(t) => write!(f, "MutMap<{}>", t),
+			TypeAnnotationKind::Set(t) => write!(f, "Set<{}>", t),
+			TypeAnnotationKind::MutSet(t) => write!(f, "MutSet<{}>", t),
+			TypeAnnotationKind::Function(t) => write!(f, "{}", t),
+			TypeAnnotationKind::UserDefined(user_defined_type) => write!(f, "{}", user_defined_type),
 		}
+	}
+}
+
+impl Display for TypeAnnotation {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		std::fmt::Display::fmt(&self.kind, f)
 	}
 }
 
@@ -198,11 +216,15 @@ pub struct FunctionSignature {
 
 impl FunctionSignature {
 	pub fn to_type_annotation(&self) -> TypeAnnotation {
-		TypeAnnotation::Function(FunctionTypeAnnotation {
-			param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
-			return_type: self.return_type.clone(),
-			phase: self.phase,
-		})
+		TypeAnnotation {
+			kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
+				param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
+				return_type: self.return_type.clone(),
+				phase: self.phase,
+			}),
+			// Function signatures may not necessarily have spans
+			span: Default::default(),
+		}
 	}
 }
 
@@ -323,6 +345,18 @@ pub enum UtilityFunctions {
 	Panic,
 	Throw,
 	Assert,
+}
+
+impl UtilityFunctions {
+	/// Returns all utility functions.
+	pub fn all() -> Vec<UtilityFunctions> {
+		vec![
+			UtilityFunctions::Log,
+			UtilityFunctions::Panic,
+			UtilityFunctions::Throw,
+			UtilityFunctions::Assert,
+		]
+	}
 }
 
 impl Display for UtilityFunctions {
@@ -571,7 +605,7 @@ pub enum UnaryOperator {
 
 #[derive(Debug)]
 pub enum BinaryOperator {
-	Add,
+	AddOrConcat,
 	Sub,
 	Mul,
 	Div,
@@ -611,7 +645,12 @@ impl Display for Reference {
 				write!(f, "{}.{}", obj_str, property.name)
 			}
 			Reference::TypeMember { type_, property } => {
-				write!(f, "{}.{}", TypeAnnotation::UserDefined(type_.clone()), property.name)
+				write!(
+					f,
+					"{}.{}",
+					TypeAnnotationKind::UserDefined(type_.clone()),
+					property.name
+				)
 			}
 		}
 	}

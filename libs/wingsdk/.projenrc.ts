@@ -2,6 +2,25 @@ import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
 const JSII_DEPS = ["constructs@~10.1.228"];
+const CDKTF_VERSION = "0.15.2";
+
+const CDKTF_PROVIDERS = [
+  "aws@~>4.65.0",
+  "random@~>3.5.1",
+  "azurerm@~>3.54.0",
+  "google@~>4.63.1",
+];
+
+// defines the list of dependencies required for each compilation target that is not built into the
+// compiler (like Terraform targets).
+const TARGET_DEPS = {
+  awscdk: ["aws-cdk-lib@^2.64.0"],
+};
+
+// we treat all the non-builtin dependencies as "side loaded". this means that we will remove them
+// from the "package.json" just before we bundle the package and the Wing CLI will require the user
+// to install them at runtime
+const sideLoad = Object.values(TARGET_DEPS).flat();
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
@@ -16,12 +35,8 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   bundledDeps: [
-    "cdktf@0.15.2",
-    "@cdktf/provider-random@^5.0.0",
-    "@cdktf/provider-aws@^12.0.1",
-    "@cdktf/provider-azurerm@^5.0.1",
-    "@cdktf/provider-google@^5.0.2",
-    "aws-cdk-lib@^2.64.0",
+    `cdktf@${CDKTF_VERSION}`,
+    ...sideLoad,
     // preflight dependencies
     "debug",
     "esbuild-wasm",
@@ -41,6 +56,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.254.0",
     "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
+    "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
@@ -49,19 +65,23 @@ const project = new cdk.JsiiProject({
     "tar",
     "express",
     "uuid",
+    "cron-parser",
     // shared client dependencies
     "ioredis",
     "vm2",
   ],
   devDeps: [
+    `@cdktf/provider-aws@^12.0.1`, // only for testing Wing plugins
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/debug",
     "@types/fs-extra",
+    "@types/mime-types",
     "@types/tar",
     "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
+    `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",
     "patch-package",
@@ -92,28 +112,6 @@ project.eslint?.addOverride({
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
 project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
-
-// Set up the project so that:
-// 1. Preflight code is compiled with JSII
-// 2. Inflight and simulator code is compiled with TypeScript
-//
-// Note: inflight and preflight code are not automatically exported from
-// the root of the package, so accessing them requires barrel imports:
-// const { BucketClient } = require("wingsdk/lib/aws/bucket.inflight");
-const pkgJson = project.tryFindObjectFile("package.json");
-pkgJson!.addOverride("jsii.excludeTypescript", ["src/**/*.inflight.ts"]);
-
-const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
-  obj: {
-    extends: "./tsconfig.json",
-    compilerOptions: {
-      esModuleInterop: true,
-    },
-    include: ["src/**/*.inflight.ts"],
-    exclude: ["node_modules"],
-  },
-});
-project.compileTask.exec(`tsc -p ${tsconfigNonJsii.path}`);
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -171,12 +169,7 @@ project.eslint!.addRules({
   ],
 });
 
-project.npmignore?.addPatterns(
-  "tsconfig.nonjsii.json",
-  ".prettierignore",
-  ".prettierrc.json",
-  "*.tgz"
-);
+project.npmignore?.addPatterns(".prettierignore", ".prettierrc.json", "*.tgz");
 
 const apiCheck = project.addTask("api-check", {
   exec: "wing-api-check",
@@ -228,5 +221,34 @@ project.addFields({
 });
 
 project.gitignore.addPatterns("src/**/*.js", "src/**/*.d.ts");
+
+// generate CDKTF bindings
+new JsonFile(project, "cdktf.json", {
+  obj: {
+    language: "typescript",
+    app: "echo noop",
+    terraformProviders: CDKTF_PROVIDERS,
+    codeMakerOutput: "src/.gen",
+    projectId: "93afdbfa-23ed-40cf-9ce4-495b3289c519",
+  },
+});
+project.gitignore.addPatterns("src/.gen/providers");
+
+project.preCompileTask.exec("cdktf get");
+
+const packageJsonBack = "package.json.bak";
+const removeBundledDeps = project.addTask("remove-bundled-deps");
+removeBundledDeps.exec(`cp package.json ${packageJsonBack}`);
+for (const dep of sideLoad) {
+  removeBundledDeps.exec(
+    `./scripts/remove-bundled-dep.js ${dep.split("@")[0]}`
+  );
+}
+
+const restoreBundleDeps = project.addTask("restore-bundled-deps");
+restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
+
+project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
+project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
 project.synth();

@@ -51,7 +51,7 @@ test("insert row", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_table") as ITableClient;
 
-  await client.insert({ id: "joe-id", name: "Joe Doe", age: 50 } as any);
+  await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
 
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
@@ -88,7 +88,7 @@ test("get row", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_table") as ITableClient;
 
-  await client.insert({ id: "joe-id", name: "Joe Doe", age: 50 } as any);
+  await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
   const joe = await client.get("joe-id");
   expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
 
@@ -127,10 +127,10 @@ test("update row", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_table") as ITableClient;
 
-  await client.insert({ id: "joe-id", name: "Joe Doe", age: 50 } as any);
+  await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
   let joe = await client.get("joe-id");
   expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
-  await client.update({ id: "joe-id", age: 51 } as any);
+  await client.update("joe-id", { age: 51 } as any);
   joe = await client.get("joe-id");
   expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 51 });
 
@@ -169,8 +169,8 @@ test("list table", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_table") as ITableClient;
 
-  await client.insert({ id: "joe-id", name: "Joe Doe", age: 50 } as any);
-  await client.insert({ id: "jane-id", name: "Jane Doe", age: 45 } as any);
+  await client.insert("joe-id", { name: "Joe Doe", age: 50 } as any);
+  await client.insert("jane-id", { name: "Jane Doe", age: 45 } as any);
   const list = await client.list();
   expect(list[0]).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
   expect(list[1]).toEqual({ id: "jane-id", name: "Jane Doe", age: 45 });
@@ -194,4 +194,63 @@ test("list table", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("inserting the same id twice", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = cloud.Table._newTable(app, "my_table", {
+    name: "my_insert_twice_table",
+    columns: {
+      name: cloud.ColumnType.STRING,
+    },
+    primaryKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ITableClient;
+
+  await client.insert("joe-id", { name: "Joe Doe" } as any);
+  await expect(() =>
+    client.insert("joe-id", { name: "Joe Doe II" } as any)
+  ).rejects.toThrow(
+    `The primary key "joe-id" already exists in the "my_insert_twice_table" table.`
+  );
+});
+
+test("update non-existent item", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = cloud.Table._newTable(app, "my_table", {
+    name: "my_update_non_existent_table",
+    columns: {
+      name: cloud.ColumnType.STRING,
+    },
+    primaryKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ITableClient;
+
+  await expect(() =>
+    client.update("joe-id", { name: "Joe Doe" } as any)
+  ).rejects.toThrow(
+    `The primary key "joe-id" was not found in the "my_update_non_existent_table" table.`
+  );
+});
+
+test("deleting non-existent item", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = cloud.Table._newTable(app, "my_table", {
+    name: "my_delete_non_existent_table",
+    columns: {
+      name: cloud.ColumnType.STRING,
+    },
+    primaryKey: "id",
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ITableClient;
+
+  await expect(() => client.delete("joe-id")).rejects.toThrow(
+    `The primary key "joe-id" not found in the "my_delete_non_existent_table" table.`
+  );
 });

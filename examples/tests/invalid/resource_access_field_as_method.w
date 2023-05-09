@@ -1,6 +1,7 @@
-resource SomeResource {
+class SomeResource {
     name: str;
     init() {
+        this.name = "John Doe";
     }
 }
 
