@@ -51,12 +51,13 @@ class Bar {
 
 let bucket = new cloud.Bucket();
 let res = new Bar("Arr", bucket);
-new cloud.Function(inflight () => {
+
+test "test" {
   let s = res.my_method();
   assert(s == "counter is: 101");
   assert(bucket.list().length == 1);
   assert(res.foo.inflight_field == 123);
-}) as "test";
+}
 
 class BigPublisher {
   b: cloud.Bucket;
@@ -95,8 +96,9 @@ class BigPublisher {
 }
 
 let bigOlPublisher = new BigPublisher();
-new cloud.Function(inflight () => {
+
+test "dependency cycles" {
   bigOlPublisher.publish("foo");
   let count = bigOlPublisher.getObjectCount();
   // assert(count == 2); TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
-}) as "test: dependency cycles";
+}

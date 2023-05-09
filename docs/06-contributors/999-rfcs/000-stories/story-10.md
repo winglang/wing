@@ -70,34 +70,34 @@ let find_task = new cloud.Function(inflight (title: str): str => {
 
 
 // ---------------- Tests Section ---------------- 
-new cloud.Function(inflight (s: str): str => {
+test "add a new task" {
     let counter_value = counter.inc(0);
     let expected = "${counter_value}";
     let id = add_task.invoke("Add inflight resource functions");
     log("added new task with id ${id}");
     assert(expected == id);
-}) as "test: add a new task";
+}
 
-new cloud.Function(inflight (s: str): str => {
+test "get a task" {
     let expected = "task 42";
     let id = add_task.invoke(expected);
     log("added new task with id ${id}");
     let content = get_task.invoke(id);
     log("The content that was added as task #${id} is '${content}'");
     assert(content == expected);
-}) as "test: get a task";
+}
 
-new cloud.Function(inflight (s: str): str => {
+test "delete all tasks" {
   for id in bucket.list() {
     delete_task.invoke(id); 
   }
   let bucket_size = bucket.list().length;
   log("bucket_size is ${bucket_size}");
   assert(0 == bucket_size);
-}) as "test: delete all tasks";
+}
 
 
-new cloud.Function(inflight (s: str): str => {
+test "find task by content" {
   log("------ test: find ------");
   let value = counter.inc(0);
   log("Initial counter is #${value}");
@@ -111,7 +111,7 @@ new cloud.Function(inflight (s: str): str => {
   let expected = "${value + 2}"; 
   log("found task with id ${id} (expected ${value + 2})");
   assert(id == expected);
-}) as "test: find task by content";
+}
 ```
 
 ## Wing Console

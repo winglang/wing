@@ -4,14 +4,14 @@ let counterA = new cloud.Counter() as "counterA";
 let counterB = new cloud.Counter(initial: 500) as "counterB";
 let counterC = new cloud.Counter(initial: -198) as "counterC";
 
-new cloud.Function(inflight () => {
+test "initial:default" {
   assert(counterA.peek() == 0);
-}) as "test:initial:default";
+};
 
-new cloud.Function(inflight () => {
+test "initial:positive-value" {
   assert(counterB.peek() == 500);
-}) as "test:initial:positive-value";
+};
 
-new cloud.Function(inflight () => {
+test "initial:negative-value" {
   assert(counterC.peek() == -198);
-}) as "test:initial:negative-value";
+}

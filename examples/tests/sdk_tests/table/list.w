@@ -8,7 +8,7 @@ let table = new cloud.Table(
 );
 
 
-new cloud.Function(inflight () => {
+test "test" {
   table.insert("eyal", Json { gender: "male" });
   table.insert("revital", Json { gender: "female" });
   let unorderded = MutJson {};
@@ -22,4 +22,4 @@ new cloud.Function(inflight () => {
   assert("male" == str.from_json(eyal.get("gender")));
   assert("revital" == str.from_json(revital.get("name")));
   assert("female" == str.from_json(revital.get("gender")));
-}) as "test";
+}

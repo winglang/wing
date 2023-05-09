@@ -54,7 +54,7 @@ class Test {
 }
 
 let f = new Test();
-new cloud.Function(inflight () => { f.test1(); }) as "test1";
-new cloud.Function(inflight () => { f.test2(); }) as "test2";
-new cloud.Function(inflight () => { f.test3(); }) as "test3";
-new cloud.Function(inflight () => { f.test4(); }) as "test4";
+test "test1" { f.test1(); }
+test "test2" { f.test2(); }
+test "test3" { f.test3(); }
+test "test4" { f.test4(); }

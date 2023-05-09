@@ -19,7 +19,7 @@ q.add_consumer(inflight () => {
 
 
 // TODO: this test fails sim due to issue: https://github.com/winglang/wing/issues/165
-new cloud.Function(inflight ()=> {
+test "test" {
   // each push should result in a timeout
   q.push("foo");
   q.push("foo");
@@ -28,5 +28,4 @@ new cloud.Function(inflight ()=> {
   js.sleep(3000);
   // The queue should have 2 messages still due to timeout
   assert(q.approx_size() == 2);
-}) as "test";
-
+}

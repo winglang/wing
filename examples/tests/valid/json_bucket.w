@@ -22,8 +22,7 @@ let get_json = new cloud.Function(inflight(msg:str): str => {
   assert(x.get("persons").get_at(0).get("fears").get_at(1) == "failure");
 });
 
-new cloud.Function(inflight(msg:str): str => {
+test "put" {
   b.put_json(file_name, j);
   get_json.invoke(msg);
-}) as "test:put";
-
+}

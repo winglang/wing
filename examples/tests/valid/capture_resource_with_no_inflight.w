@@ -7,6 +7,6 @@ class A {
 }
 
 let a = new A();
-new cloud.Function(inflight () => {
+test "test" {
   assert("hey" == a.field);
-}) as "test";
+}

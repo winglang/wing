@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ redis.wsim » root/env0/test
+pass ─ redis.wsim » root/env0/test:test
 ```
 

@@ -8,6 +8,6 @@ class Foo impl cloud.IFunctionHandler {
 
 let fn = new cloud.Function(new Foo());
 
-new cloud.Function(inflight () => {
+test "test" {
   assert(fn.invoke("test") == "hello world!");
-}) as "test";
+}

@@ -37,4 +37,4 @@ class Test {
 }
 
 let f = new Test();
-new cloud.Function(inflight () => { f.test(); }) as "test";
+test "test" { f.test(); }

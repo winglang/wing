@@ -24,7 +24,7 @@ assert(foo.instance_field == 100);
 // assert(Foo.static_field == "Static resource value"); 
 assert(Foo.m() == 99);
 
-new cloud.Function(inflight (s:str): str => {
+test "test" {
   inflight class InflightClass {
     init() {}
     inflight inflight_method(): str {
@@ -48,4 +48,4 @@ new cloud.Function(inflight (s:str): str => {
   assert(InflightClass.static_inflight_method() == "Static inflight method");
   // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
   // assert(InflightClass.static_inflight_field == "Static inflight value");
-}) as "test";
+}

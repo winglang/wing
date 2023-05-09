@@ -23,11 +23,11 @@ b.on_event(inflight (key: str) => {
 other.on_event(inflight (key: str) => {
     log("other bucket event called!");
 });
-new cloud.Function(inflight () => {
+
+test "test" {
     b.put("a", "1");
     b.put("b", "1");
     b.put("b", "100");
     b.put("c", "1");
     b.delete("c");
-}) as "test"; 
-
+}

@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ static_members.wsim » root/env0/test
+pass ─ static_members.wsim » root/env0/test:test
 ```
 
