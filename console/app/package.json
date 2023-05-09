@@ -20,14 +20,14 @@
     "playwright:update": "PLAYWRIGHT_TEST=true xvfb-maybe --auto-servernum --server-args='-screen 0 3440x1440x24' -- playwright test -u"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.328.0",
+    "@aws-sdk/client-s3": "^3.329.0",
     "@babel/core": "^7.21.8",
     "@cloudy-ts/eslint-plugin": "^0.0.260",
     "@electron/notarize": "^1.2.3",
     "@playwright/test": "^1.33.0",
     "@tailwindcss/forms": "^0.5.3",
     "@types/analytics-node": "^3.1.11",
-    "@types/node": "^18.16.5",
+    "@types/node": "^18.16.6",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "@vitejs/plugin-react": "^3.1.0",
