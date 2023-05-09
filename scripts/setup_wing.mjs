@@ -162,10 +162,10 @@ if (global) {
 } else {
   if (process.platform === "win32") {
     // Can't trust symlinks on windows.
-    // Instead create a wrapper module that requires the cli.
-    // Adds minor overhead, but not really a functional difference.
-    const wrapperContents = `#!/usr/bin/env node
-require("${wingCliBin.replace(/\\/g, "\\\\")}");`;
+    // Instead create a wrapper cmd script that calls the wing cli
+    const wrapperContents = `\
+@echo off
+node "${wingCliBin}" %*`;
     writeFileSync(wingCliLink, wrapperContents);
     chmodSync(wingCliLink, 0o755);
   } else {
