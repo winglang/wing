@@ -15,7 +15,7 @@ import {
   symlinkSync,
   writeFileSync,
 } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { parseArgs } from "node:util";
 
 let currentDir = dirname(new URL(import.meta.url).pathname);
@@ -163,9 +163,13 @@ if (global) {
   if (process.platform === "win32") {
     // Can't trust symlinks on windows.
     // Instead create a wrapper cmd script that calls the wing cli
+    // get relative path from wingCliLink to wingCliBin
+    const wingCliBinRel = relative(dirname(wingCliLink), wingCliBin);
+
     const wrapperContents = `\
-@echo off
-node "${wingCliBin}" %*`;
+#!/usr/bin/env node
+
+require("${wingCliBinRel.replace(/\\/g, "/")}");`;
     writeFileSync(wingCliLink, wrapperContents);
     chmodSync(wingCliLink, 0o755);
   } else {
