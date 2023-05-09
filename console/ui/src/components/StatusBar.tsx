@@ -38,8 +38,12 @@ export const StatusBar = ({
       {/*left side*/}
       <div className="w-full flex space-x-6">
         <div title={wingVersion} className="truncate space-x-1 min-w-[7rem]">
-          <span>Wing version:</span>
-          <span className={classNames(theme.text2)}>{wingVersion}</span>
+          {wingVersion && (
+            <>
+              <span>Wing</span>
+              <span className={classNames(theme.text2)}>v{wingVersion}</span>
+            </>
+          )}
         </div>
 
         <div className="flex space-x-1">
