@@ -199,12 +199,8 @@ async function checkTerraformStateIsEmpty(synthDir: string) {
         `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
       );
     }
-  } catch (err) {
-    const expectedErrorMsg = "No state file was found";
-    if (
-      (typeof err === "string" && (err as any).includes(expectedErrorMsg)) ||
-      (err as any).stderr?.includes(expectedErrorMsg)
-    ) {
+  } catch (err: unknown) {
+    if ((err as Error).message.includes("No state file was found")) {
       return;
     }
 
