@@ -728,123 +728,77 @@
       }
     },
     "aws_s3_bucket_notification": {
-      "root_b_S3Objectoncreatenotifier_37FBDD2C": {
+      "root_b_S3Objectnotifier_0C1BF652": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_create_notifier",
-            "uniqueId": "root_b_S3Objectoncreatenotifier_37FBDD2C"
+            "path": "root/Default/Default/b/S3Object_notifier",
+            "uniqueId": "root_b_S3Objectnotifier_0C1BF652"
           }
         },
         "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
         "depends_on": [
+          "aws_sns_topic_policy.root_b_bondelete_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_5700B364",
+          "aws_sns_topic_policy.root_b_bonupdate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_53C55984",
           "aws_sns_topic_policy.root_b_boncreate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_C218A49E"
         ],
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Put"
-            ],
-            "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
-          }
-        ]
-      },
-      "root_b_S3Objectondeletenotifier_2BF59546": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_delete_notifier",
-            "uniqueId": "root_b_S3Objectondeletenotifier_2BF59546"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_b_bondelete_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_5700B364"
-        ],
-        "topic": [
-          {
-            "events": [
               "s3:ObjectRemoved:*"
             ],
+            "id": "on-delete-notification",
             "topic_arn": "${aws_sns_topic.root_b_bondelete_357A37C8.arn}"
-          }
-        ]
-      },
-      "root_b_S3Objectonupdatenotifier_BF419C65": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_update_notifier",
-            "uniqueId": "root_b_S3Objectonupdatenotifier_BF419C65"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_b_bonupdate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_53C55984"
-        ],
-        "topic": [
+          },
           {
             "events": [
               "s3:ObjectCreated:Post"
             ],
+            "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.root_b_bonupdate_F11B4439.arn}"
-          }
-        ]
-      },
-      "root_other_S3Objectoncreatenotifier_245EEBFA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_create_notifier",
-            "uniqueId": "root_other_S3Objectoncreatenotifier_245EEBFA"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_other_otheroncreate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_432AF88B"
-        ],
-        "topic": [
+          },
           {
             "events": [
               "s3:ObjectCreated:Put"
             ],
-            "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
+            "id": "on-create-notification",
+            "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
           }
         ]
       },
-      "root_other_S3Objectondeletenotifier_723A6B77": {
+      "root_other_S3Objectnotifier_97225588": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_delete_notifier",
-            "uniqueId": "root_other_S3Objectondeletenotifier_723A6B77"
+            "path": "root/Default/Default/other/S3Object_notifier",
+            "uniqueId": "root_other_S3Objectnotifier_97225588"
           }
         },
         "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
         "depends_on": [
+          "aws_sns_topic_policy.root_other_otheroncreate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_432AF88B",
+          "aws_sns_topic_policy.root_other_otheronupdate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_18B527D9",
           "aws_sns_topic_policy.root_other_otherondelete_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_029C6FE9"
         ],
         "topic": [
           {
             "events": [
-              "s3:ObjectRemoved:*"
+              "s3:ObjectCreated:Put"
             ],
-            "topic_arn": "${aws_sns_topic.root_other_otherondelete_7CCB8682.arn}"
-          }
-        ]
-      },
-      "root_other_S3Objectonupdatenotifier_10BD12E1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_update_notifier",
-            "uniqueId": "root_other_S3Objectonupdatenotifier_10BD12E1"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_other_otheronupdate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_18B527D9"
-        ],
-        "topic": [
+            "id": "on-create-notification",
+            "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
+          },
           {
             "events": [
               "s3:ObjectCreated:Post"
             ],
+            "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.root_other_otheronupdate_3B763057.arn}"
+          },
+          {
+            "events": [
+              "s3:ObjectRemoved:*"
+            ],
+            "id": "on-delete-notification",
+            "topic_arn": "${aws_sns_topic.root_other_otherondelete_7CCB8682.arn}"
           }
         ]
       }

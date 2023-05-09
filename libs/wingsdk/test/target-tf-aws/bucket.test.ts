@@ -262,7 +262,7 @@ test("bucket with onEvent method", () => {
     "aws_sns_topic_subscription", // subscription to events
   ]);
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(3); // 3 topics will be created- one per event
-  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(3);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
