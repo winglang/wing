@@ -137,9 +137,7 @@ export async function load(options: WingCompilerLoadOptions) {
     if (resolvedDir === "/" || resolvedDir.match(/^[A-Z]:\\$/i)) {
       break;
     } else if (dirI > 100) {
-      throw new Error(
-        `Unable to find root directory to preopen for WASM compiler`
-      );
+      throw new Error(`Unable to find root directory to preopen for WASM compiler`);
     }
   }
 
@@ -178,9 +176,7 @@ export async function load(options: WingCompilerLoadOptions) {
   log("compiling wingc WASM module");
   const binary =
     options.wingcWASMData ??
-    new Uint8Array(
-      await fs.promises.readFile(resolve(__dirname, "../wingc.wasm"))
-    );
+    new Uint8Array(await fs.promises.readFile(resolve(__dirname, "../wingc.wasm")));
   const mod = new WebAssembly.Module(binary);
 
   log("instantiating wingc WASM module with importObject: %o", importObject);
@@ -242,11 +238,7 @@ export function invoke(
   const toFree = [[argPointer, bytes.byteLength]];
 
   try {
-    const argMemoryBuffer = new Uint8Array(
-      exports.memory.buffer,
-      argPointer,
-      bytes.byteLength
-    );
+    const argMemoryBuffer = new Uint8Array(exports.memory.buffer, argPointer, bytes.byteLength);
     argMemoryBuffer.set(bytes);
 
     const result = exports[func](argPointer, bytes.byteLength);
@@ -258,10 +250,7 @@ export function invoke(
       const returnLen = Number(result & LOW_MASK);
 
       const entireMemoryBuffer = new Uint8Array(exports.memory.buffer);
-      const extractedBuffer = entireMemoryBuffer.slice(
-        returnPtr,
-        returnPtr + returnLen
-      );
+      const extractedBuffer = entireMemoryBuffer.slice(returnPtr, returnPtr + returnLen);
 
       toFree.push([returnPtr, returnLen]);
 
