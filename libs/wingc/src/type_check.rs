@@ -564,7 +564,7 @@ impl FunctionSignature {
 			.iter()
 			.rev()
 			// TODO - as a hack we treat `anything` arguments like optionals so that () => {} can be a subtype of (any) => {}
-			.take_while(|arg| arg.is_option() || arg.is_anything())
+			.take_while(|arg| arg.is_option() || arg.is_struct() || arg.is_anything())
 			.count();
 
 		self.parameters.len() - num_optionals
@@ -729,6 +729,14 @@ impl TypeRef {
 
 	pub fn is_anything(&self) -> bool {
 		if let Type::Anything = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_struct(&self) -> bool {
+		if let Type::Struct(_) = **self {
 			true
 		} else {
 			false
@@ -1337,14 +1345,35 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
+				// Verify arity
+				let pos_args_count = arg_list.pos_args.len();
+				let min_args = constructor_sig.min_parameters();
+				if pos_args_count < min_args {
+					let err_text = format!(
+							"Expected {} required positional arguments but got {} when instantiating \"{}\"",
+							min_args, pos_args_count, type_
+						);
+					return self.expr_error(exp, err_text);
+				}
+
 				if !arg_list.named_args.is_empty() {
-					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
+					let last_arg = match constructor_sig.parameters.last() {
+						Some(arg) => arg.maybe_unwrap_option(),
+						None => {
+							return self.expr_error(exp, format!("Expected 0 named arguments when instantiating \"{}\"",
+								class_symbol.name
+							));
+						},
+					};
+					
+					if !last_arg.is_struct() {
+						return self.expr_error(exp, format!("class {} does not expect any named argument", class_symbol.name));
+					}
+
 					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
-				// Verify arity
 				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = constructor_sig.min_parameters();
 				let max_args = constructor_sig.max_parameters();
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
@@ -1424,8 +1453,30 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
+				// Verify arity
+				let pos_args_count = arg_list.pos_args.len();
+				let min_args = func_sig.min_parameters();
+				if pos_args_count < min_args {
+					let err_text = format!(
+							"Expected {} required positional arguments but got {}",
+							min_args, pos_args_count
+						);
+					return self.expr_error(exp, err_text);
+				}
+
 				if !arg_list.named_args.is_empty() {
-					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
+					let last_arg = match func_sig.parameters.last() {
+						Some(arg) => arg.maybe_unwrap_option(),
+						None => {
+							return self.expr_error(exp, format!("Expected 0 named arguments for func at {}", exp.span().to_string()
+							));
+						},
+					};
+
+					if !last_arg.is_struct() {
+						return self.expr_error(exp, format!("No named arguments expected"));
+					}
+
 					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 

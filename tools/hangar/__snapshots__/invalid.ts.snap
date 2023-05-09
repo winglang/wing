@@ -145,7 +145,14 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`class.w > stderr 1`] = `
-"error: \\"x\\" is not initialized
+"error: Unexpected 'parameter_list'
+   --> ../../../examples/tests/invalid/class.w:15:7
+   |
+15 |   init(foo: str)
+   |       ^^^^^^^^^^ Unexpected 'parameter_list'
+
+
+error: \\"x\\" is not initialized
   --> ../../../examples/tests/invalid/class.w:2:4
   |
 2 |    x:num;
@@ -159,10 +166,31 @@ error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
   | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.w:13:14
+error: Expected 0 named arguments when instantiating \\"C4\\"
+   --> ../../../examples/tests/invalid/class.w:11:1
    |
-13 |     this.x = \\"Hi\\";
+11 | new C4(token: \\"1\\");
+   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments when instantiating \\"C4\\"
+
+
+error: Expected 0 named arguments when instantiating \\"C5\\"
+   --> ../../../examples/tests/invalid/class.w:20:1
+   |
+20 | new C5(foo: \\"bar\\"); 
+   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments when instantiating \\"C5\\"
+
+
+error: Expected 0 named arguments when instantiating \\"C5\\"
+   --> ../../../examples/tests/invalid/class.w:23:1
+   |
+23 | new C5(\\"hello\\", foo: \\"bar\\"); 
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 0 named arguments when instantiating \\"C5\\"
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/class.w:29:14
+   |
+29 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 "
@@ -1094,11 +1122,11 @@ error: \\"not_a_field\\" is not a field of \\"ApiResponse\\"
    | \\\\-^ \\"not_a_field\\" is not a field of \\"ApiResponse\\"
 
 
-error: Expected 2 arguments but got 1
+error: Expected 2 required positional arguments but got 1
    --> ../../../examples/tests/invalid/struct_expansion.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 arguments but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 required positional arguments but got 1
 
 "
 `;
