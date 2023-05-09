@@ -14,7 +14,7 @@
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.17",
     "@popperjs/core": "^2.11.7",
-    "@storybook/react": "^7.0.9",
+    "@storybook/react": "^7.0.10",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
