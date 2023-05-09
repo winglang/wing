@@ -10,18 +10,24 @@ module.exports = function({ Foo, MyEnum }) {
       this.foo = foo;
       this.name = name;
     }
+    static async barStatic()  {
+      {
+        return "bar static";
+      }
+    }
     async myMethod()  {
       {
         (await this.foo.fooInc());
+        const s = (await Foo.fooStatic());
         (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
         return (await this.b.get("foo"));
       }
     }
-    async test_type_access()  {
+    async testTypeAccess()  {
       {
         if (true) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.bar_static()) === "bar static")'`)})(((await Bar.bar_static()) === "bar static"))};
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.foo_static()) === "foo static")'`)})(((await Foo.foo_static()) === "foo static"))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
           {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
         }
       }
@@ -84,7 +90,7 @@ module.exports = function({  }) {
         return (await this.c.peek());
       }
     }
-    static async foo_static()  {
+    static async fooStatic()  {
       {
         return "foo static";
       }
@@ -783,7 +789,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo_inc", "foo_get", "foo_static");
+        this._addInflightOps("fooInc", "fooGet", "fooStatic");
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       static _toInflightType(context) {
@@ -816,7 +822,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("fooInc")) {
           this._registerBindObject(this.c, host, ["inc"]);
         }
-        if (ops.includes("foo_static")) {
+        if (ops.includes("fooStatic")) {
         }
         super._registerBind(host, ops);
       }
@@ -824,7 +830,7 @@ class $Root extends $stdlib.std.Resource {
     class Bar extends $stdlib.std.Resource {
       constructor(scope, id, name, b, e) {
         super(scope, id);
-        this._addInflightOps("myMethod");
+        this._addInflightOps("barStatic", "myMethod", "testTypeAccess");
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
@@ -874,11 +880,13 @@ class $Root extends $stdlib.std.Resource {
           this._registerBindObject(this.foo, host, []);
           this._registerBindObject(this.name, host, []);
         }
+        if (ops.includes("barStatic")) {
+        }
         if (ops.includes("myMethod")) {
           this._registerBindObject(this.b, host, ["get", "put"]);
           this._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
         }
-        if (ops.includes("test_type_access")) {
+        if (ops.includes("testTypeAccess")) {
           this._registerBindObject(this.e, host, []);
         }
         super._registerBind(host, ops);
@@ -986,7 +994,7 @@ class $Root extends $stdlib.std.Resource {
         },
         res: {
           obj: res,
-          ops: ["bar_static","my_method","test_type_access"]
+          ops: ["barStatic","myMethod","testTypeAccess"]
         },
       }
     })
@@ -1057,8 +1065,8 @@ async handle() {
   const s = (await res.myMethod());
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflight_field === 123)'`)})((res.foo.inflight_field === 123))};
-  (await res.test_type_access());
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
+  (await res.testTypeAccess());
 }
 
 ```

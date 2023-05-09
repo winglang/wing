@@ -438,12 +438,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
-        const my_resource_client = this._lift(this.my_resource);
+        const myResource_client = this._lift(this.myResource);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FirstClient = ${First._toInflightType(this).text};
             const client = new FirstClient({
-              my_resource: ${my_resource_client},
+              myResource: ${myResource_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -473,7 +473,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const first_client = this._lift(this.first);
-        const my_field_client = this._lift(this.my_field);
+        const myField_client = this._lift(this.myField);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const AnotherClient = ${Another._toInflightType(this).text};
@@ -530,18 +530,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const another_client = this._lift(this.another);
-        const array_of_str_client = this._lift(this.array_of_str);
-        const ext_bucket_client = this._lift(this.ext_bucket);
-        const ext_num_client = this._lift(this.ext_num);
-        const map_of_num_client = this._lift(this.map_of_num);
-        const my_bool_client = this._lift(this.my_bool);
-        const my_num_client = this._lift(this.my_num);
-        const my_opt_str_client = this._lift(this.my_opt_str);
-        const my_queue_client = this._lift(this.my_queue);
-        const my_resource_client = this._lift(this.my_resource);
-        const my_str_client = this._lift(this.my_str);
-        const set_of_str_client = this._lift(this.set_of_str);
-        const unused_resource_client = this._lift(this.unused_resource);
+        const arrayOfStr_client = this._lift(this.arrayOfStr);
+        const extBucket_client = this._lift(this.extBucket);
+        const extNum_client = this._lift(this.extNum);
+        const mapOfNum_client = this._lift(this.mapOfNum);
+        const myBool_client = this._lift(this.myBool);
+        const myNum_client = this._lift(this.myNum);
+        const myOptStr_client = this._lift(this.myOptStr);
+        const myQueue_client = this._lift(this.myQueue);
+        const myResource_client = this._lift(this.myResource);
+        const myStr_client = this._lift(this.myStr);
+        const setOfStr_client = this._lift(this.setOfStr);
+        const unusedResource_client = this._lift(this.unusedResource);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this).text};

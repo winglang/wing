@@ -167,12 +167,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
-        const instance_field_client = this._lift(this.instance_field);
+        const instanceField_client = this._lift(this.instanceField);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              instance_field: ${instance_field_client},
+              instanceField: ${instanceField_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

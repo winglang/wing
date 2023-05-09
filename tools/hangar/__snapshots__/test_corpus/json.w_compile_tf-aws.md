@@ -67,12 +67,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
-        const _sum_str_client = this._lift(this._sum_str);
+        const SumStr_client = this._lift(this.SumStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              _sum_str: ${_sum_str_client},
+              SumStr: ${SumStr_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
