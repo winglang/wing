@@ -56,6 +56,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.254.0",
     "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
+    "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
@@ -75,6 +76,7 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/debug",
     "@types/fs-extra",
+    "@types/mime-types",
     "@types/tar",
     "@types/express",
     "aws-sdk-client-mock",

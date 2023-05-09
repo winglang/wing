@@ -1,6 +1,6 @@
 ---
-title: What pains does Wing aim to solve for developers and organizations?
-sidebar_label: What pains Wing solves?
+title: What pains does Wing aim to solve for developers and organizations? 🤕
+sidebar_label: What pains Wing solves? 🤕
 id: pains-wing-aims-to-solve
 keywords: [faq, winglang, Wing programming language, Wing language, developer experience, pain points]
 ---
@@ -25,4 +25,4 @@ Wing aims to enhance the developer experience by treating the entire cloud as it
 
 We'd like developers be able to write code with a "pencil" rather than a "pen," iterating quickly and learning from their mistakes. They could make a change and test it within milliseconds, even without WiFi.
 
-You can experience how far Wing has advanced on its journey to solve the above pain points and enhance the cloud developement experience in our [playground](https://play.winglang.io).
+You can experience how far Wing has advanced on its journey to solve the above pain points and enhance the cloud development experience in our [playground](https://play.winglang.io).
