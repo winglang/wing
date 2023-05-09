@@ -12,10 +12,10 @@ assert(s == "top");
 
 class A {
   init(){
-    let s = "in_resource";
-    assert(s == "in_resource");
+    let s = "inResource";
+    assert(s == "inResource");
     new cloud.Function(inflight () => {
-      assert(s == "in_resource");
+      assert(s == "inResource");
     }) as "test:inflight in resource should capture the right scoped var";
   }
 }
@@ -26,6 +26,6 @@ new cloud.Function(inflight () => {
 }) as "test:inflight on top should capture top";
 
 new cloud.Function(inflight () => {
-  let s = "inside_inflight";
-  assert(s == "inside_inflight");
-}) as "test:inside_inflight should capture the right scope";
+  let s = "insideInflight";
+  assert(s == "insideInflight");
+}) as "test:insideInflight should capture the right scope";

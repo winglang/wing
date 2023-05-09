@@ -26,7 +26,6 @@ use crate::{
 	type_check::{
 		resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
 	},
-	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
@@ -176,26 +175,16 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_reference(&mut self, reference: &Reference, case_convert: Option<bool>, context: &JSifyContext) -> String {
-		let symbolize = if case_convert.unwrap_or(false) {
-			Self::jsify_symbol_case_converted
-		} else {
-			Self::jsify_symbol
-		};
+	fn jsify_reference(&mut self, reference: &Reference, context: &JSifyContext) -> String {
 		match reference {
-			Reference::Identifier(identifier) => symbolize(self, identifier),
+			Reference::Identifier(identifier) => self.jsify_symbol(identifier),
 			Reference::InstanceMember { object, property } => {
-				self.jsify_expression(object, context) + "." + &symbolize(self, property)
+				self.jsify_expression(object, context) + "." + &self.jsify_symbol(property)
 			}
 			Reference::TypeMember { type_, property } => {
-				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &symbolize(self, property)
+				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &self.jsify_symbol(property)
 			}
 		}
-	}
-
-	fn jsify_symbol_case_converted(&self, symbol: &Symbol) -> String {
-		let result = symbol.name.clone();
-		return snake_case_to_camel_case(&result);
 	}
 
 	fn jsify_symbol(&self, symbol: &Symbol) -> String {
@@ -207,7 +196,6 @@ impl<'a> JSifier<'a> {
 		arg_list: &ArgList,
 		scope: Option<&str>,
 		id: Option<&str>,
-		case_convert: bool,
 		context: &JSifyContext,
 	) -> String {
 		let mut args = vec![];
@@ -229,11 +217,7 @@ impl<'a> JSifier<'a> {
 			// convert snake to camel case
 			structure_args.push(format!(
 				"{}: {}",
-				if case_convert {
-					snake_case_to_camel_case(&arg.0.name)
-				} else {
-					arg.0.name.clone()
-				},
+				arg.0.name.clone(),
 				self.jsify_expression(
 					arg.1,
 					&JSifyContext {
@@ -298,12 +282,6 @@ impl<'a> JSifier<'a> {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
 					true
 				};
-				let should_case_convert = if let Some(cls) = expression_type.expect("expression type").as_class_or_resource() {
-					cls.should_case_convert_jsii
-				} else {
-					// This should only happen in the case of `any`, which are almost certainly JSII imports.
-					true
-				};
 				let is_abstract = if let Some(cls) = expression_type.unwrap().as_class_or_resource() {
 					cls.is_abstract
 				} else {
@@ -325,7 +303,7 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				let args = self.jsify_arg_list(&arg_list, scope, id, should_case_convert, context);
+				let args = self.jsify_arg_list(&arg_list, scope, id, context);
 
 				let fqn = if is_resource {
 					expression_type
@@ -389,7 +367,7 @@ impl<'a> JSifier<'a> {
 					)
 				}
 			}
-			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, context),
+			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, context),
 			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
 				let function_sig = function_type.as_function_sig();
@@ -397,30 +375,12 @@ impl<'a> JSifier<'a> {
 					function_sig.is_some() || function_type.is_anything(),
 					"Expected expression to be callable"
 				);
-				let mut needs_case_conversion = false;
 
 				let expr_string = match &function.kind {
-					ExprKind::Reference(reference) => {
-						if let Reference::InstanceMember { object, .. } = reference {
-							let object_type = object.evaluated_type.borrow().unwrap();
-							if let Some(class) = object_type.as_class_or_resource() {
-								needs_case_conversion = class.should_case_convert_jsii;
-							} else {
-								// TODO I think in this case we shouldn't convert tye case but originally we had code that
-								// set `needs_case_conversion` to true for `any` and builtin types, and I'm not sure why..
-								needs_case_conversion = false;
-							}
-						} else if let Reference::TypeMember { .. } = reference {
-							let st_type = expression.evaluated_type.borrow().unwrap();
-							if let Some(class) = st_type.as_class_or_resource() {
-								needs_case_conversion = class.should_case_convert_jsii;
-							}
-						}
-						self.jsify_reference(reference, Some(needs_case_conversion), context)
-					}
+					ExprKind::Reference(reference) => self.jsify_reference(reference, context),
 					_ => format!("({})", self.jsify_expression(function, context)),
 				};
-				let arg_string = self.jsify_arg_list(&arg_list, None, None, needs_case_conversion, context);
+				let arg_string = self.jsify_arg_list(&arg_list, None, None, context);
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
@@ -498,20 +458,11 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::StructLiteral { fields, .. } => {
-        let st_type = expression.evaluated_type.borrow().unwrap();
-        let st = st_type.as_struct().unwrap();
-
 				format!(
 					"{{\n{}}}\n",
 					fields
 						.iter()
-						.map(|(name, expr)| format!("\"{}\": {},", {
-              if st.should_case_convert_jsii {
-                snake_case_to_camel_case(&name.name)
-              } else {
-                name.name.clone()
-              }
-            }, self.jsify_expression(expr, context)))
+						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, context)))
 						.collect::<Vec<String>>()
 						.join("\n")
 				)
@@ -662,7 +613,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, context))),
 			StmtKind::Assignment { variable, value } => CodeMaker::one_line(format!(
 				"{} = {};",
-				self.jsify_reference(&variable, None, context),
+				self.jsify_reference(&variable, context),
 				self.jsify_expression(value, context)
 			)),
 			StmtKind::Scope(scope) => {

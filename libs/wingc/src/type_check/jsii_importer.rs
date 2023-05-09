@@ -6,7 +6,6 @@ use crate::{
 		self, symbol_env::StatementIdx, Class, FunctionSignature, Interface, Struct, SymbolKind, Type, TypeRef, Types,
 		CLASS_INIT_NAME,
 	},
-	utilities::camel_case_to_snake_case,
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_JSON, WINGSDK_MUT_JSON,
 	WINGSDK_RESOURCE,
 };
@@ -455,10 +454,9 @@ impl<'a> JsiiImporter<'a> {
 						.and_then(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
 						.flatten(),
 				}));
-				let name = camel_case_to_snake_case(&m.name);
 				class_env
 					.define(
-						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
+						&Self::jsii_name_to_symbol(&m.name, &m.location_in_module),
 						SymbolKind::make_variable(method_sig, false, is_static, phase),
 						StatementIdx::Top,
 					)
@@ -488,7 +486,7 @@ impl<'a> JsiiImporter<'a> {
 
 				class_env
 					.define(
-						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
+						&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
 						SymbolKind::make_variable(wing_type, !matches!(p.immutable, Some(true)), is_static, phase),
 						StatementIdx::Top,
 					)

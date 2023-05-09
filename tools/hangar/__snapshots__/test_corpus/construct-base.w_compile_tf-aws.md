@@ -91,13 +91,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const get_path =  (c) =>  {
+    const getPath =  (c) =>  {
       {
         return c.node.path;
       }
     }
     ;
-    const get_display_name =  (r) =>  {
+    const getDisplayName =  (r) =>  {
       {
         return r.display.title;
       }
@@ -106,9 +106,9 @@ class $Root extends $stdlib.std.Resource {
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this,"WingResource");
     const another_resource = wr;
-    {console.log(`path of sqs.queue: ${(get_path(q))}`)};
-    {console.log(`path of wing resource: ${(get_path(wr))}`)};
-    const title = ((get_display_name(wr)) ?? "no display name");
+    {console.log(`path of sqs.queue: ${(getPath(q))}`)};
+    {console.log(`path of wing resource: ${(getPath(wr))}`)};
+    const title = ((getDisplayName(wr)) ?? "no display name");
     {console.log(`display name of wing resource: ${title}`)};
   }
 }

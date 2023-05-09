@@ -1,51 +1,51 @@
 bring cloud;
 
 class Foo {
-  instance_field: num;
+  instanceField: num;
 
   // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
-  // static static_field: str = "Static resource value"; 
-  // static inflight inflight_static_field: str = "Inflight static resource value";
+  // static staticField: str = "Static resource value"; 
+  // static inflight inflightStaticField: str = "Inflight static resource value";
 
   static m(): num { return 99; }
 
   init() {
-    this.instance_field = 100;
+    this.instanceField = 100;
   }
 
-  static inflight get_123(): num {
+  static inflight get123(): num {
     return 123;
   }
 }
 
 let foo = new Foo();
-assert(foo.instance_field == 100);
+assert(foo.instanceField == 100);
 // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
-// assert(Foo.static_field == "Static resource value"); 
+// assert(Foo.staticField == "Static resource value"); 
 assert(Foo.m() == 99);
 
 new cloud.Function(inflight (s:str): str => {
   inflight class InflightClass {
     init() {}
-    inflight inflight_method(): str {
+    inflight inflightMethod(): str {
       return "Inflight method";
     }
-    static inflight static_inflight_method(): str {
+    static inflight staticInflightMethod(): str {
       return "Static inflight method";
     }
 
     // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
-    // static static_inflight_field: str = "Static inflight value";
+    // static staticInflightField: str = "Static inflight value";
   }
 
   // TODO: acess to preflight types (`Foo`) not supported yet (https://github.com/winglang/wing/issues/1669)
-  // assert(Foo.get_123() == 123);
+  // assert(Foo.get123() == 123);
   // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
-  // assert(Foo.inflight_static_field == "Inflight static resource value");
+  // assert(Foo.inflightStaticField == "Inflight static resource value");
 
-  let inflight_class = new InflightClass();
-  assert(inflight_class.inflight_method() == "Inflight method");
-  assert(InflightClass.static_inflight_method() == "Static inflight method");
+  let inflightClass = new InflightClass();
+  assert(inflightClass.inflightMethod() == "Inflight method");
+  assert(InflightClass.staticInflightMethod() == "Static inflight method");
   // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
-  // assert(InflightClass.static_inflight_field == "Static inflight value");
+  // assert(InflightClass.staticInflightField == "Static inflight value");
 }) as "test";

@@ -40,7 +40,7 @@ module.exports = function() {
   class  r {
     constructor({  }) {
     }
-    async method_2(x)  {
+    async method2(x)  {
       {
         return x;
       }
@@ -121,14 +121,14 @@ class $Root extends $stdlib.std.Resource {
     class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method_2");
+        this._addInflightOps("method2");
       }
-       method_1(x)  {
+       method1(x)  {
         {
           return x;
         }
       }
-       method_3(x)  {
+       method3(x)  {
         {
           return x;
         }
@@ -148,7 +148,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
-        if (ops.includes("method_2")) {
+        if (ops.includes("method2")) {
         }
         super._registerBind(host, ops);
       }

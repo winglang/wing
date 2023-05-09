@@ -59,7 +59,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "my_method",
+                          "relationship": "myMethod",
                           "resource": "root/Default/Default/test",
                         },
                       ],
@@ -71,13 +71,13 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "inbound",
                               "implicit": false,
-                              "relationship": "foo_get",
+                              "relationship": "fooGet",
                               "resource": "root/Default/Default/test",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
-                              "relationship": "foo_inc",
+                              "relationship": "fooInc",
                               "resource": "root/Default/Default/test",
                             },
                           ],
@@ -647,7 +647,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "add_consumer",
+                              "relationship": "consumer",
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c351460f",
                             },
                             {
@@ -741,7 +741,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "inbound",
                               "implicit": false,
-                              "relationship": "add_consumer",
+                              "relationship": "consumer",
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue",
                             },
                           ],
@@ -1047,7 +1047,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "get_json",
+                          "relationship": "getJson",
                           "resource": "root/Default/Default/test",
                         },
                         {
@@ -1059,7 +1059,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "public_url",
+                          "relationship": "publicUrl",
                           "resource": "root/Default/Default/test",
                         },
                         {
@@ -1071,7 +1071,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "put_json",
+                          "relationship": "putJson",
                           "resource": "root/Default/Default/test",
                         },
                       ],
@@ -1131,7 +1131,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "get_json",
+                          "relationship": "getJson",
                           "resource": "root/Default/Default/cloud.Bucket",
                         },
                         {
@@ -1143,7 +1143,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "public_url",
+                          "relationship": "publicUrl",
                           "resource": "root/Default/Default/cloud.Bucket",
                         },
                         {
@@ -1155,7 +1155,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "put_json",
+                          "relationship": "putJson",
                           "resource": "root/Default/Default/cloud.Bucket",
                         },
                         {
@@ -1179,19 +1179,19 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "foo_get",
+                          "relationship": "fooGet",
                           "resource": "root/Default/Default/Bar/Foo",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "foo_inc",
+                          "relationship": "fooInc",
                           "resource": "root/Default/Default/Bar/Foo",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "my_method",
+                          "relationship": "myMethod",
                           "resource": "root/Default/Default/Bar",
                         },
                       ],

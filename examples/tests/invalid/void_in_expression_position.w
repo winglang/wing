@@ -7,6 +7,6 @@ let x = "my name is ${log("mister cloud")}";
 let y = 5 + log("hello");
 //          ^^^^^^^^^^^^^^ Expected type to be "num", but got "void" instead
 
-let returns_nothing = () => {};
-let z = returns_nothing();
+let returnsNothing = () => {};
+let z = returnsNothing();
 //      ^^^^^^^^^^^^^^^^^ Cannot assign expression of type "void" to a variable
