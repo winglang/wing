@@ -1,16 +1,16 @@
-bring cloud;
 bring util;
 
 let random_name = "RANDOM123412121212kjhkjskdjkj";
 
-assert(util.Util.env("PATH").length > 0);
+assert(util.env("PATH").length > 0);
 
 let var failed = false;
 try {
-  util.Util.env(random_name);
+  util.env(random_name);
 } catch {
   failed = true;
 }
+
 assert(failed);
 
 // TODO: this is not supported yet (P1)

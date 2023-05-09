@@ -2958,6 +2958,28 @@ impl<'a> TypeChecker<'a> {
 				_ => return None,
 			}
 		}
+
+		// rewrite "namespace.foo()" to "namespace.Util.foo()" (e.g. `util.env()`). we do this by
+		// looking up the symbol path within the current environment and if it resolves to a namespace,
+		// then resolve a class named "Util" within it. This will basically be equivalent to the
+		// `foo.Bar.baz()` case (where `baz()`) is a static method of class `Bar`.
+		if !path.is_empty() {
+			let lookup_result = env.lookup_nested(&path.iter().collect_vec(), Some(self.statement_idx));
+			if let Ok(symbol_kind) = lookup_result {
+				if let SymbolKind::Namespace(_) = symbol_kind {
+					// resolve "Util" as a user defined class within the namespace
+					let root = path.pop().unwrap();
+					path.reverse();
+					path.push(Symbol { name: "Util".to_string(), span: root.span.clone() });
+					let ut = UserDefinedType { root, fields: path };
+					return self
+						.resolve_user_defined_type(&ut, env, self.statement_idx)
+						.ok()
+						.map(|_| ut);
+				}
+			}
+		}
+
 		let root = path.pop().unwrap();
 		path.reverse();
 		let user_type_annotation = UserDefinedType { root, fields: path };
@@ -2975,8 +2997,9 @@ impl<'a> TypeChecker<'a> {
 					if let Some(var) = var.as_variable() {
 						var
 					} else {
+
 						self.variable_error(TypeError {
-							message: format!("Expected identifier {}, to be a variable, but it's a {}", symbol, var),
+							message: format!("Expected identifier \"{}\" to be a variable, but it's a {}", symbol.name, var),
 							span: symbol.span.clone(),
 						})
 					}
@@ -3493,3 +3516,4 @@ mod tests {
 		assert!(!str_fn.is_subtype_of(&opt_str_fn));
 	}
 }
+
