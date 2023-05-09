@@ -1,4 +1,0 @@
-## Wing Scripts
-
-### changelog.mjs
-

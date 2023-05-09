@@ -3,7 +3,6 @@ node_modules/
 .env
 *.tfstate
 *.tfstate.*
-tmp/
 .history
 
 # WASI SDK (insalled by "npm install")
@@ -50,5 +49,6 @@ apps/vscode-wing/resources/native/wing-language-server
 
 # hangar
 tools/hangar/results/
+tools/hangar/tmp/
 tools/hangar/src/test_corpus/*
 tools/hangar/__snapshots__/**/proc.*/
