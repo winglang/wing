@@ -8,6 +8,7 @@ import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
 import { withSpinner } from "../util";
+import { Target } from "./constants";
 
 const log = debug("wing:test");
 
@@ -33,10 +34,10 @@ async function testOne(entrypoint: string, options: TestOptions) {
   );
 
   switch (options.target) {
-    case "sim":
+    case Target.SIM:
       await testSimulator(synthDir);
       break;
-    case "tf-aws":
+    case Target.TF_AWS:
       await testTfAws(synthDir);
       break;
     default:
@@ -191,7 +192,7 @@ async function isTerraformInstalled(synthDir: string) {
   return output.startsWith("Terraform v");
 }
 
-async function checkTerraformStateIsEmpty(synthDir: string) {
+export async function checkTerraformStateIsEmpty(synthDir: string) {
   try {
     const output = await execCapture("terraform state list", { cwd: synthDir });
     if (output.length > 0) {
@@ -209,7 +210,7 @@ async function checkTerraformStateIsEmpty(synthDir: string) {
   }
 }
 
-async function terraformInit(synthDir: string) {
+export async function terraformInit(synthDir: string) {
   await execCapture("terraform init", { cwd: synthDir });
 }
 
