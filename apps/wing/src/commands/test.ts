@@ -200,7 +200,11 @@ async function checkTerraformStateIsEmpty(synthDir: string) {
       );
     }
   } catch (err) {
-    if ((err as any).stderr.includes("No state file was found")) {
+    const expectedErrorMsg = "No state file was found";
+    if (
+      (typeof err === "string" && (err as any).includes(expectedErrorMsg)) ||
+      (err as any).stderr?.includes(expectedErrorMsg)
+    ) {
       return;
     }
 
