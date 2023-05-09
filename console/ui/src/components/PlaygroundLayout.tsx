@@ -12,7 +12,6 @@ import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";
 import { MapView } from "./map-view/map-view.js";
 import { MetadataPanel } from "./MetadataPanel.js";
-import { StatusBar } from "./StatusBar.js";
 import { TestsTree } from "./TestsTree.js";
 import { LayoutProps } from "./VscodeLayout.js";
 
@@ -44,9 +43,6 @@ export const PlaygroundLayout = ({
 
   return (
     <div className="h-full flex flex-col bg-slate-50 select-none relative">
-      {cloudAppState === "error" && (
-        <div className="bg-opacity-40 bg-black absolute inset-0 z-10" />
-      )}
       <div className="flex-1 flex relative">
         {loading && (
           <div
@@ -61,7 +57,11 @@ export const PlaygroundLayout = ({
           </div>
         )}
 
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col relative">
+          {cloudAppState === "error" && (
+            <div className="bg-opacity-40 bg-black absolute inset-0 z-50" />
+          )}
+
           <div className="flex-1 flex">
             <div className="flex-1 flex flex-col">
               <MapView
@@ -72,6 +72,26 @@ export const PlaygroundLayout = ({
                 }
               />
             </div>
+
+            <LeftResizableWidget
+              className={classNames(
+                theme.border3,
+                "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[15rem] border-l z-10",
+                theme.bg4,
+              )}
+            >
+              {metadata.data && (
+                <MetadataPanel
+                  node={metadata.data.node}
+                  inbound={metadata.data.inbound}
+                  outbound={metadata.data.outbound}
+                  onConnectionNodeClick={(path) => {
+                    expand(path);
+                    setSelectedItems([path]);
+                  }}
+                />
+              )}
+            </LeftResizableWidget>
           </div>
         </div>
       </div>
@@ -136,33 +156,8 @@ export const PlaygroundLayout = ({
               </div>
             </div>
           </div>
-          <LeftResizableWidget
-            className={classNames(
-              theme.border3,
-              "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[15rem] border-r border-b z-10",
-              theme.bg4,
-            )}
-          >
-            {metadata.data && (
-              <MetadataPanel
-                node={metadata.data.node}
-                inbound={metadata.data.inbound}
-                outbound={metadata.data.outbound}
-                onConnectionNodeClick={(path) => {
-                  expand(path);
-                  setSelectedItems([path]);
-                }}
-              />
-            )}
-          </LeftResizableWidget>
         </TopResizableWidget>
       }
-
-      <StatusBar
-        wingVersion={wingVersion}
-        cloudAppState={cloudAppState}
-        isError={cloudAppState === "error"}
-      />
     </div>
   );
 };
