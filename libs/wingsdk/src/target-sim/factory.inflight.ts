@@ -6,7 +6,6 @@ import { Function } from "./function.inflight";
 import { Queue } from "./queue.inflight";
 import { Redis } from "./redis.inflight";
 import { Schedule } from "./schedule.inflight";
-import { Service } from "./service.inflight";
 import {
   API_TYPE,
   BUCKET_TYPE,
@@ -24,6 +23,7 @@ import {
   SERVICE_TYPE,
 } from "./schema-resources";
 import { Secret } from "./secret.inflight";
+import { Service } from "./service.inflight";
 import { Table } from "./table.inflight";
 import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";

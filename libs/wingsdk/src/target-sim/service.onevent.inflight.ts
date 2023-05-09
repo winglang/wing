@@ -1,7 +1,4 @@
-import type {
-  IFunctionHandlerClient,
-  IServiceOnEventClient
-} from "../cloud";
+import type { IFunctionHandlerClient, IServiceOnEventClient } from "../cloud";
 
 export class ServiceOnEventHandler implements IServiceOnEventClient {
   private readonly handler: IFunctionHandlerClient;

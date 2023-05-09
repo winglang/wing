@@ -65,8 +65,7 @@ export abstract class Service extends Resource {
 /**
  * Options for Service.onStart.
  */
-export interface ServiceOnStartProps extends FunctionProps {
-}
+export interface ServiceOnStartProps extends FunctionProps {}
 
 /**
  * Inflight interface for `Service`.

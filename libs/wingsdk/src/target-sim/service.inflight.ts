@@ -1,6 +1,10 @@
+import {
+  SERVICE_TYPE,
+  ServiceAttributes,
+  ServiceSchema,
+} from "./schema-resources";
 import { IFunctionClient, IServiceClient, TraceType } from "../cloud";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../testing";
-import { SERVICE_TYPE, ServiceAttributes, ServiceSchema } from "./schema-resources";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
@@ -33,8 +37,10 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     if (this.running) {
       return;
     }
-  
-    const fnClient = this.context.findInstance(this.onStartHandler) as ISimulatorResourceInstance & IFunctionClient;
+
+    const fnClient = this.context.findInstance(
+      this.onStartHandler
+    ) as ISimulatorResourceInstance & IFunctionClient;
     if (!fnClient) {
       throw new Error("No function client found!");
     }
@@ -58,7 +64,9 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       return;
     }
 
-    const fnClient = this.context.findInstance(this.onStopHandler!) as ISimulatorResourceInstance & IFunctionClient;
+    const fnClient = this.context.findInstance(
+      this.onStopHandler!
+    ) as ISimulatorResourceInstance & IFunctionClient;
 
     this.context.addTrace({
       type: TraceType.RESOURCE,

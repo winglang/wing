@@ -1,15 +1,15 @@
+import { join } from "path";
 import { Construct } from "constructs";
+import { Function } from "./function";
+import { ISimulatorResource } from "./resource";
+import { SERVICE_TYPE, ServiceSchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "../testing";
-import { SERVICE_TYPE, ServiceSchema } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import { simulatorHandleToken } from "./tokens";
-import { convertBetweenHandlers } from "../utils/convert";
-import { join } from "path";
-import { Function } from "./function";
 import { IInflightHost, Resource } from "../std";
+import { BaseResourceSchema } from "../testing";
+import { convertBetweenHandlers } from "../utils/convert";
 
 export class Service extends cloud.Service implements ISimulatorResource {
   private readonly autoStart: boolean;
@@ -22,7 +22,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
 
     // On Start Handler
     const onStartHash = props.onStart.node.addr.slice(-8);
-    
+
     const onStartFunctionHandler = convertBetweenHandlers(
       this.node.scope!,
       `${this.node.id}-ServiceOnStartHandler-${onStartHash}`,
@@ -37,12 +37,12 @@ export class Service extends cloud.Service implements ISimulatorResource {
       onStartFunctionHandler,
       {}
     );
-    
+
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_start"
-    })
+      relationship: "on_start",
+    });
 
     this.onStartHandlerToken = simulatorHandleToken(fn);
     this.node.addDependency(fn);
@@ -56,7 +56,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
         props.onStop,
         join(__dirname, "service.onevent.inflight.js"),
         "ServiceOnEventHandler"
-      )
+      );
 
       const stopFn = Function._newFunction(
         this.node.scope!,
@@ -64,13 +64,13 @@ export class Service extends cloud.Service implements ISimulatorResource {
         onStopFunctionHandler,
         {}
       );
-      
+
       Resource.addConnection({
         from: this,
         to: stopFn,
-        relationship: "on_stop"
-      })
-  
+        relationship: "on_stop",
+      });
+
       this.onStopHandlerToken = simulatorHandleToken(stopFn);
       this.node.addDependency(stopFn);
     }
@@ -82,16 +82,16 @@ export class Service extends cloud.Service implements ISimulatorResource {
       path: this.node.path,
       props: {
         onStartHandler: this.onStartHandlerToken,
-        autoStart: this.autoStart
+        autoStart: this.autoStart,
       },
-      attrs: {} as any
+      attrs: {} as any,
     };
     if (this.onStartHandlerToken) {
       schema.props.onStopHandler = this.onStopHandlerToken;
     }
     return schema;
   }
-  
+
   public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);

@@ -110,7 +110,7 @@ async handle(message) {
             "version": "10.1.245",
           },
           "display": {
-            "description": "A distributed message service",
+            "description": "A cloud service",
             "title": "Service",
           },
           "id": "my_service",
