@@ -298,6 +298,19 @@
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
+      "root_PublicBucket_PublicAccessBlock_A244D6BC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/PublicBucket/PublicAccessBlock",
+            "uniqueId": "root_PublicBucket_PublicAccessBlock_A244D6BC"
+          }
+        },
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "bucket": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false
+      },
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {

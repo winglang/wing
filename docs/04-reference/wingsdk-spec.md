@@ -857,9 +857,9 @@ struct ApiRequest {
   /** The request's path. */
   path: str;
   /** The request's query parameters. */
-  query: Map<str>?;
+  query: Map<str>;
   /** The path variables. */
-  vars: Map<str>?;
+  vars: Map<str>;
   /** The request's body. */
   body: Json?;
   /** The request's headers. */

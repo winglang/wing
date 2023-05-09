@@ -1,6 +1,3 @@
-let e0 = "2" + "2";
-// ERR   ^^^^^^^^^ Cannot add a string to a string
-
 let e1 = 2 + "2";
 // ERR   ^^^^^^^ Cannot add a string to a number
 

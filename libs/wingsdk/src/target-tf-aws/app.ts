@@ -10,6 +10,7 @@ import { Secret } from "./secret";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
+import { Website } from "./website";
 import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
 import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
 import { Eip } from "../.gen/providers/aws/eip";
@@ -32,6 +33,7 @@ import {
   TABLE_FQN,
   TEST_RUNNER_FQN,
   TOPIC_FQN,
+  WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
 import { REDIS_FQN } from "../redis";
@@ -103,6 +105,9 @@ export class App extends CdktfApp {
 
       case REDIS_FQN:
         return new Redis(scope, id);
+
+      case WEBSITE_FQN:
+        return new Website(scope, id, args[0]);
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);
