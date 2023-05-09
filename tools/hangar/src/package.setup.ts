@@ -7,7 +7,7 @@ import {
   targetWingSpec,
   tmpDir,
   wingBin,
-  wingBootstrapper,
+  wingSetupScript,
 } from "./paths";
 
 export default async function () {
@@ -25,10 +25,11 @@ export default async function () {
   });
 
   await execa(
-    wingBootstrapper,
+    wingSetupScript,
     ["--cli", targetWingSpec, "--sdk", targetWingSDKSpec, "--output", wingBin],
     {
       cwd: tmpDir,
+      stdio: "inherit",
     }
   );
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Creates a temporary installation of the wing toolchain (wing cli and sdk)
+ * Bootstraps an installation of the wing toolchain (wing cli and sdk)
  *
  * --help to see options
  */
@@ -18,7 +18,7 @@ let targetWingSDKSpec = join(currentDir, "../libs/wingsdk");
 let targetWingSpec = join(currentDir, "../apps/wing");
 
 let {
-  values: { alias, version, sdk, cli, help, output },
+  values: { alias, version, sdk, cli, help, output, global },
 } = parseArgs({
   options: {
     alias: {
@@ -44,7 +44,12 @@ let {
     output: {
       type: "string",
       short: "o",
-    }
+    },
+    global: {
+      type: "boolean",
+      short: "g",
+      default: false,
+    },
   },
 });
 
@@ -58,6 +63,7 @@ Options:
   -c, --cli <path>        Local path to wing cli to install. May be tarball or directory. Must be used with --sdk
   -s, --sdk <path>        Local path to wing sdk to install. May be tarball or directory. Must be used with --sdk
   -o, --output <path>     Path to symlink to the Wing CLI binary. (default: "scripts/_wing<alias>")
+  -g, --global            Install the wing cli globally (default: false)
 `);
   process.exit(0);
 }
@@ -76,10 +82,10 @@ if (version !== undefined) {
 }
 
 if (cli !== undefined) {
-  targetWingSpec = `file:${cli}`;
+  targetWingSpec = cli;
 }
 if (sdk !== undefined) {
-  targetWingSDKSpec = `file:${sdk}`;
+  targetWingSDKSpec = sdk;
 }
 
 alias = alias ?? "dev";
@@ -101,14 +107,30 @@ execSync(`npm init -y`, {
   cwd: localInstallDir,
   stdio: "ignore",
 });
-const installOutput = execSync(
-  `npm install --no-audit --foreground-scripts --no-progress --no-fund --no-package-lock --install-links=false ${targetWingSpec} ${targetWingSDKSpec}`,
-  {
-    cwd: localInstallDir,
-    stdio: "pipe",
-    encoding: "utf-8",
-  }
-);
+const installArgs = [
+  "install",
+  "--no-audit",
+  "--no-progress",
+  "--no-fund",
+  "--no-package-lock",
+  "--install-links=false",
+];
+
+if (global) {
+  installArgs.push("--global");
+}
+
+if (version !== undefined) {
+  installArgs.push(targetWingSpec);
+} else {
+  installArgs.push(targetWingSpec, targetWingSDKSpec);
+}
+
+const installOutput = execSync(`npm ${installArgs.join(" ")}`, {
+  cwd: localInstallDir,
+  stdio: "pipe",
+  encoding: "utf-8",
+});
 console.log(installOutput);
 
 const installHooks = installOutput.match(/>.*/g)?.map((s) => s) ?? [];
@@ -125,8 +147,12 @@ assert.doesNotMatch(
 
 console.log("===");
 
-symlinkSync(wingCliBin, wingCliLink);
+if (global) {
+  console.log(`"wing" installed globally`);
+} else {
+  symlinkSync(wingCliBin, wingCliLink);
 
-console.log(wingCliLink);
-console.log();
-console.log(`export PATH="${currentDir}:$PATH"`);
+  console.log(wingCliLink);
+  console.log();
+  console.log(`export PATH="${currentDir}:$PATH"`);
+}

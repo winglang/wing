@@ -20,10 +20,12 @@ jobs:
         node:
           - 18
           - 19
-        install_command:
-          - npm install -g winglang
     runs-on: ${{ matrix.runner }}
     steps:
+      - name: Minimal Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -34,7 +36,7 @@ jobs:
           echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
       - name: Install Wing
         run: |
-          ${{ matrix.install_command }}@${{ steps.get-version.outputs.version }}
+          ./scripts/setup_wing.mjs -g --version ${{ steps.get-version.outputs.version }}
       - name: Download examples/tests/valid/test_bucket.w
         run: |
           curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/test_bucket.w > test_bucket.w
