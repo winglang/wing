@@ -101,10 +101,22 @@
           }
         },
         "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
-        "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
-        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.arn}/*\"]}]}"
+      }
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudWebsite_PublicAccessBlock_89CD01D0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/PublicAccessBlock",
+            "uniqueId": "root_cloudWebsite_PublicAccessBlock_89CD01D0"
+          }
+        },
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {

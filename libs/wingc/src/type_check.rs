@@ -2124,7 +2124,9 @@ impl<'a> TypeChecker<'a> {
 				inflight_initializer,
 			}) => {
 				// Resources cannot be defined inflight
-				assert!(!*is_resource || env.phase == Phase::Preflight);
+				if *is_resource && env.phase == Phase::Inflight {
+					self.stmt_error(stmt, "Cannot define a preflight class in inflight scope".to_string());
+				}
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {

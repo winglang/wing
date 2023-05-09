@@ -784,6 +784,18 @@ error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
 "
 `;
 
+exports[`preflight_class_inflight.w > stderr 1`] = `
+"error: Cannot define a preflight class in inflight scope
+  --> ../../../examples/tests/invalid/preflight_class_inflight.w:4:3
+  |  
+4 | /   class R {
+5 | |     init() {}
+6 | |   }
+  | \\\\---^ Cannot define a preflight class in inflight scope
+
+"
+`;
+
 exports[`preflight_from_inflight.w > stderr 1`] = `
 "error: Cannot call into preflight phase while inflight
    --> ../../../examples/tests/invalid/preflight_from_inflight.w:15:5
