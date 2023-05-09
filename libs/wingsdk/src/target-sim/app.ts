@@ -22,6 +22,7 @@ import {
   QUEUE_FQN,
   SCHEDULE_FQN,
   SECRET_FQN,
+  SERVICE_FQN,
   TABLE_FQN,
   TEST_RUNNER_FQN,
   TOPIC_FQN,
@@ -33,6 +34,7 @@ import { preSynthesizeAllConstructs } from "../core/app";
 import { REDIS_FQN } from "../redis";
 import { WingSimulatorSchema } from "../testing/simulator";
 import { SIMULATOR_FILE_PATH } from "../util";
+import { Service } from "./service";
 
 /**
  * A construct that knows how to synthesize simulator resources into a
@@ -99,6 +101,9 @@ export class App extends core.App {
 
       case SCHEDULE_FQN:
         return new Schedule(scope, id, args[0]);
+      
+      case SERVICE_FQN:
+        return new Service(scope, id, args[0]);
     }
 
     return undefined;

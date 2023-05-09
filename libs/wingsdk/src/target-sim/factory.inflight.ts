@@ -6,6 +6,7 @@ import { Function } from "./function.inflight";
 import { Queue } from "./queue.inflight";
 import { Redis } from "./redis.inflight";
 import { Schedule } from "./schedule.inflight";
+import { Service } from "./service.inflight";
 import {
   API_TYPE,
   BUCKET_TYPE,
@@ -20,6 +21,7 @@ import {
   SECRET_TYPE,
   EVENT_MAPPING_TYPE,
   SCHEDULE_TYPE,
+  SERVICE_TYPE,
 } from "./schema-resources";
 import { Secret } from "./secret.inflight";
 import { Table } from "./table.inflight";
@@ -72,6 +74,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new EventMapping(props, context);
       case SCHEDULE_TYPE:
         return new Schedule(props, context);
+      case SERVICE_TYPE:
+        return new Service(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }
