@@ -12,7 +12,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.8",
     "@headlessui/react": "^1.7.14",
-    "@heroicons/react": "^2.0.17",
+    "@heroicons/react": "^2.0.18",
     "@popperjs/core": "^2.11.7",
     "@storybook/react": "^7.0.10",
     "@testing-library/react": "^14.0.0",

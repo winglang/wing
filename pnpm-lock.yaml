@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.15.32
-        version: 0.15.32(constructs@10.2.17)
+        specifier: ^0.15.33
+        version: 0.15.33(constructs@10.2.17)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -176,8 +176,8 @@ importers:
         specifier: ^1.7.14
         version: 1.7.14(react-dom@18.2.0)(react@18.2.0)
       '@heroicons/react':
-        specifier: ^2.0.17
-        version: 2.0.17(react@18.2.0)
+        specifier: ^2.0.18
+        version: 2.0.18(react@18.2.0)
       '@popperjs/core':
         specifier: ^2.11.7
         version: 2.11.7
@@ -248,8 +248,8 @@ importers:
   console/server:
     devDependencies:
       '@trpc/server':
-        specifier: ^10.25.0
-        version: 10.25.0
+        specifier: ^10.25.1
+        version: 10.25.1
       '@types/cors':
         specifier: ^2.8.13
         version: 2.8.13
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.15.32
-        version: 0.15.32(constructs@10.2.17)
+        specifier: ^0.15.33
+        version: 0.15.33(constructs@10.2.17)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -335,8 +335,8 @@ importers:
         specifier: ^1.7.14
         version: 1.7.14(react-dom@18.2.0)(react@18.2.0)
       '@heroicons/react':
-        specifier: ^2.0.17
-        version: 2.0.17(react@18.2.0)
+        specifier: ^2.0.18
+        version: 2.0.18(react@18.2.0)
       '@popperjs/core':
         specifier: ^2.11.7
         version: 2.11.7
@@ -365,14 +365,14 @@ importers:
         specifier: ^4.29.5
         version: 4.29.5(react-dom@18.2.0)(react@18.2.0)
       '@trpc/client':
-        specifier: ^10.25.0
-        version: 10.25.0(@trpc/server@10.25.0)
+        specifier: ^10.25.1
+        version: 10.25.1(@trpc/server@10.25.1)
       '@trpc/react-query':
-        specifier: ^10.25.0
-        version: 10.25.0(@tanstack/react-query@4.29.5)(@trpc/client@10.25.0)(@trpc/server@10.25.0)(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^10.25.1
+        version: 10.25.1(@tanstack/react-query@4.29.5)(@trpc/client@10.25.1)(@trpc/server@10.25.1)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: ^10.25.0
-        version: 10.25.0
+        specifier: ^10.25.1
+        version: 10.25.1
       '@types/cors':
         specifier: ^2.8.13
         version: 2.8.13
@@ -3181,8 +3181,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: true
 
-  /@heroicons/react@2.0.17(react@18.2.0):
-    resolution: {integrity: sha512-90GMZktkA53YbNzHp6asVEDevUQCMtxWH+2UK2S8OpnLEu7qckTJPhNxNQG52xIR1WFTwFqtH6bt7a60ZNcLLA==}
+  /@heroicons/react@2.0.18(react@18.2.0):
+    resolution: {integrity: sha512-7TyMjRrZZMBPa+/5Y8lN0iyvUU/01PeMGX2+RE7cQWpEUIcb4QotzUObFkJDejj/HUH4qjP/eQ0gzzKs2f+6Yw==}
     peerDependencies:
       react: '>= 16'
     dependencies:
@@ -3883,7 +3883,7 @@ packages:
       magic-string: 0.27.0
       remark-external-links: 8.0.0
       remark-slug: 6.1.0
-      rollup: 3.21.5
+      rollup: 3.21.6
       typescript: 5.0.4
       vite: 4.3.5(@types/node@18.16.6)(sass@1.62.1)
     transitivePeerDependencies:
@@ -4574,32 +4574,32 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
-  /@trpc/client@10.25.0(@trpc/server@10.25.0):
-    resolution: {integrity: sha512-XWuzbbACX2fzB9UHVkPJtaaAeFiyPjQSC3YgnRtDwjQx03/nt7OsxTBxvG0kblCN0Z2zZrnLF65aDrMJEP43LQ==}
+  /@trpc/client@10.25.1(@trpc/server@10.25.1):
+    resolution: {integrity: sha512-6ymAOKrbUgi6H/MxDZiDXXiADCF0B2fsGewBe7yWSQGNl/MK1GTuIzltJ6WAUqjmMmzrCxE621uzUihdFZ4tow==}
     peerDependencies:
-      '@trpc/server': 10.25.0
+      '@trpc/server': 10.25.1
     dependencies:
-      '@trpc/server': 10.25.0
+      '@trpc/server': 10.25.1
     dev: true
 
-  /@trpc/react-query@10.25.0(@tanstack/react-query@4.29.5)(@trpc/client@10.25.0)(@trpc/server@10.25.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-6+gHPjEo4ocTwgij5fLqEwTP6ud1ZW48Kt/STM8Kgz8/Vj7QhBSbGVEmUL++/8MD3Ro1SEBV63DTc1t7vMEZ/Q==}
+  /@trpc/react-query@10.25.1(@tanstack/react-query@4.29.5)(@trpc/client@10.25.1)(@trpc/server@10.25.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2VFxD8qoULKzlWORU0l2cR0AmOHWNZC8AOpX7v1lZE/IllFzBH5KQGK6pGCQuSqLvxwJEBjSpw4bkFNMrMeg9g==}
     peerDependencies:
       '@tanstack/react-query': ^4.18.0
-      '@trpc/client': 10.25.0
-      '@trpc/server': 10.25.0
+      '@trpc/client': 10.25.1
+      '@trpc/server': 10.25.1
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
       '@tanstack/react-query': 4.29.5(react-dom@18.2.0)(react@18.2.0)
-      '@trpc/client': 10.25.0(@trpc/server@10.25.0)
-      '@trpc/server': 10.25.0
+      '@trpc/client': 10.25.1(@trpc/server@10.25.1)
+      '@trpc/server': 10.25.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: true
 
-  /@trpc/server@10.25.0:
-    resolution: {integrity: sha512-OKcGw2iZMUV8zCHoS+uLYGVq2tbZhhK0TPbb0pGhT+KTN8oWYPG+oYpTe9He9J1A2y8qcRAoy5u1zdiUUOiFEg==}
+  /@trpc/server@10.25.1:
+    resolution: {integrity: sha512-zi08QKVvWPK0EEGpEy7i5PlOK9CBlQb3LqiIdmaIpe27DzFNz6+yZ4qXwsLXTwDcDphELl/BNw+RzzQ2+Ou2vw==}
     dev: true
 
   /@types/analytics-node@3.1.11:
@@ -5327,8 +5327,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.15.32(constructs@10.2.17):
-    resolution: {integrity: sha512-9wHsag1hi3EqoAcgdYGYp65qNUg8RZKH7ONp528saYu8t/Xq8V9fQwPVseOuuIbYRZFivqO6+gTwFQJnnB0jGQ==}
+  /@winglang/sdk@0.15.33(constructs@10.2.17):
+    resolution: {integrity: sha512-9iGqCr22OfFI3yIBVqSNZvQcIIKVDzWvcOE1thcMudB7v8UaOB1+22SEcf+kLVs+mH+BlKgbblXA+QS+ArsRIQ==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
@@ -11299,8 +11299,8 @@ packages:
     dev: true
     optional: true
 
-  /rollup@3.21.5:
-    resolution: {integrity: sha512-a4NTKS4u9PusbUJcfF4IMxuqjFzjm6ifj76P54a7cKnvVzJaG12BLVR+hgU2YDGHzyMMQNxLAZWuALsn8q2oQg==}
+  /rollup@3.21.6:
+    resolution: {integrity: sha512-SXIICxvxQxR3D4dp/3LDHZIJPC8a4anKMHd4E3Jiz2/JnY+2bEjqrOokAauc5ShGVNFHlEFjBXAXlaxkJqIqSg==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -12259,7 +12259,7 @@ packages:
       joycon: 3.1.1
       postcss-load-config: 3.1.4
       resolve-from: 5.0.0
-      rollup: 3.21.5
+      rollup: 3.21.6
       source-map: 0.8.0-beta.0
       sucrase: 3.32.0
       tree-kill: 1.2.2
@@ -12699,7 +12699,7 @@ packages:
       '@types/node': 18.16.6
       esbuild: 0.17.18
       postcss: 8.4.23
-      rollup: 3.21.5
+      rollup: 3.21.6
       sass: 1.62.1
     optionalDependencies:
       fsevents: 2.3.2
