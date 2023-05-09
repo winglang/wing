@@ -83,7 +83,7 @@ export const ContainerNode = ({
       <div
         className={classNames(
           "flex relative",
-          "rounded",
+          "rounded overflow-hidden",
           "border",
           getResourceBorderColor(resourceType),
           "group-focus:border-sky-300 dark:group-focus:border-sky-500",
