@@ -39,11 +39,14 @@ export const PlaygroundLayout = ({
     onResourceClick,
   } = useLayout({
     cloudAppState,
-    defaultLogLevels: ["verbose", "info", "warn", "error"],
+    defaultLogLevels: ["info", "warn", "error"],
   });
 
   return (
-    <div className="h-full flex flex-col bg-slate-50 select-none">
+    <div className="h-full flex flex-col bg-slate-50 select-none relative">
+      {cloudAppState === "error" && (
+        <div className="bg-opacity-40 bg-black absolute inset-0 z-10" />
+      )}
       <div className="flex-1 flex relative">
         {loading && (
           <div
@@ -57,12 +60,6 @@ export const PlaygroundLayout = ({
             </div>
           </div>
         )}
-
-        <BlueScreenOfDeath
-          hidden={cloudAppState !== "error"}
-          title={"An error has occurred:"}
-          error={errorMessage.data ?? ""}
-        />
 
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex">
@@ -78,13 +75,20 @@ export const PlaygroundLayout = ({
           </div>
         </div>
       </div>
-      {cloudAppState !== "error" && (
+      {
         <TopResizableWidget
           className={classNames(
             theme.border3,
             "flex relative border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[21rem]",
           )}
         >
+          <BlueScreenOfDeath
+            hidden={cloudAppState !== "error"}
+            title={"An error has occurred:"}
+            error={errorMessage.data ?? ""}
+            displayLinks={false}
+            displayWingTitle={false}
+          />
           <RightResizableWidget
             className={classNames(
               theme.border3,
@@ -152,7 +156,7 @@ export const PlaygroundLayout = ({
             )}
           </LeftResizableWidget>
         </TopResizableWidget>
-      )}
+      }
 
       <StatusBar
         wingVersion={wingVersion}

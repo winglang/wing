@@ -7,15 +7,23 @@ export const BlueScreenOfDeath = ({
   title,
   error = "",
   hidden = false,
+  displayLinks = true,
+  displayWingTitle = true,
 }: {
   title: string;
   error: string;
   hidden?: boolean;
+  displayLinks?: boolean;
+  displayWingTitle?: boolean;
 }) => {
   const errorRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (errorRef.current === null) {
+      return;
+    }
+    if (!displayLinks) {
+      errorRef.current.innerHTML = error;
       return;
     }
     errorRef.current.innerHTML = formatAbsolutePaths(
@@ -33,9 +41,11 @@ export const BlueScreenOfDeath = ({
       )}
     >
       <div className="h-full w-full text-md font-share-tech text-white max-w-7xl break-words space-y-4">
-        <div className="w-full flex justify-center">
-          <span className="bg-slate-400 px-4 text-[#004295]">Wing</span>
-        </div>
+        {displayWingTitle && (
+          <div className="w-full flex justify-center">
+            <span className="bg-slate-400 px-4 text-[#004295]">Wing</span>
+          </div>
+        )}
         <div className="space-y-4">
           <div>{title}</div>
           <div className="py-4">
@@ -44,10 +54,12 @@ export const BlueScreenOfDeath = ({
               ref={errorRef}
             />
           </div>
-          <div className="w-full text-center py-4">
-            Click on any error reference to navigate to your IDE{" "}
-            <span className="animate-ping">_</span>
-          </div>
+          {displayLinks && (
+            <div className="w-full text-center py-4">
+              Click on any error reference to navigate to your IDE{" "}
+              <span className="animate-ping">_</span>
+            </div>
+          )}
         </div>
       </div>
     </div>
