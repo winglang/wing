@@ -45,7 +45,7 @@ module.exports = function({  }) {
 
 ## clients/MyResource.inflight.js
 ```js
-module.exports = function({ global_another, global_array_of_str, global_bool, global_bucket, global_map_of_num, global_num, global_set_of_str, global_str, Another }) {
+module.exports = function({ global_bucket, global_str, global_bool, global_num, global_array_of_str, global_map_of_num, global_set_of_str, global_another }) {
   class  MyResource {
     constructor({ local_counter, local_topic }) {
       this.local_counter = local_counter;
@@ -64,7 +64,6 @@ module.exports = function({ global_another, global_array_of_str, global_bool, gl
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(global_another.my_field === "hello!")'`)})((global_another.my_field === "hello!"))};
         (await global_another.first.my_resource.put("key","value"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await global_another.my_method()) > 0)'`)})(((await global_another.my_method()) > 0))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.my_static_method()) > 0)'`)})(((await Another.my_static_method()) > 0))};
       }
     }
   }
@@ -75,7 +74,7 @@ module.exports = function({ global_another, global_array_of_str, global_bool, gl
 
 ## clients/R.inflight.js
 ```js
-module.exports = function({ $parent_this, global_counter }) {
+module.exports = function({ global_counter, $parent_this }) {
   class  R {
     constructor({  }) {
     }
@@ -195,7 +194,7 @@ module.exports = function({ $parent_this, global_counter }) {
             "uniqueId": "root_test_IamRolePolicy_474A6820"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.arn}\",\"${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
       }
     },
@@ -521,7 +520,7 @@ class $Root extends $stdlib.std.Resource {
           this._registerBindObject(this.my_field, host, []);
         }
         if (ops.includes("my_method")) {
-          this._registerBindObject(global_counter, host, ["peek"]);
+          this._registerBindObject(global_counter, host, ["inc", "peek"]);
         }
         if (ops.includes("my_static_method")) {
           this._registerBindObject(global_counter, host, ["peek"]);
@@ -543,12 +542,12 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
-            const $parent_this_client = context._lift($parent_this);
             const global_counter_client = context._lift(global_counter);
+            const $parent_this_client = context._lift($parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
-                $parent_this: ${$parent_this_client},
                 global_counter: ${global_counter_client},
+                $parent_this: ${$parent_this_client},
               })
             `);
           }
@@ -577,26 +576,24 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
-        const global_another_client = context._lift(global_another);
-        const global_array_of_str_client = context._lift(global_array_of_str);
-        const global_bool_client = context._lift(global_bool);
         const global_bucket_client = context._lift(global_bucket);
-        const global_map_of_num_client = context._lift(global_map_of_num);
-        const global_num_client = context._lift(global_num);
-        const global_set_of_str_client = context._lift(global_set_of_str);
         const global_str_client = context._lift(global_str);
-        const AnotherClient = Another._toInflightType(context);
+        const global_bool_client = context._lift(global_bool);
+        const global_num_client = context._lift(global_num);
+        const global_array_of_str_client = context._lift(global_array_of_str);
+        const global_map_of_num_client = context._lift(global_map_of_num);
+        const global_set_of_str_client = context._lift(global_set_of_str);
+        const global_another_client = context._lift(global_another);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            global_another: ${global_another_client},
-            global_array_of_str: ${global_array_of_str_client},
-            global_bool: ${global_bool_client},
             global_bucket: ${global_bucket_client},
-            global_map_of_num: ${global_map_of_num_client},
-            global_num: ${global_num_client},
-            global_set_of_str: ${global_set_of_str_client},
             global_str: ${global_str_client},
-            Another: ${AnotherClient.text},
+            global_bool: ${global_bool_client},
+            global_num: ${global_num_client},
+            global_array_of_str: ${global_array_of_str_client},
+            global_map_of_num: ${global_map_of_num_client},
+            global_set_of_str: ${global_set_of_str_client},
+            global_another: ${global_another_client},
           })
         `);
       }
@@ -622,6 +619,8 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("my_put")) {
           this._registerBindObject(global_another, host, ["my_method"]);
+          this._registerBindObject(global_another.first.my_resource, host, ["put"]);
+          this._registerBindObject(global_another.my_field, host, []);
           this._registerBindObject(global_array_of_str, host, ["at"]);
           this._registerBindObject(global_bool, host, []);
           this._registerBindObject(global_bucket, host, ["put"]);

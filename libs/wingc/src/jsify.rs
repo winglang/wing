@@ -2,7 +2,7 @@ mod codemaker;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
-use indexmap::{indexmap, IndexMap, IndexSet};
+use indexmap::{indexmap, indexset, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use std::{
@@ -985,8 +985,14 @@ impl<'a> JSifier<'a> {
 		// Lookup the resource type
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
+		// Find all free variables in the resource, and return a list of their symbols
+		let free_vars = self.find_free_vars(class);
+
 		// Get all references between inflight methods and preflight values
-		let mut refs = self.find_inflight_references(class);
+		let mut refs = self.find_inflight_references(class, &free_vars);
+
+		// After calling find_inflight_references, we don't really need the exact symbols anymore, only their names
+		let free_vars: IndexSet<String> = free_vars.iter().map(|s| s.name.clone()).into_iter().collect();
 
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_capturable_field_names(resource_type);
@@ -1009,7 +1015,6 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect_vec();
-		let free_vars = self.get_free_vars_in_resource(&inflight_methods);
 		let referenced_preflight_types = self.get_preflight_types_referenced_in_resource(class, &inflight_methods);
 		self.jsify_resource_client(
 			env,
@@ -1209,17 +1214,6 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	/// Get all free vars used by methods of the given resource
-	fn get_free_vars_in_resource(&self, inflight_methods: &[&(Symbol, FunctionDefinition)]) -> IndexSet<String> {
-		let mut free_vars = IndexSet::new();
-		for (_, method_def) in inflight_methods {
-			if let Some(captures) = method_def.captures.borrow().as_ref() {
-				free_vars.extend(captures.iter().map(|c| c.symbol.name.clone()));
-			}
-		}
-		free_vars
-	}
-
 	/// Get preflight types that are referenced by the given resource
 	fn get_preflight_types_referenced_in_resource(
 		&self,
@@ -1370,7 +1364,7 @@ impl<'a> JSifier<'a> {
 	fn find_inflight_references(
 		&mut self,
 		resource_class: &AstClass,
-		//free_vars: &[Symbol],
+		free_vars: &IndexSet<Symbol>,
 	) -> BTreeMap<String, BTreeMap<String, BTreeSet<String>>> {
 		let inflight_methods = resource_class
 			.methods
@@ -1381,23 +1375,7 @@ impl<'a> JSifier<'a> {
 
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
-			// println!(
-			// 	"Finding inflight references for method {}.{}\n
-			// 	free vars are: {}\n
-			// 	captures are: {}",
-			// 	resource_class.name.name,
-			// 	method_name.name,
-			// 	free_vars.iter().map(|s| &s.name).join(","),
-			// 	function_def
-			// 		.captures
-			// 		.borrow()
-			// 		.as_ref()
-			// 		.unwrap()
-			// 		.iter()
-			// 		.map(|c| &c.symbol.name)
-			// 		.join(",")
-			// );
-			let visitor = FieldReferenceVisitor::new(&function_def);
+			let visitor = FieldReferenceVisitor::new(&function_def, free_vars);
 			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
@@ -1408,7 +1386,7 @@ impl<'a> JSifier<'a> {
 
 		// Also add field rerferences from the inflight initializer
 		if let Some(inflight_init) = &resource_class.inflight_initializer {
-			let visitor = FieldReferenceVisitor::new(inflight_init);
+			let visitor = FieldReferenceVisitor::new(inflight_init, free_vars);
 			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
@@ -1434,6 +1412,12 @@ impl<'a> JSifier<'a> {
 			.map(|(name, ..)| name)
 			.collect_vec()
 	}
+
+	fn find_free_vars(&self, class: &AstClass) -> IndexSet<Symbol> {
+		let mut scanner = FreeVariableScanner::new();
+		scanner.visit_class(class);
+		scanner.free_vars
+	}
 }
 
 fn is_mutable_collection(expression: &Expr) -> bool {
@@ -1453,6 +1437,11 @@ struct FieldReferenceVisitor<'a> {
 	/// The resource type's symbol env (used to resolve field types)
 	function_def: &'a FunctionDefinition,
 
+	/// A list of free variables preloaded into the visitor. Whenever the visitor encounters a
+	/// reference to a free variable, it will be added to list of references since the
+	/// resource needs to bind to it.
+	free_vars: &'a IndexSet<Symbol>,
+
 	/// The current symbol env, option just so we can initialize it to None
 	env: Option<SymbolEnvRef>,
 
@@ -1463,12 +1452,13 @@ struct FieldReferenceVisitor<'a> {
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(function_def: &'a FunctionDefinition) -> Self {
+	pub fn new(function_def: &'a FunctionDefinition, free_vars: &'a IndexSet<Symbol>) -> Self {
 		Self {
 			references: BTreeMap::new(),
 			function_def,
 			diagnostics: Diagnostics::new(),
 			env: None,
+			free_vars,
 			statement_index: 0,
 		}
 	}
@@ -1503,14 +1493,10 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 		};
 
 		let is_free_var = match parts.first() {
-			Some(first) => self
-				.function_def
-				.captures
-				.borrow()
-				.as_ref()
-				.unwrap()
-				.iter()
-				.any(|c| c.symbol.same(&first.symbol)),
+			// TODO: chnge this "==" to make sure first.symbol is the same variable definition as something in free_vars
+			// todo this i'll need to have a "unique id" on the variable definition stored in the environment and then
+			// do a lookup for first.symbol and compare the id's
+			Some(first) => self.free_vars.iter().any(|v| v.name == first.symbol.name),
 			None => false,
 		};
 
@@ -1808,5 +1794,106 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 				panic!("Unknown symbol: {type_name}, should be covered by type checking");
 			}
 		}
+	}
+}
+
+/// Scans AST nodes for free variables.
+///
+/// A free variable is a variable that is used in the body of a function but not
+/// defined in the function's scope. Here is an example where "x" is a free variable:
+/// ```wing
+/// let x = 5;
+/// let foo = () => {
+///  return x + 3;
+/// }
+/// ```
+///
+/// For more info see https://en.wikipedia.org/wiki/Free_variables_and_bound_variables
+struct FreeVariableScanner {
+	/// A list of all free variables the scanner has found so far.
+	/// This collects the exact symbols (not just the names of variables) since
+	/// this scanner may be used to scan an entire class, and a class may have
+	/// multiple methods. It's possible that in method A, a variable "x" is a
+	/// free variable, but in method B, "x" is a bound variable:
+	/// ```wing
+	/// let x = 5;
+	/// class Foo {
+	///   methodA() {
+	///     return x + 3;
+	///   }
+	///   methodB(x) {
+	///     return x + 3;
+	///   }
+	/// }
+	/// ```
+	free_vars: IndexSet<Symbol>,
+
+	/// The current scopes env during traversal
+	env: Option<SymbolEnvRef>,
+	/// The current statement index
+	statement_index: usize,
+	/// The last symbol we visited
+	last_symb: Symbol,
+}
+
+impl FreeVariableScanner {
+	pub fn new() -> Self {
+		Self {
+			free_vars: indexset![],
+			env: None,
+			statement_index: 0,
+			last_symb: Symbol::global("badger"),
+		}
+	}
+}
+
+impl Visit<'_> for FreeVariableScanner {
+	// invariant: adds zero bound variables
+	fn visit_reference(&mut self, node: &Reference) {
+		if let Reference::Identifier(ref symb) = node {
+			// Skip "this" symbol since it's never a free var even though it refers to a preflight type
+			if symb.name != "this" {
+				// Lookup the reference int the current environment
+				let lookup_result = self
+					.env
+					.as_ref()
+					.unwrap()
+					.lookup(symb, Some(self.statement_index))
+					.expect("covered by type checking");
+
+				// If this reference is a capturable, non-reassignable, preflight
+				// variable then it's a capture
+				if let SymbolKind::Variable(v) = lookup_result {
+					if v.type_.is_capturable() && !v.reassignable && v.phase == Phase::Preflight {
+						self.free_vars.insert(symb.clone());
+					}
+				}
+			}
+		};
+
+		return visit::visit_reference(self, node);
+	}
+
+	fn visit_scope(&mut self, scope: &Scope) {
+		let curr_env = scope.env.borrow().as_ref().unwrap().get_ref();
+		// Don't look for free vars in non-inflight scopes
+		if curr_env.phase != Phase::Inflight {
+			return;
+		}
+		let old_env = self.env;
+		self.env = Some(curr_env);
+		visit::visit_scope(self, scope);
+		self.env = old_env;
+	}
+
+	fn visit_stmt(&mut self, stmt: &Stmt) {
+		let old_statement_index = self.statement_index;
+		self.statement_index = stmt.idx;
+		visit::visit_stmt(self, stmt);
+		self.statement_index = old_statement_index;
+	}
+
+	fn visit_symbol(&mut self, node: &Symbol) {
+		self.last_symb = node.clone();
 	}
 }
