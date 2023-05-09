@@ -353,9 +353,8 @@ new $App().synth();
 ```js
 async handle(req) {
   const {  } = this;
-  const vars = (req.vars ?? Object.freeze({"name":""}));
   return {
-  "body": Object.freeze({"user":(vars)["name"]}),
+  "body": Object.freeze({"user":(req.vars)["name"]}),
   "status": 200,}
   ;
 }

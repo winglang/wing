@@ -22,7 +22,11 @@
 Wing enables developers to build distributed systems that leverage cloud services as first-class citizens by combining infrastructure ***and*** application code in a safe and unified programming model (aka "*cloud-oriented*").
 Wing programs can be executed locally (*yes, no internet required*) using a fully-functional simulator, or deployed to any cloud provider (*yes, Wing programs are portable across providers*).
 
-Our mission is to bring back your creative flow and close the gap between imagination and creation. Wing elevates your cloud development experience to new heights (the puns are just inevitable so bear with us)! 🚀
+Our mission is to bring back your creative flow and close the gap between imagination and creation. 
+
+Developing for the cloud today requires mastering various layers of cloud stack, IAM roles, networking, and numerous tools, along with finding creative ways to test and debug code. In addition, long deployment times hinder iteration cycles and take developers out of their creative flow. 
+
+We fulfill our mission by reducing cognitive load and increasing iteration speeds. How? by enabling you to work at a higher level of abstraction, letting you focus on business logic instead of cloud mechanics, and write much less code. We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
 <a href="https://youtu.be/vHy1TM2JzUQ" target="_blank" align="left">
     <img src="./logo/demo.gif" alt="Wing Demo" height="300px">

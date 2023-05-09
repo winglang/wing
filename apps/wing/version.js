@@ -1,13 +1,18 @@
 const fs = require("fs");
-const assert = require("assert");
 const pJson = require("./package.json");
 
-// assign the same version as CLI to the wingsdk
-const newVersion = process.env.PROJEN_BUMP_VERSION ?? "0.0.0";
-assert(
-  typeof pJson.dependencies["@winglang/sdk"] === "string",
-  "wingsdk dependency key not found"
-);
+const defaultVersion = "0.0.0";
+const newVersion = process.env.PROJEN_BUMP_VERSION ?? defaultVersion;
+
 pJson.version = newVersion;
-pJson.dependencies["@winglang/sdk"] = newVersion;
+
+// for dev builds, assume the user will provide an installation of the sdk
+if (newVersion === defaultVersion) {
+  // remove the dependency on the sdk
+  // @ts-ignore
+  delete pJson.dependencies["@winglang/sdk"];
+} else {
+  pJson.dependencies["@winglang/sdk"] = newVersion;
+}
+
 fs.writeFileSync("./package.json", JSON.stringify(pJson, undefined, 2));
