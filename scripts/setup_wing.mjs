@@ -12,7 +12,12 @@ import { mkdirSync, rmSync, symlinkSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 
-const currentDir = dirname(new URL(import.meta.url).pathname);
+let currentDir = dirname(new URL(import.meta.url).pathname);
+if(process.platform === "win32") {
+  // for some reason, dirname returns a path with a leading slash on windows
+  currentDir = currentDir.slice(1);
+}
+
 
 let targetWingSDKSpec = join(currentDir, "../libs/wingsdk");
 let targetWingSpec = join(currentDir, "../apps/wing");
@@ -98,7 +103,6 @@ const wingCliLink = output ?? join(currentDir, newWingName);
 
 rmSync(localInstallDir, { recursive: true, force: true });
 rmSync(wingCliLink, { force: true });
-mkdirSync(installDir, { recursive: true });
 mkdirSync(localInstallDir, { recursive: true });
 console.log(`CLI: "${targetWingSpec}"`);
 console.log(`SDK: "${targetWingSDKSpec}"`);
