@@ -173,14 +173,6 @@ jobs:
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
           - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
-        exclude:
-          - runner: macos
-            full_run: false
-          - runner: windows
-            full_run: false
-          - runner: ubuntu
-            node: "19.7.0"
-            full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
