@@ -7,7 +7,7 @@ keywords: [operations]
 ## Coverage
 
 "Wing" encompasses several production assets; Some are directly user-facing, while others only affect contributors to Wing's ecosystem.
-Both are important to the health of the Wing however users should be prioritized over contributors when everything else is equal.
+Both are important to the health of Wing however users should be prioritized over contributors when everything else is equal.
 
 User-facing projects and their supporting contributor pieces:
 
@@ -64,6 +64,7 @@ A [runbook](./10-runbooks/) should be followed if one exists.
 Otherwise, the responder should take the best action they can to mitigate the issue.
 For P0/P1 issues based on regressions, the default behavior should be to revert to the last known good version.
 Make sure to document any actions taken as this will be extremely helpful in building a good post-mortem and runbook if needed.
+Whatever action(s) are technically, it is useful for the responder to be over-communicative in the created #alert thread.
 
 Another good response is to reach out to someone who has more information about the issue.
 This could be the person who wrote the code, or someone who has more context about the system.
@@ -99,10 +100,23 @@ Each rotation has a primary and secondary responder, if the primary is unable to
 The responsibility of an on-call responder is to be quickly available to take ownership of an incident. 
 This include acknowledging the incident, triage, and communication.
 At any point ownership can be transferred to another maintainer as long as it is clearly agreed upon and communicated.
-Any maintainer should be empowered take ownership of an incident if they wish, however those on-call have a responsibility to do so.
+Any maintainer should be empowered to take ownership of an incident if they wish, however those on-call have a responsibility to do so.
 
 **Rotation 1 (Israel/Europe)**: 03:00 UTC -> 15:00 UTC
+
+@eladb
+@staycoolcall911
+@ainvoner
+@ShaiBer
+@revitalbarletz
+@polamoros
+@skyrpex
+
 **Rotation 2 (US)**: 15:00 UTC -> 03:00 UTC
+
+@MarkMcCulloh
+@Chriscbr
+@hasanaburayyan
 
 [PagerDuty](https://www.pagerduty.com/) is used to manage the on-call rotation. It is configured to send alerts in the following ways:
 
