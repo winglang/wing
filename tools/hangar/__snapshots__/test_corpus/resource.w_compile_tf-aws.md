@@ -2,18 +2,34 @@
 
 ## clients/Bar.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({ Foo, MyEnum }) {
   class  Bar {
-    constructor({ b, foo, name }) {
+    constructor({ b, e, foo, name }) {
       this.b = b;
+      this.e = e;
       this.foo = foo;
       this.name = name;
+    }
+    static async barStatic()  {
+      {
+        return "bar static";
+      }
     }
     async myMethod()  {
       {
         (await this.foo.fooInc());
+        const s = (await Foo.fooStatic());
         (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
         return (await this.b.get("foo"));
+      }
+    }
+    async testTypeAccess()  {
+      {
+        if (true) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
+        }
       }
     }
   }
@@ -24,7 +40,7 @@ module.exports = function() {
 
 ## clients/BigPublisher.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  BigPublisher {
     constructor({ b, b2, q, t }) {
       this.b = b;
@@ -52,7 +68,7 @@ module.exports = function() {
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
     constructor({ c }) {
       this.c = c;
@@ -72,6 +88,11 @@ module.exports = function() {
     async fooGet()  {
       {
         return (await this.c.peek());
+      }
+    }
+    static async fooStatic()  {
+      {
+        return "foo static";
       }
     }
   }
@@ -768,16 +789,22 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("fooInc", "fooGet");
+        this._addInflightOps("fooInc", "fooGet", "fooStatic");
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
       }
       _toInflight() {
         const c_client = this._lift(this.c);
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
               c: ${c_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -795,27 +822,49 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("fooInc")) {
           this._registerBindObject(this.c, host, ["inc"]);
         }
+        if (ops.includes("fooStatic")) {
+        }
         super._registerBind(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
-      constructor(scope, id, name, b) {
+      constructor(scope, id, name, b, e) {
         super(scope, id);
-        this._addInflightOps("myMethod");
+        this._addInflightOps("barStatic", "myMethod", "testTypeAccess");
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
+        this.e = e;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
+        const FooClient = Foo._toInflightType(context);
+        const MyEnumClient = $stdlib.core.NodeJsCode.fromInline(`
+          Object.freeze((function (tmp) {
+            tmp[tmp["A"] = 0] = "A";
+            tmp[tmp["B"] = 1] = "B";
+            tmp[tmp["C"] = 2] = "C";
+            return tmp;
+          })({}))
+        `);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            Foo: ${FooClient.text},
+            MyEnum: ${MyEnumClient.text},
+          })
+        `);
       }
       _toInflight() {
         const b_client = this._lift(this.b);
+        const e_client = this._lift(this.e);
         const foo_client = this._lift(this.foo);
         const name_client = this._lift(this.name);
-        const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Bar = require("${self_client_path}")({});
-            const client = new Bar({
+            const BarClient = ${Bar._toInflightType(this).text};
+            const client = new BarClient({
               b: ${b_client},
+              e: ${e_client},
               foo: ${foo_client},
               name: ${name_client},
             });
@@ -827,12 +876,18 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.b, host, []);
+          this._registerBindObject(this.e, host, []);
           this._registerBindObject(this.foo, host, []);
           this._registerBindObject(this.name, host, []);
+        }
+        if (ops.includes("barStatic")) {
         }
         if (ops.includes("myMethod")) {
           this._registerBindObject(this.b, host, ["get", "put"]);
           this._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
+        }
+        if (ops.includes("testTypeAccess")) {
+          this._registerBindObject(this.e, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -876,16 +931,22 @@ class $Root extends $stdlib.std.Resource {
         })
         ));
       }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
       _toInflight() {
         const b_client = this._lift(this.b);
         const b2_client = this._lift(this.b2);
         const q_client = this._lift(this.q);
         const t_client = this._lift(this.t);
-        const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const BigPublisher = require("${self_client_path}")({});
-            const client = new BigPublisher({
+            const BigPublisherClient = ${BigPublisher._toInflightType(this).text};
+            const client = new BigPublisherClient({
               b: ${b_client},
               b2: ${b2_client},
               q: ${q_client},
@@ -914,8 +975,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    const MyEnum = 
+      Object.freeze((function (tmp) {
+        tmp[tmp["A"] = 0] = "A";
+        tmp[tmp["B"] = 1] = "B";
+        tmp[tmp["C"] = 2] = "C";
+        return tmp;
+      })({}))
+    ;
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const res = new Bar(this,"Bar","Arr",bucket);
+    const res = new Bar(this,"Bar","Arr",bucket,MyEnum.B);
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight4", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc4/index.js".replace(/\\/g, "/"))),
       bindings: {
@@ -925,7 +994,7 @@ class $Root extends $stdlib.std.Resource {
         },
         res: {
           obj: res,
-          ops: ["myMethod"]
+          ops: ["barStatic","myMethod","testTypeAccess"]
         },
       }
     })
@@ -997,6 +1066,7 @@ async handle() {
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
+  (await res.testTypeAccess());
 }
 
 ```

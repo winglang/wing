@@ -2,7 +2,7 @@
 
 ## clients/A.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  A {
     constructor({  }) {
     }
@@ -353,12 +353,18 @@ class $Root extends $stdlib.std.Resource {
         })
         );
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const A = require("${self_client_path}")({});
-            const client = new A({
+            const AClient = ${A._toInflightType(this).text};
+            const client = new AClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

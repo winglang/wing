@@ -917,7 +917,7 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 `;
 
 exports[`resource_inflight.w > stderr 1`] = `
-"error: Cannot create preflight class \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
+"error: Cannot create preflight class \\"Bucket\\" in inflight phase
 
 "
 `;
@@ -968,7 +968,7 @@ error: Expected 'b' to be a type but it's a variable
   |                          ^ Expected 'b' to be a type but it's a variable
 
 
-error: Inflight class c (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:16)'s parent \\"any\\" is not a class
+error: Inflight class c's parent \\"any\\" is not a class
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -985,7 +985,7 @@ error: Expected 'b' to be a type but it's a variable
   |                          ^ Expected 'b' to be a type but it's a variable
 
 
-error: Inflight class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:5:16)'s parent \\"any\\" is not a class
+error: Inflight class e's parent \\"any\\" is not a class
 
 "
 `;
@@ -1116,11 +1116,11 @@ error: Expected 2 arguments but got 1
 `;
 
 exports[`structs.w > stderr 1`] = `
-"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
+"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
   --> ../../../examples/tests/invalid/structs.w:9:8
   |
 9 | struct C extends B {
-  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
+  |        ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
 
 
 error: \\"x\\" is not initialized
@@ -1151,11 +1151,11 @@ error: Unknown symbol \\"badField\\"
    |       ^^^^^^^^ Unknown symbol \\"badField\\"
 
 
-error: Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
    --> ../../../examples/tests/invalid/structs.w:42:8
    |
 42 | struct Showtime extends Razzle, Dazzle {}
-   |        ^^^^^^^^ Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+   |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
 
 "
 `;

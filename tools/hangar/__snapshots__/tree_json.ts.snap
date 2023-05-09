@@ -59,7 +59,19 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
+                          "relationship": "barStatic",
+                          "resource": "root/Default/Default/test",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
                           "relationship": "myMethod",
+                          "resource": "root/Default/Default/test",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "testTypeAccess",
                           "resource": "root/Default/Default/test",
                         },
                       ],
@@ -1191,7 +1203,19 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
+                          "relationship": "barStatic",
+                          "resource": "root/Default/Default/Bar",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
                           "relationship": "myMethod",
+                          "resource": "root/Default/Default/Bar",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "testTypeAccess",
                           "resource": "root/Default/Default/Bar",
                         },
                       ],

@@ -34,6 +34,10 @@ class Another {
     globalCounter.inc();
     return globalCounter.peek();
   }
+
+  static inflight myStaticMethod(): num {
+    return globalCounter.peek();
+  }
 }
 
 let globalAnother = new Another();
@@ -67,6 +71,7 @@ class MyResource {
     assert(globalAnother.myField == "hello!");
     globalAnother.first.myResource.put("key", "value");
     assert(globalAnother.myMethod() > 0);
+    //assert(this.localCounter.peek() > 0); // TODO: this fails, why?
   }
 }
 

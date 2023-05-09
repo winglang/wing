@@ -2,7 +2,7 @@
 
 ## clients/Predicate.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Predicate {
     constructor({ c }) {
       this.c = c;
@@ -20,7 +20,7 @@ module.exports = function() {
 
 ## clients/TestHelper.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  TestHelper {
     constructor({  }) {
     }
@@ -294,13 +294,19 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("test");
         this.c = c;
       }
-      _toInflight() {
-        const c_client = this._lift(this.c);
+      static _toInflightType(context) {
         const self_client_path = "./clients/Predicate.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const c_client = this._lift(this.c);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Predicate = require("${self_client_path}")({});
-            const client = new Predicate({
+            const PredicateClient = ${Predicate._toInflightType(this).text};
+            const client = new PredicateClient({
               c: ${c_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -323,12 +329,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("sleep", "assert");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/TestHelper.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const TestHelper = require("${self_client_path}")({});
-            const client = new TestHelper({
+            const TestHelperClient = ${TestHelper._toInflightType(this).text};
+            const client = new TestHelperClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
