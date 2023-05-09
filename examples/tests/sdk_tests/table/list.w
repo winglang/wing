@@ -1,19 +1,16 @@
-/*\
-skip: true
-\*/
 
 bring cloud;
 
 let table = new cloud.Table( 
     name: "users", 
     primary_key: "name", 
-    columns: { gender: cloud.ColumnType.STRING } 
+    columns: { gender: cloud.ColumnType.STRING, name: cloud.ColumnType.STRING } 
 );
 
 
 new cloud.Function(inflight () => {
-  table.insert(Json {name: "eyal", gender: "male" });
-  table.insert(Json {name: "revital", gender: "female" });
+  table.insert("eyal", Json {name: "eyal", gender: "male" });
+  table.insert("revital", Json {name: "revital", gender: "female" });
   let unorderded = MutJson {};
   for u in table.list() {
     unorderded.set(str.from_json(u.get("name")), u);
