@@ -450,12 +450,60 @@ impl Subtype for Type {
 					parent_type.is_subtype_of(other)
 				})
 			}
-			(Self::Resource(res), Self::Interface(_)) => {
+			(Self::Resource(res), Self::Interface(iface)) => {
 				// If a resource implements the interface then it's a subtype of it (nominal typing)
-				res.implements.iter().any(|parent| {
+				let implements_iface = res.implements.iter().any(|parent| {
 					let parent_type: &Type = parent;
 					parent_type.is_subtype_of(other)
-				})
+				});
+
+				if implements_iface {
+					return true;
+				}
+
+				// To support flexible inflight closures, we say that any
+				// resource with an inflight method named "handle" is a subtype of
+				// any single-method interface with a matching "handle" method type.
+
+				// First, check if there is exactly one inflight method in the interface
+				if iface
+					.get_env()
+					.iter(true)
+					.filter(|(_name, kind, _info)| {
+						let type_ = kind.as_variable().expect("interface member should be a variable").type_;
+						type_.is_inflight_function()
+					})
+					.count() != 1
+				{
+					return false;
+				}
+
+				// Next, check that the interface's inflight method is named "handle" and get its type
+				let iface_handle_type = if let Some(method) = iface.get_env().try_lookup("handle", None) {
+					let method = method.as_variable().expect("interface member should be a variable");
+					if method.type_.is_inflight_function() {
+						method.type_
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				};
+
+				// Then get the type of the resource's "handle" method if it has one
+				let res_handle_type = if let Some(method) = res.get_env().try_lookup("handle", None) {
+					let method = method.as_variable().unwrap();
+					if method.type_.is_inflight_function() {
+						method.type_
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				};
+
+				// Finally check if they're subtypes
+				res_handle_type.is_subtype_of(&iface_handle_type)
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
@@ -753,6 +801,17 @@ impl TypeRef {
 
 	pub fn is_immutable_collection(&self) -> bool {
 		if let Type::Array(_) | Type::Map(_) | Type::Set(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_inflight_function(&self) -> bool {
+		if let Type::Function(ref sig) = **self {
+			if sig.phase == Phase::Inflight {
+				return true;
+			}
 			true
 		} else {
 			false
@@ -1789,7 +1848,7 @@ impl<'a> TypeChecker<'a> {
 			TypeAnnotationKind::Duration => self.types.duration(),
 			TypeAnnotationKind::Json => self.types.json(),
 			TypeAnnotationKind::MutJson => self.types.mut_json(),
-			TypeAnnotationKind::Resource => self.types.anything(), // TODO
+			TypeAnnotationKind::Resource => self.types.resource_base_type(),
 			TypeAnnotationKind::Optional(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				self.types.add_type(Type::Optional(value_type))
