@@ -98,6 +98,7 @@ const wingCliLink = output ?? join(currentDir, newWingName);
 
 rmSync(localInstallDir, { recursive: true, force: true });
 rmSync(wingCliLink, { force: true });
+mkdirSync(installDir, { recursive: true });
 mkdirSync(localInstallDir, { recursive: true });
 console.log(`CLI: "${targetWingSpec}"`);
 console.log(`SDK: "${targetWingSDKSpec}"`);
