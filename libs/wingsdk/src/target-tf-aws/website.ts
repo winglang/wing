@@ -97,7 +97,6 @@ export class Website extends cloud.Website {
 
   private uploadFile(filePath: string) {
     const fileKey = filePath.replace(this.path, "");
-    console.log(fileKey.replace(/[\/\\]/g, "__").replace(/\./g, "_"));
 
     new S3Object(this, `File${fileKey.replace(/[\/\\]/g, "--")}`, {
       dependsOn: [this.bucket],
