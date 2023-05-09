@@ -30,6 +30,7 @@ export const MapView = (props: MapViewProps) => {
             "grow relative border-t",
             theme.bg4,
             theme.border3,
+            "cursor-grab",
           )}
         >
           <div className="absolute inset-0">

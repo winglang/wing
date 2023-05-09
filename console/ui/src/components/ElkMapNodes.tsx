@@ -69,9 +69,11 @@ export const ContainerNode = ({
         "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
         "transition-all",
         "rounded",
+        "cursor-default",
         !open && "shadow-sm",
         {
           "outline-4": selected,
+          "hover:outline-2": !selected,
         },
       )}
       tabIndex={-1}
@@ -93,6 +95,7 @@ export const ContainerNode = ({
             "border-sky-300 dark:border-sky-500": selected,
           },
           "min-h-[32px]",
+          "cursor-pointer",
         )}
       >
         {Icon && (

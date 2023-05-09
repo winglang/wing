@@ -10,7 +10,7 @@ export const SpinnerLoader = ({
       <svg
         aria-hidden="true"
         className={classNames(
-          "text-slate-200 animate-spin dark:text-slate-600 fill-slate-600",
+          "text-slate-200 animate-spin dark:text-slate-600 fill-slate-600 dark:fill-slate-200",
           className,
         )}
         viewBox="0 0 100 101"
