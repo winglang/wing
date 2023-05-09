@@ -161,9 +161,11 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
 
   const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
     const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+    console.error(JSON.stringify(testArns, null, 2));
     const testRunner = new TfawsTestRunnerClient(testArns);
 
     const tests = await testRunner.listTests();
+    console.error(JSON.stringify(tests, null, 2));
     return [testRunner, pickOneTestPerEnvironment(tests)];
   });
 
