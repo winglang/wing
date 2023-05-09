@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+
 use indexmap::IndexMap;
 
 use crate::{
@@ -5,6 +7,7 @@ use crate::{
 		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
 		Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
+	diagnostic::WingSpan,
 	fold::{self, Fold},
 };
 
@@ -43,6 +46,9 @@ pub struct ClosureTransformer {
 	is_inside_class: bool,
 	// Helper state for generating unique class names
 	inflight_counter: usize,
+	class_statements: Vec<Stmt>,
+	need_parent_this: bool,
+	nearest_stmt_idx: usize,
 }
 
 impl ClosureTransformer {
@@ -51,11 +57,66 @@ impl ClosureTransformer {
 			curr_phase: Phase::Preflight,
 			is_inside_class: false,
 			inflight_counter: 0,
+			class_statements: vec![],
+			need_parent_this: false,
+			nearest_stmt_idx: 0,
 		}
 	}
 }
 
 impl Fold for ClosureTransformer {
+	fn fold_scope(&mut self, node: Scope) -> Scope {
+		let mut statements = vec![];
+
+		for stmt in node.statements {
+			let old_nearest_stmt_idx = self.nearest_stmt_idx;
+			self.nearest_stmt_idx = stmt.idx;
+			let new_stmt = self.fold_stmt(stmt);
+			self.nearest_stmt_idx = old_nearest_stmt_idx;
+
+			// Add any new statements we have accumulated that define temporary classes
+			statements.append(&mut self.class_statements);
+
+			// Push the folded statement last. This way it has access to all of the temporary
+			// classes we have defined.
+			statements.push(new_stmt);
+
+			// Reset scope-specific state
+			self.class_statements.clear();
+		}
+
+		// If we are inside a class, add define `let __parent_this = this` that can be
+		// used by the newly-created preflight classes
+		if self.need_parent_this {
+			let parent_this_name = Symbol::global(PARENT_THIS_NAME); // TODO: can we use a span?
+			let this_name = Symbol::global("this"); // TODO: can we use a span?
+			let parent_this_def = Stmt {
+				kind: StmtKind::VariableDef {
+					reassignable: false,
+					var_name: parent_this_name,
+					initial_value: Expr {
+						kind: ExprKind::Reference(Reference::Identifier(this_name)),
+						span: WingSpan::default(),          // TODO: can we use a span?
+						evaluated_type: RefCell::new(None), // thank god we have type reference
+					},
+					type_: None,
+				},
+				span: WingSpan::default(), // TODO: can we use a span?
+				idx: 0,
+			};
+
+			statements.push(parent_this_def);
+		}
+
+		self.need_parent_this = false;
+
+		Scope {
+			statements,
+			span: node.span,
+			env: node.env,
+		}
+	}
+
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
 		let prev_phase = self.curr_phase;
 		self.curr_phase = node.signature.phase;
@@ -98,14 +159,6 @@ impl Fold for ClosureTransformer {
 				};
 				let handle_name = Symbol {
 					name: "handle".to_string(),
-					span: expr.span.clone(),
-				};
-				let parent_this_name = Symbol {
-					name: PARENT_THIS_NAME.to_string(),
-					span: expr.span.clone(),
-				};
-				let this_name = Symbol {
-					name: "this".to_string(),
 					span: expr.span.clone(),
 				};
 
@@ -161,96 +214,34 @@ impl Fold for ClosureTransformer {
 						methods: vec![(handle_name.clone(), new_func_def)],
 						inflight_initializer: None,
 					}),
-					idx: 1,
+					idx: self.nearest_stmt_idx,
 					span: expr.span.clone(),
 				};
 
-				// return_class_instance :=
+				// new_class_instance :=
 				// ```
-				// return new <new_class_name>();
+				// new <new_class_name>();
 				// ```
-				let return_class_instance = Stmt {
-					kind: StmtKind::Return(Some(Expr::new(
-						ExprKind::New {
-							class: class_type_annotation,
-							arg_list: ArgList {
-								named_args: IndexMap::new(),
-								pos_args: vec![],
-							},
-							obj_id: None,
-							obj_scope: None,
+				let new_class_instance = Expr::new(
+					ExprKind::New {
+						class: class_type_annotation,
+						arg_list: ArgList {
+							named_args: IndexMap::new(),
+							pos_args: vec![],
 						},
-						expr.span.clone(),
-					))),
-					idx: 2,
-					span: expr.span.clone(),
-				};
-
-				// make_class_body :=
-				// ```
-				// {
-				//   <parent_this_def>? // only if we are inside a class
-				//   <class_def>
-				//   <return_class_instance>
-				// }
-				// ```
-				let make_class_body = if self.is_inside_class {
-					// parent_this_def :=
-					// ```
-					// let __parent_this = this;
-					// ```
-					let parent_this_def = Stmt {
-						kind: StmtKind::VariableDef {
-							reassignable: false,
-							var_name: parent_this_name,
-							initial_value: Expr::new(ExprKind::Reference(Reference::Identifier(this_name)), expr.span.clone()),
-							type_: None, // thank god we have type inference
-						},
-						idx: 0,
-						span: expr.span.clone(),
-					};
-
-					Scope::new(
-						vec![parent_this_def, class_def, return_class_instance],
-						expr.span.clone(),
-					)
-				} else {
-					Scope::new(vec![class_def, return_class_instance], expr.span.clone())
-				};
-
-				// make_class_closure :=
-				// ```
-				// (): resource => { ...<make_class_body> }
-				// ```
-				let make_class_closure = Expr::new(
-					ExprKind::FunctionClosure(FunctionDefinition {
-						signature: FunctionSignature {
-							parameters: vec![],
-							return_type: Some(Box::new(TypeAnnotation {
-								kind: TypeAnnotationKind::Resource,
-								span: expr.span.clone(),
-							})),
-							phase: Phase::Preflight,
-						},
-						body: crate::ast::FunctionBody::Statements(make_class_body),
-						is_static: false,
-						span: expr.span.clone(),
-					}),
+						obj_id: None,
+						obj_scope: None,
+					},
 					expr.span.clone(),
 				);
 
-				// call_expr :=
-				// ```
-				// <make_class_closure>()
-				// ```
-				let call_expr = Expr::new(
-					ExprKind::Call {
-						function: Box::new(make_class_closure),
-						arg_list: ArgList::new(),
-					},
-					expr.span,
-				);
-				call_expr
+				if self.is_inside_class {
+					self.need_parent_this = true;
+				}
+
+				self.class_statements.push(class_def);
+
+				new_class_instance
 			}
 			_ => fold::fold_expr(self, expr),
 		}
