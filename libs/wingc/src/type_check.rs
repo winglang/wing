@@ -1,12 +1,14 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
-use crate::ast::{self, FunctionBodyRef, TypeAnnotationKind};
+use crate::ast::{self, ClassField, FunctionBodyRef, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
 	Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
+use crate::type_check_class_fields_init::VisitClassInit;
+use crate::visit::Visit;
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
@@ -1197,8 +1199,24 @@ impl<'a> TypeChecker<'a> {
 						self.validate_type(rtype, self.types.bool(), right);
 						self.types.bool()
 					}
-					BinaryOperator::Add
-					| BinaryOperator::Sub
+					BinaryOperator::AddOrConcat => {
+						if ltype.is_subtype_of(&self.types.number()) && rtype.is_subtype_of(&self.types.number()) {
+							self.types.number()
+						} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
+							self.types.string()
+						} else {
+							self.diagnostics.borrow_mut().push(Diagnostic {
+								message: format!(
+									"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
+									ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
+								),
+								span: Some(exp.span()),
+								level: DiagnosticLevel::Error,
+							});
+							self.types.anything() // TODO: return error type
+						}
+					}
+					BinaryOperator::Sub
 					| BinaryOperator::Mul
 					| BinaryOperator::Div
 					| BinaryOperator::FloorDiv
@@ -2106,7 +2124,9 @@ impl<'a> TypeChecker<'a> {
 				inflight_initializer,
 			}) => {
 				// Resources cannot be defined inflight
-				assert!(!*is_resource || env.phase == Phase::Preflight);
+				if *is_resource && env.phase == Phase::Inflight {
+					self.stmt_error(stmt, "Cannot define a preflight class in inflight scope".to_string());
+				}
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
@@ -2232,6 +2252,9 @@ impl<'a> TypeChecker<'a> {
 
 				// Type check constructor
 				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
+
+				// Verify if all fields of a class/resource are initialized in the initializer.
+				self.check_class_field_initialization(&initializer.statements, fields);
 
 				// Type check the inflight initializer
 				if let Some(inflight_initializer) = inflight_initializer {
@@ -2483,6 +2506,30 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// Validate if the fields of a class are initialized in the constructor (init).
+	///
+	/// # Arguments
+	///
+	/// * `statements` - The constructor scope (init)
+	/// * `fields` - All fields of a class
+	///
+	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &[ClassField]) {
+		let mut visit_init = VisitClassInit { fields: Vec::new() };
+		visit_init.visit_scope(statements);
+		for field in fields.iter() {
+			// inflight or static fields cannot be initialized in the initializer
+			if field.phase == Phase::Inflight || field.is_static {
+				continue;
+			}
+			if !visit_init.fields.contains(&field.name.name) {
+				self.type_error(TypeError {
+					message: format!("\"{}\" is not initialized", field.name.name),
+					span: field.name.span.clone(),
+				});
+			}
+		}
+	}
+
 	fn type_check_method<T>(
 		&mut self,
 		class_env: &SymbolEnv,
@@ -2637,15 +2684,23 @@ impl<'a> TypeChecker<'a> {
 				.expect("Expected to find the just-added jsii import spec")
 		};
 
-		let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
+		// check if we've already defined the given alias in the current scope
+		if env.lookup(&jsii.alias, Some(jsii.import_statement_idx)).is_ok() {
+			self.type_error(TypeError {
+				message: format!("\"{}\" is already defined", alias.name),
+				span: alias.span.clone(),
+			});
+		} else {
+			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
-		// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
-		// because they aren't typically resolved through the same process as other types
-		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
-			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+			// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
+			// because they aren't typically resolved through the same process as other types
+			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
+				importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+			}
+
+			importer.import_submodules_to_env(env);
 		}
-
-		importer.import_submodules_to_env(env);
 	}
 
 	/// Add function arguments to the function's environment

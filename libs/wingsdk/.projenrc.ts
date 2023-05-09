@@ -5,11 +5,22 @@ const JSII_DEPS = ["constructs@~10.1.228"];
 const CDKTF_VERSION = "0.15.2";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>4.0",
-  "random@~>3.1",
-  "azurerm@~>3.10",
-  "google@~>4.0",
+  "aws@~>4.65.0",
+  "random@~>3.5.1",
+  "azurerm@~>3.54.0",
+  "google@~>4.63.1",
 ];
+
+// defines the list of dependencies required for each compilation target that is not built into the
+// compiler (like Terraform targets).
+const TARGET_DEPS = {
+  awscdk: ["aws-cdk-lib@^2.64.0"],
+};
+
+// we treat all the non-builtin dependencies as "side loaded". this means that we will remove them
+// from the "package.json" just before we bundle the package and the Wing CLI will require the user
+// to install them at runtime
+const sideLoad = Object.values(TARGET_DEPS).flat();
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
@@ -25,7 +36,7 @@ const project = new cdk.JsiiProject({
   deps: [...JSII_DEPS],
   bundledDeps: [
     `cdktf@${CDKTF_VERSION}`,
-    "aws-cdk-lib@^2.64.0",
+    ...sideLoad,
     // preflight dependencies
     "debug",
     "esbuild-wasm",
@@ -45,6 +56,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.254.0",
     "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
+    "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
@@ -64,6 +76,7 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/debug",
     "@types/fs-extra",
+    "@types/mime-types",
     "@types/tar",
     "@types/express",
     "aws-sdk-client-mock",
@@ -222,5 +235,20 @@ new JsonFile(project, "cdktf.json", {
 project.gitignore.addPatterns("src/.gen/providers");
 
 project.preCompileTask.exec("cdktf get");
+
+const packageJsonBack = "package.json.bak";
+const removeBundledDeps = project.addTask("remove-bundled-deps");
+removeBundledDeps.exec(`cp package.json ${packageJsonBack}`);
+for (const dep of sideLoad) {
+  removeBundledDeps.exec(
+    `./scripts/remove-bundled-dep.js ${dep.split("@")[0]}`
+  );
+}
+
+const restoreBundleDeps = project.addTask("restore-bundled-deps");
+restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
+
+project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
+project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
 project.synth();

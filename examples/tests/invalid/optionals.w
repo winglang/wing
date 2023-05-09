@@ -22,13 +22,10 @@ x ?? "hello";
 //  default type (str) must be same as wrapped type (num)
 
 inflight class Super {
-  init() {}
 }
 inflight class Sub1 extends Super {
-  init() {}
 }
 inflight class Sub2 extends Super {
-  init() {}
 }
 
 let optional_sub1: Sub1? = new Sub1();
