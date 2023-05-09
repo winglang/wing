@@ -2,10 +2,10 @@
   "language": "typescript",
   "app": "echo noop",
   "terraformProviders": [
-    "aws@~>4.0",
-    "random@~>3.1",
-    "azurerm@~>3.10",
-    "google@~>4.0"
+    "aws@~>4.65.0",
+    "random@~>3.5.1",
+    "azurerm@~>3.54.0",
+    "google@~>4.63.1"
   ],
   "codeMakerOutput": "src/.gen",
   "projectId": "93afdbfa-23ed-40cf-9ce4-495b3289c519",

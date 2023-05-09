@@ -6,7 +6,7 @@ import { tmpdir } from "os";
 
 const exampleDir = resolve("../../examples/tests/valid");
 
-/** 
+/**
  * Creates a clean environment for each test by copying the example file to a temporary directory.
  */
 async function tmpTestFile(source: string, ...additionalFiles: string[]) {
@@ -53,9 +53,9 @@ describe(
     });
 
     test("should error if a nonexistent file is compiled", async () => {
-      return expect(
-        compile("non-existent-file.w", { target: Target.SIM })
-      ).rejects.toThrowError(/Source file cannot be found/);
+      return expect(compile("non-existent-file.w", { target: Target.SIM })).rejects.toThrowError(
+        /Source file cannot be found/
+      );
     });
 
     // https://github.com/winglang/wing/issues/2081
