@@ -2972,14 +2972,21 @@ impl<'a> TypeChecker<'a> {
 		// then resolve a class named "Util" within it. This will basically be equivalent to the
 		// `foo.Bar.baz()` case (where `baz()`) is a static method of class `Bar`.
 		if !path.is_empty() {
-			let lookup_result = env.lookup_nested(&path.iter().collect_vec(), Some(self.statement_idx));
-			if let Ok(symbol_kind) = lookup_result {
+			let result = env.lookup_nested(&path.iter().collect_vec(), Some(self.statement_idx));
+			if let LookupResult::Found(symbol_kind, info) = result {
 				if let SymbolKind::Namespace(_) = symbol_kind {
+
 					// resolve "Util" as a user defined class within the namespace
 					let root = path.pop().unwrap();
 					path.reverse();
 					path.push(Symbol { name: "Util".to_string(), span: root.span.clone() });
-					let ut = UserDefinedType { root, fields: path };
+
+					let ut = UserDefinedType { 
+						root, 
+						fields: path,
+						span: WingSpan::default(),
+					};
+
 					return self
 						.resolve_user_defined_type(&ut, env, self.statement_idx)
 						.ok()
