@@ -55,8 +55,8 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
 export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
-  private notificationTopics: S3BucketNotificationTopic[] = [];
-  private notificationDependencies: ITerraformDependable[] = [];
+  private readonly notificationTopics: S3BucketNotificationTopic[] = [];
+  private readonly notificationDependencies: ITerraformDependable[] = [];
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
