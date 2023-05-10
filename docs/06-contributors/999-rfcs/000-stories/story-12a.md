@@ -106,21 +106,21 @@ resource TaskList {
 
 let tasks = new TaskList();
 
-test "get and find task" {
+new cloud.Function(inflight (s: str): str => {
   tasks.add_task("clean the dishes");
   let result = tasks.find_tasks_with("clean the dishes");
   assert(result.length == 1);
   assert("clean the dishes" == tasks.get_task(result.at(0)));
-}
+}) as "test: get and find task";
 
 
-test "get, remove and find task" {
+new cloud.Function(inflight (s: str): str => {
   tasks.add_task("clean the dishes");
   tasks.add_task("buy dishwasher soap");
   tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.length == 0);
-}
+}) as "test: get, remove and find task";
 ```
 
 ## Wing Console
