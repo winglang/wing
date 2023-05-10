@@ -172,8 +172,7 @@ Usage:
 $ wing test ENTRYPOINT...
 ```
 
-This will compile each entrypoint, and for each entrypoint it will invoke all `cloud.Function`s with
-that start with `test:` (or simply called `test`).
+This will compile each entrypoint, and for each entrypoint it will invoke all tests in the program.
 
 For example ([test_bucket.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.w)):
 
