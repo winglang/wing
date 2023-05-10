@@ -302,11 +302,11 @@ export interface IBucketClient {
   tryGet(key: string): Promise<string | undefined>;
 
   /**
-   * Tries to retrieve a Json object from the bucket.
+   * Gets an object from the bucket if it exists, parsing it as Json.
    * @param key Key of the object.
-   * @returns `true` if the object was successfully retrieved, `false` if an error occurred.
+   * @returns the contents of the object as Json if it exists, nil otherwise
    */
-  tryGetJson(key: string): Promise<boolean>;
+  tryGetJson(key: string): Promise<Json | undefined>;
 }
 
 /**
