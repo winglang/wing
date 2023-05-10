@@ -2296,7 +2296,7 @@ test "can add objects" {
 }
 ```
 
-The behavior of running tests with `wing test` CLI command is determined by the `cloud.TestRunner` resource in the Wing SDK, which can have a custom test implementation for every compiler target.
+The behavior of running tests with `wing test` CLI command is determined by the `cloud.TestRunner` resource in the Wing SDK, which can be implemented for any compiler target.
 
 See the [CLI User Manual](https://docs.winglang.io/reference/cli#test-wing-test) for more details on running tests.
 
