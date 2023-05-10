@@ -552,7 +552,7 @@ exports[`bucket with onCreate method 1`] = `
       }
     },
     \\"aws_s3_bucket_notification\\": {
-      \\"root_mybucket_S3Objectnotifier_08678F7D\\": {
+      \\"root_mybucket_S3BucketNotification_008BD786\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
         \\"depends_on\\": [
           \\"aws_sns_topic_policy.root_mybucket_mybucketoncreate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_EF6799F2\\"
@@ -741,13 +741,13 @@ exports[`bucket with onCreate method 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
-                  "S3Object_notifier": {
+                  "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.15.2",
                     },
-                    "id": "S3Object_notifier",
-                    "path": "root/Default/my_bucket/S3Object_notifier",
+                    "id": "S3BucketNotification",
+                    "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-on_create": {
                     "attributes": {
@@ -1042,7 +1042,7 @@ exports[`bucket with onDelete method 1`] = `
       }
     },
     \\"aws_s3_bucket_notification\\": {
-      \\"root_mybucket_S3Objectnotifier_08678F7D\\": {
+      \\"root_mybucket_S3BucketNotification_008BD786\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
         \\"depends_on\\": [
           \\"aws_sns_topic_policy.root_mybucket_mybucketondelete_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_79FF94E2\\"
@@ -1231,13 +1231,13 @@ exports[`bucket with onDelete method 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
-                  "S3Object_notifier": {
+                  "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.15.2",
                     },
-                    "id": "S3Object_notifier",
-                    "path": "root/Default/my_bucket/S3Object_notifier",
+                    "id": "S3BucketNotification",
+                    "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-on_delete": {
                     "attributes": {
@@ -1604,7 +1604,7 @@ exports[`bucket with onEvent method 1`] = `
       }
     },
     \\"aws_s3_bucket_notification\\": {
-      \\"root_mybucket_S3Objectnotifier_08678F7D\\": {
+      \\"root_mybucket_S3BucketNotification_008BD786\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
         \\"depends_on\\": [
           \\"aws_sns_topic_policy.root_mybucket_mybucketoncreate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_EF6799F2\\",
@@ -1867,13 +1867,13 @@ exports[`bucket with onEvent method 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
-                  "S3Object_notifier": {
+                  "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.15.2",
                     },
-                    "id": "S3Object_notifier",
-                    "path": "root/Default/my_bucket/S3Object_notifier",
+                    "id": "S3BucketNotification",
+                    "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-on_create": {
                     "attributes": {
@@ -2530,7 +2530,7 @@ exports[`bucket with onUpdate method 1`] = `
       }
     },
     \\"aws_s3_bucket_notification\\": {
-      \\"root_mybucket_S3Objectnotifier_08678F7D\\": {
+      \\"root_mybucket_S3BucketNotification_008BD786\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
         \\"depends_on\\": [
           \\"aws_sns_topic_policy.root_mybucket_mybucketonupdate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_FD9F0448\\"
@@ -2719,13 +2719,13 @@ exports[`bucket with onUpdate method 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
-                  "S3Object_notifier": {
+                  "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.15.2",
                     },
-                    "id": "S3Object_notifier",
-                    "path": "root/Default/my_bucket/S3Object_notifier",
+                    "id": "S3BucketNotification",
+                    "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-on_update": {
                     "attributes": {
