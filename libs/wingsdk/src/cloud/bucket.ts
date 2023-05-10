@@ -290,7 +290,7 @@ export interface IBucketClient {
    * Tries to put a Json object in the bucket.
    * @param key Key of the object.
    * @param body Json object that we want to store into the bucket.
-   * @returns `true` if the object was successfully stored, `false` if an error occurred.
+   * @returns `true` if the object was successfully stored, `false` if an an object already existed for the same key.
    */
   tryPutJson(key: string, body: Json): Promise<boolean>;
 
