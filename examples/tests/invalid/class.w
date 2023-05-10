@@ -5,7 +5,7 @@ class C1 {
 
 class C2 {}
 new C2(1);
-// ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating "C2"
+// ^^^^^^^^^ Expected 0 argument(s) but got 1
 
 class C4 {}
 new C4(token: "1");
