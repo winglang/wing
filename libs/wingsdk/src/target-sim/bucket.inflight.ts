@@ -170,12 +170,13 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async tryPut(key: string, value: string): Promise<boolean> {
-    if (this.fileExists(key)) {
+  public async tryPut(key: string, body: string): Promise<boolean> {
+    try {
+      await this.put(key, body);
+      return true;
+    } catch (error) {
       return false;
     }
-    
-    return this.put(key, value); // return the promise (await not needed)
   }
 
   public async tryPutJson(key: string, body: Json): Promise<boolean> {
@@ -187,22 +188,20 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     }
   }
 
-  public async tryGet(key: string): Promise<boolean> {
-    try {
-      await this.get(key);
-      return true;
-    } catch (error) {
-      return false;
+  public async tryGet(key: string): Promise<string | undefined> {
+    if (await this.fileExists(key)) {
+      return this.get(key);
     }
+
+    return undefined;
   }
 
-  public async tryGetJson(key: string): Promise<boolean> {
-    try {
-      await this.getJson(key);
-      return true;
-    } catch (error) {
-      return false;
+  public async tryGetJson(key: string): Promise<Json | undefined> {
+    if (await this.fileExists(key)) {
+      return this.getJson(key);
     }
+
+    return undefined;
   }
 
   private async addFile(key: string, value: string): Promise<void> {
