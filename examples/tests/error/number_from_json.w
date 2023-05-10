@@ -2,5 +2,5 @@
 // If it is run with other tests, subsequent failures will be ignored in snapshot.
 let j = Json { a: "apples" };
 
-let a: num = num.from_json(j.get("a"));
+let a: num = num.fromJson(j.get("a"));
 //                                ^ preflight error: unable to parse string apples as a number

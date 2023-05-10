@@ -16,16 +16,16 @@ let a: Array<str> = j;
 //                  ^ Expected type to be "Array<str>", but got "Json" instead
 
 // Immutable Json
-let forever_json = Json {a: "hello"};
-forever_json.set("a", "world!");
+let foreverJson = Json {a: "hello"};
+foreverJson.set("a", "world!");
 //           ^^^ Unknown symbol "set" (TODO: better error message https://github.com/winglang/wing/issues/1660) 
 
 let bkt = new cloud.Bucket();
-let j_arr = Json [bkt];
+let jArr = Json [bkt];
 //                ^^^ Expected "Json" elements to be Json Value (https://www.json.org/json-en.html), but got "Bucket" which is not Json Value
 
-let json_obj = Json { boom: bkt };
+let jsonObj = Json { boom: bkt };
 //                          ^^^ Expected "Json" elements to be Json Value (https://www.json.org/json-en.html), but got "Bucket" which is not Json Value
 
-let json_incomplete = Json;
+let jsonIncomplete = Json;
 //                    ^^^^ Expected a "Json" element

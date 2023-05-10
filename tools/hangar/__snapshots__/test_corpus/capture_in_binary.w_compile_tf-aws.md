@@ -182,7 +182,7 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         b: {
           obj: b,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
         x: {
           obj: x,

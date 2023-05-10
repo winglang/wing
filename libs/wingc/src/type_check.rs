@@ -3,10 +3,10 @@ pub mod symbol_env;
 use crate::ast::{self, ClassField, FunctionBodyRef, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
-	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Spanned, Stmt,
+	StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::type_check_class_fields_init::VisitClassInit;
 use crate::visit::Visit;
 use crate::{
@@ -28,7 +28,7 @@ use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
 
 use self::jsii_importer::JsiiImportSpec;
-use self::symbol_env::SymbolEnvIter;
+use self::symbol_env::{LookupResult, SymbolEnvIter};
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -122,7 +122,7 @@ impl SymbolKind {
 		}
 	}
 
-	fn as_mut_namespace_ref(&mut self) -> Option<&mut Namespace> {
+	fn as_namespace_mut(&mut self) -> Option<&mut Namespace> {
 		match self {
 			SymbolKind::Namespace(ref mut ns) => Some(ns),
 			_ => None,
@@ -222,7 +222,7 @@ impl Interface {
 
 impl Display for Interface {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		if let Some(method) = self.get_env().try_lookup("handle", None) {
+		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&"handle".into(), None) {
 			let method = method.as_variable().unwrap();
 			if method.phase == Phase::Inflight {
 				write!(f, "{} ({})", self.name.name, method.type_)
@@ -261,10 +261,12 @@ pub trait ClassLike {
 		})
 	}
 
-	fn get_method(&self, name: &str) -> Option<VariableInfo> {
+	fn get_method(&self, name: &Symbol) -> Option<VariableInfo> {
 		let v = self
 			.get_env()
-			.try_lookup(name, None)?
+			.lookup_ext(name, None)
+			.ok()?
+			.0
 			.as_variable()
 			.expect("class env should only contain variables");
 		v.type_.as_function_sig().map(|_| v.clone())
@@ -383,7 +385,7 @@ impl Subtype for Type {
 				}
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
-				if let Some(method) = r0.get_env().try_lookup("handle", None) {
+				if let Some((method, _)) = r0.get_env().lookup_ext(&"handle".into(), None).ok() {
 					let method = method.as_variable().unwrap();
 					if method.phase != Phase::Inflight {
 						return false;
@@ -1003,6 +1005,7 @@ impl Types {
 					.libraries
 					.lookup_nested_str(&resource_fqn, None)
 					.unwrap()
+					.0
 					.as_type()
 					.unwrap(),
 			);
@@ -1317,18 +1320,18 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let constructor_type = match class_env.lookup(
-					&Symbol {
-						name: CLASS_INIT_NAME.into(),
-						span: class_symbol.span.clone(),
-					},
-					None,
-				) {
-					Ok(v) => v.as_variable().expect("Expected constructor to be a variable").type_,
-					Err(type_error) => {
-						self.type_error(type_error);
-						return self.types.anything();
-					}
+				let lookup_res = class_env.lookup_ext(&CLASS_INIT_NAME.into(), None);
+				let constructor_type = if let LookupResult::Found(k, _) = lookup_res {
+					k.as_variable().expect("Expected constructor to be a variable").type_
+				} else {
+					self.type_error(lookup_result_to_type_error(
+						lookup_res,
+						&Symbol {
+							name: CLASS_INIT_NAME.into(),
+							span: class_symbol.span.clone(),
+						},
+					));
+					return self.types.anything();
 				};
 				let constructor_sig = constructor_type
 					.as_function_sig()
@@ -1378,7 +1381,7 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						// If this returns None, this means we're instantiating a preflight object in the global scope, which is valid
 						env
-							.try_lookup("this", Some(self.statement_idx))
+							.lookup(&"this".into(), Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
 					};
 
@@ -1541,7 +1544,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify that no unexpected fields are present
 				for (name, _t) in field_types.iter() {
-					if st.env.lookup(&name, Some(self.statement_idx)).is_err() {
+					if st.env.lookup(name, Some(self.statement_idx)).is_none() {
 						self.expr_error(exp, format!("\"{}\" is not a field of \"{}\"", name.name, st.name.name));
 					}
 				}
@@ -1666,7 +1669,7 @@ impl<'a> TypeChecker<'a> {
 		// Also map original field names to the ones in the struct type
 		let mut field_map = IndexMap::new();
 		for (k, _) in object_types.iter() {
-			let field = expected_struct.env.try_lookup(&k.name, None);
+			let field = expected_struct.env.lookup(k, None);
 			if let Some(field) = field {
 				let field_type = field
 					.as_variable()
@@ -1730,14 +1733,14 @@ impl<'a> TypeChecker<'a> {
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
 	/// to the diagnostics.
 	/// Returns the given type on success, otherwise returns the expected type.
-	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl ToSpan) -> TypeRef {
+	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> TypeRef {
 		self.validate_type_in(actual_type, &[expected_type], span)
 	}
 
 	/// Validate that the given type is a subtype (or same) as the one of the expected types. If not, add
 	/// an error to the diagnostics.
 	/// Returns the given type on success, otherwise returns one of the expected types.
-	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl ToSpan) -> TypeRef {
+	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		if !actual_type.is_anything()
 			&& !expected_types
@@ -2124,7 +2127,9 @@ impl<'a> TypeChecker<'a> {
 				inflight_initializer,
 			}) => {
 				// Resources cannot be defined inflight
-				assert!(!*is_resource || env.phase == Phase::Preflight);
+				if *is_resource && env.phase == Phase::Inflight {
+					self.stmt_error(stmt, "Cannot define a preflight class in inflight scope".to_string());
+				}
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
@@ -2286,7 +2291,7 @@ impl<'a> TypeChecker<'a> {
 
 					// Check all methods are implemented
 					for (method_name, method_type) in interface_type.methods(true) {
-						if let Some(symbol) = class_env.try_lookup(&method_name, None) {
+						if let Some(symbol) = class_env.lookup(&method_name.as_str().into(), None) {
 							let class_method_type = symbol.as_variable().expect("Expected method to be a variable").type_;
 							self.validate_type(class_method_type, method_type, name);
 						} else {
@@ -2302,7 +2307,7 @@ impl<'a> TypeChecker<'a> {
 
 					// Check all fields are implemented
 					for (field_name, field_type) in interface_type.fields(true) {
-						if let Some(symbol) = class_env.try_lookup(&field_name, None) {
+						if let Some(symbol) = class_env.lookup(&field_name.as_str().into(), None) {
 							let class_field_type = symbol.as_variable().expect("Expected field to be a variable").type_;
 							self.validate_type(class_field_type, field_type, name);
 						} else {
@@ -2543,7 +2548,7 @@ impl<'a> TypeChecker<'a> {
 		// https://github.com/winglang/wing/issues/457
 		// Lookup the method in the class_env
 		let method_type = class_env
-			.lookup(method_name, None)
+			.lookup(&method_name, None)
 			.expect("Expected method to be in class env")
 			.as_variable()
 			.expect("Expected method to be a variable")
@@ -2570,7 +2575,7 @@ impl<'a> TypeChecker<'a> {
 						name: "this".into(),
 						span: method_name.span.clone(),
 					},
-					SymbolKind::make_variable(class_type, false, true, method_env.phase),
+					SymbolKind::make_variable(class_type, false, true, class_env.phase),
 					StatementIdx::Top,
 				)
 				.expect("Expected `this` to be added to constructor env");
@@ -2683,7 +2688,10 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// check if we've already defined the given alias in the current scope
-		if env.lookup(&jsii.alias, Some(jsii.import_statement_idx)).is_ok() {
+		if env
+			.lookup(&jsii.alias.name.as_str().into(), Some(jsii.import_statement_idx))
+			.is_some()
+		{
 			self.type_error(TypeError {
 				message: format!("\"{}\" is already defined", alias.name),
 				span: alias.span.clone(),
@@ -2743,7 +2751,7 @@ impl<'a> TypeChecker<'a> {
 		original_fqn: &str,
 		type_params: Vec<TypeRef>,
 	) -> TypeRef {
-		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().as_type().unwrap();
+		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().0.as_type().unwrap();
 		let original_type_class = original_type.as_class().unwrap();
 		let original_type_params = if let Some(tp) = original_type_class.type_parameters.as_ref() {
 			tp
@@ -2960,7 +2968,11 @@ impl<'a> TypeChecker<'a> {
 		}
 		let root = path.pop().unwrap();
 		path.reverse();
-		let user_type_annotation = UserDefinedType { root, fields: path };
+		let user_type_annotation = UserDefinedType {
+			root,
+			fields: path,
+			span: WingSpan::default(),
+		};
 
 		self
 			.resolve_user_defined_type(&user_type_annotation, env, self.statement_idx)
@@ -2970,8 +2982,9 @@ impl<'a> TypeChecker<'a> {
 
 	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv) -> VariableInfo {
 		match reference {
-			Reference::Identifier(symbol) => match env.lookup(symbol, Some(self.statement_idx)) {
-				Ok(var) => {
+			Reference::Identifier(symbol) => {
+				let lookup_res = env.lookup_ext(symbol, Some(self.statement_idx));
+				if let LookupResult::Found(var, _) = lookup_res {
 					if let Some(var) = var.as_variable() {
 						var
 					} else {
@@ -2980,8 +2993,7 @@ impl<'a> TypeChecker<'a> {
 							span: symbol.span.clone(),
 						})
 					}
-				}
-				Err(type_error) => {
+				} else {
 					// Give a specific error message if someone tries to write "print" instead of "log"
 					if symbol.name == "print" {
 						self.variable_error(TypeError {
@@ -2989,10 +3001,10 @@ impl<'a> TypeChecker<'a> {
 							span: symbol.span.clone(),
 						})
 					} else {
-						self.variable_error(type_error)
+						self.variable_error(lookup_result_to_type_error(lookup_res, symbol))
 					}
 				}
-			},
+			}
 			Reference::InstanceMember { object, property } => {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.
 				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and transform this
@@ -3022,7 +3034,7 @@ impl<'a> TypeChecker<'a> {
 				let mut force_reassignable = false;
 				if let ExprKind::Reference(Reference::Identifier(symb)) = &object.kind {
 					if symb.name == "this" {
-						if let Ok((kind, info)) = env.lookup_ext(symb, Some(self.statement_idx)) {
+						if let LookupResult::Found(kind, info) = env.lookup_ext(&symb, Some(self.statement_idx)) {
 							// `this` resreved symbol should always be a variable
 							assert!(matches!(kind, SymbolKind::Variable(_)));
 							force_reassignable = info.init;
@@ -3070,6 +3082,7 @@ impl<'a> TypeChecker<'a> {
 						env
 							.lookup_nested_str(WINGSDK_JSON, None)
 							.unwrap()
+							.0
 							.as_type()
 							.unwrap()
 							.as_class()
@@ -3080,6 +3093,7 @@ impl<'a> TypeChecker<'a> {
 						env
 							.lookup_nested_str(WINGSDK_MUT_JSON, None)
 							.unwrap()
+							.0
 							.as_type()
 							.unwrap()
 							.as_class()
@@ -3090,6 +3104,7 @@ impl<'a> TypeChecker<'a> {
 						env
 							.lookup_nested_str(WINGSDK_STRING, None)
 							.unwrap()
+							.0
 							.as_type()
 							.unwrap()
 							.as_class()
@@ -3100,6 +3115,7 @@ impl<'a> TypeChecker<'a> {
 						env
 							.lookup_nested_str(WINGSDK_DURATION, None)
 							.unwrap()
+							.0
 							.as_type()
 							.unwrap()
 							.as_class()
@@ -3148,28 +3164,25 @@ impl<'a> TypeChecker<'a> {
 							)
 						}
 					}
-					Type::Class(ref c) | Type::Resource(ref c) => {
-						let member = c.env.lookup(property, None);
-						match member {
-							Ok(SymbolKind::Variable(v)) => {
-								if v.is_static {
-									v.clone()
-								} else {
-									self.resolve_static_error(
-										property,
-										format!(
-											"Class \"{}\" contains a member \"{}\" but it is not static",
-											type_, property.name
-										),
-									)
-								}
+					Type::Class(ref c) | Type::Resource(ref c) => match c.env.lookup(&property, None) {
+						Some(SymbolKind::Variable(v)) => {
+							if v.is_static {
+								v.clone()
+							} else {
+								self.resolve_static_error(
+									property,
+									format!(
+										"Class \"{}\" contains a member \"{}\" but it is not static",
+										type_, property.name
+									),
+								)
 							}
-							_ => self.resolve_static_error(
-								property,
-								format!("No member \"{}\" in class \"{}\"", property.name, type_),
-							),
 						}
-					}
+						_ => self.resolve_static_error(
+							property,
+							format!("No member \"{}\" in class \"{}\"", property.name, type_),
+						),
+					},
 					_ => self.resolve_static_error(property, format!("\"{}\" not a valid reference", reference)),
 				};
 			}
@@ -3178,19 +3191,19 @@ impl<'a> TypeChecker<'a> {
 
 	/// Get's the type of an instance variable in a class
 	fn get_property_from_class_like(&mut self, class: &impl ClassLike, property: &Symbol) -> VariableInfo {
-		match class.get_env().lookup(property, None) {
-			Ok(field) => {
-				let var = field.as_variable().expect("Expected property to be a variable");
-				if var.is_static {
-					self.variable_error(TypeError {
-						message: format!("Cannot access static property \"{}\" from instance", property.name),
-						span: property.span.clone(),
-					})
-				} else {
-					var
-				}
+		let lookup_res = class.get_env().lookup_ext(property, None);
+		if let LookupResult::Found(field, _) = lookup_res {
+			let var = field.as_variable().expect("Expected property to be a variable");
+			if var.is_static {
+				self.variable_error(TypeError {
+					message: format!("Cannot access static property \"{}\" from instance", property.name),
+					span: property.span.clone(),
+				})
+			} else {
+				var
 			}
-			Err(type_error) => self.variable_error(type_error),
+		} else {
+			self.variable_error(lookup_result_to_type_error(lookup_res, property))
 		}
 	}
 
@@ -3259,7 +3272,7 @@ fn add_parent_members_to_struct_env(
 				.as_variable()
 				.expect("Expected struct member to be a variable")
 				.type_;
-			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
+			if let Some(existing_type) = struct_env.lookup(&parent_member_name.as_str().into(), None) {
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected struct member to be a variable")
@@ -3313,7 +3326,7 @@ fn add_parent_members_to_iface_env(
 				.as_variable()
 				.expect("Expected interface member to be a variable")
 				.type_;
-			if let Some(existing_type) = iface_env.try_lookup(&parent_member_name, None) {
+			if let Some(existing_type) = iface_env.lookup(&parent_member_name.as_str().into(), None) {
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected interface member to be a variable")
@@ -3342,6 +3355,25 @@ fn add_parent_members_to_iface_env(
 	Ok(())
 }
 
+fn lookup_result_to_type_error<T>(lookup_result: LookupResult, looked_up_object: &T) -> TypeError
+where
+	T: Spanned + Display,
+{
+	let (message, span) = match lookup_result {
+		LookupResult::NotFound(s) => (format!("Unknown symbol \"{s}\""), s.span()),
+		LookupResult::DefinedLater => (
+			format!("Symbol \"{looked_up_object}\" used before being defined"),
+			looked_up_object.span(),
+		),
+		LookupResult::ExpectedNamespace(ns_name) => (
+			format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace"),
+			ns_name.span(),
+		),
+		LookupResult::Found(..) => panic!("Expected a lookup error, but found a successful lookup"),
+	};
+	TypeError { message, span }
+}
+
 /// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
 pub fn resolve_user_defined_type(
 	user_defined_type: &UserDefinedType,
@@ -3352,19 +3384,19 @@ pub fn resolve_user_defined_type(
 	let mut nested_name = vec![&user_defined_type.root];
 	nested_name.extend(user_defined_type.fields.iter().collect_vec());
 
-	match env.lookup_nested(&nested_name, Some(statement_idx)) {
-		Ok(_type) => {
-			if let SymbolKind::Type(t) = *_type {
-				Ok(t)
-			} else {
-				let symb = nested_name.last().unwrap();
-				Err(TypeError {
-					message: format!("Expected '{}' to be a type but it's a {}", symb.name, _type),
-					span: symb.span.clone(),
-				})
-			}
+	let lookup_result = env.lookup_nested(&nested_name, Some(statement_idx));
+	if let LookupResult::Found(symb_kind, _) = lookup_result {
+		if let SymbolKind::Type(t) = symb_kind {
+			Ok(*t)
+		} else {
+			let symb = nested_name.last().unwrap();
+			Err(TypeError {
+				message: format!("Expected '{}' to be a type but it's a {symb_kind}", symb.name),
+				span: symb.span.clone(),
+			})
 		}
-		Err(type_error) => Err(type_error),
+	} else {
+		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
 	}
 }
 
@@ -3378,7 +3410,11 @@ pub fn resolve_user_defined_type_by_fqn(
 		.map(|s| Symbol::global(s))
 		.collect_vec();
 	let root = fields.remove(0);
-	let user_defined_type = UserDefinedType { root, fields };
+	let user_defined_type = UserDefinedType {
+		root,
+		fields,
+		span: WingSpan::default(),
+	};
 	resolve_user_defined_type(&user_defined_type, env, statement_idx)
 }
 

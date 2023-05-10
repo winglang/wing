@@ -6,7 +6,6 @@ use crate::{
 		self, symbol_env::StatementIdx, Class, FunctionSignature, Interface, Struct, SymbolKind, Type, TypeRef, Types,
 		CLASS_INIT_NAME,
 	},
-	utilities::camel_case_to_snake_case,
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_JSON, WINGSDK_MUT_JSON,
 	WINGSDK_RESOURCE,
 };
@@ -17,7 +16,10 @@ use wingii::{
 	type_system::TypeSystem,
 };
 
-use super::{symbol_env::SymbolEnv, Enum, Namespace};
+use super::{
+	symbol_env::{LookupResult, SymbolEnv},
+	Enum, Namespace,
+};
 
 trait JsiiInterface {
 	fn methods(&self) -> &Option<Vec<jsii::Method>>;
@@ -135,7 +137,7 @@ impl<'a> JsiiImporter<'a> {
 
 	fn lookup_or_create_type(&mut self, type_fqn: &FQN) -> TypeRef {
 		// Check if this type is already imported
-		if let Ok(t) = self.wing_types.libraries.lookup_nested_str(type_fqn.as_str(), None) {
+		if let LookupResult::Found(t, _) = self.wing_types.libraries.lookup_nested_str(type_fqn.as_str(), None) {
 			return t.as_type().expect(&format!("Expected {} to be a type", type_fqn));
 		}
 		// Define new type and return it
@@ -145,6 +147,7 @@ impl<'a> JsiiImporter<'a> {
 			.libraries
 			.lookup_nested_str(type_fqn.as_str(), None)
 			.expect(&format!("Expected {} to be defined", type_fqn))
+			.0
 			.as_type()
 			.unwrap()
 	}
@@ -155,7 +158,10 @@ impl<'a> JsiiImporter<'a> {
 		let type_str = type_fqn.as_str();
 
 		// check if type is already imported
-		if self.wing_types.libraries.lookup_nested_str(type_str, None).is_ok() {
+		if matches!(
+			self.wing_types.libraries.lookup_nested_str(type_str, None),
+			LookupResult::Found(..)
+		) {
 			return true;
 		}
 
@@ -188,7 +194,7 @@ impl<'a> JsiiImporter<'a> {
 		// the type belongs to.
 		debug!("Setting up namespaces for {}", type_name);
 
-		if let Some(symb) = self.wing_types.libraries.try_lookup_mut(type_name.assembly(), None) {
+		if let Some(symb) = self.wing_types.libraries.lookup_mut(&type_name.assembly().into(), None) {
 			if let SymbolKind::Namespace(_) = symb {
 				// do nothing
 			} else {
@@ -225,12 +231,13 @@ impl<'a> JsiiImporter<'a> {
 			let mut parent_ns = self
 				.wing_types
 				.libraries
-				.lookup_nested_mut_str(&lookup_str, None)
+				.lookup_nested_str_mut(&lookup_str, None)
 				.unwrap()
+				.0
 				.as_namespace_ref()
 				.unwrap();
 
-			if let Some(symb) = parent_ns.env.try_lookup_mut(namespace_name, None) {
+			if let Some(symb) = parent_ns.env.lookup_mut(&namespace_name.into(), None) {
 				if let SymbolKind::Namespace(_) = symb {
 					// do nothing
 				} else {
@@ -455,10 +462,9 @@ impl<'a> JsiiImporter<'a> {
 						.and_then(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
 						.flatten(),
 				}));
-				let name = camel_case_to_snake_case(&m.name);
 				class_env
 					.define(
-						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
+						&Self::jsii_name_to_symbol(&m.name, &m.location_in_module),
 						SymbolKind::make_variable(method_sig, false, is_static, phase),
 						StatementIdx::Top,
 					)
@@ -488,7 +494,7 @@ impl<'a> JsiiImporter<'a> {
 
 				class_env
 					.define(
-						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
+						&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
 						SymbolKind::make_variable(wing_type, !matches!(p.immutable, Some(true)), is_static, phase),
 						StatementIdx::Top,
 					)
@@ -533,7 +539,7 @@ impl<'a> JsiiImporter<'a> {
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
 			let base_class_fqn = FQN::from(base_class_fqn.as_str());
 			let base_class_name = base_class_fqn.type_name();
-			let base_class_type = if let Ok(base_class_type) = self
+			let base_class_type = if let LookupResult::Found(base_class_type, _) = self
 				.wing_types
 				.libraries
 				.lookup_nested_str(base_class_fqn.as_str(), None)
@@ -552,6 +558,7 @@ impl<'a> JsiiImporter<'a> {
 						"Failed to define base class {} of {}",
 						base_class_name, type_name
 					))
+					.0
 					.as_type()
 					.unwrap()
 			};
@@ -778,7 +785,12 @@ impl<'a> JsiiImporter<'a> {
 
 			// if the "libraries" environment already contains a namespace for this assembly
 			// we can skip this step
-			if self.wing_types.libraries.try_lookup(&assembly.name, None).is_none() {
+			if self
+				.wing_types
+				.libraries
+				.lookup(&assembly.name.as_str().into(), None)
+				.is_none()
+			{
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: assembly.name.clone(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
@@ -807,8 +819,9 @@ impl<'a> JsiiImporter<'a> {
 		let ns = self
 			.wing_types
 			.libraries
-			.lookup_nested_mut_str(&lookup_str, None)
+			.lookup_nested_str_mut(&lookup_str, None)
 			.unwrap()
+			.0
 			.as_namespace_ref()
 			.unwrap();
 
@@ -823,15 +836,19 @@ impl<'a> JsiiImporter<'a> {
 
 	fn register_jsii_type(&mut self, fqn: &FQN, symbol: &Symbol, type_ref: TypeRef) {
 		// make this function idempotent
-		if self.wing_types.libraries.lookup_nested_str(fqn.as_str(), None).is_ok() {
+		if matches!(
+			self.wing_types.libraries.lookup_nested_str(fqn.as_str(), None),
+			LookupResult::Found(..)
+		) {
 			return;
 		}
 
 		let mut ns = self
 			.wing_types
 			.libraries
-			.lookup_nested_mut_str(fqn.as_str_without_type_name(), None)
+			.lookup_nested_str_mut(fqn.as_str_without_type_name(), None)
 			.unwrap()
+			.0
 			.as_namespace_ref()
 			.unwrap();
 		ns.env

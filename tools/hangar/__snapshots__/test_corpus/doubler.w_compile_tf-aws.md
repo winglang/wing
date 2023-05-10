@@ -2,7 +2,7 @@
 
 ## clients/Doubler.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Doubler {
     constructor({ func }) {
       this.func = func;
@@ -67,13 +67,19 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("invoke");
         this.func = func;
       }
-      _toInflight() {
-        const func_client = this._lift(this.func);
+      static _toInflightType(context) {
         const self_client_path = "./clients/Doubler.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const func_client = this._lift(this.func);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Doubler = require("${self_client_path}")({});
-            const client = new Doubler({
+            const DoublerClient = ${Doubler._toInflightType(this).text};
+            const client = new DoublerClient({
               func: ${func_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

@@ -1,10 +1,10 @@
 bring cloud;
 
 let q = new cloud.Queue();
-let str_to_str = new cloud.Function(inflight (s: str): str => {
+let strToStr = new cloud.Function(inflight (s: str): str => {
 
-}) as "str_to_str";
+}) as "strToStr";
 let func = new cloud.Function(inflight (s: str): str => {
-  str_to_str.invoke("one");
-  log(str_to_str.invoke("two"));
+  strToStr.invoke("one");
+  log(strToStr.invoke("two"));
 }) as "func";

@@ -2,7 +2,7 @@
 
 ## clients/A.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  A {
     constructor({  }) {
     }
@@ -19,7 +19,7 @@ module.exports = function() {
 
 ## clients/Dog.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Dog {
     constructor({  }) {
     }
@@ -36,11 +36,11 @@ module.exports = function() {
 
 ## clients/r.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  r {
     constructor({  }) {
     }
-    async method_2(x)  {
+    async method2(x)  {
       {
         return x;
       }
@@ -98,12 +98,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const A = require("${self_client_path}")({});
-            const client = new A({
+            const AClient = ${A._toInflightType(this).text};
+            const client = new AClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -121,24 +127,30 @@ class $Root extends $stdlib.std.Resource {
     class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method_2");
+        this._addInflightOps("method2");
       }
-       method_1(x)  {
+       method1(x)  {
         {
           return x;
         }
       }
-       method_3(x)  {
+       method3(x)  {
         {
           return x;
         }
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const r = require("${self_client_path}")({});
-            const client = new r({
+            const rClient = ${r._toInflightType(this).text};
+            const client = new rClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -148,7 +160,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
-        if (ops.includes("method_2")) {
+        if (ops.includes("method2")) {
         }
         super._registerBind(host, ops);
       }
@@ -158,12 +170,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("eat");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Dog = require("${self_client_path}")({});
-            const client = new Dog({
+            const DogClient = ${Dog._toInflightType(this).text};
+            const client = new DogClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
