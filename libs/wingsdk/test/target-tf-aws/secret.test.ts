@@ -1,8 +1,7 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf, mkdtemp } from "../util";
 
 test("default secret behavior", () => {
   // GIVEN

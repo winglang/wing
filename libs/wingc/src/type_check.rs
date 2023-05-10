@@ -12,7 +12,7 @@ use crate::visit::Visit;
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -2068,7 +2068,7 @@ impl<'a> TypeChecker<'a> {
 						// we use the module name as the identifier.
 						// For example, `bring fs` will import the `fs` namespace from @winglang/sdk and assign it
 						// to an identifier named `fs`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE | WINGSDK_REDIS_MODULE => {
+						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
 							alias = identifier.as_ref().unwrap_or(&module_name);
@@ -2966,6 +2966,35 @@ impl<'a> TypeChecker<'a> {
 				_ => return None,
 			}
 		}
+
+		// rewrite "namespace.foo()" to "namespace.Util.foo()" (e.g. `util.env()`). we do this by
+		// looking up the symbol path within the current environment and if it resolves to a namespace,
+		// then resolve a class named "Util" within it. This will basically be equivalent to the
+		// `foo.Bar.baz()` case (where `baz()`) is a static method of class `Bar`.
+		if !path.is_empty() {
+			let result = env.lookup_nested(&path.iter().collect_vec(), Some(self.statement_idx));
+			if let LookupResult::Found(symbol_kind, info) = result {
+				if let SymbolKind::Namespace(_) = symbol_kind {
+
+					// resolve "Util" as a user defined class within the namespace
+					let root = path.pop().unwrap();
+					path.reverse();
+					path.push(Symbol { name: "Util".to_string(), span: root.span.clone() });
+
+					let ut = UserDefinedType { 
+						root, 
+						fields: path,
+						span: WingSpan::default(),
+					};
+
+					return self
+						.resolve_user_defined_type(&ut, env, self.statement_idx)
+						.ok()
+						.map(|_| ut);
+				}
+			}
+		}
+
 		let root = path.pop().unwrap();
 		path.reverse();
 		let user_type_annotation = UserDefinedType {
@@ -2988,8 +3017,9 @@ impl<'a> TypeChecker<'a> {
 					if let Some(var) = var.as_variable() {
 						var
 					} else {
+
 						self.variable_error(TypeError {
-							message: format!("Expected identifier {}, to be a variable, but it's a {}", symbol, var),
+							message: format!("Expected identifier \"{}\" to be a variable, but it's a {}", symbol.name, var),
 							span: symbol.span.clone(),
 						})
 					}
@@ -3529,3 +3559,4 @@ mod tests {
 		assert!(!str_fn.is_subtype_of(&opt_str_fn));
 	}
 }
+
