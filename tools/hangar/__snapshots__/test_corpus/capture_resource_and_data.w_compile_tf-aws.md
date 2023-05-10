@@ -21,7 +21,7 @@
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[]"
+      "value": "[[\"root/Default/Default/test:resource and data\",\"${aws_lambda_function.root_testresourceanddata_Handler_5C5A99FB.arn}\"]]"
     }
   },
   "provider": {
@@ -31,46 +31,46 @@
   },
   "resource": {
     "aws_iam_role": {
-      "root_test_IamRole_6CDC2D16": {
+      "root_testresourceanddata_Handler_IamRole_4C2C3DAA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRole",
-            "uniqueId": "root_test_IamRole_6CDC2D16"
+            "path": "root/Default/Default/test:resource and data/Handler/IamRole",
+            "uniqueId": "root_testresourceanddata_Handler_IamRole_4C2C3DAA"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_test_IamRolePolicy_474A6820": {
+      "root_testresourceanddata_Handler_IamRolePolicy_6768C3B6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRolePolicy",
-            "uniqueId": "root_test_IamRolePolicy_474A6820"
+            "path": "root/Default/Default/test:resource and data/Handler/IamRolePolicy",
+            "uniqueId": "root_testresourceanddata_Handler_IamRolePolicy_6768C3B6"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:PurgeQueue\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
+        "role": "${aws_iam_role.root_testresourceanddata_Handler_IamRole_4C2C3DAA.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_test_IamRolePolicyAttachment_1102A28A": {
+      "root_testresourceanddata_Handler_IamRolePolicyAttachment_B4EB837E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRolePolicyAttachment",
-            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A"
+            "path": "root/Default/Default/test:resource and data/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testresourceanddata_Handler_IamRolePolicyAttachment_B4EB837E"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
+        "role": "${aws_iam_role.root_testresourceanddata_Handler_IamRole_4C2C3DAA.name}"
       }
     },
     "aws_lambda_function": {
-      "root_test_AAE85061": {
+      "root_testresourceanddata_Handler_5C5A99FB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/Default",
-            "uniqueId": "root_test_AAE85061"
+            "path": "root/Default/Default/test:resource and data/Handler/Default",
+            "uniqueId": "root_testresourceanddata_Handler_5C5A99FB"
           }
         },
         "environment": {
@@ -78,16 +78,16 @@
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "QUEUE_URL_31e95cbd": "${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
-            "WING_FUNCTION_NAME": "test-c8b6eece"
+            "WING_FUNCTION_NAME": "Handler-c8872ad1"
           }
         },
-        "function_name": "test-c8b6eece",
+        "function_name": "Handler-c8872ad1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "role": "${aws_iam_role.root_testresourceanddata_Handler_IamRole_4C2C3DAA.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "s3_key": "${aws_s3_object.root_testresourceanddata_Handler_S3Object_EE48D4E2.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -150,11 +150,11 @@
       }
     },
     "aws_s3_object": {
-      "root_test_S3Object_A16CD789": {
+      "root_testresourceanddata_Handler_S3Object_EE48D4E2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/S3Object",
-            "uniqueId": "root_test_S3Object_A16CD789"
+            "path": "root/Default/Default/test:resource and data/Handler/S3Object",
+            "uniqueId": "root_testresourceanddata_Handler_S3Object_EE48D4E2"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -190,7 +190,7 @@ class $Root extends $stdlib.std.Resource {
     const data = Object.freeze(new Set([1, 2, 3]));
     const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:resource and data",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         data: {
@@ -207,8 +207,7 @@ class $Root extends $stdlib.std.Resource {
         },
       }
     })
-    ;
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",handler);
+    );
   }
 }
 class $App extends $AppBase {
@@ -232,7 +231,7 @@ new $App().synth();
 
 ## proc1/index.js
 ```js
-async handle(e) {
+async handle() {
   const { data, queue, res } = this;
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
   (await res.put("file.txt","world"));

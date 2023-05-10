@@ -77,8 +77,8 @@ export interface ITestHandler extends IResource {}
  */
 export interface ITestHandlerClient {
   /**
-   * Entrypoint function that will be called when the test is run.
+   * Inflight function that will be called when the test is run.
    * @inflight
    */
-  handle(event: string): Promise<void>;
+  handle(): Promise<void>;
 }

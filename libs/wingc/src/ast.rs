@@ -447,10 +447,6 @@ pub enum StmtKind {
 		catch_block: Option<CatchBlock>,
 		finally_statements: Option<Scope>,
 	},
-	// Test {
-	// 	name: Symbol,
-	// 	statements: Scope,
-	// },
 }
 
 #[derive(Debug)]

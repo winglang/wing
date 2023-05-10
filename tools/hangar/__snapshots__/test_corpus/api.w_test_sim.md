@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ api.wsim (no tests)
+pass ─ api.wsim » root/env0/test:api url
 ```
 

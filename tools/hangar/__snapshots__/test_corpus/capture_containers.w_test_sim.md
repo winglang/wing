@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ capture_containers.wsim (no tests)
+pass ─ capture_containers.wsim » root/env0/test:capture_containers
 ```
 

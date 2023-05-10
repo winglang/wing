@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ capture_in_binary.wsim (no tests)
+pass ─ capture_in_binary.wsim » root/env0/test:binary expressions
 ```
 

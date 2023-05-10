@@ -5784,25 +5784,19 @@ Inflight client for `ITestHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITestHandlerClient.handle">handle</a></code> | Entrypoint function that will be called when the test is run. |
+| <code><a href="#@winglang/sdk.cloud.ITestHandlerClient.handle">handle</a></code> | Inflight function that will be called when the test is run. |
 
 ---
 
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.ITestHandlerClient.handle"></a>
 
 ```wing
-handle(event: str): void
+handle(): void
 ```
 
 **Inflight client:** [true](#true)
 
-Entrypoint function that will be called when the test is run.
-
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/sdk.cloud.ITestHandlerClient.handle.parameter.event"></a>
-
-- *Type:* str
-
----
+Inflight function that will be called when the test is run.
 
 
 ### ITestRunnerClient <a name="ITestRunnerClient" id="@winglang/sdk.cloud.ITestRunnerClient"></a>
