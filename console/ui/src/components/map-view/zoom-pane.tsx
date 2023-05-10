@@ -129,14 +129,17 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
       const y0 = viewport.y;
       const x1 = x0 + viewport.width;
       const y1 = y0 + viewport.height;
-      console.log({ x0, y0, x1, y1 });
+
+      const scale = Math.min(
+        8,
+        0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
+      );
+
       selectionTransition(selection, 800).call(
         zoom.transform,
         d3Zoom.zoomIdentity
           .translate(width / 2, height / 2)
-          .scale(
-            Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)),
-          )
+          .scale(Math.min(1, scale))
           .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
       );
     },

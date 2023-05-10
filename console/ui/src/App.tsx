@@ -1,5 +1,4 @@
 import { DefaultTheme, ThemeProvider } from "@wingconsole/design-system";
-import { useEffect } from "react";
 
 import { NotificationsProvider } from "./design-system/Notification.js";
 import { LayoutProvider, LayoutType } from "./utils/layout-provider.js";

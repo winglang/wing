@@ -3,11 +3,13 @@ import classNames from "classnames";
 import {
   FormEventHandler,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
 } from "react";
 
+import { AppContext } from "../../AppContext.js";
 import { Button } from "../../design-system/Button.js";
 import { TreeEntry, Tree } from "../../design-system/Tree.js";
 import { trpc } from "../../utils/trpc.js";
@@ -33,6 +35,7 @@ const canBePreviewed = (fileName: string) => {
 
 export const BucketView = ({ resourcePath }: BucketViewProps) => {
   const { theme } = useTheme();
+  const { appMode } = useContext(AppContext);
 
   const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
   const putFile = trpc["bucket.put"].useMutation();
@@ -154,12 +157,14 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
             onInput={uploadSelectedEntries}
             multiple
           />
-          <Button
-            label="Upload"
-            onClick={() => {
-              fileInputRef.current?.click();
-            }}
-          />
+          {appMode !== "webapp" && (
+            <Button
+              label="Upload"
+              onClick={() => {
+                fileInputRef.current?.click();
+              }}
+            />
+          )}
         </div>
       </div>
 

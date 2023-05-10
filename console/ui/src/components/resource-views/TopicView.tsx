@@ -18,9 +18,6 @@ export const TopicView = ({ resourcePath }: TopicViewProps) => {
   const { showNotification } = useNotifications();
 
   const publishMessage = useCallback(async () => {
-    if (appMode === "webapp") {
-      return;
-    }
     if (!message) {
       return;
     }
@@ -43,11 +40,7 @@ export const TopicView = ({ resourcePath }: TopicViewProps) => {
           onInput={(event) => setMessage(event.currentTarget.value)}
         />
         <div className="flex gap-2 justify-end">
-          <Button
-            label="Publish"
-            disabled={appMode === "webapp"}
-            onClick={() => publishMessage()}
-          />
+          <Button label="Publish" onClick={() => publishMessage()} />
         </div>
       </div>
     </div>

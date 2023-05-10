@@ -12,10 +12,11 @@ import { ZoomPaneProvider } from "./zoom-pane.js";
 export interface MapViewProps {
   selectedNodeId?: string;
   showTests?: boolean;
+  showMapControls?: boolean;
   onSelectedNodeIdChange?: (id: string | undefined) => void;
 }
 
-export const MapView = (props: MapViewProps) => {
+export const MapView = ({ showMapControls = true, ...props }: MapViewProps) => {
   const map = trpc["app.map"].useQuery({
     showTests: props.showTests,
   });
@@ -23,8 +24,7 @@ export const MapView = (props: MapViewProps) => {
   return (
     <ZoomPaneProvider>
       <div className="h-full flex flex-col">
-        <MapControls />
-
+        {showMapControls && <MapControls />}
         <div
           className={classNames(
             "grow relative border-t",

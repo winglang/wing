@@ -4,7 +4,6 @@ import { useContext, useId, useState } from "react";
 
 import { AppContext } from "../../AppContext.js";
 import { Button } from "../../design-system/Button.js";
-import { Modal } from "../../design-system/Modal.js";
 import { TextArea } from "../../design-system/TextArea.js";
 import { trpc } from "../../utils/trpc.js";
 import { JsonResponseInput } from "../JsonResponseInput.js";
@@ -17,6 +16,8 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
   const { theme } = useTheme();
 
   const { appMode } = useContext(AppContext);
+
+  const [payload, setPayload] = useState("");
   const [response, setResponse] = useState("");
   const payloadId = useId();
   const responseId = useId();
@@ -27,90 +28,41 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
     },
   });
 
-  const [message, setMessage] = useState("");
-  const [showModal, setShowModal] = useState(false);
-
   return (
     <>
-      <div className="flex-col space-y-1">
-        <div className="flex flex-row">
-          <div
-            className={classNames(
-              theme.text1,
-              "max-w-full min-w-0 grow space-x-2 items-end flex",
-            )}
-          >
+      <div className="h-full flex-1 flex flex-col text-sm">
+        <div className="flex flex-col gap-2">
+          <TextArea
+            id={payloadId}
+            placeholder="Payload"
+            className="text-xs"
+            value={payload}
+            onInput={(event) => setPayload(event.currentTarget.value)}
+            disabled={invoke.isLoading}
+          />
+          <div className="flex gap-2 justify-end">
             <Button
-              label="Invoke"
-              className="px-0.5"
-              aria-disabled={appMode === "webapp"}
-              onClick={() => invoke.mutate({ resourcePath, message: "" })}
-            />
-            <Button
-              label="Invoke with..."
-              className="px-0.5 truncate"
-              aria-disabled={appMode === "webapp"}
-              onClick={() => setShowModal(true)}
+              label="Send"
+              onClick={() => invoke.mutate({ resourcePath, message: payload })}
+              disabled={invoke.isLoading}
             />
           </div>
-        </div>
-        <div>
-          <label
-            htmlFor={responseId}
-            className={classNames("text-sm", theme.text2)}
-          >
-            Response
-          </label>
-          <JsonResponseInput
-            value={response}
-            loading={invoke.isLoading}
-            placeholder="No response"
-            className="max-h-[20rem]"
-          />
+          <div>
+            <label
+              htmlFor={responseId}
+              className={classNames("text-sm", theme.text2)}
+            >
+              Response
+            </label>
+            <JsonResponseInput
+              value={response}
+              loading={invoke.isLoading}
+              placeholder="No response"
+              className="max-h-[20rem]"
+            />
+          </div>
         </div>
       </div>
-
-      <Modal visible={showModal} setVisible={setShowModal}>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            setShowModal(false);
-            invoke.mutate({ resourcePath, message });
-          }}
-        >
-          <div className="mt-2 space-y-2">
-            <h3
-              className={classNames(
-                "text-base font-semibold leading-6",
-                theme.text1,
-              )}
-            >
-              Invoke {resourcePath.split("/").pop()}
-            </h3>
-
-            <label
-              className={classNames("block text-sm font-medium", theme.text1)}
-              htmlFor={payloadId}
-            >
-              Payload (JSON)
-            </label>
-            <TextArea
-              id={payloadId}
-              value={message}
-              rows={5}
-              onInput={(event) => setMessage(event.currentTarget.value)}
-              className="font-mono min-h-[40px] resize-none"
-            />
-            <p className={classNames("text-sm", theme.text2)}>
-              This payload will be sent to the function when you invoke it.
-            </p>
-          </div>
-          <div className="mt-2 space-x-2 justify-end flex">
-            <Button label="Cancel" onClick={() => setShowModal(false)} />
-            <Button primary label="Invoke" type="submit" />
-          </div>
-        </form>
-      </Modal>
     </>
   );
 };

@@ -1,8 +1,9 @@
 import { useTheme } from "@wingconsole/design-system";
 import { OpenApiSpec } from "@wingconsole/server/src/wingsdk.js";
 import classNames from "classnames";
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useContext, useEffect, useId, useState } from "react";
 
+import { AppContext } from "../../AppContext.js";
 import { Button } from "../../design-system/Button.js";
 import { Combobox } from "../../design-system/Combobox.js";
 import {
@@ -52,6 +53,7 @@ const getRoutesFromOpenApi = (openApi: OpenApiSpec): ApiRoute[] => {
 
 export const ApiView = ({ resourcePath }: ApiViewProps) => {
   const { theme } = useTheme();
+  const { appMode } = useContext(AppContext);
 
   const [url, setUrl] = useState<string>("");
 
@@ -220,7 +222,9 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
   return (
     <div className="h-full flex-1 flex flex-col text-sm space-y-1">
       <div className="relative grow">
-        <AttributeView name="URL" value={url} noLeftPadding />
+        {appMode !== "webapp" && (
+          <AttributeView name="URL" value={url} noLeftPadding />
+        )}
         <div className="space-y-2 flex-col grow mt-4">
           <div className="flex gap-1 w-full">
             <div className="group flex grow relative gap-x-1">

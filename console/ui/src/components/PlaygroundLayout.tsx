@@ -65,6 +65,7 @@ export const PlaygroundLayout = ({
           <div className="flex-1 flex">
             <div className="flex-1 flex flex-col">
               <MapView
+                showMapControls={false}
                 showTests={showTests}
                 selectedNodeId={selectedItems[0]}
                 onSelectedNodeIdChange={(nodeId) =>
@@ -99,7 +100,7 @@ export const PlaygroundLayout = ({
         <TopResizableWidget
           className={classNames(
             theme.border3,
-            "flex relative border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[21rem]",
+            "flex relative border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[15rem]",
           )}
         >
           <BlueScreenOfDeath
@@ -109,14 +110,6 @@ export const PlaygroundLayout = ({
             displayLinks={false}
             displayWingTitle={false}
           />
-          <RightResizableWidget
-            className={classNames(
-              theme.border3,
-              "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[15rem] border-r border-b",
-            )}
-          >
-            <TestsTree />
-          </RightResizableWidget>
           <div
             className={classNames(
               theme.border3,

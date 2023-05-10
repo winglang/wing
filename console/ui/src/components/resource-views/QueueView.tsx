@@ -2,7 +2,6 @@ import { useCallback, useContext, useId, useState } from "react";
 
 import { AppContext } from "../../AppContext.js";
 import { Button } from "../../design-system/Button.js";
-import { useNotifications } from "../../design-system/Notification.js";
 import { TextArea } from "../../design-system/TextArea.js";
 import { trpc } from "../../utils/trpc.js";
 
@@ -15,12 +14,8 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
   const pushMessage = trpc["queue.push"].useMutation();
 
   const [message, setMessage] = useState("");
-  const { showNotification } = useNotifications();
 
   const sendMessage = useCallback(async () => {
-    if (appMode === "webapp") {
-      return;
-    }
     if (!message || message === "") {
       return;
     }
@@ -28,8 +23,7 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
       resourcePath,
       message: message,
     });
-    showNotification("Message sent", { body: message, type: "success" });
-  }, [message, pushMessage, appMode, resourcePath, showNotification]);
+  }, [message, pushMessage, appMode, resourcePath]);
 
   const id = useId();
 
@@ -41,12 +35,13 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
           className="text-xs"
           value={message}
           onInput={(event) => setMessage(event.currentTarget.value)}
+          disabled={pushMessage.isLoading}
         />
         <div className="flex gap-2 justify-end">
           <Button
             label="Send"
-            disabled={appMode === "webapp"}
             onClick={() => sendMessage()}
+            disabled={pushMessage.isLoading}
           />
         </div>
       </div>

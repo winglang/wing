@@ -49,8 +49,10 @@ export const Console = ({
 
   let windowTitle = title ?? "Wing Console";
 
+  const appMode = layout === LayoutType.Playground ? "webapp" : "electron";
+
   return (
-    <AppContext.Provider value={{ appMode: "electron", title: windowTitle }}>
+    <AppContext.Provider value={{ appMode, title: windowTitle }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
           <App layout={layout} />
