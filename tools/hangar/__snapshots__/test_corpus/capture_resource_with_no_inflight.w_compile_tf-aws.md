@@ -2,7 +2,7 @@
 
 ## clients/A.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  A {
     constructor({ field }) {
       this.field = field;
@@ -148,13 +148,19 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this.field = "hey";
       }
-      _toInflight() {
-        const field_client = this._lift(this.field);
+      static _toInflightType(context) {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const field_client = this._lift(this.field);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const A = require("${self_client_path}")({});
-            const client = new A({
+            const AClient = ${A._toInflightType(this).text};
+            const client = new AClient({
               field: ${field_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

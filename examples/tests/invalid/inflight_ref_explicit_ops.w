@@ -1,45 +1,45 @@
 bring cloud;
 
 class Another {
-  my_queue: cloud.Queue;
-  another_str: str;
+  myQueue: cloud.Queue;
+  anotherStr: str;
 
   init () {
-    this.my_queue = new cloud.Queue();
-    this.another_str = "bang";
+    this.myQueue = new cloud.Queue();
+    this.anotherStr = "bang";
   }
 
-  inflight inflight_returns_resource(): cloud.Queue {
-    return this.my_queue;
+  inflight inflightReturnsResource(): cloud.Queue {
+    return this.myQueue;
 //              ^^^^^^^^ Cannot qualify which operations are performed on resource
   }
 }
 
 class Test {
-  just_bucket: cloud.Bucket;
+  justBucket: cloud.Bucket;
   b: cloud.Bucket;
   another: Another;
   array: Array<cloud.Bucket>;
-  just_str: str;
+  justStr: str;
 
   init() {
     this.b = new cloud.Bucket() as "b1";
-    this.just_bucket = new cloud.Bucket() as "b2";
+    this.justBucket = new cloud.Bucket() as "b2";
     this.another = new Another();
     this.array = [new cloud.Bucket() as "a1", new cloud.Bucket() as "a2"];
-    this.just_str = "hello";
+    this.justStr = "hello";
   }
 
   inflight test1() {
     let x = this.b;
 //               ^ Cannot qualify which operations are performed on resource
     x.put("hello", "world");
-    assert(this.just_str == "hello");
-    this.just_bucket.put("hello", "world");
+    assert(this.justStr == "hello");
+    this.justBucket.put("hello", "world");
   }
 
   inflight test2() {
-    let q = this.another.inflight_returns_resource();
+    let q = this.another.inflightReturnsResource();
     q.push("push!");
   }
 
@@ -49,7 +49,7 @@ class Test {
   }
 
   inflight test4() {
-    assert(this.another.another_str == "bang");
+    assert(this.another.anotherStr == "bang");
   }
 }
 

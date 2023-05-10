@@ -551,6 +551,7 @@ impl<'s> Parser<'s> {
 									kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 										root: name.clone(),
 										fields: vec![],
+										span: name.span.clone(),
 									}),
 									span: self.node_span(&class_element),
 								})),
@@ -581,6 +582,7 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
+							span: name.span.clone(),
 						}),
 						span: name.span.clone(),
 					})),
@@ -898,6 +900,7 @@ impl<'s> Parser<'s> {
 								span: Default::default(),
 							},
 							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
 						},
 						property: self.node_symbol(&property)?,
 					}),
@@ -948,6 +951,7 @@ impl<'s> Parser<'s> {
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
+			span: self.node_span(&nested_node),
 		});
 		Ok(TypeAnnotation {
 			kind,
@@ -1414,6 +1418,7 @@ impl<'s> Parser<'s> {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 						root: Symbol::global("cloud"),
 						fields: vec![Symbol::global("Test")],
+						span: WingSpan::default(),
 					}),
 					span: WingSpan::default(),
 				},

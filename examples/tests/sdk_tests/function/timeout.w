@@ -8,7 +8,7 @@ let c = new cloud.Counter();
 
 class Helper {
   init () {}
-  extern "../external/sleep.js" inflight sleep(time_ms: num);
+  extern "../external/sleep.js" inflight sleep(ms: num);
 }
 
 let helper = new Helper();

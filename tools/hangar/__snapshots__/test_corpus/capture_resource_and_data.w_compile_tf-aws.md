@@ -199,11 +199,11 @@ class $Root extends $stdlib.std.Resource {
         },
         queue: {
           obj: queue,
-          ops: ["approx_size","purge","push"]
+          ops: ["approxSize","purge","push"]
         },
         res: {
           obj: res,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
       }
     })

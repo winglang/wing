@@ -151,7 +151,7 @@ export enum TraceType {
  */
 export enum TestRunnerInflightMethods {
   /** `TestRunner.runTest` */
-  RUN_TEST = "run_test",
+  RUN_TEST = "runTest",
   /** `TestRunner.listTests` */
-  LIST_TESTS = "list_tests",
+  LIST_TESTS = "listTests",
 }

@@ -244,17 +244,17 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const file_name = "file.json";
+    const fileName = "file.json";
     const j = Object.freeze({"persons":[{"age":30,"name":"hasan","fears":["heights", "failure"]}]});
-    const get_json = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
+    const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         b: {
           obj: b,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
-        file_name: {
-          obj: file_name,
+        fileName: {
+          obj: fileName,
           ops: []
         },
       }
@@ -265,14 +265,14 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         b: {
           obj: b,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
-        file_name: {
-          obj: file_name,
+        fileName: {
+          obj: fileName,
           ops: []
         },
-        get_json: {
-          obj: get_json,
+        getJson: {
+          obj: getJson,
           ops: ["invoke"]
         },
         j: {
@@ -306,8 +306,8 @@ new $App().synth();
 ## proc1/index.js
 ```js
 async handle(msg) {
-  const { b, file_name } = this;
-  const x = (await b.getJson(file_name));
+  const { b, fileName } = this;
+  const x = (await b.getJson(fileName));
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
 }
 
@@ -316,9 +316,9 @@ async handle(msg) {
 ## proc2/index.js
 ```js
 async handle() {
-  const { b, file_name, get_json, j } = this;
-  (await b.putJson(file_name,j));
-  (await get_json.invoke(""));
+  const { b, fileName, getJson, j } = this;
+  (await b.putJson(fileName,j));
+  (await getJson.invoke(""));
 }
 
 ```

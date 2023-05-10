@@ -11,11 +11,11 @@ if true {
 assert(s == "top");
 
 class A {
-  init() {
-    let s = "in_resource";
-    assert(s == "in_resource");
+  init(){
+    let s = "inResource";
+    assert(s == "inResource");
     test "inflight in resource should capture the right scoped var" {
-      assert(s == "in_resource");
+      assert(s == "inResource");
     }
   }
 }
@@ -25,7 +25,7 @@ test "inflight on top should capture top" {
   assert(s == "top");
 }
 
-test "inside_inflight should capture the right scope" {
-  let s = "inside_inflight";
-  assert(s == "inside_inflight");
+test "insideInflight should capture the right scope" {
+  let s = "insideInflight";
+  assert(s == "insideInflight");
 }

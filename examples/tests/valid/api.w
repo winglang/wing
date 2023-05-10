@@ -23,7 +23,7 @@ api.get("/hello/world", handler);
 
 test "api url" {
   let url = api.url;
-  assert(url.starts_with("http://"));
+  assert(url.startsWith("http://"));
 }
 
 // Initialize the API in resource

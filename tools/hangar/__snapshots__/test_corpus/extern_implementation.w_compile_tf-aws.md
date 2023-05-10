@@ -2,28 +2,28 @@
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
     constructor({  }) {
     }
-    static async regex_inflight(pattern, text)  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["regex_inflight"])(pattern, text)
+    static async regexInflight(pattern, text)  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
     }
-    static async get_uuid()  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["get_uuid"])()
+    static async getUuid()  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["getUuid"])()
     }
-    static async get_data()  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["get_data"])()
+    static async getData()  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["getData"])()
     }
     async print(msg)  {
       return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
     }
     async call()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regex_inflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regex_inflight("[a-z]+-\\d+","abc-123")))};
-        const uuid = (await Foo.get_uuid());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regexInflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regexInflight("[a-z]+-\\d+","abc-123")))};
+        const uuid = (await Foo.getUuid());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.get_data()) === "Cool data!")'`)})(((await Foo.get_data()) === "Cool data!"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.getData()) === "Cool data!")'`)})(((await Foo.getData()) === "Cool data!"))};
       }
     }
   }
@@ -230,20 +230,26 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("regex_inflight", "get_uuid", "get_data", "print", "call");
+        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call");
       }
-      static get_greeting(name)  {
-        return (require("<ABSOLUTE_PATH>/external_js.js")["get_greeting"])(name)
+      static getGreeting(name)  {
+        return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
       }
       static v4()  {
         return (require("<ABSOLUTE_PATH>/index.js")["v4"])()
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -255,18 +261,18 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("call")) {
         }
-        if (ops.includes("get_data")) {
+        if (ops.includes("getData")) {
         }
-        if (ops.includes("get_uuid")) {
+        if (ops.includes("getUuid")) {
         }
         if (ops.includes("print")) {
         }
-        if (ops.includes("regex_inflight")) {
+        if (ops.includes("regexInflight")) {
         }
         super._registerBind(host, ops);
       }
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.get_greeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.getGreeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.getGreeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");
     this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:call",new $stdlib.core.Inflight(this, "$Inflight1", {
@@ -274,7 +280,7 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         f: {
           obj: f,
-          ops: ["call","get_data","get_uuid","print","regex_inflight"]
+          ops: ["call","getData","getUuid","print","regexInflight"]
         },
       }
     })
@@ -284,7 +290,7 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         f: {
           obj: f,
-          ops: ["call","get_data","get_uuid","print","regex_inflight"]
+          ops: ["call","getData","getUuid","print","regexInflight"]
         },
       }
     })

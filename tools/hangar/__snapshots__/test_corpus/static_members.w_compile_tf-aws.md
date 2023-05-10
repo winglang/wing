@@ -2,12 +2,12 @@
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
-    constructor({ instance_field }) {
-      this.instance_field = instance_field;
+    constructor({ instanceField }) {
+      this.instanceField = instanceField;
     }
-    static async get_123()  {
+    static async get123()  {
       {
         return 123;
       }
@@ -151,22 +151,28 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get_123");
-        this.instance_field = 100;
+        this._addInflightOps("get123");
+        this.instanceField = 100;
       }
       static m()  {
         {
           return 99;
         }
       }
-      _toInflight() {
-        const instance_field_client = this._lift(this.instance_field);
+      static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const instanceField_client = this._lift(this.instanceField);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
-              instance_field: ${instance_field_client},
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
+              instanceField: ${instanceField_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -175,15 +181,15 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.instance_field, host, []);
+          this._registerBindObject(this.instanceField, host, []);
         }
-        if (ops.includes("get_123")) {
+        if (ops.includes("get123")) {
         }
         super._registerBind(host, ops);
       }
     }
     const foo = new Foo(this,"Foo");
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instance_field === 100)'`)})((foo.instance_field === 100))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instanceField === 100)'`)})((foo.instanceField === 100))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.m()) === 99)'`)})(((Foo.m()) === 99))};
     this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
@@ -219,20 +225,20 @@ async handle() {
   class InflightClass {
     constructor()  {
     }
-    async inflight_method()  {
+    async inflightMethod()  {
       {
         return "Inflight method";
       }
     }
-    static async static_inflight_method()  {
+    static async staticInflightMethod()  {
       {
         return "Static inflight method";
       }
     }
   }
-  const inflight_class = new InflightClass();
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflight_class.inflight_method()) === "Inflight method")'`)})(((await inflight_class.inflight_method()) === "Inflight method"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.static_inflight_method()) === "Static inflight method")'`)})(((await InflightClass.static_inflight_method()) === "Static inflight method"))};
+  const inflightClass = new InflightClass();
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflightClass.inflightMethod()) === "Inflight method")'`)})(((await inflightClass.inflightMethod()) === "Inflight method"))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.staticInflightMethod()) === "Static inflight method")'`)})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
 }
 
 ```

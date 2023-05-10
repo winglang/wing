@@ -204,7 +204,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -248,7 +248,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -423,7 +423,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -467,7 +467,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -646,7 +646,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -690,7 +690,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -958,7 +958,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -1002,7 +1002,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -1179,7 +1179,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -1223,7 +1223,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],

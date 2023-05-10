@@ -1,9 +1,9 @@
 bring cloud;
-bring "./node_modules/jsii-code-samples" as jsii_code_samples;
+bring "./node_modules/jsii-code-samples" as jsiiCodeSamples;
 
-let hello = new jsii_code_samples.HelloWorld();
-let greeting = hello.say_hello("wingnuts");
+let hello = new jsiiCodeSamples.HelloWorld();
+let greeting = hello.sayHello("wingnuts");
 
-test "say_hello" {
+test "sayHello" {
   assert(greeting == "Hello, wingnuts");
 }

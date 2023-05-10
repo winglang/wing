@@ -1,77 +1,82 @@
 bring cloud;
 
-let global_bucket = new cloud.Bucket();
-let global_counter = new cloud.Counter();
-let global_str = "hello";
-let global_bool = true;
-let global_num = 42;
-let global_array_of_str = ["hello", "world"];
-let global_map_of_num = Map<num>{ "a": -5, "b": 2 };
-let global_set_of_str = Set<str>{ "a", "b" };
+let globalBucket = new cloud.Bucket();
+let globalCounter = new cloud.Counter();
+let globalStr = "hello";
+let globalBool = true;
+let globalNum = 42;
+let globalArrayOfStr = ["hello", "world"];
+let globalMapOfNum = Map<num>{ "a": -5, "b": 2 };
+let globalSetOfStr = Set<str>{ "a", "b" };
 
 class First {
-  my_resource: cloud.Bucket;
+  myResource: cloud.Bucket;
 
   init() {
-    this.my_resource = new cloud.Bucket();
+    this.myResource = new cloud.Bucket();
   }
 }
 
 class Another {
-  my_field: str;
+  myField: str;
   first: First;
 
   init () {
-    this.my_field = "hello!";
+    this.myField = "hello!";
     this.first = new First();
   }
 
   inflight init() {
-    assert(global_counter.peek() == 0);
+    assert(globalCounter.peek() == 0);
   }
 
-  inflight my_method(): num {
-    global_counter.inc();
-    return global_counter.peek();
+  inflight myMethod(): num {
+    globalCounter.inc();
+    return globalCounter.peek();
+  }
+
+  static inflight myStaticMethod(): num {
+    return globalCounter.peek();
   }
 }
 
-let global_another = new Another();
+let globalAnother = new Another();
 
 class MyResource {
-  local_topic: cloud.Topic;
-  local_counter: cloud.Counter;
+  localTopic: cloud.Topic;
+  localCounter: cloud.Counter;
   init() {
-    this.local_topic = new cloud.Topic();
-    this.local_counter = new cloud.Counter();
-    let $parent_this = this;
+    this.localTopic = new cloud.Topic();
+    this.localCounter = new cloud.Counter();
+    let $parentThis = this;
 
     class R impl cloud.ITopicOnMessageHandler {
       inflight handle() {
-        global_counter.inc();
-        $parent_this.local_counter.inc();
+        globalCounter.inc();
+        $parentThis.localCounter.inc();
       }
     }
-    this.local_topic.on_message(new R());
+    this.localTopic.onMessage(new R());
   }
 
-  inflight my_put() {
-    this.local_topic.publish("hello");
-    global_bucket.put("key", "value");
-    assert(global_str == "hello");
-    assert(global_bool == true);
-    assert(global_num == 42);
-    assert(global_array_of_str.at(0) == "hello");
-    assert(global_map_of_num.get("a") == -5);
-    assert(global_set_of_str.has("a"));
-    assert(global_another.my_field == "hello!");
-    global_another.first.my_resource.put("key", "value");
-    assert(global_another.my_method() > 0);
+  inflight myPut() {
+    this.localTopic.publish("hello");
+    globalBucket.put("key", "value");
+    assert(globalStr == "hello");
+    assert(globalBool == true);
+    assert(globalNum == 42);
+    assert(globalArrayOfStr.at(0) == "hello");
+    assert(globalMapOfNum.get("a") == -5);
+    assert(globalSetOfStr.has("a"));
+    assert(globalAnother.myField == "hello!");
+    globalAnother.first.myResource.put("key", "value");
+    assert(globalAnother.myMethod() > 0);
+    //assert(this.localCounter.peek() > 0); // TODO: this fails, why?
   }
 }
 
 let res = new MyResource();
 
 test "test" {
-  res.my_put();
+  res.myPut();
 }
