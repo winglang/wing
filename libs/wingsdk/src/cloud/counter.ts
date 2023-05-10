@@ -96,26 +96,6 @@ export interface ICounterClient {
 }
 
 /**
- * Functionality shared between all `CounterClient` implementations regardless of the target.
- */
-export abstract class CounterClientBase implements ICounterClient {
-  inc(amount?: number): Promise<number> {
-    amount;
-    throw new Error("Method not implemented.");
-  }
-  dec(amount?: number): Promise<number> {
-    return this.inc(-1 * (amount ?? 1));
-  }
-  peek(): Promise<number> {
-    throw new Error("Method not implemented.");
-  }
-  reset(value?: number): Promise<void> {
-    value;
-    throw new Error("Method not implemented.");
-  }
-}
-
-/**
  * List of inflight operations available for `Counter`.
  * @internal
  */
