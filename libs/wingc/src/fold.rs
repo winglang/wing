@@ -445,6 +445,7 @@ where
 	UserDefinedType {
 		root: f.fold_symbol(node.root),
 		fields: node.fields.into_iter().map(|s| f.fold_symbol(s)).collect(),
+		span: node.span,
 	}
 }
 

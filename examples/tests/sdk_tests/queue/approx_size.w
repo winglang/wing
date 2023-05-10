@@ -3,7 +3,7 @@ bring cloud;
 let q = new cloud.Queue();
 
 new cloud.Function(inflight ()=>{
-  assert(q.approx_size() == 0);
+  assert(q.approxSize() == 0);
   q.push("message");
-  assert(q.approx_size() == 1);
+  assert(q.approxSize() == 1);
 }) as "test";

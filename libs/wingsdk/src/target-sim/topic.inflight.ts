@@ -50,7 +50,7 @@ export class Topic
         timestamp: new Date().toISOString(),
       });
 
-      void (await fnClient.invoke(message).catch((err) => {
+      await fnClient.invoke(message).catch((err) => {
         this.context.addTrace({
           data: {
             message: `Subscriber error: ${err}`,
@@ -60,7 +60,7 @@ export class Topic
           type: TraceType.RESOURCE,
           timestamp: new Date().toISOString(),
         });
-      }));
+      });
     }
   }
 
