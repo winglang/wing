@@ -44,6 +44,8 @@ test("unsupported resource in target", async ({ expect }) => {
   );
 });
 
+// Remove random numbers from generated test artifact folder
+// e.g. "{...}.tfgcp.927822.tmp/{...}" => "{...}.tfgcp.XXXXXX.tmp/{...}"
 function sanitizeErrorMessage(inputString: string): string {
   return inputString.replaceAll(/\.tfgcp\.\d+\.tmp/g, ".tfgcp.XXXXXX.tmp");
 }
