@@ -19,7 +19,7 @@ export interface ServiceProps {
   readonly onStart: IServiceOnEventHandler;
   /**
    * Handler to run with the service stops.
-   * @default undefined
+   * @default - no special activity at shutdown
    */
   readonly onStop?: IServiceOnEventHandler;
   /**
