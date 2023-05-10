@@ -35,6 +35,6 @@ jobs:
             chore
             rfc
             revert
-          subjectPattern: ^[^A-Z]+[^.]$
-          subjectPatternError: Subject must be all lowercase and should not end with a period
+          subjectPattern: /^[^A-Z][^:]+[^.]$/gm
+          subjectPatternError: Subject must start with a lowercase, should not include ':' and should not end with a period
           requireScope: false
