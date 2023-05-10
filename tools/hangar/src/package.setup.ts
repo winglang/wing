@@ -20,13 +20,9 @@ export default async function () {
   fs.removeSync(tmpDir);
   fs.mkdirpSync(tmpDir);
 
-  await execa(npmBin, ["init", "-y"], {
-    cwd: tmpDir,
-  });
-
   await execa(
     wingSetupScript,
-    ["--cli", targetWingSpec, "--sdk", targetWingSDKSpec, "--output", wingBin],
+    ["--cli", targetWingSpec, "--sdk", targetWingSDKSpec, "--output", wingBin, "--installDir", tmpDir],
     {
       cwd: tmpDir,
       stdio: "inherit",

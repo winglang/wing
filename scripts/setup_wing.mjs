@@ -28,7 +28,7 @@ let targetWingSDKSpec = join(currentDir, "../libs/wingsdk");
 let targetWingSpec = join(currentDir, "../apps/wing");
 
 let {
-  values: { alias, version, sdk, cli, help, output, global },
+  values: { alias, version, sdk, cli, help, output, global, installDir },
 } = parseArgs({
   options: {
     alias: {
@@ -60,6 +60,10 @@ let {
       short: "g",
       default: false,
     },
+    installDir: {
+      type: "string",
+      short: "i",
+    },
   },
 });
 
@@ -72,6 +76,7 @@ Options:
   -v, --version <version> Registry-available version of wing to install. Cannot be used with --sdk or --cli
   -c, --cli <path>        Local path to wing cli to install. May be tarball or directory. Must be used with --sdk
   -s, --sdk <path>        Local path to wing sdk to install. May be tarball or directory. Must be used with --sdk
+  -i, --installDir <path> Path to install wing to. Must be empty (default: "__wing_installs/<alias>")
   -o, --output <path>     Path to symlink to the Wing CLI binary. (default: "scripts/_wing<alias>")
   -g, --global            Install the wing cli globally (default: false)
 `);
@@ -100,21 +105,20 @@ if (sdk !== undefined) {
 
 alias = alias ?? "dev";
 
+installDir = installDir ?? join(currentDir, "__wing_installs", alias);
 const newWingName = `_wing${alias}`;
-const installDir = join(currentDir, "__wing_installs");
-const localInstallDir = join(installDir, alias);
-const wingCliBin = join(localInstallDir, "node_modules", ".bin", "wing");
+const wingCliBin = join(installDir, "node_modules", ".bin", "wing");
 const wingCliLink = output ?? join(currentDir, newWingName);
 
-rmSync(localInstallDir, { recursive: true, force: true });
+rmSync(installDir, { recursive: true, force: true });
 rmSync(wingCliLink, { force: true });
-mkdirSync(localInstallDir, { recursive: true });
+mkdirSync(installDir, { recursive: true });
 console.log(`CLI: "${targetWingSpec}"`);
 console.log(`SDK: "${targetWingSDKSpec}"`);
 
 console.log("Installing...");
 execSync(`npm init -y`, {
-  cwd: localInstallDir,
+  cwd: installDir,
   stdio: "ignore",
 });
 const installArgs = [
@@ -137,7 +141,7 @@ if (version !== undefined) {
 }
 
 const installOutput = execSync(`npm ${installArgs.join(" ")}`, {
-  cwd: localInstallDir,
+  cwd: installDir,
   stdio: "pipe",
   encoding: "utf-8",
 });
