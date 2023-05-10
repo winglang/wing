@@ -446,23 +446,23 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         bucket1: {
           obj: bucket1,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
         bucket2: {
           obj: bucket2,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
         bucket3: {
           obj: bucket3,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
       }
     })
     ;
     (queue.addConsumer(handler,{ batchSize: 5 }));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: Object.freeze({}) });
-    const empty_env = Object.freeze({});
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: empty_env });
+    const emptyEnv = Object.freeze({});
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: emptyEnv });
   }
 }
 class $App extends $AppBase {

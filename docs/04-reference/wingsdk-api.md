@@ -5402,7 +5402,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueAddConsumerHandlerClient](#@winglang/sdk.cloud.IQueueAddConsumerHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Queue.add_consumer`.
+Represents a resource with an inflight "handle" method that can be passed to `Queue.addConsumer`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>

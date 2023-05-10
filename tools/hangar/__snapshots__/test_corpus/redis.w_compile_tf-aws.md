@@ -461,11 +461,11 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         r: {
           obj: r,
-          ops: ["del","get","hget","hset","raw_client","sadd","set","smembers","url"]
+          ops: ["del","get","hget","hset","rawClient","sadd","set","smembers","url"]
         },
         r2: {
           obj: r2,
-          ops: ["del","get","hget","hset","raw_client","sadd","set","smembers","url"]
+          ops: ["del","get","hget","hset","rawClient","sadd","set","smembers","url"]
         },
       }
     })
