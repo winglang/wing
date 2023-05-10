@@ -3,6 +3,7 @@ import * as fs from "fs-extra";
 import { expect } from "vitest";
 import { snapshotDir, wingBin } from "./paths";
 import { join, extname } from "path";
+import { realpathSync } from "fs-extra";
 
 export interface RunWingCommandOptions {
   cwd: string;
@@ -16,7 +17,7 @@ export interface RunWingCommandOptions {
 export async function runWingCommand(options: RunWingCommandOptions) {
   const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
   const out = await execa(
-    wingBin,
+    realpathSync(wingBin),
     ["--no-update-check", ...options.args, options.wingFile, ...plugins],
     {
       cwd: options.cwd,

@@ -1,6 +1,6 @@
 import assert from "assert";
 import { execa } from "execa";
-import fs from "fs-extra";
+import fs, { realpathSync } from "fs-extra";
 import {
   npmBin,
   targetWingSDKSpec,
@@ -33,7 +33,7 @@ export default async function () {
     }
   );
 
-  const versionOutput = await execa(wingBin, ["--version"], {
+  const versionOutput = await execa(realpathSync(wingBin), ["--version"], {
     cwd: tmpDir,
   });
 

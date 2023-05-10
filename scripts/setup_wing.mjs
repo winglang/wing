@@ -160,21 +160,7 @@ console.log("===");
 if (global) {
   console.log(`"wing" installed globally`);
 } else {
-  if (process.platform === "win32") {
-    // Can't trust symlinks on windows.
-    // Instead create a wrapper cmd script that calls the wing cli
-    // get relative path from wingCliLink to wingCliBin
-    const wingCliBinRel = relative(dirname(wingCliLink), wingCliBin);
-
-    const wrapperContents = `\
-#!/usr/bin/env node
-
-require("${wingCliBinRel.replace(/\\/g, "/")}");`;
-    writeFileSync(wingCliLink, wrapperContents);
-    chmodSync(wingCliLink, 0o755);
-  } else {
-    symlinkSync(wingCliBin, wingCliLink);
-  }
+  symlinkSync(wingCliBin, wingCliLink);
 
   console.log(wingCliLink);
   console.log();
