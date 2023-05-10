@@ -1,5 +1,52 @@
 # [on_message.w](../../../../examples/tests/valid/on_message.w) | compile | tf-aws
 
+## clients/Predicate.inflight.js
+```js
+module.exports = function({  }) {
+  class  Predicate {
+    constructor({ c }) {
+      this.c = c;
+    }
+    async test()  {
+      {
+        return ((await this.c.peek()) === 10);
+      }
+    }
+  }
+  return Predicate;
+}
+
+```
+
+## clients/TestHelper.inflight.js
+```js
+module.exports = function({  }) {
+  class  TestHelper {
+    constructor({  }) {
+    }
+    static async sleep(milli)  {
+      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
+    }
+    async assert(predicate)  {
+      {
+        let i = 0;
+        while ((i < 600)) {
+          i = (i + 1);
+          if ((await predicate.test())) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+            return;
+          }
+          (await TestHelper.sleep(100));
+        }
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+      }
+    }
+  }
+  return TestHelper;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -21,7 +68,7 @@
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:on_message\",\"${aws_lambda_function.root_testonmessage_5F1C3725.arn}\"]]"
+      "value": "[[\"root/Default/Default/test\",\"${aws_lambda_function.root_test_AAE85061.arn}\"]]"
     }
   },
   "provider": {
@@ -68,11 +115,11 @@
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testonmessage_IamRole_A1C6A390": {
+      "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:on_message/IamRole",
-            "uniqueId": "root_testonmessage_IamRole_A1C6A390"
+            "path": "root/Default/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -99,15 +146,15 @@
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudTopicOnMessagee46e5cb7_IamRole_8BCE5BC1.name}"
       },
-      "root_testonmessage_IamRolePolicy_60CCA66F": {
+      "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:on_message/IamRolePolicy",
-            "uniqueId": "root_testonmessage_IamRolePolicy_60CCA66F"
+            "path": "root/Default/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.root_cloudTopic_6057BD0C.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testonmessage_IamRole_A1C6A390.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.root_cloudTopic_6057BD0C.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -131,15 +178,15 @@
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_cloudTopicOnMessagee46e5cb7_IamRole_8BCE5BC1.name}"
       },
-      "root_testonmessage_IamRolePolicyAttachment_E22CCDDA": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:on_message/IamRolePolicyAttachment",
-            "uniqueId": "root_testonmessage_IamRolePolicyAttachment_E22CCDDA"
+            "path": "root/Default/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testonmessage_IamRole_A1C6A390.name}"
+        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
       }
     },
     "aws_lambda_function": {
@@ -195,27 +242,27 @@
           "subnet_ids": []
         }
       },
-      "root_testonmessage_5F1C3725": {
+      "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:on_message/Default",
-            "uniqueId": "root_testonmessage_5F1C3725"
+            "path": "root/Default/Default/test/Default",
+            "uniqueId": "root_test_AAE85061"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "TOPIC_ARN_f61df91b": "${aws_sns_topic.root_cloudTopic_6057BD0C.arn}",
-            "WING_FUNCTION_NAME": "test-on_message-c8afc7e2"
+            "WING_FUNCTION_NAME": "test-c8b6eece"
           }
         },
-        "function_name": "test-on_message-c8afc7e2",
+        "function_name": "test-c8b6eece",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testonmessage_IamRole_A1C6A390.arn}",
+        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testonmessage_S3Object_EAE8736C.key}",
+        "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -283,11 +330,11 @@
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testonmessage_S3Object_EAE8736C": {
+      "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:on_message/S3Object",
-            "uniqueId": "root_testonmessage_S3Object_EAE8736C"
+            "path": "root/Default/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -344,6 +391,75 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class Predicate extends $stdlib.std.Resource {
+      constructor(scope, id, c) {
+        super(scope, id);
+        this._addInflightOps("test");
+        this.c = c;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Predicate.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const c_client = this._lift(this.c);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const PredicateClient = ${Predicate._toInflightType(this).text};
+            const client = new PredicateClient({
+              c: ${c_client},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          this._registerBindObject(this.c, host, []);
+        }
+        if (ops.includes("test")) {
+          this._registerBindObject(this.c, host, ["peek"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class TestHelper extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("sleep", "assert");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/TestHelper.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const TestHelperClient = ${TestHelper._toInflightType(this).text};
+            const client = new TestHelperClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("assert")) {
+        }
+        if (ops.includes("sleep")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
     const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     (t.onMessage(new $stdlib.core.Inflight(this, "$Inflight1", {
@@ -366,12 +482,18 @@ class $Root extends $stdlib.std.Resource {
       }
     })
     ));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:on_message",new $stdlib.core.Inflight(this, "$Inflight3", {
+    const js = new TestHelper(this,"TestHelper");
+    const predicate = new Predicate(this,"Predicate",c);
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight3", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc3/index.js".replace(/\\/g, "/"))),
       bindings: {
-        c: {
-          obj: c,
-          ops: ["dec","inc","peek","reset"]
+        js: {
+          obj: js,
+          ops: ["assert","sleep"]
+        },
+        predicate: {
+          obj: predicate,
+          ops: ["test"]
         },
         t: {
           obj: t,
@@ -422,11 +544,11 @@ async handle() {
 ## proc3/index.js
 ```js
 async handle() {
-  const { c, t } = this;
+  const { js, predicate, t } = this;
   for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
     (await t.publish("msg"));
   }
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 10)'`)})(((await c.peek()) === 10))};
+  (await js.assert(predicate));
 }
 
 ```

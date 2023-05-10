@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ on_message.wsim » root/env0/test:on_message
+pass ─ on_message.wsim » root/env0/test
 ```
 
