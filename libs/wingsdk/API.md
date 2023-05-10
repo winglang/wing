@@ -2663,7 +2663,7 @@ on_stop: IServiceOnEventHandler;
 ```
 
 - *Type:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
-- *Default:* undefined
+- *Default:* no special activity at shutdown
 
 Handler to run with the service stops.
 
