@@ -277,6 +277,36 @@ export interface IBucketClient {
    * @inflight
    */
   delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
+
+  /**
+   * Tries to put an object in the bucket.
+   * @param key Key of the object.
+   * @param body Content of the object we want to store into the bucket.
+   * @returns `true` if the object was successfully stored, `false` if an error occurred.
+   */
+  tryPut(key: string, body: string): Promise<boolean>;
+
+  /**
+   * Tries to put a Json object in the bucket.
+   * @param key Key of the object.
+   * @param body Json object that we want to store into the bucket.
+   * @returns `true` if the object was successfully stored, `false` if an error occurred.
+   */
+  tryPutJson(key: string, body: Json): Promise<boolean>;
+
+  /**
+   * Tries to retrieve an object from the bucket.
+   * @param key Key of the object.
+   * @returns `true` if the object was successfully retrieved, `false` if an error occurred.
+   */
+  tryGet(key: string): Promise<boolean>;
+
+  /**
+   * Tries to retrieve a Json object from the bucket.
+   * @param key Key of the object.
+   * @returns `true` if the object was successfully retrieved, `false` if an error occurred.
+   */
+  tryGetJson(key: string): Promise<boolean>;
 }
 
 /**
@@ -373,10 +403,18 @@ export enum BucketInflightMethods {
   LIST = "list",
   /** `Bucket.delete` */
   DELETE = "delete",
-  /** `Bucket.putJson */
+  /** `Bucket.putJson` */
   PUT_JSON = "put_json",
-  /** `Bucket.getJson */
+  /** `Bucket.getJson` */
   GET_JSON = "get_json",
-  /** `Bucket.publicUrl */
+  /** `Bucket.publicUrl` */
   PUBLIC_URL = "public_url",
+  /** `Bucket.tryPut` */
+  TRY_PUT = "try_put",
+  /** `Bucket.tryPutJson` */
+  TRY_PUT_JSON = "try_put_json",
+  /** `Bucket.tryGet` */
+  TRY_GET = "try_get",
+  /** `Bucket.tryGetJson` */
+  TRY_GET_JSON = "try_get_json",
 }

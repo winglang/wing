@@ -170,6 +170,42 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
+  public async tryPut(key: string, value: string): Promise<boolean> {
+    try {
+      await this.put(key, value);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  public async tryPutJson(key: string, body: Json): Promise<boolean> {
+    try {
+      await this.putJson(key, body);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  public async tryGet(key: string): Promise<boolean> {
+    try {
+      await this.get(key);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  public async tryGetJson(key: string): Promise<boolean> {
+    try {
+      await this.getJson(key);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   private async addFile(key: string, value: string): Promise<void> {
     const actionType: BucketEventType = this.objectKeys.has(key)
       ? BucketEventType.UPDATE
