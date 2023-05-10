@@ -27,17 +27,23 @@ test("unsupported resource in target", async ({ expect }) => {
       env: {
         GOOGLE_PROJECT_ID: "test-project",
         GOOGLE_STORAGE_LOCATION: "us-central1",
-      }
+      },
     })
-  ).rejects.toThrowErrorMatchingInlineSnapshot(`
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    sanitizeErrorMessage(`
     "ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
 
-    target/test.tfgcp.342975.tmp/.wing/preflight.js:8
+    target/test.tfgcp.525006.tmp/.wing/preflight.js:8
          constructor(scope, id) {
            super(scope, id);
     >>     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Schedule\\",this,\\"cloud.Schedule\\");
          }
        }
     "
-  `);
+  `)
+  );
 });
+
+function sanitizeErrorMessage(inputString: string): string {
+  return inputString.replaceAll(/\.tfgcp\.\d+\.tmp/g, ".tfgcp.XXXXXX.tmp");
+}
