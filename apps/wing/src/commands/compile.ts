@@ -1,7 +1,7 @@
 import * as vm from "vm";
 
 import { rmSync, mkdirSync, promises as fsPromise } from "fs";
-import { basename, dirname, join, resolve } from "path";
+import { basename, dirname, join, resolve, relative } from "path";
 import * as os from "os";
 
 import chalk from "chalk";
@@ -241,9 +241,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
       const lineNumber =
         Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
-      
-      output.push('');
-      output.push(chalk.underline(chalk.dim(`${artifactPath}:${lineNumber}`)));
+      const relativeArtifactPath = relative(process.cwd(), artifactPath);
+      log("relative artifact path: %s", relativeArtifactPath);
+
+      output.push("");
+      output.push(chalk.underline(chalk.dim(`${relativeArtifactPath}:${lineNumber}`)));
 
       const lines = artifact.split("\n");
       let startLine = Math.max(lineNumber - 2, 0);
@@ -258,7 +260,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         }
       }
 
-      output.push('');
+      output.push("");
     }
 
     if (process.env.DEBUG) {
