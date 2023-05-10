@@ -19,6 +19,13 @@ new cloud.Function(inflight () => {
   let json_obj3 = Json { test: "test3" };
   b.put_json("test3.txt", json_obj3);
   let test_json3 = b.get_json("test3.txt");
+
   assert(test_json3.get("test") == json_obj3.get("test"));
+
+  b.delete("test1.txt");
+  let files = b.list();
+  
+  assert(files.contains("test1.txt") == false);
+  assert(files.contains("test2.txt") == true);
   
 }) as "test:put_json";

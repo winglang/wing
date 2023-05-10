@@ -217,12 +217,16 @@ async handle() {
   (await b.putJson("test2.txt",json_obj2));
   const test_json1 = (await b.getJson("test1.txt"));
   const test_json2 = (await b.getJson("test2.txt"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((test_json1)["test1"] === (json_obj1)["test1"])'`)})(((test_json1)["test1"] === (json_obj1)["test1"]))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((test_json2)["test2"] === (json_obj2)["test2"])'`)})(((test_json2)["test2"] === (json_obj2)["test2"]))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((test_json1)["test"] === (json_obj1)["test"])'`)})(((test_json1)["test"] === (json_obj1)["test"]))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((test_json2)["test"] === (json_obj2)["test"])'`)})(((test_json2)["test"] === (json_obj2)["test"]))};
   const json_obj3 = Object.freeze({"test":"test3"});
   (await b.putJson("test3.txt",json_obj3));
   const test_json3 = (await b.getJson("test3.txt"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((test_json1)["test3"] === (json_obj1)["test3"])'`)})(((test_json1)["test3"] === (json_obj1)["test3"]))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((test_json3)["test"] === (json_obj3)["test"])'`)})(((test_json3)["test"] === (json_obj3)["test"]))};
+  (await b.delete("test1.txt"));
+  const files = (await b.list());
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
 }
 
 ```
