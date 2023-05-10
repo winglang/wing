@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ add_consumer.wsim » root/env0/test:add_consumer
+pass ─ add_consumer.wsim » root/env0/test:addConsumer
 ```
 

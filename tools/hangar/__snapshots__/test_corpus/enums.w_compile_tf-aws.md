@@ -41,12 +41,14 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const SomeEnum = Object.freeze((function (SomeEnum) {
-      SomeEnum[SomeEnum["ONE"] = 0] = "ONE";
-      SomeEnum[SomeEnum["TWO"] = 1] = "TWO";
-      SomeEnum[SomeEnum["THREE"] = 2] = "THREE";
-      return SomeEnum;
-    })({}));
+    const SomeEnum = 
+      Object.freeze((function (tmp) {
+        tmp[tmp["ONE"] = 0] = "ONE";
+        tmp[tmp["TWO"] = 1] = "TWO";
+        tmp[tmp["THREE"] = 2] = "THREE";
+        return tmp;
+      })({}))
+    ;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
   }

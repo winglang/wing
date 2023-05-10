@@ -40,11 +40,11 @@
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_strtostr_IamRole_305ACAF8": {
+      "root_strToStr_IamRole_3DB9F718": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/str_to_str/IamRole",
-            "uniqueId": "root_strtostr_IamRole_305ACAF8"
+            "path": "root/Default/Default/strToStr/IamRole",
+            "uniqueId": "root_strToStr_IamRole_3DB9F718"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -58,18 +58,18 @@
             "uniqueId": "root_func_IamRolePolicy_3AC5101F"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_strtostr_05420EE8.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_strToStr_D5CC2EE4.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_func_IamRole_EE572BCE.name}"
       },
-      "root_strtostr_IamRolePolicy_B80B33C4": {
+      "root_strToStr_IamRolePolicy_7CFB4B0C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/str_to_str/IamRolePolicy",
-            "uniqueId": "root_strtostr_IamRolePolicy_B80B33C4"
+            "path": "root/Default/Default/strToStr/IamRolePolicy",
+            "uniqueId": "root_strToStr_IamRolePolicy_7CFB4B0C"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_strtostr_IamRole_305ACAF8.name}"
+        "role": "${aws_iam_role.root_strToStr_IamRole_3DB9F718.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -83,15 +83,15 @@
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_func_IamRole_EE572BCE.name}"
       },
-      "root_strtostr_IamRolePolicyAttachment_C5B57BBD": {
+      "root_strToStr_IamRolePolicyAttachment_1346C60A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/str_to_str/IamRolePolicyAttachment",
-            "uniqueId": "root_strtostr_IamRolePolicyAttachment_C5B57BBD"
+            "path": "root/Default/Default/strToStr/IamRolePolicyAttachment",
+            "uniqueId": "root_strToStr_IamRolePolicyAttachment_1346C60A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_strtostr_IamRole_305ACAF8.name}"
+        "role": "${aws_iam_role.root_strToStr_IamRole_3DB9F718.name}"
       }
     },
     "aws_lambda_function": {
@@ -104,7 +104,7 @@
         },
         "environment": {
           "variables": {
-            "FUNCTION_NAME_8ca853c9": "${aws_lambda_function.root_strtostr_05420EE8.arn}",
+            "FUNCTION_NAME_bc9a3a6d": "${aws_lambda_function.root_strToStr_D5CC2EE4.arn}",
             "WING_FUNCTION_NAME": "func-c8cf78f6"
           }
         },
@@ -121,25 +121,25 @@
           "subnet_ids": []
         }
       },
-      "root_strtostr_05420EE8": {
+      "root_strToStr_D5CC2EE4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/str_to_str/Default",
-            "uniqueId": "root_strtostr_05420EE8"
+            "path": "root/Default/Default/strToStr/Default",
+            "uniqueId": "root_strToStr_D5CC2EE4"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "str_to_str-c8891c85"
+            "WING_FUNCTION_NAME": "strToStr-c8d5081f"
           }
         },
-        "function_name": "str_to_str-c8891c85",
+        "function_name": "strToStr-c8d5081f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_strtostr_IamRole_305ACAF8.arn}",
+        "role": "${aws_iam_role.root_strToStr_IamRole_3DB9F718.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_strtostr_S3Object_C6E06A09.key}",
+        "s3_key": "${aws_s3_object.root_strToStr_S3Object_C492B63C.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -170,11 +170,11 @@
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_strtostr_S3Object_C6E06A09": {
+      "root_strToStr_S3Object_C492B63C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/str_to_str/S3Object",
-            "uniqueId": "root_strtostr_S3Object_C6E06A09"
+            "path": "root/Default/Default/strToStr/S3Object",
+            "uniqueId": "root_strToStr_S3Object_C492B63C"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -208,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    const str_to_str = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"str_to_str",new $stdlib.core.Inflight(this, "$Inflight1", {
+    const strToStr = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"strToStr",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
@@ -217,8 +217,8 @@ class $Root extends $stdlib.std.Resource {
     const func = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"func",new $stdlib.core.Inflight(this, "$Inflight2", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
       bindings: {
-        str_to_str: {
-          obj: str_to_str,
+        strToStr: {
+          obj: strToStr,
           ops: ["invoke"]
         },
       }
@@ -256,9 +256,9 @@ async handle(s) {
 ## proc2/index.js
 ```js
 async handle(s) {
-  const { str_to_str } = this;
-  (await str_to_str.invoke("one"));
-  {console.log((await str_to_str.invoke("two")))};
+  const { strToStr } = this;
+  (await strToStr.invoke("one"));
+  {console.log((await strToStr.invoke("two")))};
 }
 
 ```

@@ -20,6 +20,6 @@ inflight class Sub1 extends Super {
   init() { this.name = "Sub"; }
 }
 
-let optional_sup: Super? = new Super();
-let s = optional_sup ?? new Sub();
+let optionalSup: Super? = new Super();
+let s = optionalSup ?? new Sub();
 assert(s.name == "Super");

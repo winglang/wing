@@ -1,6 +1,6 @@
 bring cloud;
 
-let global_b = new cloud.Bucket();
+let globalB = new cloud.Bucket();
 
 class Test {
   b: cloud.Bucket;
@@ -14,7 +14,7 @@ class Test {
 //               ^ Cannot qualify which operations are performed on object
     x.put("hello", "world");
 
-    let y = global_b;
+    let y = globalB;
 //          ^ Cannot qualify which operations are performed on object
     y.put("boom", "shakalaka");
   }
