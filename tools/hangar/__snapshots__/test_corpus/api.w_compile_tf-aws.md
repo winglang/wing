@@ -2,7 +2,7 @@
 
 ## clients/A.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  A {
     constructor({ api }) {
       this.api = api;
@@ -15,7 +15,7 @@ module.exports = function() {
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
     constructor({ api }) {
       this.api = api;
@@ -438,13 +438,19 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("handle");
         this.api = api;
       }
-      _toInflight() {
-        const api_client = this._lift(this.api);
+      static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const api_client = this._lift(this.api);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
               api: ${api_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -477,13 +483,19 @@ class $Root extends $stdlib.std.Resource {
         })
         ));
       }
-      _toInflight() {
-        const api_client = this._lift(this.api);
+      static _toInflightType(context) {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const api_client = this._lift(this.api);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const A = require("${self_client_path}")({});
-            const client = new A({
+            const AClient = ${A._toInflightType(this).text};
+            const client = new AClient({
               api: ${api_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

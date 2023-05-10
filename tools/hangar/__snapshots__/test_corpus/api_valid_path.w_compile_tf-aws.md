@@ -258,7 +258,7 @@ class $Root extends $stdlib.std.Resource {
       }
     })
     ;
-    const test_invalid_path =  (path) =>  {
+    const testInvalidPath =  (path) =>  {
       {
         let error = "";
         const expected = `Invalid path ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".`;
@@ -273,7 +273,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     ;
-    const test_valid_path =  (path) =>  {
+    const testValidPath =  (path) =>  {
       {
         let error = "";
         try {
@@ -287,19 +287,19 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     ;
-    (test_invalid_path("/test/{sup:er/:annoying//path}"));
-    (test_invalid_path("/test/{::another:annoying:path}"));
-    (test_invalid_path("/test/n0t_alphanumer1cPa:th"));
-    (test_invalid_path("/test/path/{with}/{two:invali4d#}/variables"));
-    (test_invalid_path("/test/path/{unclosed"));
-    (test_invalid_path("/test/m{issplaced}"));
-    (test_invalid_path("/test/{misspla}ced"));
-    (test_invalid_path("/test/{}/empty"));
-    (test_valid_path("/test"));
-    (test_valid_path("/test/alphanumer1cPa_th"));
-    (test_valid_path("/test/regular/path"));
-    (test_valid_path("/test/pa-th/{with}/two/{variable_s}/f?bla=5&b=6"));
-    (test_valid_path("/test/param/is/{last}"));
+    (testInvalidPath("/test/{sup:er/:annoying//path}"));
+    (testInvalidPath("/test/{::another:annoying:path}"));
+    (testInvalidPath("/test/n0t_alphanumer1cPa:th"));
+    (testInvalidPath("/test/path/{with}/{two:invali4d#}/variables"));
+    (testInvalidPath("/test/path/{unclosed"));
+    (testInvalidPath("/test/m{issplaced}"));
+    (testInvalidPath("/test/{misspla}ced"));
+    (testInvalidPath("/test/{}/empty"));
+    (testValidPath("/test"));
+    (testValidPath("/test/alphanumer1cPa_th"));
+    (testValidPath("/test/regular/path"));
+    (testValidPath("/test/pa-th/{with}/two/{variable_s}/f?bla=5&b=6"));
+    (testValidPath("/test/param/is/{last}"));
   }
 }
 class $App extends $AppBase {

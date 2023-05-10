@@ -95,7 +95,7 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"gender\":0,\"name\":0}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"gender\":0}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "name",
             "WING_FUNCTION_NAME": "test-c8b6eece"
           }
@@ -152,7 +152,7 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING}) });
+    const table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":cloud.ColumnType.STRING}) });
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
@@ -188,8 +188,8 @@ new $App().synth();
 ```js
 async handle() {
   const { table } = this;
-  (await table.insert("eyal",Object.freeze({"name":"eyal","gender":"male"})));
-  (await table.insert("revital",Object.freeze({"name":"revital","gender":"female"})));
+  (await table.insert("eyal",Object.freeze({"gender":"male"})));
+  (await table.insert("revital",Object.freeze({"gender":"female"})));
   const unorderded = {};
   for (const u of (await table.list())) {
     ((obj, args) => { obj[args[0]] = args[1]; })(unorderded, [((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((u)["name"]),u]);
