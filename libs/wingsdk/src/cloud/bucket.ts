@@ -410,7 +410,7 @@ export enum BucketInflightMethods {
   /** `Bucket.publicUrl` */
   PUBLIC_URL = "public_url",
   /** `Bucket.tryPut` */
-  TRY_PUT = "try_put",
+  TRY_PUT = "tryPut",
   /** `Bucket.tryPutJson` */
   TRY_PUT_JSON = "try_put_json",
   /** `Bucket.tryGet` */
