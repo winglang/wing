@@ -3195,92 +3195,6 @@ to parse boolean from.
 
 
 
-### CounterClientBase <a name="CounterClientBase" id="@winglang/sdk.cloud.CounterClientBase"></a>
-
-- *Implements:* <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
-
-Functionality shared between all `CounterClient` implementations regardless of the target.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.CounterClientBase.Initializer"></a>
-
-```wing
-bring cloud;
-
-new cloud.CounterClientBase()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.CounterClientBase.dec">dec</a></code> | Decrement the counter, returning the previous value. |
-| <code><a href="#@winglang/sdk.cloud.CounterClientBase.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
-| <code><a href="#@winglang/sdk.cloud.CounterClientBase.peek">peek</a></code> | Get the current value of the counter. |
-| <code><a href="#@winglang/sdk.cloud.CounterClientBase.reset">reset</a></code> | Reset a counter to a given value. |
-
----
-
-##### `dec` <a name="dec" id="@winglang/sdk.cloud.CounterClientBase.dec"></a>
-
-```wing
-dec(amount?: num): num
-```
-
-Decrement the counter, returning the previous value.
-
-###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/sdk.cloud.CounterClientBase.dec.parameter.amount"></a>
-
-- *Type:* num
-
----
-
-##### `inc` <a name="inc" id="@winglang/sdk.cloud.CounterClientBase.inc"></a>
-
-```wing
-inc(amount?: num): num
-```
-
-Increments the counter atomically by a certain amount and returns the previous value.
-
-###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/sdk.cloud.CounterClientBase.inc.parameter.amount"></a>
-
-- *Type:* num
-
----
-
-##### `peek` <a name="peek" id="@winglang/sdk.cloud.CounterClientBase.peek"></a>
-
-```wing
-peek(): num
-```
-
-Get the current value of the counter.
-
-Using this API may introduce race conditions since the value can change between
-the time it is read and the time it is used in your code.
-
-##### `reset` <a name="reset" id="@winglang/sdk.cloud.CounterClientBase.reset"></a>
-
-```wing
-reset(value?: num): void
-```
-
-Reset a counter to a given value.
-
-###### `value`<sup>Optional</sup> <a name="value" id="@winglang/sdk.cloud.CounterClientBase.reset.parameter.value"></a>
-
-- *Type:* num
-
----
-
-
-
-
 ### Display <a name="Display" id="@winglang/sdk.std.Display"></a>
 
 Information on how to display a resource in the UI.
@@ -5261,7 +5175,7 @@ Function that will be called when an event notification is fired.
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.CounterClientBase">CounterClientBase</a>, <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
 
 Inflight interface for `Counter`.
 

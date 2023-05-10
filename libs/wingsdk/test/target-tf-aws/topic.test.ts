@@ -4,8 +4,9 @@ import * as cloud from "../../src/cloud";
 import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
 import {
+  mkdtemp,
+  sanitizeCode,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
