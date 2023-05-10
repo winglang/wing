@@ -13,7 +13,7 @@ new cloud.Function(inflight () => {
   let test_json1 = b.get_json("test1.txt");
   let test_json2 = b.get_json("test2.txt");
   
-  assert(test_json1.get("test1") == json_obj1.get("test1"));
+  assert(test_json1.get("test") == json_obj1.get("test"));
   assert(test_json2.get("test2") == json_obj2.get("test2"));
 
   let json_obj3 = Json { test: "test3" };
