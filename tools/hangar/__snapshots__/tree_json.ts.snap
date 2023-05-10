@@ -52,6 +52,12 @@ exports[`tree.json for an app with many resources 1`] = `
                           "relationship": "my_method",
                           "resource": "root/Default/Default/test",
                         },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/Default/test",
+                        },
                       ],
                     },
                     "children": {
@@ -142,6 +148,24 @@ exports[`tree.json for an app with many resources 1`] = `
                   "BigPublisher": {
                     "attributes": {
                       "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-c351460f",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-fe215853",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-d05c64b5",
+                        },
                         {
                           "direction": "inbound",
                           "implicit": false,
@@ -318,6 +342,12 @@ exports[`tree.json for an app with many resources 1`] = `
                           "b2-on_create-OnMessage-d05c64b5": {
                             "attributes": {
                               "wing:resource:connections": [
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "$inflight_init",
+                                  "resource": "root/Default/Default/BigPublisher",
+                                },
                                 {
                                   "direction": "outbound",
                                   "implicit": false,
@@ -578,6 +608,12 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "put",
                               "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
                             },
@@ -719,6 +755,12 @@ exports[`tree.json for an app with many resources 1`] = `
                       "cloud.Topic-OnMessage-c351460f": {
                         "attributes": {
                           "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
                             {
                               "direction": "outbound",
                               "implicit": false,
@@ -945,6 +987,12 @@ exports[`tree.json for an app with many resources 1`] = `
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "my_method",
+                          "resource": "root/Default/Default/Bar",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
                           "resource": "root/Default/Default/Bar",
                         },
                         {

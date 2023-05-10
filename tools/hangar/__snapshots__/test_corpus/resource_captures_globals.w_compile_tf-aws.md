@@ -247,6 +247,7 @@ module.exports = function({ $parent_this, global_counter }) {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
+            "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86"
           }
         },
@@ -566,6 +567,7 @@ class $Root extends $stdlib.std.Resource {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
+              this._registerBindObject($parent_this, host, ["$inflight_init"]);
               this._registerBindObject($parent_this.local_counter, host, ["inc"]);
               this._registerBindObject(global_counter, host, ["inc"]);
             }
@@ -616,7 +618,9 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("my_put")) {
           this._registerBindObject(global_another, host, ["my_method"]);
+          this._registerBindObject(global_another, host, ["$inflight_init"]);
           this._registerBindObject(global_another.first.my_resource, host, ["put"]);
+          this._registerBindObject(global_another, host, ["$inflight_init"]);
           this._registerBindObject(global_another.my_field, host, []);
           this._registerBindObject(global_array_of_str, host, ["at"]);
           this._registerBindObject(global_bool, host, []);

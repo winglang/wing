@@ -319,6 +319,7 @@ module.exports = function() {
         },
         "environment": {
           "variables": {
+            "CLOUD_API_C8B1D888": "${aws_api_gateway_stage.root_A_cloudApi_api_stage_EEF6B12C.invoke_url}",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-80279403-c814f893"
           }
         },
@@ -565,6 +566,7 @@ class $Root extends $stdlib.std.Resource {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
+              this._registerBindObject(__parent_this, host, ["$inflight_init"]);
               this._registerBindObject(__parent_this.api.url, host, []);
             }
             super._registerBind(host, ops);

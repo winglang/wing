@@ -963,6 +963,15 @@ impl<'a> JSifier<'a> {
 		for (method_name, method_refs) in refs {
 			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
 			for (field, ops) in method_refs {
+				// field might be a dotted accessor, like foo.bar.baz, in which case
+				// we first bind to `foo` as an op
+				if field.split(".").count() > 1 && field.split(".").next().unwrap() != "this" {
+					let first_part = field.split(".").next().unwrap();
+					bind_method.line(format!(
+						"this._registerBindObject({first_part}, host, [\"$inflight_init\"]);"
+					));
+				}
+
 				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 				bind_method.line(format!("this._registerBindObject({field}, host, [{ops_strings}]);",));
 			}
