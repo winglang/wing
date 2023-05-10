@@ -108,7 +108,7 @@ export async function load(options: WingCompilerLoadOptions) {
   } else {
     // mapping the root is not sufficient on linux/mac
     // we need to also map all directories in the root
-    const rootStat = await fs.promises.stat("/");
+    const rootDeviceId = await fs.promises.stat("/").then((stat) => stat.dev.toString());
     const rootFiles = await fs.promises.readdir("/");
     for (const file of rootFiles) {
       // skip files and dot dirs
@@ -122,7 +122,7 @@ export async function load(options: WingCompilerLoadOptions) {
         // include directories and symlinks to directories
         fileStat.isDirectory() &&
         // on mac only preopen directories within the root device
-        (process.platform !== "darwin" || fileStat.dev.toString() == rootStat.dev.toString())
+        (process.platform !== "darwin" || fileStat.dev.toString() === rootDeviceId)
       ) {
         try {
           await fs.promises.access(fullPath, fs.constants.R_OK | fs.constants.F_OK);
