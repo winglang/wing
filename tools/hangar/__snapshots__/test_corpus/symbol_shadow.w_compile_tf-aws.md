@@ -2,7 +2,7 @@
 
 ## clients/A.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  A {
     constructor({  }) {
     }
@@ -33,7 +33,7 @@ module.exports = function() {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight nested should not capture the shadowed var\",\"${aws_lambda_function.root_testinflightnestedshouldnotcapturetheshadowedvar_9382E411.arn}\"],[\"root/Default/Default/A/test:inflight in resource should capture the right scoped var\",\"${aws_lambda_function.root_A_testinflightinresourceshouldcapturetherightscopedvar_551605A5.arn}\"],[\"root/Default/Default/test:inflight on top should capture top\",\"${aws_lambda_function.root_testinflightontopshouldcapturetop_A36CE723.arn}\"],[\"root/Default/Default/test:inside_inflight should capture the right scope\",\"${aws_lambda_function.root_testinsideinflightshouldcapturetherightscope_AB987B89.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight nested should not capture the shadowed var\",\"${aws_lambda_function.root_testinflightnestedshouldnotcapturetheshadowedvar_9382E411.arn}\"],[\"root/Default/Default/A/test:inflight in resource should capture the right scoped var\",\"${aws_lambda_function.root_A_testinflightinresourceshouldcapturetherightscopedvar_551605A5.arn}\"],[\"root/Default/Default/test:inflight on top should capture top\",\"${aws_lambda_function.root_testinflightontopshouldcapturetop_A36CE723.arn}\"],[\"root/Default/Default/test:insideInflight should capture the right scope\",\"${aws_lambda_function.root_testinsideInflightshouldcapturetherightscope_A5A6B6B3.arn}\"]]"
     }
   },
   "provider": {
@@ -70,11 +70,11 @@ module.exports = function() {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testinsideinflightshouldcapturetherightscope_IamRole_AC6104A8": {
+      "root_testinsideInflightshouldcapturetherightscope_IamRole_E9765D04": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inside_inflight should capture the right scope/IamRole",
-            "uniqueId": "root_testinsideinflightshouldcapturetherightscope_IamRole_AC6104A8"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/IamRole",
+            "uniqueId": "root_testinsideInflightshouldcapturetherightscope_IamRole_E9765D04"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -111,15 +111,15 @@ module.exports = function() {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testinflightontopshouldcapturetop_IamRole_E3EDF4E3.name}"
       },
-      "root_testinsideinflightshouldcapturetherightscope_IamRolePolicy_52C3186D": {
+      "root_testinsideInflightshouldcapturetherightscope_IamRolePolicy_043CD475": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inside_inflight should capture the right scope/IamRolePolicy",
-            "uniqueId": "root_testinsideinflightshouldcapturetherightscope_IamRolePolicy_52C3186D"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/IamRolePolicy",
+            "uniqueId": "root_testinsideInflightshouldcapturetherightscope_IamRolePolicy_043CD475"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinsideinflightshouldcapturetherightscope_IamRole_AC6104A8.name}"
+        "role": "${aws_iam_role.root_testinsideInflightshouldcapturetherightscope_IamRole_E9765D04.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -153,15 +153,15 @@ module.exports = function() {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testinflightontopshouldcapturetop_IamRole_E3EDF4E3.name}"
       },
-      "root_testinsideinflightshouldcapturetherightscope_IamRolePolicyAttachment_8B30CF95": {
+      "root_testinsideInflightshouldcapturetherightscope_IamRolePolicyAttachment_0C853DC1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inside_inflight should capture the right scope/IamRolePolicyAttachment",
-            "uniqueId": "root_testinsideinflightshouldcapturetherightscope_IamRolePolicyAttachment_8B30CF95"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/IamRolePolicyAttachment",
+            "uniqueId": "root_testinsideInflightshouldcapturetherightscope_IamRolePolicyAttachment_0C853DC1"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinsideinflightshouldcapturetherightscope_IamRole_AC6104A8.name}"
+        "role": "${aws_iam_role.root_testinsideInflightshouldcapturetherightscope_IamRole_E9765D04.name}"
       }
     },
     "aws_lambda_function": {
@@ -240,25 +240,25 @@ module.exports = function() {
           "subnet_ids": []
         }
       },
-      "root_testinsideinflightshouldcapturetherightscope_AB987B89": {
+      "root_testinsideInflightshouldcapturetherightscope_A5A6B6B3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inside_inflight should capture the right scope/Default",
-            "uniqueId": "root_testinsideinflightshouldcapturetherightscope_AB987B89"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/Default",
+            "uniqueId": "root_testinsideInflightshouldcapturetherightscope_A5A6B6B3"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "test-inside_inflight-should-capture-the-right-scope-c8bf488d"
+            "WING_FUNCTION_NAME": "test-insideInflight-should-capture-the-right-scope-c8f7739a"
           }
         },
-        "function_name": "test-inside_inflight-should-capture-the-right-scope-c8bf488d",
+        "function_name": "test-insideInflight-should-capture-the-right-scope-c8f7739a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinsideinflightshouldcapturetherightscope_IamRole_AC6104A8.arn}",
+        "role": "${aws_iam_role.root_testinsideInflightshouldcapturetherightscope_IamRole_E9765D04.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC.key}",
+        "s3_key": "${aws_s3_object.root_testinsideInflightshouldcapturetherightscope_S3Object_7AEB4685.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -311,11 +311,11 @@ module.exports = function() {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC": {
+      "root_testinsideInflightshouldcapturetherightscope_S3Object_7AEB4685": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inside_inflight should capture the right scope/S3Object",
-            "uniqueId": "root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/S3Object",
+            "uniqueId": "root_testinsideInflightshouldcapturetherightscope_S3Object_7AEB4685"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -340,8 +340,8 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const s = "in_resource";
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
+        const s = "inResource";
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inResource")'`)})((s === "inResource"))};
         this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inflight in resource should capture the right scoped var",new $stdlib.core.Inflight(this, "$Inflight1", {
           code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
           bindings: {
@@ -353,12 +353,18 @@ class $Root extends $stdlib.std.Resource {
         })
         );
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const A = require("${self_client_path}")({});
-            const client = new A({
+            const AClient = ${A._toInflightType(this).text};
+            const client = new AClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -398,7 +404,7 @@ class $Root extends $stdlib.std.Resource {
       }
     })
     );
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inside_inflight should capture the right scope",new $stdlib.core.Inflight(this, "$Inflight4", {
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:insideInflight should capture the right scope",new $stdlib.core.Inflight(this, "$Inflight4", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc4/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
@@ -429,7 +435,7 @@ new $App().synth();
 ```js
 async handle() {
   const { s } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inResource")'`)})((s === "inResource"))};
 }
 
 ```
@@ -456,8 +462,8 @@ async handle() {
 ```js
 async handle() {
   const {  } = this;
-  const s = "inside_inflight";
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inside_inflight")'`)})((s === "inside_inflight"))};
+  const s = "insideInflight";
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "insideInflight")'`)})((s === "insideInflight"))};
 }
 
 ```

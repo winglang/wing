@@ -28,8 +28,8 @@ inflight class Sub1 extends Super {
 inflight class Sub2 extends Super {
 }
 
-let optional_sub1: Sub1? = new Sub1();
-optional_sub1 ?? new Sub2();
+let optionalSub1: Sub1? = new Sub1();
+optionalSub1 ?? new Sub2();
 //               ^ error: Sub2 is not a subtype of Sub1
-optional_sub1 ?? new Super();
+optionalSub1 ?? new Super();
 //               ^ error: Super? is not a subtype of Sub1

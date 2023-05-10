@@ -28,7 +28,7 @@ class Foo {
     this.data = b;
   }
 
-  inflight get_stuff(): str {
+  inflight getStuff(): str {
     return this.data.field0;
   }
 }
@@ -38,7 +38,7 @@ assert(y.field1 == 1);
 assert(y.field3.field0 == "foo");
 
 // valid types in struct
-struct lots_of_types {
+struct lotsOfTypes {
   a: str;
   b: num;
   c: Array<str>;
