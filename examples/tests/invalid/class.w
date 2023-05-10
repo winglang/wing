@@ -18,7 +18,7 @@ new C5();
 // ^^^^^^^^^ Expected 1 required positional arguments but got 0 when instantiating "C5"
 
 new C5(foo: "bar"); 
-// ^^^^^^^^^ Expected 1 required positional arguments but got 0 when instantiating "C5"
+// ^^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 new C5("hello", foo: "bar"); 
 // ^^^^^^^^^ class C5 does not expect any named argument
