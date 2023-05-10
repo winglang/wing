@@ -171,12 +171,11 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   }
 
   public async tryPut(key: string, value: string): Promise<boolean> {
-    try {
-      await this.put(key, value);
-      return true;
-    } catch (error) {
+    if (this.fileExists(key)) {
       return false;
     }
+    
+    return this.put(key, value); // return the promise (await not needed)
   }
 
   public async tryPutJson(key: string, body: Json): Promise<boolean> {
