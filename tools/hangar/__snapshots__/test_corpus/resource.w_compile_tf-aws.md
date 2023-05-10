@@ -536,11 +536,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_notification": {
-      "root_BigPublisher_b2_S3Objectnotifier_AF71C8A3": {
+      "root_BigPublisher_b2_S3BucketNotification_70B757E2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/S3Object_notifier",
-            "uniqueId": "root_BigPublisher_b2_S3Objectnotifier_AF71C8A3"
+            "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
+            "uniqueId": "root_BigPublisher_b2_S3BucketNotification_70B757E2"
           }
         },
         "bucket": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.id}",

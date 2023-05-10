@@ -338,13 +338,13 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "PublicAccessBlock",
                             "path": "root/Default/Default/BigPublisher/b2/PublicAccessBlock",
                           },
-                          "S3Object_notifier": {
+                          "S3BucketNotification": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
                               "version": "0.15.2",
                             },
-                            "id": "S3Object_notifier",
-                            "path": "root/Default/Default/BigPublisher/b2/S3Object_notifier",
+                            "id": "S3BucketNotification",
+                            "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
                           },
                           "b2-on_create": {
                             "attributes": {

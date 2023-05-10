@@ -728,11 +728,11 @@
       }
     },
     "aws_s3_bucket_notification": {
-      "root_b_S3Objectnotifier_0C1BF652": {
+      "root_b_S3BucketNotification_DA757190": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/b/S3Object_notifier",
-            "uniqueId": "root_b_S3Objectnotifier_0C1BF652"
+            "path": "root/Default/Default/b/S3BucketNotification",
+            "uniqueId": "root_b_S3BucketNotification_DA757190"
           }
         },
         "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
@@ -765,11 +765,11 @@
           }
         ]
       },
-      "root_other_S3Objectnotifier_97225588": {
+      "root_other_S3BucketNotification_C16CA005": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/other/S3Object_notifier",
-            "uniqueId": "root_other_S3Objectnotifier_97225588"
+            "path": "root/Default/Default/other/S3BucketNotification",
+            "uniqueId": "root_other_S3BucketNotification_C16CA005"
           }
         },
         "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
