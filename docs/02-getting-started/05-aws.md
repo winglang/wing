@@ -33,7 +33,7 @@ Click :thumbsup: on the relevant issue and tell us what you think.
 
 ## Prerequisites
 
-To deploy Wing code to AWS, you'll need the following setup:
+In order to deploy to AWS, you will need:
 
 * [Terraform](https://terraform.io/downloads)
 * [AWS account] and the [AWS CLI] with [AWS credentials]
