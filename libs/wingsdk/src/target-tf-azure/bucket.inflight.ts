@@ -1,5 +1,9 @@
 import { DefaultAzureCredential } from "@azure/identity";
-import { BlobServiceClient, ContainerClient } from "@azure/storage-blob";
+import {
+  BlobDownloadResponseParsed,
+  BlobServiceClient,
+  ContainerClient,
+} from "@azure/storage-blob";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { Json } from "../std";
 
@@ -61,16 +65,29 @@ export class BucketClient implements IBucketClient {
   public async get(key: string): Promise<string> {
     const blobClient = this.containerClient.getBlobClient(key);
 
-    const downloadResponse = await blobClient.download();
+    let downloadResponse: BlobDownloadResponseParsed;
+    try {
+      downloadResponse = await blobClient.download();
+    } catch (e) {
+      throw new Error(
+        `Object does not exist (key=${key}): ${(e as Error).stack}`
+      );
+    }
     if (downloadResponse.readableStreamBody === undefined) {
       return "";
     }
 
-    const downloaded = (
-      await this.streamToBuffer(downloadResponse.readableStreamBody)
-    ).toString();
-
-    return downloaded;
+    try {
+      return (
+        await this.streamToBuffer(downloadResponse.readableStreamBody)
+      ).toString();
+    } catch (e) {
+      throw new Error(
+        `Object contents could not be read as text (key=${key}): ${
+          (e as Error).stack
+        })}`
+      );
+    }
   }
 
   /**
