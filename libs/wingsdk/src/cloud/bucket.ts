@@ -295,11 +295,11 @@ export interface IBucketClient {
   tryPutJson(key: string, body: Json): Promise<boolean>;
 
   /**
-   * Tries to retrieve an object from the bucket.
+   * Get an object from the bucket if it exists
    * @param key Key of the object.
-   * @returns `true` if the object was successfully retrieved, `false` if an error occurred.
+   * @returns the contents of the object as a string if it exists, nil otherwise
    */
-  tryGet(key: string): Promise<boolean>;
+  tryGet(key: string): Promise<string | undefined>;
 
   /**
    * Tries to retrieve a Json object from the bucket.
