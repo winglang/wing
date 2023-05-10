@@ -1,6 +1,7 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import { testing } from "@winglang/sdk";
+import { Trace } from "@winglang/sdk/lib/cloud/index.js";
 import cors from "cors";
 import Emittery from "emittery";
 import express from "express";
@@ -20,7 +21,10 @@ export interface CreateExpressServerOptions {
   simulatorInstance(): Promise<testing.Simulator>;
   consoleLogger: ConsoleLogger;
   errorMessage(): string | undefined;
-  emitter: Emittery<{ invalidateQuery: string | undefined }>;
+  emitter: Emittery<{
+    invalidateQuery: string | undefined;
+    trace: Trace;
+  }>;
   log: LogInterface;
   updater?: Updater;
   config: Config;

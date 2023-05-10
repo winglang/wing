@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
+import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
@@ -12,7 +13,7 @@ import {
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { BaseResourceSchema, Simulator } from "../wingsdk.js";
+import { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 
@@ -337,6 +338,14 @@ export const createAppRouter = () => {
         ctx.emitter.on("invalidateQuery", emit.next);
         return () => {
           ctx.emitter.off("invalidateQuery", emit.next);
+        };
+      });
+    }),
+    "app.traces": createProcedure.subscription(({ ctx }) => {
+      return observable<Trace>((emit) => {
+        ctx.emitter.on("trace", emit.next);
+        return () => {
+          ctx.emitter.off("trace", emit.next);
         };
       });
     }),

@@ -1,5 +1,5 @@
 import { createTRPCReact } from "@trpc/react-query";
-import { Router } from "@wingconsole/server";
+import type { Router } from "@wingconsole/server";
 
 export const trpc = createTRPCReact<Router>({
   unstable_overrides: {

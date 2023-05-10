@@ -1,5 +1,6 @@
 import { initTRPC } from "@trpc/server";
 import { testing } from "@winglang/sdk";
+import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
 import Emittery from "emittery";
 
 import { Config } from "../config.js";
@@ -28,7 +29,10 @@ export interface RouterContext {
     wingVersion: string | undefined;
   }>;
   errorMessage(): string | undefined;
-  emitter: Emittery<{ invalidateQuery: string | undefined }>;
+  emitter: Emittery<{
+    invalidateQuery: string | undefined;
+    trace: Trace;
+  }>;
   appState(): State;
   logger: ConsoleLogger;
   updater?: Updater;

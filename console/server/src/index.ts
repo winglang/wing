@@ -1,4 +1,5 @@
 import { inferRouterInputs } from "@trpc/server";
+import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
 import Emittery from "emittery";
 
 import { Config } from "./config.js";
@@ -38,6 +39,7 @@ export const createConsoleServer = async ({
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
+    trace: Trace;
   }>();
 
   const invalidateQuery = async (query: RouteNames) => {
@@ -125,6 +127,8 @@ export const createConsoleServer = async ({
     ) {
       invalidateQuery("queue.approxSize");
     }
+
+    emitter.emit("trace", trace);
   });
 
   // Create the express server and router for the simulator. Start
@@ -139,7 +143,10 @@ export const createConsoleServer = async ({
     errorMessage() {
       return lastErrorMessage;
     },
-    emitter: emitter as Emittery<{ invalidateQuery: string | undefined }>,
+    emitter: emitter as Emittery<{
+      invalidateQuery: string | undefined;
+      trace: Trace;
+    }>,
     log,
     updater,
     config,
