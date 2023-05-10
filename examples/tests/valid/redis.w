@@ -12,7 +12,7 @@ let r2 = new redis.Redis() as "r2";
 
 new cloud.Function(inflight (s:str):str => {
   // Using raw client
-  let connection = r.raw_client();
+  let connection = r.rawClient();
   connection.set("wing", "does redis");
   let value = connection.get("wing");
   assert(value == "does redis");

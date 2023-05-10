@@ -178,7 +178,7 @@ bucket: (function(env) {
                   {
                     "direction": "outbound",
                     "implicit": false,
-                    "relationship": "add_consumer",
+                    "relationship": "consumer",
                     "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
                   },
                 ],
@@ -234,7 +234,7 @@ bucket: (function(env) {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "add_consumer",
+                    "relationship": "consumer",
                     "resource": "root/HelloWorld/Queue",
                   },
                 ],

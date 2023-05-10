@@ -19,8 +19,8 @@ let x = cloud.ApiResponse {
 
 let y = cloud.ApiResponse {
   status: 200,
-  not_a_field: 500,
-// ^^^^^^^^^^^ "not_a_field" is not a field of "ApiResponse"
+  notAField: 500,
+// ^^^^^^^^^^^ "notAField" is not a field of "ApiResponse"
 };
 
 new cloud.Function(

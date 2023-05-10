@@ -148,7 +148,7 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         q: {
           obj: q,
-          ops: ["approx_size","purge","push"]
+          ops: ["approxSize","purge","push"]
         },
       }
     })

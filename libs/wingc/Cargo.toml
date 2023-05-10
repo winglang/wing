@@ -23,6 +23,7 @@ aho-corasick = "0.7.20"
 lsp-types = "0.94.0"
 indoc = "2.0.0"
 const_format = "0.2.30"
+duplicate = "1.0.0"
 
 [lib]
 crate-type = ["rlib", "cdylib"]
