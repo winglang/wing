@@ -1,11 +1,7 @@
 bring cloud;
 
 class MyResource {
-  init() {
-
-  }
-
-  my_preflight() { }
+  myPreflight() { }
 }
 
 class Test {
@@ -16,7 +12,7 @@ class Test {
   }
 
   inflight test() {
-    this.r.my_preflight();
+    this.r.myPreflight();
 //  ^^^^^^^^^^^^^^^^^^^^^^ Cannot call into preflight phase while inflight
   }
 }

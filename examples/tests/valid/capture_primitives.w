@@ -1,28 +1,28 @@
 bring cloud;
 
-let my_str = "hello, string";
-let my_num = 1234;
-let my_bool = true;
-let my_second_bool = false;
-let my_dur = 10m;
+let myStr = "hello, string";
+let myNum = 1234;
+let myBool = true;
+let mySecondBool = false;
+let myDur = 10m;
 
 let handler = inflight (s: str): str => {
-  log(my_str);
+  log(myStr);
 
-  let n = my_num;
+  let n = myNum;
   log("${n}");
 
-  assert(my_second_bool == false);
+  assert(mySecondBool == false);
 
-  if my_bool {
+  if myBool {
     log("bool=true");
   } else {
     log("bool=false");
   }
 
-  let min = my_dur.minutes;
-  let sec = my_dur.seconds;
-  let hr  = my_dur.hours;
+  let min = myDur.minutes;
+  let sec = myDur.seconds;
+  let hr  = myDur.hours;
   let split = "min=${min} sec=${sec} hr=${hr}".split(" ");
   assert(split.length == 3);
 };

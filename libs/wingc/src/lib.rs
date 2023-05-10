@@ -40,7 +40,7 @@ pub mod lsp;
 pub mod parser;
 pub mod type_check;
 pub mod type_check_assert;
-pub mod utilities;
+pub mod type_check_class_fields_init;
 pub mod visit;
 mod wasm_util;
 

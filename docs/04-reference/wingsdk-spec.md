@@ -416,6 +416,17 @@ struct QueueProps {
    * @default 30s
    */
   timeout: duration?;
+   /**
+   * How long a queue retains a message.
+   * @default undefined
+   */
+   retentionPeriod?: duration;
+
+  /**
+   * Initialize the queue with a set of messages.
+   * @default []
+   */
+   initialMessages?: string[];
 }
 
 resource Queue {
@@ -846,9 +857,9 @@ struct ApiRequest {
   /** The request's path. */
   path: str;
   /** The request's query parameters. */
-  query: Map<str>?;
+  query: Map<str>;
   /** The path variables. */
-  vars: Map<str>?;
+  vars: Map<str>;
   /** The request's body. */
   body: Json?;
   /** The request's headers. */
@@ -1043,7 +1054,7 @@ To use it, you must manually create a secret with a matching name on the provide
 struct SecretProps {
   /**
    * The secret's name.
-   * 
+   *
    * If no name is provided then a new secret is provisioned in the target.
    * If a name is provided then the resource will reference an existing
    * secret in the target.

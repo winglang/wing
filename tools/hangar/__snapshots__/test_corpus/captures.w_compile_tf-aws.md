@@ -298,6 +298,19 @@
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
+      "root_PublicBucket_PublicAccessBlock_A244D6BC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/PublicBucket/PublicAccessBlock",
+            "uniqueId": "root_PublicBucket_PublicAccessBlock_A244D6BC"
+          }
+        },
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "bucket": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false
+      },
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
@@ -433,23 +446,23 @@ class $Root extends $stdlib.std.Resource {
       bindings: {
         bucket1: {
           obj: bucket1,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
         bucket2: {
           obj: bucket2,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
         bucket3: {
           obj: bucket3,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
       }
     })
     ;
     (queue.addConsumer(handler,{ batchSize: 5 }));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: Object.freeze({}) });
-    const empty_env = Object.freeze({});
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: empty_env });
+    const emptyEnv = Object.freeze({});
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: emptyEnv });
   }
 }
 class $App extends $AppBase {

@@ -550,6 +550,7 @@ impl<'s> Parser<'s> {
 									kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 										root: name.clone(),
 										fields: vec![],
+										span: name.span.clone(),
 									}),
 									span: self.node_span(&class_element),
 								})),
@@ -569,12 +570,31 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
-		if initializer.is_none() {
-			self.add_error::<Node>(
-				format!("No constructor defined in class {:?}", statement_node),
-				&statement_node,
-			)?;
-		}
+
+		let initializer = match initializer {
+			Some(init) => init,
+			// add a default initializer if none is defined
+			None => Initializer {
+				signature: FunctionSignature {
+					parameters: vec![],
+					return_type: Some(Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+							root: name.clone(),
+							fields: vec![],
+							span: name.span.clone(),
+						}),
+						span: name.span.clone(),
+					})),
+					phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
+				},
+				statements: Scope {
+					env: RefCell::new(None),
+					statements: vec![],
+					span: name.span.clone(),
+				},
+				span: name.span.clone(),
+			},
+		};
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(&parent_node)?;
@@ -625,7 +645,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			initializer: initializer.unwrap(),
+			initializer,
 			is_resource,
 			inflight_initializer,
 		}))
@@ -879,6 +899,7 @@ impl<'s> Parser<'s> {
 								span: Default::default(),
 							},
 							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
 						},
 						property: self.node_symbol(&property)?,
 					}),
@@ -929,6 +950,7 @@ impl<'s> Parser<'s> {
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
+			span: self.node_span(&nested_node),
 		});
 		Ok(TypeAnnotation {
 			kind,
@@ -1027,7 +1049,7 @@ impl<'s> Parser<'s> {
 					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
 					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-						"+" => BinaryOperator::Add,
+						"+" => BinaryOperator::AddOrConcat,
 						"-" => BinaryOperator::Sub,
 						"==" => BinaryOperator::Equal,
 						"!=" => BinaryOperator::NotEqual,

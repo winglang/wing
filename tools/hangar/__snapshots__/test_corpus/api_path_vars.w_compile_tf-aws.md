@@ -2,7 +2,7 @@
 
 ## clients/Fetch.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Fetch {
     constructor({  }) {
     }
@@ -285,12 +285,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("get");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/Fetch.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Fetch = require("${self_client_path}")({});
-            const client = new Fetch({
+            const FetchClient = ${Fetch._toInflightType(this).text};
+            const client = new FetchClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -353,9 +359,8 @@ new $App().synth();
 ```js
 async handle(req) {
   const {  } = this;
-  const vars = (req.vars ?? Object.freeze({"name":""}));
   return {
-  "body": Object.freeze({"user":(vars)["name"]}),
+  "body": Object.freeze({"user":(req.vars)["name"]}),
   "status": 200,}
   ;
 }

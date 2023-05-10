@@ -5,10 +5,10 @@ const JSII_DEPS = ["constructs@~10.1.228"];
 const CDKTF_VERSION = "0.15.2";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>4.0",
-  "random@~>3.1",
-  "azurerm@~>3.10",
-  "google@~>4.0",
+  "aws@~>4.65.0",
+  "random@~>3.5.1",
+  "azurerm@~>3.54.0",
+  "google@~>4.63.1",
 ];
 
 // defines the list of dependencies required for each compilation target that is not built into the
@@ -56,6 +56,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.254.0",
     "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
+    "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
@@ -75,6 +76,7 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/debug",
     "@types/fs-extra",
+    "@types/mime-types",
     "@types/tar",
     "@types/express",
     "aws-sdk-client-mock",

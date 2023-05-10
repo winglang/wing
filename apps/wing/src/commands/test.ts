@@ -25,10 +25,12 @@ export async function test(entrypoints: string[], options: TestOptions) {
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () => compile(entrypoint, {
-    ...options,
-    testing: true,
-  }));
+  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () =>
+    compile(entrypoint, {
+      ...options,
+      testing: true,
+    })
+  );
 
   switch (options.target) {
     case "sim":
@@ -52,8 +54,7 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
 
   // find the longest `path` of all the tests
   const longestPath = results.reduce(
-    (longest, result) =>
-      result.path.length > longest ? result.path.length : longest,
+    (longest, result) => (result.path.length > longest ? result.path.length : longest),
     0
   );
 
@@ -62,7 +63,7 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
   if (results.length === 0) {
     results.push({
       pass: true,
-      path: '',
+      path: "",
       traces: [],
     });
   }
@@ -73,13 +74,13 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
     const details = new Array<string>();
 
     // add any log messages that were emitted during the test
-    for (const log of result.traces.filter(t => t.type == "log")) {
+    for (const log of result.traces.filter((t) => t.type == "log")) {
       details.push(chalk.gray(log.data.message));
     }
 
     // if the test failed, add the error message and trace
     if (result.error) {
-      details.push(...result.error.split("\n").map(l => chalk.red(l)));
+      details.push(...result.error.split("\n").map((l) => chalk.red(l)));
     }
 
     // construct the first row of the test result by collecting the various components and joining
@@ -102,7 +103,6 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
       firstRow.push(chalk.whiteBright(result.path.padEnd(longestPath)));
     } else {
       firstRow.push(chalk.gray("(no tests)"));
-
     }
 
     // okay we are ready to print the test result
@@ -122,7 +122,7 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
   }
 
   return hasFailures;
-};
+}
 
 async function testSimulator(synthDir: string) {
   const s = new sdk.testing.Simulator({ simfile: synthDir });
@@ -255,9 +255,9 @@ function pickOneTestPerEnvironment(testPaths: string[]) {
   const envs = new Set<string>();
 
   for (const testPath of testPaths) {
-    const testSuffix = testPath.substring(testPath.indexOf('env') + 1); // "<env #>/<path to test>"
-    const env = testSuffix.substring(0, testSuffix.indexOf('/')); // "<env #>"
-    const test = testSuffix.substring(testSuffix.indexOf('/') + 1); // "<path to test>"
+    const testSuffix = testPath.substring(testPath.indexOf("env") + 1); // "<env #>/<path to test>"
+    const env = testSuffix.substring(0, testSuffix.indexOf("/")); // "<env #>"
+    const test = testSuffix.substring(testSuffix.indexOf("/") + 1); // "<path to test>"
 
     if (envs.has(env)) {
       continue;
