@@ -20,7 +20,7 @@
     "playwright:update": "PLAYWRIGHT_TEST=true xvfb-maybe --auto-servernum --server-args='-screen 0 3440x1440x24' -- playwright test -u"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.329.0",
+    "@aws-sdk/client-s3": "^3.331.0",
     "@babel/core": "^7.21.8",
     "@cloudy-ts/eslint-plugin": "^0.0.260",
     "@electron/notarize": "^1.2.3",
@@ -45,7 +45,7 @@
     "constructs": "^10.2.18",
     "dmg-license": "^1.0.11",
     "dotenv": "^16.0.3",
-    "electron": "^24.2.0",
+    "electron": "^24.3.0",
     "electron-builder": "^23.6.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-log": "^4.4.8",
