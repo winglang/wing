@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.16.3
-        version: 0.16.3(constructs@10.2.18)
+        specifier: ^0.16.4
+        version: 0.16.4(constructs@10.2.18)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.16.3
-        version: 0.16.3(constructs@10.2.18)
+        specifier: ^0.16.4
+        version: 0.16.4(constructs@10.2.18)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -5327,8 +5327,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.16.3(constructs@10.2.18):
-    resolution: {integrity: sha512-cQAARZAQRs/poEQH+jIp03pMkCPv7v+ulIb0HrZDxJvpYJZjyNrMw4Hh3qbzFHxIaWRvIGlwFACnVcO3WPRg7Q==}
+  /@winglang/sdk@0.16.4(constructs@10.2.18):
+    resolution: {integrity: sha512-1QnBTlCSmfjdFuxUPWdPkcvM7621bbvb5H2PBCvuVNO0pKNJw3ZDGufvLL8B1sCqZOxwgtEnRmxtwrm5JDOknA==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
