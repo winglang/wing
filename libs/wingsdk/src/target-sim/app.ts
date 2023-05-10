@@ -10,6 +10,7 @@ import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
+import { Service } from "./service";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
@@ -22,6 +23,7 @@ import {
   QUEUE_FQN,
   SCHEDULE_FQN,
   SECRET_FQN,
+  SERVICE_FQN,
   TABLE_FQN,
   TEST_RUNNER_FQN,
   TOPIC_FQN,
@@ -32,7 +34,11 @@ import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { REDIS_FQN } from "../redis";
 import { WingSimulatorSchema } from "../testing/simulator";
-import { SIMULATOR_FILE_PATH } from "../util";
+
+/**
+ * Path of the simulator configuration file in every .wsim tarball.
+ */
+export const SIMULATOR_FILE_PATH = "simulator.json";
 
 /**
  * A construct that knows how to synthesize simulator resources into a
@@ -99,6 +105,9 @@ export class App extends core.App {
 
       case SCHEDULE_FQN:
         return new Schedule(scope, id, args[0]);
+
+      case SERVICE_FQN:
+        return new Service(scope, id, args[0]);
     }
 
     return undefined;

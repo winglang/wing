@@ -6,7 +6,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
-import { runCommand } from "../util";
+import { runCommand } from "../utils/misc";
 
 export class Redis
   extends RedisClientBase

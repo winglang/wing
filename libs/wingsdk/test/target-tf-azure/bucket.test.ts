@@ -4,8 +4,8 @@ import { test, expect } from "vitest";
 import { Bucket, IBucketEventHandler } from "../../src/cloud";
 import { Inflight, NodeJsCode } from "../../src/core";
 import * as tfazure from "../../src/target-tf-azure";
-import { mkdtemp } from "../../src/util";
 import {
+  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,

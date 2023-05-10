@@ -2,8 +2,8 @@ import path from "path";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../../src/util";
 import {
+  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfResourcesWithProperty,

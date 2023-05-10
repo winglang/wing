@@ -19,6 +19,7 @@ export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
 export const REDIS_TYPE = "wingsdk.redis.Redis";
 export const WEBSITE_TYPE = "wingsdk.cloud.Website";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
+export const SERVICE_TYPE = "wingsdk.cloud.Service";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
@@ -81,6 +82,22 @@ export interface QueueSchema extends BaseResourceSchema {
     readonly initialMessages: string[];
   };
 }
+
+/** Schema for cloud.Service */
+export interface ServiceSchema extends BaseResourceSchema {
+  readonly type: typeof SERVICE_TYPE;
+  readonly props: {
+    /** Function that should be called when service is started */
+    onStartHandler: FunctionHandle;
+    /** Function that is called when service is stopped */
+    onStopHandler?: FunctionHandle;
+    /** Whether the service should start when sim starts */
+    autoStart: boolean;
+  };
+}
+
+/** Runtime attributes for cloud.Service */
+export interface ServiceAttributes {}
 
 /** Runtime attributes for cloud.Schedule */
 export interface ScheduleAttributes {}
