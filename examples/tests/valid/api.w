@@ -28,7 +28,7 @@ class Foo impl cloud.IFunctionHandler {
   }
   inflight handle(message: str) {
     let url = this.api.url;
-    assert(url.starts_with("http://"));
+    assert(url.startsWith("http://"));
   }
 }
 

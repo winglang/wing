@@ -13,7 +13,7 @@ class JSHelper {
 
 let js = new JSHelper();
 
-q.add_consumer(inflight () => {
+q.addConsumer(inflight () => {
   js.sleep(2000);
 });
 
@@ -27,6 +27,6 @@ new cloud.Function(inflight ()=> {
   // wait for 3 seconds
   js.sleep(3000);
   // The queue should have 2 messages still due to timeout
-  assert(q.approx_size() == 2);
+  assert(q.approxSize() == 2);
 }) as "test";
 

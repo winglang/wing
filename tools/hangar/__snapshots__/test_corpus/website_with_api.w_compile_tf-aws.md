@@ -531,36 +531,36 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website_with_api" });
-    const users_table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING,"age":cloud.ColumnType.NUMBER}) });
-    const get_handler = new $stdlib.core.Inflight(this, "$Inflight1", {
+    const usersTable = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING,"age":cloud.ColumnType.NUMBER}) });
+    const getHandler = new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
-        users_table: {
-          obj: users_table,
+        usersTable: {
+          obj: usersTable,
           ops: ["delete","get","insert","list","update"]
         },
       }
     })
     ;
-    const post_handler = new $stdlib.core.Inflight(this, "$Inflight2", {
+    const postHandler = new $stdlib.core.Inflight(this, "$Inflight2", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
       bindings: {
-        users_table: {
-          obj: users_table,
+        usersTable: {
+          obj: usersTable,
           ops: ["delete","get","insert","list","update"]
         },
       }
     })
     ;
-    const options_handler = new $stdlib.core.Inflight(this, "$Inflight3", {
+    const optionsHandler = new $stdlib.core.Inflight(this, "$Inflight3", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc3/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })
     ;
-    (api.get("/users",get_handler));
-    (api.post("/users",post_handler));
-    (api.options("/users",options_handler));
+    (api.get("/users",getHandler));
+    (api.post("/users",postHandler));
+    (api.options("/users",optionsHandler));
     (website.addJson("config.json",Object.freeze({"apiUrl":api.url})));
   }
 }
@@ -586,9 +586,9 @@ new $App().synth();
 ## proc1/index.js
 ```js
 async handle(req) {
-  const { users_table } = this;
+  const { usersTable } = this;
   return {
-  "body": Object.freeze({"users":(await users_table.list())}),
+  "body": Object.freeze({"users":(await usersTable.list())}),
   "status": 200,}
   ;
 }
@@ -598,7 +598,7 @@ async handle(req) {
 ## proc2/index.js
 ```js
 async handle(req) {
-  const { users_table } = this;
+  const { usersTable } = this;
   const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
   if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
     return {
@@ -606,7 +606,7 @@ async handle(req) {
     "status": 400,}
     ;
   }
-  (await users_table.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+  (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
   return {
   "body": Object.freeze({"user":(body)["id"]}),
   "status": 201,}

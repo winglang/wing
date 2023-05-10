@@ -5,7 +5,7 @@ class CdkDockerImageFunction {
 
     init() {
         this.function = new awscdk.aws_lambda.DockerImageFunction(awscdk.aws_lambda.DockerImageFunctionProps{
-            code: awscdk.aws_lambda.DockerImageCode.from_image_asset("./test.ts"),
+            code: awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts"),
         }) as "DockerImageFunction";
     }
 }
