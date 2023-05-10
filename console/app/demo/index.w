@@ -26,7 +26,7 @@ let handler = inflight (message: str): str => {
   return message;
 };
 
-queue.add_consumer(handler);
+queue.addConsumer(handler);
 
 let counter = new cloud.Counter(initial: 0);
 new cloud.Function(inflight (message: str): str => {
@@ -36,11 +36,11 @@ new cloud.Function(inflight (message: str): str => {
 }) as "IncrementCounter";
 
 let topic = new cloud.Topic() as "Topic";
-topic.on_message(inflight (message: str): str => {
+topic.onMessage(inflight (message: str): str => {
   log("Topic subscriber #1: ${message}");
   return message;
 });
-topic.on_message(inflight (message: str): str => {
+topic.onMessage(inflight (message: str): str => {
   log("Topic subscriber #2: ${message}");
   return message;
 });
