@@ -102,7 +102,7 @@ export class Bucket extends cloud.Bucket {
   public _preSynthesize() {
     super._preSynthesize();
     if (this.notificationTopics.length) {
-      new S3BucketNotification(this, `S3Object_notifier`, {
+      new S3BucketNotification(this, `S3BucketNotification`, {
         bucket: this.bucket.id,
         topic: this.notificationTopics,
         dependsOn: this.notificationDependencies,
