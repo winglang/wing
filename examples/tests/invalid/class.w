@@ -9,7 +9,7 @@ new C2(1);
 
 class C4 {}
 new C4(token: "1");
-// ^^^^^^^^^ Expected 0 named arguments when instantiating \\"C4\\"
+// ^^^^^^^^^ Expected 0 named argument(s)"
 
 class C5 {
   init(foo: str)
