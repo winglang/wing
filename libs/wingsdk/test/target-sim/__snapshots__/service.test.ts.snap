@@ -116,7 +116,7 @@ async handle(message) {
           "id": "my_service",
           "path": "root/my_service",
         },
-        "my_service-ServiceOnStartHandler-ef2b13b9": {
+        "my_service-ServiceOnStart-ef2b13b9": {
           "attributes": {
             "wing:resource:connections": [],
           },
@@ -127,8 +127,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_service-ServiceOnStartHandler-ef2b13b9",
-          "path": "root/my_service-ServiceOnStartHandler-ef2b13b9",
+          "id": "my_service-ServiceOnStart-ef2b13b9",
+          "path": "root/my_service-ServiceOnStart-ef2b13b9",
         },
         "my_service-ServiceOnStartef2b13b9": {
           "attributes": {

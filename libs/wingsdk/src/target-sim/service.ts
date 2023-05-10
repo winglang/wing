@@ -20,60 +20,49 @@ export class Service extends cloud.Service implements ISimulatorResource {
     super(scope, id, props);
     this.autoStart = props.autoStart ?? true;
 
+    const onStartFunction = this.createServiceFunction(props.onStart, "ServiceOnStart");
+    this.onStartHandlerToken = simulatorHandleToken(onStartFunction);
+    
+    Resource.addConnection({
+      from: this,
+      to: onStartFunction,
+      relationship: "on_start",
+    });
+
+    // On Stop Handler
+    if (props.onStop) {
+      const onStopFunction = this.createServiceFunction(props.onStop, "ServiceOnStop");
+      this.onStopHandlerToken = simulatorHandleToken(onStopFunction);
+      
+      Resource.addConnection({
+        from: this,
+        to: onStopFunction,
+        relationship: "on_stop",
+      });
+    }
+  }
+
+  private createServiceFunction(handler: cloud.IServiceOnEventHandler, id: string): cloud.Function {
     // On Start Handler
-    const onStartHash = props.onStart.node.addr.slice(-8);
+    const onStartHash = handler.node.addr.slice(-8);
 
     const onStartFunctionHandler = convertBetweenHandlers(
       this.node.scope!,
-      `${this.node.id}-ServiceOnStartHandler-${onStartHash}`,
-      props.onStart,
+      `${this.node.id}-${id}-${onStartHash}`,
+      handler,
       join(__dirname, "service.onevent.inflight.js"),
       "ServiceOnEventHandler"
     );
 
     const fn = Function._newFunction(
       this.node.scope!,
-      `${this.node.id}-ServiceOnStart${onStartHash}`,
+      `${this.node.id}-${id}${onStartHash}`,
       onStartFunctionHandler,
       {}
     );
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_start",
-    });
-
-    this.onStartHandlerToken = simulatorHandleToken(fn);
     this.node.addDependency(fn);
-
-    // On Stop Handler
-    if (props.onStop) {
-      const onStopHash = props.onStart.node.addr.slice(-8);
-      const onStopFunctionHandler = convertBetweenHandlers(
-        this.node.scope!,
-        `${this.node.id}-ServiceOnStopHandler-${onStopHash}`,
-        props.onStop,
-        join(__dirname, "service.onevent.inflight.js"),
-        "ServiceOnEventHandler"
-      );
-
-      const stopFn = Function._newFunction(
-        this.node.scope!,
-        `${this.node.id}-ServiceOnStop${onStopHash}`,
-        onStopFunctionHandler,
-        {}
-      );
-
-      Resource.addConnection({
-        from: this,
-        to: stopFn,
-        relationship: "on_stop",
-      });
-
-      this.onStopHandlerToken = simulatorHandleToken(stopFn);
-      this.node.addDependency(stopFn);
-    }
+    return fn;
   }
 
   toSimulator(): BaseResourceSchema {
