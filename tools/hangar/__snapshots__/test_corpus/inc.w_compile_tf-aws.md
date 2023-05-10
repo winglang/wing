@@ -21,7 +21,7 @@
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inc\",\"${aws_lambda_function.root_testinc_9F32E3AB.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inc\",\"${aws_lambda_function.root_testinc_Handler_A10D3F88.arn}\"]]"
     }
   },
   "provider": {
@@ -50,61 +50,61 @@
       }
     },
     "aws_iam_role": {
-      "root_testinc_IamRole_55C86D0F": {
+      "root_testinc_Handler_IamRole_FADF671C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inc/IamRole",
-            "uniqueId": "root_testinc_IamRole_55C86D0F"
+            "path": "root/Default/Default/test:inc/Handler/IamRole",
+            "uniqueId": "root_testinc_Handler_IamRole_FADF671C"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinc_IamRolePolicy_6C0DCBF3": {
+      "root_testinc_Handler_IamRolePolicy_C6ED1330": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inc/IamRolePolicy",
-            "uniqueId": "root_testinc_IamRolePolicy_6C0DCBF3"
+            "path": "root/Default/Default/test:inc/Handler/IamRolePolicy",
+            "uniqueId": "root_testinc_Handler_IamRolePolicy_C6ED1330"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testinc_IamRole_55C86D0F.name}"
+        "role": "${aws_iam_role.root_testinc_Handler_IamRole_FADF671C.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinc_IamRolePolicyAttachment_497EB6F4": {
+      "root_testinc_Handler_IamRolePolicyAttachment_F0CAB67D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inc/IamRolePolicyAttachment",
-            "uniqueId": "root_testinc_IamRolePolicyAttachment_497EB6F4"
+            "path": "root/Default/Default/test:inc/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinc_Handler_IamRolePolicyAttachment_F0CAB67D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinc_IamRole_55C86D0F.name}"
+        "role": "${aws_iam_role.root_testinc_Handler_IamRole_FADF671C.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinc_9F32E3AB": {
+      "root_testinc_Handler_A10D3F88": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inc/Default",
-            "uniqueId": "root_testinc_9F32E3AB"
+            "path": "root/Default/Default/test:inc/Handler/Default",
+            "uniqueId": "root_testinc_Handler_A10D3F88"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "test-inc-c8edfc7a"
+            "WING_FUNCTION_NAME": "Handler-c8ddbb5a"
           }
         },
-        "function_name": "test-inc-c8edfc7a",
+        "function_name": "Handler-c8ddbb5a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinc_IamRole_55C86D0F.arn}",
+        "role": "${aws_iam_role.root_testinc_Handler_IamRole_FADF671C.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinc_S3Object_2E03DC4E.key}",
+        "s3_key": "${aws_s3_object.root_testinc_Handler_S3Object_3A9256BD.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -124,11 +124,11 @@
       }
     },
     "aws_s3_object": {
-      "root_testinc_S3Object_2E03DC4E": {
+      "root_testinc_Handler_S3Object_3A9256BD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inc/S3Object",
-            "uniqueId": "root_testinc_S3Object_2E03DC4E"
+            "path": "root/Default/Default/test:inc/Handler/S3Object",
+            "uniqueId": "root_testinc_Handler_S3Object_3A9256BD"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -151,7 +151,7 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 0 });
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inc",new $stdlib.core.Inflight(this, "$Inflight1", {
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inc",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         counter: {

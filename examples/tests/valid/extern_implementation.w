@@ -22,11 +22,10 @@ assert(Foo.v4().length == 36);
 
 let f = new Foo();
 
-new cloud.Function(inflight () => {
+test "call" {
   f.call();
-}) as "test:call";
+}
 
-new cloud.Function(inflight () => {
+test "console" {
   f.print("hey there");
-}) as "test:console";
-
+}

@@ -2282,6 +2282,26 @@ class Rect {
 
 [`▲ top`][top]
 
+### 3.10 Unit tests
+
+Unit tests can be defined in Wing using the built-in test statement.
+A test statement expects a name and a block of inflight code to execute.
+
+```js
+let b = new cloud.Bucket();
+
+test "can add objects" {
+  b.put("key", "value");
+  assert(b.get("key") == "value");
+}
+```
+
+The behavior of running tests with `wing test` CLI command is determined by the `cloud.TestRunner` resource in the Wing SDK, which can be implemented for any compiler target.
+
+See the [CLI User Manual](https://docs.winglang.io/reference/cli#test-wing-test) for more details on running tests.
+
+[`▲ top`][top]
+
 ---
 
 ## 4. Module System

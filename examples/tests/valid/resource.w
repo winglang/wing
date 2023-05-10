@@ -86,13 +86,14 @@ class Bar {
 
 let bucket = new cloud.Bucket();
 let res = new Bar("Arr", bucket, MyEnum.B);
-new cloud.Function(inflight () => {
+
+test "test" {
   let s = res.myMethod();
   assert(s == "counter is: 101");
   assert(bucket.list().length == 1);
   assert(res.foo.inflightField == 123);
   res.testTypeAccess();
-}) as "test";
+}
 
 class BigPublisher {
   b: cloud.Bucket;
@@ -131,8 +132,9 @@ class BigPublisher {
 }
 
 let bigOlPublisher = new BigPublisher();
-new cloud.Function(inflight () => {
+
+test "dependency cycles" {
   bigOlPublisher.publish("foo");
   let count = bigOlPublisher.getObjectCount();
   // assert(count == 2); TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
-}) as "test: dependency cycles";
+}
