@@ -36,7 +36,7 @@ Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the
 
 ## Why do we think the cloud needs a programming language? 🤔
 
-Cloud applications are are fundamentally different from applications that run on a single machine - 
+Cloud applications are fundamentally different from applications that run on a single machine - 
 they are distributed systems that rely on cloud infrastructure to achieve their goals.
 
 In order to be able to express both infrastructure and application logic in a safe and unified programming model, 
