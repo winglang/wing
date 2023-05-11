@@ -445,10 +445,7 @@ where
 			}
 		}
 		TypeAnnotationKind::UserDefined(t) => {
-			v.visit_symbol(&t.root);
-			for field in &t.fields {
-				v.visit_symbol(field);
-			}
+			v.visit_user_defined_type(t);
 		}
 	}
 }

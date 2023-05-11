@@ -496,12 +496,18 @@ impl<'s> Parser<'s> {
 								}
 								Phase::Inflight
 							}
-							None => Phase::Preflight,
+							None => {
+								if is_resource {
+									Phase::Preflight
+								} else {
+									Phase::Inflight
+								}
+							}
 						},
 					})
 				}
 				("initializer", _) => {
-					let is_inflight = class_element.child_by_field_name("inflight").is_some();
+					let is_inflight = class_element.child_by_field_name("inflight").is_some() || !is_resource;
 					if initializer.is_some() && !is_inflight {
 						self
 							.add_error::<Node>(
@@ -517,19 +523,17 @@ impl<'s> Parser<'s> {
 							)
 							.err();
 					}
-					if !is_resource && is_inflight {
-						self
-							.add_error::<Node>("Class cannot have an inflight initializers", &class_element)
-							.err();
-					}
 					let parameters_node = class_element.child_by_field_name("parameter_list").unwrap();
 					let parameters = self.build_parameter_list(&parameters_node)?;
-					if !parameters.is_empty() && is_inflight {
+					if !parameters.is_empty() && is_inflight && is_resource {
 						self
-							.add_error::<Node>("Inflight initializers cannot have parameters", &parameters_node)
+							.add_error::<Node>(
+								"Inflight initializers in preflight classes cannot have parameters",
+								&parameters_node,
+							)
 							.err();
 					}
-					if is_inflight {
+					if is_inflight && is_resource {
 						inflight_initializer = Some(FunctionDefinition {
 							body: FunctionBody::Statements(self.build_scope(&class_element.child_by_field_name("block").unwrap())),
 							signature: FunctionSignature {

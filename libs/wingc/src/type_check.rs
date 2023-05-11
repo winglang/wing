@@ -1296,25 +1296,34 @@ impl<'a> TypeChecker<'a> {
 				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env);
 				let (class_env, class_symbol) = match &*type_ {
-					Type::Class(ref class) => (&class.env, &class.name),
+					Type::Class(ref class) => {
+						// We're in the preflight phase, we can't instantiate inflight classes
+						if env.phase == Phase::Preflight && class.env.phase == Phase::Inflight {
+							return self.expr_error(
+								exp,
+								format!("Cannot create inflight class \"{}\" in preflight phase", class.name),
+							);
+						}
+						(&class.env, &class.name)
+					}
 					Type::Resource(ref class) => {
 						if matches!(env.phase, Phase::Preflight) {
 							(&class.env, &class.name)
 						} else {
-							return self.general_type_error(format!(
-								"Cannot create preflight class \"{}\" in inflight phase",
-								class.name
-							));
+							return self.expr_error(
+								exp,
+								format!("Cannot create preflight class \"{}\" in inflight phase", class.name),
+							);
 						}
 					}
 					t => {
 						if matches!(t, Type::Anything) {
 							return self.types.anything();
 						} else {
-							return self.general_type_error(format!(
-								"Cannot instantiate type \"{}\" because it is not a class",
-								type_
-							));
+							return self.expr_error(
+								exp,
+								format!("Cannot instantiate type \"{}\" because it is not a class", type_),
+							);
 						}
 					}
 				};
@@ -2126,8 +2135,14 @@ impl<'a> TypeChecker<'a> {
 				is_resource,
 				inflight_initializer,
 			}) => {
+				let class_phase = if *is_resource {
+					Phase::Preflight
+				} else {
+					Phase::Inflight
+				};
+
 				// Resources cannot be defined inflight
-				if *is_resource && env.phase == Phase::Inflight {
+				if class_phase == Phase::Preflight && env.phase == Phase::Inflight {
 					self.stmt_error(stmt, "Cannot define a preflight class in inflight scope".to_string());
 				}
 
@@ -2160,7 +2175,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), false, class_phase, stmt.idx);
 
 				let impl_interfaces = implements
 					.iter()
@@ -2201,7 +2216,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), false, env.phase, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), false, class_phase, stmt.idx);
 
 				// Add fields to the class env
 				for field in fields.iter() {
