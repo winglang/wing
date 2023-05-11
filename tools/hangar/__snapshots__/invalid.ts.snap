@@ -159,11 +159,11 @@ error: \\"x\\" is not initialized
   |    ^ \\"x\\" is not initialized
 
 
-error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
+error: Expected 0 arguments but got 1
   --> ../../../examples/tests/invalid/class.w:7:1
   |
 7 | new C2(1);
-  | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
+  | ^^^^^^^^^ Expected 0 arguments but got 1
 
 
 error: Expected 0 named argument(s)
@@ -1086,11 +1086,11 @@ error: \\"bublic\\" is not a field of \\"BucketProps\\"
   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \\"bublic\\" is not a field of \\"BucketProps\\"
 
 
-error: Expected between 0 and 1 arguments but got 2 when instantiating \\"Bucket\\"
+error: Expected between 0 and 1 arguments but got 2
   --> ../../../examples/tests/invalid/struct_expansion.w:7:15
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
-  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2 when instantiating \\"Bucket\\"
+  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2
 
 
 error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead

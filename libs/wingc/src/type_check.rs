@@ -1377,13 +1377,13 @@ impl<'a> TypeChecker<'a> {
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
 						format!(
-							"Expected {} arguments but got {} when instantiating \"{}\"",
-							min_args, arg_count, type_
+							"Expected {} arguments but got {}",
+							min_args, arg_count
 						)
 					} else {
 						format!(
-							"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
-							min_args, max_args, arg_count, type_
+							"Expected between {} and {} arguments but got {}",
+							min_args, max_args, arg_count
 						)
 					};
 					self.expr_error(exp, err_text);
