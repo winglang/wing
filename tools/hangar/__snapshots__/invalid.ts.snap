@@ -166,25 +166,25 @@ error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
   | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
 
 
-error: Expected 0 named arguments when instantiating \\"C4\\"
+error: Expected 0 named argument(s)
    --> ../../../examples/tests/invalid/class.w:11:1
    |
 11 | new C4(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments when instantiating \\"C4\\"
+   | ^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
 
 
-error: Expected 0 named arguments when instantiating \\"C5\\"
+error: Expected 0 named argument(s)
    --> ../../../examples/tests/invalid/class.w:20:1
    |
 20 | new C5(foo: \\"bar\\"); 
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments when instantiating \\"C5\\"
+   | ^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
 
 
-error: Expected 0 named arguments when instantiating \\"C5\\"
+error: Expected 0 named argument(s)
    --> ../../../examples/tests/invalid/class.w:23:1
    |
 23 | new C5(\\"hello\\", foo: \\"bar\\"); 
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 0 named arguments when instantiating \\"C5\\"
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1122,11 +1122,11 @@ error: \\"not_a_field\\" is not a field of \\"ApiResponse\\"
    | \\\\-^ \\"not_a_field\\" is not a field of \\"ApiResponse\\"
 
 
-error: Expected 2 required positional arguments but got 1
+error: Expected 2 positional argument(s) but got 1
    --> ../../../examples/tests/invalid/struct_expansion.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 required positional arguments but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
 
 "
 `;

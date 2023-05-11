@@ -1350,8 +1350,8 @@ impl<'a> TypeChecker<'a> {
 				let min_args = constructor_sig.min_parameters();
 				if pos_args_count < min_args {
 					let err_text = format!(
-							"Expected {} required positional arguments but got {} when instantiating \"{}\"",
-							min_args, pos_args_count, type_
+							"Expected {} positional argument(s) but got {}",
+							min_args, pos_args_count
 						);
 					return self.expr_error(exp, err_text);
 				}
@@ -1360,8 +1360,7 @@ impl<'a> TypeChecker<'a> {
 					let last_arg = match constructor_sig.parameters.last() {
 						Some(arg) => arg.maybe_unwrap_option(),
 						None => {
-							return self.expr_error(exp, format!("Expected 0 named arguments when instantiating \"{}\"",
-								class_symbol.name
+							return self.expr_error(exp, format!("Expected 0 named argument(s)"
 							));
 						},
 					};
@@ -1458,7 +1457,7 @@ impl<'a> TypeChecker<'a> {
 				let min_args = func_sig.min_parameters();
 				if pos_args_count < min_args {
 					let err_text = format!(
-							"Expected {} required positional arguments but got {}",
+							"Expected {} positional argument(s) but got {}",
 							min_args, pos_args_count
 						);
 					return self.expr_error(exp, err_text);
