@@ -17,10 +17,7 @@ export function normalPath(path: string) {
   }
 }
 
-export async function withSpinner<T>(
-  message: string,
-  fn: () => Promise<T>,
-): Promise<T> {
+export async function withSpinner<T>(message: string, fn: () => Promise<T>): Promise<T> {
   const spinner = ora({
     stream: process.stdout, // hangar tests currently expect stderr to be empty or else they fail
     text: message,
@@ -40,11 +37,9 @@ export async function copyDir(src: string, dest: string) {
   let entries = await fsPromise.readdir(src, { withFileTypes: true });
 
   for (let entry of entries) {
-      let srcPath = path.join(src, entry.name);
-      let destPath = path.join(dest, entry.name);
+    let srcPath = path.join(src, entry.name);
+    let destPath = path.join(dest, entry.name);
 
-      entry.isDirectory() ?
-          await copyDir(srcPath, destPath) :
-          copyFileSync(srcPath, destPath);
+    entry.isDirectory() ? await copyDir(srcPath, destPath) : copyFileSync(srcPath, destPath);
   }
 }

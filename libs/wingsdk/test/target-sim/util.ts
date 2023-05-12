@@ -1,8 +1,11 @@
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { Simulator } from "../../src/testing";
-import { mkdtemp, readJsonSync } from "../../src/util";
+
+export function readJsonSync(file: string) {
+  return JSON.parse(readFileSync(file, "utf-8"));
+}
 
 export function simulatorJsonOf(simdir: string) {
   const simJson = join(simdir, "simulator.json");

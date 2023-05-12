@@ -2,10 +2,10 @@
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
-    constructor({ _sum_str }) {
-      this._sum_str = _sum_str;
+    constructor({ SumStr }) {
+      this.SumStr = SumStr;
     }
   }
   return Foo;
@@ -57,16 +57,22 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._sum_str = "wow!";
+        this.SumStr = "wow!";
       }
-      _toInflight() {
-        const _sum_str_client = this._lift(this._sum_str);
+      static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const SumStr_client = this._lift(this.SumStr);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
-              _sum_str: ${_sum_str_client},
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
+              SumStr: ${SumStr_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -75,63 +81,63 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this._sum_str, host, []);
+          this._registerBindObject(this.SumStr, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const json_number = 123;
-    const json_bool = true;
-    const json_array = [1, 2, 3];
-    const json_obj = Object.freeze({"boom":123});
-    const json_mut_obj = {"hello":123,"world":[1, "cat", 3],"boom boom":{"hello":1233}};
+    const jsonNumber = 123;
+    const jsonBool = true;
+    const jsonArray = [1, 2, 3];
+    const jsonObj = Object.freeze({"boom":123});
+    const jsonMutObj = {"hello":123,"world":[1, "cat", 3],"boom boom":{"hello":1233}};
     const message = "Coolness";
-    ((obj, args) => { obj[args[0]] = args[1]; })(json_mut_obj, ["hello",message]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((json_mut_obj)["hello"] === message)'`)})(((json_mut_obj)["hello"] === message))};
-    const some_number = 999;
-    const jj = some_number;
-    const jj1 = Object.freeze({"foo":some_number});
-    const jj2 = [some_number, {"bar":some_number}];
-    const get_str =  () =>  {
+    ((obj, args) => { obj[args[0]] = args[1]; })(jsonMutObj, ["hello",message]);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((jsonMutObj)["hello"] === message)'`)})(((jsonMutObj)["hello"] === message))};
+    const someNumber = 999;
+    const jj = someNumber;
+    const jj1 = Object.freeze({"foo":someNumber});
+    const jj2 = [someNumber, {"bar":someNumber}];
+    const getStr =  () =>  {
       {
         return "hello";
       }
     }
     ;
-    const jj3 = (get_str());
+    const jj3 = (getStr());
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(jj3 === "hello")'`)})((jj3 === "hello"))};
     const f = new Foo(this,"Foo");
-    const jj4 = f._sum_str;
+    const jj4 = f.SumStr;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(jj4 === "wow!")'`)})((jj4 === "wow!"))};
-    const some_json = {"x":some_number};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((some_json)["x"] === some_number)'`)})(((some_json)["x"] === some_number))};
-    ((obj, args) => { obj[args[0]] = args[1]; })(some_json, ["x",111]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((some_json)["x"] === 111)'`)})(((some_json)["x"] === 111))};
+    const someJson = {"x":someNumber};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((someJson)["x"] === someNumber)'`)})(((someJson)["x"] === someNumber))};
+    ((obj, args) => { obj[args[0]] = args[1]; })(someJson, ["x",111]);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((someJson)["x"] === 111)'`)})(((someJson)["x"] === 111))};
     const x = Object.freeze({"cool":"beans"});
-    const nested_json = {"a":"hello","b":{"c":"world","d":{"foo":"foo","bar":123}}};
-    ((obj, args) => { obj[args[0]] = args[1]; })(((nested_json)["b"])["d"], ["foo","tastic"]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nested_json)["b"])["d"])["foo"] === "tastic")'`)})(((((nested_json)["b"])["d"])["foo"] === "tastic"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nested_json)["b"])["d"])["bar"] === 123)'`)})(((((nested_json)["b"])["d"])["bar"] === 123))};
+    const nestedJson = {"a":"hello","b":{"c":"world","d":{"foo":"foo","bar":123}}};
+    ((obj, args) => { obj[args[0]] = args[1]; })(((nestedJson)["b"])["d"], ["foo","tastic"]);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nestedJson)["b"])["d"])["foo"] === "tastic")'`)})(((((nestedJson)["b"])["d"])["foo"] === "tastic"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nestedJson)["b"])["d"])["bar"] === 123)'`)})(((((nestedJson)["b"])["d"])["bar"] === 123))};
     const b = "buckle";
     const arr = [1, 2, b, "my", "shoe", 3, 4, ["shut", "the", "door"]];
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((arr)[0] === 1)'`)})(((arr)[0] === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((arr)[2] === b)'`)})(((arr)[2] === b))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((arr)[7])[0] === "shut")'`)})((((arr)[7])[0] === "shut"))};
     Object.freeze({"a":[1, 2, "world"],"b":[1, 2, "world"]});
-    const empty_json = Object.freeze({});
-    const empty_json_arr = [];
-    const empty_mut_json = {};
-    const empty_mut_json_arr = [];
-    ((obj, args) => { obj[args[0]] = args[1]; })(empty_mut_json, ["cool",{"a":1,"b":2}]);
-    ((obj, args) => { obj[args[0]] = args[1]; })((empty_mut_json)["cool"], ["a",3]);
-    ((obj, args) => { obj[args[0]] = args[1]; })(empty_mut_json_arr, [0,{"a":1,"b":2}]);
-    ((obj, args) => { obj[args[0]] = args[1]; })((empty_mut_json_arr)[0], ["a",3]);
-    const the_tower_of_json = {"a":{},"b":{"c":{},"d":[[[{}]]]},"e":{"f":{"g":{},"h":[{}, []]}}};
-    ((obj, args) => { obj[args[0]] = args[1]; })(((((the_tower_of_json)["e"])["f"])["h"])[0], ["a",1]);
-    const that_super_nested_value = (((((the_tower_of_json)["e"])["f"])["h"])[0])["a"];
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(that_super_nested_value) === 1)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(that_super_nested_value) === 1))};
-    const unested_json_arr = [1, 2, 3];
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((unested_json_arr)[0] === 1)'`)})(((unested_json_arr)[0] === 1))};
+    const emptyJson = Object.freeze({});
+    const emptyJsonArr = [];
+    const emptyMutJson = {};
+    const emptyMutJsonArr = [];
+    ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJson, ["cool",{"a":1,"b":2}]);
+    ((obj, args) => { obj[args[0]] = args[1]; })((emptyMutJson)["cool"], ["a",3]);
+    ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJsonArr, [0,{"a":1,"b":2}]);
+    ((obj, args) => { obj[args[0]] = args[1]; })((emptyMutJsonArr)[0], ["a",3]);
+    const theTowerOfJson = {"a":{},"b":{"c":{},"d":[[[{}]]]},"e":{"f":{"g":{},"h":[{}, []]}}};
+    ((obj, args) => { obj[args[0]] = args[1]; })(((((theTowerOfJson)["e"])["f"])["h"])[0], ["a",1]);
+    const thatSuperNestedValue = (((((theTowerOfJson)["e"])["f"])["h"])[0])["a"];
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue) === 1)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue) === 1))};
+    const unestedJsonArr = [1, 2, 3];
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((unestedJsonArr)[0] === 1)'`)})(((unestedJsonArr)[0] === 1))};
   }
 }
 class $App extends $AppBase {

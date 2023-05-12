@@ -5,7 +5,7 @@ import { Construct } from "constructs";
 import { makeHandler } from "./internal";
 import { TreeInspector } from "./tree";
 import { Connection, Display, IInflightHost, IResource } from "../std/resource";
-import { normalPath } from "../util";
+import { normalPath } from "../utils/misc";
 
 /**
  * Reference to a piece of code.

@@ -4,7 +4,7 @@ import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
 import { serializeImmutableData } from "../core/internal";
 import { IInspectable, TreeInspector } from "../core/tree";
-import { log } from "../util";
+import { log } from "../utils/log";
 
 /**
  * A resource that can run inflight code.

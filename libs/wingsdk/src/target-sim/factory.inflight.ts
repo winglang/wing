@@ -20,8 +20,10 @@ import {
   SECRET_TYPE,
   EVENT_MAPPING_TYPE,
   SCHEDULE_TYPE,
+  SERVICE_TYPE,
 } from "./schema-resources";
 import { Secret } from "./secret.inflight";
+import { Service } from "./service.inflight";
 import { Table } from "./table.inflight";
 import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";
@@ -72,6 +74,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new EventMapping(props, context);
       case SCHEDULE_TYPE:
         return new Schedule(props, context);
+      case SERVICE_TYPE:
+        return new Service(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }

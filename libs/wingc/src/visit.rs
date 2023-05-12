@@ -17,7 +17,7 @@ use crate::ast::{
 ///
 /// ```ignore
 /// impl<'ast> Visit<'ast> for ExprVisitor {
-///   fn visit_item_fn(&mut self, exp: &'ast Expr) {
+///   fn visit_expr(&mut self, exp: &'ast Expr) {
 ///     println!("Expr with span={}", exp.span);
 ///
 ///     // Delegate to the default impl to visit any nested expressions.

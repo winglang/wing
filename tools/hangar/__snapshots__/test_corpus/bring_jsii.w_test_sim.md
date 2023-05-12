@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ bring_jsii.wsim » root/env0/test:say_hello
+pass ─ bring_jsii.wsim » root/env0/test:sayHello
 ```
 

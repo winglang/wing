@@ -16,19 +16,19 @@ class C impl cloud.Bucket {
 }
 
 interface I1 {
-  method_1(x: num): num;
+  method1(x: num): num;
 }
 
 interface I2 extends I1 {
-  inflight method_2(x: str): str;
+  inflight method2(x: str): str;
 }
 
 interface I3 extends I2 {
-  method_3(x: Array<num>): Array<num>;
+  method3(x: Array<num>): Array<num>;
 }
 
 class r impl I3 {
-      // ^ Resource "r" does not implement method "method_1" of interface "I3"
-      // ^ Resource "r" does not implement method "method_2" of interface "I3"
-      // ^ Resource "r" does not implement method "method_3" of interface "I3"
+      // ^ Resource "r" does not implement method "method1" of interface "I3"
+      // ^ Resource "r" does not implement method "method2" of interface "I3"
+      // ^ Resource "r" does not implement method "method3" of interface "I3"
 }
