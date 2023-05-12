@@ -22,7 +22,7 @@
     "@wingconsole/tsconfig": "workspace:^",
     "@winglang/sdk": "^0.16.6",
     "chokidar": "^3.5.3",
-    "constructs": "^10.2.18",
+    "constructs": "^10.2.19",
     "cors": "^2.8.5",
     "emittery": "^1.0.1",
     "eslint": "^8.40.0",
