@@ -39,13 +39,14 @@ export async function runWingCommand(options: RunWingCommandOptions) {
 export function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+?"/g;
   const assetSourceRegex = /"assets\/.+?"/g;
+  const sourceRegex = /(?<=\"source\"\:)\"([A-Z]:|\/|\\)[\/\\\-\w\.]+\"/g;
   const json = fs.readJsonSync(path);
 
   const jsonText = JSON.stringify(json);
   const sanitizedJsonText = jsonText
     .replace(assetKeyRegex, '"<ASSET_KEY>"')
-    .replace(assetSourceRegex, '"<ASSET_SOURCE>"');
-
+    .replace(assetSourceRegex, '"<ASSET_SOURCE>"')
+    .replace(sourceRegex, '"<SOURCE>"');
   const finalObj = JSON.parse(sanitizedJsonText);
   delete finalObj.terraform;
 

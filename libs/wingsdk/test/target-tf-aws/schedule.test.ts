@@ -4,8 +4,7 @@ import * as cloud from "../../src/cloud";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("schedule behavior with rate", () => {
   // GIVEN

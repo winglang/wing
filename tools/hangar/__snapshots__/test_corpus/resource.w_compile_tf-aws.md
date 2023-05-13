@@ -2,18 +2,34 @@
 
 ## clients/Bar.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({ Foo, MyEnum }) {
   class  Bar {
-    constructor({ b, foo, name }) {
+    constructor({ b, e, foo, name }) {
       this.b = b;
+      this.e = e;
       this.foo = foo;
       this.name = name;
     }
-    async my_method()  {
+    static async barStatic()  {
       {
-        (await this.foo.foo_inc());
-        (await this.b.put("foo",`counter is: ${(await this.foo.foo_get())}`));
+        return "bar static";
+      }
+    }
+    async myMethod()  {
+      {
+        (await this.foo.fooInc());
+        const s = (await Foo.fooStatic());
+        (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
         return (await this.b.get("foo"));
+      }
+    }
+    async testTypeAccess()  {
+      {
+        if (true) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
+        }
       }
     }
   }
@@ -24,7 +40,7 @@ module.exports = function() {
 
 ## clients/BigPublisher.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  BigPublisher {
     constructor({ b, b2, q, t }) {
       this.b = b;
@@ -52,26 +68,31 @@ module.exports = function() {
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
     constructor({ c }) {
       this.c = c;
     }
     async $inflight_init()  {
       {
-        this.inflight_field = 123;
+        this.inflightField = 123;
         (await this.c.inc(110));
         (await this.c.dec(10));
       }
     }
-    async foo_inc()  {
+    async fooInc()  {
       {
         (await this.c.inc());
       }
     }
-    async foo_get()  {
+    async fooGet()  {
       {
         return (await this.c.peek());
+      }
+    }
+    static async fooStatic()  {
+      {
+        return "foo static";
       }
     }
   }
@@ -101,7 +122,7 @@ module.exports = function() {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test\",\"${aws_lambda_function.root_test_AAE85061.arn}\"],[\"root/Default/Default/test: dependency cycles\",\"${aws_lambda_function.root_testdependencycycles_1C5B99E3.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"],[\"root/Default/Default/test:dependency cycles\",\"${aws_lambda_function.root_testdependencycycles_Handler_C1F83FAB.arn}\"]]"
     }
   },
   "provider": {
@@ -157,20 +178,20 @@ module.exports = function() {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_test_IamRole_6CDC2D16": {
+      "root_testdependencycycles_Handler_IamRole_74890367": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRole",
-            "uniqueId": "root_test_IamRole_6CDC2D16"
+            "path": "root/Default/Default/test:dependency cycles/Handler/IamRole",
+            "uniqueId": "root_testdependencycycles_Handler_IamRole_74890367"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testdependencycycles_IamRole_35624E89": {
+      "root_testtest_Handler_IamRole_6C1728D1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test: dependency cycles/IamRole",
-            "uniqueId": "root_testdependencycycles_IamRole_35624E89"
+            "path": "root/Default/Default/test:test/Handler/IamRole",
+            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -207,25 +228,25 @@ module.exports = function() {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}\",\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.arn}\",\"${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessagecb235724_IamRole_E95E92A5.name}"
       },
-      "root_test_IamRolePolicy_474A6820": {
+      "root_testdependencycycles_Handler_IamRolePolicy_380CBE3B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRolePolicy",
-            "uniqueId": "root_test_IamRolePolicy_474A6820"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
-      },
-      "root_testdependencycycles_IamRolePolicy_43BC84C0": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test: dependency cycles/IamRolePolicy",
-            "uniqueId": "root_testdependencycycles_IamRolePolicy_43BC84C0"
+            "path": "root/Default/Default/test:dependency cycles/Handler/IamRolePolicy",
+            "uniqueId": "root_testdependencycycles_Handler_IamRolePolicy_380CBE3B"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}\",\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.arn}\",\"${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testdependencycycles_IamRole_35624E89.name}"
+        "role": "${aws_iam_role.root_testdependencycycles_Handler_IamRole_74890367.name}"
+      },
+      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
+            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -259,25 +280,25 @@ module.exports = function() {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessagecb235724_IamRole_E95E92A5.name}"
       },
-      "root_test_IamRolePolicyAttachment_1102A28A": {
+      "root_testdependencycycles_Handler_IamRolePolicyAttachment_44606D07": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRolePolicyAttachment",
-            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A"
+            "path": "root/Default/Default/test:dependency cycles/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testdependencycycles_Handler_IamRolePolicyAttachment_44606D07"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
+        "role": "${aws_iam_role.root_testdependencycycles_Handler_IamRole_74890367.name}"
       },
-      "root_testdependencycycles_IamRolePolicyAttachment_51136FA4": {
+      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test: dependency cycles/IamRolePolicyAttachment",
-            "uniqueId": "root_testdependencycycles_IamRolePolicyAttachment_51136FA4"
+            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testdependencycycles_IamRole_35624E89.name}"
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_lambda_event_source_mapping": {
@@ -387,39 +408,11 @@ module.exports = function() {
           "subnet_ids": []
         }
       },
-      "root_test_AAE85061": {
+      "root_testdependencycycles_Handler_C1F83FAB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/Default",
-            "uniqueId": "root_test_AAE85061"
-          }
-        },
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "DYNAMODB_TABLE_NAME_c7446906": "${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.name}",
-            "WING_FUNCTION_NAME": "test-c8b6eece"
-          }
-        },
-        "function_name": "test-c8b6eece",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "root_testdependencycycles_1C5B99E3": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test: dependency cycles/Default",
-            "uniqueId": "root_testdependencycycles_1C5B99E3"
+            "path": "root/Default/Default/test:dependency cycles/Handler/Default",
+            "uniqueId": "root_testdependencycycles_Handler_C1F83FAB"
           }
         },
         "environment": {
@@ -430,16 +423,44 @@ module.exports = function() {
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
             "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
-            "WING_FUNCTION_NAME": "test-dependency-cycles-c8c6fae2"
+            "WING_FUNCTION_NAME": "Handler-c893ad83"
           }
         },
-        "function_name": "test-dependency-cycles-c8c6fae2",
+        "function_name": "Handler-c893ad83",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testdependencycycles_IamRole_35624E89.arn}",
+        "role": "${aws_iam_role.root_testdependencycycles_Handler_IamRole_74890367.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testdependencycycles_S3Object_8DA21812.key}",
+        "s3_key": "${aws_s3_object.root_testdependencycycles_Handler_S3Object_DAB1138F.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "root_testtest_Handler_046C3415": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:test/Handler/Default",
+            "uniqueId": "root_testtest_Handler_046C3415"
+          }
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
+            "DYNAMODB_TABLE_NAME_c7446906": "${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.name}",
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+          }
+        },
+        "function_name": "Handler-c8f4f2a1",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -661,22 +682,22 @@ module.exports = function() {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_test_S3Object_A16CD789": {
+      "root_testdependencycycles_Handler_S3Object_DAB1138F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/S3Object",
-            "uniqueId": "root_test_S3Object_A16CD789"
+            "path": "root/Default/Default/test:dependency cycles/Handler/S3Object",
+            "uniqueId": "root_testdependencycycles_Handler_S3Object_DAB1138F"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testdependencycycles_S3Object_8DA21812": {
+      "root_testtest_Handler_S3Object_71CD07AC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test: dependency cycles/S3Object",
-            "uniqueId": "root_testdependencycycles_S3Object_8DA21812"
+            "path": "root/Default/Default/test:test/Handler/S3Object",
+            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -768,16 +789,22 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo_inc", "foo_get");
+        this._addInflightOps("fooInc", "fooGet", "fooStatic");
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
       }
       _toInflight() {
         const c_client = this._lift(this.c);
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
               c: ${c_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -789,33 +816,55 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.c, host, ["dec", "inc"]);
         }
-        if (ops.includes("foo_get")) {
+        if (ops.includes("fooGet")) {
           this._registerBindObject(this.c, host, ["peek"]);
         }
-        if (ops.includes("foo_inc")) {
+        if (ops.includes("fooInc")) {
           this._registerBindObject(this.c, host, ["inc"]);
+        }
+        if (ops.includes("fooStatic")) {
         }
         super._registerBind(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
-      constructor(scope, id, name, b) {
+      constructor(scope, id, name, b, e) {
         super(scope, id);
-        this._addInflightOps("my_method");
+        this._addInflightOps("barStatic", "myMethod", "testTypeAccess");
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
+        this.e = e;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
+        const FooClient = Foo._toInflightType(context);
+        const MyEnumClient = $stdlib.core.NodeJsCode.fromInline(`
+          Object.freeze((function (tmp) {
+            tmp[tmp["A"] = 0] = "A";
+            tmp[tmp["B"] = 1] = "B";
+            tmp[tmp["C"] = 2] = "C";
+            return tmp;
+          })({}))
+        `);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            Foo: ${FooClient.text},
+            MyEnum: ${MyEnumClient.text},
+          })
+        `);
       }
       _toInflight() {
         const b_client = this._lift(this.b);
+        const e_client = this._lift(this.e);
         const foo_client = this._lift(this.foo);
         const name_client = this._lift(this.name);
-        const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Bar = require("${self_client_path}")({});
-            const client = new Bar({
+            const BarClient = ${Bar._toInflightType(this).text};
+            const client = new BarClient({
               b: ${b_client},
+              e: ${e_client},
               foo: ${foo_client},
               name: ${name_client},
             });
@@ -827,12 +876,18 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.b, host, []);
+          this._registerBindObject(this.e, host, []);
           this._registerBindObject(this.foo, host, []);
           this._registerBindObject(this.name, host, []);
         }
-        if (ops.includes("my_method")) {
+        if (ops.includes("barStatic")) {
+        }
+        if (ops.includes("myMethod")) {
           this._registerBindObject(this.b, host, ["get", "put"]);
-          this._registerBindObject(this.foo, host, ["foo_get", "foo_inc"]);
+          this._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
+        }
+        if (ops.includes("testTypeAccess")) {
+          this._registerBindObject(this.e, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -876,16 +931,22 @@ class $Root extends $stdlib.std.Resource {
         })
         ));
       }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
       _toInflight() {
         const b_client = this._lift(this.b);
         const b2_client = this._lift(this.b2);
         const q_client = this._lift(this.q);
         const t_client = this._lift(this.t);
-        const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const BigPublisher = require("${self_client_path}")({});
-            const client = new BigPublisher({
+            const BigPublisherClient = ${BigPublisher._toInflightType(this).text};
+            const client = new BigPublisherClient({
               b: ${b_client},
               b2: ${b2_client},
               q: ${q_client},
@@ -914,24 +975,32 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    const MyEnum = 
+      Object.freeze((function (tmp) {
+        tmp[tmp["A"] = 0] = "A";
+        tmp[tmp["B"] = 1] = "B";
+        tmp[tmp["C"] = 2] = "C";
+        return tmp;
+      })({}))
+    ;
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const res = new Bar(this,"Bar","Arr",bucket);
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight4", {
+    const res = new Bar(this,"Bar","Arr",bucket,MyEnum.B);
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight4", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc4/index.js".replace(/\\/g, "/"))),
       bindings: {
         bucket: {
           obj: bucket,
-          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
         },
         res: {
           obj: res,
-          ops: ["my_method"]
+          ops: ["barStatic","myMethod","testTypeAccess"]
         },
       }
     })
     );
     const bigOlPublisher = new BigPublisher(this,"BigPublisher");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test: dependency cycles",new $stdlib.core.Inflight(this, "$Inflight5", {
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:dependency cycles",new $stdlib.core.Inflight(this, "$Inflight5", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc5/index.js".replace(/\\/g, "/"))),
       bindings: {
         bigOlPublisher: {
@@ -993,10 +1062,11 @@ async handle() {
 ```js
 async handle() {
   const { bucket, res } = this;
-  const s = (await res.my_method());
+  const s = (await res.myMethod());
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
   {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflight_field === 123)'`)})((res.foo.inflight_field === 123))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
+  (await res.testTypeAccess());
 }
 
 ```

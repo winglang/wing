@@ -16,14 +16,18 @@ import {
   TEST_RUNNER_TYPE,
   TOPIC_TYPE,
   REDIS_TYPE,
+  WEBSITE_TYPE,
   SECRET_TYPE,
   EVENT_MAPPING_TYPE,
   SCHEDULE_TYPE,
+  SERVICE_TYPE,
 } from "./schema-resources";
 import { Secret } from "./secret.inflight";
+import { Service } from "./service.inflight";
 import { Table } from "./table.inflight";
 import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";
+import { Website } from "./website.inflight";
 import {
   ISimulatorFactory,
   ISimulatorContext,
@@ -62,12 +66,16 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new TestRunnerClient(props, context);
       case REDIS_TYPE:
         return new Redis(props, context);
+      case WEBSITE_TYPE:
+        return new Website(props, context);
       case SECRET_TYPE:
         return new Secret(props, context);
       case EVENT_MAPPING_TYPE:
         return new EventMapping(props, context);
       case SCHEDULE_TYPE:
         return new Schedule(props, context);
+      case SERVICE_TYPE:
+        return new Service(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }
