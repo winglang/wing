@@ -292,3 +292,29 @@ enum SomeEnum {
     (enum_field)
     (enum_field)
     (enum_field)))
+
+================================================================================
+Test statement
+================================================================================
+
+test "it works" {
+  assert(2 + 2 == 4);
+}
+
+--------------------------------------------------------------------------------
+
+(source
+  (test_statement
+    name: (string)
+    block: (block
+      (expression_statement
+        (call
+          caller: (reference
+            (reference_identifier))
+          args: (argument_list
+            (positional_argument
+              (binary_expression
+                left: (binary_expression
+                  left: (number)
+                  right: (number))
+                right: (number)))))))))

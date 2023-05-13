@@ -38,7 +38,6 @@ const project = new cdk.JsiiProject({
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
     // preflight dependencies
-    "debug",
     "esbuild-wasm",
     "safe-stable-stringify",
     // aws client dependencies
@@ -74,7 +73,6 @@ const project = new cdk.JsiiProject({
     `@cdktf/provider-aws@^12.0.1`, // only for testing Wing plugins
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
-    "@types/debug",
     "@types/fs-extra",
     "@types/mime-types",
     "@types/tar",

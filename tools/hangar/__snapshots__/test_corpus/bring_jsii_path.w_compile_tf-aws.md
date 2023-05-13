@@ -21,7 +21,7 @@
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:sayHello\",\"${aws_lambda_function.root_testsayHello_CA492A35.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:sayHello\",\"${aws_lambda_function.root_testsayHello_Handler_11C90E2C.arn}\"]]"
     }
   },
   "provider": {
@@ -31,60 +31,60 @@
   },
   "resource": {
     "aws_iam_role": {
-      "root_testsayHello_IamRole_4742D92B": {
+      "root_testsayHello_Handler_IamRole_508BA144": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sayHello/IamRole",
-            "uniqueId": "root_testsayHello_IamRole_4742D92B"
+            "path": "root/Default/Default/test:sayHello/Handler/IamRole",
+            "uniqueId": "root_testsayHello_Handler_IamRole_508BA144"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testsayHello_IamRolePolicy_E420618C": {
+      "root_testsayHello_Handler_IamRolePolicy_2C605E6D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sayHello/IamRolePolicy",
-            "uniqueId": "root_testsayHello_IamRolePolicy_E420618C"
+            "path": "root/Default/Default/test:sayHello/Handler/IamRolePolicy",
+            "uniqueId": "root_testsayHello_Handler_IamRolePolicy_2C605E6D"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testsayHello_IamRole_4742D92B.name}"
+        "role": "${aws_iam_role.root_testsayHello_Handler_IamRole_508BA144.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testsayHello_IamRolePolicyAttachment_FB7E31BC": {
+      "root_testsayHello_Handler_IamRolePolicyAttachment_A53D35FF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sayHello/IamRolePolicyAttachment",
-            "uniqueId": "root_testsayHello_IamRolePolicyAttachment_FB7E31BC"
+            "path": "root/Default/Default/test:sayHello/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testsayHello_Handler_IamRolePolicyAttachment_A53D35FF"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testsayHello_IamRole_4742D92B.name}"
+        "role": "${aws_iam_role.root_testsayHello_Handler_IamRole_508BA144.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testsayHello_CA492A35": {
+      "root_testsayHello_Handler_11C90E2C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sayHello/Default",
-            "uniqueId": "root_testsayHello_CA492A35"
+            "path": "root/Default/Default/test:sayHello/Handler/Default",
+            "uniqueId": "root_testsayHello_Handler_11C90E2C"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "test-sayHello-c81275aa"
+            "WING_FUNCTION_NAME": "Handler-c887876f"
           }
         },
-        "function_name": "test-sayHello-c81275aa",
+        "function_name": "Handler-c887876f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testsayHello_IamRole_4742D92B.arn}",
+        "role": "${aws_iam_role.root_testsayHello_Handler_IamRole_508BA144.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testsayHello_S3Object_6E931A5A.key}",
+        "s3_key": "${aws_s3_object.root_testsayHello_Handler_S3Object_92DB68EF.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -104,11 +104,11 @@
       }
     },
     "aws_s3_object": {
-      "root_testsayHello_S3Object_6E931A5A": {
+      "root_testsayHello_Handler_S3Object_92DB68EF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sayHello/S3Object",
-            "uniqueId": "root_testsayHello_S3Object_6E931A5A"
+            "path": "root/Default/Default/test:sayHello/Handler/S3Object",
+            "uniqueId": "root_testsayHello_Handler_S3Object_92DB68EF"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -133,7 +133,7 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const hello = new jsiiCodeSamples.HelloWorld();
     const greeting = (hello.sayHello("wingnuts"));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:sayHello",new $stdlib.core.Inflight(this, "$Inflight1", {
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:sayHello",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         greeting: {
@@ -166,7 +166,7 @@ new $App().synth();
 
 ## proc1/index.js
 ```js
-async handle(m) {
+async handle() {
   const { greeting } = this;
   {((cond) => {if (!cond) throw new Error(`assertion failed: '(greeting === "Hello, wingnuts")'`)})((greeting === "Hello, wingnuts"))};
 }

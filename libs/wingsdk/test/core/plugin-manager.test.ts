@@ -4,8 +4,7 @@ import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { PluginManager } from "../../src/core/plugin-manager";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../../src/util";
-import { tfResourcesOfCount } from "../util";
+import { tfResourcesOfCount, mkdtemp } from "../util";
 
 const PLUGIN_CODE = `
 var s3_bucket = require("../.gen/providers/aws/s3-bucket");

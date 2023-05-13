@@ -2,8 +2,7 @@ import { test, expect } from "vitest";
 import * as tfaws from "../../src/target-tf-aws";
 import { Api, Function } from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { tfResourcesOfCount } from "../util";
+import { mkdtemp, tfResourcesOfCount } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { return "Hello, World"; }`;
 const extractApiSpec = (output: any) => {

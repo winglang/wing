@@ -1,12 +1,12 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import { Tree } from "./tree";
-import { ITestRunnerClient, TestResult, Trace, TraceType } from "../cloud";
+import { Trace, TraceType } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
-import { readJsonSync } from "../util";
+import { readJsonSync } from "../utils/misc";
 
 /**
  * Props for `Simulator`.
@@ -370,70 +370,6 @@ export class Simulator {
    */
   public onTrace(subscriber: ITraceSubscriber) {
     this._traceSubscribers.push(subscriber);
-  }
-
-  private findTestRunner(): ITestRunnerClient {
-    let testRunnerClient = this.tryGetResource("root/cloud.TestRunner");
-    if (!testRunnerClient) {
-      throw new Error(
-        `Could not find a cloud.TestRunner resource in the simulation tree. Resources ${this.listResources()}}`
-      );
-    }
-    return testRunnerClient;
-  }
-
-  /**
-   * Lists all resource with identifier "test" or that start with "test:*".
-   * @returns A list of resource paths
-   * @deprecated use the "cloud.TestRunner" resource client instead.
-   */
-  public listTests(): string[] {
-    const isTest = /(\/test$|\/test:([^\\/])+$)/;
-    const all = this.listResources();
-    return all.filter((f) => isTest.test(f));
-  }
-
-  /**
-   * Run all tests in the simulation tree.
-   *
-   * A test is a `cloud.Function` resource with an identifier that starts with "test." or is "test".
-   * @returns A list of test results.
-   *
-   * @deprecated use the "cloud.TestRunner" resource client instead.
-   */
-  public async runAllTests(): Promise<TestResult[]> {
-    const results = new Array<TestResult>();
-    const tests = this.listTests();
-
-    for (const path of tests) {
-      results.push(await this.runTest(path));
-    }
-
-    return results;
-  }
-
-  /**
-   * Runs a single test.
-   * @param path The path to a cloud.Function resource that represents the test
-   * @returns The result of the test
-   *
-   * @deprecated create a fresh simulator instance and invoke a test through the "cloud.TestRunner" resource client instead.
-   */
-  public async runTest(path: string): Promise<TestResult> {
-    // create a new simulator instance to run this test in isolation
-    const isolated = new Simulator({ simfile: this.simdir });
-    await isolated.start();
-
-    // find the test runner
-    const testRunner = isolated.findTestRunner();
-
-    // run the test
-    const result = await testRunner.runTest(path);
-
-    // stop the simulator
-    await isolated.stop();
-
-    return result;
   }
 
   /**

@@ -17,13 +17,12 @@ let j = Json {
 };
 
 
-let getJson = new cloud.Function(inflight(msg:str): str => {
+let getJson = new cloud.Function(inflight(msg: str): str => {
   let x = b.getJson(fileName);
   assert(x.get("persons").getAt(0).get("fears").getAt(1) == "failure");
 });
 
-new cloud.Function(inflight(msg:str): str => {
+test "put" {
   b.putJson(fileName, j);
-  getJson.invoke(msg);
-}) as "test:put";
-
+  getJson.invoke("");
+}

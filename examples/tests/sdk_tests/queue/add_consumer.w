@@ -44,8 +44,8 @@ q.addConsumer(inflight (msg: str): str => {
 let js = new TestHelper();
 
 let predicate = new Predicate(c);
-new cloud.Function(inflight () => {
+test "addConsumer" {
   q.push("hello");
   q.push("world");
   js.assert(predicate);
-}) as "test:addConsumer";
+}
