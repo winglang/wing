@@ -11,7 +11,7 @@
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
   },
   "devDependencies": {
-    "@trpc/server": "^10.25.1",
+    "@trpc/server": "^10.26.0",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/lodash.uniqby": "^4.7.7",
@@ -22,7 +22,7 @@
     "@wingconsole/tsconfig": "workspace:^",
     "@winglang/sdk": "^0.16.6",
     "chokidar": "^3.5.3",
-    "constructs": "^10.2.19",
+    "constructs": "^10.2.21",
     "cors": "^2.8.5",
     "emittery": "^1.0.1",
     "eslint": "^8.40.0",
