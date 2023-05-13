@@ -47,6 +47,7 @@ changelog. To that end, pull request titles must follow this convention:
   * `cli`
   * `examples`
   * `playground`
+  * `tutorial`
   * `vscode`
   * `plugins`
   * `build` - change related to development environment, build system, build tools, etc.
