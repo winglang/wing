@@ -1,4 +1,4 @@
-# [approx_size.w](../../../../examples/tests/valid/approx_size.w) | compile | tf-aws
+# [pop.w](../../../../examples/tests/valid/pop.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -142,10 +142,15 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    const NIL = "<<NIL>>";
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
+        NIL: {
+          obj: NIL,
+          ops: []
+        },
         q: {
           obj: q,
           ops: ["approxSize","pop","purge","push"]
@@ -157,7 +162,7 @@ class $Root extends $stdlib.std.Resource {
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "approx_size", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "pop", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -177,10 +182,17 @@ new $App().synth();
 ## proc1/index.js
 ```js
 async handle() {
-  const { q } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
-  (await q.push("message"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 1)'`)})(((await q.approxSize()) === 1))};
+  const { NIL, q } = this;
+  const msgs = Object.freeze(["Foo", "Bar"]);
+  for (const msg of msgs) {
+    (await q.push(msg));
+  }
+  const first = ((await q.pop()) ?? NIL);
+  const second = ((await q.pop()) ?? NIL);
+  const third = ((await q.pop()) ?? NIL);
+  {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
 }
 
 ```
