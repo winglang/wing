@@ -436,7 +436,7 @@ struct QueueProps {
    * Initialize the queue with a set of messages.
    * @default []
    */
-   initialMessages?: str[];
+   initialMessages?: Array<str>;
 }
 
 resource Queue {
