@@ -1654,6 +1654,10 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 
 	fn visit_reference(&mut self, node: &'ast Reference) {
 		if let Reference::TypeMember { type_, .. } = node {
+			// Skip standard lib types, for now they are available through the macro outputs on call expressions
+			if type_.root.name == "std" {
+				return;
+			}
 			let type_name = type_.to_string();
 			// Lookup the type in the current env and see where it was defined
 			if let LookupResult::Found(kind, info) = (*self.env).lookup_nested_str(&type_name, None) {

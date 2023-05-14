@@ -3021,7 +3021,7 @@ impl<'a> TypeChecker<'a> {
 		// `foo.Bar.baz()` case (where `baz()`) is a static method of class `Bar`.
 		if !path.is_empty() {
 			let result = env.lookup_nested(&path.iter().collect_vec(), Some(self.statement_idx));
-			if let LookupResult::Found(symbol_kind, _info) = result {
+			if let LookupResult::Found(symbol_kind, _) = result {
 				if let SymbolKind::Namespace(_) = symbol_kind {
 					// resolve "Util" as a user defined class within the namespace
 					let root = path.pop().unwrap();
