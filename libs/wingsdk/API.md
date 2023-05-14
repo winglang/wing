@@ -4942,8 +4942,6 @@ Inflight interface for `Bucket`.
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryPut">tryPut</a></code> | Tries to put an object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryPutJson">tryPutJson</a></code> | Tries to put a Json object in the bucket. |
 
 ---
 
@@ -5124,54 +5122,6 @@ Gets an object from the bucket if it exists, parsing it as Json.
 - *Type:* str
 
 Key of the object.
-
----
-
-##### `tryPut` <a name="tryPut" id="@winglang/sdk.cloud.IBucketClient.tryPut"></a>
-
-```wing
-tryPut(key: str, body: str): bool
-```
-
-Tries to put an object in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryPut.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.tryPut.parameter.body"></a>
-
-- *Type:* str
-
-Content of the object we want to store into the bucket.
-
----
-
-##### `tryPutJson` <a name="tryPutJson" id="@winglang/sdk.cloud.IBucketClient.tryPutJson"></a>
-
-```wing
-tryPutJson(key: str, body: Json): bool
-```
-
-Tries to put a Json object in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryPutJson.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.tryPutJson.parameter.body"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-Json object that we want to store into the bucket.
 
 ---
 
