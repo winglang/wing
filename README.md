@@ -22,7 +22,11 @@
 Wing enables developers to build distributed systems that leverage cloud services as first-class citizens by combining infrastructure ***and*** application code in a safe and unified programming model (aka "*cloud-oriented*").
 Wing programs can be executed locally (*yes, no internet required*) using a fully-functional simulator, or deployed to any cloud provider (*yes, Wing programs are portable across providers*).
 
-Our mission is to bring back your creative flow and close the gap between imagination and creation. Wing elevates your cloud development experience to new heights (the puns are just inevitable so bear with us)! 🚀
+Our mission is to bring back your creative flow and close the gap between imagination and creation. 
+
+Developing for the cloud today requires mastering various layers of cloud stack, IAM roles, networking, and numerous tools, along with finding creative ways to test and debug code. In addition, long deployment times hinder iteration cycles and take developers out of their creative flow. 
+
+We fulfill our mission by reducing cognitive load and increasing iteration speeds. How? by enabling you to work at a higher level of abstraction, letting you focus on business logic instead of cloud mechanics, and write much less code. We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
 <a href="https://youtu.be/vHy1TM2JzUQ" target="_blank" align="left">
     <img src="./logo/demo.gif" alt="Wing Demo" height="300px">
@@ -32,7 +36,7 @@ Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the
 
 ## Why do we think the cloud needs a programming language? 🤔
 
-Cloud applications are are fundamentally different from applications that run on a single machine - 
+Cloud applications are fundamentally different from applications that run on a single machine - 
 they are distributed systems that rely on cloud infrastructure to achieve their goals.
 
 In order to be able to express both infrastructure and application logic in a safe and unified programming model, 
@@ -50,7 +54,7 @@ let queue = new cloud.Queue();
 let counter = new cloud.Counter();
 let bucket = new cloud.Bucket();
 
-queue.add_consumer(inflight (message: str) => {
+queue.addConsumer(inflight (message: str) => {
   let i = counter.inc();
   bucket.put("file-${i}.txt", message);
 });
@@ -59,7 +63,7 @@ queue.add_consumer(inflight (message: str) => {
 `cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*.
 They represent cloud infrastructure resources. 
 When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
-of these resources. The `queue.add_consumer()` method is a *preflight method* that configures the infrastructure to
+of these resources. The `queue.addConsumer()` method is a *preflight method* that configures the infrastructure to
 invoke a particular *inflight function* for each message in the queue.
 
 **Now comes the cool part:** the code that runs inside the inflight function interacts with the `counter` and the `bucket` objects
@@ -107,7 +111,7 @@ It's a once-in-a-lifetime adventure into the Wing rabbit hole!
 
 ## FAQs ❓
 
-Here are some questions we're commonly asked that are covered by our [FAQ](https://docs.winglang.io/faq):
+Here are some questions we're commonly asked that are covered by our [FAQ](https://docs.winglang.io/category/faq):
 
 * [Who is behind this project?](https://docs.winglang.io/faq/who-is-behind-wing)
 * [Which clouds are supported by Wing?](https://docs.winglang.io/faq/supported-clouds)

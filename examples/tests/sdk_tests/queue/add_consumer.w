@@ -37,15 +37,15 @@ class TestHelper {
   }
 }
 
-q.add_consumer(inflight (msg: str): str => {
+q.addConsumer(inflight (msg: str): str => {
   c.inc();
 });
 
 let js = new TestHelper();
 
 let predicate = new Predicate(c);
-new cloud.Function(inflight () => {
+test "addConsumer" {
   q.push("hello");
   q.push("world");
   js.assert(predicate);
-}) as "test:add_consumer";
+}

@@ -38,7 +38,6 @@ const project = new cdk.JsiiProject({
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
     // preflight dependencies
-    "debug",
     "esbuild-wasm",
     "safe-stable-stringify",
     // aws client dependencies
@@ -56,6 +55,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.254.0",
     "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
+    "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
@@ -73,8 +73,8 @@ const project = new cdk.JsiiProject({
     `@cdktf/provider-aws@^12.0.1`, // only for testing Wing plugins
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
-    "@types/debug",
     "@types/fs-extra",
+    "@types/mime-types",
     "@types/tar",
     "@types/express",
     "aws-sdk-client-mock",

@@ -1,22 +1,22 @@
 bring cloud;
 
-let global_queue = new cloud.Queue();
+let globalQueue = new cloud.Queue();
 
 class Another {
-  my_queue: cloud.Queue;
+  myQueue: cloud.Queue;
 
   init () {
-    this.my_queue = new cloud.Queue();
+    this.myQueue = new cloud.Queue();
   }
 
-  inflight inflight_returns_resource(): cloud.Queue {
-    return this.my_queue;
-//              ^^^^^^^^ Cannot qualify which operations are performed on class "this.my_queue"
+  inflight inflightReturnsResource(): cloud.Queue {
+    return this.myQueue;
+//              ^^^^^^^^ Cannot qualify which operations are performed on class "this.myQueue"
   }
 
-  inflight inflight_returns_resource2(): cloud.Queue {
-    return global_queue;
-//         ^^^^^^^^^^^^ Cannot qualify which operations are performed on class "global_queue"
+  inflight inflightReturnsResource2(): cloud.Queue {
+    return globalQueue;
+//         ^^^^^^^^^^^^ Cannot qualify which operations are performed on class "globalQueue"
   }
 }
 
@@ -28,13 +28,13 @@ class Test {
   }
 
   inflight test() {
-    let q = this.another.inflight_returns_resource();
+    let q = this.another.inflightReturnsResource();
     q.push("push!");
 
-    let q2 = this.another.inflight_returns_resource2();
+    let q2 = this.another.inflightReturnsResource2();
     q2.push("push!");
   }
 }
 
 let f = new Test();
-new cloud.Function(inflight () => { f.test(); }) as "test";
+test "test" { f.test(); }

@@ -17,25 +17,25 @@ let handler = inflight (event: str): str => {
     log(stuff);
   }
 
-  log(bucket2.public_url("file.txt"));
+  log(bucket2.publicUrl("file.txt"));
 
   try {
-    bucket1.public_url("file.txt");
+    bucket1.publicUrl("file.txt");
   } catch error {
     log(error);
   }
 };
 
-queue.add_consumer(handler, batch_size: 5);
+queue.addConsumer(handler, batchSize: 5);
 
 new cloud.Function(
   handler, 
   env: Map<str> {}
 );
 
-let empty_env = Map<str> {};
+let emptyEnv = Map<str> {};
 
 new cloud.Function(
   handler, 
-  env: empty_env
+  env: emptyEnv
 ) as "AnotherFunction";

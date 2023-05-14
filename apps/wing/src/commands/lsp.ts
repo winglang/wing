@@ -54,11 +54,7 @@ export async function run_server() {
     return JSON.parse(result) as CompletionItem[];
   });
   connection.onDefinition(async (params) => {
-    const result = wingCompiler.invoke(
-      wingc,
-      "wingc_on_goto_definition",
-      JSON.stringify(params)
-    );
+    const result = wingCompiler.invoke(wingc, "wingc_on_goto_definition", JSON.stringify(params));
     if (result == 0) {
       return null;
     } else {
@@ -66,11 +62,7 @@ export async function run_server() {
     }
   });
   connection.onDocumentSymbol(async (params) => {
-    const result = wingCompiler.invoke(
-      wingc,
-      "wingc_on_document_symbol",
-      JSON.stringify(params)
-    );
+    const result = wingCompiler.invoke(wingc, "wingc_on_document_symbol", JSON.stringify(params));
     if (result == 0) {
       return null;
     } else {
@@ -78,11 +70,7 @@ export async function run_server() {
     }
   });
   connection.onHover(async (params) => {
-    const result = wingCompiler.invoke(
-      wingc,
-      "wingc_on_hover",
-      JSON.stringify(params)
-    );
+    const result = wingCompiler.invoke(wingc, "wingc_on_hover", JSON.stringify(params));
     if (result == 0) {
       return null;
     } else {

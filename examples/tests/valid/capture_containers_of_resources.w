@@ -9,7 +9,7 @@ let map = { "my_queue": new cloud.Queue() };
 
 let set = { "foo", "foo", "bar" };
 
-new cloud.Function(inflight (s: str) => {
+test "test" {
   let b1 = arr.at(0);
   let b2 = arr.at(1);
   let q = map.get("my_queue");
@@ -22,4 +22,4 @@ new cloud.Function(inflight (s: str) => {
 
   assert(set.has("foo"));
   assert(set.size == 2);
-}) as "test";
+}

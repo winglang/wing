@@ -96,7 +96,13 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const hash = this.hashKey(key);
         const filename = join(this.fileDir, hash);
-        return fs.promises.readFile(filename, "utf8");
+        try {
+          return await fs.promises.readFile(filename, "utf8");
+        } catch (e) {
+          throw new Error(
+            `Object does not exist (key=${key}): ${(e as Error).stack}`
+          );
+        }
       },
     });
   }

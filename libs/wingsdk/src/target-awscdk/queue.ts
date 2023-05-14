@@ -73,7 +73,7 @@ export class Queue extends cloud.Queue {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "add_consumer",
+      relationship: "consumer",
     });
 
     return fn;

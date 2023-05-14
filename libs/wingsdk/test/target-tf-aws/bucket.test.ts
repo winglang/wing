@@ -4,8 +4,8 @@ import { test, expect } from "vitest";
 import { Bucket, IBucketEventHandler } from "../../src/cloud";
 import { NodeJsCode, Inflight } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../../src/util";
 import {
+  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
@@ -60,6 +60,7 @@ test("bucket is public", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
@@ -78,6 +79,7 @@ test("bucket with two preflight objects", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object", // file1.txt
   ]);
@@ -156,6 +158,7 @@ test("bucket with onCreate method", () => {
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object",
     "aws_sns_topic", // topic to subscribe to bucket events
@@ -187,6 +190,7 @@ test("bucket with onDelete method", () => {
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object",
     "aws_sns_topic", // topic to subscribe to bucket events
@@ -218,6 +222,7 @@ test("bucket with onUpdate method", () => {
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object",
     "aws_sns_topic", // topic to subscribe to bucket events
@@ -249,6 +254,7 @@ test("bucket with onEvent method", () => {
     "aws_s3_bucket", // main bucket
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
     "aws_s3_object",
     "aws_sns_topic", // topic to subscribe to bucket events

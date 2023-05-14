@@ -2,14 +2,8 @@ import * as reflect from "jsii-reflect";
 import * as transpile from "./transpile";
 import { TranspiledTypeReferenceToStringOptions } from "./transpile";
 import { submodulePath } from "../schema";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const Case = require("case");
 
 // Helpers
-const toSnakeCase = (text?: string) => {
-  return Case.snake(text ?? "");
-};
-
 const formatArguments = (inputs: string[]) => {
   return inputs.join(", ");
 };
@@ -22,7 +16,7 @@ const typeToString: TranspiledTypeReferenceToStringOptions = {
 
 const formatStructInitialization = (type: transpile.TranspiledType) => {
   const target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
-  return `let ${toSnakeCase(type.name)} = ${target}{ ... }`;
+  return `let ${type.name} = ${target}{ ... }`;
 };
 
 const formatClassInitialization = (
@@ -129,7 +123,7 @@ export class WingTranspile extends transpile.TranspileBase {
   }
 
   public property(property: reflect.Property): transpile.TranspiledProperty {
-    const name = property.const ? property.name : toSnakeCase(property.name);
+    const name = property.name;
     const typeRef = this.typeReference(property.type);
     return {
       name,
@@ -150,7 +144,7 @@ export class WingTranspile extends transpile.TranspileBase {
   public parameter(
     parameter: reflect.Parameter
   ): transpile.TranspiledParameter {
-    const name = toSnakeCase(parameter.name);
+    const name = parameter.name;
     const typeRef = this.typeReference(parameter.type);
     return {
       name,
@@ -178,7 +172,7 @@ export class WingTranspile extends transpile.TranspileBase {
         return p.name !== "scope" && p.name !== "id";
       })
       .sort(this.optionalityCompare);
-    const name = toSnakeCase(callable.name);
+    const name = callable.name;
     const inputs = parameters.map((p) =>
       this.formatParameters(this.parameter(p))
     );
@@ -271,6 +265,6 @@ export class WingTranspile extends transpile.TranspileBase {
     if (tf === "Inflight") {
       tf = "~Inflight";
     }
-    return `${toSnakeCase(name)}: ${tf};`;
+    return `${name}: ${tf};`;
   }
 }

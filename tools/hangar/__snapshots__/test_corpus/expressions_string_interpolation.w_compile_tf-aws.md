@@ -41,13 +41,13 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const regular_string = "str\n\"";
-    const empty_string = "";
+    const regularString = "str\n\"";
+    const emptyString = "";
     const number = 1;
-    const cool_string = `cool \"\${${regular_string}}\" test`;
-    const really_cool_string = `${number}${empty_string}\n${cool_string}\n\${empty_string}${"string-in-string"}!`;
-    const begining_with_cool_strings = `${regular_string} ${number} <- cool`;
-    const ending_with_cool_strings = `cool -> ${regular_string} ${number}`;
+    const coolString = `cool \"\${${regularString}}\" test`;
+    const reallyCoolString = `${number}${emptyString}\n${coolString}\n\${empty_string}${"string-in-string"}!`;
+    const beginingWithCoolStrings = `${regularString} ${number} <- cool`;
+    const endingWithCoolStrings = `cool -> ${regularString} ${number}`;
   }
 }
 class $App extends $AppBase {

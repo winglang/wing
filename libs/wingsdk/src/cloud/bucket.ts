@@ -403,18 +403,10 @@ export enum BucketInflightMethods {
   LIST = "list",
   /** `Bucket.delete` */
   DELETE = "delete",
-  /** `Bucket.putJson` */
-  PUT_JSON = "put_json",
-  /** `Bucket.getJson` */
-  GET_JSON = "get_json",
-  /** `Bucket.publicUrl` */
-  PUBLIC_URL = "public_url",
-  /** `Bucket.tryPut` */
-  TRY_PUT = "tryPut",
-  /** `Bucket.tryPutJson` */
-  TRY_PUT_JSON = "try_put_json",
-  /** `Bucket.tryGet` */
-  TRY_GET = "try_get",
-  /** `Bucket.tryGetJson` */
-  TRY_GET_JSON = "try_get_json",
+  /** `Bucket.putJson */
+  PUT_JSON = "putJson",
+  /** `Bucket.getJson */
+  GET_JSON = "getJson",
+  /** `Bucket.publicUrl */
+  PUBLIC_URL = "publicUrl",
 }

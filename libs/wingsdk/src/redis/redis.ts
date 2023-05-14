@@ -123,8 +123,8 @@ export interface IRedisClient {
  * @internal
  */
 export enum RedisInflightMethods {
-  /** `Redis.raw_client` */
-  RAW_CLIENT = "raw_client",
+  /** `Redis.rawClient` */
+  RAW_CLIENT = "rawClient",
   /** `Redis.url` */
   URL = "url",
   /** `Redis.set` */

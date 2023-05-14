@@ -1,0 +1,570 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`default website behavior 1`] = `
+"{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
+  \\"resource\\": {
+    \\"aws_cloudfront_distribution\\": {
+      \\"root_Website_Distribution_02AE6540\\": {
+        \\"default_cache_behavior\\": {
+          \\"allowed_methods\\": [
+            \\"GET\\",
+            \\"HEAD\\"
+          ],
+          \\"cached_methods\\": [
+            \\"GET\\",
+            \\"HEAD\\"
+          ],
+          \\"compress\\": true,
+          \\"default_ttl\\": 3600,
+          \\"forwarded_values\\": {
+            \\"cookies\\": {
+              \\"forward\\": \\"none\\"
+            },
+            \\"query_string\\": false
+          },
+          \\"max_ttl\\": 86400,
+          \\"min_ttl\\": 0,
+          \\"target_origin_id\\": \\"s3Origin\\",
+          \\"viewer_protocol_policy\\": \\"redirect-to-https\\"
+        },
+        \\"default_root_object\\": \\"index.html\\",
+        \\"enabled\\": true,
+        \\"origin\\": [
+          {
+            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket_regional_domain_name}\\",
+            \\"origin_id\\": \\"s3Origin\\"
+          }
+        ],
+        \\"price_class\\": \\"PriceClass_100\\",
+        \\"restrictions\\": {
+          \\"geo_restriction\\": {
+            \\"locations\\": [],
+            \\"restriction_type\\": \\"none\\"
+          }
+        },
+        \\"viewer_certificate\\": {
+          \\"cloudfront_default_certificate\\": true
+        }
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Website_WebsiteBucket_B334706B\\": {
+        \\"bucket_prefix\\": \\"website-c80d509a-\\",
+        \\"force_destroy\\": false
+      }
+    },
+    \\"aws_s3_bucket_policy\\": {
+      \\"root_Website_PublicPolicy_F4A65951\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_Website_PublicAccessBlock_1B1D8C0A\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"root_Website_Encryption_3BFF2396\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    },
+    \\"aws_s3_bucket_website_configuration\\": {
+      \\"root_Website_BucketWebsiteConfiguration_9BCFE685\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"index_document\\": {
+          \\"suffix\\": \\"index.html\\"
+        }
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Website_Filebhtml_117F6E5A\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"content_type\\": \\"text/html; charset=utf-8\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
+        \\"key\\": \\"/b.html\\",
+        \\"source\\": \\"<source>\\"
+      },
+      \\"root_Website_Fileinnerfolderahtml_A85A47D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"content_type\\": \\"text/html; charset=utf-8\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
+        \\"key\\": \\"/inner-folder/a.html\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`default website behavior 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Website": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "BucketWebsiteConfiguration": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "BucketWebsiteConfiguration",
+                    "path": "root/Default/Website/BucketWebsiteConfiguration",
+                  },
+                  "Distribution": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "Distribution",
+                    "path": "root/Default/Website/Distribution",
+                  },
+                  "Encryption": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "Encryption",
+                    "path": "root/Default/Website/Encryption",
+                  },
+                  "File--b.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "File--b.html",
+                    "path": "root/Default/Website/File--b.html",
+                  },
+                  "File--inner-folder--a.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "File--inner-folder--a.html",
+                    "path": "root/Default/Website/File--inner-folder--a.html",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/Website/PublicAccessBlock",
+                  },
+                  "PublicPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicPolicy",
+                    "path": "root/Default/Website/PublicPolicy",
+                  },
+                  "WebsiteBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "WebsiteBucket",
+                    "path": "root/Default/Website/WebsiteBucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A static website",
+                  "title": "Website",
+                },
+                "id": "Website",
+                "path": "root/Default/Website",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
+                },
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.245",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`website with add_json 1`] = `
+"{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
+  \\"resource\\": {
+    \\"aws_cloudfront_distribution\\": {
+      \\"root_Website_Distribution_02AE6540\\": {
+        \\"default_cache_behavior\\": {
+          \\"allowed_methods\\": [
+            \\"GET\\",
+            \\"HEAD\\"
+          ],
+          \\"cached_methods\\": [
+            \\"GET\\",
+            \\"HEAD\\"
+          ],
+          \\"compress\\": true,
+          \\"default_ttl\\": 3600,
+          \\"forwarded_values\\": {
+            \\"cookies\\": {
+              \\"forward\\": \\"none\\"
+            },
+            \\"query_string\\": false
+          },
+          \\"max_ttl\\": 86400,
+          \\"min_ttl\\": 0,
+          \\"target_origin_id\\": \\"s3Origin\\",
+          \\"viewer_protocol_policy\\": \\"redirect-to-https\\"
+        },
+        \\"default_root_object\\": \\"index.html\\",
+        \\"enabled\\": true,
+        \\"origin\\": [
+          {
+            \\"domain_name\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket_regional_domain_name}\\",
+            \\"origin_id\\": \\"s3Origin\\"
+          }
+        ],
+        \\"price_class\\": \\"PriceClass_100\\",
+        \\"restrictions\\": {
+          \\"geo_restriction\\": {
+            \\"locations\\": [],
+            \\"restriction_type\\": \\"none\\"
+          }
+        },
+        \\"viewer_certificate\\": {
+          \\"cloudfront_default_certificate\\": true
+        }
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Website_WebsiteBucket_B334706B\\": {
+        \\"bucket_prefix\\": \\"website-c80d509a-\\",
+        \\"force_destroy\\": false
+      }
+    },
+    \\"aws_s3_bucket_policy\\": {
+      \\"root_Website_PublicPolicy_F4A65951\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_Website_PublicAccessBlock_1B1D8C0A\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"root_Website_Encryption_3BFF2396\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    },
+    \\"aws_s3_bucket_website_configuration\\": {
+      \\"root_Website_BucketWebsiteConfiguration_9BCFE685\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"index_document\\": {
+          \\"suffix\\": \\"index.html\\"
+        }
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Website_Filebhtml_117F6E5A\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"content_type\\": \\"text/html; charset=utf-8\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
+        \\"key\\": \\"/b.html\\",
+        \\"source\\": \\"<source>\\"
+      },
+      \\"root_Website_Fileconfigjson_49B1EFB1\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"content\\": \\"{\\\\\\"version\\\\\\":\\\\\\"8.31.0\\\\\\"}\\",
+        \\"content_type\\": \\"application/json\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
+        \\"key\\": \\"config.json\\"
+      },
+      \\"root_Website_Fileinnerfolderahtml_A85A47D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Website_WebsiteBucket_B334706B.bucket}\\",
+        \\"content_type\\": \\"text/html; charset=utf-8\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.root_Website_WebsiteBucket_B334706B\\"
+        ],
+        \\"key\\": \\"/inner-folder/a.html\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`website with add_json 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Website": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "BucketWebsiteConfiguration": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "BucketWebsiteConfiguration",
+                    "path": "root/Default/Website/BucketWebsiteConfiguration",
+                  },
+                  "Distribution": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "Distribution",
+                    "path": "root/Default/Website/Distribution",
+                  },
+                  "Encryption": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "Encryption",
+                    "path": "root/Default/Website/Encryption",
+                  },
+                  "File--b.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "File--b.html",
+                    "path": "root/Default/Website/File--b.html",
+                  },
+                  "File--inner-folder--a.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "File--inner-folder--a.html",
+                    "path": "root/Default/Website/File--inner-folder--a.html",
+                  },
+                  "File-config.json": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "File-config.json",
+                    "path": "root/Default/Website/File-config.json",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/Website/PublicAccessBlock",
+                  },
+                  "PublicPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicPolicy",
+                    "path": "root/Default/Website/PublicPolicy",
+                  },
+                  "WebsiteBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "WebsiteBucket",
+                    "path": "root/Default/Website/WebsiteBucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A static website",
+                  "title": "Website",
+                },
+                "id": "Website",
+                "path": "root/Default/Website",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.15.2",
+                },
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.245",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

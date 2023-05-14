@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ capture_resource_with_no_inflight.wsim » root/env0/test
+pass ─ capture_resource_with_no_inflight.wsim » root/env0/test:test
 ```
 
