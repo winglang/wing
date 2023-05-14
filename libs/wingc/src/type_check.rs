@@ -468,29 +468,19 @@ impl Subtype for Type {
 				// any single-method interface with a matching "handle" method type.
 
 				// First, check if there is exactly one inflight method in the interface
-				if iface
-					.get_env()
-					.iter(true)
-					.filter(|(_name, kind, _info)| {
-						let type_ = kind.as_variable().expect("interface member should be a variable").type_;
-						type_.is_inflight_function()
-					})
-					.count() != 1
-				{
+				let mut inflight_methods = iface
+					.methods(true)
+					.filter(|(_name, type_)| type_.is_inflight_function());
+				let handler_method = inflight_methods.next();
+				if handler_method.is_none() || inflight_methods.next().is_some() {
 					return false;
 				}
 
-				// Next, check that the interface's inflight method is named "handle" and get its type
-				let iface_handle_type = if let Some(method) = iface.get_env().lookup(&"handle".into(), None) {
-					let method = method.as_variable().expect("interface member should be a variable");
-					if method.type_.is_inflight_function() {
-						method.type_
-					} else {
-						return false;
-					}
-				} else {
+				// Next, check that the method's name is "handle"
+				let (handler_method_name, handler_method_type) = handler_method.unwrap();
+				if handler_method_name != "handle" {
 					return false;
-				};
+				}
 
 				// Then get the type of the resource's "handle" method if it has one
 				let res_handle_type = if let Some(method) = res.get_env().lookup(&"handle".into(), None) {
@@ -505,7 +495,7 @@ impl Subtype for Type {
 				};
 
 				// Finally check if they're subtypes
-				res_handle_type.is_subtype_of(&iface_handle_type)
+				res_handle_type.is_subtype_of(&handler_method_type)
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
