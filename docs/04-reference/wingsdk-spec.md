@@ -98,7 +98,7 @@ For example, a `cloud.Bucket` can emit events whenever an object is uploaded, an
 ```ts
 // wing
 let bucket = new cloud.Bucket();
-bucket.onCreate(inflight (file: str) => {
+bucket.onCreate(inflight (file: string) => {
   log.info("File uploaded: " + file);
 });
 ```
@@ -253,71 +253,81 @@ resource Bucket {
   /**
    * Run an inflight whenever an object is uploaded to the bucket.
    */
-  onCreate(fn: inflight (key: str) => void, opts: BucketOnUploadProps?): void;
+  onCreate(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void;
 
   /**
    * Run an inflight whenever an object is deleted from the bucket.
    */
-  onDelete(fn: inflight (key: str) => void, opts: BucketOnDeleteProps?): void;
+  onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void;
 
   /**
    * Run an inflight whenever an object is updated in the bucket.
    */
-  onUpdate(fn: inflight (key: str) => void, opts: BucketOnUpdateProps?): void;
+  onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void;
 
   /**
    * Run an inflight whenever an object is uploaded, modified, or deleted from the bucket.
    */
-  onEvent(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): void;
+  onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps?): void;
 
   /**
    * Add an object to the bucket that is uploaded when the app is deployed.
    */
-  addObject(key: str, value: Blob): void;
+  addObject(key: string, body: string): void;
 
   /**
    * Upload an object to the bucket.
    */
-  inflight put(key: str, value: Blob): void;
+  inflight put(key: string, body: string): Promise<void>;
 
   /**
-   * Upload a Json object to bucket
+   * Upload a Json object to bucket.
    */
-  inflight putJson(key: str, value: Json): void;
+  inflight putJson(key: string, body: Json): Promise<void>;
 
   /**
    * Get an object from the bucket.
    *
    * @throws Will throw if the object doesn't exist.
    */
-  inflight get(key: str): Blob;
+  inflight get(key: string): Promise<string>;
 
   /**
    * Get an object from the bucket if it exists.
    */
-  inflight tryGet(key: str): Blob?;
+  inflight tryGet(key: string): Promise<string | undefined>;
+
+  /**
+   * Get a Json object from the bucket.
+   */
+  inflight getJson(key: string, body: Json): Promise<void>;
+
+  /**
+   * Get a Json object from the bucket if it exists.
+   */
+  inflight tryGetJson(key: string): Promise<Json | undefined>;
 
   /**
    * Delete an object from the bucket.
    *
    * @throws Will throw if the object doesn't exist.
    */
-  inflight delete(key: str): void;
+  inflight delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
 
   /**
    * Delete an object from the bucket if it exists.
    */
-  inflight tryDelete(key: str): bool;
+  inflight tryDelete(key: string): bool;
 
   /**
    * Check if an object exists in the bucket.
    */
-  inflight exists(key: str): bool;
+  inflight exists(key: string): bool;
 
   /**
    * Get the metadata of an object in the bucket.
    */
-  inflight metadata(key: str): ObjectMetadata;
+  inflight metadata(key: string): ObjectMetadata;
 
   /**
    * Move an object to a new location in the bucket. If an object already exists
@@ -325,7 +335,7 @@ resource Bucket {
    *
    * @throws Will throw if the `src` object doesn't exist.
    */
-  inflight rename(src: str, dst: str): void;
+  inflight rename(src: string, dst: string): void;
 
   /**
    * Copy an object to a new location in the bucket. If the destination object
@@ -333,25 +343,25 @@ resource Bucket {
    *
    * @throws Will throw if the `src` object doesn't exist.
    */
-  inflight copy(src: str, dst: str): void;
+  inflight copy(src: string, dst: string): void;
 
   /**
    * List all objects in the bucket with the given prefix.
    */
-  inflight list(prefix: str?): Iterator<str>;
+  inflight list(prefix?: string): Promise<string[]>;
 
   /**
    * Returns a url to the given object key. Does not check if the object exists.
    *
    * @throws Will throw if the bucket is not public.
    */
-  inflight publicUrl(key: str): str;
+  inflight publicUrl(key: string): Promise<string>;
 
   /**
    * Returns a signed url to the given object. This URL can be used by anyone to
    * access the object until the link expires (defaults to 24 hours).
    */
-  inflight signedUrl(key: str, duration?: duration): str;
+  inflight signedUrl(key: string, duration?: duration): string;
 }
 
 struct ObjectMetadata {
@@ -369,7 +379,7 @@ struct BucketOnUpdateProps { /* elided */ }
 struct BucketOnEventProps { /* elided */ }
 
 struct BucketEvent {
-  key: str;
+  key: string;
   type: BucketEventType;
 }
 
@@ -510,7 +520,7 @@ struct FunctionProps {
    * The environment variables to pass to the function.
    * @default {}
    */
-  env: Map<str>?;
+  env: Map<string>?;
 }
 
 resource Function {
@@ -534,7 +544,7 @@ resource Function {
   /**
    * Add an environment variable to the function.
    */
-  addEnv(key: str, value: str): void;
+  addEnv(key: string, value: string): void;
 
   /**
    * Invoke the function.
@@ -662,7 +672,7 @@ resource Schedule {
    * Trigger events according to a cron schedule.
    * @example "0 0 * * *" - midnight every day
    */
-  static fromCron(cron: str): Schedule;
+  static fromCron(cron: string): Schedule;
 
   /**
    * Trigger events at a periodic rate.
@@ -710,7 +720,7 @@ struct WebsiteProps {
    * Local path to the website's static files, relative to the Wing source file.
    * @example "./dist"
    */
-  path: str;
+  path: string;
 
   /**
    * The website's custom domain name.
@@ -725,7 +735,7 @@ struct WebsiteProps {
    * @param obj the object to write to the key
    * @returns the json file path
    */
-  addJson(filePath: str, obj: Json): str;
+  addJson(filePath: string, obj: Json): string;
 }
 
 resource Website {
@@ -735,12 +745,12 @@ resource Website {
    * Local path to the website's static files, relative to the Wing source file.
    * @example "./dist"
    */
-  get path(): str;
+  get path(): string;
 
   /**
    * The website's url.
    */
-  get url(): str;
+  get url(): string;
 }
 ```
 
@@ -768,7 +778,7 @@ resource Api {
   /**
    * The api's base url.
    */
-  url: str;
+  url: string;
 
   /**
    * Default CORS configuration options that are used for new routes.
@@ -779,32 +789,32 @@ resource Api {
   /**
    * Run an inflight whenever a GET request is made to the specified path.
    */
-  get(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
+  get(path: string, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
 
   /**
    * Run an inflight whenever a POST request is made to the specified path.
    */
-  post(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
+  post(path: string, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
 
   /**
    * Run an inflight whenever a PUT request is made to the specified path.
    */
-  put(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
+  put(path: string, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
 
   /**
    * Run an inflight whenever a DELETE request is made to the specified path.
    */
-  delete(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
+  delete(path: string, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
 
   /**
    * Run an inflight whenever a PATCH request is made to the specified path.
    */
-  patch(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
+  patch(path: string, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
 
   /**
    * Run an inflight whenever any request is made to the specified path.
    */
-  any(path: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnAnyProps?): void;
+  any(path: string, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnAnyProps?): void;
 
   /**
    * Make a request to the specified path. Throws if the path hasn't been
@@ -825,7 +835,7 @@ struct ApiCorsProps {
    * The list of allowed origins.
    * @example ["https://example.com"]
    */
-  origins: Array<str>;
+  origins: Array<string>;
 
   /**
    * The list of allowed methods.
@@ -837,13 +847,13 @@ struct ApiCorsProps {
    * The list of allowed headers.
    * @example ["Content-Type"]
    */
-  headers: Array<str>;
+  headers: Record<string, string>?;
 
   /**
    * The list of exposed headers.
    * @example ["Content-Type"]
    */
-  exposedHeaders: Array<str>;
+  exposedHeaders: Array<string>;
 
   /**
    * Whether to allow credentials.
@@ -855,15 +865,15 @@ struct ApiRequest {
   /** The request's HTTP method. */
   method: HttpMethod;
   /** The request's path. */
-  path: str;
+  path: string;
   /** The request's query parameters. */
-  query: Map<str>;
+  query: Map<string>;
   /** The path variables. */
-  vars: Map<str>;
+  vars: Map<string>;
   /** The request's body. */
   body: Json?;
   /** The request's headers. */
-  headers: Map<str>?;
+  headers: Map<string>?;
 }
 
 struct ApiResponse {
@@ -872,7 +882,7 @@ struct ApiResponse {
   /** The response's body. */
   body: Json?;
   /** The response's headers. */
-  headers: Map<str>?;
+  headers: Map<string>?;
 }
 
 enum HttpMethod {
@@ -932,20 +942,20 @@ struct MetricProps {
    * The metric's name.
    * @example "bytesUploaded"
    */
-  name: str;
+  name: string;
 
   /**
    * The metric's unit.
    * @example "bytes"
    */
-  unit: str;
+  unit: string;
 
   /**
    * The metric's description.
    * @example "The number of bytes uploaded to the website."
    * @default - no description
    */
-  description?: str;
+  description?: string;
 }
 
 resource Metric {
@@ -955,13 +965,13 @@ resource Metric {
    * The metric's name.
    * @example "bytesUploaded"
    */
-  name: str;
+  name: string;
 
   /**
    * The metric's unit.
    * @example "bytes"
    */
-  unit: str;
+  unit: string;
 
   /**
    * The metric's description, if any.
@@ -1061,14 +1071,14 @@ struct SecretProps {
    *
    * @default - a new secret is provisioned with a generated name
    */
-  name: str;
+  name: string;
 
   /**
    * Retrieve the value of the secret.
    * @throws if the secret doesn't exist.
    * @returns the secret value as string.
    */
-  inflight value(): str;
+  inflight value(): string;
 
   /**
    * Retrieve the value of the secret and parse it as JSON.
@@ -1126,18 +1136,18 @@ struct ServiceProps {
    * The directory containing the service's source code to package with
    * buildpack.
    */
-  buildpackPath: str;
+  buildpackPath: string;
 
   /**
    * The service's environment variables.
    * @default {}
    */
-  env: Map<str>;
+  env: Map<string>;
 
   /**
    * The service's command.
    */
-  command: str;
+  command: string;
 
   /**
    * The service's port.
@@ -1164,18 +1174,18 @@ resource Service {
   /**
    * The service's URL.
    */
-  url: str;
+  url: string;
 
   /**
    * The directory containing the service's source code to package with
    * buildpack.
    */
-  buildpackPath: str;
+  buildpackPath: string;
 
   /**
    * The service's command.
    */
-  command: str;
+  command: string;
 
   /**
    * The service's port.
@@ -1200,7 +1210,7 @@ resource Service {
   /**
    * Add an environment variable to the service.
    */
-  addEnv(key: str, value: str): void;
+  addEnv(key: string, value: string): void;
 
   /**
    * Send a request to the service.
@@ -1217,13 +1227,13 @@ struct ServiceRequestOptions {
   /**
    * The request's path.
    */
-  path: str;
+  path: string;
 
   /**
    * The request's headers.
    * @default {}
    */
-  headers: Map<str>;
+  headers: Map<string>;
 
   /**
    * The request's body.
@@ -1241,7 +1251,7 @@ struct ServiceResponse {
   /**
    * The response's headers.
    */
-  headers: Map<str>;
+  headers: Map<string>;
 
   /**
    * The response's body.
@@ -1269,7 +1279,7 @@ struct TableProps {
   /**
    * The table's name.
    */
-  name: str;
+  name: string;
 
   /**
    * The table's columns.
@@ -1280,7 +1290,7 @@ struct TableProps {
    * The table's primary key. No two rows can have the same value for the
    * primary key.
    */
-  primaryKey: str;
+  primaryKey: string;
 }
 
 enum ColumnType {
@@ -1297,7 +1307,7 @@ resource Table {
   /**
    * The table's name.
    */
-  name: str;
+  name: string;
 
   /**
    * The table's columns.
@@ -1307,27 +1317,27 @@ resource Table {
   /**
    * The table's primary key.
    */
-  primaryKey: str;
+  primaryKey: string;
 
   /**
    * Insert a row into the table.
    */
-  inflight insert(key: str, row: Json): void;
+  inflight insert(key: string, row: Json): void;
 
   /**
    * Update a row in the table.
    */
-  inflight update(key: str, row: Json): void;
+  inflight update(key: string, row: Json): void;
 
   /**
    * Delete a row from the table, by primary key.
    */
-  inflight delete(key: str): void;
+  inflight delete(key: string): void;
 
   /**
    * Get a row from the table, by primary key.
    */
-  inflight get(key: str): Json;
+  inflight get(key: string): Json;
 
   /**
    * List all rows in the table.
