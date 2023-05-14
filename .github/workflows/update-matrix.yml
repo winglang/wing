@@ -1,0 +1,27 @@
+name: Update Compatibility Matrix
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  update_issue_number:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Find and Replace
+        run: |
+          sed -i "s/implemented: false, issue: ${GITHUB_EVENT_ISSUE_NUMBER}/implemented: true/g" docs/04-reference/compatibility/compatibility.json
+
+      - name: Commit Changes
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git commit -a -m "Update issue number to closed-${GITHUB_EVENT_ISSUE_NUMBER}"
+
+      - name: Push Changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
