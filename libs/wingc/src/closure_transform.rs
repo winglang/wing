@@ -122,56 +122,22 @@ impl Fold for ClosureTransformer {
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
 		let prev_phase = self.phase;
 		self.phase = node.signature.phase;
+		let prev_inside_scope_with_this = self.inside_scope_with_this;
+		if !node.is_static {
+			self.inside_scope_with_this = true;
+		}
 		let new_node = fold::fold_function_definition(self, node);
+		self.inside_scope_with_this = prev_inside_scope_with_this;
 		self.phase = prev_phase;
 		new_node
 	}
 
-	fn fold_class(&mut self, node: Class) -> Class {
-		Class {
-			name: self.fold_symbol(node.name),
-			fields: node
-				.fields
-				.into_iter()
-				.map(|field| self.fold_class_field(field))
-				.collect(),
-			methods: node
-				.methods
-				.into_iter()
-				.map(|(name, def)| {
-					let new_symbol = self.fold_symbol(name);
-
-					let new_def = if !def.is_static {
-						let prev_inside_scope_with_this = self.inside_scope_with_this;
-						self.inside_scope_with_this = true;
-						let new_def = self.fold_function_definition(def);
-						self.inside_scope_with_this = prev_inside_scope_with_this;
-						new_def
-					} else {
-						self.fold_function_definition(def)
-					};
-
-					(new_symbol, new_def)
-				})
-				.collect(),
-			initializer: {
-				let prev_inside_scope_with_this = self.inside_scope_with_this;
-				self.inside_scope_with_this = true;
-				let new_constructor = self.fold_initializer(node.initializer);
-				self.inside_scope_with_this = prev_inside_scope_with_this;
-				new_constructor
-			},
-			parent: node.parent.map(|parent| self.fold_user_defined_type(parent)),
-			implements: node
-				.implements
-				.into_iter()
-				.map(|interface| self.fold_user_defined_type(interface))
-				.collect(),
-			is_resource: node.is_resource,
-			inflight_initializer: node
-				.inflight_initializer
-				.map(|init| self.fold_function_definition(init)),
-		}
+	fn fold_initializer(&mut self, node: Initializer) -> Initializer {
+		let prev_inside_scope_with_this = self.inside_scope_with_this;
+		self.inside_scope_with_this = true;
+		let new_node = fold::fold_initializer(self, node);
+		self.inside_scope_with_this = prev_inside_scope_with_this;
+		new_node
 	}
 
 	fn fold_expr(&mut self, expr: Expr) -> Expr {
@@ -215,7 +181,7 @@ impl Fold for ClosureTransformer {
 				let class_fields: Vec<ClassField> = vec![];
 				let class_init_params: Vec<FunctionParameter> = vec![];
 
-				let new_func_def = if self.inside_scope_with_this {
+				let mut new_func_def = if self.inside_scope_with_this {
 					// If we are inside a class, we transform inflight closures with an extra
 					// `let __parent_this = this;` statement before the class definition, and replace references
 					// to `this` with `__parent_this` so that they can access the parent class's fields.
@@ -224,6 +190,10 @@ impl Fold for ClosureTransformer {
 				} else {
 					func_def
 				};
+
+				// Anonymous functions are always static -- since the function code is now an instance method on a class,
+				// we need to set this to false.
+				new_func_def.is_static = false;
 
 				// class_def :=
 				// ```

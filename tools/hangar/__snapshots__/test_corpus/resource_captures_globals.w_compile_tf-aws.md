@@ -27,6 +27,7 @@ module.exports = function({ globalCounter }) {
     }
     async $inflight_init()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalCounter.peek()) === 0)'`)})(((await globalCounter.peek()) === 0))};
       }
     }

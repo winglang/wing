@@ -170,6 +170,7 @@ module.exports = function({  }) {
     }
     async $inflight_init()  {
       {
+        const __parent_this = this;
         this.inflightField = 123;
         (await this.c.inc(110));
         (await this.c.dec(10));

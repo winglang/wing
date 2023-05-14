@@ -513,10 +513,10 @@ impl<'a> JSifier<'a> {
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.phase {
 				Phase::Inflight => {
 					assert!(ctx.phase == Phase::Inflight, "inflight closures should have been transformed into preflight handler classes in the closure_transform compiler phase");
-					self.jsify_function(None, func_def, ctx).to_string()
+					self.jsify_function(None, func_def, false, ctx).to_string()
 				},
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, func_def, ctx).to_string(),
+				Phase::Preflight => self.jsify_function(None, func_def, false, ctx).to_string(),
 			},
 		}
 	}
@@ -728,7 +728,13 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_function(&mut self, name: Option<&str>, func_def: &impl MethodLike<'a>, ctx: &JSifyContext) -> CodeMaker {
+	fn jsify_function(
+		&mut self,
+		name: Option<&str>,
+		func_def: &impl MethodLike<'a>,
+		is_class_member: bool,
+		ctx: &JSifyContext,
+	) -> CodeMaker {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
@@ -777,7 +783,7 @@ impl<'a> JSifier<'a> {
 			}
 		};
 		let mut modifiers = vec![];
-		if func_def.is_static() {
+		if func_def.is_static() && is_class_member {
 			modifiers.push("static")
 		}
 		if matches!(func_def.signature().phase, Phase::Inflight) {
@@ -923,7 +929,7 @@ impl<'a> JSifier<'a> {
 		));
 
 		for (n, m) in preflight_methods {
-			code.add_code(self.jsify_function(Some(&n.name), m, ctx));
+			code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
 		}
 
 		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
@@ -1170,6 +1176,7 @@ impl<'a> JSifier<'a> {
 			class_code.add_code(self.jsify_function(
 				Some(CLASS_INFLIGHT_INIT_NAME),
 				inflight_init,
+				true,
 				&JSifyContext {
 					in_json: ctx.in_json,
 					phase: inflight_init.signature.phase,
@@ -1181,6 +1188,7 @@ impl<'a> JSifier<'a> {
 			class_code.add_code(self.jsify_function(
 				Some(&name.name),
 				def,
+				true,
 				&JSifyContext {
 					in_json: ctx.in_json,
 					phase: def.signature.phase,
@@ -1228,7 +1236,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		for (n, m) in class.methods.iter() {
-			code.add_code(self.jsify_function(Some(&n.name), m, ctx));
+			code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
 		}
 
 		code.close("}");
