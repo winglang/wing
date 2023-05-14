@@ -213,12 +213,9 @@ impl Fold for ClosureTransformer {
 
 				let new_func_def = if self.inside_scope_with_this {
 					// If we are inside a class, we transform inflight closures with an extra
-					// `let __parent_this = this;` statement before the class definition, and replace all references
-					// of `this` with `__parent_this` so that they can access the parent class's fields.
-					let mut this_transform = RenameIdentifierTransformer {
-						from: "this",
-						to: PARENT_THIS_NAME,
-					};
+					// `let __parent_this = this;` statement before the class definition, and replace references
+					// to `this` with `__parent_this` so that they can access the parent class's fields.
+					let mut this_transform = RenameThisTransformer::default();
 					this_transform.fold_function_definition(func_def)
 				} else {
 					func_def
@@ -282,17 +279,38 @@ impl Fold for ClosureTransformer {
 	}
 }
 
-/// Rename all occurrences of an identifier to a new name.
-struct RenameIdentifierTransformer<'a> {
+/// Rename all occurrences of an identifier inside an inflight closure to a new name.
+struct RenameThisTransformer<'a> {
 	from: &'a str,
 	to: &'a str,
+	// The transform shouldn't change references to `this` inside inflight classes since
+	// they refer to different objects.
+	inside_class: bool,
 }
 
-impl<'a> Fold for RenameIdentifierTransformer<'a> {
+impl Default for RenameThisTransformer<'_> {
+	fn default() -> Self {
+		Self {
+			from: "this",
+			to: PARENT_THIS_NAME,
+			inside_class: false,
+		}
+	}
+}
+
+impl<'a> Fold for RenameThisTransformer<'a> {
+	fn fold_class(&mut self, node: Class) -> Class {
+		let old_inside_class = self.inside_class;
+		self.inside_class = true;
+		let new_class = fold::fold_class(self, node);
+		self.inside_class = old_inside_class;
+		new_class
+	}
+
 	fn fold_reference(&mut self, node: Reference) -> Reference {
 		match node {
 			Reference::Identifier(ident) => {
-				if ident.name == self.from {
+				if !self.inside_class && ident.name == self.from {
 					Reference::Identifier(Symbol {
 						name: self.to.to_string(),
 						span: ident.span,
