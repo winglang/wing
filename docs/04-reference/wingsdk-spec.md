@@ -847,7 +847,7 @@ struct ApiCorsProps {
    * The list of allowed headers.
    * @example ["Content-Type"]
    */
-  headers: Record<string, string>?;
+  headers: Map<str>;
 
   /**
    * The list of exposed headers.
