@@ -1752,7 +1752,7 @@ impl Visit<'_> for FreeVariableScanner {
 				// If this reference is a capturable, non-reassignable, preflight
 				// variable then it's a capture
 				if let SymbolKind::Variable(v) = lookup_result {
-					// TODO: if we see a reassignable or non-capturable variable, should we emit an error?
+					// TODO: if we see a reassignable or non-capturable variable, should we emit an error here or inside analyze_expr?
 					if v.phase == Phase::Preflight {
 						self.free_vars.insert(symb.clone());
 					}
