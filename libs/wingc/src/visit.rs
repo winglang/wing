@@ -429,7 +429,6 @@ where
 		TypeAnnotationKind::Duration => {}
 		TypeAnnotationKind::Json => {}
 		TypeAnnotationKind::MutJson => {}
-		TypeAnnotationKind::Resource => {}
 		TypeAnnotationKind::Optional(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::Array(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::MutArray(t) => v.visit_type_annotation(t),

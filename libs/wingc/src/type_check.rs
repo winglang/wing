@@ -1848,7 +1848,6 @@ impl<'a> TypeChecker<'a> {
 			TypeAnnotationKind::Duration => self.types.duration(),
 			TypeAnnotationKind::Json => self.types.json(),
 			TypeAnnotationKind::MutJson => self.types.mut_json(),
-			TypeAnnotationKind::Resource => self.types.resource_base_type(),
 			TypeAnnotationKind::Optional(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				self.types.add_type(Type::Optional(value_type))
