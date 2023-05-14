@@ -301,8 +301,7 @@ impl<'a> Fold for RenameIdentifierTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } => fold::fold_reference(self, node),
-			Reference::TypeMember { .. } => fold::fold_reference(self, node),
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
 		}
 	}
 }
