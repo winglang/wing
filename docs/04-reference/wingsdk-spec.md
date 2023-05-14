@@ -295,7 +295,7 @@ resource Bucket {
   /**
    * Get an object from the bucket if it exists.
    */
-  inflight tryGet(key: str): str | undefined;
+  inflight tryGet(key: str): str | nil;
 
   /**
    * Get a Json object from the bucket.
@@ -305,7 +305,7 @@ resource Bucket {
   /**
    * Get a Json object from the bucket if it exists.
    */
-  inflight tryGetJson(key: str): Json | undefined;
+  inflight tryGetJson(key: str): Json | nil;
 
   /**
    * Delete an object from the bucket.
