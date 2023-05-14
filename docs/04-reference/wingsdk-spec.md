@@ -273,7 +273,7 @@ resource Bucket {
   /**
    * Add an object to the bucket that is uploaded when the app is deployed.
    */
-  addObject(key: string, body: string): void;
+  addObject(key: str, body: str): void;
 
   /**
    * Upload an object to the bucket.
