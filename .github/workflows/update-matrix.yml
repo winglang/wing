@@ -19,7 +19,7 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git commit -a -m "Update issue number to closed-${GITHUB_EVENT_ISSUE_NUMBER}"
+          git commit -a -m "Updating matrix (closed issue: ${GITHUB_EVENT_ISSUE_NUMBER})"
 
       - name: Push Changes
         uses: ad-m/github-push-action@v0.6.0
