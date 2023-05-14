@@ -279,22 +279,6 @@ export interface IBucketClient {
   delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
 
   /**
-   * Tries to put an object in the bucket.
-   * @param key Key of the object.
-   * @param body Content of the object we want to store into the bucket.
-   * @returns `true` if the object was successfully stored, `false` if an error occurred.
-   */
-  tryPut(key: string, body: string): Promise<boolean>;
-
-  /**
-   * Tries to put a Json object in the bucket.
-   * @param key Key of the object.
-   * @param body Json object that we want to store into the bucket.
-   * @returns `true` if the object was successfully stored, `false` if an an object already existed for the same key.
-   */
-  tryPutJson(key: string, body: Json): Promise<boolean>;
-
-  /**
    * Get an object from the bucket if it exists
    * @param key Key of the object.
    * @returns the contents of the object as a string if it exists, nil otherwise
@@ -403,10 +387,14 @@ export enum BucketInflightMethods {
   LIST = "list",
   /** `Bucket.delete` */
   DELETE = "delete",
-  /** `Bucket.putJson */
+  /** `Bucket.putJson` */
   PUT_JSON = "putJson",
-  /** `Bucket.getJson */
+  /** `Bucket.getJson` */
   GET_JSON = "getJson",
-  /** `Bucket.publicUrl */
+  /** `Bucket.publicUrl` */
   PUBLIC_URL = "publicUrl",
+  /** `Bucket.tryGet` */
+  TRY_GET = "tryGet",
+  /** `Bucket.tryGetJson` */
+  TRY_GET_JSON = "tryGetJson",
 }

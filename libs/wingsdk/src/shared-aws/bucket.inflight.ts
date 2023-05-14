@@ -72,24 +72,6 @@ export class BucketClient implements IBucketClient {
     return !!resp.Contents && resp.Contents.length > 0;
   }
 
-  public async tryPut(key: string, body: string): Promise<boolean> {
-    try {
-      await this.put(key, body);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  public async tryPutJson(key: string, body: Json): Promise<boolean> {
-    try {
-      await this.putJson(key, body);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
   public async tryGet(key: string): Promise<string | undefined> {
     if (await this.exists(key)) {
       return this.get(key);

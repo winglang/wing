@@ -176,24 +176,6 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async tryPut(key: string, body: string): Promise<boolean> {
-    try {
-      await this.put(key, body);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  public async tryPutJson(key: string, body: Json): Promise<boolean> {
-    try {
-      await this.putJson(key, body);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
   public async tryGet(key: string): Promise<string | undefined> {
     if (await this.fileExists(key)) {
       return this.get(key);
