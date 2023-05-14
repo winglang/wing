@@ -253,22 +253,22 @@ resource Bucket {
   /**
    * Run an inflight whenever an object is uploaded to the bucket.
    */
-  onCreate(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void;
+  onCreate(fn: inflight (key: str) => void, opts: BucketOnUploadProps?): void;
 
   /**
    * Run an inflight whenever an object is deleted from the bucket.
    */
-  onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void;
+  onDelete(fn: inflight (key: str) => void, opts: BucketOnDeleteProps?): void;
 
   /**
    * Run an inflight whenever an object is updated in the bucket.
    */
-  onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void;
+  onUpdate(fn: inflight (key: str) => void, opts: BucketOnUpdateProps?): void;
 
   /**
    * Run an inflight whenever an object is uploaded, modified, or deleted from the bucket.
    */
-  onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps?): void;
+  onEvent(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): void;
 
   /**
    * Add an object to the bucket that is uploaded when the app is deployed.
@@ -312,7 +312,7 @@ resource Bucket {
    *
    * @throws Will throw if the object doesn't exist.
    */
-  inflight delete(key: str, opts?: BucketDeleteOptions): void;
+  inflight delete(key: str, opts: BucketDeleteOptions?): void;
 
   /**
    * Delete an object from the bucket if it exists.
