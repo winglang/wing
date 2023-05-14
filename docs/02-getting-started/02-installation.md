@@ -21,11 +21,6 @@ To install Wing, you will need the following setup:
 * [VSCode]
   * Not required, but currently supported with an [extension](#wing-ide-extension)
 
-In order to deploy to AWS, you will also need:
-
-* [Terraform](https://terraform.io/downloads)
-* [AWS account] and the [AWS CLI] with [AWS credentials]
-
 ## Wing CLI
 
 <br/>

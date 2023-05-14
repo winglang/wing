@@ -40,8 +40,8 @@ export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
   /** @internal */
   public _preSynthesize(): void {
     // add a dependency on each test function
-    for (const fn of this.findTests()) {
-      this.node.addDependency(fn);
+    for (const test of this.findTests()) {
+      this.node.addDependency(test._fn);
     }
 
     super._preSynthesize();
@@ -49,8 +49,8 @@ export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
 
   private getTestFunctionHandles(): Record<string, string> {
     const handles: Record<string, string> = {};
-    for (const fn of this.findTests()) {
-      handles[fn.node.path] = simulatorHandleToken(fn);
+    for (const test of this.findTests()) {
+      handles[test.node.path] = simulatorHandleToken(test._fn);
     }
     return handles;
   }

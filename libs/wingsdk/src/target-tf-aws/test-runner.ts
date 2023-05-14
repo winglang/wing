@@ -57,8 +57,8 @@ export class TestRunner extends cloud.TestRunner {
   /** @internal */
   public _preSynthesize(): void {
     // add a dependency on each test function
-    for (const fn of this.findTests()) {
-      this.node.addDependency(fn);
+    for (const test of this.findTests()) {
+      this.node.addDependency(test._fn);
     }
 
     super._preSynthesize();
@@ -66,13 +66,13 @@ export class TestRunner extends cloud.TestRunner {
 
   private getTestFunctionArns(): Map<string, string> {
     const arns = new Map<string, string>();
-    for (const fn of this.findTests()) {
-      if (!(fn instanceof AwsFunction)) {
+    for (const test of this.findTests()) {
+      if (!(test._fn instanceof AwsFunction)) {
         throw new Error(
-          `Unsupported test function type, ${fn.node.path} was not a tfaws.Function`
+          `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`
         );
       }
-      arns.set(fn.node.path, (fn as AwsFunction).arn);
+      arns.set(test.node.path, (test._fn as AwsFunction).arn);
     }
     return arns;
   }

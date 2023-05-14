@@ -197,6 +197,7 @@ impl<'s> Parser<'s> {
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
+			"test_statement" => self.build_test_statement(statement_node)?,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -550,6 +551,7 @@ impl<'s> Parser<'s> {
 									kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 										root: name.clone(),
 										fields: vec![],
+										span: name.span.clone(),
 									}),
 									span: self.node_span(&class_element),
 								})),
@@ -580,6 +582,7 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
+							span: name.span.clone(),
 						}),
 						span: name.span.clone(),
 					})),
@@ -897,6 +900,7 @@ impl<'s> Parser<'s> {
 								span: Default::default(),
 							},
 							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
 						},
 						property: self.node_symbol(&property)?,
 					}),
@@ -947,6 +951,7 @@ impl<'s> Parser<'s> {
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
+			span: self.node_span(&nested_node),
 		});
 		Ok(TypeAnnotation {
 			kind,
@@ -1383,5 +1388,49 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
+	}
+
+	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		let name_node = statement_node.child_by_field_name("name").unwrap();
+		let name_text = self.node_text(&name_node);
+		let test_id = format!("test:{}", &name_text[1..name_text.len() - 1]);
+		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+
+		let inflight_closure = Expr {
+			kind: ExprKind::FunctionClosure(FunctionDefinition {
+				body: FunctionBody::Statements(statements),
+				signature: FunctionSignature {
+					parameters: vec![],
+					return_type: None,
+					phase: Phase::Inflight,
+				},
+				is_static: false,
+				span: WingSpan::default(),
+				captures: RefCell::new(None),
+			}),
+			span: WingSpan::default(),
+			evaluated_type: RefCell::new(None),
+		};
+
+		Ok(StmtKind::Expression(Expr {
+			kind: ExprKind::New {
+				class: TypeAnnotation {
+					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+						root: Symbol::global("cloud"),
+						fields: vec![Symbol::global("Test")],
+						span: WingSpan::default(),
+					}),
+					span: WingSpan::default(),
+				},
+				obj_id: Some(test_id),
+				obj_scope: None,
+				arg_list: ArgList {
+					pos_args: vec![inflight_closure],
+					named_args: IndexMap::new(),
+				},
+			},
+			span: self.node_span(statement_node),
+			evaluated_type: RefCell::new(None),
+		}))
 	}
 }

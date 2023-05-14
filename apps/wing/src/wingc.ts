@@ -108,14 +108,21 @@ export async function load(options: WingCompilerLoadOptions) {
   } else {
     // mapping the root is not sufficient on linux/mac
     // we need to also map all directories in the root
+    const rootDeviceId = await fs.promises.stat("/").then((stat) => stat.dev.toString());
     const rootFiles = await fs.promises.readdir("/");
     for (const file of rootFiles) {
       // skip files and dot dirs
+      if (file.startsWith(".")) {
+        continue;
+      }
+ 
       const fullPath = `/${file}`;
+      const fileStat = await fs.promises.stat(fullPath);
       if (
-        !file.startsWith(".") &&
         // include directories and symlinks to directories
-        (await fs.promises.stat(fullPath)).isDirectory()
+        fileStat.isDirectory() &&
+        // on mac only preopen directories within the root device
+        (process.platform !== "darwin" || fileStat.dev.toString() === rootDeviceId)
       ) {
         try {
           await fs.promises.access(fullPath, fs.constants.R_OK | fs.constants.F_OK);
@@ -137,9 +144,7 @@ export async function load(options: WingCompilerLoadOptions) {
     if (resolvedDir === "/" || resolvedDir.match(/^[A-Z]:\\$/i)) {
       break;
     } else if (dirI > 100) {
-      throw new Error(
-        `Unable to find root directory to preopen for WASM compiler`
-      );
+      throw new Error(`Unable to find root directory to preopen for WASM compiler`);
     }
   }
 
@@ -178,9 +183,7 @@ export async function load(options: WingCompilerLoadOptions) {
   log("compiling wingc WASM module");
   const binary =
     options.wingcWASMData ??
-    new Uint8Array(
-      await fs.promises.readFile(resolve(__dirname, "../wingc.wasm"))
-    );
+    new Uint8Array(await fs.promises.readFile(resolve(__dirname, "../wingc.wasm")));
   const mod = new WebAssembly.Module(binary);
 
   log("instantiating wingc WASM module with importObject: %o", importObject);
@@ -242,11 +245,7 @@ export function invoke(
   const toFree = [[argPointer, bytes.byteLength]];
 
   try {
-    const argMemoryBuffer = new Uint8Array(
-      exports.memory.buffer,
-      argPointer,
-      bytes.byteLength
-    );
+    const argMemoryBuffer = new Uint8Array(exports.memory.buffer, argPointer, bytes.byteLength);
     argMemoryBuffer.set(bytes);
 
     const result = exports[func](argPointer, bytes.byteLength);
@@ -258,10 +257,7 @@ export function invoke(
       const returnLen = Number(result & LOW_MASK);
 
       const entireMemoryBuffer = new Uint8Array(exports.memory.buffer);
-      const extractedBuffer = entireMemoryBuffer.slice(
-        returnPtr,
-        returnPtr + returnLen
-      );
+      const extractedBuffer = entireMemoryBuffer.slice(returnPtr, returnPtr + returnLen);
 
       toFree.push([returnPtr, returnLen]);
 

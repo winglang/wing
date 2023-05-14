@@ -2,7 +2,7 @@
 
 ## clients/WingResource.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  WingResource {
     constructor({  }) {
     }
@@ -73,12 +73,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         {console.log(`my id is ${this.node.id}`)};
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/WingResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const WingResource = require("${self_client_path}")({});
-            const client = new WingResource({
+            const WingResourceClient = ${WingResource._toInflightType(this).text};
+            const client = new WingResourceClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -91,13 +97,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const get_path =  (c) =>  {
+    const getPath =  (c) =>  {
       {
         return c.node.path;
       }
     }
     ;
-    const get_display_name =  (r) =>  {
+    const getDisplayName =  (r) =>  {
       {
         return r.display.title;
       }
@@ -106,9 +112,9 @@ class $Root extends $stdlib.std.Resource {
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this,"WingResource");
     const another_resource = wr;
-    {console.log(`path of sqs.queue: ${(get_path(q))}`)};
-    {console.log(`path of wing resource: ${(get_path(wr))}`)};
-    const title = ((get_display_name(wr)) ?? "no display name");
+    {console.log(`path of sqs.queue: ${(getPath(q))}`)};
+    {console.log(`path of wing resource: ${(getPath(wr))}`)};
+    const title = ((getDisplayName(wr)) ?? "no display name");
     {console.log(`display name of wing resource: ${title}`)};
   }
 }

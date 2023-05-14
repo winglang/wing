@@ -2,7 +2,7 @@ import { spawnSync } from "child_process";
 import * as crypto from "crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
-import { normalPath } from "../util";
+import { normalPath } from "./misc";
 
 export interface Bundle {
   entrypointPath: string;

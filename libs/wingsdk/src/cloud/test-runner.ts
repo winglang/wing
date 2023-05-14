@@ -1,5 +1,5 @@
-import { Construct, IConstruct } from "constructs";
-import { Function } from "./function";
+import { Construct } from "constructs";
+import { Test } from "./test";
 import { fqnForType } from "../constants";
 import { App } from "../core/app";
 import { Resource } from "../std";
@@ -32,16 +32,6 @@ export abstract class TestRunner extends Resource {
     return App.of(scope).newAbstract(TEST_RUNNER_FQN, scope, id, props);
   }
 
-  /**
-   * Returns whether a construct represents a runnable test.
-   * @param c A construct.
-   * @returns Whether the construct is a test.
-   */
-  public static isTest(c: IConstruct): boolean {
-    const regex = /(\/test$|\/test:([^\\/])+$)/;
-    return regex.test(c.node.path);
-  }
-
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     super(scope, id);
 
@@ -54,19 +44,14 @@ export abstract class TestRunner extends Resource {
   }
 
   /**
-   * Find all tests in the construct tree. Currently these are all
-   * `cloud.Function` resources with a path that ends in `/test` or
-   * `/test:<name>`.
+   * Find all tests in the construct tree.
    * @returns A list of tests.
    */
-  public findTests(): Function[] {
-    const isFunction = (fn: any): fn is Function => {
-      return fn instanceof Function;
+  public findTests(): Test[] {
+    const isTest = (fn: any): fn is Test => {
+      return fn instanceof Test;
     };
-    return this.node.root.node
-      .findAll()
-      .filter(TestRunner.isTest)
-      .filter(isFunction);
+    return this.node.root.node.findAll().filter(isTest);
   }
 }
 
@@ -166,7 +151,7 @@ export enum TraceType {
  */
 export enum TestRunnerInflightMethods {
   /** `TestRunner.runTest` */
-  RUN_TEST = "run_test",
+  RUN_TEST = "runTest",
   /** `TestRunner.listTests` */
-  LIST_TESTS = "list_tests",
+  LIST_TESTS = "listTests",
 }

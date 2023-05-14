@@ -4,3 +4,4 @@ export * as core from "./core";
 export * as redis from "./redis";
 export * as std from "./std";
 export * as testing from "./testing";
+export * as util from "./util";

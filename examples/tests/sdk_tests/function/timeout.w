@@ -8,7 +8,7 @@ let c = new cloud.Counter();
 
 class Helper {
   init () {}
-  extern "../external/sleep.js" inflight sleep(time_ms: num);
+  extern "../external/sleep.js" inflight sleep(ms: num);
 }
 
 let helper = new Helper();
@@ -20,9 +20,7 @@ let f = new cloud.Function(inflight () => {
 }, cloud.FunctionProps {timeout: 1s});
 
 // doesn't work yet- see issue: https://github.com/winglang/wing/issues/1980
-new cloud.Function(inflight () => {
+test "function timeout" {
   f.invoke("");
   assert(c.peek() == 0);
-}) as "test:function timeout";
-
-
+}

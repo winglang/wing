@@ -2,8 +2,13 @@ import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
-import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import {
+  mkdtemp,
+  sanitizeCode,
+  tfResourcesOf,
+  tfSanitize,
+  treeJsonOf,
+} from "../util";
 
 test("default table behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });

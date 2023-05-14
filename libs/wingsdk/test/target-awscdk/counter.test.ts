@@ -3,7 +3,7 @@ import { test, expect } from "vitest";
 import { Counter, Function, CounterInflightMethods } from "../../src/cloud";
 import * as awscdk from "../../src/target-awscdk";
 import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
+import { sanitizeCode, mkdtemp } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",

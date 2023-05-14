@@ -20,7 +20,7 @@ if true {
   }
 }
 
-new cloud.Function(inflight (s: str): str => {
+test "test" {
   if true {
     let x = 2;
     if true && x + 2 == 4 {
@@ -37,4 +37,4 @@ new cloud.Function(inflight (s: str): str => {
       assert(false);
     }
   }
-}) as "test";
+}
