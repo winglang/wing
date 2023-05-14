@@ -2973,16 +2973,18 @@ impl<'a> TypeChecker<'a> {
 		// `foo.Bar.baz()` case (where `baz()`) is a static method of class `Bar`.
 		if !path.is_empty() {
 			let result = env.lookup_nested(&path.iter().collect_vec(), Some(self.statement_idx));
-			if let LookupResult::Found(symbol_kind, info) = result {
+			if let LookupResult::Found(symbol_kind, _) = result {
 				if let SymbolKind::Namespace(_) = symbol_kind {
-
 					// resolve "Util" as a user defined class within the namespace
 					let root = path.pop().unwrap();
 					path.reverse();
-					path.push(Symbol { name: "Util".to_string(), span: root.span.clone() });
+					path.push(Symbol {
+						name: "Util".to_string(),
+						span: root.span.clone(),
+					});
 
-					let ut = UserDefinedType { 
-						root, 
+					let ut = UserDefinedType {
+						root,
 						fields: path,
 						span: WingSpan::default(),
 					};
@@ -3017,9 +3019,11 @@ impl<'a> TypeChecker<'a> {
 					if let Some(var) = var.as_variable() {
 						var
 					} else {
-
 						self.variable_error(TypeError {
-							message: format!("Expected identifier \"{}\" to be a variable, but it's a {}", symbol.name, var),
+							message: format!(
+								"Expected identifier \"{}\" to be a variable, but it's a {}",
+								symbol.name, var
+							),
 							span: symbol.span.clone(),
 						})
 					}
@@ -3559,4 +3563,3 @@ mod tests {
 		assert!(!str_fn.is_subtype_of(&opt_str_fn));
 	}
 }
-
