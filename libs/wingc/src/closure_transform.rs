@@ -7,7 +7,6 @@ use crate::{
 		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
 		Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
-	diagnostic::WingSpan,
 	fold::{self, Fold},
 };
 
@@ -70,20 +69,20 @@ impl Fold for ClosureTransformer {
 		// If we are inside a scope with "this", add define `let __parent_this = this` which can be
 		// used by the newly-created preflight classes
 		if self.inside_scope_with_this {
-			let parent_this_name = Symbol::global(PARENT_THIS_NAME); // TODO: can we use a span?
-			let this_name = Symbol::global("this"); // TODO: can we use a span?
+			let parent_this_name = Symbol::new(PARENT_THIS_NAME, node.span.clone());
+			let this_name = Symbol::new("this", node.span.clone());
 			let parent_this_def = Stmt {
 				kind: StmtKind::VariableDef {
 					reassignable: false,
 					var_name: parent_this_name,
 					initial_value: Expr {
 						kind: ExprKind::Reference(Reference::Identifier(this_name)),
-						span: WingSpan::default(),          // TODO: can we use a span?
+						span: node.span.clone(),
 						evaluated_type: RefCell::new(None), // thank god we have type reference
 					},
 					type_: None,
 				},
-				span: WingSpan::default(), // TODO: can we use a span?
+				span: node.span.clone(),
 				idx: 0,
 			};
 

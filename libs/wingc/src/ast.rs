@@ -16,6 +16,13 @@ pub struct Symbol {
 }
 
 impl Symbol {
+	pub fn new<S: Into<String>>(name: S, span: WingSpan) -> Self {
+		Self {
+			name: name.into(),
+			span,
+		}
+	}
+
 	pub fn global<S: Into<String>>(name: S) -> Self {
 		Self {
 			name: name.into(),
