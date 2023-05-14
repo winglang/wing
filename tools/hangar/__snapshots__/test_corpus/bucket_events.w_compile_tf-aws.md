@@ -2,7 +2,7 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  $Inflight1 {
     constructor({  }) {
     }
@@ -19,7 +19,7 @@ module.exports = function() {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  $Inflight2 {
     constructor({  }) {
     }
@@ -36,7 +36,7 @@ module.exports = function() {
 
 ## clients/$Inflight3.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  $Inflight3 {
     constructor({  }) {
     }
@@ -60,7 +60,7 @@ module.exports = function({ other }) {
     async handle(key)  {
       {
         {console.log(`last key ${key}`)};
-        (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+        (await other.put("last_operation_key",`\"${key}\"`));
       }
     }
   }
@@ -71,7 +71,7 @@ module.exports = function({ other }) {
 
 ## clients/$Inflight5.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  $Inflight5 {
     constructor({  }) {
     }
@@ -128,7 +128,7 @@ module.exports = function({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test\",\"${aws_lambda_function.root_test_AAE85061.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
     }
   },
   "provider": {
@@ -219,11 +219,11 @@ module.exports = function({ b }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_test_IamRole_6CDC2D16": {
+      "root_testtest_Handler_IamRole_6C1728D1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRole",
-            "uniqueId": "root_test_IamRole_6CDC2D16"
+            "path": "root/Default/Default/test:test/Handler/IamRole",
+            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -320,15 +320,15 @@ module.exports = function({ b }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_other_otheronupdateOnMessage02fb2142_IamRole_9D20DEAB.name}"
       },
-      "root_test_IamRolePolicy_474A6820": {
+      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRolePolicy",
-            "uniqueId": "root_test_IamRolePolicy_474A6820"
+            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
+            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -422,15 +422,15 @@ module.exports = function({ b }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_other_otheronupdateOnMessage02fb2142_IamRole_9D20DEAB.name}"
       },
-      "root_test_IamRolePolicyAttachment_1102A28A": {
+      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRolePolicyAttachment",
-            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A"
+            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_lambda_function": {
@@ -665,27 +665,27 @@ module.exports = function({ b }) {
           "subnet_ids": []
         }
       },
-      "root_test_AAE85061": {
+      "root_testtest_Handler_046C3415": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/Default",
-            "uniqueId": "root_test_AAE85061"
+            "path": "root/Default/Default/test:test/Handler/Default",
+            "uniqueId": "root_testtest_Handler_046C3415"
           }
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.root_b_6D0D1E6D.bucket}",
             "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "test-c8b6eece"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
           }
         },
-        "function_name": "test-c8b6eece",
+        "function_name": "Handler-c8f4f2a1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -1118,11 +1118,11 @@ module.exports = function({ b }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_test_S3Object_A16CD789": {
+      "root_testtest_Handler_S3Object_71CD07AC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/S3Object",
-            "uniqueId": "root_test_S3Object_A16CD789"
+            "path": "root/Default/Default/test:test/Handler/S3Object",
+            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -1368,12 +1368,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1 = require("${self_client_path}")({});
-            const client = new $Inflight1({
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1393,12 +1399,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2 = require("${self_client_path}")({});
-            const client = new $Inflight2({
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1418,12 +1430,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight3 = require("${self_client_path}")({});
-            const client = new $Inflight3({
+            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
+            const client = new $Inflight3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1443,15 +1461,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const other_client = this._lift(other);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+        const other_client = context._lift(other);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            other: ${other_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight4 = require("${self_client_path}")({
-              other: ${other_client},
-            });
-            const client = new $Inflight4({
+            const $Inflight4Client = ${$Inflight4._toInflightType(this).text};
+            const client = new $Inflight4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1472,12 +1495,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight5 = require("${self_client_path}")({});
-            const client = new $Inflight5({
+            const $Inflight5Client = ${$Inflight5._toInflightType(this).text};
+            const client = new $Inflight5Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1497,15 +1526,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const b_client = this._lift(b);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight6.inflight.js".replace(/\\/g, "/");
+        const b_client = context._lift(b);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            b: ${b_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight6 = require("${self_client_path}")({
-              b: ${b_client},
-            });
-            const client = new $Inflight6({
+            const $Inflight6Client = ${$Inflight6._toInflightType(this).text};
+            const client = new $Inflight6Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1528,7 +1562,7 @@ class $Root extends $stdlib.std.Resource {
     (b.onCreate(new $Inflight3(this,"$Inflight3")));
     (b.onEvent(new $Inflight4(this,"$Inflight4")));
     (other.onEvent(new $Inflight5(this,"$Inflight5")));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $Inflight6(this,"$Inflight6"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight6(this,"$Inflight6"));
   }
 }
 class $App extends $AppBase {

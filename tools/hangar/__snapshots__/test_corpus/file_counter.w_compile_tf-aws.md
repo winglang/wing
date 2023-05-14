@@ -2,7 +2,7 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ bucket, counter }) {
+module.exports = function({ counter, bucket }) {
   class  $Inflight1 {
     constructor({  }) {
     }
@@ -244,17 +244,22 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const bucket_client = this._lift(bucket);
-        const counter_client = this._lift(counter);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const counter_client = context._lift(counter);
+        const bucket_client = context._lift(bucket);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            counter: ${counter_client},
+            bucket: ${bucket_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1 = require("${self_client_path}")({
-              bucket: ${bucket_client},
-              counter: ${counter_client},
-            });
-            const client = new $Inflight1({
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

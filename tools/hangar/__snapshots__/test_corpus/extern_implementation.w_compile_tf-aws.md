@@ -36,18 +36,18 @@ module.exports = function({ f }) {
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
     constructor({  }) {
     }
-    static async regex_inflight(pattern, text)  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["regex_inflight"])(pattern, text)
+    static async regexInflight(pattern, text)  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
     }
-    static async get_uuid()  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["get_uuid"])()
+    static async getUuid()  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["getUuid"])()
     }
-    static async get_data()  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["get_data"])()
+    static async getData()  {
+      return (require("<ABSOLUTE_PATH>/external_js.js")["getData"])()
     }
     async print(msg)  {
       return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
@@ -55,10 +55,10 @@ module.exports = function() {
     async call()  {
       {
         const __parent_this = this;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regex_inflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regex_inflight("[a-z]+-\\d+","abc-123")))};
-        const uuid = (await Foo.get_uuid());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regexInflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regexInflight("[a-z]+-\\d+","abc-123")))};
+        const uuid = (await Foo.getUuid());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.get_data()) === "Cool data!")'`)})(((await Foo.get_data()) === "Cool data!"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.getData()) === "Cool data!")'`)})(((await Foo.getData()) === "Cool data!"))};
       }
     }
   }
@@ -88,7 +88,7 @@ module.exports = function() {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:call\",\"${aws_lambda_function.root_testcall_517ABBF6.arn}\"],[\"root/Default/Default/test:console\",\"${aws_lambda_function.root_testconsole_65723C7E.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:call\",\"${aws_lambda_function.root_testcall_Handler_C73C89A7.arn}\"],[\"root/Default/Default/test:console\",\"${aws_lambda_function.root_testconsole_Handler_DD0D6BBA.arn}\"]]"
     }
   },
   "provider": {
@@ -98,114 +98,114 @@ module.exports = function() {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testcall_IamRole_ACAC0DA1": {
+      "root_testcall_Handler_IamRole_B9068115": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/IamRole",
-            "uniqueId": "root_testcall_IamRole_ACAC0DA1"
+            "path": "root/Default/Default/test:call/Handler/IamRole",
+            "uniqueId": "root_testcall_Handler_IamRole_B9068115"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testconsole_IamRole_73B3A70E": {
+      "root_testconsole_Handler_IamRole_65E31A0B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/IamRole",
-            "uniqueId": "root_testconsole_IamRole_73B3A70E"
+            "path": "root/Default/Default/test:console/Handler/IamRole",
+            "uniqueId": "root_testconsole_Handler_IamRole_65E31A0B"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testcall_IamRolePolicy_D0EC9ADF": {
+      "root_testcall_Handler_IamRolePolicy_E93D23FF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/IamRolePolicy",
-            "uniqueId": "root_testcall_IamRolePolicy_D0EC9ADF"
+            "path": "root/Default/Default/test:call/Handler/IamRolePolicy",
+            "uniqueId": "root_testcall_Handler_IamRolePolicy_E93D23FF"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testcall_IamRole_ACAC0DA1.name}"
+        "role": "${aws_iam_role.root_testcall_Handler_IamRole_B9068115.name}"
       },
-      "root_testconsole_IamRolePolicy_2EC6F84C": {
+      "root_testconsole_Handler_IamRolePolicy_0247158D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/IamRolePolicy",
-            "uniqueId": "root_testconsole_IamRolePolicy_2EC6F84C"
+            "path": "root/Default/Default/test:console/Handler/IamRolePolicy",
+            "uniqueId": "root_testconsole_Handler_IamRolePolicy_0247158D"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testconsole_IamRole_73B3A70E.name}"
+        "role": "${aws_iam_role.root_testconsole_Handler_IamRole_65E31A0B.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testcall_IamRolePolicyAttachment_B0B58D7B": {
+      "root_testcall_Handler_IamRolePolicyAttachment_D5A14EE2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/IamRolePolicyAttachment",
-            "uniqueId": "root_testcall_IamRolePolicyAttachment_B0B58D7B"
+            "path": "root/Default/Default/test:call/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testcall_Handler_IamRolePolicyAttachment_D5A14EE2"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcall_IamRole_ACAC0DA1.name}"
+        "role": "${aws_iam_role.root_testcall_Handler_IamRole_B9068115.name}"
       },
-      "root_testconsole_IamRolePolicyAttachment_740041DD": {
+      "root_testconsole_Handler_IamRolePolicyAttachment_88293121": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/IamRolePolicyAttachment",
-            "uniqueId": "root_testconsole_IamRolePolicyAttachment_740041DD"
+            "path": "root/Default/Default/test:console/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testconsole_Handler_IamRolePolicyAttachment_88293121"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testconsole_IamRole_73B3A70E.name}"
+        "role": "${aws_iam_role.root_testconsole_Handler_IamRole_65E31A0B.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testcall_517ABBF6": {
+      "root_testcall_Handler_C73C89A7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/Default",
-            "uniqueId": "root_testcall_517ABBF6"
+            "path": "root/Default/Default/test:call/Handler/Default",
+            "uniqueId": "root_testcall_Handler_C73C89A7"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "test-call-c82d98b7"
+            "WING_FUNCTION_NAME": "Handler-c8074088"
           }
         },
-        "function_name": "test-call-c82d98b7",
+        "function_name": "Handler-c8074088",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcall_IamRole_ACAC0DA1.arn}",
+        "role": "${aws_iam_role.root_testcall_Handler_IamRole_B9068115.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcall_S3Object_7FFD9CF8.key}",
+        "s3_key": "${aws_s3_object.root_testcall_Handler_S3Object_343DEC5F.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testconsole_65723C7E": {
+      "root_testconsole_Handler_DD0D6BBA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/Default",
-            "uniqueId": "root_testconsole_65723C7E"
+            "path": "root/Default/Default/test:console/Handler/Default",
+            "uniqueId": "root_testconsole_Handler_DD0D6BBA"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "test-console-c86d99aa"
+            "WING_FUNCTION_NAME": "Handler-c8fb077d"
           }
         },
-        "function_name": "test-console-c86d99aa",
+        "function_name": "Handler-c8fb077d",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testconsole_IamRole_73B3A70E.arn}",
+        "role": "${aws_iam_role.root_testconsole_Handler_IamRole_65E31A0B.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testconsole_S3Object_DC38E410.key}",
+        "s3_key": "${aws_s3_object.root_testconsole_Handler_S3Object_12E2B161.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -225,22 +225,22 @@ module.exports = function() {
       }
     },
     "aws_s3_object": {
-      "root_testcall_S3Object_7FFD9CF8": {
+      "root_testcall_Handler_S3Object_343DEC5F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/S3Object",
-            "uniqueId": "root_testcall_S3Object_7FFD9CF8"
+            "path": "root/Default/Default/test:call/Handler/S3Object",
+            "uniqueId": "root_testcall_Handler_S3Object_343DEC5F"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testconsole_S3Object_DC38E410": {
+      "root_testconsole_Handler_S3Object_12E2B161": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/S3Object",
-            "uniqueId": "root_testconsole_S3Object_DC38E410"
+            "path": "root/Default/Default/test:console/Handler/S3Object",
+            "uniqueId": "root_testconsole_Handler_S3Object_12E2B161"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -265,21 +265,27 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("regex_inflight", "get_uuid", "get_data", "print", "call");
+        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call");
         const __parent_this = this;
       }
-      static get_greeting(name)  {
-        return (require("<ABSOLUTE_PATH>/external_js.js")["get_greeting"])(name)
+      static getGreeting(name)  {
+        return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
       }
       static v4()  {
         return (require("<ABSOLUTE_PATH>/index.js")["v4"])()
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -291,13 +297,13 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("call")) {
         }
-        if (ops.includes("get_data")) {
+        if (ops.includes("getData")) {
         }
-        if (ops.includes("get_uuid")) {
+        if (ops.includes("getUuid")) {
         }
         if (ops.includes("print")) {
         }
-        if (ops.includes("regex_inflight")) {
+        if (ops.includes("regexInflight")) {
         }
         super._registerBind(host, ops);
       }
@@ -307,15 +313,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const f_client = this._lift(f);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const f_client = context._lift(f);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            f: ${f_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1 = require("${self_client_path}")({
-              f: ${f_client},
-            });
-            const client = new $Inflight1({
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -336,15 +347,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const f_client = this._lift(f);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const f_client = context._lift(f);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            f: ${f_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2 = require("${self_client_path}")({
-              f: ${f_client},
-            });
-            const client = new $Inflight2({
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -360,11 +376,11 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.get_greeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.getGreeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.getGreeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:call",new $Inflight1(this,"$Inflight1"));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:console",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:call",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:console",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

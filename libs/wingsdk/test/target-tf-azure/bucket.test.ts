@@ -3,8 +3,8 @@ import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import * as tfazure from "../../src/target-tf-azure";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
 import {
+  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,

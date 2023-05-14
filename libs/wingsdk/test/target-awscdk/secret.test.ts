@@ -1,9 +1,9 @@
-import { CfnOutput, Stack } from "aws-cdk-lib";
+import { Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Secret } from "../../src/cloud";
 import * as awscdk from "../../src/target-awscdk";
-import { mkdtemp } from "../../src/util";
+import { mkdtemp } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",

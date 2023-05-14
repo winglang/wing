@@ -204,6 +204,7 @@ impl Fold for ClosureTransformer {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 						root: new_class_name.clone(),
 						fields: vec![],
+						span: expr.span.clone(),
 					}),
 					span: expr.span.clone(),
 				};

@@ -2,7 +2,7 @@
 
 ## clients/C1.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  C1 {
     constructor({  }) {
     }
@@ -14,7 +14,7 @@ module.exports = function() {
 
 ## clients/C2.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  C2 {
     constructor({ x }) {
       this.x = x;
@@ -27,7 +27,7 @@ module.exports = function() {
 
 ## clients/C3.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  C3 {
     constructor({ x, y }) {
       this.x = x;
@@ -41,7 +41,7 @@ module.exports = function() {
 
 ## clients/C4.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  C4 {
     constructor({  }) {
     }
@@ -97,12 +97,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         const __parent_this = this;
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/C1.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const C1 = require("${self_client_path}")({});
-            const client = new C1({
+            const C1Client = ${C1._toInflightType(this).text};
+            const client = new C1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -121,13 +127,19 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
         this.x = 1;
       }
-      _toInflight() {
-        const x_client = this._lift(this.x);
+      static _toInflightType(context) {
         const self_client_path = "./clients/C2.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const x_client = this._lift(this.x);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const C2 = require("${self_client_path}")({});
-            const client = new C2({
+            const C2Client = ${C2._toInflightType(this).text};
+            const client = new C2Client({
               x: ${x_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -152,14 +164,20 @@ class $Root extends $stdlib.std.Resource {
           this.y = b;
         }
       }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/C3.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
       _toInflight() {
         const x_client = this._lift(this.x);
         const y_client = this._lift(this.y);
-        const self_client_path = "./clients/C3.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const C3 = require("${self_client_path}")({});
-            const client = new C3({
+            const C3Client = ${C3._toInflightType(this).text};
+            const client = new C3Client({
               x: ${x_client},
               y: ${y_client},
             });
@@ -187,12 +205,18 @@ class $Root extends $stdlib.std.Resource {
           return 1;
         }
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/C4.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const C4 = require("${self_client_path}")({});
-            const client = new C4({
+            const C4Client = ${C4._toInflightType(this).text};
+            const client = new C4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

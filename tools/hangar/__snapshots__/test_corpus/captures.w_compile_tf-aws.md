@@ -312,9 +312,6 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
           }
         },
         "bucket": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
-        "depends_on": [
-          "aws_s3_bucket.root_PublicBucket_73AE6C59"
-        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"]}]}"
       }
     },
@@ -331,6 +328,19 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
         "bucket": "${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
+      },
+      "root_PublicBucket_PublicAccessBlock_A244D6BC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/PublicBucket/PublicAccessBlock",
+            "uniqueId": "root_PublicBucket_PublicAccessBlock_A244D6BC"
+          }
+        },
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "bucket": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false
       },
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
@@ -461,19 +471,24 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const bucket1_client = this._lift(bucket1);
-        const bucket2_client = this._lift(bucket2);
-        const bucket3_client = this._lift(bucket3);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const bucket1_client = context._lift(bucket1);
+        const bucket2_client = context._lift(bucket2);
+        const bucket3_client = context._lift(bucket3);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            bucket1: ${bucket1_client},
+            bucket2: ${bucket2_client},
+            bucket3: ${bucket3_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1 = require("${self_client_path}")({
-              bucket1: ${bucket1_client},
-              bucket2: ${bucket2_client},
-              bucket3: ${bucket3_client},
-            });
-            const client = new $Inflight1({
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -484,8 +499,8 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket1, host, ["list", "public_url", "put"]);
-          this._registerBindObject(bucket2, host, ["get", "public_url"]);
+          this._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
+          this._registerBindObject(bucket2, host, ["get", "publicUrl"]);
           this._registerBindObject(bucket3, host, ["get"]);
         }
         super._registerBind(host, ops);
@@ -500,8 +515,8 @@ class $Root extends $stdlib.std.Resource {
     const handler = new $Inflight1(this,"$Inflight1");
     (queue.addConsumer(handler,{ batchSize: 5 }));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: Object.freeze({}) });
-    const empty_env = Object.freeze({});
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: empty_env });
+    const emptyEnv = Object.freeze({});
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: emptyEnv });
   }
 }
 class $App extends $AppBase {

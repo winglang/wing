@@ -2,8 +2,8 @@ import path from "path";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../../src/util";
 import {
+  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfResourcesWithProperty,
@@ -24,6 +24,7 @@ test("default website behavior", () => {
     "aws_cloudfront_distribution",
     "aws_s3_bucket",
     "aws_s3_bucket_policy",
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration",
     "aws_s3_bucket_website_configuration",
     "aws_s3_object",
@@ -70,6 +71,7 @@ test("website with add_json", () => {
     "aws_cloudfront_distribution",
     "aws_s3_bucket",
     "aws_s3_bucket_policy",
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_bucket_server_side_encryption_configuration",
     "aws_s3_bucket_website_configuration",
     "aws_s3_object",

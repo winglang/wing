@@ -2,25 +2,25 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ my_bool, my_dur, my_num, my_second_bool, my_str }) {
+module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
   class  $Inflight1 {
     constructor({  }) {
     }
     async handle(s)  {
       {
-        {console.log(my_str)};
-        const n = my_num;
+        {console.log(myStr)};
+        const n = myNum;
         {console.log(`${n}`)};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(my_second_bool === false)'`)})((my_second_bool === false))};
-        if (my_bool) {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
+        if (myBool) {
           {console.log("bool=true")};
         }
         else {
           {console.log("bool=false")};
         }
-        const min = my_dur.minutes;
-        const sec = my_dur.seconds;
-        const hr = my_dur.hours;
+        const min = myDur.minutes;
+        const sec = myDur.seconds;
+        const hr = myDur.hours;
         const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
       }
@@ -166,23 +166,28 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const my_bool_client = this._lift(my_bool);
-        const my_dur_client = this._lift(my_dur);
-        const my_num_client = this._lift(my_num);
-        const my_second_bool_client = this._lift(my_second_bool);
-        const my_str_client = this._lift(my_str);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const myStr_client = context._lift(myStr);
+        const myNum_client = context._lift(myNum);
+        const mySecondBool_client = context._lift(mySecondBool);
+        const myBool_client = context._lift(myBool);
+        const myDur_client = context._lift(myDur);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            myStr: ${myStr_client},
+            myNum: ${myNum_client},
+            mySecondBool: ${mySecondBool_client},
+            myBool: ${myBool_client},
+            myDur: ${myDur_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1 = require("${self_client_path}")({
-              my_bool: ${my_bool_client},
-              my_dur: ${my_dur_client},
-              my_num: ${my_num_client},
-              my_second_bool: ${my_second_bool_client},
-              my_str: ${my_str_client},
-            });
-            const client = new $Inflight1({
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -193,20 +198,20 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(my_bool, host, []);
-          this._registerBindObject(my_dur, host, []);
-          this._registerBindObject(my_num, host, []);
-          this._registerBindObject(my_second_bool, host, []);
-          this._registerBindObject(my_str, host, []);
+          this._registerBindObject(myBool, host, []);
+          this._registerBindObject(myDur, host, []);
+          this._registerBindObject(myNum, host, []);
+          this._registerBindObject(mySecondBool, host, []);
+          this._registerBindObject(myStr, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const my_str = "hello, string";
-    const my_num = 1234;
-    const my_bool = true;
-    const my_second_bool = false;
-    const my_dur = $stdlib.std.Duration.fromSeconds(600);
+    const myStr = "hello, string";
+    const myNum = 1234;
+    const myBool = true;
+    const mySecondBool = false;
+    const myDur = $stdlib.std.Duration.fromSeconds(600);
     const handler = new $Inflight1(this,"$Inflight1");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler);
   }

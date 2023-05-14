@@ -2,12 +2,12 @@
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
     constructor({ data }) {
       this.data = data;
     }
-    async get_stuff()  {
+    async getStuff()  {
       {
         const __parent_this = this;
         return this.data.field0;
@@ -63,17 +63,23 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, b) {
         super(scope, id);
-        this._addInflightOps("get_stuff");
+        this._addInflightOps("getStuff");
         const __parent_this = this;
         this.data = b;
       }
-      _toInflight() {
-        const data_client = this._lift(this.data);
+      static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const data_client = this._lift(this.data);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
               data: ${data_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -85,7 +91,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.data, host, []);
         }
-        if (ops.includes("get_stuff")) {
+        if (ops.includes("getStuff")) {
           this._registerBindObject(this.data.field0, host, []);
         }
         super._registerBind(host, ops);

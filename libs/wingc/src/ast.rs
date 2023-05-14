@@ -61,13 +61,19 @@ impl PartialEq for Symbol {
 
 impl Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{} (at {})", self.name, self.span)
+		write!(f, "{}", self.name)
 	}
 }
 
 impl Equivalent<Symbol> for str {
 	fn equivalent(&self, key: &Symbol) -> bool {
 		self == key.name
+	}
+}
+
+impl From<&str> for Symbol {
+	fn from(s: &str) -> Self {
+		Symbol::global(s)
 	}
 }
 
@@ -143,6 +149,13 @@ pub struct FunctionTypeAnnotation {
 pub struct UserDefinedType {
 	pub root: Symbol,
 	pub fields: Vec<Symbol>,
+	pub span: WingSpan,
+}
+
+impl Spanned for UserDefinedType {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
 }
 
 impl Display for UserDefinedType {
@@ -660,31 +673,31 @@ impl Display for Reference {
 }
 
 /// Represents any type that has a span.
-pub trait ToSpan {
+pub trait Spanned {
 	fn span(&self) -> WingSpan;
 }
 
-impl ToSpan for Stmt {
+impl Spanned for Stmt {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl ToSpan for Expr {
+impl Spanned for Expr {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl ToSpan for Symbol {
+impl Spanned for Symbol {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl<T> ToSpan for Box<T>
+impl<T> Spanned for Box<T>
 where
-	T: ToSpan,
+	T: Spanned,
 {
 	fn span(&self) -> WingSpan {
 		(&**self).span()

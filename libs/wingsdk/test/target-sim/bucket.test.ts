@@ -269,7 +269,9 @@ test("get invalid object throws an error", async () => {
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
   // THEN
-  await expect(() => client.get("unknown.txt")).rejects.toThrowError();
+  await expect(() => client.get("unknown.txt")).rejects.toThrowError(
+    /Object does not exist/
+  );
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();

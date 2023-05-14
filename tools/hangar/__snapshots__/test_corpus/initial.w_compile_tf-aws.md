@@ -72,7 +72,7 @@ module.exports = function({ counterC }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:initial:default\",\"${aws_lambda_function.root_testinitialdefault_7AB6A06C.arn}\"],[\"root/Default/Default/test:initial:positive-value\",\"${aws_lambda_function.root_testinitialpositivevalue_7C0AF18B.arn}\"],[\"root/Default/Default/test:initial:negative-value\",\"${aws_lambda_function.root_testinitialnegativevalue_C113FF0B.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:initial:default\",\"${aws_lambda_function.root_testinitialdefault_Handler_6C031FD0.arn}\"],[\"root/Default/Default/test:initial:positive-value\",\"${aws_lambda_function.root_testinitialpositivevalue_Handler_11CA4DA1.arn}\"],[\"root/Default/Default/test:initial:negative-value\",\"${aws_lambda_function.root_testinitialnegativevalue_Handler_108DD32C.arn}\"]]"
     }
   },
   "provider": {
@@ -135,171 +135,171 @@ module.exports = function({ counterC }) {
       }
     },
     "aws_iam_role": {
-      "root_testinitialdefault_IamRole_0C9F829C": {
+      "root_testinitialdefault_Handler_IamRole_CAD17AD2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:default/IamRole",
-            "uniqueId": "root_testinitialdefault_IamRole_0C9F829C"
+            "path": "root/Default/Default/test:initial:default/Handler/IamRole",
+            "uniqueId": "root_testinitialdefault_Handler_IamRole_CAD17AD2"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testinitialnegativevalue_IamRole_1A6EDBCE": {
+      "root_testinitialnegativevalue_Handler_IamRole_B1DCC657": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/IamRole",
-            "uniqueId": "root_testinitialnegativevalue_IamRole_1A6EDBCE"
+            "path": "root/Default/Default/test:initial:negative-value/Handler/IamRole",
+            "uniqueId": "root_testinitialnegativevalue_Handler_IamRole_B1DCC657"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testinitialpositivevalue_IamRole_1BB7220A": {
+      "root_testinitialpositivevalue_Handler_IamRole_F254394C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/IamRole",
-            "uniqueId": "root_testinitialpositivevalue_IamRole_1BB7220A"
+            "path": "root/Default/Default/test:initial:positive-value/Handler/IamRole",
+            "uniqueId": "root_testinitialpositivevalue_Handler_IamRole_F254394C"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinitialdefault_IamRolePolicy_4F54C0B2": {
+      "root_testinitialdefault_Handler_IamRolePolicy_3A417076": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:default/IamRolePolicy",
-            "uniqueId": "root_testinitialdefault_IamRolePolicy_4F54C0B2"
+            "path": "root/Default/Default/test:initial:default/Handler/IamRolePolicy",
+            "uniqueId": "root_testinitialdefault_Handler_IamRolePolicy_3A417076"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterA_FE83A0AC.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testinitialdefault_IamRole_0C9F829C.name}"
+        "role": "${aws_iam_role.root_testinitialdefault_Handler_IamRole_CAD17AD2.name}"
       },
-      "root_testinitialnegativevalue_IamRolePolicy_2F38CD01": {
+      "root_testinitialnegativevalue_Handler_IamRolePolicy_8EBB5CE7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/IamRolePolicy",
-            "uniqueId": "root_testinitialnegativevalue_IamRolePolicy_2F38CD01"
+            "path": "root/Default/Default/test:initial:negative-value/Handler/IamRolePolicy",
+            "uniqueId": "root_testinitialnegativevalue_Handler_IamRolePolicy_8EBB5CE7"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterC_5BAA0CEC.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testinitialnegativevalue_IamRole_1A6EDBCE.name}"
+        "role": "${aws_iam_role.root_testinitialnegativevalue_Handler_IamRole_B1DCC657.name}"
       },
-      "root_testinitialpositivevalue_IamRolePolicy_668CB553": {
+      "root_testinitialpositivevalue_Handler_IamRolePolicy_B59A972F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/IamRolePolicy",
-            "uniqueId": "root_testinitialpositivevalue_IamRolePolicy_668CB553"
+            "path": "root/Default/Default/test:initial:positive-value/Handler/IamRolePolicy",
+            "uniqueId": "root_testinitialpositivevalue_Handler_IamRolePolicy_B59A972F"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_counterB_3EAEEDE1.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testinitialpositivevalue_IamRole_1BB7220A.name}"
+        "role": "${aws_iam_role.root_testinitialpositivevalue_Handler_IamRole_F254394C.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinitialdefault_IamRolePolicyAttachment_5D70A5A5": {
+      "root_testinitialdefault_Handler_IamRolePolicyAttachment_6E5E7FDD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:default/IamRolePolicyAttachment",
-            "uniqueId": "root_testinitialdefault_IamRolePolicyAttachment_5D70A5A5"
+            "path": "root/Default/Default/test:initial:default/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinitialdefault_Handler_IamRolePolicyAttachment_6E5E7FDD"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinitialdefault_IamRole_0C9F829C.name}"
+        "role": "${aws_iam_role.root_testinitialdefault_Handler_IamRole_CAD17AD2.name}"
       },
-      "root_testinitialnegativevalue_IamRolePolicyAttachment_5A185C0D": {
+      "root_testinitialnegativevalue_Handler_IamRolePolicyAttachment_6E9FD7AE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/IamRolePolicyAttachment",
-            "uniqueId": "root_testinitialnegativevalue_IamRolePolicyAttachment_5A185C0D"
+            "path": "root/Default/Default/test:initial:negative-value/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinitialnegativevalue_Handler_IamRolePolicyAttachment_6E9FD7AE"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinitialnegativevalue_IamRole_1A6EDBCE.name}"
+        "role": "${aws_iam_role.root_testinitialnegativevalue_Handler_IamRole_B1DCC657.name}"
       },
-      "root_testinitialpositivevalue_IamRolePolicyAttachment_BBC11CFA": {
+      "root_testinitialpositivevalue_Handler_IamRolePolicyAttachment_532DD068": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/IamRolePolicyAttachment",
-            "uniqueId": "root_testinitialpositivevalue_IamRolePolicyAttachment_BBC11CFA"
+            "path": "root/Default/Default/test:initial:positive-value/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinitialpositivevalue_Handler_IamRolePolicyAttachment_532DD068"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinitialpositivevalue_IamRole_1BB7220A.name}"
+        "role": "${aws_iam_role.root_testinitialpositivevalue_Handler_IamRole_F254394C.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinitialdefault_7AB6A06C": {
+      "root_testinitialdefault_Handler_6C031FD0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:default/Default",
-            "uniqueId": "root_testinitialdefault_7AB6A06C"
+            "path": "root/Default/Default/test:initial:default/Handler/Default",
+            "uniqueId": "root_testinitialdefault_Handler_6C031FD0"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_220d28dd": "${aws_dynamodb_table.root_counterA_FE83A0AC.name}",
-            "WING_FUNCTION_NAME": "test-initial-default-c89b4269"
+            "WING_FUNCTION_NAME": "Handler-c88a038b"
           }
         },
-        "function_name": "test-initial-default-c89b4269",
+        "function_name": "Handler-c88a038b",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinitialdefault_IamRole_0C9F829C.arn}",
+        "role": "${aws_iam_role.root_testinitialdefault_Handler_IamRole_CAD17AD2.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinitialdefault_S3Object_A9D32834.key}",
+        "s3_key": "${aws_s3_object.root_testinitialdefault_Handler_S3Object_A209CD73.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testinitialnegativevalue_C113FF0B": {
+      "root_testinitialnegativevalue_Handler_108DD32C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/Default",
-            "uniqueId": "root_testinitialnegativevalue_C113FF0B"
+            "path": "root/Default/Default/test:initial:negative-value/Handler/Default",
+            "uniqueId": "root_testinitialnegativevalue_Handler_108DD32C"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_4795370d": "${aws_dynamodb_table.root_counterC_5BAA0CEC.name}",
-            "WING_FUNCTION_NAME": "test-initial-negative-value-c8c9608b"
+            "WING_FUNCTION_NAME": "Handler-c88178b6"
           }
         },
-        "function_name": "test-initial-negative-value-c8c9608b",
+        "function_name": "Handler-c88178b6",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinitialnegativevalue_IamRole_1A6EDBCE.arn}",
+        "role": "${aws_iam_role.root_testinitialnegativevalue_Handler_IamRole_B1DCC657.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinitialnegativevalue_S3Object_B14976BF.key}",
+        "s3_key": "${aws_s3_object.root_testinitialnegativevalue_Handler_S3Object_8F761E6E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testinitialpositivevalue_7C0AF18B": {
+      "root_testinitialpositivevalue_Handler_11CA4DA1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/Default",
-            "uniqueId": "root_testinitialpositivevalue_7C0AF18B"
+            "path": "root/Default/Default/test:initial:positive-value/Handler/Default",
+            "uniqueId": "root_testinitialpositivevalue_Handler_11CA4DA1"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_96df6c3c": "${aws_dynamodb_table.root_counterB_3EAEEDE1.name}",
-            "WING_FUNCTION_NAME": "test-initial-positive-value-c81996f7"
+            "WING_FUNCTION_NAME": "Handler-c835d39a"
           }
         },
-        "function_name": "test-initial-positive-value-c81996f7",
+        "function_name": "Handler-c835d39a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinitialpositivevalue_IamRole_1BB7220A.arn}",
+        "role": "${aws_iam_role.root_testinitialpositivevalue_Handler_IamRole_F254394C.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinitialpositivevalue_S3Object_067C0CCF.key}",
+        "s3_key": "${aws_s3_object.root_testinitialpositivevalue_Handler_S3Object_B0633AA8.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -319,33 +319,33 @@ module.exports = function({ counterC }) {
       }
     },
     "aws_s3_object": {
-      "root_testinitialdefault_S3Object_A9D32834": {
+      "root_testinitialdefault_Handler_S3Object_A209CD73": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:default/S3Object",
-            "uniqueId": "root_testinitialdefault_S3Object_A9D32834"
+            "path": "root/Default/Default/test:initial:default/Handler/S3Object",
+            "uniqueId": "root_testinitialdefault_Handler_S3Object_A209CD73"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testinitialnegativevalue_S3Object_B14976BF": {
+      "root_testinitialnegativevalue_Handler_S3Object_8F761E6E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:negative-value/S3Object",
-            "uniqueId": "root_testinitialnegativevalue_S3Object_B14976BF"
+            "path": "root/Default/Default/test:initial:negative-value/Handler/S3Object",
+            "uniqueId": "root_testinitialnegativevalue_Handler_S3Object_8F761E6E"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testinitialpositivevalue_S3Object_067C0CCF": {
+      "root_testinitialpositivevalue_Handler_S3Object_B0633AA8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:initial:positive-value/S3Object",
-            "uniqueId": "root_testinitialpositivevalue_S3Object_067C0CCF"
+            "path": "root/Default/Default/test:initial:positive-value/Handler/S3Object",
+            "uniqueId": "root_testinitialpositivevalue_Handler_S3Object_B0633AA8"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -372,15 +372,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const counterA_client = this._lift(counterA);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const counterA_client = context._lift(counterA);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            counterA: ${counterA_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1 = require("${self_client_path}")({
-              counterA: ${counterA_client},
-            });
-            const client = new $Inflight1({
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -401,15 +406,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const counterB_client = this._lift(counterB);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const counterB_client = context._lift(counterB);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            counterB: ${counterB_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2 = require("${self_client_path}")({
-              counterB: ${counterB_client},
-            });
-            const client = new $Inflight2({
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -430,15 +440,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const counterC_client = this._lift(counterC);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        const counterC_client = context._lift(counterC);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            counterC: ${counterC_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight3 = require("${self_client_path}")({
-              counterC: ${counterC_client},
-            });
-            const client = new $Inflight3({
+            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
+            const client = new $Inflight3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -457,9 +472,9 @@ class $Root extends $stdlib.std.Resource {
     const counterA = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterA");
     const counterB = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterB",{ initial: 500 });
     const counterC = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterC",{ initial: (-198) });
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:default",new $Inflight1(this,"$Inflight1"));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:positive-value",new $Inflight2(this,"$Inflight2"));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:initial:negative-value",new $Inflight3(this,"$Inflight3"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:initial:default",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:initial:positive-value",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:initial:negative-value",new $Inflight3(this,"$Inflight3"));
   }
 }
 class $App extends $AppBase {

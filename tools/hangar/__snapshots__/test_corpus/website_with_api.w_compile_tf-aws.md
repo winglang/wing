@@ -2,14 +2,14 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ users_table }) {
+module.exports = function({ usersTable }) {
   class  $Inflight1 {
     constructor({  }) {
     }
     async handle(req)  {
       {
         return {
-        "body": Object.freeze({"users":(await users_table.list())}),
+        "body": Object.freeze({"users":(await usersTable.list())}),
         "status": 200,}
         ;
       }
@@ -22,7 +22,7 @@ module.exports = function({ users_table }) {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function({ users_table }) {
+module.exports = function({ usersTable }) {
   class  $Inflight2 {
     constructor({  }) {
     }
@@ -35,7 +35,7 @@ module.exports = function({ users_table }) {
           "status": 400,}
           ;
         }
-        (await users_table.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+        (await usersTable.insert(`\"${JSON.stringify((body)["id"], null, 2)}\"`,body));
         return {
         "body": Object.freeze({"user":(body)["id"]}),
         "status": 201,}
@@ -50,7 +50,7 @@ module.exports = function({ users_table }) {
 
 ## clients/$Inflight3.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  $Inflight3 {
     constructor({  }) {
     }
@@ -468,10 +468,22 @@ module.exports = function() {
           }
         },
         "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
-        "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
-        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.arn}/*\"]}]}"
+      }
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudWebsite_PublicAccessBlock_89CD01D0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/PublicAccessBlock",
+            "uniqueId": "root_cloudWebsite_PublicAccessBlock_89CD01D0"
+          }
+        },
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -590,15 +602,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const users_table_client = this._lift(users_table);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const usersTable_client = context._lift(usersTable);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            usersTable: ${usersTable_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1 = require("${self_client_path}")({
-              users_table: ${users_table_client},
-            });
-            const client = new $Inflight1({
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -609,7 +626,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(users_table, host, ["list"]);
+          this._registerBindObject(usersTable, host, ["list"]);
         }
         super._registerBind(host, ops);
       }
@@ -619,15 +636,20 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
-        const users_table_client = this._lift(users_table);
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const usersTable_client = context._lift(usersTable);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            usersTable: ${usersTable_client},
+          })
+        `);
+      }
+      _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2 = require("${self_client_path}")({
-              users_table: ${users_table_client},
-            });
-            const client = new $Inflight2({
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -638,7 +660,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(users_table, host, ["insert"]);
+          this._registerBindObject(usersTable, host, ["insert"]);
         }
         super._registerBind(host, ops);
       }
@@ -648,12 +670,18 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("handle");
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight3 = require("${self_client_path}")({});
-            const client = new $Inflight3({
+            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
+            const client = new $Inflight3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -670,13 +698,13 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website_with_api" });
-    const users_table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING,"age":cloud.ColumnType.NUMBER}) });
-    const get_handler = new $Inflight1(this,"$Inflight1");
-    const post_handler = new $Inflight2(this,"$Inflight2");
-    const options_handler = new $Inflight3(this,"$Inflight3");
-    (api.get("/users",get_handler));
-    (api.post("/users",post_handler));
-    (api.options("/users",options_handler));
+    const usersTable = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING,"age":cloud.ColumnType.NUMBER}) });
+    const getHandler = new $Inflight1(this,"$Inflight1");
+    const postHandler = new $Inflight2(this,"$Inflight2");
+    const optionsHandler = new $Inflight3(this,"$Inflight3");
+    (api.get("/users",getHandler));
+    (api.post("/users",postHandler));
+    (api.options("/users",optionsHandler));
     (website.addJson("config.json",Object.freeze({"apiUrl":api.url})));
   }
 }

@@ -1,32 +1,31 @@
 bring cloud;
 
 class Foo {
-  extern "./external_js.js" static get_greeting(name: str): str;
-  extern "./external_js.js" static inflight regex_inflight(pattern: str, text: str): bool;
-  extern "./external_js.js" static inflight get_uuid(): str;
-  extern "./external_js.js" static inflight get_data(): str;
+  extern "./external_js.js" static getGreeting(name: str): str;
+  extern "./external_js.js" static inflight regexInflight(pattern: str, text: str): bool;
+  extern "./external_js.js" static inflight getUuid(): str;
+  extern "./external_js.js" static inflight getData(): str;
   extern "./external_js.js" inflight print(msg: str);
   extern "uuid" static v4(): str;
 
   inflight call() {
-    assert(Foo.regex_inflight("[a-z]+-\\d+", "abc-123"));
-    let uuid = Foo.get_uuid();
+    assert(Foo.regexInflight("[a-z]+-\\d+", "abc-123"));
+    let uuid = Foo.getUuid();
     assert(uuid.length == 36);
 
-    assert(Foo.get_data() == "Cool data!");
+    assert(Foo.getData() == "Cool data!");
   }
 }
 
-assert(Foo.get_greeting("Wingding") == "Hello, Wingding!");
+assert(Foo.getGreeting("Wingding") == "Hello, Wingding!");
 assert(Foo.v4().length == 36);
 
 let f = new Foo();
 
-new cloud.Function(inflight () => {
+test "call" {
   f.call();
-}) as "test:call";
+}
 
-new cloud.Function(inflight () => {
+test "console" {
   f.print("hey there");
-}) as "test:console";
-
+}

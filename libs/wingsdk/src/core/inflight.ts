@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { readFileSync } from "fs";
 import { basename } from "path";
-import { normalPath } from "../util";
+import { normalPath } from "../utils/misc";
 
 /**
  * Reference to a piece of code.

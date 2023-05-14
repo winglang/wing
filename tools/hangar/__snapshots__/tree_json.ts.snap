@@ -49,8 +49,14 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "my_method",
-                          "resource": "root/Default/Default/test",
+                          "relationship": "myMethod",
+                          "resource": "root/Default/Default/test:test/Handler",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "testTypeAccess",
+                          "resource": "root/Default/Default/test:test/Handler",
                         },
                       ],
                     },
@@ -61,20 +67,20 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "inbound",
                               "implicit": false,
-                              "relationship": "foo_get",
-                              "resource": "root/Default/Default/test",
+                              "relationship": "fooGet",
+                              "resource": "root/Default/Default/test:test/Handler",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
-                              "relationship": "foo_inc",
-                              "resource": "root/Default/Default/test",
+                              "relationship": "fooInc",
+                              "resource": "root/Default/Default/test:test/Handler",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
-                              "relationship": "inflight_field",
-                              "resource": "root/Default/Default/test",
+                              "relationship": "inflightField",
+                              "resource": "root/Default/Default/test:test/Handler",
                             },
                           ],
                         },
@@ -86,19 +92,19 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "direction": "inbound",
                                   "implicit": false,
                                   "relationship": "dec",
-                                  "resource": "root/Default/Default/test",
+                                  "resource": "root/Default/Default/test:test/Handler",
                                 },
                                 {
                                   "direction": "inbound",
                                   "implicit": false,
                                   "relationship": "inc",
-                                  "resource": "root/Default/Default/test",
+                                  "resource": "root/Default/Default/test:test/Handler",
                                 },
                                 {
                                   "direction": "inbound",
                                   "implicit": false,
                                   "relationship": "peek",
-                                  "resource": "root/Default/Default/test",
+                                  "resource": "root/Default/Default/test:test/Handler",
                                 },
                               ],
                             },
@@ -146,13 +152,13 @@ exports[`tree.json for an app with many resources 1`] = `
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "getObjectCount",
-                          "resource": "root/Default/Default/test: dependency cycles",
+                          "resource": "root/Default/Default/test:dependency cycles/Handler",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "publish",
-                          "resource": "root/Default/Default/test: dependency cycles",
+                          "resource": "root/Default/Default/test:dependency cycles/Handler",
                         },
                       ],
                     },
@@ -224,7 +230,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "put",
-                              "resource": "root/Default/Default/test: dependency cycles",
+                              "resource": "root/Default/Default/test:dependency cycles/Handler",
                             },
                           ],
                         },
@@ -479,7 +485,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "list",
-                              "resource": "root/Default/Default/test: dependency cycles",
+                              "resource": "root/Default/Default/test:dependency cycles/Handler",
                             },
                           ],
                         },
@@ -526,7 +532,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "add_consumer",
+                              "relationship": "consumer",
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-fe215853",
                             },
                             {
@@ -539,7 +545,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "push",
-                              "resource": "root/Default/Default/test: dependency cycles",
+                              "resource": "root/Default/Default/test:dependency cycles/Handler",
                             },
                           ],
                         },
@@ -590,7 +596,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "inbound",
                               "implicit": false,
-                              "relationship": "add_consumer",
+                              "relationship": "consumer",
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue",
                             },
                           ],
@@ -683,7 +689,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "publish",
-                              "resource": "root/Default/Default/test: dependency cycles",
+                              "resource": "root/Default/Default/test:dependency cycles/Handler",
                             },
                           ],
                         },
@@ -837,19 +843,19 @@ exports[`tree.json for an app with many resources 1`] = `
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "list",
-                          "resource": "root/Default/Default/test",
+                          "resource": "root/Default/Default/test:test/Handler",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "get",
-                          "resource": "root/Default/Default/test",
+                          "resource": "root/Default/Default/test:test/Handler",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "put",
-                          "resource": "root/Default/Default/test",
+                          "resource": "root/Default/Default/test:test/Handler",
                         },
                       ],
                     },
@@ -890,233 +896,273 @@ exports[`tree.json for an app with many resources 1`] = `
                     "id": "cloud.Bucket",
                     "path": "root/Default/Default/cloud.Bucket",
                   },
-                  "test": {
+                  "test:dependency cycles": {
                     "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "list",
-                          "resource": "root/Default/Default/cloud.Bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "dec",
-                          "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "inc",
-                          "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "get",
-                          "resource": "root/Default/Default/cloud.Bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "put",
-                          "resource": "root/Default/Default/cloud.Bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "peek",
-                          "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "foo_get",
-                          "resource": "root/Default/Default/Bar/Foo",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "foo_inc",
-                          "resource": "root/Default/Default/Bar/Foo",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "my_method",
-                          "resource": "root/Default/Default/Bar",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "inflight_field",
-                          "resource": "root/Default/Default/Bar/Foo",
-                        },
-                      ],
+                      "wing:resource:connections": [],
                     },
                     "children": {
-                      "Asset": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformAsset",
-                          "version": "0.15.2",
+                      "Handler": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "put",
+                              "resource": "root/Default/Default/BigPublisher/b2",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "push",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "getObjectCount",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                          ],
                         },
-                        "id": "Asset",
-                        "path": "root/Default/Default/test/Asset",
-                      },
-                      "Default": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2",
+                            },
+                            "id": "Asset",
+                            "path": "root/Default/Default/test:dependency cycles/Handler/Asset",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/test:dependency cycles/Handler/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "IamRole",
+                            "path": "root/Default/Default/test:dependency cycles/Handler/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/test:dependency cycles/Handler/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/test:dependency cycles/Handler/IamRolePolicyAttachment",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "S3Object",
+                            "path": "root/Default/Default/test:dependency cycles/Handler/S3Object",
+                          },
                         },
-                        "id": "Default",
-                        "path": "root/Default/Default/test/Default",
-                      },
-                      "IamRole": {
                         "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0",
                         },
-                        "id": "IamRole",
-                        "path": "root/Default/Default/test/IamRole",
-                      },
-                      "IamRolePolicy": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
                         },
-                        "id": "IamRolePolicy",
-                        "path": "root/Default/Default/test/IamRolePolicy",
-                      },
-                      "IamRolePolicyAttachment": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
-                        },
-                        "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/Default/test/IamRolePolicyAttachment",
-                      },
-                      "S3Object": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
-                        },
-                        "id": "S3Object",
-                        "path": "root/Default/Default/test/S3Object",
+                        "id": "Handler",
+                        "path": "root/Default/Default/test:dependency cycles/Handler",
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.cloud.Function",
+                      "fqn": "@winglang/sdk.cloud.Test",
                       "version": "0.0.0",
                     },
                     "display": {
-                      "description": "A cloud function (FaaS)",
-                      "title": "Function",
+                      "description": "A cloud unit test.",
+                      "title": "Test",
                     },
-                    "id": "test",
-                    "path": "root/Default/Default/test",
+                    "id": "test:dependency cycles",
+                    "path": "root/Default/Default/test:dependency cycles",
                   },
-                  "test: dependency cycles": {
+                  "test:test": {
                     "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "list",
-                          "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "put",
-                          "resource": "root/Default/Default/BigPublisher/b2",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "push",
-                          "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "publish",
-                          "resource": "root/Default/Default/BigPublisher/cloud.Topic",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "getObjectCount",
-                          "resource": "root/Default/Default/BigPublisher",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "publish",
-                          "resource": "root/Default/Default/BigPublisher",
-                        },
-                      ],
+                      "wing:resource:connections": [],
                     },
                     "children": {
-                      "Asset": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformAsset",
-                          "version": "0.15.2",
+                      "Handler": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "dec",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "inc",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "get",
+                              "resource": "root/Default/Default/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "put",
+                              "resource": "root/Default/Default/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "peek",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "fooGet",
+                              "resource": "root/Default/Default/Bar/Foo",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "fooInc",
+                              "resource": "root/Default/Default/Bar/Foo",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "myMethod",
+                              "resource": "root/Default/Default/Bar",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "testTypeAccess",
+                              "resource": "root/Default/Default/Bar",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "inflightField",
+                              "resource": "root/Default/Default/Bar/Foo",
+                            },
+                          ],
                         },
-                        "id": "Asset",
-                        "path": "root/Default/Default/test: dependency cycles/Asset",
-                      },
-                      "Default": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.15.2",
+                            },
+                            "id": "Asset",
+                            "path": "root/Default/Default/test:test/Handler/Asset",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/test:test/Handler/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "IamRole",
+                            "path": "root/Default/Default/test:test/Handler/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.15.2",
+                            },
+                            "id": "S3Object",
+                            "path": "root/Default/Default/test:test/Handler/S3Object",
+                          },
                         },
-                        "id": "Default",
-                        "path": "root/Default/Default/test: dependency cycles/Default",
-                      },
-                      "IamRole": {
                         "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0",
                         },
-                        "id": "IamRole",
-                        "path": "root/Default/Default/test: dependency cycles/IamRole",
-                      },
-                      "IamRolePolicy": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
                         },
-                        "id": "IamRolePolicy",
-                        "path": "root/Default/Default/test: dependency cycles/IamRolePolicy",
-                      },
-                      "IamRolePolicyAttachment": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
-                        },
-                        "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/Default/test: dependency cycles/IamRolePolicyAttachment",
-                      },
-                      "S3Object": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.15.2",
-                        },
-                        "id": "S3Object",
-                        "path": "root/Default/Default/test: dependency cycles/S3Object",
+                        "id": "Handler",
+                        "path": "root/Default/Default/test:test/Handler",
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.cloud.Function",
+                      "fqn": "@winglang/sdk.cloud.Test",
                       "version": "0.0.0",
                     },
                     "display": {
-                      "description": "A cloud function (FaaS)",
-                      "title": "Function",
+                      "description": "A cloud unit test.",
+                      "title": "Test",
                     },
-                    "id": "test: dependency cycles",
-                    "path": "root/Default/Default/test: dependency cycles",
+                    "id": "test:test",
+                    "path": "root/Default/Default/test:test",
                   },
                 },
                 "constructInfo": {

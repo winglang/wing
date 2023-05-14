@@ -111,7 +111,7 @@ export interface IQueueClient {
 
 /**
  * Represents a resource with an inflight "handle" method that can be passed to
- * `Queue.add_consumer`.
+ * `Queue.addConsumer`.
  *
  * @inflight `@winglang/sdk.cloud.IQueueAddConsumerHandlerClient`
  */
@@ -138,5 +138,5 @@ export enum QueueInflightMethods {
   /** `Queue.purge` */
   PURGE = "purge",
   /** `Queue.approxSize` */
-  APPROX_SIZE = "approx_size",
+  APPROX_SIZE = "approxSize",
 }

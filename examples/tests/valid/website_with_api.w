@@ -5,9 +5,9 @@ let api = new cloud.Api();
 
 let website = new cloud.Website(path: "./website_with_api");
 
-let users_table = new cloud.Table(
+let usersTable = new cloud.Table(
   name: "users-table",
-  primary_key: "id",
+  primaryKey: "id",
   columns: {
     id: cloud.ColumnType.STRING,
     name: cloud.ColumnType.STRING,
@@ -16,14 +16,14 @@ let users_table = new cloud.Table(
 );
 
 
-let get_handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+let getHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
-    body: {users: users_table.list()},
+    body: {users: usersTable.list()},
     status: 200
   };
 };
 
-let post_handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   let body: Json = req.body ?? {name: "", age: "", id: ""};
   if (body.get("name") == "" || body.get("age")  == "" || body.get("id")  == "") {
     return cloud.ApiResponse {
@@ -31,7 +31,8 @@ let post_handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       status: 400
     };
   }
-  users_table.insert(Json.stringify(body.get("id")), body);
+  // TODO: cannot use str.fromJson inflight due to https://github.com/winglang/wing/issues/2505
+  usersTable.insert("\"${body.get("id")}\"", body);
   return cloud.ApiResponse {
     body: {user: body.get("id")},
     status: 201
@@ -39,7 +40,7 @@ let post_handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 };
 
   // responsible for the CORS - https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html
-let options_handler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
+let optionsHandler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     headers: {
       "Access-Control-Allow-Headers" : "Content-Type",
@@ -50,11 +51,11 @@ let options_handler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 };
 
-api.get("/users", get_handler);
-api.post("/users", post_handler);
-api.options("/users", options_handler);
+api.get("/users", getHandler);
+api.post("/users", postHandler);
+api.options("/users", optionsHandler);
 
-website.add_json("config.json", { apiUrl: api.url });
+website.addJson("config.json", { apiUrl: api.url });
 
 
 
