@@ -35,7 +35,7 @@ module.exports = function({ usersTable }) {
           "status": 400,}
           ;
         }
-        (await usersTable.insert(`\"${JSON.stringify((body)["id"], null, 2)}\"`,body));
+        (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
         return {
         "body": Object.freeze({"user":(body)["id"]}),
         "status": 201,}

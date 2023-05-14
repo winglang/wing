@@ -17,8 +17,7 @@ b.onCreate(inflight (key:str) => {
 
 b.onEvent(inflight (key: str) => {   
     log("last key ${key}");
-    // TODO: cannot use Json.stringify because of https://github.com/winglang/wing/issues/2505
-    other.put("last_operation_key", "\"${key}\""); //TODO: until we'll fix the function args conversion/mapping
+    other.put("last_operation_key", Json.stringify(key)); //TODO: until we'll fix the function args conversion/mapping
 });
 
 other.onEvent(inflight (key: str) => {

@@ -1,9 +1,4 @@
 
-/*\
-skip: true
-\*/
-// TODO: add this test back after resolving https://github.com/winglang/wing/issues/2505
-
 bring cloud;
 
 let table = new cloud.Table( 

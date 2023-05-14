@@ -31,8 +31,7 @@ let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       status: 400
     };
   }
-  // TODO: cannot use str.fromJson inflight due to https://github.com/winglang/wing/issues/2505
-  usersTable.insert("\"${body.get("id")}\"", body);
+  usersTable.insert(Json.stringify(body.get("id")), body);
   return cloud.ApiResponse {
     body: {user: body.get("id")},
     status: 201
