@@ -43,3 +43,9 @@ let jsonOfMany = Json {a: 123, b: "hello", c: true};
 assert(str.fromJson(jsonOfMany.get("b")) == "hello");
 assert(num.fromJson(jsonOfMany.get("a")) == 123);
 assert(bool.fromJson(jsonOfMany.get("c")));
+
+// Inflight access
+test "Access Json static inflight" {
+  let x = Json.stringify(jj, 2);
+  assert(x == "{\n  \"a\": 123,\n  \"b\": {\n    \"c\": 456,\n    \"d\": 789\n  }\n}");
+}
