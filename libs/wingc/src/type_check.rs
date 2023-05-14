@@ -464,7 +464,7 @@ impl Subtype for Type {
 				}
 
 				// To support flexible inflight closures, we say that any
-				// resource with an inflight method named "handle" is a subtype of
+				// preflight class with an inflight method named "handle" is a subtype of
 				// any single-method interface with a matching "handle" method type.
 
 				// First, check if there is exactly one inflight method in the interface
