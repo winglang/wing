@@ -1,3 +1,5 @@
+bring cloud;
+
 // Get Keys
 let x = Json {a: 123, b: {c: 456, d: 789}};
 let k = Json.keys(x);
@@ -46,6 +48,6 @@ assert(bool.fromJson(jsonOfMany.get("c")));
 
 // Inflight access
 test "Access Json static inflight" {
-  let x = Json.stringify(jj, 2);
-  assert(x == "{\n  \"a\": 123,\n  \"b\": {\n    \"c\": 456,\n    \"d\": 789\n  }\n}");
+  let ss = Json.stringify(jj);
+  assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
 }
