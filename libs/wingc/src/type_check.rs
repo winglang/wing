@@ -483,8 +483,7 @@ impl Subtype for Type {
 				}
 
 				// Then get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = res.get_env().lookup(&"handle".into(), None) {
-					let method = method.as_variable().unwrap();
+				let res_handle_type = if let Some(method) = res.get_method(&"handle".into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
