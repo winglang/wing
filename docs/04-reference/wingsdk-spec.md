@@ -98,7 +98,7 @@ For example, a `cloud.Bucket` can emit events whenever an object is uploaded, an
 ```ts
 // wing
 let bucket = new cloud.Bucket();
-bucket.onCreate(inflight (file: string) => {
+bucket.onCreate(inflight (file: str) => {
   log.info("File uploaded: " + file);
 });
 ```
