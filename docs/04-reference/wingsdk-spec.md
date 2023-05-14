@@ -348,7 +348,7 @@ resource Bucket {
   /**
    * List all objects in the bucket with the given prefix.
    */
-  inflight list(prefix?: str): str[];
+  inflight list(prefix?: str): Array<str>; // return an iterator in the future
 
   /**
    * Returns a url to the given object key. Does not check if the object exists.
