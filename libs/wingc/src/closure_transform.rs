@@ -39,7 +39,7 @@ const PARENT_THIS_NAME: &str = "__parent_this";
 pub struct ClosureTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
-	curr_phase: Phase,
+	phase: Phase,
 	// Whether the transformer is inside a scope where "this" is valid.
 	inside_scope_with_this: bool,
 	// Helper state for generating unique class names
@@ -54,7 +54,7 @@ pub struct ClosureTransformer {
 impl ClosureTransformer {
 	pub fn new() -> Self {
 		Self {
-			curr_phase: Phase::Preflight,
+			phase: Phase::Preflight,
 			inside_scope_with_this: false,
 			inflight_counter: 0,
 			class_statements: vec![],
@@ -115,10 +115,12 @@ impl Fold for ClosureTransformer {
 	}
 
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
-		let prev_phase = self.curr_phase;
-		self.curr_phase = node.signature.phase;
+		let prev_phase = self.phase;
+		self.phase = node.signature.phase;
+
 		let new_node = fold::fold_function_definition(self, node);
-		self.curr_phase = prev_phase;
+
+		self.phase = prev_phase;
 		new_node
 	}
 
@@ -152,7 +154,7 @@ impl Fold for ClosureTransformer {
 			initializer: {
 				let prev_inside_scope_with_this = self.inside_scope_with_this;
 				self.inside_scope_with_this = true;
-				let new_constructor = self.fold_constructor(node.initializer);
+				let new_constructor = self.fold_initializer(node.initializer);
 				self.inside_scope_with_this = prev_inside_scope_with_this;
 				new_constructor
 			},
@@ -172,7 +174,7 @@ impl Fold for ClosureTransformer {
 	fn fold_expr(&mut self, expr: Expr) -> Expr {
 		// Inflight closures that are themselves defined inflight do not need
 		// to be transformed, since they are not created in preflight.
-		if self.curr_phase == Phase::Inflight {
+		if self.phase == Phase::Inflight {
 			return expr;
 		}
 
