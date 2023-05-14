@@ -558,7 +558,7 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.phase {
 				Phase::Inflight => {
-					assert!(ctx.phase == Phase::Inflight, "inflight closures should have been transformed into resources by now");
+					assert!(ctx.phase == Phase::Inflight, "inflight closures should have been transformed into preflight handler classes in the closure_transform compiler phase");
 					self.jsify_function(None, func_def, ctx).to_string()
 				},
 				Phase::Independent => unimplemented!(),
