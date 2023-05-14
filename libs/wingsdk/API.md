@@ -4940,6 +4940,10 @@ Inflight interface for `Bucket`.
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryPut">tryPut</a></code> | Tries to put an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryPutJson">tryPutJson</a></code> | Tries to put a Json object in the bucket. |
 
 ---
 
@@ -5091,10 +5095,10 @@ Json object that we want to store into the bucket.
 
 ---
 
-##### `try_get` <a name="try_get" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
 
 ```wing
-try_get(key: str): str
+tryGet(key: str): str
 ```
 
 Get an object from the bucket if it exists.
@@ -5107,10 +5111,10 @@ Key of the object.
 
 ---
 
-##### `try_get_json` <a name="try_get_json" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
+##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
 
 ```wing
-try_get_json(key: str): Json
+tryGetJson(key: str): Json
 ```
 
 Gets an object from the bucket if it exists, parsing it as Json.
@@ -5123,10 +5127,10 @@ Key of the object.
 
 ---
 
-##### `try_put` <a name="try_put" id="@winglang/sdk.cloud.IBucketClient.tryPut"></a>
+##### `tryPut` <a name="tryPut" id="@winglang/sdk.cloud.IBucketClient.tryPut"></a>
 
 ```wing
-try_put(key: str, body: str): bool
+tryPut(key: str, body: str): bool
 ```
 
 Tries to put an object in the bucket.
@@ -5147,10 +5151,10 @@ Content of the object we want to store into the bucket.
 
 ---
 
-##### `try_put_json` <a name="try_put_json" id="@winglang/sdk.cloud.IBucketClient.tryPutJson"></a>
+##### `tryPutJson` <a name="tryPutJson" id="@winglang/sdk.cloud.IBucketClient.tryPutJson"></a>
 
 ```wing
-try_put_json(key: str, body: Json): bool
+tryPutJson(key: str, body: Json): bool
 ```
 
 Tries to put a Json object in the bucket.
