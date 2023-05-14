@@ -1,7 +1,7 @@
 /*\
 skip: true
 \*/
-// failing due to https://github.com/winglang/wing/issues/2522
+// TODO: failing due to https://github.com/winglang/wing/issues/2522
 bring cloud;
 
 let api = new cloud.Api();

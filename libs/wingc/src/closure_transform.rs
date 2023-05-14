@@ -19,13 +19,16 @@ const PARENT_THIS_NAME: &str = "__parent_this";
 /// The class is given a unique name to avoid collisions.
 ///
 /// For example, the following code:
+///
 /// ```wing
 /// let b = new cloud.Bucket();
 /// let f = inflight (message: str) => {
 ///   b.put("file.txt", message);
 /// };
 /// ```
+///
 /// is transformed into:
+///
 /// ```wing
 /// let b = new cloud.Bucket();
 /// class $Inflight1 {
@@ -35,6 +38,7 @@ const PARENT_THIS_NAME: &str = "__parent_this";
 ///   }
 /// }
 /// let f = new $Inflight1();
+/// ```
 pub struct ClosureTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
@@ -90,6 +94,8 @@ impl Fold for ClosureTransformer {
 		}
 
 		for stmt in node.statements {
+			// TODO: can we remove "idx" from Stmt to avoid having to reason about this?
+			// or add a compiler step that updates statement indices after folding?
 			let old_nearest_stmt_idx = self.nearest_stmt_idx;
 			self.nearest_stmt_idx = stmt.idx;
 			let new_stmt = self.fold_stmt(stmt);
@@ -116,9 +122,7 @@ impl Fold for ClosureTransformer {
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
 		let prev_phase = self.phase;
 		self.phase = node.signature.phase;
-
 		let new_node = fold::fold_function_definition(self, node);
-
 		self.phase = prev_phase;
 		new_node
 	}
