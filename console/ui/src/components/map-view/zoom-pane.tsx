@@ -72,7 +72,7 @@ const selectionTransition = (selection: Selection, duration?: number) => {
 };
 
 const MIN_ZOOM_LEVEL = 0.5;
-const MAX_ZOOM_LEVEL = 4;
+const MAX_ZOOM_LEVEL = 2;
 
 export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
   props,
@@ -130,6 +130,8 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
       const x1 = x0 + viewport.width;
       const y1 = y0 + viewport.height;
 
+      const defaultScale = 1.25;
+
       const scale = Math.min(
         8,
         0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
@@ -139,7 +141,7 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
         zoom.transform,
         d3Zoom.zoomIdentity
           .translate(width / 2, height / 2)
-          .scale(Math.min(1, scale))
+          .scale(Math.min(defaultScale, scale))
           .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
       );
     },
