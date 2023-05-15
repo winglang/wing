@@ -100,7 +100,10 @@ export const PlaygroundLayout = ({
         <TopResizableWidget
           className={classNames(
             theme.border3,
-            "flex relative border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[15rem]",
+            "flex relative border-t border-slate-300 bg-slate-50",
+            cloudAppState === "error"
+              ? "min-h-[32rem] h-[32rem]"
+              : "min-h-[5rem] h-[15rem] max-h-[25rem]",
           )}
         >
           <BlueScreenOfDeath
