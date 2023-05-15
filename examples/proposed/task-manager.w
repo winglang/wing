@@ -92,14 +92,14 @@ let import_contacts = new TaskManager(inflight (input: str) => {
 
 // Tests
 
-new cloud.Function(inflight () => {
+test "import_contacts_work" {
   let key = import_contacts.start("hello");
   Utils.sleep(1s);
   assert(import_contacts.check(key) == "pending");
   Utils.sleep(5s);
   assert(import_contacts.check(key) == "done");
   assert(import_contacts.get_result(key) == "hello");
-}) as "test:import_contacts_work"
+}
 
 // Exercises for the curious reader:
 // - Add a timeout to the background task.

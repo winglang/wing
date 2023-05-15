@@ -1,7 +1,7 @@
 bring cloud;
 
 let b = new cloud.Bucket();
-let file_name = "file.json";
+let fileName = "file.json";
 
 let j = Json {
   persons: [
@@ -17,13 +17,12 @@ let j = Json {
 };
 
 
-let get_json = new cloud.Function(inflight(msg:str): str => {
-  let x = b.get_json(file_name);
-  assert(x.get("persons").get_at(0).get("fears").get_at(1) == "failure");
+let getJson = new cloud.Function(inflight(msg: str): str => {
+  let x = b.getJson(fileName);
+  assert(x.get("persons").getAt(0).get("fears").getAt(1) == "failure");
 });
 
-new cloud.Function(inflight(msg:str): str => {
-  b.put_json(file_name, j);
-  get_json.invoke(msg);
-}) as "test:put";
-
+test "put" {
+  b.putJson(fileName, j);
+  getJson.invoke("");
+}

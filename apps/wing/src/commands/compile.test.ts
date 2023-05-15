@@ -1,15 +1,16 @@
-import { Target, compile } from "./compile";
+import { compile } from "./compile";
 import { cp, mkdtemp, readdir, stat, writeFile } from "fs/promises";
 import { describe, test, expect } from "vitest";
 import { join, resolve } from "path";
 import { tmpdir } from "os";
+import { Target } from "./constants";
 
 const exampleDir = resolve("../../examples/tests/valid");
 
-/** 
+/**
  * Creates a clean environment for each test by copying the example file to a temporary directory.
  */
-async function tmpTestFile(source: string, ...additionalFiles: string[]) {
+export async function tmpTestFile(source: string, ...additionalFiles: string[]) {
   const testDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
   const exampleWingFile = join(testDir, source);
   await cp(join(exampleDir, source), exampleWingFile);
@@ -53,9 +54,9 @@ describe(
     });
 
     test("should error if a nonexistent file is compiled", async () => {
-      return expect(
-        compile("non-existent-file.w", { target: Target.SIM })
-      ).rejects.toThrowError(/Source file cannot be found/);
+      return expect(compile("non-existent-file.w", { target: Target.SIM })).rejects.toThrowError(
+        /Source file cannot be found/
+      );
     });
 
     // https://github.com/winglang/wing/issues/2081

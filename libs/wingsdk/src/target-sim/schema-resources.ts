@@ -1,4 +1,5 @@
 import { ColumnType, HttpMethod, OpenApiSpec } from "../cloud";
+import { Json } from "../std";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -16,7 +17,9 @@ export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
 export const REDIS_TYPE = "wingsdk.redis.Redis";
+export const WEBSITE_TYPE = "wingsdk.cloud.Website";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
+export const SERVICE_TYPE = "wingsdk.cloud.Service";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
@@ -79,6 +82,22 @@ export interface QueueSchema extends BaseResourceSchema {
     readonly initialMessages: string[];
   };
 }
+
+/** Schema for cloud.Service */
+export interface ServiceSchema extends BaseResourceSchema {
+  readonly type: typeof SERVICE_TYPE;
+  readonly props: {
+    /** Function that should be called when service is started */
+    onStartHandler: FunctionHandle;
+    /** Function that is called when service is stopped */
+    onStopHandler?: FunctionHandle;
+    /** Whether the service should start when sim starts */
+    autoStart: boolean;
+  };
+}
+
+/** Runtime attributes for cloud.Service */
+export interface ServiceAttributes {}
 
 /** Runtime attributes for cloud.Schedule */
 export interface ScheduleAttributes {}
@@ -207,6 +226,17 @@ export interface TestRunnerAttributes {}
 export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_TYPE;
   readonly props: {};
+}
+
+/** Schema for cloud.Website */
+export interface WebsiteSchema extends BaseResourceSchema {
+  readonly type: typeof WEBSITE_TYPE;
+  readonly props: {
+    /** Path to the directory where all static files are hosted from */
+    staticFilesPath: string;
+    /** Map of `.json` file paths to dynamic content inserted from preflight */
+    jsonRoutes: Record<string, Json>;
+  };
 }
 
 export interface RedisAttributes {}

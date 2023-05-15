@@ -197,6 +197,7 @@ impl<'s> Parser<'s> {
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
+			"test_statement" => self.build_test_statement(statement_node)?,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -459,7 +460,8 @@ impl<'s> Parser<'s> {
 			match (class_element.kind(), is_resource) {
 				("method_definition", true) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
-					let func_def = self.build_function_definition(&class_element, Phase::Preflight);
+					let is_static = class_element.child_by_field_name("static").is_some();
+					let func_def = self.build_function_definition(&class_element, Phase::Preflight, is_static);
 					match (method_name, func_def) {
 						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
 						_ => {}
@@ -467,7 +469,8 @@ impl<'s> Parser<'s> {
 				}
 				("inflight_method_definition", _) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
-					let func_def = self.build_function_definition(&class_element, Phase::Inflight);
+					let is_static = class_element.child_by_field_name("static").is_some();
+					let func_def = self.build_function_definition(&class_element, Phase::Inflight, is_static);
 					match (method_name, func_def) {
 						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
 						_ => {}
@@ -539,7 +542,6 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
-							captures: RefCell::new(None),
 						})
 					} else {
 						initializer = Some(Initializer {
@@ -550,6 +552,7 @@ impl<'s> Parser<'s> {
 									kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 										root: name.clone(),
 										fields: vec![],
+										span: name.span.clone(),
 									}),
 									span: self.node_span(&class_element),
 								})),
@@ -580,6 +583,7 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
+							span: name.span.clone(),
 						}),
 						span: name.span.clone(),
 					})),
@@ -732,10 +736,15 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, phase)
+		self.build_function_definition(anon_closure_node, phase, true)
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(
+		&self,
+		func_def_node: &Node,
+		phase: Phase,
+		is_static: bool,
+	) -> DiagnosticResult<FunctionDefinition> {
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
@@ -748,8 +757,7 @@ impl<'s> Parser<'s> {
 		Ok(FunctionDefinition {
 			body: statements,
 			signature,
-			is_static: func_def_node.child_by_field_name("static").is_some(),
-			captures: RefCell::new(None),
+			is_static,
 			span: self.node_span(func_def_node),
 		})
 	}
@@ -897,6 +905,7 @@ impl<'s> Parser<'s> {
 								span: Default::default(),
 							},
 							fields: vec![self.node_symbol(&object_expr)?],
+							span: self.node_span(&object_expr),
 						},
 						property: self.node_symbol(&property)?,
 					}),
@@ -947,6 +956,7 @@ impl<'s> Parser<'s> {
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
+			span: self.node_span(&nested_node),
 		});
 		Ok(TypeAnnotation {
 			kind,
@@ -1383,5 +1393,48 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
+	}
+
+	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		let name_node = statement_node.child_by_field_name("name").unwrap();
+		let name_text = self.node_text(&name_node);
+		let test_id = format!("test:{}", &name_text[1..name_text.len() - 1]);
+		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+
+		let inflight_closure = Expr {
+			kind: ExprKind::FunctionClosure(FunctionDefinition {
+				body: FunctionBody::Statements(statements),
+				signature: FunctionSignature {
+					parameters: vec![],
+					return_type: None,
+					phase: Phase::Inflight,
+				},
+				is_static: true,
+				span: WingSpan::default(),
+			}),
+			span: WingSpan::default(),
+			evaluated_type: RefCell::new(None),
+		};
+
+		Ok(StmtKind::Expression(Expr {
+			kind: ExprKind::New {
+				class: TypeAnnotation {
+					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+						root: Symbol::global("cloud"),
+						fields: vec![Symbol::global("Test")],
+						span: WingSpan::default(),
+					}),
+					span: WingSpan::default(),
+				},
+				obj_id: Some(test_id),
+				obj_scope: None,
+				arg_list: ArgList {
+					pos_args: vec![inflight_closure],
+					named_args: IndexMap::new(),
+				},
+			},
+			span: self.node_span(statement_node),
+			evaluated_type: RefCell::new(None),
+		}))
 	}
 }

@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ bucket_keys.wsim » root/env0/test
+pass ─ bucket_keys.wsim » root/env0/test:test
 ```
 

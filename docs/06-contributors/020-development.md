@@ -242,6 +242,8 @@ npx nx dev vscode-wing
 
 To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.
 
+Tip: if you want to print debug messages in your code while developing, you should use Rust's `dbg!` macro, instead of `print!` or `println!`.
+
 ## 🧹 How do I lint my code?
 
 To lint Rust code, you can run the `lint` target on the `wingc` or `wingii` projects:

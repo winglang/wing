@@ -1,14 +1,37 @@
 # [for_loop.w](../../../../examples/tests/valid/for_loop.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(event)  {
+      {
+        for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(x <= 0)'`)})((x <= 0))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(x > 10)'`)})((x > 10))};
+          {console.log(`${x}`)};
+        }
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/Foo.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Foo {
     constructor({  }) {
     }
     async hello()  {
       {
+        const __parent_this = this;
         for (const p of Object.freeze(["hello"])) {
+          const __parent_this = this;
           {console.log(p)};
         }
       }
@@ -149,17 +172,55 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("hello");
+        const __parent_this = this;
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Foo = require("${self_client_path}")({});
-            const client = new Foo({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -175,9 +236,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const words = Object.freeze(["wing", "lang", "dang"]);
-    const unique_numbers = Object.freeze(new Set([1, 2, 3]));
+    const uniqueNumbers = Object.freeze(new Set([1, 2, 3]));
     for (const word of words) {
-      for (const number of unique_numbers) {
+      for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(number > 0)'`)})((number > 0))};
         {console.log(`${word}: ${number}`)};
       }
@@ -185,37 +246,37 @@ class $Root extends $stdlib.std.Resource {
     let i = 0;
     for (const word of words) {
       i = (i + 1);
-      let pre_break_hits = 0;
-      let post_break_hits = 0;
-      for (const number of unique_numbers) {
+      let preBreakHits = 0;
+      let postBreakHits = 0;
+      for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(number > 0)'`)})((number > 0))};
         {console.log(`${word}: ${number}`)};
-        pre_break_hits = (pre_break_hits + 1);
+        preBreakHits = (preBreakHits + 1);
         if ((number === 2)) {
           break;
         }
-        post_break_hits = (post_break_hits + 1);
+        postBreakHits = (postBreakHits + 1);
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(pre_break_hits === 2)'`)})((pre_break_hits === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(post_break_hits === 1)'`)})((post_break_hits === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(preBreakHits === 2)'`)})((preBreakHits === 2))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(postBreakHits === 1)'`)})((postBreakHits === 1))};
     }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(i === 3)'`)})((i === 3))};
     let j = 0;
     for (const word of words) {
       j = (j + 1);
-      let pre_continue_hits = 0;
-      let post_continue_hits = 0;
-      for (const number of unique_numbers) {
+      let preContinueHits = 0;
+      let postContinueHits = 0;
+      for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(number > 0)'`)})((number > 0))};
         {console.log(`${word}: ${number}`)};
-        pre_continue_hits = (pre_continue_hits + 1);
+        preContinueHits = (preContinueHits + 1);
         if ((number > 0)) {
           continue;
         }
-        post_continue_hits = (post_continue_hits + 1);
+        postContinueHits = (postContinueHits + 1);
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(pre_continue_hits === 3)'`)})((pre_continue_hits === 3))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(post_continue_hits === 0)'`)})((post_continue_hits === 0))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(preContinueHits === 3)'`)})((preContinueHits === 3))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(postContinueHits === 0)'`)})((postContinueHits === 0))};
     }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(j === 3)'`)})((j === 3))};
     {console.log("---\nfor x in 0..0 { ... }")};
@@ -313,12 +374,7 @@ class $Root extends $stdlib.std.Resource {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(x > 0)'`)})((x > 0))};
       {console.log(`${x}`)};
     }
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    );
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -337,19 +393,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(event) {
-  const {  } = this;
-  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x <= 0)'`)})((x <= 0))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x > 10)'`)})((x > 10))};
-    {console.log(`${x}`)};
-  }
-}
 
 ```
 

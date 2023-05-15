@@ -10,15 +10,15 @@
       "type": "build"
     },
     {
-      "name": "@types/debug",
-      "type": "build"
-    },
-    {
       "name": "@types/express",
       "type": "build"
     },
     {
       "name": "@types/fs-extra",
+      "type": "build"
+    },
+    {
+      "name": "@types/mime-types",
       "type": "build"
     },
     {
@@ -240,10 +240,6 @@
       "type": "bundled"
     },
     {
-      "name": "debug",
-      "type": "bundled"
-    },
-    {
       "name": "esbuild-wasm",
       "type": "bundled"
     },
@@ -253,6 +249,10 @@
     },
     {
       "name": "ioredis",
+      "type": "bundled"
+    },
+    {
+      "name": "mime-types",
       "type": "bundled"
     },
     {

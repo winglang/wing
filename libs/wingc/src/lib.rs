@@ -8,8 +8,9 @@
 extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
-use capture::CaptureVisitor;
+use closure_transform::ClosureTransformer;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
+use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -31,7 +32,7 @@ use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
-pub mod capture;
+pub mod closure_transform;
 pub mod debug;
 pub mod diagnostic;
 pub mod fold;
@@ -41,7 +42,6 @@ pub mod parser;
 pub mod type_check;
 pub mod type_check_assert;
 pub mod type_check_class_fields_init;
-pub mod utilities;
 pub mod visit;
 mod wasm_util;
 
@@ -51,6 +51,7 @@ const WINGSDK_STD_MODULE: &'static str = "std";
 const WINGSDK_FS_MODULE: &'static str = "fs";
 const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
+const WINGSDK_UTIL_MODULE: &'static str = "util";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.ImmutableMap";
@@ -282,10 +283,19 @@ pub fn compile(
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
+	// -- PARSING PHASE --
+	let (scope, parse_diagnostics) = parse(&source_path);
+
+	// -- DESUGARING PHASE --
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = ClosureTransformer::new();
+	let mut scope = inflight_transformer.fold_scope(scope);
+
+	// -- TYPECHECKING PHASE --
+
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
-	// Build our AST
-	let (mut scope, parse_diagnostics) = parse(&source_path);
 	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
@@ -308,11 +318,6 @@ pub fn compile(
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
 
-	// Analyze inflight captures
-	let mut capture_visitor = CaptureVisitor::new();
-	capture_visitor.visit_scope(&scope);
-	diagnostics.extend(capture_visitor.diagnostics);
-
 	// Filter diagnostics to only errors
 	let errors = diagnostics
 		.iter()
@@ -324,6 +329,8 @@ pub fn compile(
 	if errors.len() > 0 {
 		return Err(errors);
 	}
+
+	// -- JSIFICATION PHASE --
 
 	// Prepare output directory for support inflight code
 	fs::create_dir_all(out_dir).expect("create output dir");

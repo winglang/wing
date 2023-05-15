@@ -46,6 +46,24 @@ test("get object from a bucket", async () => {
   expect(response).toEqual(VALUE);
 });
 
+test("get invalid object from a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(new Error("fake error"));
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.get(KEY)).rejects.toThrowError(
+    /Object does not exist/
+  );
+});
+
 test("get Json object from a bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";

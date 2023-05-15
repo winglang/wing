@@ -20,6 +20,15 @@ exports[`bucket is public 1`] = `
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
       }
     },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
+      }
+    },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
       \\"root_mybucket_Encryption_AA43F7E8\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
@@ -98,6 +107,14 @@ exports[`bucket is public 2`] = `
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
                   },
                   "PublicPolicy": {
                     "constructInfo": {
@@ -535,7 +552,7 @@ exports[`bucket with onCreate method 1`] = `
       }
     },
     \\"aws_s3_bucket_notification\\": {
-      \\"root_mybucket_S3Objectoncreatenotifier_1BF30494\\": {
+      \\"root_mybucket_S3BucketNotification_008BD786\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
         \\"depends_on\\": [
           \\"aws_sns_topic_policy.root_mybucket_mybucketoncreate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_EF6799F2\\"
@@ -545,6 +562,7 @@ exports[`bucket with onCreate method 1`] = `
             \\"events\\": [
               \\"s3:ObjectCreated:Put\\"
             ],
+            \\"id\\": \\"on-create-notification\\",
             \\"topic_arn\\": \\"\${aws_sns_topic.root_mybucket_mybucketoncreate_A862D5F2.arn}\\"
           }
         ]
@@ -554,6 +572,15 @@ exports[`bucket with onCreate method 1`] = `
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
@@ -698,6 +725,14 @@ exports[`bucket with onCreate method 2`] = `
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
+                  },
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -706,13 +741,13 @@ exports[`bucket with onCreate method 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
-                  "S3Object_on_create_notifier": {
+                  "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.15.2",
                     },
-                    "id": "S3Object_on_create_notifier",
-                    "path": "root/Default/my_bucket/S3Object_on_create_notifier",
+                    "id": "S3BucketNotification",
+                    "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-on_create": {
                     "attributes": {
@@ -1007,7 +1042,7 @@ exports[`bucket with onDelete method 1`] = `
       }
     },
     \\"aws_s3_bucket_notification\\": {
-      \\"root_mybucket_S3Objectondeletenotifier_0B1D91B2\\": {
+      \\"root_mybucket_S3BucketNotification_008BD786\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
         \\"depends_on\\": [
           \\"aws_sns_topic_policy.root_mybucket_mybucketondelete_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_79FF94E2\\"
@@ -1017,6 +1052,7 @@ exports[`bucket with onDelete method 1`] = `
             \\"events\\": [
               \\"s3:ObjectRemoved:*\\"
             ],
+            \\"id\\": \\"on-delete-notification\\",
             \\"topic_arn\\": \\"\${aws_sns_topic.root_mybucket_mybucketondelete_9854917D.arn}\\"
           }
         ]
@@ -1026,6 +1062,15 @@ exports[`bucket with onDelete method 1`] = `
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
@@ -1170,6 +1215,14 @@ exports[`bucket with onDelete method 2`] = `
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
+                  },
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -1178,13 +1231,13 @@ exports[`bucket with onDelete method 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
-                  "S3Object_on_delete_notifier": {
+                  "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.15.2",
                     },
-                    "id": "S3Object_on_delete_notifier",
-                    "path": "root/Default/my_bucket/S3Object_on_delete_notifier",
+                    "id": "S3BucketNotification",
+                    "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-on_delete": {
                     "attributes": {
@@ -1551,45 +1604,34 @@ exports[`bucket with onEvent method 1`] = `
       }
     },
     \\"aws_s3_bucket_notification\\": {
-      \\"root_mybucket_S3Objectoncreatenotifier_1BF30494\\": {
+      \\"root_mybucket_S3BucketNotification_008BD786\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
         \\"depends_on\\": [
-          \\"aws_sns_topic_policy.root_mybucket_mybucketoncreate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_EF6799F2\\"
+          \\"aws_sns_topic_policy.root_mybucket_mybucketoncreate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_EF6799F2\\",
+          \\"aws_sns_topic_policy.root_mybucket_mybucketonupdate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_FD9F0448\\",
+          \\"aws_sns_topic_policy.root_mybucket_mybucketondelete_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_79FF94E2\\"
         ],
         \\"topic\\": [
           {
             \\"events\\": [
               \\"s3:ObjectCreated:Put\\"
             ],
+            \\"id\\": \\"on-create-notification\\",
             \\"topic_arn\\": \\"\${aws_sns_topic.root_mybucket_mybucketoncreate_A862D5F2.arn}\\"
-          }
-        ]
-      },
-      \\"root_mybucket_S3Objectondeletenotifier_0B1D91B2\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
-        \\"depends_on\\": [
-          \\"aws_sns_topic_policy.root_mybucket_mybucketondelete_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_79FF94E2\\"
-        ],
-        \\"topic\\": [
-          {
-            \\"events\\": [
-              \\"s3:ObjectRemoved:*\\"
-            ],
-            \\"topic_arn\\": \\"\${aws_sns_topic.root_mybucket_mybucketondelete_9854917D.arn}\\"
-          }
-        ]
-      },
-      \\"root_mybucket_S3Objectonupdatenotifier_4EF303CE\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
-        \\"depends_on\\": [
-          \\"aws_sns_topic_policy.root_mybucket_mybucketonupdate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_FD9F0448\\"
-        ],
-        \\"topic\\": [
+          },
           {
             \\"events\\": [
               \\"s3:ObjectCreated:Post\\"
             ],
+            \\"id\\": \\"on-update-notification\\",
             \\"topic_arn\\": \\"\${aws_sns_topic.root_mybucket_mybucketonupdate_3B88F935.arn}\\"
+          },
+          {
+            \\"events\\": [
+              \\"s3:ObjectRemoved:*\\"
+            ],
+            \\"id\\": \\"on-delete-notification\\",
+            \\"topic_arn\\": \\"\${aws_sns_topic.root_mybucket_mybucketondelete_9854917D.arn}\\"
           }
         ]
       }
@@ -1598,6 +1640,15 @@ exports[`bucket with onEvent method 1`] = `
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
@@ -1800,6 +1851,14 @@ exports[`bucket with onEvent method 2`] = `
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
+                  },
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -1808,29 +1867,13 @@ exports[`bucket with onEvent method 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
-                  "S3Object_on_create_notifier": {
+                  "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.15.2",
                     },
-                    "id": "S3Object_on_create_notifier",
-                    "path": "root/Default/my_bucket/S3Object_on_create_notifier",
-                  },
-                  "S3Object_on_delete_notifier": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
-                    },
-                    "id": "S3Object_on_delete_notifier",
-                    "path": "root/Default/my_bucket/S3Object_on_delete_notifier",
-                  },
-                  "S3Object_on_update_notifier": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
-                    },
-                    "id": "S3Object_on_update_notifier",
-                    "path": "root/Default/my_bucket/S3Object_on_update_notifier",
+                    "id": "S3BucketNotification",
+                    "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-on_create": {
                     "attributes": {
@@ -2487,7 +2530,7 @@ exports[`bucket with onUpdate method 1`] = `
       }
     },
     \\"aws_s3_bucket_notification\\": {
-      \\"root_mybucket_S3Objectonupdatenotifier_4EF303CE\\": {
+      \\"root_mybucket_S3BucketNotification_008BD786\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.id}\\",
         \\"depends_on\\": [
           \\"aws_sns_topic_policy.root_mybucket_mybucketonupdate_PublishPermissionc8045fccc85a7ef42d5391d87958e5ce36c53a401a_FD9F0448\\"
@@ -2497,6 +2540,7 @@ exports[`bucket with onUpdate method 1`] = `
             \\"events\\": [
               \\"s3:ObjectCreated:Post\\"
             ],
+            \\"id\\": \\"on-update-notification\\",
             \\"topic_arn\\": \\"\${aws_sns_topic.root_mybucket_mybucketonupdate_3B88F935.arn}\\"
           }
         ]
@@ -2506,6 +2550,15 @@ exports[`bucket with onUpdate method 1`] = `
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
@@ -2650,6 +2703,14 @@ exports[`bucket with onUpdate method 2`] = `
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
                   },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
+                  },
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -2658,13 +2719,13 @@ exports[`bucket with onUpdate method 2`] = `
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
                   },
-                  "S3Object_on_update_notifier": {
+                  "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.15.2",
                     },
-                    "id": "S3Object_on_update_notifier",
-                    "path": "root/Default/my_bucket/S3Object_on_update_notifier",
+                    "id": "S3BucketNotification",
+                    "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-on_update": {
                     "attributes": {
@@ -2915,6 +2976,15 @@ exports[`bucket with two preflight objects 1`] = `
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
       }
     },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
+        \\"block_public_acls\\": false,
+        \\"block_public_policy\\": false,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"ignore_public_acls\\": false,
+        \\"restrict_public_buckets\\": false
+      }
+    },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
       \\"root_mybucket_Encryption_AA43F7E8\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
@@ -3005,6 +3075,14 @@ exports[`bucket with two preflight objects 2`] = `
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.15.2",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
                   },
                   "PublicPolicy": {
                     "constructInfo": {

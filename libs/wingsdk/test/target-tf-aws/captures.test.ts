@@ -2,8 +2,7 @@ import { test, expect, describe } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
-import { tfResourcesOf, tfSanitize } from "../util";
+import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 describe("function with bucket binding", () => {
   // Dirty little helper to check if a config contains a set of actions

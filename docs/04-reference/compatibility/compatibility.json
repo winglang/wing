@@ -356,29 +356,29 @@
   },
   "Website": {
     "WebsiteProps.path": {
-      "sim": {"implemented": false, "issue": 1293},
-      "tf-aws": {"implemented": false, "issue": 1294},
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1295},
       "tf-gcp": {"implemented": false, "issue": 1296},
       "aws-cdk": {"implemented": false}
     },
     "WebsiteProps.domain": {
-      "sim": {"implemented": false, "issue": 1293},
-      "tf-aws": {"implemented": false, "issue": 1294},
+      "sim": {"implemented": false},
+      "tf-aws": {"implemented": false, "issue": 2440},
       "tf-azure": {"implemented": false, "issue": 1295},
       "tf-gcp": {"implemented": false, "issue": 1296},
       "aws-cdk": {"implemented": false}
     },
     "path": {
-      "sim": {"implemented": false, "issue": 1293},
-      "tf-aws": {"implemented": false, "issue": 1294},
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1295},
       "tf-gcp": {"implemented": false, "issue": 1296},
       "aws-cdk": {"implemented": false}
     },
     "url": {
-      "sim": {"implemented": false, "issue": 1293},
-      "tf-aws": {"implemented": false, "issue": 1294},
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1295},
       "tf-gcp": {"implemented": false, "issue": 1296},
       "aws-cdk": {"implemented": false}
