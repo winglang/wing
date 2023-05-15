@@ -1,19 +1,9 @@
-import { Construct } from "constructs";
 import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { BucketEventType, IBucketEventHandler } from "../../src/cloud";
-import { Inflight, NodeJsCode } from "../../src/core";
+import { BucketEventType } from "../../src/cloud";
+import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-
-class InflightBucketEventHandler
-  extends Inflight
-  implements IBucketEventHandler
-{
-  constructor(scope: Construct, id: string) {
-    super(scope, id, { code: NodeJsCode.fromInline("null") });
-  }
-}
 
 test("create a bucket", async () => {
   // GIVEN
@@ -69,7 +59,7 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
-  const testInflight = new InflightBucketEventHandler(app, "inflight_test");
+  const testInflight = Testing.makeHandler(app, "inflight_test", "null");
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
@@ -101,7 +91,7 @@ test("bucket on event creates 3 topics ", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
-  const testInflight = new InflightBucketEventHandler(app, "inflight_test");
+  const testInflight = Testing.makeHandler(app, "inflight_test", "null");
   bucket.onEvent(testInflight);
 
   const s = await app.startSimulator();
@@ -324,7 +314,7 @@ test("removing a key will call onDelete method", async () => {
   const app = new SimApp();
 
   const bucket = cloud.Bucket._newBucket(app, bucketName);
-  const testInflight = new InflightBucketEventHandler(app, "inflight_test");
+  const testInflight = Testing.makeHandler(app, "inflight_test", "null");
   bucket.onDelete(testInflight);
 
   const s = await app.startSimulator();

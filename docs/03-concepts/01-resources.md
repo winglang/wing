@@ -31,11 +31,11 @@ class SafeQueue extends cloud.Queue {
   init() {
     let dlq = new cloud.Queue();
 
-    dlq.add_consumer(inflight (m: str) => {
+    dlq.addConsumer(inflight (m: str) => {
       log.error("dead-letter: ${m}");
     });
 
-    this.add_dead_letter_queue(dlq);
+    this.addDeadLetterQueue(dlq);
   }
 }
 ```

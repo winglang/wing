@@ -1,5 +1,39 @@
 # [extern_implementation.w](../../../../examples/tests/valid/extern_implementation.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ f }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await f.call());
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({ f }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await f.print("hey there"));
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
@@ -20,6 +54,7 @@ module.exports = function({  }) {
     }
     async call()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regexInflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regexInflight("[a-z]+-\\d+","abc-123")))};
         const uuid = (await Foo.getUuid());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
@@ -231,6 +266,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call");
+        const __parent_this = this;
       }
       static getGreeting(name)  {
         return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
@@ -272,29 +308,79 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const f_client = context._lift(f);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            f: ${f_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(f, host, ["call"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const f_client = context._lift(f);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            f: ${f_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(f, host, ["print"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.getGreeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.getGreeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:call",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        f: {
-          obj: f,
-          ops: ["call","getData","getUuid","print","regexInflight"]
-        },
-      }
-    })
-    );
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:console",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        f: {
-          obj: f,
-          ops: ["call","getData","getUuid","print","regexInflight"]
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:call",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:console",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {
@@ -313,24 +399,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { f } = this;
-  (await f.call());
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const { f } = this;
-  (await f.print("hey there"));
-}
 
 ```
 

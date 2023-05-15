@@ -83,17 +83,17 @@ Our canonic example is a function that wants to put an object inside a bucket:
 ```js
 bring cloud;
 
-let my_bucket = new cloud.Bucket();
+let myBucket = new cloud.Bucket();
 
 new cloud.Function(inflight () => {
-  my_bucket.put("hello", "world");
+  myBucket.put("hello", "world");
 });
 ```
 
-The magic happens when the inflight function is referencing `my_bucket`. The `cloud.Bucket` which is
+The magic happens when the inflight function is referencing `myBucket`. The `cloud.Bucket` which is
 defined (with `new`) outside the function closure is a preflight object which represents a **cloud infrastructure resource**,
 not an in-memory object. When the function code interacts with this bucket (calls
-`my_bucket.put()`), it represents an interaction across machine boundaries. The code is executed
+`myBucket.put()`), it represents an interaction across machine boundaries. The code is executed
 inside some compute service such as AWS Lambda, and the bucket is backed by something like Amazon
 S3. The compiler has to do quite a lot in order to make this a reality on the cloud: it needs to
 wire up the bucket information during deployment, add the right permissions to the Lambda's IAM
@@ -108,11 +108,11 @@ an async function from synchronous contexts. It is also not very different from 
 Inflight functions are an *isolation boundary* enforced by the compiler. This means that there are
 certain limitations on what can be accessed from an inflight scope. Specifically, you can only
 access *immutable data* and interact with *preflight object* through their inflight API (like the
-example above demonstrates). If you try to call `my_bucket.put()` outside of an `inflight` context
+example above demonstrates). If you try to call `myBucket.put()` outside of an `inflight` context
 the Wing compiler will emit this error: 
 
 ```
-Cannot call inflight function "my_bucket.put" while in preflight phase
+Cannot call inflight function "myBucket.put" while in preflight phase
 ```
 
 Many folks are asking us [why is Wing a language and not a
