@@ -724,12 +724,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { res } = this;
-  (await res.my_put());
-}
-
-```
-
