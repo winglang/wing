@@ -5,7 +5,7 @@ import { Target } from "./constants";
 import { resolve } from "path";
 import { generateTmpDir } from "src/util";
 
-const exampleDir = resolve("../../examples/tests/valid/capture.w");
+const exampleDir = resolve("../../examples/tests/valid/captures.w");
 
 describe("test command tests", () => {
   test(
