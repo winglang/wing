@@ -9,101 +9,66 @@ on:
       - "logo/**"
       - "*.md"
   workflow_dispatch: {}
-
+      
 concurrency:
-  group: ${{ github.workflow }}-main
+  group: ${{ github.workflow }}-${{ github.event.after || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: "Build"
+  release_docs:
+    name: Get the latest version artifacts and release new version
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
-      last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
-      changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      # Reads versions from root package.json "volta" section
-      - name: Setup Node/NPM with pinned Volta version
-        uses: volta-cli/action@v4.0.0
-
-      - name: Install Dependencies
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          
+      - name: Install dependencies
         uses: bahmutov/npm-install@v1
+        with:
+          working-directory: scripts/docs/
 
-      - name: Changelog Generation
+      - name: Generate changelong
         id: changelog
-        run: npm run changelog
+        env:
+          GENERATE_VERSION: false
+        run: |
+          cp scripts/changelog.mjs scripts/docs/changelog.mjs
+          cd scripts/docs/
+          npm run changelog
 
-      - name: Upload Wing CLI
-        uses: actions/upload-artifact@v3
-        with:
-          name: wing
-          path: apps/wing/*.tgz
+      - name: Download assets
+        run: npx tsx scripts/docs/downloadAssets.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
-      - name: Upload WingSDK
-        uses: actions/upload-artifact@v3
-        with:
-          name: wingsdk
-          path: libs/wingsdk/*.tgz
-
-      - name: Upload WingC WASM
-        uses: actions/upload-artifact@v3
-        with:
-          name: wingc
-          path: target/wasm32-wasi/release/wingc.wasm
-
-      - name: Upload Extension
-        uses: actions/upload-artifact@v3
-        with:
-          name: vscode-wing
-          path: apps/vscode-wing/vscode-wing.vsix
-
-      - name: Compress Docs
+      - name: Compress docs
         run: tar -czvf docs.tgz docs/*
-
-      - name: Upload Docs
-        uses: actions/upload-artifact@v3
-        with:
-          name: docs
-          path: docs.tgz
-
-  publish:
-    name: Publish
-    needs:
-      - build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
-        if: ${{ needs.build.outputs.last-version != needs.build.outputs.version }}
+        if: ${{ fromJson(steps.changelog.outputs.data).newVersion != fromJson(steps.changelog.outputs.data).lastVersion }}
         with:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
-          tag: "v${{ needs.build.outputs.version }}"
-
-      - name: Rename Docs
-        run: mv docs "docs-${{ needs.build.outputs.version }}.tgz"
-
-      - name: Write Changelog
+          tag: "v${{ fromJson(steps.changelog.outputs.data).newVersion }}"
+      
+      - name: Write changelog
         uses: DamianReeves/write-file-action@v1.2
         with:
           path: "CHANGELOG.md"
-          contents: ${{ needs.build.outputs.changelog }}
+          contents: ${{ fromJson(steps.changelog.outputs.data).changelog }}
           write-mode: overwrite
 
-      - name: Compute Checksums
+      - name: Compute checksums
         run: |
-          mkdir dist
-          mv ./*/*.vsix ./dist
-          mv ./*/*.tgz ./dist
-          mv ./*/*.wasm ./dist
+          mv docs.tgz dist/
           cd dist
 
           echo '' >> ../CHANGELOG.md
@@ -112,12 +77,12 @@ jobs:
           sha1sum --binary * >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md
           cat ../CHANGELOG.md
-
-      - name: Cut Development Release
+      
+      - name: Cut development release
         uses: softprops/action-gh-release@v1
         with:
-          name: "Wing ${{ needs.build.outputs.version }}"
-          tag_name: "v${{ needs.build.outputs.version }}"
+          name: "Wing ${{ fromJson(steps.changelog.outputs.data).newVersion }}"
+          tag_name: "v${{ fromJson(steps.changelog.outputs.data).newVersion }}"
           body_path: CHANGELOG.md
           files: dist/*
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
