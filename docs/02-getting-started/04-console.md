@@ -73,3 +73,5 @@ You have just written and tested your first Wing program!
 ---
 
 Now, after you have tested your application, lets deploy it to AWS.
+
+This is a change just for testing the build process. DO NOT MERGE THIS CHANGE.
