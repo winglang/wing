@@ -3279,9 +3279,9 @@ Represents a length of time.
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Duration.fromDays">fromDays</a></code> | Create a Duration representing an amount of days. |
 | <code><a href="#@winglang/sdk.std.Duration.fromHours">fromHours</a></code> | Create a Duration representing an amount of hours. |
+| <code><a href="#@winglang/sdk.std.Duration.fromMilliseconds">fromMilliseconds</a></code> | Create a Duration representing an amount of milliseconds. |
 | <code><a href="#@winglang/sdk.std.Duration.fromMinutes">fromMinutes</a></code> | Create a Duration representing an amount of minutes. |
 | <code><a href="#@winglang/sdk.std.Duration.fromSeconds">fromSeconds</a></code> | Create a Duration representing an amount of seconds. |
-| <code><a href="#@winglang/sdk.std.Duration.fromMilliseconds">fromMilliseconds</a></code> | Create a Duration representing an amount of milliseconds. |
 
 ---
 
