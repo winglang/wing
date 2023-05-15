@@ -1,9 +1,8 @@
 import * as cdktf from "cdktf";
-import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { Bucket, IBucketEventHandler } from "../../src/cloud";
-import { NodeJsCode, Inflight } from "../../src/core";
+import { Bucket } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
+import { Testing } from "../../src/testing";
 import {
   mkdtemp,
   tfResourcesOf,
@@ -11,15 +10,6 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
-
-class InflightBucketEventHandler
-  extends Inflight
-  implements IBucketEventHandler
-{
-  constructor(scope: Construct, id: string) {
-    super(scope, id, { code: NodeJsCode.fromInline("null") });
-  }
-}
 
 test("create a bucket", () => {
   // GIVEN
@@ -144,7 +134,7 @@ test("bucket with onCreate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onCreate(inflightTest);
   const output = app.synth();
 
@@ -176,7 +166,7 @@ test("bucket with onDelete method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onDelete(inflightTest);
   const output = app.synth();
 
@@ -208,7 +198,7 @@ test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onUpdate(inflightTest);
   const output = app.synth();
 
@@ -240,7 +230,7 @@ test("bucket with onEvent method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onEvent(inflightTest);
   const output = app.synth();
 
