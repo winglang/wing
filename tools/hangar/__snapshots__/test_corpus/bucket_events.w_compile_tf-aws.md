@@ -1,5 +1,112 @@
 # [bucket_events.w](../../../../examples/tests/valid/bucket_events.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log(`deleted ${key}`)};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log(`updated ${key}`)};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
+## clients/$Inflight3.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight3 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log(`created ${key}`)};
+      }
+    }
+  }
+  return $Inflight3;
+}
+
+```
+
+## clients/$Inflight4.inflight.js
+```js
+module.exports = function({ other }) {
+  class  $Inflight4 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log(`last key ${key}`)};
+        (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+      }
+    }
+  }
+  return $Inflight4;
+}
+
+```
+
+## clients/$Inflight5.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight5 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log("other bucket event called!")};
+      }
+    }
+  }
+  return $Inflight5;
+}
+
+```
+
+## clients/$Inflight6.inflight.js
+```js
+module.exports = function({ b }) {
+  class  $Inflight6 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await b.put("a","1"));
+        (await b.put("b","1"));
+        (await b.put("b","100"));
+        (await b.put("c","1"));
+        (await b.delete("c"));
+      }
+    }
+  }
+  return $Inflight6;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -130,7 +237,7 @@
             "uniqueId": "root_b_boncreateOnMessage8588493f_IamRolePolicy_369E4FFE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_b_boncreateOnMessage8588493f_IamRole_F4D6A039.name}"
       },
       "root_b_boncreateOnMessage88f6f7aa_IamRolePolicy_78821956": {
@@ -160,7 +267,7 @@
             "uniqueId": "root_b_bondeleteOnMessagedece1815_IamRolePolicy_211100A3"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_b_bondeleteOnMessagedece1815_IamRole_0A3F666E.name}"
       },
       "root_b_bonupdateOnMessage8b441417_IamRolePolicy_BD9C58B6": {
@@ -180,7 +287,7 @@
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_IamRolePolicy_F62B56EB"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_b_bonupdateOnMessagec7d8cc3e_IamRole_1B0D38A4.name}"
       },
       "root_other_otheroncreateOnMessage1a259cac_IamRolePolicy_09BCADB5": {
@@ -220,7 +327,7 @@
             "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
@@ -1256,52 +1363,206 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight3 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
+            const client = new $Inflight3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight4 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+        const other_client = context._lift(other);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            other: ${other_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight4Client = ${$Inflight4._toInflightType(this).text};
+            const client = new $Inflight4Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(other, host, ["put"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight5 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight5Client = ${$Inflight5._toInflightType(this).text};
+            const client = new $Inflight5Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight6 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight6.inflight.js".replace(/\\/g, "/");
+        const b_client = context._lift(b);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            b: ${b_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight6Client = ${$Inflight6._toInflightType(this).text};
+            const client = new $Inflight6Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(b, host, ["delete", "put"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"other");
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b");
-    (b.onDelete(new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ));
-    (b.onUpdate(new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ));
-    (b.onCreate(new $stdlib.core.Inflight(this, "$Inflight3", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc3/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ));
-    (b.onEvent(new $stdlib.core.Inflight(this, "$Inflight4", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc4/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        other: {
-          obj: other,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-      }
-    })
-    ));
-    (other.onEvent(new $stdlib.core.Inflight(this, "$Inflight5", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc5/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight6", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc6/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        b: {
-          obj: b,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-      }
-    })
-    );
+    (b.onDelete(new $Inflight1(this,"$Inflight1")));
+    (b.onUpdate(new $Inflight2(this,"$Inflight2")));
+    (b.onCreate(new $Inflight3(this,"$Inflight3")));
+    (b.onEvent(new $Inflight4(this,"$Inflight4")));
+    (other.onEvent(new $Inflight5(this,"$Inflight5")));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight6(this,"$Inflight6"));
   }
 }
 class $App extends $AppBase {
@@ -1320,65 +1581,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(key) {
-  const {  } = this;
-  {console.log(`deleted ${key}`)};
-}
-
-```
-
-## proc2/index.js
-```js
-async handle(key) {
-  const {  } = this;
-  {console.log(`updated ${key}`)};
-}
-
-```
-
-## proc3/index.js
-```js
-async handle(key) {
-  const {  } = this;
-  {console.log(`created ${key}`)};
-}
-
-```
-
-## proc4/index.js
-```js
-async handle(key) {
-  const { other } = this;
-  {console.log(`last key ${key}`)};
-  (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
-}
-
-```
-
-## proc5/index.js
-```js
-async handle(key) {
-  const {  } = this;
-  {console.log("other bucket event called!")};
-}
-
-```
-
-## proc6/index.js
-```js
-async handle() {
-  const { b } = this;
-  (await b.put("a","1"));
-  (await b.put("b","1"));
-  (await b.put("b","100"));
-  (await b.put("c","1"));
-  (await b.delete("c"));
-}
 
 ```
 
