@@ -11,6 +11,6 @@ let i = inflight () => {
   //     ^ Cannot reference 's' of type 'MutSet<num>' from an inflight context
   assert(m.size() == 1);
   //     ^ Cannot reference 'm' of type 'MutMap<bool>' from an inflight context
-  assert(aCloned.size == 1);
+  assert(aCloned.length == 1);
   //     ^ Cannot reference 'aCloned' of type 'MutArray<str>' from an inflight context
 };

@@ -1,5 +1,32 @@
 # [reset.w](../../../../examples/tests/valid/reset.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ counter }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
+        (await counter.inc());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
+        (await counter.inc());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 2)'`)})(((await counter.peek()) === 2))};
+        (await counter.inc(10));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
+        (await counter.reset());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
+        (await counter.reset(88));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 88)'`)})(((await counter.peek()) === 88))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -21,7 +48,7 @@
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:reset\",\"${aws_lambda_function.root_testreset_271DE846.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:reset\",\"${aws_lambda_function.root_testreset_Handler_6C29318E.arn}\"]]"
     }
   },
   "provider": {
@@ -50,61 +77,61 @@
       }
     },
     "aws_iam_role": {
-      "root_testreset_IamRole_96AB4BE3": {
+      "root_testreset_Handler_IamRole_3FFC708F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/IamRole",
-            "uniqueId": "root_testreset_IamRole_96AB4BE3"
+            "path": "root/Default/Default/test:reset/Handler/IamRole",
+            "uniqueId": "root_testreset_Handler_IamRole_3FFC708F"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testreset_IamRolePolicy_6D3DF6A9": {
+      "root_testreset_Handler_IamRolePolicy_902A4BAC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/IamRolePolicy",
-            "uniqueId": "root_testreset_IamRolePolicy_6D3DF6A9"
+            "path": "root/Default/Default/test:reset/Handler/IamRolePolicy",
+            "uniqueId": "root_testreset_Handler_IamRolePolicy_902A4BAC"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testreset_IamRole_96AB4BE3.name}"
+        "role": "${aws_iam_role.root_testreset_Handler_IamRole_3FFC708F.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testreset_IamRolePolicyAttachment_87C12602": {
+      "root_testreset_Handler_IamRolePolicyAttachment_EA60CD22": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/IamRolePolicyAttachment",
-            "uniqueId": "root_testreset_IamRolePolicyAttachment_87C12602"
+            "path": "root/Default/Default/test:reset/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testreset_Handler_IamRolePolicyAttachment_EA60CD22"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testreset_IamRole_96AB4BE3.name}"
+        "role": "${aws_iam_role.root_testreset_Handler_IamRole_3FFC708F.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testreset_271DE846": {
+      "root_testreset_Handler_6C29318E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/Default",
-            "uniqueId": "root_testreset_271DE846"
+            "path": "root/Default/Default/test:reset/Handler/Default",
+            "uniqueId": "root_testreset_Handler_6C29318E"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "test-reset-c8e494b2"
+            "WING_FUNCTION_NAME": "Handler-c81a3369"
           }
         },
-        "function_name": "test-reset-c8e494b2",
+        "function_name": "Handler-c81a3369",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testreset_IamRole_96AB4BE3.arn}",
+        "role": "${aws_iam_role.root_testreset_Handler_IamRole_3FFC708F.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testreset_S3Object_782B6FB2.key}",
+        "s3_key": "${aws_s3_object.root_testreset_Handler_S3Object_0E10B0F5.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -124,11 +151,11 @@
       }
     },
     "aws_s3_object": {
-      "root_testreset_S3Object_782B6FB2": {
+      "root_testreset_Handler_S3Object_0E10B0F5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/S3Object",
-            "uniqueId": "root_testreset_S3Object_782B6FB2"
+            "path": "root/Default/Default/test:reset/Handler/S3Object",
+            "uniqueId": "root_testreset_Handler_S3Object_0E10B0F5"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -150,17 +177,42 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 0 });
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:reset",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        counter: {
-          obj: counter,
-          ops: ["dec","inc","peek","reset"]
-        },
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
       }
-    })
-    );
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const counter_client = context._lift(counter);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            counter: ${counter_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(counter, host, ["inc", "peek", "reset"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 0 });
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:reset",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -179,25 +231,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { counter } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-  (await counter.inc());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
-  (await counter.inc());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 2)'`)})(((await counter.peek()) === 2))};
-  (await counter.inc(10));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
-  (await counter.reset());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-  (await counter.reset(88));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 88)'`)})(((await counter.peek()) === 88))};
-}
 
 ```
 

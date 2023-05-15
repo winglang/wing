@@ -4,7 +4,7 @@ import { Function } from "../../src/cloud";
 import { Duration } from "../../src/std";
 import * as awscdk from "../../src/target-awscdk";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
+import { mkdtemp } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",

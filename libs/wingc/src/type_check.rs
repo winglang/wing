@@ -12,7 +12,7 @@ use crate::visit::Visit;
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -452,12 +452,49 @@ impl Subtype for Type {
 					parent_type.is_subtype_of(other)
 				})
 			}
-			(Self::Resource(res), Self::Interface(_)) => {
+			(Self::Resource(res), Self::Interface(iface)) => {
 				// If a resource implements the interface then it's a subtype of it (nominal typing)
-				res.implements.iter().any(|parent| {
+				let implements_iface = res.implements.iter().any(|parent| {
 					let parent_type: &Type = parent;
 					parent_type.is_subtype_of(other)
-				})
+				});
+
+				if implements_iface {
+					return true;
+				}
+
+				// To support flexible inflight closures, we say that any
+				// preflight class with an inflight method named "handle" is a subtype of
+				// any single-method interface with a matching "handle" method type.
+
+				// First, check if there is exactly one inflight method in the interface
+				let mut inflight_methods = iface
+					.methods(true)
+					.filter(|(_name, type_)| type_.is_inflight_function());
+				let handler_method = inflight_methods.next();
+				if handler_method.is_none() || inflight_methods.next().is_some() {
+					return false;
+				}
+
+				// Next, check that the method's name is "handle"
+				let (handler_method_name, handler_method_type) = handler_method.unwrap();
+				if handler_method_name != "handle" {
+					return false;
+				}
+
+				// Then get the type of the resource's "handle" method if it has one
+				let res_handle_type = if let Some(method) = res.get_method(&"handle".into()) {
+					if method.type_.is_inflight_function() {
+						method.type_
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				};
+
+				// Finally check if they're subtypes
+				res_handle_type.is_subtype_of(&handler_method_type)
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
@@ -755,6 +792,17 @@ impl TypeRef {
 
 	pub fn is_immutable_collection(&self) -> bool {
 		if let Type::Array(_) | Type::Map(_) | Type::Set(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_inflight_function(&self) -> bool {
+		if let Type::Function(ref sig) = **self {
+			if sig.phase == Phase::Inflight {
+				return true;
+			}
 			true
 		} else {
 			false
@@ -2068,7 +2116,7 @@ impl<'a> TypeChecker<'a> {
 						// we use the module name as the identifier.
 						// For example, `bring fs` will import the `fs` namespace from @winglang/sdk and assign it
 						// to an identifier named `fs`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE | WINGSDK_REDIS_MODULE => {
+						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
 							alias = identifier.as_ref().unwrap_or(&module_name);
@@ -2966,6 +3014,37 @@ impl<'a> TypeChecker<'a> {
 				_ => return None,
 			}
 		}
+
+		// rewrite "namespace.foo()" to "namespace.Util.foo()" (e.g. `util.env()`). we do this by
+		// looking up the symbol path within the current environment and if it resolves to a namespace,
+		// then resolve a class named "Util" within it. This will basically be equivalent to the
+		// `foo.Bar.baz()` case (where `baz()`) is a static method of class `Bar`.
+		if !path.is_empty() {
+			let result = env.lookup_nested(&path.iter().collect_vec(), Some(self.statement_idx));
+			if let LookupResult::Found(symbol_kind, _) = result {
+				if let SymbolKind::Namespace(_) = symbol_kind {
+					// resolve "Util" as a user defined class within the namespace
+					let root = path.pop().unwrap();
+					path.reverse();
+					path.push(Symbol {
+						name: "Util".to_string(),
+						span: root.span.clone(),
+					});
+
+					let ut = UserDefinedType {
+						root,
+						fields: path,
+						span: WingSpan::default(),
+					};
+
+					return self
+						.resolve_user_defined_type(&ut, env, self.statement_idx)
+						.ok()
+						.map(|_| ut);
+				}
+			}
+		}
+
 		let root = path.pop().unwrap();
 		path.reverse();
 		let user_type_annotation = UserDefinedType {
@@ -2989,7 +3068,10 @@ impl<'a> TypeChecker<'a> {
 						var
 					} else {
 						self.variable_error(TypeError {
-							message: format!("Expected identifier {}, to be a variable, but it's a {}", symbol, var),
+							message: format!(
+								"Expected identifier \"{}\" to be a variable, but it's a {}",
+								symbol.name, var
+							),
 							span: symbol.span.clone(),
 						})
 					}

@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ api_path_vars.wsim » root/env0/test
+pass ─ api_path_vars.wsim » root/env0/test:test
 ```
 

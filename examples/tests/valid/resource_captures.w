@@ -138,7 +138,7 @@ class MyResource {
 let b = new cloud.Bucket();
 let r = new MyResource(b, 12);
 
-new cloud.Function(inflight () => {
+test "test" {
   r.testNoCapture();
   r.testCaptureCollectionsOfData();
   r.testCapturePrimitives();
@@ -150,4 +150,4 @@ new cloud.Function(inflight () => {
   r.testExternal();
   r.testUserDefinedResource();
   r.testInflightField();
-}) as "test";
+}

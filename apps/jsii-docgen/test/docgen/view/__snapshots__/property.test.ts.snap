@@ -188,28 +188,28 @@ public readonly repositoryCatalogData: any;
 exports[`wing snapshot 1`] = `
 Object {
   "default": undefined,
-  "displayName": "repository_catalog_data",
+  "displayName": "repositoryCatalogData",
   "docs": Object {
     "links": Array [
       "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorycatalogdata",
     ],
     "summary": "\`AWS::ECR::PublicRepository.RepositoryCatalogData\`.",
   },
-  "fqn": "@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repository_catalog_data",
+  "fqn": "@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData",
   "id": "@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData",
   "optional": true,
   "type": Object {
     "formattingPattern": "any",
   },
-  "usage": "repository_catalog_data: any;",
+  "usage": "repositoryCatalogData: any;",
 }
 `;
 
 exports[`wing snapshot 2`] = `
-" \`repository_catalog_data\`<sup>Optional</sup> <a name=\\"repository_catalog_data\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
+" \`repositoryCatalogData\`<sup>Optional</sup> <a name=\\"repositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
 
 \`\`\`wing
-repository_catalog_data: any;
+repositoryCatalogData: any;
 \`\`\`
 
 - *Type:* any

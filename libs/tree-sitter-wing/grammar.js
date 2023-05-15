@@ -90,6 +90,7 @@ module.exports = grammar({
 
     _statement: ($) =>
       choice(
+        $.test_statement,
         $.short_import_statement,
         $.expression_statement,
         $.variable_definition_statement,
@@ -105,7 +106,7 @@ module.exports = grammar({
         $.if_statement,
         $.struct_definition,
         $.enum_definition,
-        $.try_catch_statement
+        $.try_catch_statement,
       ),
 
     short_import_statement: ($) =>
@@ -649,6 +650,9 @@ module.exports = grammar({
     json_container_type: ($) => $._json_types,
 
     _json_types: ($) => choice("Json", "MutJson"),
+
+    test_statement: ($) =>
+      seq("test", field("name", $.string), field("block", $.block))
   },
 });
 
