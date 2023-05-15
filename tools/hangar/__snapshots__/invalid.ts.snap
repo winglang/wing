@@ -113,7 +113,7 @@ error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"fo
 `;
 
 exports[`capture_mutables.w > stderr 1`] = `
-"error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
+"Error: error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
   --> ../../../examples/tests/invalid/capture_mutables.w:8:10
   |
 8 |   assert(a.length == 1);
@@ -148,7 +148,7 @@ error: Cannot capture field 'aCloned' with non-capturable type 'MutArray<str>'
 `;
 
 exports[`capture_reassignable.w > stderr 1`] = `
-"error: Cannot capture reassignable field 'x'
+"Error: error: Cannot capture reassignable field 'x'
   --> ../../../examples/tests/invalid/capture_reassignable.w:6:15
   |
 6 |     log(\\"x: \${x}\\");
