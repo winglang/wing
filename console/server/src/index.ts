@@ -5,6 +5,7 @@ import Emittery from "emittery";
 import { Config } from "./config.js";
 import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
+import { HostUtils } from "./hostUtils.js";
 import { Router } from "./router/index.js";
 import { State } from "./types.js";
 import { Updater } from "./updater.js";
@@ -28,6 +29,7 @@ export interface CreateConsoleServerOptions {
   updater?: Updater;
   config: Config;
   requestedPort?: number;
+  hostUtils?: HostUtils;
 }
 
 export const createConsoleServer = async ({
@@ -36,6 +38,7 @@ export const createConsoleServer = async ({
   updater,
   config,
   requestedPort,
+  hostUtils,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -154,6 +157,7 @@ export const createConsoleServer = async ({
     appState() {
       return appState;
     },
+    hostUtils,
   });
 
   const close = async () => {

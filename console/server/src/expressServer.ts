@@ -10,6 +10,7 @@ import { WebSocketServer } from "ws";
 
 import { Config } from "./config.js";
 import { ConsoleLogger } from "./consoleLogger.js";
+import { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
 import { State } from "./types.js";
 import { Updater } from "./updater.js";
@@ -30,6 +31,7 @@ export interface CreateExpressServerOptions {
   config: Config;
   requestedPort?: number;
   appState(): State;
+  hostUtils?: HostUtils;
 }
 
 export const createExpressServer = async ({
@@ -42,6 +44,7 @@ export const createExpressServer = async ({
   config,
   requestedPort,
   appState,
+  hostUtils,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -65,6 +68,7 @@ export const createExpressServer = async ({
       updater,
       config,
       appState,
+      hostUtils,
     };
   };
   app.use(

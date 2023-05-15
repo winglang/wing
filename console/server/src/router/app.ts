@@ -384,9 +384,8 @@ export const createAppRouter = () => {
           url: z.string(),
         }),
       )
-      .mutation(async ({ input }) => {
-        // TODO
-        // await shell.openExternal(input.url);
+      .mutation(async ({ ctx, input }) => {
+        await ctx.hostUtils?.openExternal(input.url);
       }),
   });
 

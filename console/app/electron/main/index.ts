@@ -8,6 +8,7 @@ import fixPath from "fix-path";
 
 import { initApplicationMenu, setApplicationMenu } from "./appMenu.js";
 import { AppConfig, ThemeMode } from "./config.js";
+import { HostUtils } from "./hostUtils.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
 import { ThemeStore } from "./themStore.js";
@@ -130,6 +131,7 @@ function createWindowManager() {
         log,
         updater,
         config: appConfig,
+        hostUtils: new HostUtils(),
       });
 
       newWindow = await createWindow({
