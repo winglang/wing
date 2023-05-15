@@ -1,0 +1,18 @@
+{
+    "name": "docs",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "changelog": "node changelog.mjs"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@octokit/request": "^6.2.3",
+      "changelogen": "^0.5.3",
+      "semver": "^7.5.1",
+      "tar": "^6.1.14",
+      "tsx": "^3.12.7"
+    }
+  }
