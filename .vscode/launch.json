@@ -25,7 +25,13 @@
     },
     {
       "command": "npx nx wing -- test ..${pathSeparator}..${pathSeparator}${relativeFile}",
-      "name": "wing compile test",
+      "name": "wing test sim",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "npx nx wing -- test -t tf-aws ..${pathSeparator}..${pathSeparator}${relativeFile}",
+      "name": "wing test tf-aws",
       "request": "launch",
       "type": "node-terminal"
     },
@@ -38,10 +44,7 @@
         "WING_BIN": "${workspaceFolder}/apps/wing/bin/wing",
         "RUST_BACKTRACE": "1"
       },
-      "args": [
-        "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-wing"
-      ]
+      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-wing"]
     }
   ]
 }

@@ -7,8 +7,9 @@ import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/tar
 import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
-import { withSpinner } from "../util";
+import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "./constants";
+import { rmSync } from "fs-extra";
 
 const log = debug("wing:test");
 
@@ -26,8 +27,9 @@ export async function test(entrypoints: string[], options: TestOptions) {
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
+  const tempFile: string = Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
   const synthDir = await withSpinner(`Compiling to ${options.target}...`, () =>
-    compile(entrypoint, {
+    compile(tempFile, {
       ...options,
       testing: true,
     })
@@ -142,49 +144,64 @@ async function testSimulator(synthDir: string) {
   await s.stop();
 
   const hasFailures = printTestReport(synthDir, results);
+  rmSync(synthDir, { recursive: true, force: true });
+
   if (hasFailures) {
     process.exit(1);
   }
 }
 
-async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
-  if (!isTerraformInstalled(synthDir)) {
-    throw new Error(
-      "Terraform is not installed. Please install Terraform to run tests in the cloud."
-    );
-  }
-
-  await withSpinner("terraform init", () => terraformInit(synthDir));
-
-  await checkTerraformStateIsEmpty(synthDir);
-
-  await withSpinner("terraform apply", () => terraformApply(synthDir));
-
-  const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-    const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
-    const testRunner = new TfawsTestRunnerClient(testArns);
-
-    const tests = await testRunner.listTests();
-    return [testRunner, pickOneTestPerEnvironment(tests)];
-  });
-
-  const results = await withSpinner("Running tests...", async () => {
-    const results = new Array<sdk.cloud.TestResult>();
-    for (const path of tests) {
-      results.push(await testRunner.runTest(path));
+async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | void> {
+  try {
+    if (!isTerraformInstalled(synthDir)) {
+      throw new Error(
+        "Terraform is not installed. Please install Terraform to run tests in the cloud."
+      );
     }
+
+    await withSpinner("terraform init", async () => await terraformInit(synthDir));
+
+    if (!(await checkTerraformStateIsEmpty(synthDir))) {
+      console.warn(
+        `Terraform state is not empty. Running \`terraform destroy\` inside ${synthDir} to clean up any previous test runs:`
+      );
+      await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
+    }
+    await withSpinner("terraform apply", () => terraformApply(synthDir));
+
+    const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+      const testRunner = new TfawsTestRunnerClient(testArns);
+
+      const tests = await testRunner.listTests();
+      return [testRunner, pickOneTestPerEnvironment(tests)];
+    });
+
+    const results = await withSpinner("Running tests...", async () => {
+      const results = new Array<sdk.cloud.TestResult>();
+      for (const path of tests) {
+        results.push(await testRunner.runTest(path));
+      }
+      return results;
+    });
+
+    const hasFailures = printTestReport(synthDir, results);
+
+    if (hasFailures) {
+      console.log("One or more tests failed. Cleaning up resources...");
+    }
+
     return results;
-  });
-
-  const hasFailures = printTestReport(synthDir, results);
-
-  if (hasFailures) {
-    console.log("One or more tests failed. Cleaning up resources...");
+  } catch (err) {
+    console.warn((err as Error).message);
+  } finally {
+    cleanup(synthDir);
   }
+}
 
+async function cleanup(synthDir: string) {
   await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
-
-  return results;
+  rmSync(synthDir, { recursive: true, force: true });
 }
 
 async function isTerraformInstalled(synthDir: string) {
@@ -192,17 +209,13 @@ async function isTerraformInstalled(synthDir: string) {
   return output.startsWith("Terraform v");
 }
 
-export async function checkTerraformStateIsEmpty(synthDir: string) {
+export async function checkTerraformStateIsEmpty(synthDir: string): Promise<boolean> {
   try {
     const output = await execCapture("terraform state list", { cwd: synthDir });
-    if (output.length > 0) {
-      throw new Error(
-        `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
-      );
-    }
+    return !output.length;
   } catch (err: unknown) {
     if ((err as Error).message.includes("No state file was found")) {
-      return;
+      return true;
     }
 
     // An unexpected error occurred, rethrow it
@@ -211,15 +224,15 @@ export async function checkTerraformStateIsEmpty(synthDir: string) {
 }
 
 export async function terraformInit(synthDir: string) {
-  await execCapture("terraform init", { cwd: synthDir });
+  return execCapture("terraform init", { cwd: synthDir });
 }
 
 async function terraformApply(synthDir: string) {
-  await execCapture("terraform apply -auto-approve", { cwd: synthDir });
+  return execCapture("terraform apply -auto-approve", { cwd: synthDir });
 }
 
 async function terraformDestroy(synthDir: string) {
-  await execCapture("terraform destroy -auto-approve", { cwd: synthDir });
+  return execCapture("terraform destroy -auto-approve", { cwd: synthDir });
 }
 
 async function terraformOutput(synthDir: string, name: string) {
