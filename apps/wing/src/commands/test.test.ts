@@ -38,10 +38,16 @@ describe("printing test reports", () => {
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
-    console.error("test", chalk.level);
   });
 
-  test("resource traces are shown if debug mode is active", () => {
+  test("resource traces are not shown if debug mode is disabled", () => {
+    const testReport = renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
+
+    expect(testReport).toMatchSnapshot();
+    expect(testReport).not.toContain("Push (message=cool)");
+  });
+
+  test("resource traces are shown if debug mode is enabled", () => {
     const oldDebug = process.env.DEBUG;
     process.env.DEBUG = "1";
 

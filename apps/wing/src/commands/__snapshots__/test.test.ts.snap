@@ -1,6 +1,24 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`printing test reports > resource traces are not shown if debug mode is disabled 1`] = `
+"fail ┌ hello.w » root/env0/test:test
+     │ sleeping for 500 ms
+     └ Error: Object does not exist (key=file.txt)"
+`;
+
 exports[`printing test reports > resource traces are shown if debug mode is active 1`] = `
+"fail ┌ hello.w » root/env0/test:test
+     │ [trace] Push (message=cool).
+     │ sleeping for 500 ms
+     │ [trace] Sending messages (messages=[\\"cool\\"], subscriber=sim-4).
+     │ [trace] Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"cool\\\\\\"]}\\").
+     │ [trace] Subscriber error - returning 1 messages to queue: Missing environment variable: QUEUE_HANDLE_7164aec4
+     │ [trace] Get (key=file.txt).
+     │ [trace] Invoke (payload=\\"\\").
+     └ Error: Object does not exist (key=file.txt)"
+`;
+
+exports[`printing test reports > resource traces are shown if debug mode is enabled 1`] = `
 "fail ┌ hello.w » root/env0/test:test
      │ [trace] Push (message=cool).
      │ sleeping for 500 ms
