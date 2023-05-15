@@ -230,18 +230,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { counter } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
-  const dec1 = (await counter.dec());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec1 === 1)'`)})((dec1 === 1))};
-  const dec2 = (await counter.dec(2));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === (-2))'`)})(((await counter.peek()) === (-2)))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === 0)'`)})((dec2 === 0))};
-}
-
-```
-

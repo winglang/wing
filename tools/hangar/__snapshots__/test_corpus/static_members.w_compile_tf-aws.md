@@ -278,28 +278,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const {  } = this;
-  class InflightClass {
-    constructor()  {
-    }
-    async inflightMethod()  {
-      {
-        return "Inflight method";
-      }
-    }
-    static async staticInflightMethod()  {
-      {
-        return "Static inflight method";
-      }
-    }
-  }
-  const inflightClass = new InflightClass();
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflightClass.inflightMethod()) === "Inflight method")'`)})(((await inflightClass.inflightMethod()) === "Inflight method"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.staticInflightMethod()) === "Static inflight method")'`)})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
-}
-
-```
-

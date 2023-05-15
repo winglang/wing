@@ -496,30 +496,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { counterA } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterA.peek()) === 0)'`)})(((await counterA.peek()) === 0))};
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const { counterB } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterB.peek()) === 500)'`)})(((await counterB.peek()) === 500))};
-}
-
-```
-
-## proc3/index.js
-```js
-async handle() {
-  const { counterC } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterC.peek()) === (-198))'`)})(((await counterC.peek()) === (-198)))};
-}
-
-```
-

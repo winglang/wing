@@ -724,22 +724,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { r } = this;
-  (await r.testNoCapture());
-  (await r.testCaptureCollectionsOfData());
-  (await r.testCapturePrimitives());
-  (await r.testCaptureOptional());
-  (await r.testCaptureResource());
-  (await r.testNestedInflightField());
-  (await r.testNestedResource());
-  (await r.testExpressionRecursive());
-  (await r.testExternal());
-  (await r.testUserDefinedResource());
-  (await r.testInflightField());
-}
-
-```
-

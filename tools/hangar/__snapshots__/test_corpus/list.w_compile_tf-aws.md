@@ -237,23 +237,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { table } = this;
-  (await table.insert("eyal",Object.freeze({"gender":"male"})));
-  (await table.insert("revital",Object.freeze({"gender":"female"})));
-  const unorderded = {};
-  for (const u of (await table.list())) {
-    ((obj, args) => { obj[args[0]] = args[1]; })(unorderded, [((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((u)["name"]),u]);
-  }
-  const revital = (unorderded)["revital"];
-  const eyal = (unorderded)["eyal"];
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("eyal" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["name"]))'`)})(("eyal" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["name"])))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("male" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["gender"]))'`)})(("male" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["gender"])))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("revital" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["name"]))'`)})(("revital" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["name"])))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("female" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["gender"]))'`)})(("female" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["gender"])))};
-}
-
-```
-

@@ -235,26 +235,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle(s) {
-  const { myBool, myDur, myNum, mySecondBool, myStr } = this;
-  {console.log(myStr)};
-  const n = myNum;
-  {console.log(`${n}`)};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
-  if (myBool) {
-    {console.log("bool=true")};
-  }
-  else {
-    {console.log("bool=false")};
-  }
-  const min = myDur.minutes;
-  const sec = myDur.seconds;
-  const hr = myDur.hours;
-  const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
-}
-
-```
-

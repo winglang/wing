@@ -235,24 +235,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle(j) {
-  const {  } = this;
-  return (j + 1);
-}
-
-```
-
-## proc2/index.js
-```js
-async handle(body) {
-  const {  } = this;
-  const i = 0;
-  while (((await iterator(i)) < 3)) {
-    {console.log(`${i}`)};
-  }
-}
-
-```
-

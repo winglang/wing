@@ -385,23 +385,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle(msg) {
-  const { b, fileName } = this;
-  const x = (await b.getJson(fileName));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const { b, fileName, getJson, j } = this;
-  (await b.putJson(fileName,j));
-  (await getJson.invoke(""));
-}
-
-```
-

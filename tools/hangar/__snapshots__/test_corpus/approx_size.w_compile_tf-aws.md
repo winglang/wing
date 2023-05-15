@@ -218,14 +218,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { q } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
-  (await q.push("message"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 1)'`)})(((await q.approxSize()) === 1))};
-}
-
-```
-
