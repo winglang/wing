@@ -1,5 +1,36 @@
 # [capture_primitives.w](../../../../examples/tests/valid/capture_primitives.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(s)  {
+      {
+        {console.log(myStr)};
+        const n = myNum;
+        {console.log(`${n}`)};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
+        if (myBool) {
+          {console.log("bool=true")};
+        }
+        else {
+          {console.log("bool=false")};
+        }
+        const min = myDur.minutes;
+        const sec = myDur.seconds;
+        const hr = myDur.hours;
+        const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -130,37 +161,58 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const myStr_client = context._lift(myStr);
+        const myNum_client = context._lift(myNum);
+        const mySecondBool_client = context._lift(mySecondBool);
+        const myBool_client = context._lift(myBool);
+        const myDur_client = context._lift(myDur);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            myStr: ${myStr_client},
+            myNum: ${myNum_client},
+            mySecondBool: ${mySecondBool_client},
+            myBool: ${myBool_client},
+            myDur: ${myDur_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(myBool, host, []);
+          this._registerBindObject(myDur, host, []);
+          this._registerBindObject(myNum, host, []);
+          this._registerBindObject(mySecondBool, host, []);
+          this._registerBindObject(myStr, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const myStr = "hello, string";
     const myNum = 1234;
     const myBool = true;
     const mySecondBool = false;
     const myDur = $stdlib.std.Duration.fromSeconds(600);
-    const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        myBool: {
-          obj: myBool,
-          ops: []
-        },
-        myDur: {
-          obj: myDur,
-          ops: []
-        },
-        myNum: {
-          obj: myNum,
-          ops: []
-        },
-        mySecondBool: {
-          obj: mySecondBool,
-          ops: []
-        },
-        myStr: {
-          obj: myStr,
-          ops: []
-        },
-      }
-    })
-    ;
+    const handler = new $Inflight1(this,"$Inflight1");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler);
   }
 }

@@ -1,5 +1,31 @@
 # [pop.w](../../../../examples/tests/valid/pop.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ q, NIL }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        const msgs = Object.freeze(["Foo", "Bar"]);
+        for (const msg of msgs) {
+          (await q.push(msg));
+        }
+        const first = ((await q.pop()) ?? NIL);
+        const second = ((await q.pop()) ?? NIL);
+        const third = ((await q.pop()) ?? NIL);
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -49,7 +75,7 @@
             "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:PurgeQueue\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:ReceiveMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:ReceiveMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
@@ -142,22 +168,46 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const q_client = context._lift(q);
+        const NIL_client = context._lift(NIL);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            q: ${q_client},
+            NIL: ${NIL_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(NIL, host, []);
+          this._registerBindObject(q, host, ["pop", "push"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const NIL = "<<NIL>>";
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        NIL: {
-          obj: NIL,
-          ops: []
-        },
-        q: {
-          obj: q,
-          ops: ["approxSize","pop","purge","push"]
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

@@ -1,5 +1,24 @@
 # [std_string.w](../../../../examples/tests/valid/std_string.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ s1, s2 }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
+        {console.log((await (await s1.split(" ")).at(1)))};
+        {console.log((await s1.concat(s2)))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -130,6 +149,43 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const s1_client = context._lift(s1);
+        const s2_client = context._lift(s2);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            s1: ${s1_client},
+            s2: ${s2_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(s1, host, []);
+          this._registerBindObject(s2, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const s1 = "some string";
     const s2 = "s are immutable";
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s1.length === 11)'`)})((s1.length === 11))};
@@ -147,20 +203,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(("   some string   ".trim()) === "some string")'`)})((("   some string   ".trim()) === "some string"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '("Some String".toLocaleUpperCase() === "SOME STRING")'`)})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(("hello" + " world") === "hello world")'`)})((("hello" + " world") === "hello world"))};
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:string",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        s1: {
-          obj: s1,
-          ops: []
-        },
-        s2: {
-          obj: s2,
-          ops: []
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:string",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

@@ -1,5 +1,112 @@
 # [bucket_events.w](../../../../examples/tests/valid/bucket_events.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log(`deleted ${key}`)};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log(`updated ${key}`)};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
+## clients/$Inflight3.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight3 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log(`created ${key}`)};
+      }
+    }
+  }
+  return $Inflight3;
+}
+
+```
+
+## clients/$Inflight4.inflight.js
+```js
+module.exports = function({ other }) {
+  class  $Inflight4 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log(`last key ${key}`)};
+        (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+      }
+    }
+  }
+  return $Inflight4;
+}
+
+```
+
+## clients/$Inflight5.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight5 {
+    constructor({  }) {
+    }
+    async handle(key)  {
+      {
+        {console.log("other bucket event called!")};
+      }
+    }
+  }
+  return $Inflight5;
+}
+
+```
+
+## clients/$Inflight6.inflight.js
+```js
+module.exports = function({ b }) {
+  class  $Inflight6 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await b.put("a","1"));
+        (await b.put("b","1"));
+        (await b.put("b","100"));
+        (await b.put("c","1"));
+        (await b.delete("c"));
+      }
+    }
+  }
+  return $Inflight6;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -130,7 +237,7 @@
             "uniqueId": "root_b_boncreateOnMessage8588493f_IamRolePolicy_369E4FFE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_b_boncreateOnMessage8588493f_IamRole_F4D6A039.name}"
       },
       "root_b_boncreateOnMessage88f6f7aa_IamRolePolicy_78821956": {
@@ -160,7 +267,7 @@
             "uniqueId": "root_b_bondeleteOnMessagedece1815_IamRolePolicy_211100A3"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_b_bondeleteOnMessagedece1815_IamRole_0A3F666E.name}"
       },
       "root_b_bonupdateOnMessage8b441417_IamRolePolicy_BD9C58B6": {
@@ -180,7 +287,7 @@
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_IamRolePolicy_F62B56EB"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_other_26932ECB.arn}\",\"${aws_s3_bucket.root_other_26932ECB.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_b_bonupdateOnMessagec7d8cc3e_IamRole_1B0D38A4.name}"
       },
       "root_other_otheroncreateOnMessage1a259cac_IamRolePolicy_09BCADB5": {
@@ -220,7 +327,7 @@
             "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
@@ -728,123 +835,77 @@
       }
     },
     "aws_s3_bucket_notification": {
-      "root_b_S3Objectoncreatenotifier_37FBDD2C": {
+      "root_b_S3BucketNotification_DA757190": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_create_notifier",
-            "uniqueId": "root_b_S3Objectoncreatenotifier_37FBDD2C"
+            "path": "root/Default/Default/b/S3BucketNotification",
+            "uniqueId": "root_b_S3BucketNotification_DA757190"
           }
         },
         "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
         "depends_on": [
+          "aws_sns_topic_policy.root_b_bondelete_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_5700B364",
+          "aws_sns_topic_policy.root_b_bonupdate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_53C55984",
           "aws_sns_topic_policy.root_b_boncreate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_C218A49E"
         ],
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Put"
-            ],
-            "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
-          }
-        ]
-      },
-      "root_b_S3Objectondeletenotifier_2BF59546": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_delete_notifier",
-            "uniqueId": "root_b_S3Objectondeletenotifier_2BF59546"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_b_bondelete_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_5700B364"
-        ],
-        "topic": [
-          {
-            "events": [
               "s3:ObjectRemoved:*"
             ],
+            "id": "on-delete-notification",
             "topic_arn": "${aws_sns_topic.root_b_bondelete_357A37C8.arn}"
-          }
-        ]
-      },
-      "root_b_S3Objectonupdatenotifier_BF419C65": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_update_notifier",
-            "uniqueId": "root_b_S3Objectonupdatenotifier_BF419C65"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_b_bonupdate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_53C55984"
-        ],
-        "topic": [
+          },
           {
             "events": [
               "s3:ObjectCreated:Post"
             ],
+            "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.root_b_bonupdate_F11B4439.arn}"
-          }
-        ]
-      },
-      "root_other_S3Objectoncreatenotifier_245EEBFA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_create_notifier",
-            "uniqueId": "root_other_S3Objectoncreatenotifier_245EEBFA"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_other_otheroncreate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_432AF88B"
-        ],
-        "topic": [
+          },
           {
             "events": [
               "s3:ObjectCreated:Put"
             ],
-            "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
+            "id": "on-create-notification",
+            "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
           }
         ]
       },
-      "root_other_S3Objectondeletenotifier_723A6B77": {
+      "root_other_S3BucketNotification_C16CA005": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_delete_notifier",
-            "uniqueId": "root_other_S3Objectondeletenotifier_723A6B77"
+            "path": "root/Default/Default/other/S3BucketNotification",
+            "uniqueId": "root_other_S3BucketNotification_C16CA005"
           }
         },
         "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
         "depends_on": [
+          "aws_sns_topic_policy.root_other_otheroncreate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_432AF88B",
+          "aws_sns_topic_policy.root_other_otheronupdate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_18B527D9",
           "aws_sns_topic_policy.root_other_otherondelete_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_029C6FE9"
         ],
         "topic": [
           {
             "events": [
-              "s3:ObjectRemoved:*"
+              "s3:ObjectCreated:Put"
             ],
-            "topic_arn": "${aws_sns_topic.root_other_otherondelete_7CCB8682.arn}"
-          }
-        ]
-      },
-      "root_other_S3Objectonupdatenotifier_10BD12E1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_update_notifier",
-            "uniqueId": "root_other_S3Objectonupdatenotifier_10BD12E1"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_other_otheronupdate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_18B527D9"
-        ],
-        "topic": [
+            "id": "on-create-notification",
+            "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
+          },
           {
             "events": [
               "s3:ObjectCreated:Post"
             ],
+            "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.root_other_otheronupdate_3B763057.arn}"
+          },
+          {
+            "events": [
+              "s3:ObjectRemoved:*"
+            ],
+            "id": "on-delete-notification",
+            "topic_arn": "${aws_sns_topic.root_other_otherondelete_7CCB8682.arn}"
           }
         ]
       }
@@ -1256,52 +1317,206 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight3 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
+            const client = new $Inflight3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight4 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+        const other_client = context._lift(other);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            other: ${other_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight4Client = ${$Inflight4._toInflightType(this).text};
+            const client = new $Inflight4Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(other, host, ["put"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight5 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight5Client = ${$Inflight5._toInflightType(this).text};
+            const client = new $Inflight5Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight6 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight6.inflight.js".replace(/\\/g, "/");
+        const b_client = context._lift(b);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            b: ${b_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight6Client = ${$Inflight6._toInflightType(this).text};
+            const client = new $Inflight6Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(b, host, ["delete", "put"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"other");
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b");
-    (b.onDelete(new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ));
-    (b.onUpdate(new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ));
-    (b.onCreate(new $stdlib.core.Inflight(this, "$Inflight3", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc3/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ));
-    (b.onEvent(new $stdlib.core.Inflight(this, "$Inflight4", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc4/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        other: {
-          obj: other,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-      }
-    })
-    ));
-    (other.onEvent(new $stdlib.core.Inflight(this, "$Inflight5", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc5/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight6", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc6/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        b: {
-          obj: b,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-      }
-    })
-    );
+    (b.onDelete(new $Inflight1(this,"$Inflight1")));
+    (b.onUpdate(new $Inflight2(this,"$Inflight2")));
+    (b.onCreate(new $Inflight3(this,"$Inflight3")));
+    (b.onEvent(new $Inflight4(this,"$Inflight4")));
+    (other.onEvent(new $Inflight5(this,"$Inflight5")));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight6(this,"$Inflight6"));
   }
 }
 class $App extends $AppBase {

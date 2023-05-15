@@ -1,5 +1,22 @@
 # [doubler.w](../../../../examples/tests/valid/doubler.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(m)  {
+      {
+        return `Hello ${m}!`;
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/Doubler.inflight.js
 ```js
 module.exports = function({  }) {
@@ -9,6 +26,7 @@ module.exports = function({  }) {
     }
     async invoke(message)  {
       {
+        const __parent_this = this;
         (await this.func.handle(message));
         (await this.func.handle(message));
       }
@@ -65,6 +83,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, func) {
         super(scope, id);
         this._addInflightOps("invoke");
+        const __parent_this = this;
         this.func = func;
       }
       static _toInflightType(context) {
@@ -97,12 +116,38 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const fn = new Doubler(this,"Doubler",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
       }
-    })
-    );
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const fn = new Doubler(this,"Doubler",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
