@@ -59,7 +59,8 @@ export abstract class Queue extends Resource {
     this._addInflightOps(
       QueueInflightMethods.PUSH,
       QueueInflightMethods.PURGE,
-      QueueInflightMethods.APPROX_SIZE
+      QueueInflightMethods.APPROX_SIZE,
+      QueueInflightMethods.POP
     );
 
     props;
@@ -107,6 +108,13 @@ export interface IQueueClient {
    * @inflight
    */
   approxSize(): Promise<number>;
+
+  /**
+   * Pop a message from the queue.
+   * @returns The message, or `nil` if the queue is empty.
+   * @inflight
+   */
+  pop(): Promise<string | undefined>;
 }
 
 /**
@@ -139,4 +147,6 @@ export enum QueueInflightMethods {
   PURGE = "purge",
   /** `Queue.approxSize` */
   APPROX_SIZE = "approxSize",
+  /** `Queue.pop` */
+  POP = "pop",
 }

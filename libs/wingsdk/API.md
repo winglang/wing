@@ -5492,6 +5492,7 @@ Inflight interface for `Queue`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
 
@@ -5506,6 +5507,16 @@ approxSize(): num
 **Inflight client:** [true](#true)
 
 Retrieve the approximate number of messages in the queue.
+
+##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
+
+```wing
+pop(): str
+```
+
+**Inflight client:** [true](#true)
+
+Pop a message from the queue.
 
 ##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
 
