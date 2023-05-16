@@ -1429,12 +1429,9 @@ impl<'a> TypeChecker<'a> {
 				}
 				type_
 			}
-			ExprKind::Call {
-				callee: function,
-				arg_list,
-			} => {
+			ExprKind::Call { callee, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
-				let func_type = self.type_check_exp(function, env);
+				let func_type = self.type_check_exp(callee, env);
 
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
@@ -1447,7 +1444,7 @@ impl<'a> TypeChecker<'a> {
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig
 				} else {
-					return self.expr_error(function, "should be a function or method".to_string());
+					return self.expr_error(callee, "should be a function or method".to_string());
 				};
 
 				if !env.phase.can_call_to(&func_sig.phase) {

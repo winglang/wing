@@ -368,23 +368,23 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
-			ExprKind::Call { callee: function, arg_list } => {
-				let function_type = function.evaluated_type.borrow().unwrap();
+			ExprKind::Call { callee, arg_list } => {
+				let function_type = callee.evaluated_type.borrow().unwrap();
 				let function_sig = function_type.as_function_sig();
 				assert!(
 					function_sig.is_some() || function_type.is_anything(),
 					"Expected expression to be callable"
 				);
 
-				let expr_string = match &function.kind {
+				let expr_string = match &callee.kind {
 					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
-					_ => format!("({})", self.jsify_expression(function, ctx)),
+					_ => format!("({})", self.jsify_expression(callee, ctx)),
 				};
 				let arg_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
-						let self_string = &match &function.kind {
+						let self_string = &match &callee.kind {
 							// for "loose" macros, e.g. `print()`, $self$ is the global object
 							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {

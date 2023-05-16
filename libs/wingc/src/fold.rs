@@ -266,11 +266,8 @@ where
 			end: Box::new(f.fold_expr(*end)),
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
-		ExprKind::Call {
-			callee: function,
-			arg_list,
-		} => ExprKind::Call {
-			callee: Box::new(f.fold_expr(*function)),
+		ExprKind::Call { callee, arg_list } => ExprKind::Call {
+			callee: Box::new(f.fold_expr(*callee)),
 			arg_list: f.fold_args(arg_list),
 		},
 		ExprKind::Unary { op, exp } => ExprKind::Unary {
