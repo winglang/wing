@@ -621,11 +621,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_notification": {
-      "root_BigPublisher_b2_S3Objectoncreatenotifier_C4BA755A": {
+      "root_BigPublisher_b2_S3BucketNotification_70B757E2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/S3Object_on_create_notifier",
-            "uniqueId": "root_BigPublisher_b2_S3Objectoncreatenotifier_C4BA755A"
+            "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
+            "uniqueId": "root_BigPublisher_b2_S3BucketNotification_70B757E2"
           }
         },
         "bucket": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.id}",
@@ -637,6 +637,7 @@ module.exports = function({  }) {
             "events": [
               "s3:ObjectCreated:Put"
             ],
+            "id": "on-create-notification",
             "topic_arn": "${aws_sns_topic.root_BigPublisher_b2_b2oncreate_DFA80519.arn}"
           }
         ]
