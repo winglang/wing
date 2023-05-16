@@ -81,7 +81,7 @@ module.exports = function({ counter, b }) {
             this.counterVal = counterVal;
           }
           counterVal;
-          async sleep(ms)  {
+          static async sleep(ms)  {
             return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
           }
           async assertion()  {
@@ -98,7 +98,7 @@ module.exports = function({ counter, b }) {
                   {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
                   return;
                 }
-                (await this.sleep((1000 * 10)));
+                (await Predicate.sleep((1000 * 10)));
               }
               {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
             }
@@ -139,7 +139,7 @@ module.exports = function({ counter, b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/cloud.Test\",\"${aws_lambda_function.root_cloudTest_Handler_D9FCF988.arn}\"]]"
+      "value": "[[\"root/Default/Default/counter is incremented 10 times\",\"${aws_lambda_function.root_counterisincremented10times_Handler_B5694BAC.arn}\"]]"
     }
   },
   "provider": {
@@ -222,11 +222,11 @@ module.exports = function({ counter, b }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_cloudTest_Handler_IamRole_8B27257A": {
+      "root_counterisincremented10times_Handler_IamRole_0E3BD780": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Test/Handler/IamRole",
-            "uniqueId": "root_cloudTest_Handler_IamRole_8B27257A"
+            "path": "root/Default/Default/counter is incremented 10 times/Handler/IamRole",
+            "uniqueId": "root_counterisincremented10times_Handler_IamRole_0E3BD780"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -293,15 +293,15 @@ module.exports = function({ counter, b }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_b_bonupdateOnMessagec7d8cc3e_IamRole_1B0D38A4.name}"
       },
-      "root_cloudTest_Handler_IamRolePolicy_E7B28C57": {
+      "root_counterisincremented10times_Handler_IamRolePolicy_0BB48888": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Test/Handler/IamRolePolicy",
-            "uniqueId": "root_cloudTest_Handler_IamRolePolicy_E7B28C57"
+            "path": "root/Default/Default/counter is incremented 10 times/Handler/IamRolePolicy",
+            "uniqueId": "root_counterisincremented10times_Handler_IamRolePolicy_0BB48888"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_cloudTest_Handler_IamRole_8B27257A.name}"
+        "role": "${aws_iam_role.root_counterisincremented10times_Handler_IamRole_0E3BD780.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -365,15 +365,15 @@ module.exports = function({ counter, b }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_b_bonupdateOnMessagec7d8cc3e_IamRole_1B0D38A4.name}"
       },
-      "root_cloudTest_Handler_IamRolePolicyAttachment_4C720580": {
+      "root_counterisincremented10times_Handler_IamRolePolicyAttachment_C7BCBB0A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudTest_Handler_IamRolePolicyAttachment_4C720580"
+            "path": "root/Default/Default/counter is incremented 10 times/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_counterisincremented10times_Handler_IamRolePolicyAttachment_C7BCBB0A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudTest_Handler_IamRole_8B27257A.name}"
+        "role": "${aws_iam_role.root_counterisincremented10times_Handler_IamRole_0E3BD780.name}"
       }
     },
     "aws_lambda_function": {
@@ -533,11 +533,11 @@ module.exports = function({ counter, b }) {
           "subnet_ids": []
         }
       },
-      "root_cloudTest_Handler_D9FCF988": {
+      "root_counterisincremented10times_Handler_B5694BAC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Test/Handler/Default",
-            "uniqueId": "root_cloudTest_Handler_D9FCF988"
+            "path": "root/Default/Default/counter is incremented 10 times/Handler/Default",
+            "uniqueId": "root_counterisincremented10times_Handler_B5694BAC"
           }
         },
         "environment": {
@@ -545,16 +545,16 @@ module.exports = function({ counter, b }) {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.root_b_6D0D1E6D.bucket}",
             "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "Handler-c82bc21f"
+            "WING_FUNCTION_NAME": "Handler-c81a387c"
           }
         },
-        "function_name": "Handler-c82bc21f",
+        "function_name": "Handler-c81a387c",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudTest_Handler_IamRole_8B27257A.arn}",
+        "role": "${aws_iam_role.root_counterisincremented10times_Handler_IamRole_0E3BD780.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudTest_Handler_S3Object_CC92298E.key}",
+        "s3_key": "${aws_s3_object.root_counterisincremented10times_Handler_S3Object_4916C35D.key}",
         "timeout": 180,
         "vpc_config": {
           "security_group_ids": [],
@@ -796,11 +796,11 @@ module.exports = function({ counter, b }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_cloudTest_Handler_S3Object_CC92298E": {
+      "root_counterisincremented10times_Handler_S3Object_4916C35D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Test/Handler/S3Object",
-            "uniqueId": "root_cloudTest_Handler_S3Object_CC92298E"
+            "path": "root/Default/Default/counter is incremented 10 times/Handler/S3Object",
+            "uniqueId": "root_counterisincremented10times_Handler_S3Object_4916C35D"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -1130,7 +1130,7 @@ class $Root extends $stdlib.std.Resource {
     (b.onUpdate(new $Inflight2(this,"$Inflight2")));
     (b.onCreate(new $Inflight3(this,"$Inflight3")));
     (b.onEvent(new $Inflight4(this,"$Inflight4")));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"cloud.Test",new $Inflight5(this,"$Inflight5"),{
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"counter is incremented 10 times",new $Inflight5(this,"$Inflight5"),{
     "timeout": $stdlib.std.Duration.fromSeconds(180),}
     );
   }

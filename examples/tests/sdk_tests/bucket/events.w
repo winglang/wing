@@ -29,7 +29,7 @@ new cloud.Test(inflight () => {
             this.counterVal = counterVal;
         }
 
-        extern "../external/sleep.js" inflight sleep(ms: num);
+        extern "../external/sleep.js" static inflight sleep(ms: num);
 
         inflight assertion (): bool {
             return counter.peek() == this.counterVal;
@@ -37,14 +37,14 @@ new cloud.Test(inflight () => {
 
         inflight testAssertion ()  {
             let var i = 0;
-            // waiting for up to 2 minutes
+            // waiting for up to 2 minutess, checking every 10 seconds
             while i < 12 {
             i = i + 1;
             if this.assertion() {
                 assert(this.assertion());
                 return;
             } 
-            this.sleep(1000 * 10);
+            Predicate.sleep(1000 * 10);
             }
             assert(this.assertion());
         }
