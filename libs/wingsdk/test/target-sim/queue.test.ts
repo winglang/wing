@@ -257,3 +257,41 @@ test("queue has display title and description properties", async () => {
     },
   });
 });
+
+test("queue pops messages", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const messages = ["A", "B", "C", "D", "E", "F"];
+  cloud.Queue._newQueue(app, "my_queue", {
+    initialMessages: messages,
+  });
+
+  // WHEN
+  const s = await app.startSimulator();
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+  const poppedMessages: Array<string | undefined> = [];
+  for (let i = 0; i < messages.length; i++) {
+    poppedMessages.push(await queueClient.pop());
+  }
+  const poppedOnEmptyQueue = await queueClient.pop();
+
+  // THEN
+  await s.stop();
+  expect(poppedMessages).toEqual(messages);
+  expect(poppedOnEmptyQueue).toBeUndefined();
+});
+
+test("empty queue pops nothing", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Queue._newQueue(app, "my_queue");
+
+  // WHEN
+  const s = await app.startSimulator();
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+  const popped = await queueClient.pop();
+
+  // THEN
+  await s.stop();
+  expect(popped).toBeUndefined();
+});
