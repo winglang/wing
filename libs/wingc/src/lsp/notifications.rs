@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use lsp_types::{Range, Url};
 
-use crate::diagnostic::{DiagnosticLevel, Diagnostics};
+use crate::diagnostic::Diagnostics;
 
 lazy_static! {
 	static ref NOTIFICATION_TYPE_LOG: Vec<u8> = "window/logMessage".to_string().into_bytes();
@@ -43,7 +43,7 @@ pub unsafe fn send_notification(
 pub fn send_diagnostics(uri: &Url, diagnostics: &Diagnostics) {
 	let final_diags = diagnostics
 		.iter()
-		.filter(|item| matches!(item.level, DiagnosticLevel::Error) && item.span.is_some())
+		.filter(|item| item.span.is_some())
 		.map(|item| {
 			let span = item.span.as_ref().unwrap();
 			let start_position = span.start.into();

@@ -76,7 +76,7 @@ impl Fold for ClosureTransformer {
 			let parent_this_name = Symbol::new(PARENT_THIS_NAME, node.span.clone());
 			let this_name = Symbol::new("this", node.span.clone());
 			let parent_this_def = Stmt {
-				kind: StmtKind::VariableDef {
+				kind: StmtKind::Let {
 					reassignable: false,
 					var_name: parent_this_name,
 					initial_value: Expr {

@@ -332,7 +332,6 @@ impl<'a> JsiiImporter<'a> {
 			true => self.wing_types.add_type(Type::Struct(Struct {
 				name: new_type_symbol.clone(),
 				extends: extends.clone(),
-				should_case_convert_jsii: true,
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
@@ -628,7 +627,6 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		let class_spec = Class {
-			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
 			fqn: Some(jsii_class_fqn.to_string()),
