@@ -44,6 +44,13 @@ export function calculateQueuePermissions(
     });
   }
 
+  if (ops.includes(cloud.QueueInflightMethods.POP)) {
+    policies.push({
+      actions: ["sqs:ReceiveMessage"],
+      resources: [arn],
+    });
+  }
+
   return policies;
 }
 

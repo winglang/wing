@@ -3,6 +3,7 @@ import {
   SendMessageCommand,
   PurgeQueueCommand,
   GetQueueAttributesCommand,
+  ReceiveMessageCommand,
 } from "@aws-sdk/client-sqs";
 import { IQueueClient } from "../cloud";
 
@@ -34,5 +35,17 @@ export class QueueClient implements IQueueClient {
     });
     const data = await this.client.send(command);
     return Number.parseInt(data.Attributes?.ApproximateNumberOfMessages ?? "0");
+  }
+
+  public async pop(): Promise<string | undefined> {
+    const command = new ReceiveMessageCommand({
+      QueueUrl: this.queueUrl,
+      MaxNumberOfMessages: 1,
+    });
+    const data = await this.client.send(command);
+    if (!data.Messages) {
+      return undefined;
+    }
+    return data.Messages[0].Body;
   }
 }

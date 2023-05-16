@@ -460,7 +460,8 @@ impl<'s> Parser<'s> {
 			match (class_element.kind(), is_resource) {
 				("method_definition", true) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
-					let func_def = self.build_function_definition(&class_element, Phase::Preflight);
+					let is_static = class_element.child_by_field_name("static").is_some();
+					let func_def = self.build_function_definition(&class_element, Phase::Preflight, is_static);
 					match (method_name, func_def) {
 						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
 						_ => {}
@@ -468,7 +469,8 @@ impl<'s> Parser<'s> {
 				}
 				("inflight_method_definition", _) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
-					let func_def = self.build_function_definition(&class_element, Phase::Inflight);
+					let is_static = class_element.child_by_field_name("static").is_some();
+					let func_def = self.build_function_definition(&class_element, Phase::Inflight, is_static);
 					match (method_name, func_def) {
 						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
 						_ => {}
@@ -540,7 +542,6 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
-							captures: RefCell::new(None),
 						})
 					} else {
 						initializer = Some(Initializer {
@@ -735,10 +736,15 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, phase)
+		self.build_function_definition(anon_closure_node, phase, true)
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(
+		&self,
+		func_def_node: &Node,
+		phase: Phase,
+		is_static: bool,
+	) -> DiagnosticResult<FunctionDefinition> {
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
@@ -751,8 +757,7 @@ impl<'s> Parser<'s> {
 		Ok(FunctionDefinition {
 			body: statements,
 			signature,
-			is_static: func_def_node.child_by_field_name("static").is_some(),
-			captures: RefCell::new(None),
+			is_static,
 			span: self.node_span(func_def_node),
 		})
 	}
@@ -1404,9 +1409,8 @@ impl<'s> Parser<'s> {
 					return_type: None,
 					phase: Phase::Inflight,
 				},
-				is_static: false,
+				is_static: true,
 				span: WingSpan::default(),
-				captures: RefCell::new(None),
 			}),
 			span: WingSpan::default(),
 			evaluated_type: RefCell::new(None),

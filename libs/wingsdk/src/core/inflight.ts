@@ -1,10 +1,6 @@
 import { createHash } from "crypto";
 import { readFileSync } from "fs";
 import { basename } from "path";
-import { Construct } from "constructs";
-import { makeHandler } from "./internal";
-import { TreeInspector } from "./tree";
-import { Connection, Display, IInflightHost, IResource } from "../std/resource";
 import { normalPath } from "../utils/misc";
 
 /**
@@ -84,59 +80,6 @@ export interface InflightProps {
    * @default - no bindings
    */
   readonly bindings?: InflightBindings;
-}
-
-/**
- * Represents a unit of application code that can be executed by a cloud
- * resource. In practice, it's a resource with one inflight method named
- * "handle".
- */
-export class Inflight extends Construct implements IResource {
-  /** @internal */
-  public _connections: Connection[] = []; // thrown away
-
-  /**
-   * Information on how to display a resource in the UI.
-   */
-  public readonly display = new Display();
-
-  constructor(scope: Construct, id: string, props: InflightProps) {
-    super(null as any, ""); // thrown away
-
-    this.display.hidden = true;
-    this.display.title = "Inflight";
-    this.display.description = "An inflight resource";
-
-    if (props.code.language !== Language.NODE_JS) {
-      throw new Error("Only Node.js code is supported");
-    }
-
-    return makeHandler(scope, id, props.code.text, props.bindings, {
-      hidden: this.display.hidden,
-      title: this.display.title,
-      description: this.display.description,
-    });
-  }
-  /** @internal */
-  public _bind(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  public _registerBind(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  public _preSynthesize(): void {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  public _inspect(_inspector: TreeInspector): void {
-    throw new Error("Method not implemented.");
-  }
 }
 
 /**
