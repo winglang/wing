@@ -9,7 +9,7 @@ exports[`access_hidden_namespace.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -65,7 +65,7 @@ error: Variable this.f is not reassignable
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -86,7 +86,7 @@ error: \\"cloud\\" is already defined
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -107,7 +107,7 @@ error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"fo
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -142,7 +142,7 @@ error: Cannot capture field 'aCloned' with non-capturable type 'MutArray<str>'
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -156,7 +156,7 @@ exports[`capture_reassignable.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -184,7 +184,7 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -212,7 +212,7 @@ error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\"
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -222,7 +222,7 @@ exports[`construction.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -355,7 +355,7 @@ error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -376,7 +376,7 @@ error: Property access unsupported on type \\"SomeEnum\\"
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -397,7 +397,7 @@ error: Failed to resolve extern \\"not-installed\\": Not Found
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -411,7 +411,7 @@ exports[`for_loop.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -425,7 +425,7 @@ exports[`immutable_container_types.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -470,7 +470,7 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -484,7 +484,7 @@ exports[`inflight_in_class.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -512,7 +512,7 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -533,7 +533,7 @@ error: Unable to qualify which operations are performed on 'globalQueue' of type
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -554,7 +554,7 @@ error: Unable to qualify which operations are performed on 'globalB' of type 'Bu
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -592,7 +592,7 @@ error: Symbol \\"foo\\" already defined in this scope
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -669,7 +669,7 @@ error: Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -683,7 +683,7 @@ exports[`json_static.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -711,7 +711,7 @@ error: Expected '}'
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -816,7 +816,7 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -872,7 +872,7 @@ error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -888,7 +888,7 @@ exports[`preflight_class_inflight.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -902,7 +902,7 @@ exports[`preflight_from_inflight.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -937,7 +937,7 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -979,7 +979,7 @@ error: Variable arg is not reassignable
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -993,7 +993,7 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1028,7 +1028,7 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1038,7 +1038,7 @@ exports[`resource_inflight.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1073,7 +1073,7 @@ error: Inflight initializers cannot have parameters
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1114,7 +1114,7 @@ error: Inflight class e's parent \\"any\\" is not a class
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1149,7 +1149,7 @@ error: Expected continue statement to be inside of a loop (while/for)
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1177,7 +1177,7 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1191,7 +1191,7 @@ exports[`std_containers.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1255,7 +1255,7 @@ error: Expected 2 arguments but got 1
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1304,7 +1304,7 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1320,7 +1320,7 @@ exports[`try_no_catch_or_finally.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1348,7 +1348,7 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1390,7 +1390,7 @@ error: expression \\"await_expression\\" is not supported yet see https://github
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1439,7 +1439,7 @@ error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1460,7 +1460,7 @@ error: Symbol \\"x\\" used before being defined
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1474,7 +1474,7 @@ exports[`variable_scoping.w > stderr 1`] = `
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
@@ -1502,7 +1502,7 @@ error: Cannot assign expression of type \\"void\\" to a variable
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
-    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:32:24)
+    at async withSpinner (/Users/tsuf/Documents/wing/apps/wing/dist/util.js:31:24)
     at async testOne (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:51:22)
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;

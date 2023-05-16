@@ -1,7 +1,6 @@
-import { copyFileSync, promises as fsPromise, readFileSync } from "fs";
+import { mkdtemp, copyFileSync, promises as fsPromise, readFileSync, cpSync } from "fs-extra";
 import ora from "ora";
 import { basename, join, resolve } from "path";
-import { cp, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 
 /**
@@ -56,15 +55,15 @@ export async function generateTmpDir(sourcePath: string, ...additionalFiles: str
   const sourceDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
   const tempWingFile = join(sourceDir, sourceFile);
 
-  await cp(sourcePath, tempWingFile);
+  cpSync(sourcePath, tempWingFile);
 
   for (const filePath of additionalFiles) {
     const file = basename(filePath);
-    await cp(filePath, join(sourceDir, file));
+    cpSync(filePath, join(sourceDir, file));
   }
 
   for (const path of externs) {
-    await cp(join(resolve(sourcePath), `../${path}`), join(sourceDir, path));
+    cpSync(join(resolve(sourcePath), `../${path}`), join(sourceDir, path));
   }
 
   return tempWingFile;
