@@ -416,7 +416,7 @@ pub enum StmtKind {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
-	VariableDef {
+	Let {
 		reassignable: bool,
 		var_name: Symbol,
 		initial_value: Expr,
@@ -501,7 +501,7 @@ pub enum ExprKind {
 	},
 	Reference(Reference),
 	Call {
-		function: Box<Expr>,
+		callee: Box<Expr>,
 		arg_list: ArgList,
 	},
 	Unary {

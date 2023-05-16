@@ -1,8 +1,9 @@
 mod codemaker;
+mod free_var_scanner;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
-use indexmap::{indexmap, indexset, IndexMap, IndexSet};
+use indexmap::{indexmap, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use std::{
@@ -22,7 +23,7 @@ use crate::{
 		StmtKind, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	debug,
-	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
+	diagnostic::{Diagnostic, Diagnostics},
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
@@ -32,7 +33,7 @@ use crate::{
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
 
-use self::codemaker::CodeMaker;
+use self::{codemaker::CodeMaker, free_var_scanner::FreeVariableScanner};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -367,23 +368,23 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
-			ExprKind::Call { function, arg_list } => {
-				let function_type = function.evaluated_type.borrow().unwrap();
+			ExprKind::Call { callee, arg_list } => {
+				let function_type = callee.evaluated_type.borrow().unwrap();
 				let function_sig = function_type.as_function_sig();
 				assert!(
 					function_sig.is_some() || function_type.is_anything(),
 					"Expected expression to be callable"
 				);
 
-				let expr_string = match &function.kind {
+				let expr_string = match &callee.kind {
 					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
-					_ => format!("({})", self.jsify_expression(function, ctx)),
+					_ => format!("({})", self.jsify_expression(callee, ctx)),
 				};
 				let arg_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
-						let self_string = &match &function.kind {
+						let self_string = &match &callee.kind {
 							// for "loose" macros, e.g. `print()`, $self$ is the global object
 							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
@@ -546,7 +547,7 @@ impl<'a> JSifier<'a> {
 					}
 				))
 			}
-			StmtKind::VariableDef {
+			StmtKind::Let {
 				reassignable,
 				var_name,
 				initial_value,
@@ -772,7 +773,6 @@ impl<'a> JSifier<'a> {
 							self.diagnostics.push(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
 								span: Some(func_def.span()),
-								level: DiagnosticLevel::Error,
 							});
 							format!("/* unresolved: \"{external_spec}\" */")
 						}
@@ -1419,7 +1419,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			// if the variable is reassignable, bail out
 			if variable.reassignable {
 				self.diagnostics.push(Diagnostic {
-					level: DiagnosticLevel::Error,
 					message: format!("Cannot capture reassignable field '{}'", curr.text),
 					span: Some(curr.expr.span.clone()),
 				});
@@ -1430,7 +1429,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			// if this type is not capturable, bail out
 			if !variable.type_.is_capturable() {
 				self.diagnostics.push(Diagnostic {
-					level: DiagnosticLevel::Error,
 					message: format!(
 						"Cannot capture field '{}' with non-capturable type '{}'",
 						curr.text, variable.type_
@@ -1448,7 +1446,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			if let Some(inner_type) = variable.type_.collection_item_type() {
 				if inner_type.as_resource().is_some() {
 					self.diagnostics.push(Diagnostic {
-						level: DiagnosticLevel::Error,
 						message: format!(
 							"Capturing collection of resources is not supported yet (type is '{}')",
 							variable.type_,
@@ -1496,7 +1493,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 				if v.type_.as_resource().is_some() {
 					if qualification.len() == 0 {
 						self.diagnostics.push(Diagnostic {
-							level: DiagnosticLevel::Error,
 							message: format!(
 								"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
 								key, v.type_,
@@ -1682,107 +1678,5 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 				panic!("Unknown symbol: {type_name}, should be covered by type checking");
 			}
 		}
-	}
-}
-
-/// Scans AST nodes for free variables.
-///
-/// A free variable is a variable that is used in the body of a function but not
-/// defined in the function's scope. Here is an example where "x" is a free variable:
-/// ```wing
-/// let x = 5;
-/// let foo = () => {
-///  return x + 3;
-/// }
-/// ```
-///
-/// For more info see https://en.wikipedia.org/wiki/Free_variables_and_bound_variables
-struct FreeVariableScanner {
-	/// A list of all free variables the scanner has found so far.
-	/// This collects the exact symbols (not just the names of variables) since
-	/// this scanner may be used to scan an entire class, and a class may have
-	/// multiple methods. It's possible that in method A, a variable "x" is a
-	/// free variable, but in method B, "x" is a bound variable:
-	/// ```wing
-	/// let x = 5;
-	/// class Foo {
-	///   methodA() {
-	///     return x + 3;
-	///   }
-	///   methodB(x) {
-	///     return x + 3;
-	///   }
-	/// }
-	/// ```
-	free_vars: IndexSet<Symbol>,
-
-	/// The current scopes env during traversal
-	env: Option<SymbolEnvRef>,
-	/// The current statement index
-	statement_index: usize,
-	/// The last symbol we visited
-	last_symb: Symbol,
-}
-
-impl FreeVariableScanner {
-	pub fn new() -> Self {
-		Self {
-			free_vars: indexset![],
-			env: None,
-			statement_index: 0,
-			last_symb: Symbol::global("badger"),
-		}
-	}
-}
-
-impl Visit<'_> for FreeVariableScanner {
-	// invariant: adds zero bound variables
-	fn visit_reference(&mut self, node: &Reference) {
-		if let Reference::Identifier(ref symb) = node {
-			// Skip "this" symbol since it's never a free var even though it refers to a preflight type
-			if symb.name != "this" {
-				// Lookup the reference int the current environment
-				let lookup_result = self
-					.env
-					.as_ref()
-					.unwrap()
-					.lookup(symb, Some(self.statement_index))
-					.expect("covered by type checking");
-
-				// If this reference is a capturable, non-reassignable, preflight
-				// variable then it's a capture
-				if let SymbolKind::Variable(v) = lookup_result {
-					// TODO: if we see a reassignable or non-capturable variable, should we emit an error here or inside analyze_expr?
-					if v.phase == Phase::Preflight {
-						self.free_vars.insert(symb.clone());
-					}
-				}
-			}
-		};
-
-		return visit::visit_reference(self, node);
-	}
-
-	fn visit_scope(&mut self, scope: &Scope) {
-		let curr_env = scope.env.borrow().as_ref().unwrap().get_ref();
-		// Don't look for free vars in non-inflight scopes
-		if curr_env.phase != Phase::Inflight {
-			return;
-		}
-		let old_env = self.env;
-		self.env = Some(curr_env);
-		visit::visit_scope(self, scope);
-		self.env = old_env;
-	}
-
-	fn visit_stmt(&mut self, stmt: &Stmt) {
-		let old_statement_index = self.statement_index;
-		self.statement_index = stmt.idx;
-		visit::visit_stmt(self, stmt);
-		self.statement_index = old_statement_index;
-	}
-
-	fn visit_symbol(&mut self, node: &Symbol) {
-		self.last_symb = node.clone();
 	}
 }
