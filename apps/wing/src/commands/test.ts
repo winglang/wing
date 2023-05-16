@@ -48,12 +48,10 @@ async function testOne(entrypoint: string, options: TestOptions) {
 }
 
 /**
- * Print out a test report to the console.
- * @returns `true` if any tests failed, `false` otherwise.
+ * Render a test report for printing out to the console.
  */
-function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): boolean {
-  // print report
-  let hasFailures = false;
+export function renderTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): string {
+  const out = new Array<string>();
 
   // find the longest `path` of all the tests
   const longestPath = results.reduce(
@@ -77,8 +75,14 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
     const details = new Array<string>();
 
     // add any log messages that were emitted during the test
-    for (const log of result.traces.filter((t) => t.type == "log")) {
-      details.push(chalk.gray(log.data.message));
+    for (const log of result.traces) {
+      // only show detailed traces if we are in debug mode
+      if (log.type === "resource" && process.env.DEBUG) {
+        details.push(chalk.gray("[trace] " + log.data.message));
+      }
+      if (log.type === "log") {
+        details.push(chalk.gray(log.data.message));
+      }
     }
 
     // if the test failed, add the error message and trace
@@ -111,20 +115,20 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
     // okay we are ready to print the test result
 
     // print the primary description of the test
-    console.log(firstRow.join(" "));
+    out.push(firstRow.join(" "));
 
     // print additional rows that are related to this test
     for (let i = 0; i < details.length; i++) {
       const left = i === details.length - 1 ? "└" : "│";
-      console.log(`    ${chalk.gray(` ${left} `)}${details[i]}`);
-    }
-
-    if (!result.pass) {
-      hasFailures = true;
+      out.push(`    ${chalk.gray(` ${left} `)}${details[i]}`);
     }
   }
 
-  return hasFailures;
+  return out.join("\n");
+}
+
+function testResultsContainsFailure(results: sdk.cloud.TestResult[]): boolean {
+  return results.some((r) => !r.pass);
 }
 
 async function testSimulator(synthDir: string) {
@@ -143,10 +147,12 @@ async function testSimulator(synthDir: string) {
 
   await s.stop();
 
-  const hasFailures = printTestReport(synthDir, results);
+  const testReport = renderTestReport(synthDir, results);
+  console.log(testReport);
+
   rmSync(synthDir, { recursive: true, force: true });
 
-  if (hasFailures) {
+  if (testResultsContainsFailure(results)) {
     process.exit(1);
   }
 }
@@ -185,9 +191,10 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
       return results;
     });
 
-    const hasFailures = printTestReport(synthDir, results);
+    const testReport = renderTestReport(synthDir, results);
+    console.log(testReport);
 
-    if (hasFailures) {
+    if (testResultsContainsFailure(results)) {
       console.log("One or more tests failed. Cleaning up resources...");
     }
 
