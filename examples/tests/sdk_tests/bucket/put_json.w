@@ -4,23 +4,23 @@ let b = new cloud.Bucket();
 
 new cloud.Function(inflight () => {
 
-  let json_obj1 = Json { test: "test1" };
-  let json_obj2 = Json { test: "test2" };
+  let jsonObj1 = Json { test: "test1" };
+  let jsonObj2 = Json { test: "test2" };
 
-  b.put_json("test1.txt", json_obj1);
-  b.put_json("test2.txt", json_obj2);
+  b.putJson("test1.txt", jsonObj1);
+  b.putJson("test2.txt", jsonObj2);
 
-  let test_json1 = b.get_json("test1.txt");
-  let test_json2 = b.get_json("test2.txt");
+  let testJson1 = b.getJson("test1.txt");
+  let testJson2 = b.getJson("test2.txt");
   
-  assert(test_json1.get("test") == json_obj1.get("test"));
-  assert(test_json2.get("test") == json_obj2.get("test"));
+  assert(testJson1.get("test") == jsonObj1.get("test"));
+  assert(testJson2.get("test") == jsonObj2.get("test"));
 
-  let json_obj3 = Json { test: "test3" };
-  b.put_json("test3.txt", json_obj3);
-  let test_json3 = b.get_json("test3.txt");
+  let jsonObj3 = Json { test: "test3" };
+  b.putJson("test3.txt", jsonObj3);
+  let testJson3 = b.getJson("test3.txt");
 
-  assert(test_json3.get("test") == json_obj3.get("test"));
+  assert(testJson3.get("test") == jsonObj3.get("test"));
 
   b.delete("test1.txt");
   let files = b.list();
@@ -28,4 +28,4 @@ new cloud.Function(inflight () => {
   assert(files.contains("test1.txt") == false);
   assert(files.contains("test2.txt") == true);
   
-}) as "test:put_json";
+}) as "test:putJson";
