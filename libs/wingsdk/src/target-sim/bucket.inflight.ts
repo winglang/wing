@@ -60,7 +60,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return topicClient.publish(key);
   }
 
-  private async fileExists(key: string): Promise<boolean> {
+  private async exists(key: string): Promise<boolean> {
     return fs.promises
       .access(join(this.fileDir, key))
       .then(() => true)
@@ -80,7 +80,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put Json (key=${key}).`,
       activity: async () => {
-        const actionType: BucketEventType = (await this.fileExists(key))
+        const actionType: BucketEventType = (await this.exists(key))
           ? BucketEventType.UPDATE
           : BucketEventType.CREATE;
 

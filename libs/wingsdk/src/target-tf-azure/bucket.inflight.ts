@@ -35,6 +35,15 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
+   * Check if an object exists in the bucket
+   *
+   * @param key Key of the object
+   */
+  public async exists(key: string): Promise<boolean> {
+    // WIP
+  }
+
+  /**
    * Put object into bucket with given body contents
    *
    * @param key Key of the object

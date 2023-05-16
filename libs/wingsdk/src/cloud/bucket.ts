@@ -222,6 +222,13 @@ export interface BucketDeleteOptions {
  */
 export interface IBucketClient {
   /**
+   * Check if an object exists in the bucket.
+   * @param key Key of the object.
+   * @inflight
+   */
+  exists(key: string): Promise<boolean>;
+
+  /**
    * Put an object in the bucket.
    * @param key Key of the object.
    * @param body Content of the object we want to store into the bucket.
