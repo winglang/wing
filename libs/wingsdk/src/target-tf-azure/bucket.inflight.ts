@@ -42,14 +42,20 @@ export class BucketClient implements IBucketClient {
   public async exists(key: string): Promise<boolean> {
     const connectionString =
       "DefaultEndpointsProtocol=https;AccountName=myaccount;AccountKey=mykey;EndpointSuffix=core.windows.net";
-    const containerName = "mycontainer";
 
     const blobServiceClient =
       BlobServiceClient.fromConnectionString(connectionString);
-    const containerClient = blobServiceClient.getContainerClient(containerName);
-    const blobClient = containerClient.getBlobClient(key);
-    const response = await blobClient.exists();
-    return response;
+    const containers = blobServiceClient.listContainers();
+    for await (const container of containers) {
+      const containerClient = blobServiceClient.getContainerClient(
+        container.name
+      );
+      const blobClient = containerClient.getBlobClient(key);
+      if (await blobClient.exists()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
