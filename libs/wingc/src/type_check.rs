@@ -191,7 +191,6 @@ pub struct Class {
 	implements: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
-	pub should_case_convert_jsii: bool,
 	pub fqn: Option<String>,
 	pub is_abstract: bool,
 	pub type_parameters: Option<Vec<TypeRef>>,
@@ -305,7 +304,6 @@ pub struct Struct {
 	extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
-	pub should_case_convert_jsii: bool,
 }
 
 #[derive(Debug)]
@@ -2205,7 +2203,6 @@ impl<'a> TypeChecker<'a> {
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
-					should_case_convert_jsii: false,
 					name: name.clone(),
 					fqn: None,
 					env: dummy_env,
@@ -2469,7 +2466,6 @@ impl<'a> TypeChecker<'a> {
 					name,
 					SymbolKind::Type(self.types.add_type(Type::Struct(Struct {
 						name: name.clone(),
-						should_case_convert_jsii: false,
 						extends: extends_types,
 						env: struct_env,
 					}))),
@@ -2812,7 +2808,6 @@ impl<'a> TypeChecker<'a> {
 			fqn: Some(original_fqn.to_string()),
 			parent: original_type_class.parent,
 			implements: original_type_class.implements.clone(),
-			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params),
 		});
