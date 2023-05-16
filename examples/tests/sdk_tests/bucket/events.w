@@ -56,4 +56,4 @@ new cloud.Test(inflight () => {
     b.delete("c");
     new Predicate(10).testAssertion();
 
-}, cloud.TestProps {timeout: 3m});
+}, cloud.TestProps {timeout: 3m}) as "counter is incremented 10 times";
