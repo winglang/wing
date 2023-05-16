@@ -37,7 +37,7 @@ new cloud.Test(inflight () => {
 
     inflight testAssertion ()  {
         let var i = 0;
-        // waiting for up to 2 minutes
+        // waiting for up to 2 minutes, checking every 10 seconds
         while i<12 {
         i = i + 1;
         if this.assertion() {
