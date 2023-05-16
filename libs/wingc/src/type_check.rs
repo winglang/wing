@@ -1,5 +1,7 @@
+mod class_fields_init;
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
+
 use crate::ast::{self, ClassField, FunctionBodyRef, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
@@ -7,8 +9,6 @@ use crate::ast::{
 	StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::type_check_class_fields_init::VisitClassInit;
-use crate::visit::Visit;
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
@@ -27,6 +27,7 @@ use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
 
+use self::class_fields_init::VisitClassInit;
 use self::jsii_importer::JsiiImportSpec;
 use self::symbol_env::{LookupResult, SymbolEnvIter};
 
@@ -2564,15 +2565,17 @@ impl<'a> TypeChecker<'a> {
 	/// * `statements` - The constructor scope (init)
 	/// * `fields` - All fields of a class
 	///
-	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &[ClassField]) {
-		let mut visit_init = VisitClassInit { fields: Vec::new() };
-		visit_init.visit_scope(statements);
+	fn check_class_field_initialization(&mut self, scope: &Scope, fields: &[ClassField]) {
+		let mut visit_init = VisitClassInit::default();
+		visit_init.analyze_statements(&scope.statements);
+		let initialized_fields = visit_init.fields;
+
 		for field in fields.iter() {
 			// inflight or static fields cannot be initialized in the initializer
 			if field.phase == Phase::Inflight || field.is_static {
 				continue;
 			}
-			if !visit_init.fields.contains(&field.name.name) {
+			if !initialized_fields.contains(&field.name.name) {
 				self.type_error(TypeError {
 					message: format!("\"{}\" is not initialized", field.name.name),
 					span: field.name.span.clone(),

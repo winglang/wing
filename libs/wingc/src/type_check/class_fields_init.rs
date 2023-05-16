@@ -3,9 +3,18 @@ use crate::{
 	visit::{self, Visit},
 };
 
-/// Visitor Pattern for listing the variables that are initialized in the class constructor.
+/// Determine a list of all variables that are initialized in a class constructor.
+#[derive(Default)]
 pub struct VisitClassInit {
 	pub fields: Vec<String>,
+}
+
+impl VisitClassInit {
+	pub fn analyze_statements(&mut self, statements: &[Stmt]) {
+		for stmt in statements {
+			self.visit_stmt(stmt);
+		}
+	}
 }
 
 impl Visit<'_> for VisitClassInit {
