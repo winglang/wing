@@ -8,7 +8,7 @@ use crate::ast::{
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Spanned, Stmt,
 	StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
+use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
@@ -1120,31 +1120,14 @@ impl<'a> TypeChecker<'a> {
 		);
 	}
 
-	// TODO: All calls to this should be removed and we should make sure type checks are done
-	// for unimplemented types
-	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
-		self.diagnostics.borrow_mut().push(Diagnostic {
-			level: DiagnosticLevel::Warning,
-			message: format!("Unimplemented type: {}", type_name),
-			span: None,
-		});
-
-		return Some(Type::Anything);
-	}
-
 	fn general_type_error(&self, message: String) -> TypeRef {
-		self.diagnostics.borrow_mut().push(Diagnostic {
-			level: DiagnosticLevel::Error,
-			message,
-			span: None,
-		});
+		self.diagnostics.borrow_mut().push(Diagnostic { message, span: None });
 
 		self.types.anything()
 	}
 
 	fn resolve_static_error(&self, property: &Symbol, message: String) -> VariableInfo {
 		self.diagnostics.borrow_mut().push(Diagnostic {
-			level: DiagnosticLevel::Error,
 			message,
 			span: Some(property.span.clone()),
 		});
@@ -1158,7 +1141,6 @@ impl<'a> TypeChecker<'a> {
 
 	fn expr_error(&self, expr: &Expr, message: String) -> TypeRef {
 		self.diagnostics.borrow_mut().push(Diagnostic {
-			level: DiagnosticLevel::Error,
 			message,
 			span: Some(expr.span.clone()),
 		});
@@ -1168,7 +1150,6 @@ impl<'a> TypeChecker<'a> {
 
 	fn stmt_error(&self, stmt: &Stmt, message: String) {
 		self.diagnostics.borrow_mut().push(Diagnostic {
-			level: DiagnosticLevel::Error,
 			message,
 			span: Some(stmt.span.clone()),
 		});
@@ -1177,7 +1158,6 @@ impl<'a> TypeChecker<'a> {
 	fn type_error(&self, type_error: TypeError) -> TypeRef {
 		let TypeError { message, span } = type_error;
 		self.diagnostics.borrow_mut().push(Diagnostic {
-			level: DiagnosticLevel::Error,
 			message,
 			span: Some(span),
 		});
@@ -1188,7 +1168,6 @@ impl<'a> TypeChecker<'a> {
 	fn variable_error(&self, type_error: TypeError) -> VariableInfo {
 		let TypeError { message, span } = type_error;
 		self.diagnostics.borrow_mut().push(Diagnostic {
-			level: DiagnosticLevel::Error,
 			message,
 			span: Some(span),
 		});
@@ -1263,7 +1242,6 @@ impl<'a> TypeChecker<'a> {
 									ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
 								),
 								span: Some(exp.span()),
-								level: DiagnosticLevel::Error,
 							});
 							self.types.anything() // TODO: return error type
 						}
@@ -1814,7 +1792,6 @@ impl<'a> TypeChecker<'a> {
 					)
 				},
 				span: Some(span.span()),
-				level: DiagnosticLevel::Error,
 			});
 			expected_types[0]
 		} else {

@@ -9,7 +9,7 @@ extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
-use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
+use diagnostic::{print_diagnostics, Diagnostic, Diagnostics};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -143,7 +143,6 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 			diagnostics.push(Diagnostic {
 				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
 				span: None,
-				level: DiagnosticLevel::Error,
 			});
 
 			// Set up a dummy scope to return
@@ -263,7 +262,6 @@ pub fn compile(
 		return Err(vec![Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
 			span: None,
-			level: DiagnosticLevel::Error,
 		}]);
 	}
 
@@ -274,7 +272,6 @@ pub fn compile(
 				source_path.display()
 			),
 			span: None,
-			level: DiagnosticLevel::Error,
 		}]);
 	}
 
@@ -317,16 +314,9 @@ pub fn compile(
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
 
-	// Filter diagnostics to only errors
-	let errors = diagnostics
-		.iter()
-		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
-		.cloned()
-		.collect::<Vec<_>>();
-
 	// bail out now (before jsification) if there are errors (no point in jsifying)
-	if errors.len() > 0 {
-		return Err(errors);
+	if diagnostics.len() > 0 {
+		return Err(diagnostics);
 	}
 
 	// -- JSIFICATION PHASE --
@@ -348,7 +338,6 @@ pub fn compile(
 			diagnostics.push(Diagnostic {
 				message: format!("Project directory must be absolute: {}", project_dir.display()),
 				span: None,
-				level: DiagnosticLevel::Error,
 			});
 			return Err(diagnostics);
 		}

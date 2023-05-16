@@ -12,7 +12,7 @@ use crate::ast::{
 	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
 	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
+use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
 
 pub struct Parser<'a> {
@@ -70,7 +70,6 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
-			level: DiagnosticLevel::Error,
 		};
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag);
@@ -480,7 +479,6 @@ impl<'s> Parser<'s> {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
 						self.diagnostics.borrow_mut().push(Diagnostic {
-							level: DiagnosticLevel::Error,
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),

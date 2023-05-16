@@ -23,7 +23,7 @@ use crate::{
 		StmtKind, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	debug,
-	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
+	diagnostic::{Diagnostic, Diagnostics},
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
@@ -773,7 +773,6 @@ impl<'a> JSifier<'a> {
 							self.diagnostics.push(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
 								span: Some(func_def.span()),
-								level: DiagnosticLevel::Error,
 							});
 							format!("/* unresolved: \"{external_spec}\" */")
 						}
@@ -1420,7 +1419,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			// if the variable is reassignable, bail out
 			if variable.reassignable {
 				self.diagnostics.push(Diagnostic {
-					level: DiagnosticLevel::Error,
 					message: format!("Cannot capture reassignable field '{}'", curr.text),
 					span: Some(curr.expr.span.clone()),
 				});
@@ -1431,7 +1429,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			// if this type is not capturable, bail out
 			if !variable.type_.is_capturable() {
 				self.diagnostics.push(Diagnostic {
-					level: DiagnosticLevel::Error,
 					message: format!(
 						"Cannot capture field '{}' with non-capturable type '{}'",
 						curr.text, variable.type_
@@ -1449,7 +1446,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			if let Some(inner_type) = variable.type_.collection_item_type() {
 				if inner_type.as_resource().is_some() {
 					self.diagnostics.push(Diagnostic {
-						level: DiagnosticLevel::Error,
 						message: format!(
 							"Capturing collection of resources is not supported yet (type is '{}')",
 							variable.type_,
@@ -1497,7 +1493,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 				if v.type_.as_resource().is_some() {
 					if qualification.len() == 0 {
 						self.diagnostics.push(Diagnostic {
-							level: DiagnosticLevel::Error,
 							message: format!(
 								"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
 								key, v.type_,
