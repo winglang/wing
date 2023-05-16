@@ -55,7 +55,7 @@ async function createWindow(options: { title?: string; port: number }) {
     webPreferences: {
       devTools: import.meta.env.DEV,
     },
-    titleBarStyle: "hidden",
+    titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
   });
 
   if (import.meta.env.DEV) {
