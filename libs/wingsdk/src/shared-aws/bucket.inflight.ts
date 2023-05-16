@@ -20,7 +20,7 @@ export class BucketClient implements IBucketClient {
     private readonly s3Client = new S3Client({})
   ) {}
 
-  private async exists(key: string): Promise<boolean> {
+  public async exists(key: string): Promise<boolean> {
     const command = new ListObjectsV2Command({
       Bucket: this.bucketName,
       Prefix: key,

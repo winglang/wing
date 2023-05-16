@@ -60,7 +60,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return topicClient.publish(key);
   }
 
-  private async exists(key: string): Promise<boolean> {
+  public async exists(key: string): Promise<boolean> {
     return fs.promises
       .access(join(this.fileDir, key))
       .then(() => true)
