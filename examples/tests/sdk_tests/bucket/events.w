@@ -24,10 +24,10 @@ b.onEvent(inflight (key: str) => {
 new cloud.Test(inflight () => {
 
     inflight class Predicate {
-    counterVal: num;
-    init(counterVal: num) {
-       this.counterVal = counterVal;
-    }
+      counterVal: num;
+      init(counterVal: num) {
+         this.counterVal = counterVal;
+      }
 
     extern "../external/sleep.js" inflight sleep(ms: num);
 
