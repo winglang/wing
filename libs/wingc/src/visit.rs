@@ -98,7 +98,7 @@ where
 				v.visit_symbol(identifier);
 			}
 		}
-		StmtKind::VariableDef {
+		StmtKind::Let {
 			reassignable: _,
 			var_name,
 			initial_value,
@@ -286,7 +286,10 @@ where
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
 		}
-		ExprKind::Call { function, arg_list } => {
+		ExprKind::Call {
+			callee: function,
+			arg_list,
+		} => {
 			v.visit_expr(function);
 			v.visit_args(arg_list);
 		}

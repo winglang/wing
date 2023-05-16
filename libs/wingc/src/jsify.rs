@@ -368,7 +368,7 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
-			ExprKind::Call { function, arg_list } => {
+			ExprKind::Call { callee: function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
 				let function_sig = function_type.as_function_sig();
 				assert!(
@@ -547,7 +547,7 @@ impl<'a> JSifier<'a> {
 					}
 				))
 			}
-			StmtKind::VariableDef {
+			StmtKind::Let {
 				reassignable,
 				var_name,
 				initial_value,

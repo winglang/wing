@@ -386,7 +386,7 @@ impl<'s> Parser<'s> {
 		} else {
 			None
 		};
-		Ok(StmtKind::VariableDef {
+		Ok(StmtKind::Let {
 			reassignable: statement_node.child_by_field_name("reassignable").is_some(),
 			var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
 			initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
@@ -1196,7 +1196,7 @@ impl<'s> Parser<'s> {
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
-					function: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
+					callee: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
 					arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,

@@ -3,7 +3,7 @@ use crate::{
 	visit::{self, Visit},
 };
 
-/// Determine a list of all variables that are initialized in a class constructor.
+/// Determine a list of all fields that are initialized in a class constructor.
 #[derive(Default)]
 pub struct VisitClassInit {
 	pub fields: Vec<String>,
