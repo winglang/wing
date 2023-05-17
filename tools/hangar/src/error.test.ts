@@ -27,8 +27,8 @@ errorWingFiles.forEach((wingFile) => {
       // Normalize line endings
       .replaceAll("\r\n", "\n")
       // Remove random numbers from generated test artifact folder
-      // e.g. "{...}.wsim.927822.tmp/{...}" => "{...}.wsim.XXXXXX.tmp/{...}"
-      .replaceAll(/\.wsim\.\d+\.tmp/g, ".wsim.XXXXXX.tmp");
+      // e.g. "{...}.wsim.927822.tmp/{...}" => "{...}.wsim.[REDACTED].tmp/{...}"
+      .replaceAll(/\.wsim\.\d+\.tmp/g, ".wsim.[REDACTED].tmp");
 
     expect(stderrSanitized).toMatchSnapshot("stderr");
   });
