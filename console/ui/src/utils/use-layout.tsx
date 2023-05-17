@@ -78,7 +78,11 @@ export const useLayout = ({
   );
 
   const loading = useMemo(() => {
-    return cloudAppState === "loadingSimulator" || items.length === 0;
+    return (
+      cloudAppState === "loadingSimulator" ||
+      cloudAppState === "compiling" ||
+      items.length === 0
+    );
   }, [cloudAppState, items.length]);
 
   const onResourceClick = (log: LogEntry) => {
