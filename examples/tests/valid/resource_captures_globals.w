@@ -77,6 +77,6 @@ class MyResource {
 
 let res = new MyResource();
 
-new cloud.Function(inflight () => {
+test "test" {
   res.myPut();
-}) as "test";
+}

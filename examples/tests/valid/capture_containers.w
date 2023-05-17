@@ -6,7 +6,7 @@ let myMap = {"hello": 123, "world": 999};
 let arrOfMap = [{"bang": 123}];
 let j = Json {a: "hello", b: "world"};
 
-let handler = inflight (s: str): str => {
+test "capture_containers" {
   assert(arr.at(0) == "hello");
   assert(arr.at(1) == "world");
   assert(arr.length == 2);
@@ -19,6 +19,4 @@ let handler = inflight (s: str): str => {
 
   assert(arrOfMap.at(0).has("bang"));
   assert(j.get("b") == "world");
-};
-
-new cloud.Function(handler) as "test";
+}

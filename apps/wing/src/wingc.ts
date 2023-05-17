@@ -108,14 +108,21 @@ export async function load(options: WingCompilerLoadOptions) {
   } else {
     // mapping the root is not sufficient on linux/mac
     // we need to also map all directories in the root
+    const rootDeviceId = await fs.promises.stat("/").then((stat) => stat.dev.toString());
     const rootFiles = await fs.promises.readdir("/");
     for (const file of rootFiles) {
       // skip files and dot dirs
+      if (file.startsWith(".")) {
+        continue;
+      }
+
       const fullPath = `/${file}`;
+      const fileStat = await fs.promises.stat(fullPath);
       if (
-        !file.startsWith(".") &&
         // include directories and symlinks to directories
-        (await fs.promises.stat(fullPath)).isDirectory()
+        fileStat.isDirectory() &&
+        // on mac only preopen directories within the root device
+        (process.platform !== "darwin" || fileStat.dev.toString() === rootDeviceId)
       ) {
         try {
           await fs.promises.access(fullPath, fs.constants.R_OK | fs.constants.F_OK);
@@ -209,7 +216,6 @@ export interface WingDiagnostic {
     };
     file_id: string;
   };
-  level: "Error" | "Warning" | "Note";
 }
 
 /**

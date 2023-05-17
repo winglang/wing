@@ -2,12 +2,9 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import { Function, IFunctionClient } from "../../src/cloud/function";
-import {
-  Inflight,
-  InflightBindings,
-  NodeJsCode,
-} from "../../src/core/inflight";
+import { InflightBindings, NodeJsCode } from "../../src/core/inflight";
 import { Duration } from "../../src/std";
+import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 interface CaptureTest {
@@ -321,19 +318,19 @@ function captureTest(name: string, t: (scope: Construct) => CaptureTest) {
     Function._newFunction(
       app,
       "Function",
-      new Inflight(app, "foo", {
-        code: NodeJsCode.fromInline(
-          [
-            "async handle() {",
-            ...renderInflightCode(),
-            options.whenInflightExpression
-              ? `return JSON.stringify(${options.whenInflightExpression});`
-              : "",
-            "}",
-          ].join("\n")
-        ),
-        bindings: options.bindings,
-      })
+      Testing.makeHandler(
+        app,
+        "foo",
+        [
+          "async handle() {",
+          ...renderInflightCode(),
+          options.whenInflightExpression
+            ? `return JSON.stringify(${options.whenInflightExpression});`
+            : "",
+          "}",
+        ].join("\n"),
+        options.bindings
+      )
     );
 
     const sim = await app.startSimulator();

@@ -8,6 +8,7 @@ import {
   PutObjectCommand,
   GetBucketLocationCommand,
   S3Client,
+  GetObjectOutput,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { Duration, Json } from "../std";
@@ -38,8 +39,23 @@ export class BucketClient implements IBucketClient {
       Bucket: this.bucketName,
       Key: key,
     });
-    const resp = await this.s3Client.send(command);
-    return consumers.text(resp.Body as Readable);
+    let resp: GetObjectOutput;
+    try {
+      resp = await this.s3Client.send(command);
+    } catch (e) {
+      throw new Error(
+        `Object does not exist (key=${key}): ${(e as Error).stack}`
+      );
+    }
+    try {
+      return await consumers.text(resp.Body as Readable);
+    } catch (e) {
+      throw new Error(
+        `Object contents could not be read as text (key=${key}): ${
+          (e as Error).stack
+        })}`
+      );
+    }
   }
 
   public async getJson(key: string): Promise<Json> {

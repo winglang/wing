@@ -19,8 +19,8 @@ assert("Some String".uppercase() == "SOME STRING");
 assert("hello" + " world" == "hello world");
   
 // For debugging the test
-new cloud.Function(inflight () => {
+test "string" {
   log("index of \"s\" in s1 is ${s1.indexOf("s")}");
   log(s1.split(" ").at(1));
   log(s1.concat(s2));
-}) as "test:string";
+}

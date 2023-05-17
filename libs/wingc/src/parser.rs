@@ -12,7 +12,7 @@ use crate::ast::{
 	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
 	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
+use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
 
 pub struct Parser<'a> {
@@ -70,7 +70,6 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
-			level: DiagnosticLevel::Error,
 		};
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag);
@@ -197,6 +196,7 @@ impl<'s> Parser<'s> {
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
+			"test_statement" => self.build_test_statement(statement_node)?,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -386,7 +386,7 @@ impl<'s> Parser<'s> {
 		} else {
 			None
 		};
-		Ok(StmtKind::VariableDef {
+		Ok(StmtKind::Let {
 			reassignable: statement_node.child_by_field_name("reassignable").is_some(),
 			var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
 			initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
@@ -459,7 +459,8 @@ impl<'s> Parser<'s> {
 			match (class_element.kind(), is_resource) {
 				("method_definition", true) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
-					let func_def = self.build_function_definition(&class_element, Phase::Preflight);
+					let is_static = class_element.child_by_field_name("static").is_some();
+					let func_def = self.build_function_definition(&class_element, Phase::Preflight, is_static);
 					match (method_name, func_def) {
 						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
 						_ => {}
@@ -467,7 +468,8 @@ impl<'s> Parser<'s> {
 				}
 				("inflight_method_definition", _) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
-					let func_def = self.build_function_definition(&class_element, Phase::Inflight);
+					let is_static = class_element.child_by_field_name("static").is_some();
+					let func_def = self.build_function_definition(&class_element, Phase::Inflight, is_static);
 					match (method_name, func_def) {
 						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
 						_ => {}
@@ -477,7 +479,6 @@ impl<'s> Parser<'s> {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
 						self.diagnostics.borrow_mut().push(Diagnostic {
-							level: DiagnosticLevel::Error,
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
@@ -539,7 +540,6 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
-							captures: RefCell::new(None),
 						})
 					} else {
 						initializer = Some(Initializer {
@@ -734,10 +734,15 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, phase)
+		self.build_function_definition(anon_closure_node, phase, true)
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(
+		&self,
+		func_def_node: &Node,
+		phase: Phase,
+		is_static: bool,
+	) -> DiagnosticResult<FunctionDefinition> {
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
@@ -750,8 +755,7 @@ impl<'s> Parser<'s> {
 		Ok(FunctionDefinition {
 			body: statements,
 			signature,
-			is_static: func_def_node.child_by_field_name("static").is_some(),
-			captures: RefCell::new(None),
+			is_static,
 			span: self.node_span(func_def_node),
 		})
 	}
@@ -1192,7 +1196,7 @@ impl<'s> Parser<'s> {
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
-					function: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
+					callee: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
 					arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,
@@ -1387,5 +1391,48 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
+	}
+
+	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		let name_node = statement_node.child_by_field_name("name").unwrap();
+		let name_text = self.node_text(&name_node);
+		let test_id = format!("test:{}", &name_text[1..name_text.len() - 1]);
+		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+
+		let inflight_closure = Expr {
+			kind: ExprKind::FunctionClosure(FunctionDefinition {
+				body: FunctionBody::Statements(statements),
+				signature: FunctionSignature {
+					parameters: vec![],
+					return_type: None,
+					phase: Phase::Inflight,
+				},
+				is_static: true,
+				span: WingSpan::default(),
+			}),
+			span: WingSpan::default(),
+			evaluated_type: RefCell::new(None),
+		};
+
+		Ok(StmtKind::Expression(Expr {
+			kind: ExprKind::New {
+				class: TypeAnnotation {
+					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+						root: Symbol::global("cloud"),
+						fields: vec![Symbol::global("Test")],
+						span: WingSpan::default(),
+					}),
+					span: WingSpan::default(),
+				},
+				obj_id: Some(test_id),
+				obj_scope: None,
+				arg_list: ArgList {
+					pos_args: vec![inflight_closure],
+					named_args: IndexMap::new(),
+				},
+			},
+			span: self.node_span(statement_node),
+			evaluated_type: RefCell::new(None),
+		}))
 	}
 }

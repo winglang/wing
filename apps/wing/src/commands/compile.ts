@@ -8,7 +8,7 @@ import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { copyDir, normalPath } from "../util";
-import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
+import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import { existsSync } from "fs";
 import { Target } from "./constants";
 
@@ -144,7 +144,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
     for (const error of errors) {
-      const { message, span, level } = error;
+      const { message, span } = error;
       let files: File[] = [];
       let labels: Label[] = [];
 
@@ -167,7 +167,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         files,
         {
           message,
-          severity: level.toLowerCase() as Severity,
+          severity: "error",
           labels,
         },
         {

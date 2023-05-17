@@ -2,7 +2,7 @@ bring cloud;
 
 let counter = new cloud.Counter(initial: 0);
 
-new cloud.Function(inflight () => {
+test "inc" {
   assert(counter.peek() == 0);
   let r0 = counter.inc();
   assert(r0 == 0);
@@ -15,4 +15,4 @@ new cloud.Function(inflight () => {
   assert(counter.peek() == 12);
   let r3 = counter.inc();
   assert(r3 == 12);
-}) as "test:inc";
+}

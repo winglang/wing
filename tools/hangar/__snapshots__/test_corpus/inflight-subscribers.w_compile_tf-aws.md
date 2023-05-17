@@ -1,5 +1,39 @@
 # [inflight-subscribers.w](../../../../examples/tests/valid/inflight-subscribers.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {console.log("hello, world")};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {console.log("hello, world")};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -257,20 +291,72 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic").onMessage(new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
       }
-    })
-    ,{
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic").onMessage(new $Inflight1(this,"$Inflight1"),{
     "timeout": $stdlib.std.Duration.fromSeconds(180),}
     ));
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue").addConsumer(new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ,{
+    (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue").addConsumer(new $Inflight2(this,"$Inflight2"),{
     "timeout": $stdlib.std.Duration.fromSeconds(180),}
     ));
   }
@@ -291,24 +377,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const {  } = this;
-  {console.log("hello, world")};
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const {  } = this;
-  {console.log("hello, world")};
-}
 
 ```
 

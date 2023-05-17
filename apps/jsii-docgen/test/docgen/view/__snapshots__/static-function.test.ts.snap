@@ -281,18 +281,18 @@ Grant access to retrieve an authorization token.
 
 exports[`wing snapshot 1`] = `
 Object {
-  "displayName": "grant_read",
+  "displayName": "grantRead",
   "docs": Object {
     "summary": "Grant access to retrieve an authorization token.",
   },
-  "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grant_read",
+  "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
   "parameters": Array [
     Object {
       "default": undefined,
       "displayName": "grantee",
       "docs": Object {},
-      "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grant_read.parameter.grantee",
+      "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
       "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
       "optional": undefined,
       "type": Object {
@@ -311,17 +311,17 @@ Object {
   ],
   "usage": "bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
 
-AuthorizationToken.grant_read(grantee: IGrantable)",
+AuthorizationToken.grantRead(grantee: IGrantable)",
 }
 `;
 
 exports[`wing snapshot 2`] = `
-" \`grant_read\` <a name=\\"grant_read\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
+" \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
 
 \`\`\`wing
 bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
 
-AuthorizationToken.grant_read(grantee: IGrantable)
+AuthorizationToken.grantRead(grantee: IGrantable)
 \`\`\`
 
 Grant access to retrieve an authorization token.
