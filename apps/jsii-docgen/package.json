@@ -52,7 +52,7 @@
     "json-schema": "^0.4.0",
     "npm-check-updates": "^16",
     "prettier": "^2.8.3",
-    "projen": "^0.67.11",
+    "projen": "^0.71.60",
     "standard-version": "^9",
     "ts-jest": "^27",
     "ts-node": "^10.9.1",
