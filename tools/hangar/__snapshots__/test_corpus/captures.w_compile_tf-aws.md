@@ -1,5 +1,36 @@
 # [captures.w](../../../../examples/tests/valid/captures.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ bucket1, bucket2, bucket3 }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(event)  {
+      {
+        (await bucket1.put("file.txt","data"));
+        (await bucket2.get("file.txt"));
+        (await bucket2.get("file2.txt"));
+        (await bucket3.get("file3.txt"));
+        for (const stuff of (await bucket1.list())) {
+          {console.log(stuff)};
+        }
+        {console.log((await bucket2.publicUrl("file.txt")))};
+        try {
+          (await bucket1.publicUrl("file.txt"));
+        }
+        catch ($error_error) {
+          const error = $error_error.message;
+          {console.log(error)};
+        }
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -67,7 +98,7 @@
             "uniqueId": "root_AnotherFunction_IamRolePolicy_5B37F663"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.name}"
       },
       "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
@@ -77,7 +108,7 @@
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}"
       },
       "root_cloudQueueAddConsumere46e5cb7_IamRolePolicy_756548A7": {
@@ -87,7 +118,7 @@
             "uniqueId": "root_cloudQueueAddConsumere46e5cb7_IamRolePolicy_756548A7"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\",\"${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\",\"${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE.name}"
       }
     },
@@ -435,30 +466,53 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const bucket1_client = context._lift(bucket1);
+        const bucket2_client = context._lift(bucket2);
+        const bucket3_client = context._lift(bucket3);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            bucket1: ${bucket1_client},
+            bucket2: ${bucket2_client},
+            bucket3: ${bucket3_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
+          this._registerBindObject(bucket2, host, ["get", "publicUrl"]);
+          this._registerBindObject(bucket3, host, ["get"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PublicBucket",{
     "public": true,}
     );
     const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PrivateBucket",{ public: false });
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        bucket1: {
-          obj: bucket1,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-        bucket2: {
-          obj: bucket2,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-        bucket3: {
-          obj: bucket3,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-      }
-    })
-    ;
+    const handler = new $Inflight1(this,"$Inflight1");
     (queue.addConsumer(handler,{ batchSize: 5 }));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: Object.freeze({}) });
     const emptyEnv = Object.freeze({});
@@ -481,29 +535,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(event) {
-  const { bucket1, bucket2, bucket3 } = this;
-  (await bucket1.put("file.txt","data"));
-  (await bucket2.get("file.txt"));
-  (await bucket2.get("file2.txt"));
-  (await bucket3.get("file3.txt"));
-  for (const stuff of (await bucket1.list())) {
-    {console.log(stuff)};
-  }
-  {console.log((await bucket2.publicUrl("file.txt")))};
-  try {
-    (await bucket1.publicUrl("file.txt"));
-  }
-  catch ($error_error) {
-    const error = $error_error.message;
-    {console.log(error)};
-  }
-}
 
 ```
 

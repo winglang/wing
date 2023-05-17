@@ -464,9 +464,9 @@ resource Queue {
   inflight push(message: Json): void;
 
   /**
-   * Pops (deletes and returns) a message from the queue.
+   * Pops (deletes and returns) a message from the queue if any.
    */
-  inflight pop(): Json;
+  inflight pop(): Json?;
 
   /**
    * Remove all messages from the queue.

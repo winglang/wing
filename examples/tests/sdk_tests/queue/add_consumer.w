@@ -18,23 +18,7 @@ class Predicate {
 
 class TestHelper {
   init(){}
-  extern "../external/sleep.js" static inflight sleep(milli: num);
-  
-  /** 
-   * test predicate every 100 miliseconds until a minute passes
-  **/
-  inflight assert(predicate: Predicate) { 
-    let var i = 0;
-    while i<600 {
-      i = i + 1;
-      if predicate.test() {
-        assert(predicate.test());
-        return;
-      } 
-      TestHelper.sleep(100);
-    }
-    assert(predicate.test());
-  }
+  extern "../external/sleep.js" inflight sleep(milli: num);
 }
 
 q.addConsumer(inflight (msg: str): str => {
@@ -47,5 +31,15 @@ let predicate = new Predicate(c);
 test "addConsumer" {
   q.push("hello");
   q.push("world");
-  js.assert(predicate);
+
+  let var i = 0;
+  while i < 600 {
+    i = i + 1;
+    if predicate.test() {
+      assert(predicate.test());
+      return;
+    } 
+    js.sleep(100);
+  }
+  assert(predicate.test());
 }

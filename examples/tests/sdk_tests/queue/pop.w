@@ -1,19 +1,20 @@
-/*\
-skip: true
-\*/
-
 bring cloud;
+
+let NIL = "<<NIL>>";
 
 let q = new cloud.Queue();
 
-// TODO: Will not work until https://github.com/winglang/wing/issues/1385
-new cloud.Function(inflight () => {
-  q.push("Foo");
-  q.push("Bar");
+test "test" {
+  let msgs = ["Foo", "Bar"];
+  for msg in msgs {
+    q.push(msg);
+  }
 
-  let first = q.pop();
-  let second = q.pop();
-  
-  assert(first == "Bar");
-  assert(second == "Foo");
-});
+  let first = q.pop() ?? NIL;
+  let second = q.pop() ?? NIL;
+  let third = q.pop() ?? NIL;
+
+  assert(msgs.contains(first));
+  assert(msgs.contains(second));
+  assert(third == NIL);
+}

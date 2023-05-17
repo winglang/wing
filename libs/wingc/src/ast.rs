@@ -5,7 +5,6 @@ use std::hash::{Hash, Hasher};
 use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 
-use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::TypeRef;
@@ -17,6 +16,13 @@ pub struct Symbol {
 }
 
 impl Symbol {
+	pub fn new<S: Into<String>>(name: S, span: WingSpan) -> Self {
+		Self {
+			name: name.into(),
+			span,
+		}
+	}
+
 	pub fn global<S: Into<String>>(name: S) -> Self {
 		Self {
 			name: name.into(),
@@ -278,8 +284,7 @@ pub trait MethodLike<'a> {
 	fn span(&self) -> WingSpan;
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct FunctionDefinition {
 	/// The function implementation.
 	pub body: FunctionBody,
@@ -289,9 +294,6 @@ pub struct FunctionDefinition {
 	pub is_static: bool,
 
 	pub span: WingSpan,
-
-	#[derivative(Debug = "ignore")]
-	pub captures: RefCell<Option<Captures>>,
 }
 
 impl MethodLike<'_> for FunctionDefinition {
@@ -414,7 +416,7 @@ pub enum StmtKind {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
-	VariableDef {
+	Let {
 		reassignable: bool,
 		var_name: Symbol,
 		initial_value: Expr,
@@ -499,7 +501,7 @@ pub enum ExprKind {
 	},
 	Reference(Reference),
 	Call {
-		function: Box<Expr>,
+		callee: Box<Expr>,
 		arg_list: ArgList,
 	},
 	Unary {
@@ -602,6 +604,14 @@ pub struct Scope {
 }
 
 impl Scope {
+	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+		Self {
+			statements,
+			span,
+			env: RefCell::new(None),
+		}
+	}
+
 	pub fn set_env(&self, new_env: SymbolEnv) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());
