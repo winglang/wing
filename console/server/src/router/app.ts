@@ -1,6 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
+import { ConstructTree } from "@winglang/sdk/lib/core";
+import { ConstructInfo, DisplayInfo } from "@winglang/sdk/lib/core/tree";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
@@ -24,6 +26,15 @@ export interface ExplorerItem {
   childItems?: ExplorerItem[];
   display?: NodeDisplay;
 }
+
+const shakeTree = (tree: ConstructTreeNode): ConstructTreeNode => {
+  const newTree = { ...tree, children: { ...tree.children } };
+  // remove node id "Default" from newTree and move children to root
+  if (newTree.children.Default) {
+    newTree.children = { ...newTree.children.Default.children };
+  }
+  return newTree;
+};
 
 export const createAppRouter = () => {
   const router = createRouter({
@@ -73,7 +84,7 @@ export const createAppRouter = () => {
 
         const { tree } = simulator.tree().rawData();
         return createExplorerItemFromConstructTreeNode(
-          tree,
+          shakeTree(tree),
           simulator,
           input?.showTests,
         );
@@ -88,7 +99,7 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(tree);
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
 
         const node = nodeMap.get(input.path);
         const children = nodeMap.getAll(node?.children ?? []);
@@ -193,7 +204,7 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(tree);
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
 
         let breadcrumbs: Array<{
           id: string;
@@ -221,7 +232,7 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(tree);
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
         const node = nodeMap.get(input.path);
         if (!node) {
           throw new TRPCError({
@@ -259,7 +270,7 @@ export const createAppRouter = () => {
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(tree);
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
         const node = nodeMap.get(path);
         if (!node) {
           throw new TRPCError({
@@ -361,12 +372,21 @@ export const createAppRouter = () => {
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(tree);
+        const shakedTree = shakeTree(tree);
+        const nodeMap = buildConstructTreeNodeMap(shakedTree);
         const nodes = [
-          createMapNodeFromConstructTreeNode(tree, simulator, input?.showTests),
+          createMapNodeFromConstructTreeNode(
+            shakedTree,
+            simulator,
+            input?.showTests,
+          ),
         ];
         const edges = uniqby(
-          createMapEdgeFromConstructTreeNode(tree, nodeMap, input?.showTests),
+          createMapEdgeFromConstructTreeNode(
+            shakedTree,
+            nodeMap,
+            input?.showTests,
+          ),
           (edge) => edge.id,
         );
 
