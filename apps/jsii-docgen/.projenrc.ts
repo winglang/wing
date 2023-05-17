@@ -65,4 +65,6 @@ project.addFields({
   volta: rootPackageJson.volta,
 });
 
+project.npmrc.addConfig("install-links", "false");
+
 project.synth();

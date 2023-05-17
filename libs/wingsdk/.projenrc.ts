@@ -249,4 +249,6 @@ restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
 project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
 project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
+project.npmrc.addConfig("install-links", "false");
+
 project.synth();
