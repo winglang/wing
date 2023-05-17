@@ -55,7 +55,8 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.LIST,
       BucketInflightMethods.PUT,
       BucketInflightMethods.PUT_JSON,
-      BucketInflightMethods.PUBLIC_URL
+      BucketInflightMethods.PUBLIC_URL,
+      BucketInflightMethods.EXISTS
     );
 
     props;
@@ -386,4 +387,6 @@ export enum BucketInflightMethods {
   GET_JSON = "getJson",
   /** `Bucket.publicUrl */
   PUBLIC_URL = "publicUrl",
+  /** `Bucket.exists` */
+  EXISTS = "exists",
 }
