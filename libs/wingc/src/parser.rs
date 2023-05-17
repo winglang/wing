@@ -12,7 +12,7 @@ use crate::ast::{
 	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
 	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
+use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
 
 pub struct Parser<'a> {
@@ -70,7 +70,6 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
-			level: DiagnosticLevel::Error,
 		};
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag);
@@ -387,7 +386,7 @@ impl<'s> Parser<'s> {
 		} else {
 			None
 		};
-		Ok(StmtKind::VariableDef {
+		Ok(StmtKind::Let {
 			reassignable: statement_node.child_by_field_name("reassignable").is_some(),
 			var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
 			initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
@@ -480,7 +479,6 @@ impl<'s> Parser<'s> {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
 						self.diagnostics.borrow_mut().push(Diagnostic {
-							level: DiagnosticLevel::Error,
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
@@ -1198,7 +1196,7 @@ impl<'s> Parser<'s> {
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
-					function: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
+					callee: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
 					arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,
