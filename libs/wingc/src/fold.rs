@@ -85,12 +85,12 @@ where
 			module_name: f.fold_symbol(module_name),
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},
-		StmtKind::VariableDef {
+		StmtKind::Let {
 			reassignable,
 			var_name,
 			initial_value,
 			type_,
-		} => StmtKind::VariableDef {
+		} => StmtKind::Let {
 			reassignable,
 			var_name: f.fold_symbol(var_name),
 			initial_value: f.fold_expr(initial_value),
@@ -266,8 +266,8 @@ where
 			end: Box::new(f.fold_expr(*end)),
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
-		ExprKind::Call { function, arg_list } => ExprKind::Call {
-			function: Box::new(f.fold_expr(*function)),
+		ExprKind::Call { callee, arg_list } => ExprKind::Call {
+			callee: Box::new(f.fold_expr(*callee)),
 			arg_list: f.fold_args(arg_list),
 		},
 		ExprKind::Unary { op, exp } => ExprKind::Unary {
