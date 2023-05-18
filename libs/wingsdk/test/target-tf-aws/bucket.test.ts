@@ -285,3 +285,7 @@ test("bucket with onEvent method", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
+
+test("check if key exists in the bucket", () => {
+  // TODO
+});
