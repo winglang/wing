@@ -198,13 +198,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["dec", "peek"]);
+          $Inflight1._registerBindObject(counter, host, ["dec", "peek"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 1 });

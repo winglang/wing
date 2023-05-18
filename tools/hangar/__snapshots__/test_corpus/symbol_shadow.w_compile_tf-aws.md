@@ -437,13 +437,16 @@ class $Root extends $stdlib.std.Resource {
               })())
             `);
           }
-          _registerBind(host, ops) {
+           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(s, host, []);
+              $Inflight2._registerBindObject(s, host, []);
             }
             super._registerBind(host, ops);
+          }
+          static _registerTypeBind(host, ops) {
+            super._registerTypeBind(host, ops);
           }
         }
         this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight in resource should capture the right scoped var",new $Inflight2(this,"$Inflight2"));
@@ -466,10 +469,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight3 extends $stdlib.std.Resource {
@@ -497,13 +503,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(s, host, []);
+          $Inflight3._registerBindObject(s, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight4 extends $stdlib.std.Resource {
@@ -529,12 +538,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const s = "top";
@@ -566,13 +578,16 @@ class $Root extends $stdlib.std.Resource {
             })())
           `);
         }
-        _registerBind(host, ops) {
+         _registerBind(host, ops) {
           if (ops.includes("$inflight_init")) {
           }
           if (ops.includes("handle")) {
-            this._registerBindObject(s, host, []);
+            $Inflight1._registerBindObject(s, host, []);
           }
           super._registerBind(host, ops);
+        }
+        static _registerTypeBind(host, ops) {
+          super._registerTypeBind(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight nested should not capture the shadowed var",new $Inflight1(this,"$Inflight1"));

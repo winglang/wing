@@ -392,13 +392,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterA, host, ["peek"]);
+          $Inflight1._registerBindObject(counterA, host, ["peek"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight2 extends $stdlib.std.Resource {
@@ -426,13 +429,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterB, host, ["peek"]);
+          $Inflight2._registerBindObject(counterB, host, ["peek"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight3 extends $stdlib.std.Resource {
@@ -460,13 +466,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterC, host, ["peek"]);
+          $Inflight3._registerBindObject(counterC, host, ["peek"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const counterA = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterA");

@@ -306,14 +306,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["getJson"]);
-          this._registerBindObject(fileName, host, []);
+          $Inflight1._registerBindObject(b, host, ["getJson"]);
+          $Inflight1._registerBindObject(fileName, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight2 extends $stdlib.std.Resource {
@@ -347,16 +350,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["putJson"]);
-          this._registerBindObject(fileName, host, []);
-          this._registerBindObject(getJson, host, ["invoke"]);
-          this._registerBindObject(j, host, []);
+          $Inflight2._registerBindObject(b, host, ["putJson"]);
+          $Inflight2._registerBindObject(fileName, host, []);
+          $Inflight2._registerBindObject(getJson, host, ["invoke"]);
+          $Inflight2._registerBindObject(j, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

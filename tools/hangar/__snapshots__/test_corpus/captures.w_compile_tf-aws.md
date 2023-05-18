@@ -495,15 +495,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
-          this._registerBindObject(bucket2, host, ["get", "publicUrl"]);
-          this._registerBindObject(bucket3, host, ["get"]);
+          $Inflight1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
+          $Inflight1._registerBindObject(bucket2, host, ["get", "publicUrl"]);
+          $Inflight1._registerBindObject(bucket3, host, ["get"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

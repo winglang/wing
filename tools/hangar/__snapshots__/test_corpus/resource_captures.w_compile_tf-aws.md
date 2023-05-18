@@ -491,11 +491,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.myResource, host, []);
+          First._registerBindObject(this.myResource, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class Another extends $stdlib.std.Resource {
@@ -528,16 +531,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.first, host, []);
-          this._registerBindObject(this.myField, host, []);
+          Another._registerBindObject(this.first, host, []);
+          Another._registerBindObject(this.myField, host, []);
         }
         if (ops.includes("anotherFunc")) {
         }
         if (ops.includes("meaningOfLife")) {
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -609,61 +615,64 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.another, host, []);
-          this._registerBindObject(this.arrayOfStr, host, []);
-          this._registerBindObject(this.extBucket, host, []);
-          this._registerBindObject(this.extNum, host, []);
-          this._registerBindObject(this.mapOfNum, host, []);
-          this._registerBindObject(this.myBool, host, []);
-          this._registerBindObject(this.myNum, host, []);
-          this._registerBindObject(this.myOptStr, host, []);
-          this._registerBindObject(this.myQueue, host, []);
-          this._registerBindObject(this.myResource, host, []);
-          this._registerBindObject(this.myStr, host, []);
-          this._registerBindObject(this.setOfStr, host, []);
-          this._registerBindObject(this.unusedResource, host, []);
+          MyResource._registerBindObject(this.another, host, []);
+          MyResource._registerBindObject(this.arrayOfStr, host, []);
+          MyResource._registerBindObject(this.extBucket, host, []);
+          MyResource._registerBindObject(this.extNum, host, []);
+          MyResource._registerBindObject(this.mapOfNum, host, []);
+          MyResource._registerBindObject(this.myBool, host, []);
+          MyResource._registerBindObject(this.myNum, host, []);
+          MyResource._registerBindObject(this.myOptStr, host, []);
+          MyResource._registerBindObject(this.myQueue, host, []);
+          MyResource._registerBindObject(this.myResource, host, []);
+          MyResource._registerBindObject(this.myStr, host, []);
+          MyResource._registerBindObject(this.setOfStr, host, []);
+          MyResource._registerBindObject(this.unusedResource, host, []);
         }
         if (ops.includes("testCaptureCollectionsOfData")) {
-          this._registerBindObject(this.arrayOfStr, host, ["at", "length"]);
-          this._registerBindObject(this.mapOfNum, host, ["get"]);
-          this._registerBindObject(this.setOfStr, host, ["has"]);
+          MyResource._registerBindObject(this.arrayOfStr, host, ["at", "length"]);
+          MyResource._registerBindObject(this.mapOfNum, host, ["get"]);
+          MyResource._registerBindObject(this.setOfStr, host, ["has"]);
         }
         if (ops.includes("testCaptureOptional")) {
-          this._registerBindObject(this.myOptStr, host, []);
+          MyResource._registerBindObject(this.myOptStr, host, []);
         }
         if (ops.includes("testCapturePrimitives")) {
-          this._registerBindObject(this.myBool, host, []);
-          this._registerBindObject(this.myNum, host, []);
-          this._registerBindObject(this.myStr, host, []);
+          MyResource._registerBindObject(this.myBool, host, []);
+          MyResource._registerBindObject(this.myNum, host, []);
+          MyResource._registerBindObject(this.myStr, host, []);
         }
         if (ops.includes("testCaptureResource")) {
-          this._registerBindObject(this.myResource, host, ["get", "list", "put"]);
+          MyResource._registerBindObject(this.myResource, host, ["get", "list", "put"]);
         }
         if (ops.includes("testExpressionRecursive")) {
-          this._registerBindObject(this.myQueue, host, ["push"]);
-          this._registerBindObject(this.myStr, host, []);
+          MyResource._registerBindObject(this.myQueue, host, ["push"]);
+          MyResource._registerBindObject(this.myStr, host, []);
         }
         if (ops.includes("testExternal")) {
-          this._registerBindObject(this.extBucket, host, ["list"]);
-          this._registerBindObject(this.extNum, host, []);
+          MyResource._registerBindObject(this.extBucket, host, ["list"]);
+          MyResource._registerBindObject(this.extNum, host, []);
         }
         if (ops.includes("testInflightField")) {
         }
         if (ops.includes("testNestedInflightField")) {
-          this._registerBindObject(this.another.myField, host, []);
+          MyResource._registerBindObject(this.another.myField, host, []);
         }
         if (ops.includes("testNestedResource")) {
-          this._registerBindObject(this.another.first.myResource, host, ["get", "list", "put"]);
-          this._registerBindObject(this.myStr, host, []);
+          MyResource._registerBindObject(this.another.first.myResource, host, ["get", "list", "put"]);
+          MyResource._registerBindObject(this.myStr, host, []);
         }
         if (ops.includes("testNoCapture")) {
         }
         if (ops.includes("testUserDefinedResource")) {
-          this._registerBindObject(this.another, host, ["anotherFunc", "meaningOfLife"]);
+          MyResource._registerBindObject(this.another, host, ["anotherFunc", "meaningOfLife"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight1 extends $stdlib.std.Resource {
@@ -691,13 +700,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
+          $Inflight1._registerBindObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

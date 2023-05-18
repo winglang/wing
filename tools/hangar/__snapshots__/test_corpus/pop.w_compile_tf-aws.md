@@ -195,14 +195,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(NIL, host, []);
-          this._registerBindObject(q, host, ["pop", "push"]);
+          $Inflight1._registerBindObject(NIL, host, []);
+          $Inflight1._registerBindObject(q, host, ["pop", "push"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const NIL = "<<NIL>>";

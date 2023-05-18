@@ -335,13 +335,16 @@ class $Root extends $stdlib.std.Resource {
                 })())
               `);
             }
-            _registerBind(host, ops) {
+             _registerBind(host, ops) {
               if (ops.includes("$inflight_init")) {
               }
               if (ops.includes("handle")) {
-                this._registerBindObject(__parent_this.b, host, ["put"]);
+                $Inflight1._registerBindObject(__parent_this.b, host, ["put"]);
               }
               super._registerBind(host, ops);
+            }
+            static _registerTypeBind(host, ops) {
+              super._registerTypeBind(host, ops);
             }
           }
           const inflight_closure = new $Inflight1(this,"$Inflight1");
@@ -368,11 +371,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.b, host, []);
+          PreflightClass._registerBindObject(this.b, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight2 extends $stdlib.std.Resource {
@@ -400,13 +406,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
+       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(f, host, ["invoke"]);
+          $Inflight2._registerBindObject(f, host, ["invoke"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const p = new PreflightClass(this,"PreflightClass");
