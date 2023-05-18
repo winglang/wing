@@ -64,11 +64,18 @@ export const createCompiler = (wingfile: string): Compiler => {
     }
   };
 
-  const watcher = chokidar.watch(wingfile);
+  const dirname = path.dirname(wingfile);
+  const ignoreList = ["**/target/**", "**/node_modules/**"];
+  const watcher = chokidar.watch(dirname, {
+    ignored: ignoreList,
+  });
   watcher.on("change", compile);
   watcher.on("add", compile);
-  watcher.on("unlink", async () => {
-    await events.emit("error", new Error("Wingfile deleted"));
+  watcher.on("unlink", async (path: string) => {
+    if (path === wingfile) {
+      await events.emit("error", new Error("Wing file deleted"));
+    }
+    void compile();
   });
 
   return {
