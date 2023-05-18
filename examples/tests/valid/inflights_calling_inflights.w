@@ -1,13 +1,13 @@
 bring cloud;
 
-let global_bucket = new cloud.Bucket();
+let globalBucket = new cloud.Bucket();
 
-let store_in_bucket = inflight (event: str, file: str): str => {
-  global_bucket.put(file, event);
+let storeInBucket = inflight (event: str, file: str): str => {
+  globalBucket.put(file, event);
 };
 
 let handler1 = inflight (event: str): str => {
-	store_in_bucket(event, "file1");
+	storeInBucket(event, "file1");
 };     
 
 let func1 = new cloud.Function(handler1) as "func1";
@@ -23,7 +23,7 @@ class MyResource {
 
   init() {
     this.closure = inflight (s: str): str => {
-      global_bucket.list();
+      globalBucket.list();
       return "hello";
     };
   }

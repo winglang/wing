@@ -2,13 +2,13 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ global_bucket }) {
+module.exports = function({ globalBucket }) {
   class  $Inflight1 {
     constructor({  }) {
     }
     async handle(event, file)  {
       {
-        (typeof global_bucket.put === "function" ? await global_bucket.put(file,event) : await global_bucket.put.handle(file,event));
+        (typeof globalBucket.put === "function" ? await globalBucket.put(file,event) : await globalBucket.put.handle(file,event));
       }
     }
   }
@@ -19,13 +19,13 @@ module.exports = function({ global_bucket }) {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function({ store_in_bucket }) {
+module.exports = function({ storeInBucket }) {
   class  $Inflight2 {
     constructor({  }) {
     }
     async handle(event)  {
       {
-        (typeof store_in_bucket === "function" ? await store_in_bucket(event,"file1") : await store_in_bucket.handle(event,"file1"));
+        (typeof storeInBucket === "function" ? await storeInBucket(event,"file1") : await storeInBucket.handle(event,"file1"));
       }
     }
   }
@@ -53,13 +53,13 @@ module.exports = function({ func1 }) {
 
 ## clients/$Inflight4.inflight.js
 ```js
-module.exports = function({ global_bucket }) {
+module.exports = function({ globalBucket }) {
   class  $Inflight4 {
     constructor({  }) {
     }
     async handle(s)  {
       {
-        (typeof global_bucket.list === "function" ? await global_bucket.list() : await global_bucket.list.handle());
+        (typeof globalBucket.list === "function" ? await globalBucket.list() : await globalBucket.list.handle());
         return "hello";
       }
     }
@@ -421,10 +421,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-        const global_bucket_client = context._lift(global_bucket);
+        const globalBucket_client = context._lift(globalBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            global_bucket: ${global_bucket_client},
+            globalBucket: ${globalBucket_client},
           })
         `);
       }
@@ -443,7 +443,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(global_bucket, host, ["put"]);
+          this._registerBindObject(globalBucket, host, ["put"]);
         }
         super._registerBind(host, ops);
       }
@@ -455,10 +455,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
-        const store_in_bucket_client = context._lift(store_in_bucket);
+        const storeInBucket_client = context._lift(storeInBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            store_in_bucket: ${store_in_bucket_client},
+            storeInBucket: ${storeInBucket_client},
           })
         `);
       }
@@ -477,7 +477,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(store_in_bucket, host, ["handle"]);
+          this._registerBindObject(storeInBucket, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
@@ -528,10 +528,10 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
-            const global_bucket_client = context._lift(global_bucket);
+            const globalBucket_client = context._lift(globalBucket);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
-                global_bucket: ${global_bucket_client},
+                globalBucket: ${globalBucket_client},
               })
             `);
           }
@@ -550,7 +550,7 @@ class $Root extends $stdlib.std.Resource {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(global_bucket, host, ["list"]);
+              this._registerBindObject(globalBucket, host, ["list"]);
             }
             super._registerBind(host, ops);
           }
@@ -621,8 +621,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const global_bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const store_in_bucket = new $Inflight1(this,"$Inflight1");
+    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const storeInBucket = new $Inflight1(this,"$Inflight1");
     const handler1 = new $Inflight2(this,"$Inflight2");
     const func1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"func1",handler1);
     this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflights can call other inflights",new $Inflight3(this,"$Inflight3"));
