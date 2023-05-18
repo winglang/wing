@@ -192,7 +192,8 @@ export abstract class Resource extends Construct implements IResource {
 
   /**
    * Register that the resource type needs to be bound to the host for the given
-   * operations.
+   * operations. A type being bound to a host means that that type's static members
+   * will be bound to the host.
    *
    * @internal
    */
@@ -289,7 +290,7 @@ export abstract class Resource extends Construct implements IResource {
     }
 
     throw new Error(
-      `unable to serialize immutable data object of type ${obj.constructor?.name} ${typeof obj} with ops ${ops}`
+      `unable to serialize immutable data object of type ${obj.constructor?.name}`
     );
   }
 
@@ -489,9 +490,7 @@ export class Display {
 }
 
 function isResource(obj: any): obj is IResource {
-  let x = isIResourceType(obj.constructor);
-  console.log(`in isResource for ${obj.constructor.name} returning ${x}`);
-  return x;
+  return isIResourceType(obj.constructor);
 }
 
 function isIResourceType(t: any): t is new (...args: any[]) => IResource {
@@ -504,10 +503,8 @@ function isIResourceType(t: any): t is new (...args: any[]) => IResource {
 }
 
 function isResourceType(t: any): t is typeof Resource {
-  let x = typeof t._registerTypeBind === "function" &&
-    isIResourceType(t);
-  console.log(`in isResourceType for ${t} returning ${x}`);
   return (
-    x
+    typeof t._registerTypeBind === "function" &&
+    isIResourceType(t)
   );
 }

@@ -884,7 +884,6 @@ impl<'a> JSifier<'a> {
 				init_refs_entry.insert(k, v);
 			}
 		}
-		println!("resource {} inflight refs: {:#?}", class.name.name.blue(), refs);
 
 		// Jsify inflight client
 		let inflight_methods = class
@@ -965,7 +964,6 @@ impl<'a> JSifier<'a> {
 
 		let mut type_bind_method = CodeMaker::default();
 		type_bind_method.open("static _registerTypeBind(host, ops) {");
-		type_bind_method.line(format!("console.log(\"registering type bind for {}\");", class_name));
 		for (method_name, method_refs) in refs.iter().filter(|(m, _)| {
 			*m != CLASS_INFLIGHT_INIT_NAME
 				&& resource_type
@@ -975,7 +973,6 @@ impl<'a> JSifier<'a> {
 					.expect("method")
 					.is_static
 		}) {
-			type_bind_method.line("console.log(\"registering type bind\");");
 			type_bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
 			for (field, ops) in method_refs {
 				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
@@ -1673,7 +1670,6 @@ impl<'a> FieldReferenceVisitor<'a> {
 				return [obj, prop].concat();
 			}
 			Reference::TypeMember { type_, property } => {
-				println!("type member: {:?} {:?}", type_, property);
 				let env = self.env.unwrap();
 
 				// Get the type we're accessing a member of
@@ -1681,7 +1677,6 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 				// If the type we're referencing ins't a preflight class then skip it
 				let Type::Resource(class) = &*t else {
-					println!("{} is not a resource", t);
 					return vec![];
 				};
 
@@ -1693,11 +1688,6 @@ impl<'a> FieldReferenceVisitor<'a> {
 					.expect("covered by type checking")
 					.as_variable()
 					.expect("reference to a non-variable");
-
-				// // If the reference isn't a preflight (lifted) variable then skip it
-				// if var.phase != Phase::Preflight {
-				// 	return vec![];
-				// }
 
 				return vec![
 					Component {
