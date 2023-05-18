@@ -8,8 +8,9 @@
 extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
-use capture::CaptureVisitor;
-use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
+use closure_transform::ClosureTransformer;
+use diagnostic::{print_diagnostics, Diagnostic, Diagnostics};
+use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -31,7 +32,7 @@ use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
-pub mod capture;
+pub mod closure_transform;
 pub mod debug;
 pub mod diagnostic;
 pub mod fold;
@@ -40,7 +41,6 @@ pub mod lsp;
 pub mod parser;
 pub mod type_check;
 pub mod type_check_assert;
-pub mod type_check_class_fields_init;
 pub mod visit;
 mod wasm_util;
 
@@ -143,7 +143,6 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 			diagnostics.push(Diagnostic {
 				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
 				span: None,
-				level: DiagnosticLevel::Error,
 			});
 
 			// Set up a dummy scope to return
@@ -263,7 +262,6 @@ pub fn compile(
 		return Err(vec![Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
 			span: None,
-			level: DiagnosticLevel::Error,
 		}]);
 	}
 
@@ -274,7 +272,6 @@ pub fn compile(
 				source_path.display()
 			),
 			span: None,
-			level: DiagnosticLevel::Error,
 		}]);
 	}
 
@@ -282,10 +279,19 @@ pub fn compile(
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
+	// -- PARSING PHASE --
+	let (scope, parse_diagnostics) = parse(&source_path);
+
+	// -- DESUGARING PHASE --
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = ClosureTransformer::new();
+	let mut scope = inflight_transformer.fold_scope(scope);
+
+	// -- TYPECHECKING PHASE --
+
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
-	// Build our AST
-	let (mut scope, parse_diagnostics) = parse(&source_path);
 	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
@@ -308,22 +314,12 @@ pub fn compile(
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
 
-	// Analyze inflight captures
-	let mut capture_visitor = CaptureVisitor::new();
-	capture_visitor.visit_scope(&scope);
-	diagnostics.extend(capture_visitor.diagnostics);
-
-	// Filter diagnostics to only errors
-	let errors = diagnostics
-		.iter()
-		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
-		.cloned()
-		.collect::<Vec<_>>();
-
 	// bail out now (before jsification) if there are errors (no point in jsifying)
-	if errors.len() > 0 {
-		return Err(errors);
+	if diagnostics.len() > 0 {
+		return Err(diagnostics);
 	}
+
+	// -- JSIFICATION PHASE --
 
 	// Prepare output directory for support inflight code
 	fs::create_dir_all(out_dir).expect("create output dir");
@@ -342,7 +338,6 @@ pub fn compile(
 			diagnostics.push(Diagnostic {
 				message: format!("Project directory must be absolute: {}", project_dir.display()),
 				span: None,
-				level: DiagnosticLevel::Error,
 			});
 			return Err(diagnostics);
 		}

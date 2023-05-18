@@ -1,12 +1,12 @@
 mod codemaker;
+mod free_var_scanner;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
-use indexmap::{indexmap, indexset, IndexMap, IndexSet};
+use indexmap::{indexmap, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use std::{
-	cell::RefCell,
 	cmp::Ordering,
 	collections::{BTreeMap, BTreeSet},
 	fmt::Display,
@@ -23,7 +23,7 @@ use crate::{
 		StmtKind, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	debug,
-	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
+	diagnostic::{Diagnostic, Diagnostics},
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
@@ -33,7 +33,7 @@ use crate::{
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
 
-use self::codemaker::CodeMaker;
+use self::{codemaker::CodeMaker, free_var_scanner::FreeVariableScanner};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -51,10 +51,11 @@ const APP_BASE_CLASS: &str = "$AppBase";
 
 const ROOT_CLASS: &str = "$Root";
 
-const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
-
 pub struct JSifyContext {
 	pub in_json: bool,
+	/// The current execution phase of the AST traversal.
+	/// The root of any Wing app starts with the preflight phase, and
+	/// the `inflight` keyword specifies scopes that are inflight.
 	pub phase: Phase,
 }
 
@@ -64,8 +65,6 @@ pub struct JSifier<'a> {
 	absolute_project_root: &'a Path,
 	shim: bool,
 	app_name: String,
-	inflight_counter: RefCell<usize>,
-	proc_counter: RefCell<usize>,
 }
 
 impl<'a> JSifier<'a> {
@@ -75,8 +74,6 @@ impl<'a> JSifier<'a> {
 			out_dir,
 			shim,
 			app_name: app_name.to_string(),
-			inflight_counter: RefCell::new(0),
-			proc_counter: RefCell::new(0),
 			absolute_project_root,
 		}
 	}
@@ -167,22 +164,22 @@ impl<'a> JSifier<'a> {
 		output.to_string()
 	}
 
-	fn jsify_scope_body(&mut self, scope: &Scope, context: &JSifyContext) -> CodeMaker {
+	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		for statement in scope.statements.iter() {
-			let statement_code = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, context);
+			let statement_code = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, ctx);
 			code.add_code(statement_code);
 		}
 
 		code
 	}
 
-	fn jsify_reference(&mut self, reference: &Reference, context: &JSifyContext) -> String {
+	fn jsify_reference(&mut self, reference: &Reference, ctx: &JSifyContext) -> String {
 		match reference {
 			Reference::Identifier(identifier) => self.jsify_symbol(identifier),
 			Reference::InstanceMember { object, property } => {
-				self.jsify_expression(object, context) + "." + &self.jsify_symbol(property)
+				self.jsify_expression(object, ctx) + "." + &self.jsify_symbol(property)
 			}
 			Reference::TypeMember { type_, property } => {
 				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &self.jsify_symbol(property)
@@ -199,7 +196,7 @@ impl<'a> JSifier<'a> {
 		arg_list: &ArgList,
 		scope: Option<&str>,
 		id: Option<&str>,
-		context: &JSifyContext,
+		ctx: &JSifyContext,
 	) -> String {
 		let mut args = vec![];
 		let mut structure_args = vec![];
@@ -213,7 +210,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		for arg in arg_list.pos_args.iter() {
-			args.push(self.jsify_expression(arg, &context));
+			args.push(self.jsify_expression(arg, &ctx));
 		}
 
 		for arg in arg_list.named_args.iter() {
@@ -224,7 +221,7 @@ impl<'a> JSifier<'a> {
 				self.jsify_expression(
 					arg.1,
 					&JSifyContext {
-						in_json: context.in_json,
+						in_json: ctx.in_json,
 						phase: Phase::Independent,
 					}
 				)
@@ -266,8 +263,8 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_expression(&mut self, expression: &Expr, context: &JSifyContext) -> String {
-		let auto_await = match context.phase {
+	fn jsify_expression(&mut self, expression: &Expr, ctx: &JSifyContext) -> String {
+		let auto_await = match ctx.phase {
 			Phase::Inflight => "await ",
 			_ => "",
 		};
@@ -306,7 +303,7 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				let args = self.jsify_arg_list(&arg_list, scope, id, context);
+				let args = self.jsify_arg_list(&arg_list, scope, id, ctx);
 
 				let fqn = if is_resource {
 					expression_type
@@ -340,9 +337,9 @@ impl<'a> JSifier<'a> {
 							InterpolatedStringPart::Expr(e) => {
 								match *e.evaluated_type.borrow().expect("Should have type") {
 									Type::Json | Type::MutJson => {
-										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, context))
+										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, ctx))
 									}
-									_ => format!("${{{}}}", self.jsify_expression(e, context)),
+									_ => format!("${{{}}}", self.jsify_expression(e, ctx)),
 								}
 							}
 						})
@@ -354,44 +351,44 @@ impl<'a> JSifier<'a> {
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {
-				match context.phase {
+				match ctx.phase {
 					Phase::Inflight => format!(
 						"((s,e,i) => {{ function* iterator(start,end,inclusive) {{ let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }}; return iterator(s,e,i); }})({},{},{})",
-						self.jsify_expression(start, context),
-						self.jsify_expression(end, context),
+						self.jsify_expression(start, ctx),
+						self.jsify_expression(end, ctx),
 						inclusive.unwrap()
 					),
 					_ => format!(
 						"{}.std.Range.of({}, {}, {})",
 						STDLIB,
-						self.jsify_expression(start, context),
-						self.jsify_expression(end, context),
+						self.jsify_expression(start, ctx),
+						self.jsify_expression(end, ctx),
 						inclusive.unwrap()
 					)
 				}
 			}
-			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, context),
-			ExprKind::Call { function, arg_list } => {
-				let function_type = function.evaluated_type.borrow().unwrap();
+			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
+			ExprKind::Call { callee, arg_list } => {
+				let function_type = callee.evaluated_type.borrow().unwrap();
 				let function_sig = function_type.as_function_sig();
 				assert!(
 					function_sig.is_some() || function_type.is_anything(),
 					"Expected expression to be callable"
 				);
 
-				let expr_string = match &function.kind {
-					ExprKind::Reference(reference) => self.jsify_reference(reference, context),
-					_ => format!("({})", self.jsify_expression(function, context)),
+				let expr_string = match &callee.kind {
+					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
+					_ => format!("({})", self.jsify_expression(callee, ctx)),
 				};
-				let arg_string = self.jsify_arg_list(&arg_list, None, None, context);
+				let arg_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
-						let self_string = &match &function.kind {
+						let self_string = &match &callee.kind {
 							// for "loose" macros, e.g. `print()`, $self$ is the global object
 							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-								self.jsify_expression(object, context)
+								self.jsify_expression(object, ctx)
 							}
 
 							_ => expr_string,
@@ -406,7 +403,7 @@ impl<'a> JSifier<'a> {
 				format!("({}{}({}))", auto_await, expr_string, arg_string)
 			}
 			ExprKind::Unary { op, exp } => {
-				let js_exp = self.jsify_expression(exp, context);
+				let js_exp = self.jsify_expression(exp, ctx);
 				match op {
 					UnaryOperator::Minus => format!("(-{})", js_exp),
 					UnaryOperator::Not => format!("(!{})", js_exp),
@@ -417,8 +414,8 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Binary { op, left, right } => {
-				let js_left = self.jsify_expression(left, context);
-				let js_right = self.jsify_expression(right, context);
+				let js_left = self.jsify_expression(left, ctx);
+				let js_right = self.jsify_expression(right, ctx);
 
 				let js_op = match op {
 					BinaryOperator::AddOrConcat => "+",
@@ -449,11 +446,11 @@ impl<'a> JSifier<'a> {
 			ExprKind::ArrayLiteral { items, .. } => {
 				let item_list = items
 					.iter()
-					.map(|expr| self.jsify_expression(expr, context))
+					.map(|expr| self.jsify_expression(expr, ctx))
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if is_mutable_collection(expression) || context.in_json {
+				if is_mutable_collection(expression) || ctx.in_json {
 					// json arrays dont need frozen at nested level
 					format!("[{}]", item_list)
 				} else {
@@ -465,7 +462,7 @@ impl<'a> JSifier<'a> {
 					"{{\n{}}}\n",
 					fields
 						.iter()
-						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, context)))
+						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, ctx)))
 						.collect::<Vec<String>>()
 						.join("\n")
 				)
@@ -473,7 +470,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::JsonLiteral { is_mut, element } => {
 				let json_context = &JSifyContext {
 					in_json: true,
-					phase: context.phase,
+					phase: ctx.phase,
 				};
 				let js_out = match &element.kind {
 					ExprKind::MapLiteral { .. } => {
@@ -490,11 +487,11 @@ impl<'a> JSifier<'a> {
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
-					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, context)))
+					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, ctx)))
 					.collect::<Vec<String>>()
 					.join(",");
 
-				if is_mutable_collection(expression) || context.in_json {
+				if is_mutable_collection(expression) || ctx.in_json {
 					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
 				} else {
@@ -504,7 +501,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::SetLiteral { items, .. } => {
 				let item_list = items
 					.iter()
-					.map(|expr| self.jsify_expression(expr, context))
+					.map(|expr| self.jsify_expression(expr, ctx))
 					.collect::<Vec<String>>()
 					.join(", ");
 
@@ -515,14 +512,17 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.phase {
-				Phase::Inflight => self.jsify_inflight_function(func_def, context).to_string(),
+				Phase::Inflight => {
+					assert!(ctx.phase == Phase::Inflight, "inflight closures should have been transformed into preflight handler classes in the closure_transform compiler phase");
+					self.jsify_function(None, func_def, false, ctx).to_string()
+				},
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, func_def, context).to_string(),
+				Phase::Preflight => self.jsify_function(None, func_def, false, ctx).to_string(),
 			},
 		}
 	}
 
-	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, context: &JSifyContext) -> CodeMaker {
+	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
 		match &statement.kind {
 			StmtKind::Bring {
 				module_name,
@@ -547,13 +547,13 @@ impl<'a> JSifier<'a> {
 					}
 				))
 			}
-			StmtKind::VariableDef {
+			StmtKind::Let {
 				reassignable,
 				var_name,
 				initial_value,
 				type_: _,
 			} => {
-				let initial_value = self.jsify_expression(initial_value, context);
+				let initial_value = self.jsify_expression(initial_value, ctx);
 				return if *reassignable {
 					CodeMaker::one_line(format!("let {} = {};", self.jsify_symbol(var_name), initial_value))
 				} else {
@@ -569,16 +569,16 @@ impl<'a> JSifier<'a> {
 				code.open(format!(
 					"for (const {} of {}) {{",
 					self.jsify_symbol(iterator),
-					self.jsify_expression(iterable, context)
+					self.jsify_expression(iterable, ctx)
 				));
-				code.add_code(self.jsify_scope_body(statements, context));
+				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 				code
 			}
 			StmtKind::While { condition, statements } => {
 				let mut code = CodeMaker::default();
-				code.open(format!("while ({}) {{", self.jsify_expression(condition, context)));
-				code.add_code(self.jsify_scope_body(statements, context));
+				code.open(format!("while ({}) {{", self.jsify_expression(condition, ctx)));
+				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 				code
 			}
@@ -592,48 +592,48 @@ impl<'a> JSifier<'a> {
 			} => {
 				let mut code = CodeMaker::default();
 
-				code.open(format!("if ({}) {{", self.jsify_expression(condition, context)));
-				code.add_code(self.jsify_scope_body(statements, context));
+				code.open(format!("if ({}) {{", self.jsify_expression(condition, ctx)));
+				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 
 				for elif_block in elif_statements {
-					let condition = self.jsify_expression(&elif_block.condition, context);
+					let condition = self.jsify_expression(&elif_block.condition, ctx);
 					// TODO: this puts the "else if" in a separate line from the closing block but
 					// technically that shouldn't be a problem, its just ugly
 					code.open(format!("else if ({}) {{", condition));
-					code.add_code(self.jsify_scope_body(&elif_block.statements, context));
+					code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
 					code.close("}");
 				}
 
 				if let Some(else_scope) = else_statements {
 					code.open("else {");
-					code.add_code(self.jsify_scope_body(else_scope, context));
+					code.add_code(self.jsify_scope_body(else_scope, ctx));
 					code.close("}");
 				}
 
 				code
 			}
-			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, context))),
+			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, ctx))),
 			StmtKind::Assignment { variable, value } => CodeMaker::one_line(format!(
 				"{} = {};",
-				self.jsify_reference(&variable, context),
-				self.jsify_expression(value, context)
+				self.jsify_reference(&variable, ctx),
+				self.jsify_expression(value, ctx)
 			)),
 			StmtKind::Scope(scope) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
-				code.add_code(self.jsify_scope_body(scope, context));
+				code.add_code(self.jsify_scope_body(scope, ctx));
 				code.close("}");
 				code
 			}
 			StmtKind::Return(exp) => {
 				if let Some(exp) = exp {
-					CodeMaker::one_line(format!("return {};", self.jsify_expression(exp, context)))
+					CodeMaker::one_line(format!("return {};", self.jsify_expression(exp, ctx)))
 				} else {
 					CodeMaker::one_line("return;")
 				}
 			}
-			StmtKind::Class(class) => self.jsify_class(env, class, context),
+			StmtKind::Class(class) => self.jsify_class(env, class, ctx),
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
 				CodeMaker::default()
@@ -657,7 +657,7 @@ impl<'a> JSifier<'a> {
 				let mut code = CodeMaker::default();
 
 				code.open("try {");
-				code.add_code(self.jsify_scope_body(try_statements, context));
+				code.add_code(self.jsify_scope_body(try_statements, ctx));
 				code.close("}");
 
 				if let Some(catch_block) = catch_block {
@@ -671,13 +671,13 @@ impl<'a> JSifier<'a> {
 						code.open("catch {");
 					}
 
-					code.add_code(self.jsify_scope_body(&catch_block.statements, context));
+					code.add_code(self.jsify_scope_body(&catch_block.statements, ctx));
 					code.close("}");
 				}
 
 				if let Some(finally_statements) = finally_statements {
 					code.open("finally {");
-					code.add_code(self.jsify_scope_body(finally_statements, context));
+					code.add_code(self.jsify_scope_body(finally_statements, ctx));
 					code.close("}");
 				}
 
@@ -707,83 +707,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> CodeMaker {
-		let parameters = func_def
-			.parameters()
-			.iter()
-			.map(|p| self.jsify_symbol(&p.name))
-			.join(", ");
-
-		let block = match &func_def.body {
-			FunctionBody::Statements(scope) => self.jsify_scope_body(
-				scope,
-				&JSifyContext {
-					in_json: context.in_json,
-					phase: Phase::Inflight,
-				},
-			),
-			FunctionBody::External(_) => CodeMaker::one_line("throw new Error(\"extern with closures is not supported\");"),
-		};
-
-		let mut bindings = vec![];
-		let mut capture_names = vec![];
-
-		for capture in func_def.captures.borrow().as_ref().unwrap().iter() {
-			capture_names.push(capture.symbol.name.clone());
-
-			let mut binding = CodeMaker::default();
-			binding.open(format!("{}: {{", capture.symbol.name));
-			binding.line(format!("obj: {},", capture.symbol.name));
-			binding.line(format!(
-				"ops: [{}]",
-				capture.ops.iter().map(|x| format!("\"{}\"", x.member)).join(",")
-			));
-			binding.close("},");
-			bindings.push(binding);
-		}
-
-		let mut proc_source = CodeMaker::default();
-		proc_source.open(format!("async handle({parameters}) {{"));
-		proc_source.line(format!("const {{ {} }} = this;", capture_names.join(", ")));
-		proc_source.add_code(block);
-		proc_source.close("}");
-
-		let mut proc_counter = self.proc_counter.borrow_mut();
-		*proc_counter += 1;
-		let proc_dir = format!("{}/proc{}", self.out_dir.to_string_lossy(), proc_counter);
-		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
-		let file_path = format!("{}/index.js", proc_dir);
-		let relative_file_path = format!("proc{}/index.js", proc_counter);
-		fs::write(&file_path, proc_source.to_string()).expect("Writing inflight proc source");
-
-		let mut props_block = CodeMaker::default();
-		props_block.line(format!(
-			"code: {}.core.NodeJsCode.fromFile(require.resolve({})),",
-			STDLIB,
-			Self::js_resolve_path(&relative_file_path)
-		));
-		props_block.open("bindings: {");
-		for binding in bindings {
-			props_block.add_code(binding);
-		}
-		props_block.close("}");
-
-		let mut inflight_counter = self.inflight_counter.borrow_mut();
-		*inflight_counter += 1;
-		let inflight_obj_id = format!("{}{}", INFLIGHT_OBJ_PREFIX, inflight_counter);
-
-		let mut code = CodeMaker::default();
-		code.open(format!(
-			"new {}.core.Inflight(this, \"{}\", {{",
-			STDLIB, inflight_obj_id
-		));
-		code.add_code(props_block);
-		code.close("})");
-
-		code
-	}
-
-	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Initializer, context: &JSifyContext) -> CodeMaker {
+	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Initializer, ctx: &JSifyContext) -> CodeMaker {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
@@ -799,7 +723,7 @@ impl<'a> JSifier<'a> {
 
 		let mut code = CodeMaker::default();
 		code.open(format!("{name}({parameters}) {arrow} {{"));
-		code.add_code(self.jsify_scope_body(&func_def.statements, context));
+		code.add_code(self.jsify_scope_body(&func_def.statements, ctx));
 		code.close("}");
 
 		code
@@ -809,7 +733,8 @@ impl<'a> JSifier<'a> {
 		&mut self,
 		name: Option<&str>,
 		func_def: &impl MethodLike<'a>,
-		context: &JSifyContext,
+		is_class_member: bool,
+		ctx: &JSifyContext,
 	) -> CodeMaker {
 		let mut parameter_list = vec![];
 
@@ -828,7 +753,7 @@ impl<'a> JSifier<'a> {
 			FunctionBodyRef::Statements(scope) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
-				code.add_code(self.jsify_scope_body(scope, context));
+				code.add_code(self.jsify_scope_body(scope, ctx));
 				code.close("}");
 				code
 			}
@@ -848,7 +773,6 @@ impl<'a> JSifier<'a> {
 							self.diagnostics.push(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
 								span: Some(func_def.span()),
-								level: DiagnosticLevel::Error,
 							});
 							format!("/* unresolved: \"{external_spec}\" */")
 						}
@@ -859,7 +783,7 @@ impl<'a> JSifier<'a> {
 			}
 		};
 		let mut modifiers = vec![];
-		if func_def.is_static() {
+		if func_def.is_static() && is_class_member {
 			modifiers.push("static")
 		}
 		if matches!(func_def.signature().phase, Phase::Inflight) {
@@ -930,8 +854,8 @@ impl<'a> JSifier<'a> {
 	///   }
 	/// }
 	/// ```
-	fn jsify_resource(&mut self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> CodeMaker {
-		assert!(context.phase == Phase::Preflight);
+	fn jsify_resource(&mut self, env: &SymbolEnv, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
+		assert!(ctx.phase == Phase::Preflight);
 
 		// Lookup the resource type
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
@@ -966,6 +890,8 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect_vec();
+		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
+
 		let referenced_preflight_types = self.get_preflight_types_referenced_in_resource(class, &inflight_methods);
 		self.jsify_resource_client(
 			env,
@@ -975,7 +901,7 @@ impl<'a> JSifier<'a> {
 			free_vars
 				.iter()
 				.chain(referenced_preflight_types.iter().map(|(n, _)| n)),
-			context,
+			ctx,
 		);
 
 		// Get all preflight methods to be jsified to the preflight class
@@ -998,11 +924,12 @@ impl<'a> JSifier<'a> {
 			&class.initializer,
 			class.parent.is_none(),
 			&inflight_methods,
-			context,
+			&inflight_fields,
+			ctx,
 		));
 
 		for (n, m) in preflight_methods {
-			code.add_code(self.jsify_function(Some(&n.name), m, context));
+			code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
 		}
 
 		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
@@ -1034,7 +961,8 @@ impl<'a> JSifier<'a> {
 		constructor: &Initializer,
 		no_parent: bool,
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		context: &JSifyContext,
+		inflight_fields: &[&ClassField],
+		ctx: &JSifyContext,
 	) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.open(format!(
@@ -1051,10 +979,13 @@ impl<'a> JSifier<'a> {
 			code.line("super(scope, id);");
 		}
 
-		if inflight_methods.len() > 0 {
-			let inflight_ops_string = inflight_methods
+		if inflight_methods.len() + inflight_fields.len() > 0 {
+			let inflight_method_names = inflight_methods.iter().map(|(name, _)| name.name.clone()).collect_vec();
+			let inflight_field_names = inflight_fields.iter().map(|f| f.name.name.clone()).collect_vec();
+			let inflight_ops_string = inflight_method_names
 				.iter()
-				.map(|(name, _)| format!("\"{}\"", name.name))
+				.chain(inflight_field_names.iter())
+				.map(|name| format!("\"{}\"", name))
 				.join(", ");
 			code.line(format!("this._addInflightOps({inflight_ops_string});"));
 		}
@@ -1062,7 +993,7 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_scope_body(
 			&constructor.statements,
 			&JSifyContext {
-				in_json: context.in_json,
+				in_json: ctx.in_json,
 				phase: Phase::Preflight,
 			},
 		));
@@ -1192,7 +1123,7 @@ impl<'a> JSifier<'a> {
 		captured_fields: &[String],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		input_symbols: impl Iterator<Item = impl Display>,
-		context: &JSifyContext,
+		ctx: &JSifyContext,
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut parent_captures = vec![];
@@ -1245,8 +1176,9 @@ impl<'a> JSifier<'a> {
 			class_code.add_code(self.jsify_function(
 				Some(CLASS_INFLIGHT_INIT_NAME),
 				inflight_init,
+				true,
 				&JSifyContext {
-					in_json: context.in_json,
+					in_json: ctx.in_json,
 					phase: inflight_init.signature.phase,
 				},
 			));
@@ -1256,8 +1188,9 @@ impl<'a> JSifier<'a> {
 			class_code.add_code(self.jsify_function(
 				Some(&name.name),
 				def,
+				true,
 				&JSifyContext {
-					in_json: context.in_json,
+					in_json: ctx.in_json,
 					phase: def.signature.phase,
 				},
 			));
@@ -1280,9 +1213,9 @@ impl<'a> JSifier<'a> {
 		fs::write(&relative_file_path, code.to_string()).expect("Writing client inflight source");
 	}
 
-	fn jsify_class(&mut self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> CodeMaker {
+	fn jsify_class(&mut self, env: &SymbolEnv, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
 		if class.is_resource {
-			return self.jsify_resource(env, class, context);
+			return self.jsify_resource(env, class, ctx);
 		}
 
 		let mut code = CodeMaker::default();
@@ -1296,14 +1229,14 @@ impl<'a> JSifier<'a> {
 			},
 		));
 
-		code.add_code(self.jsify_constructor(Some("constructor"), &class.initializer, context));
+		code.add_code(self.jsify_constructor(Some("constructor"), &class.initializer, ctx));
 
 		for m in class.fields.iter() {
 			code.add_code(self.jsify_class_member(&m));
 		}
 
 		for (n, m) in class.methods.iter() {
-			code.add_code(self.jsify_function(Some(&n.name), m, context));
+			code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
 		}
 
 		code.close("}");
@@ -1486,7 +1419,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			// if the variable is reassignable, bail out
 			if variable.reassignable {
 				self.diagnostics.push(Diagnostic {
-					level: DiagnosticLevel::Error,
 					message: format!("Cannot capture reassignable field '{}'", curr.text),
 					span: Some(curr.expr.span.clone()),
 				});
@@ -1497,7 +1429,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			// if this type is not capturable, bail out
 			if !variable.type_.is_capturable() {
 				self.diagnostics.push(Diagnostic {
-					level: DiagnosticLevel::Error,
 					message: format!(
 						"Cannot capture field '{}' with non-capturable type '{}'",
 						curr.text, variable.type_
@@ -1515,7 +1446,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			if let Some(inner_type) = variable.type_.collection_item_type() {
 				if inner_type.as_resource().is_some() {
 					self.diagnostics.push(Diagnostic {
-						level: DiagnosticLevel::Error,
 						message: format!(
 							"Capturing collection of resources is not supported yet (type is '{}')",
 							variable.type_,
@@ -1563,7 +1493,6 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 				if v.type_.as_resource().is_some() {
 					if qualification.len() == 0 {
 						self.diagnostics.push(Diagnostic {
-							level: DiagnosticLevel::Error,
 							message: format!(
 								"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
 								key, v.type_,
@@ -1749,106 +1678,5 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 				panic!("Unknown symbol: {type_name}, should be covered by type checking");
 			}
 		}
-	}
-}
-
-/// Scans AST nodes for free variables.
-///
-/// A free variable is a variable that is used in the body of a function but not
-/// defined in the function's scope. Here is an example where "x" is a free variable:
-/// ```wing
-/// let x = 5;
-/// let foo = () => {
-///  return x + 3;
-/// }
-/// ```
-///
-/// For more info see https://en.wikipedia.org/wiki/Free_variables_and_bound_variables
-struct FreeVariableScanner {
-	/// A list of all free variables the scanner has found so far.
-	/// This collects the exact symbols (not just the names of variables) since
-	/// this scanner may be used to scan an entire class, and a class may have
-	/// multiple methods. It's possible that in method A, a variable "x" is a
-	/// free variable, but in method B, "x" is a bound variable:
-	/// ```wing
-	/// let x = 5;
-	/// class Foo {
-	///   methodA() {
-	///     return x + 3;
-	///   }
-	///   methodB(x) {
-	///     return x + 3;
-	///   }
-	/// }
-	/// ```
-	free_vars: IndexSet<Symbol>,
-
-	/// The current scopes env during traversal
-	env: Option<SymbolEnvRef>,
-	/// The current statement index
-	statement_index: usize,
-	/// The last symbol we visited
-	last_symb: Symbol,
-}
-
-impl FreeVariableScanner {
-	pub fn new() -> Self {
-		Self {
-			free_vars: indexset![],
-			env: None,
-			statement_index: 0,
-			last_symb: Symbol::global("badger"),
-		}
-	}
-}
-
-impl Visit<'_> for FreeVariableScanner {
-	// invariant: adds zero bound variables
-	fn visit_reference(&mut self, node: &Reference) {
-		if let Reference::Identifier(ref symb) = node {
-			// Skip "this" symbol since it's never a free var even though it refers to a preflight type
-			if symb.name != "this" {
-				// Lookup the reference int the current environment
-				let lookup_result = self
-					.env
-					.as_ref()
-					.unwrap()
-					.lookup(symb, Some(self.statement_index))
-					.expect("covered by type checking");
-
-				// If this reference is a capturable, non-reassignable, preflight
-				// variable then it's a capture
-				if let SymbolKind::Variable(v) = lookup_result {
-					if v.type_.is_capturable() && !v.reassignable && v.phase == Phase::Preflight {
-						self.free_vars.insert(symb.clone());
-					}
-				}
-			}
-		};
-
-		return visit::visit_reference(self, node);
-	}
-
-	fn visit_scope(&mut self, scope: &Scope) {
-		let curr_env = scope.env.borrow().as_ref().unwrap().get_ref();
-		// Don't look for free vars in non-inflight scopes
-		if curr_env.phase != Phase::Inflight {
-			return;
-		}
-		let old_env = self.env;
-		self.env = Some(curr_env);
-		visit::visit_scope(self, scope);
-		self.env = old_env;
-	}
-
-	fn visit_stmt(&mut self, stmt: &Stmt) {
-		let old_statement_index = self.statement_index;
-		self.statement_index = stmt.idx;
-		visit::visit_stmt(self, stmt);
-		self.statement_index = old_statement_index;
-	}
-
-	fn visit_symbol(&mut self, node: &Symbol) {
-		self.last_symb = node.clone();
 	}
 }
