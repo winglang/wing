@@ -165,10 +165,10 @@
     },
     "timeout": {
       "sim": {"implemented": true},
-      "tf-aws": {"implemented": false},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": false}
+      "aws-cdk": {"implemented": true}
     },
     "add_consumer": {
       "sim": {"implemented": true},
