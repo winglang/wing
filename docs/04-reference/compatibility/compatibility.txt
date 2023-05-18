@@ -237,14 +237,14 @@
     },
     "timeout": {
       "sim": {"implemented": true},
-      "tf-aws": {"implemented": false},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": false}
+      "aws-cdk": {"implemented": true}
     },
     "memory": {
       "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
