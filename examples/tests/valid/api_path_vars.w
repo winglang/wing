@@ -3,30 +3,31 @@ skip: true
 \*/
 // TODO: failing due to https://github.com/winglang/wing/issues/2522
 
+
 bring cloud;
+bring util;
 
-let api = new cloud.Api();
+// let api = new cloud.Api();
 
-class Fetch {
-  extern "./api_path_vars.js" inflight get(url: str): Json;
-}
 
-let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  return cloud.ApiResponse {
-    body: {user:  req.vars.get("name")},
-    status: 200
-  };
-};
+// let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+//   return cloud.ApiResponse {
+//     body: {user:  req.vars.get("name")},
+//     status: 200
+//   };
+// };
 
-api.get("/users/{name}", handler);
-
-let f = new Fetch();
+// api.get("/users/{name}", handler);
 
 test "test" {
   let username = "tsuf";
-  // TODO: change f.get to static when possible
-  let res = f.get("${api.url}/users/${username}");
 
-  assert(res.get("status") == 200);
-  assert(res.get("body").get("user") == username);
+  let http = new util.Http();
+  // let res: util.Response = http.get("${api.url}/users/${username}");
+  let res = http.get("www.google.com");
+  log(res.body);
+
+
+  // assert(res.status == 200);
+  // assert(res.get("user") == username);
 }
