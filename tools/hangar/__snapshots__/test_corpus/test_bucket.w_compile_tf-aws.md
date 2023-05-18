@@ -37,11 +37,6 @@ module.exports = function({ b }) {
 
 ```
 
-## clients/hello.js
-```js
-hello world!
-```
-
 ## main.tf.json
 ```json
 {
