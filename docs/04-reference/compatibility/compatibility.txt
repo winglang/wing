@@ -244,7 +244,7 @@
     },
     "memory": {
       "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
