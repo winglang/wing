@@ -495,6 +495,25 @@ impl Subtype for Type {
 				// Finally check if they're subtypes
 				res_handle_type.is_subtype_of(&handler_method_type)
 			}
+			(Self::Resource(res), Self::Function(_)) => {
+				// To support flexible inflight closures, we say that any
+				// preflight class with an inflight method named "handle" is a subtype of
+				// any matching inflight type.
+
+				// Get the type of the resource's "handle" method if it has one
+				let res_handle_type = if let Some(method) = res.get_method(&"handle".into()) {
+					if method.type_.is_inflight_function() {
+						method.type_
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				};
+
+				// Finally check if they're subtypes
+				(*res_handle_type).is_subtype_of(other)
+			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
 				// https://github.com/winglang/wing/issues/2111
@@ -773,6 +792,24 @@ impl TypeRef {
 		}
 	}
 
+	pub fn is_resource(&self) -> bool {
+		if let Type::Resource(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	/// Returns whether the type is a preflight class with an inflight method named "handle"
+	pub fn is_handler_resource(&self) -> bool {
+		if let Type::Resource(ref class) = **self {
+			return class
+				.methods(true)
+				.any(|(name, type_)| name == "handle" && type_.is_inflight_function());
+		}
+		false
+	}
+
 	pub fn is_void(&self) -> bool {
 		if let Type::Void = **self {
 			true
@@ -829,14 +866,6 @@ impl TypeRef {
 		}
 	}
 
-	pub fn is_primitive(&self) -> bool {
-		if let Type::Number | Type::String | Type::Duration | Type::Boolean = **self {
-			true
-		} else {
-			false
-		}
-	}
-
 	pub fn is_iterable(&self) -> bool {
 		if let Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_) = **self {
 			true
@@ -866,7 +895,7 @@ impl TypeRef {
 			Type::MutArray(_) => false,
 			Type::MutMap(_) => false,
 			Type::MutSet(_) => false,
-			Type::Function(_) => false, // TODO: https://github.com/winglang/wing/issues/2236
+			Type::Function(sig) => sig.phase == Phase::Inflight,
 			Type::Class(_) => false,
 		}
 	}
@@ -1440,7 +1469,27 @@ impl<'a> TypeChecker<'a> {
 
 				// Make sure this is a function signature type
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
-					func_sig
+					func_sig.clone()
+				} else if let Some(res) = func_type.as_resource() {
+					// return the signature of the "handle" method
+					let lookup_res = res.get_env().lookup_ext(&"handle".into(), None);
+					let handle_type = if let LookupResult::Found(k, _) = lookup_res {
+						k.as_variable().expect("Expected handle to be a variable").type_
+					} else {
+						self.type_error(lookup_result_to_type_error(
+							lookup_res,
+							&Symbol {
+								name: "handle".into(),
+								span: callee.span.clone(),
+							},
+						));
+						return self.types.anything();
+					};
+					if let Some(sig_type) = handle_type.as_function_sig() {
+						sig_type.clone()
+					} else {
+						return self.expr_error(callee, "should be a function or method".to_string());
+					}
 				} else {
 					return self.expr_error(callee, "should be a function or method".to_string());
 				};
