@@ -62,8 +62,8 @@ return class Handler {
 };
 })())({
 ${Object.entries(clients)
-            .map(([name, client]) => `${name}: ${client}`)
-            .join(",\n")}
+  .map(([name, client]) => `${name}: ${client}`)
+  .join(",\n")}
 })`
         );
       }

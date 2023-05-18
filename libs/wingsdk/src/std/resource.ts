@@ -9,7 +9,7 @@ import { log } from "../utils/log";
 /**
  * A resource that can run inflight code.
  */
-export interface IInflightHost extends IResource { }
+export interface IInflightHost extends IResource {}
 
 /**
  * Abstract interface for `Resource`.
@@ -273,7 +273,8 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${
+        host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
@@ -496,15 +497,12 @@ function isResource(obj: any): obj is IResource {
 function isIResourceType(t: any): t is new (...args: any[]) => IResource {
   return (
     t instanceof Function &&
-    'prototype' in t &&
+    "prototype" in t &&
     typeof t.prototype._bind === "function" &&
     typeof t.prototype._registerBind === "function"
   );
 }
 
 function isResourceType(t: any): t is typeof Resource {
-  return (
-    typeof t._registerTypeBind === "function" &&
-    isIResourceType(t)
-  );
+  return typeof t._registerTypeBind === "function" && isIResourceType(t);
 }
