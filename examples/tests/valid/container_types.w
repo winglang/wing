@@ -66,6 +66,12 @@ assert(m8.keys().at(2) == "c");
 assert(m8.values().at(0) == "a1");
 assert(m8.values().at(1) == "b1");
 assert(m8.values().at(2) == "c1");
+for val in m8.keys() {
+  assert(!val.endsWith("1"));
+}
+for val in m8.values() {
+  assert(val.endsWith("1"));
+}
 let m9 = MutMap<str>{"a": "a1", "b": "b1", "c": "c1"};
 assert(m9.keys().at(0) == "a");
 assert(m9.keys().at(1) == "b");
@@ -73,6 +79,12 @@ assert(m9.keys().at(2) == "c");
 assert(m9.values().at(0) == "a1");
 assert(m9.values().at(1) == "b1");
 assert(m9.values().at(2) == "c1");
+for val in m9.keys() {
+  assert(!val.endsWith("1"));
+}
+for val in m9.values() {
+  assert(val.endsWith("1"));
+}
 
 //Set tests
 let emptySet = Set<num>{};
