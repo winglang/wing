@@ -117,79 +117,6 @@ export abstract class Resource extends Construct implements IResource {
     }
   }
 
-  private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
-
-  /** @internal */
-  public readonly _connections: Connection[] = [];
-
-  /**
-   * A list of all inflight operations that are supported by this resource.
-   */
-  private readonly inflightOps: string[] = ["$inflight_init"];
-
-  /**
-   * Information on how to display a resource in the UI.
-   */
-  public readonly display = new Display();
-
-  /**
-   * Record that this resource supports the given inflight operation.
-   *
-   * This is used to give better error messages if the compiler attempts to bind
-   * a resource with an operation that is not supported.
-   *
-   * @internal
-   */
-  public _addInflightOps(...ops: string[]) {
-    this.inflightOps.push(...ops);
-  }
-
-  /**
-   * Binds the resource to the host so that it can be used by inflight code.
-   *
-   * You can override this method to perform additional logic like granting
-   * IAM permissions to the host based on what methods are being called. But
-   * you must call `super._bind(host, ops)` to ensure that the resource is
-   * actually bound.
-   *
-   * @internal
-   */
-  public _bind(host: IInflightHost, ops: string[]): void {
-    // Do nothing by default
-    host;
-    ops;
-  }
-
-  /**
-   * Register that the resource needs to be bound to the host for the given
-   * operations. This means that the resource's `_bind` method will be called
-   * during pre-synthesis.
-   *
-   * @internal
-   */
-  public _registerBind(host: IInflightHost, ops: string[]) {
-    log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
-      }) with ops: ${JSON.stringify(ops)}`
-    );
-
-    for (const op of ops) {
-      if (!this.inflightOps.includes(op)) {
-        throw new Error(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
-        );
-      }
-    }
-
-    // Register the binding between this resource and the host
-    if (!this.bindMap.has(host)) {
-      this.bindMap.set(host, new Set());
-    }
-    for (const op of ops) {
-      this.bindMap.get(host)!.add(op);
-    }
-  }
-
   /**
    * Register that the resource type needs to be bound to the host for the given
    * operations. A type being bound to a host means that that type's static members
@@ -292,6 +219,79 @@ export abstract class Resource extends Construct implements IResource {
     throw new Error(
       `unable to serialize immutable data object of type ${obj.constructor?.name}`
     );
+  }
+
+  private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
+
+  /** @internal */
+  public readonly _connections: Connection[] = [];
+
+  /**
+   * A list of all inflight operations that are supported by this resource.
+   */
+  private readonly inflightOps: string[] = ["$inflight_init"];
+
+  /**
+   * Information on how to display a resource in the UI.
+   */
+  public readonly display = new Display();
+
+  /**
+   * Record that this resource supports the given inflight operation.
+   *
+   * This is used to give better error messages if the compiler attempts to bind
+   * a resource with an operation that is not supported.
+   *
+   * @internal
+   */
+  public _addInflightOps(...ops: string[]) {
+    this.inflightOps.push(...ops);
+  }
+
+  /**
+   * Binds the resource to the host so that it can be used by inflight code.
+   *
+   * You can override this method to perform additional logic like granting
+   * IAM permissions to the host based on what methods are being called. But
+   * you must call `super._bind(host, ops)` to ensure that the resource is
+   * actually bound.
+   *
+   * @internal
+   */
+  public _bind(host: IInflightHost, ops: string[]): void {
+    // Do nothing by default
+    host;
+    ops;
+  }
+
+  /**
+   * Register that the resource needs to be bound to the host for the given
+   * operations. This means that the resource's `_bind` method will be called
+   * during pre-synthesis.
+   *
+   * @internal
+   */
+  public _registerBind(host: IInflightHost, ops: string[]) {
+    log(
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
+      }) with ops: ${JSON.stringify(ops)}`
+    );
+
+    for (const op of ops) {
+      if (!this.inflightOps.includes(op)) {
+        throw new Error(
+          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
+        );
+      }
+    }
+
+    // Register the binding between this resource and the host
+    if (!this.bindMap.has(host)) {
+      this.bindMap.set(host, new Set());
+    }
+    for (const op of ops) {
+      this.bindMap.get(host)!.add(op);
+    }
   }
 
   /**
