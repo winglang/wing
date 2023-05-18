@@ -27,7 +27,7 @@ use crate::{
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
+		SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -1508,7 +1508,11 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 				// if this reference refers to an inflight function or handler resource,
 				// we need to give permission to the "handle" operation
 				if v.type_.is_inflight_function() || v.type_.is_handler_resource() {
-					self.references.entry(key).or_default().insert("handle".to_string());
+					self
+						.references
+						.entry(key)
+						.or_default()
+						.insert(HANDLE_METHOD_NAME.to_string());
 					return;
 				}
 			}

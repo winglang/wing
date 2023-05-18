@@ -166,6 +166,8 @@ pub enum Type {
 pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
+pub const HANDLE_METHOD_NAME: &'static str = "handle";
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Namespace {
@@ -222,7 +224,7 @@ impl Interface {
 
 impl Display for Interface {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&"handle".into(), None) {
+		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None) {
 			let method = method.as_variable().unwrap();
 			if method.phase == Phase::Inflight {
 				write!(f, "{} ({})", self.name.name, method.type_)
@@ -384,7 +386,7 @@ impl Subtype for Type {
 				}
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
-				if let Some((method, _)) = r0.get_env().lookup_ext(&"handle".into(), None).ok() {
+				if let Some((method, _)) = r0.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None).ok() {
 					let method = method.as_variable().unwrap();
 					if method.phase != Phase::Inflight {
 						return false;
@@ -477,12 +479,12 @@ impl Subtype for Type {
 
 				// Next, check that the method's name is "handle"
 				let (handler_method_name, handler_method_type) = handler_method.unwrap();
-				if handler_method_name != "handle" {
+				if handler_method_name != HANDLE_METHOD_NAME {
 					return false;
 				}
 
 				// Then get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = res.get_method(&"handle".into()) {
+				let res_handle_type = if let Some(method) = res.get_method(&HANDLE_METHOD_NAME.into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
@@ -501,7 +503,7 @@ impl Subtype for Type {
 				// any matching inflight type.
 
 				// Get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = res.get_method(&"handle".into()) {
+				let res_handle_type = if let Some(method) = res.get_method(&HANDLE_METHOD_NAME.into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
@@ -805,7 +807,7 @@ impl TypeRef {
 		if let Type::Resource(ref class) = **self {
 			return class
 				.methods(true)
-				.any(|(name, type_)| name == "handle" && type_.is_inflight_function());
+				.any(|(name, type_)| name == HANDLE_METHOD_NAME && type_.is_inflight_function());
 		}
 		false
 	}
@@ -1472,14 +1474,14 @@ impl<'a> TypeChecker<'a> {
 					func_sig.clone()
 				} else if let Some(res) = func_type.as_resource() {
 					// return the signature of the "handle" method
-					let lookup_res = res.get_env().lookup_ext(&"handle".into(), None);
+					let lookup_res = res.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None);
 					let handle_type = if let LookupResult::Found(k, _) = lookup_res {
 						k.as_variable().expect("Expected handle to be a variable").type_
 					} else {
 						self.type_error(lookup_result_to_type_error(
 							lookup_res,
 							&Symbol {
-								name: "handle".into(),
+								name: HANDLE_METHOD_NAME.into(),
 								span: callee.span.clone(),
 							},
 						));
