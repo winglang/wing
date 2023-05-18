@@ -1,5 +1,7 @@
 bring cloud;
 
+// check that we can capture an interface and call its methods inflight
+
 class Doubler {
   func: cloud.IFunctionHandler;
   init(func: cloud.IFunctionHandler) {
@@ -16,6 +18,8 @@ let fn = new Doubler(inflight (m: str): str => {
 });
 
 // ----------
+
+// check that we can capture an inflight function and call it inflight
 
 class Doubler2 {
   // TODO: make into a static method - see https://github.com/winglang/wing/issues/2583

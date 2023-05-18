@@ -1474,18 +1474,11 @@ impl<'a> TypeChecker<'a> {
 					func_sig.clone()
 				} else if let Some(res) = func_type.as_resource() {
 					// return the signature of the "handle" method
-					let lookup_res = res.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None);
-					let handle_type = if let LookupResult::Found(k, _) = lookup_res {
-						k.as_variable().expect("Expected handle to be a variable").type_
+					let lookup_res = res.get_method(&HANDLE_METHOD_NAME.into());
+					let handle_type = if let Some(method) = lookup_res {
+						method.type_
 					} else {
-						self.type_error(lookup_result_to_type_error(
-							lookup_res,
-							&Symbol {
-								name: HANDLE_METHOD_NAME.into(),
-								span: callee.span.clone(),
-							},
-						));
-						return self.types.anything();
+						return self.expr_error(callee, "should be a function or method".to_string());
 					};
 					if let Some(sig_type) = handle_type.as_function_sig() {
 						sig_type.clone()

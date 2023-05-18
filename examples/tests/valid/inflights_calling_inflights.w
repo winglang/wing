@@ -7,13 +7,14 @@ let storeInBucket = inflight (event: str, file: str): str => {
 };
 
 let handler1 = inflight (event: str): str => {
-	storeInBucket(event, "file1");
-};     
+  storeInBucket(event, "file1");
+};
 
 let func1 = new cloud.Function(handler1) as "func1";
 
 test "inflights can call other inflights" {
-    func1.invoke("hi1");
+  func1.invoke("hi1");
+  assert(globalBucket.get("file1") == "hi1");
 }
 
 // -----

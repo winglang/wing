@@ -36,13 +36,14 @@ module.exports = function({ storeInBucket }) {
 
 ## clients/$Inflight3.inflight.js
 ```js
-module.exports = function({ func1 }) {
+module.exports = function({ func1, globalBucket }) {
   class  $Inflight3 {
     constructor({  }) {
     }
     async handle()  {
       {
         (typeof func1.invoke === "function" ? await func1.invoke("hi1") : await func1.invoke.handle("hi1"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof globalBucket.get === "function" ? await globalBucket.get("file1") : await globalBucket.get.handle("file1")) === "hi1")'`)})(((typeof globalBucket.get === "function" ? await globalBucket.get("file1") : await globalBucket.get.handle("file1")) === "hi1"))};
       }
     }
   }
@@ -183,7 +184,7 @@ module.exports = function({  }) {
             "uniqueId": "root_testinflightscancallotherinflights_Handler_IamRolePolicy_9ADCA787"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_func1_52D4D9D4.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_func1_52D4D9D4.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testinflightscancallotherinflights_Handler_IamRole_BB2EB09E.name}"
       },
       "root_testvariablecanbeaninflightclosure_Handler_IamRolePolicy_1E567808": {
@@ -266,6 +267,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "FUNCTION_NAME_c79d5cd4": "${aws_lambda_function.root_func1_52D4D9D4.arn}",
             "WING_FUNCTION_NAME": "Handler-c8ad4c02"
           }
@@ -490,9 +493,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
         const func1_client = context._lift(func1);
+        const globalBucket_client = context._lift(globalBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             func1: ${func1_client},
+            globalBucket: ${globalBucket_client},
           })
         `);
       }
@@ -512,6 +517,7 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("handle")) {
           this._registerBindObject(func1, host, ["invoke"]);
+          this._registerBindObject(globalBucket, host, ["get"]);
         }
         super._registerBind(host, ops);
       }
