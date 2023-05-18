@@ -8,7 +8,7 @@ module.exports = function({ res }) {
     }
     async handle()  {
       {
-        (await res.myPut());
+        (typeof res.myPut === "function" ? await res.myPut() : await res.myPut.handle());
       }
     }
   }
@@ -28,19 +28,19 @@ module.exports = function({ globalCounter }) {
     async $inflight_init()  {
       {
         const __parent_this = this;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalCounter.peek()) === 0)'`)})(((await globalCounter.peek()) === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof globalCounter.peek === "function" ? await globalCounter.peek() : await globalCounter.peek.handle()) === 0)'`)})(((typeof globalCounter.peek === "function" ? await globalCounter.peek() : await globalCounter.peek.handle()) === 0))};
       }
     }
     async myMethod()  {
       {
         const __parent_this = this;
-        (await globalCounter.inc());
-        return (await globalCounter.peek());
+        (typeof globalCounter.inc === "function" ? await globalCounter.inc() : await globalCounter.inc.handle());
+        return (typeof globalCounter.peek === "function" ? await globalCounter.peek() : await globalCounter.peek.handle());
       }
     }
     static async myStaticMethod()  {
       {
-        return (await globalCounter.peek());
+        return (typeof globalCounter.peek === "function" ? await globalCounter.peek() : await globalCounter.peek.handle());
       }
     }
   }
@@ -73,17 +73,17 @@ module.exports = function({ globalBucket, globalStr, globalBool, globalNum, glob
     async myPut()  {
       {
         const __parent_this = this;
-        (await this.localTopic.publish("hello"));
-        (await globalBucket.put("key","value"));
+        (typeof this.localTopic.publish === "function" ? await this.localTopic.publish("hello") : await this.localTopic.publish.handle("hello"));
+        (typeof globalBucket.put === "function" ? await globalBucket.put("key","value") : await globalBucket.put.handle("key","value"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalStr === "hello")'`)})((globalStr === "hello"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalBool === true)'`)})((globalBool === true))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalNum === 42)'`)})((globalNum === 42))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalArrayOfStr.at(0)) === "hello")'`)})(((await globalArrayOfStr.at(0)) === "hello"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof globalArrayOfStr.at === "function" ? await globalArrayOfStr.at(0) : await globalArrayOfStr.at.handle(0)) === "hello")'`)})(((typeof globalArrayOfStr.at === "function" ? await globalArrayOfStr.at(0) : await globalArrayOfStr.at.handle(0)) === "hello"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((globalMapOfNum)["a"] === (-5))'`)})(((globalMapOfNum)["a"] === (-5)))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await globalSetOfStr.has("a"))'`)})((await globalSetOfStr.has("a")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof globalSetOfStr.has === "function" ? await globalSetOfStr.has("a") : await globalSetOfStr.has.handle("a"))'`)})((typeof globalSetOfStr.has === "function" ? await globalSetOfStr.has("a") : await globalSetOfStr.has.handle("a")))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalAnother.myField === "hello!")'`)})((globalAnother.myField === "hello!"))};
-        (await globalAnother.first.myResource.put("key","value"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalAnother.myMethod()) > 0)'`)})(((await globalAnother.myMethod()) > 0))};
+        (typeof globalAnother.first.myResource.put === "function" ? await globalAnother.first.myResource.put("key","value") : await globalAnother.first.myResource.put.handle("key","value"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof globalAnother.myMethod === "function" ? await globalAnother.myMethod() : await globalAnother.myMethod.handle()) > 0)'`)})(((typeof globalAnother.myMethod === "function" ? await globalAnother.myMethod() : await globalAnother.myMethod.handle()) > 0))};
       }
     }
   }
@@ -101,8 +101,8 @@ module.exports = function({ globalCounter, $parentThis }) {
     async handle()  {
       {
         const __parent_this = this;
-        (await globalCounter.inc());
-        (await $parentThis.localCounter.inc());
+        (typeof globalCounter.inc === "function" ? await globalCounter.inc() : await globalCounter.inc.handle());
+        (typeof $parentThis.localCounter.inc === "function" ? await $parentThis.localCounter.inc() : await $parentThis.localCounter.inc.handle());
       }
     }
   }

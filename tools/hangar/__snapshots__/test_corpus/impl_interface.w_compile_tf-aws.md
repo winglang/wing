@@ -8,7 +8,7 @@ module.exports = function({ x }) {
     }
     async handle()  {
       {
-        (await x.handle("hello world!"));
+        (typeof x.handle === "function" ? await x.handle("hello world!") : await x.handle.handle("hello world!"));
       }
     }
   }

@@ -1,30 +1,14 @@
-# [static_members.w](../../../../examples/tests/valid/static_members.w) | compile | tf-aws
+# [schedule.w](../../../../examples/tests/valid/schedule.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ handler }) {
   class  $Inflight1 {
     constructor({  }) {
     }
     async handle()  {
       {
-        class InflightClass {
-          constructor()  {
-          }
-          async inflightMethod()  {
-            {
-              return "Inflight method";
-            }
-          }
-          static async staticInflightMethod()  {
-            {
-              return "Static inflight method";
-            }
-          }
-        }
-        const inflightClass = new InflightClass();
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method")'`)})(((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method")'`)})(((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method"))};
+        (typeof handler === "function" ? await handler() : await handler.handle());
       }
     }
   }
@@ -33,20 +17,31 @@ module.exports = function({  }) {
 
 ```
 
-## clients/Foo.inflight.js
+## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
-    constructor({ instanceField }) {
-      this.instanceField = instanceField;
+  class  $Inflight2 {
+    constructor({  }) {
     }
-    static async get123()  {
+    async handle()  {
       {
-        return 123;
+        return "foo";
       }
     }
   }
-  return Foo;
+  return $Inflight2;
+}
+
+```
+
+## clients/Schedule.inflight.js
+```js
+module.exports = function({  }) {
+  class  Schedule {
+    constructor({  }) {
+    }
+  }
+  return Schedule;
 }
 
 ```
@@ -72,7 +67,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -82,60 +77,60 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_Schedule_cloudFunction_IamRole_F94CC350": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/Schedule/cloud.Function/IamRole",
+            "uniqueId": "root_Schedule_cloudFunction_IamRole_F94CC350"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_Schedule_cloudFunction_IamRolePolicy_D96586EC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/Schedule/cloud.Function/IamRolePolicy",
+            "uniqueId": "root_Schedule_cloudFunction_IamRolePolicy_D96586EC"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_Schedule_cloudFunction_IamRole_F94CC350.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_Schedule_cloudFunction_IamRolePolicyAttachment_1F83AF14": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/Schedule/cloud.Function/IamRolePolicyAttachment",
+            "uniqueId": "root_Schedule_cloudFunction_IamRolePolicyAttachment_1F83AF14"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_Schedule_cloudFunction_IamRole_F94CC350.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testtest_Handler_046C3415": {
+      "root_Schedule_cloudFunction_283575EC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/Schedule/cloud.Function/Default",
+            "uniqueId": "root_Schedule_cloudFunction_283575EC"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "cloud-Function-c80ded5a"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "cloud-Function-c80ded5a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_Schedule_cloudFunction_IamRole_F94CC350.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_Schedule_cloudFunction_S3Object_D04A7C11.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -155,11 +150,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_Schedule_cloudFunction_S3Object_D04A7C11": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/Schedule/cloud.Function/S3Object",
+            "uniqueId": "root_Schedule_cloudFunction_S3Object_D04A7C11"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -181,32 +176,63 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.std.Resource {
+    class Schedule extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get123");
         const __parent_this = this;
-        this.instanceField = 100;
       }
-      static m()  {
+       onTick(handler)  {
         {
-          return 99;
+          const __parent_this = this;
+          class $Inflight1 extends $stdlib.std.Resource {
+            constructor(scope, id, ) {
+              super(scope, id);
+              this._addInflightOps("handle");
+            }
+            static _toInflightType(context) {
+              const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+              const handler_client = context._lift(handler);
+              return $stdlib.core.NodeJsCode.fromInline(`
+                require("${self_client_path}")({
+                  handler: ${handler_client},
+                })
+              `);
+            }
+            _toInflight() {
+              return $stdlib.core.NodeJsCode.fromInline(`
+                (await (async () => {
+                  const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+                  const client = new $Inflight1Client({
+                  });
+                  if (client.$inflight_init) { await client.$inflight_init(); }
+                  return client;
+                })())
+              `);
+            }
+            _registerBind(host, ops) {
+              if (ops.includes("$inflight_init")) {
+              }
+              if (ops.includes("handle")) {
+                this._registerBindObject(handler, host, ["handle"]);
+              }
+              super._registerBind(host, ops);
+            }
+          }
+          this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Inflight1(this,"$Inflight1"));
         }
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Schedule.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
         `);
       }
       _toInflight() {
-        const instanceField_client = this._lift(this.instanceField);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
-            const client = new FooClient({
-              instanceField: ${instanceField_client},
+            const ScheduleClient = ${Schedule._toInflightType(this).text};
+            const client = new ScheduleClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -215,20 +241,17 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.instanceField, host, []);
-        }
-        if (ops.includes("get123")) {
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Inflight2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -237,8 +260,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -253,15 +276,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const foo = new Foo(this,"Foo");
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instanceField === 100)'`)})((foo.instanceField === 100))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.m()) === 99)'`)})(((Foo.m()) === 99))};
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    const s = new Schedule(this,"Schedule");
+    (s.onTick(new $Inflight2(this,"$Inflight2")));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "static_members", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "schedule", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

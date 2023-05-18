@@ -25,7 +25,7 @@ module.exports = function({ f, payload }) {
     }
     async handle()  {
       {
-        const x = (await f.invoke(""));
+        const x = (typeof f.invoke === "function" ? await f.invoke("") : await f.invoke.handle(""));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
       }
     }

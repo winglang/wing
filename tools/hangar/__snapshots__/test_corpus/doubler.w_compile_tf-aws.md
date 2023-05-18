@@ -27,8 +27,8 @@ module.exports = function({  }) {
     async invoke(message)  {
       {
         const __parent_this = this;
-        (await this.func.handle(message));
-        (await this.func.handle(message));
+        (typeof this.func.handle === "function" ? await this.func.handle(message) : await this.func.handle.handle(message));
+        (typeof this.func.handle === "function" ? await this.func.handle(message) : await this.func.handle.handle(message));
       }
     }
   }
