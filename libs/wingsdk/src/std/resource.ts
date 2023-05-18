@@ -9,7 +9,7 @@ import { log } from "../utils/log";
 /**
  * A resource that can run inflight code.
  */
-export interface IInflightHost extends IResource {}
+export interface IInflightHost extends IResource { }
 
 /**
  * Abstract interface for `Resource`.
@@ -169,8 +169,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
@@ -192,6 +191,18 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
+   * Register that the resource type needs to be bound to the host for the given
+   * operations.
+   *
+   * @internal
+   */
+  static _registerTypeBind(host: IInflightHost, ops: string[]): void {
+    // Do nothing by default
+    host;
+    ops;
+  }
+
+  /**
    * Register a binding between an object (either data or resource) and a host.
    *
    * - Primitives and Duration objects are ignored.
@@ -205,7 +216,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  protected _registerBindObject(
+  protected static _registerBindObject(
     obj: any,
     host: IResource,
     ops: string[] = []
@@ -266,10 +277,19 @@ export abstract class Resource extends Construct implements IResource {
           );
           return;
         }
+        break;
+
+      case "function":
+        // If the object is actually a resource type, call the type's _registerTypeBind static method
+        if (isResourceType(obj)) {
+          obj._registerTypeBind(host, ops);
+          return;
+        }
+        break;
     }
 
     throw new Error(
-      `unable to serialize immutable data object of type ${obj.constructor?.name}`
+      `unable to serialize immutable data object of type ${obj.constructor?.name} ${typeof obj} with ops ${ops}`
     );
   }
 
@@ -469,8 +489,25 @@ export class Display {
 }
 
 function isResource(obj: any): obj is IResource {
+  let x = isIResourceType(obj.constructor);
+  console.log(`in isResource for ${obj.constructor.name} returning ${x}`);
+  return x;
+}
+
+function isIResourceType(t: any): t is new (...args: any[]) => IResource {
   return (
-    typeof (obj as IResource)._bind === "function" &&
-    typeof (obj as IResource)._registerBind === "function"
+    t instanceof Function &&
+    'prototype' in t &&
+    typeof t.prototype._bind === "function" &&
+    typeof t.prototype._registerBind === "function"
+  );
+}
+
+function isResourceType(t: any): t is typeof Resource {
+  let x = typeof t._registerTypeBind === "function" &&
+    isIResourceType(t);
+  console.log(`in isResourceType for ${t} returning ${x}`);
+  return (
+    x
   );
 }
