@@ -2,7 +2,6 @@ mod codemaker;
 mod free_var_scanner;
 
 use aho_corasick::AhoCorasick;
-use colored::Colorize;
 use const_format::formatcp;
 use indexmap::{indexmap, IndexMap, IndexSet};
 use itertools::Itertools;
@@ -936,56 +935,8 @@ impl<'a> JSifier<'a> {
 
 		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
 		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
-
-		let mut bind_method = CodeMaker::default();
-		bind_method.open("_registerBind(host, ops) {");
-		for (method_name, method_refs) in refs.iter().filter(|(m, _)| {
-			*m == CLASS_INFLIGHT_INIT_NAME
-				|| !resource_type
-					.as_resource()
-					.unwrap()
-					.get_method(&m.as_str().into())
-					.expect(&format!("method {m} doesn't exist in {class_name}"))
-					.is_static
-		}) {
-			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (field, ops) in method_refs {
-				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
-				bind_method.line(format!(
-					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",
-				));
-			}
-			bind_method.close("}");
-		}
-		bind_method.line("super._registerBind(host, ops);");
-		bind_method.close("}");
-
-		code.add_code(bind_method);
-
-		let mut type_bind_method = CodeMaker::default();
-		type_bind_method.open("static _registerTypeBind(host, ops) {");
-		for (method_name, method_refs) in refs.iter().filter(|(m, _)| {
-			*m != CLASS_INFLIGHT_INIT_NAME
-				&& resource_type
-					.as_resource()
-					.unwrap()
-					.get_method(&m.as_str().into())
-					.expect("method")
-					.is_static
-		}) {
-			type_bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (field, ops) in method_refs {
-				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
-				type_bind_method.line(format!(
-					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",
-				));
-			}
-			type_bind_method.close("}");
-		}
-		type_bind_method.line("super._registerTypeBind(host, ops);");
-		type_bind_method.close("}");
-
-		code.add_code(type_bind_method);
+		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, false));
+		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, true));
 
 		code.close("}");
 
@@ -1338,6 +1289,45 @@ impl<'a> JSifier<'a> {
 		let mut scanner = FreeVariableScanner::new();
 		scanner.visit_class(class);
 		scanner.free_vars
+	}
+
+	fn jsify_register_bind_method(
+		&self,
+		class: &AstClass,
+		refs: &BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
+		resource_type: TypeRef,
+		handle_statics: bool,
+	) -> CodeMaker {
+		let mut bind_method = CodeMaker::default();
+		let (modifier, bind_method_name) = if handle_statics {
+			("static", "_registerTypeBind")
+		} else {
+			("", "_registerBind")
+		};
+		bind_method.open(format!("{modifier} {bind_method_name}(host, ops) {{"));
+		let class_name = self.jsify_symbol(&class.name);
+		for (method_name, method_refs) in refs.iter().filter(|(m, _)| {
+			(*m == CLASS_INFLIGHT_INIT_NAME
+				|| !resource_type
+					.as_resource()
+					.unwrap()
+					.get_method(&m.as_str().into())
+					.expect(&format!("method {m} doesn't exist in {class_name}"))
+					.is_static)
+				^ handle_statics
+		}) {
+			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
+			for (field, ops) in method_refs {
+				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+				bind_method.line(format!(
+					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",
+				));
+			}
+			bind_method.close("}");
+		}
+		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
+		bind_method.close("}");
+		bind_method
 	}
 }
 
