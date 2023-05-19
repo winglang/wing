@@ -36,8 +36,8 @@ assert(C4.m() == 1);
 // class with inflight field
 class C5 {
   inflight var x: num;
-  init(a: num) {
-    this.x = a;
+  inflight init() {
+    this.x = 123;
   }
   inflight func(b: num) {
     this.x = b;
