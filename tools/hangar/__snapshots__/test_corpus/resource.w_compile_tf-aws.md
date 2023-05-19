@@ -1245,3 +1245,52 @@ new $App().synth();
 
 ```
 
+## proc1/index.js
+```js
+async handle() {
+  const { this } = this;
+  (await this.b.put("foo1.txt","bar"));
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const { this } = this;
+  (await this.b.put("foo2.txt","bar"));
+}
+
+```
+
+## proc3/index.js
+```js
+async handle() {
+  const { this } = this;
+  (await this.q.push("foo"));
+}
+
+```
+
+## proc4/index.js
+```js
+async handle() {
+  const { bucket, res } = this;
+  const s = (await res.my_method());
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflight_field === 123)'`)})((res.foo.inflight_field === 123))};
+}
+
+```
+
+## proc5/index.js
+```js
+async handle() {
+  const { bigOlPublisher } = this;
+  (await bigOlPublisher.publish("foo"));
+  const count = (await bigOlPublisher.getObjectCount());
+}
+
+```
+

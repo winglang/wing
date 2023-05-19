@@ -227,3 +227,15 @@ new $App().synth();
 
 ```
 
+## proc1/index.js
+```js
+async handle() {
+  const { c } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
+  (await c.inc());
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 1)'`)})(((await c.peek()) === 1))};
+}
+
+```
+

@@ -602,3 +602,40 @@ new $App().synth();
 
 ```
 
+## proc1/index.js
+```js
+async handle() {
+  const { s } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const { s } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
+}
+
+```
+
+## proc3/index.js
+```js
+async handle() {
+  const { s } = this;
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
+}
+
+```
+
+## proc4/index.js
+```js
+async handle() {
+  const {  } = this;
+  const s = "inside_inflight";
+  {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inside_inflight")'`)})((s === "inside_inflight"))};
+}
+
+```
+

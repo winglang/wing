@@ -402,3 +402,21 @@ new $App().synth();
 
 ```
 
+## proc1/index.js
+```js
+async handle() {
+  const { f } = this;
+  (await f.call());
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const { f } = this;
+  (await f.print("hey there"));
+}
+
+```
+

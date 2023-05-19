@@ -490,3 +490,23 @@ new $App().synth();
 
 ```
 
+## proc1/index.js
+```js
+async handle(msg) {
+  const { c } = this;
+  (await c.inc());
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const { js, predicate, q } = this;
+  (await q.push("hello"));
+  (await q.push("world"));
+  (await js.assert(predicate));
+}
+
+```
+

@@ -158,3 +158,19 @@ new $App().synth();
 
 ```
 
+## proc1/index.js
+```js
+async handle() {
+  const {  } = this;
+}
+
+```
+
+## proc2/index.js
+```js
+async handle() {
+  const {  } = this;
+}
+
+```
+
