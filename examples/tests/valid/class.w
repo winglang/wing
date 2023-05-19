@@ -43,6 +43,9 @@ class C5 {
     this.x = b;
   }
 }
-let c5 = new C5(123);
-assert(c5.x == 123);
+let c5 = new C5();
+
+test "access inflight field" {
+  assert(c5.x == 123);
+}
 
