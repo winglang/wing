@@ -787,19 +787,11 @@ impl TypeRef {
 	}
 
 	pub fn is_anything(&self) -> bool {
-		if let Type::Anything = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Anything)
 	}
 
 	pub fn is_resource(&self) -> bool {
-		if let Type::Resource(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Resource(_))
 	}
 
 	/// Returns whether the type is a preflight class with an inflight method named "handle"
@@ -813,35 +805,20 @@ impl TypeRef {
 	}
 
 	pub fn is_void(&self) -> bool {
-		if let Type::Void = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Void)
 	}
 
 	pub fn is_option(&self) -> bool {
-		if let Type::Optional(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Optional(_))
 	}
 
 	pub fn is_immutable_collection(&self) -> bool {
-		if let Type::Array(_) | Type::Map(_) | Type::Set(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Array(_) | Type::Map(_) | Type::Set(_))
 	}
 
 	pub fn is_inflight_function(&self) -> bool {
 		if let Type::Function(ref sig) = **self {
-			if sig.phase == Phase::Inflight {
-				return true;
-			}
-			true
+			sig.phase == Phase::Inflight
 		} else {
 			false
 		}
@@ -861,19 +838,14 @@ impl TypeRef {
 	}
 
 	pub fn is_mutable_collection(&self) -> bool {
-		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::MutArray(_) | Type::MutMap(_) | Type::MutSet(_))
 	}
 
 	pub fn is_iterable(&self) -> bool {
-		if let Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(
+			**self,
+			Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_)
+		)
 	}
 
 	pub fn is_capturable(&self) -> bool {
