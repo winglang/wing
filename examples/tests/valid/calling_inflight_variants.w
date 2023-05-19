@@ -18,7 +18,7 @@ class Foo {
   }
 
   inflight makeFn(x: bool): inflight (): num {
-    if (x == true) {
+    if x == true {
       return this.inflight1;
     } else {
       return this.inflight2;
