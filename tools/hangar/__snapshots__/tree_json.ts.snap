@@ -29,6 +29,9 @@ exports[`tree.json for an app with many resources 1`] = `
                       "fqn": "@winglang/sdk.std.Resource",
                       "version": "0.0.0",
                     },
+                    "display": {
+                      "hidden": true,
+                    },
                     "id": "$Inflight1",
                     "path": "root/Default/Default/$Inflight1",
                   },
@@ -39,6 +42,9 @@ exports[`tree.json for an app with many resources 1`] = `
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
                       "version": "0.0.0",
+                    },
+                    "display": {
+                      "hidden": true,
                     },
                     "id": "$Inflight5",
                     "path": "root/Default/Default/$Inflight5",
@@ -178,6 +184,9 @@ exports[`tree.json for an app with many resources 1`] = `
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
                         },
+                        "display": {
+                          "hidden": true,
+                        },
                         "id": "$Inflight2",
                         "path": "root/Default/Default/BigPublisher/$Inflight2",
                       },
@@ -196,6 +205,9 @@ exports[`tree.json for an app with many resources 1`] = `
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
                         },
+                        "display": {
+                          "hidden": true,
+                        },
                         "id": "$Inflight3",
                         "path": "root/Default/Default/BigPublisher/$Inflight3",
                       },
@@ -213,6 +225,9 @@ exports[`tree.json for an app with many resources 1`] = `
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
+                        },
+                        "display": {
+                          "hidden": true,
                         },
                         "id": "$Inflight4",
                         "path": "root/Default/Default/BigPublisher/$Inflight4",
