@@ -2544,8 +2544,8 @@ impl<'a> TypeChecker<'a> {
 		let initialized_fields = visit_init.fields;
 
 		for field in fields.iter() {
-			// inflight or static fields cannot be initialized in the initializer
-			if field.phase == Phase::Inflight || field.is_static {
+			// static fields cannot be initialized in the initializer
+			if field.is_static {
 				continue;
 			}
 			if !initialized_fields.contains(&field.name.name) {

@@ -27,9 +27,22 @@ let c3 = new C3(1, 2);
 assert(c3.x == 1);
 assert(c3.y == 2);
 
-// resource with static method and no init
+// class with static method and no init
 class C4 {
-  inflight var y: num;
   static m():num {return 1;}
 }
 assert(C4.m() == 1);
+
+// class with infligth field
+class C5 {
+  inflight var x: num;
+  init(a: num) {
+    this.x = a;
+  }
+  inflight func(b: num) {
+    this.x = b;
+  }
+}
+let c5 = new C5(123);
+assert(c5.x == 123);
+

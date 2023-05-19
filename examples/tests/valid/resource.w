@@ -7,6 +7,7 @@ class Foo {
 
   init() {
     this.c = new cloud.Counter();
+    this.inflightField = 1;
   }
 
   // Inflight init

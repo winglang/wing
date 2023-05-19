@@ -14,3 +14,10 @@ class C3 {
   //         ^^^^ Expected type to be "num", but got "str" instead
   }
 }
+
+class C4 {
+    inflight var x: num;
+//               ^ "x" is not initialized
+  inflight y: str;
+//         ^ "y" is not initialized
+}

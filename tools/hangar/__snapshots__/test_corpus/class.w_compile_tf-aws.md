@@ -51,6 +51,24 @@ module.exports = function({  }) {
 
 ```
 
+## clients/C5.inflight.js
+```js
+module.exports = function({  }) {
+  class  C5 {
+    constructor({  }) {
+    }
+    async func(b)  {
+      {
+        const __parent_this = this;
+        this.x = b;
+      }
+    }
+  }
+  return C5;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -197,7 +215,6 @@ class $Root extends $stdlib.std.Resource {
     class C4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("y");
         const __parent_this = this;
       }
       static m()  {
@@ -229,6 +246,39 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class C5 extends $stdlib.std.Resource {
+      constructor(scope, id, a) {
+        super(scope, id);
+        this._addInflightOps("func", "x");
+        const __parent_this = this;
+        this.x = a;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/C5.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const C5Client = ${C5._toInflightType(this).text};
+            const client = new C5Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("func")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     new C1(this,"C1");
     const c2 = new C2(this,"C2");
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(c2.x === 1)'`)})((c2.x === 1))};
@@ -236,6 +286,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(c3.x === 1)'`)})((c3.x === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(c3.y === 2)'`)})((c3.y === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((C4.m()) === 1)'`)})(((C4.m()) === 1))};
+    const c5 = new C5(this,"C5",123);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.x === 123)'`)})((c5.x === 123))};
   }
 }
 class $App extends $AppBase {
