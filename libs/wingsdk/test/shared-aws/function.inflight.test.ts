@@ -33,6 +33,52 @@ test("invoke - happy path", async () => {
   expect(response).toEqual(RESPONSE);
 });
 
+test("invoke - happy path - response number", async () => {
+  // GIVEN
+  const FUNCTION_NAME = "FUNCTION_NAME";
+  const PAYLOAD = "PAYLOAD";
+  const RESPONSE = 123;
+  lambdaMock
+    .on(InvokeCommand, {
+      FunctionName: FUNCTION_NAME,
+      Payload: fromUtf8(JSON.stringify(PAYLOAD)),
+    })
+    .resolves({
+      StatusCode: 200,
+      Payload: fromUtf8(JSON.stringify(RESPONSE)),
+    });
+
+  // WHEN
+  const client = new FunctionClient(FUNCTION_NAME);
+  const response = await client.invoke(PAYLOAD);
+
+  // THEN
+  expect(response).toEqual(RESPONSE);
+});
+
+test("invoke - happy path - response json", async () => {
+  // GIVEN
+  const FUNCTION_NAME = "FUNCTION_NAME";
+  const PAYLOAD = "PAYLOAD";
+  const RESPONSE = { foo: "bar" };
+  lambdaMock
+    .on(InvokeCommand, {
+      FunctionName: FUNCTION_NAME,
+      Payload: fromUtf8(JSON.stringify(PAYLOAD)),
+    })
+    .resolves({
+      StatusCode: 200,
+      Payload: fromUtf8(JSON.stringify(RESPONSE)),
+    });
+
+  // WHEN
+  const client = new FunctionClient(FUNCTION_NAME);
+  const response = await client.invoke(PAYLOAD);
+
+  // THEN
+  expect(response).toEqual(RESPONSE);
+});
+
 test("invoke - sad path", async () => {
   // GIVEN
   const FUNCTION_NAME = "FUNCTION_NAME";
