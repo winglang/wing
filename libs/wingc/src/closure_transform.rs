@@ -195,6 +195,10 @@ impl Fold for ClosureTransformer {
 				// we need to set this to false.
 				new_func_def.is_static = false;
 
+				// class_init_body :=
+				// ```
+				// this.display.hidden = true;
+				// ```
 				let class_init_body = vec![Stmt {
 					idx: 0,
 					kind: StmtKind::Assignment {
