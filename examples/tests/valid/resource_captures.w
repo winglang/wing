@@ -42,11 +42,13 @@ class MyResource {
   extBucket: cloud.Bucket;
   extNum: num;
 
-  // Needs to be var since we don't support inflight inits yet.
-  inflight var inflightField: num;
+  inflight inflightField: num;
+  
+  inflight init() {
+    this.inflightfield = 1;
+  }
 
   init(externalBucket: cloud.Bucket, externalNum: num) {
-    this.inflightField = 1;
     this.myResource = new cloud.Bucket();
     this.myStr = "myString";
     this.myNum = 42;
