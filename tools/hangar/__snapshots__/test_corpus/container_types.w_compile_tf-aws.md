@@ -226,6 +226,28 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m8).at(0)) === "a")'`)})(((Object.keys(m8).at(0)) === "a"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m8).at(1)) === "b")'`)})(((Object.keys(m8).at(1)) === "b"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m8).at(2)) === "c")'`)})(((Object.keys(m8).at(2)) === "c"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.values(m8).at(0)) === "a1")'`)})(((Object.values(m8).at(0)) === "a1"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.values(m8).at(1)) === "b1")'`)})(((Object.values(m8).at(1)) === "b1"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.values(m8).at(2)) === "c1")'`)})(((Object.values(m8).at(2)) === "c1"))};
+    for (const val of Object.keys(m8)) {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!val.endsWith("1"))'`)})((!val.endsWith("1")))};
+    }
+    for (const val of Object.values(m8)) {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'val.endsWith("1")'`)})(val.endsWith("1"))};
+    }
+    const m9 = {"a":"a1","b":"b1","c":"c1"};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m9).at(0)) === "a")'`)})(((Object.keys(m9).at(0)) === "a"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m9).at(1)) === "b")'`)})(((Object.keys(m9).at(1)) === "b"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m9).at(2)) === "c")'`)})(((Object.keys(m9).at(2)) === "c"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.values(m9).at(0)) === "a1")'`)})(((Object.values(m9).at(0)) === "a1"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.values(m9).at(1)) === "b1")'`)})(((Object.values(m9).at(1)) === "b1"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.values(m9).at(2)) === "c1")'`)})(((Object.values(m9).at(2)) === "c1"))};
+    for (const val of Object.keys(m9)) {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!val.endsWith("1"))'`)})((!val.endsWith("1")))};
+    }
+    for (const val of Object.values(m9)) {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'val.endsWith("1")'`)})(val.endsWith("1"))};
+    }
     const emptySet = Object.freeze(new Set([]));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(emptySet.size === 0)'`)})((emptySet.size === 0))};
     const emptySet2 = new Set([]);
