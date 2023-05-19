@@ -11,8 +11,8 @@ struct C extends B {
   x: num;
 }
 
-let some_struct = B { y: 5 };
-//                ^^^^^^^^^^ "x" is not initialized
+let someStruct = B { y: 5 };
+//               ^^^^^^^^^^ "x" is not initialized
 
 struct D {
   f: MutArray<str>;
@@ -27,8 +27,8 @@ struct E {
 let a = A {
   x: "Sup"
 };
-log(a.bad_field);
-//      ^^^^^^ Unknown symbol "bad_field"
+log(a.badField);
+//    ^^^^^^^^ Unknown symbol "badField"
 
 // two inherits with same field name but different type
 struct Razzle {

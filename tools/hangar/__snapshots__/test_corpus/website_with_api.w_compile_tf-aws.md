@@ -1,5 +1,73 @@
 # [website_with_api.w](../../../../examples/tests/valid/website_with_api.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ usersTable }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(req)  {
+      {
+        return {
+        "body": Object.freeze({"users":(await usersTable.list())}),
+        "status": 200,}
+        ;
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({ usersTable }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle(req)  {
+      {
+        const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
+        if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
+          return {
+          "body": Object.freeze({"error":"incomplete details"}),
+          "status": 400,}
+          ;
+        }
+        (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+        return {
+        "body": Object.freeze({"user":(body)["id"]}),
+        "status": 201,}
+        ;
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
+## clients/$Inflight3.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight3 {
+    constructor({  }) {
+    }
+    async handle(req)  {
+      {
+        return {
+        "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
+        "status": 204,}
+        ;
+      }
+    }
+  }
+  return $Inflight3;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -200,7 +268,7 @@
             "uniqueId": "root_cloudApi_cloudApiOnRequestb3f3d188_IamRolePolicy_5AC6F400"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:DeleteItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestb3f3d188_IamRole_94B392C2.name}"
       },
       "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRolePolicy_0281983F": {
@@ -210,7 +278,7 @@
             "uniqueId": "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRolePolicy_0281983F"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:DeleteItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequeste46e5cb7_IamRole_15046B29.name}"
       }
     },
@@ -529,38 +597,114 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const usersTable_client = context._lift(usersTable);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            usersTable: ${usersTable_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(usersTable, host, ["list"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const usersTable_client = context._lift(usersTable);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            usersTable: ${usersTable_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(usersTable, host, ["insert"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight3 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
+            const client = new $Inflight3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website_with_api" });
-    const users_table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING,"age":cloud.ColumnType.NUMBER}) });
-    const get_handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        users_table: {
-          obj: users_table,
-          ops: ["delete","get","insert","list","update"]
-        },
-      }
-    })
-    ;
-    const post_handler = new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        users_table: {
-          obj: users_table,
-          ops: ["delete","get","insert","list","update"]
-        },
-      }
-    })
-    ;
-    const options_handler = new $stdlib.core.Inflight(this, "$Inflight3", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc3/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    ;
-    (api.get("/users",get_handler));
-    (api.post("/users",post_handler));
-    (api.options("/users",options_handler));
+    const usersTable = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING,"age":cloud.ColumnType.NUMBER}) });
+    const getHandler = new $Inflight1(this,"$Inflight1");
+    const postHandler = new $Inflight2(this,"$Inflight2");
+    const optionsHandler = new $Inflight3(this,"$Inflight3");
+    (api.get("/users",getHandler));
+    (api.post("/users",postHandler));
+    (api.options("/users",optionsHandler));
     (website.addJson("config.json",Object.freeze({"apiUrl":api.url})));
   }
 }
@@ -580,50 +724,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(req) {
-  const { users_table } = this;
-  return {
-  "body": Object.freeze({"users":(await users_table.list())}),
-  "status": 200,}
-  ;
-}
-
-```
-
-## proc2/index.js
-```js
-async handle(req) {
-  const { users_table } = this;
-  const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
-  if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
-    return {
-    "body": Object.freeze({"error":"incomplete details"}),
-    "status": 400,}
-    ;
-  }
-  (await users_table.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
-  return {
-  "body": Object.freeze({"user":(body)["id"]}),
-  "status": 201,}
-  ;
-}
-
-```
-
-## proc3/index.js
-```js
-async handle(req) {
-  const {  } = this;
-  return {
-  "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
-  "status": 204,}
-  ;
-}
 
 ```
 

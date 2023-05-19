@@ -4,8 +4,8 @@ import { Function } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import * as redis from "../../src/target-tf-aws/redis";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
 import {
+  mkdtemp,
   getTfResource,
   tfResourcesOf,
   tfResourcesOfCount,

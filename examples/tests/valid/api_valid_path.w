@@ -10,7 +10,7 @@ let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 };
 
-let test_invalid_path = (path:str) => {
+let testInvalidPath = (path:str) => {
   let var error = "";
   let expected = "Invalid path ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".";
   try {
@@ -21,7 +21,7 @@ let test_invalid_path = (path:str) => {
   assert(error == expected);
 };
 
-let test_valid_path = (path:str) => {
+let testValidPath = (path:str) => {
   let var error = "";
   try {
     api.get(path, handler);
@@ -32,19 +32,19 @@ let test_valid_path = (path:str) => {
 };
 
 //invalid paths
-test_invalid_path("/test/{sup:er/:annoying//path}");
-test_invalid_path("/test/{::another:annoying:path}");
-test_invalid_path("/test/n0t_alphanumer1cPa:th");
-test_invalid_path("/test/path/{with}/{two:invali4d#}/variables");
-test_invalid_path("/test/path/{unclosed");
-test_invalid_path("/test/m{issplaced}");
-test_invalid_path("/test/{misspla}ced");
-test_invalid_path("/test/{}/empty");
+testInvalidPath("/test/{sup:er/:annoying//path}");
+testInvalidPath("/test/{::another:annoying:path}");
+testInvalidPath("/test/n0t_alphanumer1cPa:th");
+testInvalidPath("/test/path/{with}/{two:invali4d#}/variables");
+testInvalidPath("/test/path/{unclosed");
+testInvalidPath("/test/m{issplaced}");
+testInvalidPath("/test/{misspla}ced");
+testInvalidPath("/test/{}/empty");
   
 
 // valid paths
-test_valid_path("/test");
-test_valid_path("/test/alphanumer1cPa_th");
-test_valid_path("/test/regular/path");
-test_valid_path("/test/pa-th/{with}/two/{variable_s}/f?bla=5&b=6");
-test_valid_path("/test/param/is/{last}");
+testValidPath("/test");
+testValidPath("/test/alphanumer1cPa_th");
+testValidPath("/test/regular/path");
+testValidPath("/test/pa-th/{with}/two/{variable_s}/f?bla=5&b=6");
+testValidPath("/test/param/is/{last}");

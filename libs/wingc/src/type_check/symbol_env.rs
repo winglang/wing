@@ -1,3 +1,5 @@
+use duplicate::duplicate_item;
+
 use crate::{
 	ast::{Phase, Symbol},
 	diagnostic::TypeError,
@@ -34,15 +36,56 @@ pub enum StatementIdx {
 	Top,
 }
 
+#[duplicate_item(
+	LookupResult reference(lifetime, type);
+	[LookupResult] [& 'lifetime type];
+	[LookupResultMut] [& 'lifetime mut type];
+)]
+#[derive(Debug)]
 /// Possible results for a symbol lookup in the environment
-enum LookupResult<'a> {
-	/// The kind of symbol and usefull metadata associated with its lookup
-	Found((&'a SymbolKind, SymbolLookupInfo)),
-	/// The symbol was not found in the environment
-	NotFound,
+pub enum LookupResult<'a> {
+	/// The kind of symbol and useful metadata associated with its lookup
+	Found(reference([a], [SymbolKind]), SymbolLookupInfo),
+	/// The symbol was not found in the environment, contains the name of the symbol or part of it that was not found
+	NotFound(Symbol),
 	/// The symbol exists in the environment but it's not defined yet (based on the statement
 	/// index passed to the lookup)
 	DefinedLater,
+	/// Expected a namespace in a nested lookup but found a different kind of symbol
+	ExpectedNamespace(Symbol),
+}
+
+#[duplicate_item(
+	LookupResult reference(lifetime, type);
+	[LookupResult] [& 'lifetime type];
+	[LookupResultMut] [& 'lifetime mut type];
+)]
+impl<'a> LookupResult<'a> {
+	pub fn unwrap(self) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
+		match self {
+			LookupResult::Found(kind, info) => (kind, info),
+			LookupResult::NotFound(_) => panic!("LookupResult::unwrap() called on LookupResult::NotFound"),
+			LookupResult::DefinedLater => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
+			LookupResult::ExpectedNamespace(symbol) => panic!(
+				"LookupResult::unwrap() called on LookupResult::ExpectedNamespace({:?})",
+				symbol
+			),
+		}
+	}
+
+	pub fn expect(self, message: &str) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
+		match self {
+			LookupResult::Found(kind, info) => (kind, info),
+			_ => panic!("{message}"),
+		}
+	}
+
+	pub fn ok(self) -> Option<(reference([a], [SymbolKind]), SymbolLookupInfo)> {
+		match self {
+			LookupResult::Found(kind, info) => Some((kind, info)),
+			_ => None,
+		}
+	}
 }
 
 #[derive(Debug)]
@@ -51,16 +94,6 @@ pub struct SymbolLookupInfo {
 	pub phase: Phase,
 	/// Whether the symbol was defined in an `init`'s environment
 	pub init: bool,
-}
-
-enum LookupMutResult<'a> {
-	/// The type of the symbol and its flight phase
-	Found((&'a mut SymbolKind, Phase)),
-	/// The symbol was not found in the environment
-	NotFound,
-	/// The symbol exists in the environment but it's not defined yet (based on the statement
-	/// index passed to the lookup)
-	DefinedLater,
 }
 
 impl SymbolEnv {
@@ -107,22 +140,37 @@ impl SymbolEnv {
 		Ok(())
 	}
 
-	pub fn try_lookup(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> Option<&SymbolKind> {
-		match self.try_lookup_ext(symbol_name, not_after_stmt_idx) {
-			LookupResult::Found((type_, _)) => Some(type_),
-			LookupResult::NotFound | LookupResult::DefinedLater => None,
-		}
+	#[allow(clippy::needless_arbitrary_self_type)]
+	#[duplicate_item(
+		lookup reference(type) lookup_ext;
+		[lookup] [& type] [lookup_ext];
+		[lookup_mut] [& mut type] [lookup_ext_mut];
+	)]
+	/// Lookup a symbol in the environment, returning the symbol kind if it was found.
+	/// Note that the symbol name cannot be a nested symbol (e.g. `foo.bar`). Use
+	/// `lookup_nested` for that.
+	/// This is a simplified version of `lookup_ext` that only returns the symbol kind
+	/// without the added `SymbolLookupInfo` metadata and without details lookup errors,
+	/// just `None`.
+	pub fn lookup(
+		self: reference([Self]),
+		symbol: &Symbol,
+		not_after_stmt_idx: Option<usize>,
+	) -> Option<reference([SymbolKind])> {
+		self.lookup_ext(symbol, not_after_stmt_idx).ok().map(|(kind, _)| kind)
 	}
 
-	pub fn try_lookup_mut(&mut self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> Option<&mut SymbolKind> {
-		match self.try_lookup_mut_ext(symbol_name, not_after_stmt_idx) {
-			LookupMutResult::Found((type_, _)) => Some(type_),
-			LookupMutResult::NotFound | LookupMutResult::DefinedLater => None,
-		}
-	}
-
-	fn try_lookup_ext(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		if let Some((definition_idx, kind)) = self.symbol_map.get(symbol_name) {
+	#[allow(clippy::needless_arbitrary_self_type)]
+	#[duplicate_item(
+		lookup_ext LookupResult map_get reference(type) ref_annotation(ident);
+		[lookup_ext] [LookupResult] [get] [& type] [ref ident];
+		[lookup_ext_mut] [LookupResultMut] [get_mut] [&mut type] [ref mut ident];
+	)]
+	/// Lookup a symbol in the environment, returning a `LookupResult`. Note that the symbol name
+	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
+	/// TODO: perhaps make this private and switch to the nested version in all external calls
+	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
+		if let Some((definition_idx, kind)) = self.symbol_map.map_get(&symbol.name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
 				if let StatementIdx::Index(definition_idx) = definition_idx {
 					if *definition_idx > not_after_stmt_idx {
@@ -130,183 +178,84 @@ impl SymbolEnv {
 					}
 				}
 			}
-			LookupResult::Found((
+			LookupResult::Found(
 				kind,
 				SymbolLookupInfo {
 					phase: self.phase,
 					init: self.is_init,
 				},
-			))
-		} else if let Some(ref parent_env) = self.parent {
-			parent_env.try_lookup_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
+			)
+		} else if let Some(ref_annotation([parent_env])) = self.parent {
+			parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
-			LookupResult::NotFound
+			LookupResult::NotFound(symbol.clone())
 		}
 	}
 
-	// TODO: Baahh. Find a nice way to reuse the non-mut code and remove LookupMutResult
-	fn try_lookup_mut_ext(&mut self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupMutResult {
-		if let Some((definition_idx, kind)) = self.symbol_map.get_mut(symbol_name) {
-			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
-				if let StatementIdx::Index(definition_idx) = definition_idx {
-					if *definition_idx > not_after_stmt_idx {
-						return LookupMutResult::DefinedLater;
-					}
+	#[allow(clippy::needless_arbitrary_self_type)]
+	#[duplicate_item(
+		lookup_nested LookupResult lookup_ext as_namespace reference(type);
+		[lookup_nested] [LookupResult] [lookup_ext] [as_namespace] [& type];
+		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type];
+	)]
+	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
+	/// nested symbol (e.g. `foo.bar`) if `nested_ver` is larger than 1.
+	pub fn lookup_nested(self: reference([Self]), nested_vec: &[&Symbol], statement_idx: Option<usize>) -> LookupResult {
+		let mut it = nested_vec.iter();
+
+		let symb = *it.next().unwrap();
+
+		let res = self.lookup_ext(symb, statement_idx);
+		let mut res = if let LookupResult::Found(k, i) = res {
+			(k, i)
+		} else {
+			return res;
+		};
+
+		let mut prev_symb = symb;
+		while let Some(next_symb) = it.next() {
+			// Hack: if we reach an anything symbol we just return it and don't bother if there are more nested symbols.
+			// This is because we currently allow unknown stuff to be referenced under an anything which will
+			// be resolved only in runtime.
+			// TODO: do we still need this? Why?
+			if let SymbolKind::Variable(VariableInfo { type_: t, .. }) = *res.0 {
+				if matches!(*t, Type::Anything) {
+					break;
 				}
 			}
-			LookupMutResult::Found((kind, self.phase))
-		} else if let Some(ref mut parent_env) = self.parent {
-			parent_env.try_lookup_mut_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
-		} else {
-			LookupMutResult::NotFound
+			let ns = if let Some(ns) = res.0.as_namespace() {
+				ns
+			} else {
+				return LookupResult::ExpectedNamespace(prev_symb.clone());
+			};
+
+			let lookup_result = ns.env.lookup_ext(next_symb, statement_idx);
+			prev_symb = *next_symb;
+
+			if let LookupResult::Found(k, i) = lookup_result {
+				res = (k, i);
+			} else {
+				return lookup_result;
+			}
 		}
+		let (kind, lookup_info) = res;
+		LookupResult::Found(kind, lookup_info)
 	}
 
-	pub fn lookup(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
-		Ok(self.lookup_ext(symbol, not_after_stmt_idx)?.0)
-	}
-
-	pub fn lookup_ext(
-		&self,
-		symbol: &Symbol,
-		not_after_stmt_idx: Option<usize>,
-	) -> Result<(&SymbolKind, SymbolLookupInfo), TypeError> {
-		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
-
-		match lookup_result {
-			LookupResult::Found((kind, symbol_info)) => Ok((kind, symbol_info)),
-			LookupResult::NotFound => Err(TypeError {
-				message: format!("Unknown symbol \"{}\"", &symbol.name),
-				span: symbol.span.clone(),
-			}),
-			LookupResult::DefinedLater => Err(TypeError {
-				message: format!("Symbol \"{}\" used before being defined", symbol.name),
-				span: symbol.span.clone(),
-			}),
-		}
-	}
-
-	pub fn lookup_nested_str(&self, nested_str: &str, statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
+	#[allow(clippy::needless_arbitrary_self_type)]
+	#[duplicate_item(
+		lookup_nested_str LookupResult lookup_nested reference(type);
+		[lookup_nested_str] [LookupResult] [lookup_nested] [& type];
+		[lookup_nested_str_mut] [LookupResultMut] [lookup_nested_mut] [&mut type];
+	)]
+	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
+	/// nested symbol (e.g. `foo.bar`).
+	pub fn lookup_nested_str(self: reference([Self]), nested_str: &str, statement_idx: Option<usize>) -> LookupResult {
 		let nested_vec = nested_str
 			.split('.')
 			.map(|s| Symbol::global(s))
 			.collect::<Vec<Symbol>>();
 		self.lookup_nested(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
-	}
-
-	// TODO: can we make this more generic to avoid code duplication with lookup_nested_str?
-	pub fn lookup_nested_mut_str(
-		&mut self,
-		nested_str: &str,
-		statement_idx: Option<usize>,
-	) -> Result<&mut SymbolKind, TypeError> {
-		let nested_vec = nested_str
-			.split('.')
-			.map(|s| Symbol::global(s))
-			.collect::<Vec<Symbol>>();
-		self.lookup_nested_mut(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
-	}
-
-	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
-		let mut it = nested_vec.iter();
-
-		let mut symb = *it.next().unwrap();
-		let mut t = if let Some(type_ref) = self.try_lookup(&symb.name, statement_idx) {
-			type_ref
-		} else {
-			return Err(TypeError {
-				message: format!("Unknown symbol \"{}\"", symb.name),
-				span: symb.span.clone(),
-			});
-		};
-
-		while let Some(next_symb) = it.next() {
-			// Hack: if we reach an anything symbol we just return it and don't bother if there are more nested symbols.
-			// This is because we currently allow unknown stuff to be referenced under an anything which will
-			// be resolved only in runtime.
-			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(VariableInfo { type_: t, .. }) = *t {
-				if matches!(*t, Type::Anything) {
-					break;
-				}
-			}
-			let ns = if let Some(ns) = t.as_namespace() {
-				ns
-			} else {
-				return Err(TypeError {
-					message: format!("Symbol \"{}\" is not a namespace", symb.name),
-					span: symb.span.clone(),
-				});
-			};
-
-			let lookup_result = ns.env.try_lookup(&next_symb.name, statement_idx);
-
-			if let Some(type_ref) = lookup_result {
-				t = type_ref;
-			} else {
-				return Err(TypeError {
-					message: format!("Unknown symbol \"{}\" in namespace \"{}\"", next_symb.name, ns.name),
-					span: next_symb.span.clone(),
-				});
-			}
-
-			symb = *next_symb;
-		}
-		Ok(t)
-	}
-
-	/// TODO: can we make this more generic to avoid code duplication with lookup_nested?
-	fn lookup_nested_mut(
-		&mut self,
-		nested_vec: &[&Symbol],
-		statement_idx: Option<usize>,
-	) -> Result<&mut SymbolKind, TypeError> {
-		let mut it = nested_vec.iter();
-
-		let mut symb = *it.next().unwrap();
-		let mut t = if let Some(type_ref) = self.try_lookup_mut(&symb.name, statement_idx) {
-			type_ref
-		} else {
-			return Err(TypeError {
-				message: format!("Unknown symbol \"{}\"", symb.name),
-				span: symb.span.clone(),
-			});
-		};
-
-		while let Some(next_symb) = it.next() {
-			// Hack: if we reach an anything symbol we just return it and don't bother if there are more nested symbols.
-			// This is because we currently allow unknown stuff to be referenced under an anything which will
-			// be resolved only in runtime.
-			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(VariableInfo { type_: t, .. }) = *t {
-				if matches!(*t, Type::Anything) {
-					break;
-				}
-			}
-
-			let ns = if let Some(ns) = t.as_mut_namespace_ref() {
-				ns
-			} else {
-				return Err(TypeError {
-					message: format!("Symbol \"{}\" is not a namespace", symb.name),
-					span: symb.span.clone(),
-				});
-			};
-
-			let lookup_result = ns.env.try_lookup_mut(&next_symb.name, statement_idx);
-
-			if let Some(type_ref) = lookup_result {
-				t = type_ref;
-			} else {
-				return Err(TypeError {
-					message: format!("Unknown symbol \"{}\" in namespace \"{}\"", next_symb.name, ns.name),
-					span: next_symb.span.clone(),
-				});
-			}
-
-			symb = *next_symb;
-		}
-		Ok(t)
 	}
 
 	pub fn iter(&self, with_ancestry: bool) -> SymbolEnvIter {
@@ -360,6 +309,232 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 			}
 		} else {
 			None
+		}
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use crate::{
+		ast::{Phase, Symbol},
+		type_check::{symbol_env::LookupResult, Namespace, SymbolKind, Types},
+	};
+
+	use super::{StatementIdx, SymbolEnv};
+
+	fn setup_types() -> Types {
+		Types::new()
+	}
+
+	#[test]
+	fn test_statement_idx_lookups() {
+		let types = setup_types();
+		let mut parent_env = SymbolEnv::new(None, types.void(), false, Phase::Independent, 0);
+		let child_scope_idx = 10;
+		let mut child_env = SymbolEnv::new(
+			Some(parent_env.get_ref()),
+			types.void(),
+			false,
+			crate::ast::Phase::Independent,
+			child_scope_idx,
+		);
+
+		// Define a globally visible variable in the parent env
+		assert!(matches!(
+			parent_env.define(
+				&Symbol::global("parent_global_var"),
+				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				StatementIdx::Top,
+			),
+			Ok(())
+		));
+
+		// Define a positionally visible variable in the parent env before the child scope
+		assert!(matches!(
+			parent_env.define(
+				&Symbol::global("parent_low_pos_var"),
+				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				StatementIdx::Index(child_scope_idx - 1),
+			),
+			Ok(())
+		));
+
+		// Define a positionally visible variable in the parent env after the child scope
+		let parent_high_pos_var_idx = child_scope_idx + 1;
+		assert!(matches!(
+			parent_env.define(
+				&Symbol::global("parent_high_pos_var"),
+				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				StatementIdx::Index(parent_high_pos_var_idx),
+			),
+			Ok(())
+		));
+
+		// Define a globally visible variable in the child env
+		assert!(matches!(
+			child_env.define(
+				&Symbol::global("child_global_var"),
+				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				StatementIdx::Top,
+			),
+			Ok(())
+		));
+
+		// Lookup non-existent variable
+		assert!(matches!(
+			parent_env.lookup_nested_str("non_existent_var", None),
+			LookupResult::NotFound(_)
+		));
+
+		// Lookup globally visible variable
+		assert!(matches!(
+			parent_env.lookup_nested_str("parent_global_var", None),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
+
+		// Lookup globally visible variable using low statement index
+		assert!(matches!(
+			parent_env.lookup_nested_str("parent_global_var", Some(0)),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
+
+		// Lookup positionally visible variable using an index after it's defined
+		assert!(matches!(
+			parent_env.lookup_nested_str("parent_high_pos_var", Some(parent_high_pos_var_idx + 1)),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
+
+		// Lookup positionally visible variable using an index before it's defined
+		assert!(matches!(
+			parent_env.lookup_nested_str("parent_high_pos_var", Some(parent_high_pos_var_idx - 1)),
+			LookupResult::DefinedLater
+		));
+
+		// Lookup a globally visible parent var in the child env with a low statement index
+		assert!(matches!(
+			child_env.lookup_nested_str("parent_global_var", Some(0)),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
+
+		// Lookup a globally visible parent var in the child env with a high statement index
+		assert!(matches!(
+			child_env.lookup_nested_str("parent_global_var", Some(1000)),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
+
+		// Lookup a positionally visible parent var defined after the child scope in the child env using a low statement index
+		assert!(matches!(
+			child_env.lookup_nested_str("parent_high_pos_var", Some(0)),
+			LookupResult::DefinedLater
+		));
+
+		// Lookup for a child var in the parent env
+		assert!(matches!(
+			parent_env.lookup_nested_str("child_global_var", None),
+			LookupResult::NotFound(_)
+		));
+
+		// Lookup for a var in the child env
+		assert!(matches!(
+			child_env.lookup_nested_str("child_global_var", None),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
+	}
+
+	#[test]
+	fn test_nested_lookups() {
+		let mut types = setup_types();
+		let mut parent_env = SymbolEnv::new(None, types.void(), false, Phase::Independent, 0);
+		let child_env = SymbolEnv::new(
+			Some(parent_env.get_ref()),
+			types.void(),
+			false,
+			crate::ast::Phase::Independent,
+			0,
+		);
+
+		// Create namespaces
+		let ns1 = types.add_namespace(Namespace {
+			name: "ns1".to_string(),
+			env: SymbolEnv::new(None, types.void(), false, Phase::Independent, 0),
+		});
+		let ns2 = types.add_namespace(Namespace {
+			name: "ns2".to_string(),
+			env: SymbolEnv::new(Some(ns1.env.get_ref()), types.void(), false, Phase::Independent, 0),
+		});
+
+		// Define ns2 in n1's env
+		assert!(matches!(
+			ns1
+				.env
+				.get_ref()
+				.define(&Symbol::global("ns2"), SymbolKind::Namespace(ns2), StatementIdx::Top),
+			Ok(())
+		));
+
+		// Define a variable in n2's env
+		assert!(matches!(
+			ns2.env.get_ref().define(
+				&Symbol::global("ns2_var"),
+				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				StatementIdx::Top,
+			),
+			Ok(())
+		));
+
+		// Define a variable in n1's env
+		assert!(matches!(
+			ns1.env.get_ref().define(
+				&Symbol::global("ns1_var"),
+				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				StatementIdx::Top,
+			),
+			Ok(())
+		));
+
+		// Define the namesapces in the parent env
+		assert!(matches!(
+			parent_env.define(&Symbol::global("ns1"), SymbolKind::Namespace(ns1), StatementIdx::Top),
+			Ok(())
+		));
+
+		// Perform a nested lookup from the parent env
+		assert!(matches!(
+			parent_env.lookup_nested_str("ns1.ns2.ns2_var", None),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
+
+		// Perform a nested lookup from the child env
+		assert!(matches!(
+			child_env.lookup_nested_str("ns1.ns2.ns2_var", None),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
+
+		// Perform a nested lookup through a existing variable name
+		let res = child_env.lookup_nested_str("ns1.ns1_var.ns2_var", None);
+		match res {
+			LookupResult::ExpectedNamespace(s) => {
+				assert!(s.name == "ns1_var")
+			}
+			_ => panic!("Expected LookupResult::ExpectedNamespace(_) but got {:?}", res),
+		}
+
+		// Perform a nested lookup for a non-existent var
+		let res = child_env.lookup_nested_str("ns1.ns2.non_existent", None);
+		match res {
+			LookupResult::NotFound(s) => {
+				assert!(s.name == "non_existent")
+			}
+			_ => panic!("Expected LookupResult::NotFount(_) but got {:?}", res),
+		}
+
+		// Perform a nested lookup through a non-existent namespace
+		let res = child_env.lookup_nested_str("ns1.non_existent.ns2_var", None);
+		match res {
+			LookupResult::NotFound(s) => {
+				assert!(s.name == "non_existent")
+			}
+			_ => panic!("Expected LookupResult::NotFount(_) but got {:?}", res),
 		}
 	}
 }

@@ -5,7 +5,6 @@ use std::hash::{Hash, Hasher};
 use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 
-use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::TypeRef;
@@ -17,6 +16,13 @@ pub struct Symbol {
 }
 
 impl Symbol {
+	pub fn new<S: Into<String>>(name: S, span: WingSpan) -> Self {
+		Self {
+			name: name.into(),
+			span,
+		}
+	}
+
 	pub fn global<S: Into<String>>(name: S) -> Self {
 		Self {
 			name: name.into(),
@@ -62,13 +68,19 @@ impl PartialEq for Symbol {
 
 impl Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{} (at {})", self.name, self.span)
+		write!(f, "{}", self.name)
 	}
 }
 
 impl Equivalent<Symbol> for str {
 	fn equivalent(&self, key: &Symbol) -> bool {
 		self == key.name
+	}
+}
+
+impl From<&str> for Symbol {
+	fn from(s: &str) -> Self {
+		Symbol::global(s)
 	}
 }
 
@@ -144,6 +156,13 @@ pub struct FunctionTypeAnnotation {
 pub struct UserDefinedType {
 	pub root: Symbol,
 	pub fields: Vec<Symbol>,
+	pub span: WingSpan,
+}
+
+impl Spanned for UserDefinedType {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
 }
 
 impl Display for UserDefinedType {
@@ -265,8 +284,7 @@ pub trait MethodLike<'a> {
 	fn span(&self) -> WingSpan;
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct FunctionDefinition {
 	/// The function implementation.
 	pub body: FunctionBody,
@@ -276,9 +294,6 @@ pub struct FunctionDefinition {
 	pub is_static: bool,
 
 	pub span: WingSpan,
-
-	#[derivative(Debug = "ignore")]
-	pub captures: RefCell<Option<Captures>>,
 }
 
 impl MethodLike<'_> for FunctionDefinition {
@@ -401,7 +416,7 @@ pub enum StmtKind {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
-	VariableDef {
+	Let {
 		reassignable: bool,
 		var_name: Symbol,
 		initial_value: Expr,
@@ -486,7 +501,7 @@ pub enum ExprKind {
 	},
 	Reference(Reference),
 	Call {
-		function: Box<Expr>,
+		callee: Box<Expr>,
 		arg_list: ArgList,
 	},
 	Unary {
@@ -589,6 +604,14 @@ pub struct Scope {
 }
 
 impl Scope {
+	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+		Self {
+			statements,
+			span,
+			env: RefCell::new(None),
+		}
+	}
+
 	pub fn set_env(&self, new_env: SymbolEnv) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());
@@ -657,31 +680,31 @@ impl Display for Reference {
 }
 
 /// Represents any type that has a span.
-pub trait ToSpan {
+pub trait Spanned {
 	fn span(&self) -> WingSpan;
 }
 
-impl ToSpan for Stmt {
+impl Spanned for Stmt {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl ToSpan for Expr {
+impl Spanned for Expr {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl ToSpan for Symbol {
+impl Spanned for Symbol {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
 }
 
-impl<T> ToSpan for Box<T>
+impl<T> Spanned for Box<T>
 where
-	T: ToSpan,
+	T: Spanned,
 {
 	fn span(&self) -> WingSpan {
 		(&**self).span()

@@ -1,153 +1,153 @@
 bring cloud;
 
 class First {
-  my_resource: cloud.Bucket;
+  myResource: cloud.Bucket;
 
   init() {
-    this.my_resource = new cloud.Bucket();
+    this.myResource = new cloud.Bucket();
   }
 }
 
 class Another {
-  my_field: str;
+  myField: str;
   first: First;
 
   init () {
-    this.my_field = "hello!";
+    this.myField = "hello!";
     this.first = new First();
   }
 
-  inflight meaning_of_life(): num {
+  inflight meaningOfLife(): num {
     return 42;
   }
 
-  inflight another_func(): str {
+  inflight anotherFunc(): str {
     return "42";
   }
 }
 
 class MyResource {
-  my_resource: cloud.Bucket;
-  my_str: str;
-  my_num: num;
-  my_bool: bool;
-  my_opt_str: str?;
-  array_of_str: Array<str>;
-  map_of_num: Map<num>;
-  set_of_str: Set<str>;
+  myResource: cloud.Bucket;
+  myStr: str;
+  myNum: num;
+  myBool: bool;
+  myOptStr: str?;
+  arrayOfStr: Array<str>;
+  mapOfNum: Map<num>;
+  setOfStr: Set<str>;
   another: Another;
-  my_queue: cloud.Queue;
-  unused_resource: cloud.Counter;
+  myQueue: cloud.Queue;
+  unusedResource: cloud.Counter;
 
-  ext_bucket: cloud.Bucket;
-  ext_num: num;
+  extBucket: cloud.Bucket;
+  extNum: num;
 
 
   // Needs to be var since we don't support inflight inits yet.
-  inflight var inflight_field: num;
+  inflight var inflightField: num;
 
-  init(external_bucket: cloud.Bucket, external_num: num) {
-    this.my_resource = new cloud.Bucket();
-    this.my_str = "my_string";
-    this.my_num = 42;
-    this.my_bool = true;
-    this.my_opt_str = "my_opt_string";
-    this.array_of_str = ["s1", "s2"];
-    this.map_of_num = {
+  init(externalBucket: cloud.Bucket, externalNum: num) {
+    this.myResource = new cloud.Bucket();
+    this.myStr = "myString";
+    this.myNum = 42;
+    this.myBool = true;
+    this.myOptStr = "myOptString";
+    this.arrayOfStr = ["s1", "s2"];
+    this.mapOfNum = {
       k1: 11,
       k2: 22
     };
-    this.set_of_str = {"s1", "s2", "s1"};
+    this.setOfStr = {"s1", "s2", "s1"};
 
     this.another = new Another();
-    this.my_queue = new cloud.Queue();
-    this.ext_bucket = external_bucket;
-    this.ext_num = external_num;
-    this.unused_resource = new cloud.Counter();
+    this.myQueue = new cloud.Queue();
+    this.extBucket = externalBucket;
+    this.extNum = externalNum;
+    this.unusedResource = new cloud.Counter();
   }
 
-  inflight test_no_capture() {
+  inflight testNoCapture() {
     let arr = [1,2,3];
     assert(arr.length == 3);
     log("array.len=${arr.length}");
   }
 
-  inflight test_capture_collections_of_data() {
-    assert(this.array_of_str.length == 2);
-    assert(this.array_of_str.at(0) == "s1");
-    assert(this.array_of_str.at(1) == "s2");
-    assert(this.map_of_num.get("k1") == 11);
-    assert(this.map_of_num.get("k2") == 22);
-    assert(this.set_of_str.has("s1"));
-    assert(this.set_of_str.has("s2"));
-    assert(!this.set_of_str.has("s3"));
+  inflight testCaptureCollectionsOfData() {
+    assert(this.arrayOfStr.length == 2);
+    assert(this.arrayOfStr.at(0) == "s1");
+    assert(this.arrayOfStr.at(1) == "s2");
+    assert(this.mapOfNum.get("k1") == 11);
+    assert(this.mapOfNum.get("k2") == 22);
+    assert(this.setOfStr.has("s1"));
+    assert(this.setOfStr.has("s2"));
+    assert(!this.setOfStr.has("s3"));
   }
 
-  inflight test_capture_primitives() {
-    assert(this.my_str == "my_string");
-    assert(this.my_num == 42);
-    assert(this.my_bool == true);
+  inflight testCapturePrimitives() {
+    assert(this.myStr == "myString");
+    assert(this.myNum == 42);
+    assert(this.myBool == true);
   }
 
-  inflight test_capture_optional() {
-    assert(this.my_opt_str ?? "" == "my_opt_string");
+  inflight testCaptureOptional() {
+    assert(this.myOptStr ?? "" == "myOptString");
   }
 
-  hello_preflight(): Another {
+  helloPreflight(): Another {
     return this.another;
   }
 
-  inflight test_capture_resource() {
-    this.my_resource.put("f1.txt", "f1");
-    assert(this.my_resource.get("f1.txt") == "f1");
-    assert(this.my_resource.list().length == 1);
+  inflight testCaptureResource() {
+    this.myResource.put("f1.txt", "f1");
+    assert(this.myResource.get("f1.txt") == "f1");
+    assert(this.myResource.list().length == 1);
   }
 
-  inflight test_nested_preflight_field() {
-    assert(this.another.my_field == "hello!");
-    log("field=${this.another.my_field}");
+  inflight testNestedInflightField() {
+    assert(this.another.myField == "hello!");
+    log("field=${this.another.myField}");
   }
 
-  inflight test_nested_resource() {
-    assert(this.another.first.my_resource.list().length == 0);
-    this.another.first.my_resource.put("hello", this.my_str);
-    log("this.another.first.my_resource:${this.another.first.my_resource.get("hello")}");
+  inflight testNestedResource() {
+    assert(this.another.first.myResource.list().length == 0);
+    this.another.first.myResource.put("hello", this.myStr);
+    log("this.another.first.myResource:${this.another.first.myResource.get("hello")}");
   }
 
   // expression within an expression
-  inflight test_expression_recursive() {
-    this.my_queue.push(this.my_str);
+  inflight testExpressionRecursive() {
+    this.myQueue.push(this.myStr);
   }
 
-  inflight test_external() {
-    assert(this.ext_bucket.list().length == 0);
-    assert(this.ext_num == 12);
+  inflight testExternal() {
+    assert(this.extBucket.list().length == 0);
+    assert(this.extNum == 12);
   }
 
-  inflight test_user_defined_resource() {
-    assert(this.another.meaning_of_life() == 42);
-    assert(this.another.another_func() == "42");
+  inflight testUserDefinedResource() {
+    assert(this.another.meaningOfLife() == 42);
+    assert(this.another.anotherFunc() == "42");
   }
 
-  inflight test_inflight_field() {
-    this.inflight_field = 123;
-    assert(this.inflight_field == 123);
+  inflight testInflightField() {
+    this.inflightField = 123;
+    assert(this.inflightField == 123);
   }
 }
 
 let b = new cloud.Bucket();
 let r = new MyResource(b, 12);
 
-new cloud.Function(inflight () => {
-  r.test_no_capture();
-  r.test_capture_collections_of_data();
-  r.test_capture_primitives();
-  r.test_capture_optional();
-  r.test_capture_resource();
-  r.test_nested_preflight_field();
-  r.test_nested_resource();
-  r.test_expression_recursive();
-  r.test_external();
-  r.test_user_defined_resource();
-  r.test_inflight_field();
-}) as "test";
+test "test" {
+  r.testNoCapture();
+  r.testCaptureCollectionsOfData();
+  r.testCapturePrimitives();
+  r.testCaptureOptional();
+  r.testCaptureResource();
+  r.testNestedInflightField();
+  r.testNestedResource();
+  r.testExpressionRecursive();
+  r.testExternal();
+  r.testUserDefinedResource();
+  r.testInflightField();
+}

@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import * as tfgcp from "../../src/target-tf-gcp";
-import { mkdtemp } from "../../src/util";
 import {
+  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,

@@ -4,7 +4,7 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ┌ bucket_events.wsim » root/env0/test
+pass ┌ bucket_events.wsim » root/env0/test:test
      │ created a
      │ last key a
      │ other bucket event called!

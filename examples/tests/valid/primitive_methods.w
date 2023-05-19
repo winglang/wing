@@ -8,4 +8,4 @@ if stringy.contains("60") && stringy.split(":").at(0) == "60" {
   log("${stringy.length}!");
 }
 
-assert(num.from_str("123") == 123);
+assert(num.fromStr("123") == 123);

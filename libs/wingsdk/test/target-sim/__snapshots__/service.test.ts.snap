@@ -1,0 +1,172 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`create a service with on start method 1`] = `
+{
+  ".wing/my_service-serviceonstartef2b13b9_c8cb6e3a.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/service.onevent.inflight.js\\")).ServiceOnEventHandler({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+  console.log(\\"Service Started\\");
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_service-ServiceOnStartef2b13b9",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_service-serviceonstartef2b13b9_c8cb6e3a.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_service",
+        "props": {
+          "autoStart": true,
+          "onStartHandler": "\${root/my_service-ServiceOnStartef2b13b9#attrs.handle}",
+        },
+        "type": "wingsdk.cloud.Service",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "OnStartHandler": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_service-ServiceOnStartef2b13b9",
+              },
+            ],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "OnStartHandler",
+          "path": "root/OnStartHandler",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_service": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_start",
+                "resource": "root/my_service-ServiceOnStartef2b13b9",
+              },
+            ],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud service",
+            "title": "Service",
+          },
+          "id": "my_service",
+          "path": "root/my_service",
+        },
+        "my_service-ServiceOnStart-ef2b13b9": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "hidden": true,
+          },
+          "id": "my_service-ServiceOnStart-ef2b13b9",
+          "path": "root/my_service-ServiceOnStart-ef2b13b9",
+        },
+        "my_service-ServiceOnStartef2b13b9": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/OnStartHandler",
+              },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "on_start",
+                "resource": "root/my_service",
+              },
+            ],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_service-ServiceOnStartef2b13b9",
+          "path": "root/my_service-ServiceOnStartef2b13b9",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;

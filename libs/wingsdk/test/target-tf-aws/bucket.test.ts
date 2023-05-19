@@ -1,25 +1,16 @@
 import * as cdktf from "cdktf";
-import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { Bucket, IBucketEventHandler } from "../../src/cloud";
-import { NodeJsCode, Inflight } from "../../src/core";
+import { Bucket } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../../src/util";
+import { Testing } from "../../src/testing";
 import {
+  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
   treeJsonOf,
+  getTfResource,
 } from "../util";
-
-class InflightBucketEventHandler
-  extends Inflight
-  implements IBucketEventHandler
-{
-  constructor(scope: Construct, id: string) {
-    super(scope, id, { code: NodeJsCode.fromInline("null") });
-  }
-}
 
 test("create a bucket", () => {
   // GIVEN
@@ -144,7 +135,7 @@ test("bucket with onCreate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onCreate(inflightTest);
   const output = app.synth();
 
@@ -168,6 +159,13 @@ test("bucket with onCreate method", () => {
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  const bucketNotification = getTfResource(
+    output,
+    "aws_s3_bucket_notification"
+  );
+  expect(bucketNotification.depends_on.length).toEqual(1);
+  expect(bucketNotification.topic.length).toEqual(1);
+  expect(bucketNotification.topic.every((item) => !!item.id)).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -176,7 +174,7 @@ test("bucket with onDelete method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onDelete(inflightTest);
   const output = app.synth();
 
@@ -200,6 +198,13 @@ test("bucket with onDelete method", () => {
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  const bucketNotification = getTfResource(
+    output,
+    "aws_s3_bucket_notification"
+  );
+  expect(bucketNotification.depends_on.length).toEqual(1);
+  expect(bucketNotification.topic.length).toEqual(1);
+  expect(bucketNotification.topic.every((item) => !!item.id)).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -208,7 +213,7 @@ test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onUpdate(inflightTest);
   const output = app.synth();
 
@@ -232,6 +237,13 @@ test("bucket with onUpdate method", () => {
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  const bucketNotification = getTfResource(
+    output,
+    "aws_s3_bucket_notification"
+  );
+  expect(bucketNotification.depends_on.length).toEqual(1);
+  expect(bucketNotification.topic.length).toEqual(1);
+  expect(bucketNotification.topic.every((item) => !!item.id)).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -240,7 +252,7 @@ test("bucket with onEvent method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  const inflightTest = Testing.makeHandler(app, "inflight", "null");
   bucket.onEvent(inflightTest);
   const output = app.synth();
 
@@ -262,7 +274,14 @@ test("bucket with onEvent method", () => {
     "aws_sns_topic_subscription", // subscription to events
   ]);
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(3); // 3 topics will be created- one per event
-  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(3);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  const bucketNotification = getTfResource(
+    output,
+    "aws_s3_bucket_notification"
+  );
+  expect(bucketNotification.depends_on.length).toEqual(3);
+  expect(bucketNotification.topic.length).toEqual(3);
+  expect(bucketNotification.topic.every((item) => !!item.id)).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
