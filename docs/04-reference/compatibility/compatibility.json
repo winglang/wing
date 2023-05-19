@@ -192,11 +192,11 @@
       "aws-cdk": {"implemented": true}
     },
     "pop": {
-      "sim": {"implemented": true, "issue": 1385},
-      "tf-aws": {"implemented": true, "issue": 1385},
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": true, "issue": 1385}
+      "aws-cdk": {"implemented": true}
     },
     "purge": {
       "sim": {"implemented": true},
