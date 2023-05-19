@@ -40,21 +40,9 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    */
   public async exists(key: string): Promise<boolean> {
-    const connectionString =
-      "DefaultEndpointsProtocol=https;AccountName=myaccount;AccountKey=mykey;EndpointSuffix=core.windows.net";
-
-    const blobServiceClient =
-      BlobServiceClient.fromConnectionString(connectionString);
-    const containers = blobServiceClient.listContainers();
-    for await (const container of containers) {
-      const containerClient = blobServiceClient.getContainerClient(
-        container.name
-      );
-      const blobClient = containerClient.getBlobClient(key);
-      if (await blobClient.exists()) {
-        return true;
-      }
-    }
+    throw new Error(
+      "exists method isn't implemented yet on the current target."
+    );
     return false;
   }
 
