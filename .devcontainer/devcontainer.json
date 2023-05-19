@@ -1,6 +1,7 @@
 {
   "name": "Wing Development",
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+  "postStartCommand": "volta install node npm && volta setup && npm install",
   "features": {
     "ghcr.io/devcontainers/features/aws-cli:1": {},
     "ghcr.io/devcontainers/features/terraform:1": {},
