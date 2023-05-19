@@ -16,7 +16,7 @@ class C3 {
 }
 
 class C4 {
-    inflight var x: num;
+  inflight var x: num;
 //               ^ "x" is not initialized
   inflight y: str;
 //         ^ "y" is not initialized
