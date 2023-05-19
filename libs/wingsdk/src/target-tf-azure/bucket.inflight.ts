@@ -40,6 +40,7 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    */
   public async exists(key: string): Promise<boolean> {
+    key = "none";
     throw new Error(
       "exists method isn't implemented yet on the current target."
     );
