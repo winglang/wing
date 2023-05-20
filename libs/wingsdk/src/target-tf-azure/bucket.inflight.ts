@@ -40,10 +40,8 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    */
   public async exists(key: string): Promise<boolean> {
-    key;
-    throw new Error(
-      "exists method isn't implemented yet on the current target."
-    );
+    const blobClient = this.containerClient.getBlobClient(key);
+    return await blobClient.exists();
   }
 
   /**
