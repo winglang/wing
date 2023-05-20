@@ -273,36 +273,46 @@ resource Bucket {
   /**
    * Add an object to the bucket that is uploaded when the app is deployed.
    */
-  addObject(key: str, value: Blob): void;
+  addObject(key: str, body: str): void;
 
   /**
    * Upload an object to the bucket.
    */
-  inflight put(key: str, value: Blob): void;
+  inflight put(key: str, body: str): void;
 
   /**
-   * Upload a Json object to bucket
+   * Upload a Json object to bucket.
    */
-  inflight putJson(key: str, value: Json): void;
+  inflight putJson(key: str, body: Json): void;
 
   /**
    * Get an object from the bucket.
    *
    * @throws Will throw if the object doesn't exist.
    */
-  inflight get(key: str): Blob;
+  inflight get(key: str): str;
 
   /**
    * Get an object from the bucket if it exists.
    */
-  inflight tryGet(key: str): Blob?;
+  inflight tryGet(key: str): str | nil;
+
+  /**
+   * Get a Json object from the bucket.
+   */
+  inflight getJson(key: str, body: Json): void;
+
+  /**
+   * Get a Json object from the bucket if it exists.
+   */
+  inflight tryGetJson(key: str): Json | nil;
 
   /**
    * Delete an object from the bucket.
    *
    * @throws Will throw if the object doesn't exist.
    */
-  inflight delete(key: str): void;
+  inflight delete(key: str, opts: BucketDeleteOptions?): void;
 
   /**
    * Delete an object from the bucket if it exists.
@@ -338,7 +348,7 @@ resource Bucket {
   /**
    * List all objects in the bucket with the given prefix.
    */
-  inflight list(prefix: str?): Iterator<str>;
+  inflight list(prefix?: str): Array<str>; // return an iterator in the future
 
   /**
    * Returns a url to the given object key. Does not check if the object exists.
@@ -426,7 +436,7 @@ struct QueueProps {
    * Initialize the queue with a set of messages.
    * @default []
    */
-   initialMessages?: string[];
+   initialMessages?: Array<str>;
 }
 
 resource Queue {
@@ -580,14 +590,14 @@ resource Counter {
    * The `key` parameter can be used to update different counters.
    * @default - value: 1, key: "default"
    */
-  inflight inc(value: num?, key: string?): num;
+  inflight inc(value: num?, key: str?): num;
 
   /**
    * Decrement tahe counter, returning the previous value.
    * The `key` parameter can be used to update different counters.
    * @default - value: 1, key: "default"
    */
-  inflight dec(value: num?, key: string?): num;
+  inflight dec(value: num?, key: str?): num;
 
   /**
    * Get the current value of a counter. Using this API is prone to race
@@ -595,13 +605,13 @@ resource Counter {
    * time it is used in your code.
    * @default - key: "default"
    */
-  inflight peek(key: string?): number;
+  inflight peek(key: str?): number;
 
   /**
    * Reset a counter to a given value.
    * @default - value: 0, key: "default"
    */
-  inflight reset(value?: num, key: string?): void;
+  inflight reset(value?: num, key: str?): void;
 }
 ```
 
@@ -837,7 +847,7 @@ struct ApiCorsProps {
    * The list of allowed headers.
    * @example ["Content-Type"]
    */
-  headers: Array<str>;
+  headers: Map<str>?;
 
   /**
    * The list of exposed headers.
@@ -1066,7 +1076,7 @@ struct SecretProps {
   /**
    * Retrieve the value of the secret.
    * @throws if the secret doesn't exist.
-   * @returns the secret value as string.
+   * @returns the secret value as str.
    */
   inflight value(): str;
 

@@ -115,7 +115,7 @@ export async function load(options: WingCompilerLoadOptions) {
       if (file.startsWith(".")) {
         continue;
       }
- 
+
       const fullPath = `/${file}`;
       const fileStat = await fs.promises.stat(fullPath);
       if (
@@ -216,7 +216,6 @@ export interface WingDiagnostic {
     };
     file_id: string;
   };
-  level: "Error" | "Warning" | "Note";
 }
 
 /**

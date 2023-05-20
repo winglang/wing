@@ -3632,6 +3632,7 @@ new std.ImmutableMap()
 | <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.values">values</a></code> | Returns the values of this map. |
 
 ---
 
@@ -3695,6 +3696,14 @@ size(): num
 Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `values` <a name="values" id="@winglang/sdk.std.ImmutableMap.values"></a>
+
+```wing
+values(): ImmutableArray
+```
+
+Returns the values of this map.
 
 
 
@@ -4216,8 +4225,10 @@ new std.MutableMap()
 | <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.MutableMap.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
 | <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.values">values</a></code> | Returns the values of this map. |
 
 ---
 
@@ -4288,6 +4299,14 @@ The key of the element to test for presence.
 
 ---
 
+##### `keys` <a name="keys" id="@winglang/sdk.std.MutableMap.keys"></a>
+
+```wing
+keys(): ImmutableArray
+```
+
+Returns the keys of this map.
+
 ##### `set` <a name="set" id="@winglang/sdk.std.MutableMap.set"></a>
 
 ```wing
@@ -4323,6 +4342,14 @@ size(): num
 Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `values` <a name="values" id="@winglang/sdk.std.MutableMap.values"></a>
+
+```wing
+values(): ImmutableArray
+```
+
+Returns the values of this map.
 
 
 
