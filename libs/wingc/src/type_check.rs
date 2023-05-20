@@ -2270,6 +2270,16 @@ impl<'a> TypeChecker<'a> {
 						&mut class_env,
 						&inflight_init_symb,
 					);
+				} else {
+					for field in fields.iter() {
+						// inflight fields needs to be initialized in the inflight initializer
+						if field.phase == Phase::Inflight {
+							self.type_error(TypeError {
+								message: format!("Inflight field \"{}\" is not initialized", field.name.name),
+								span: field.name.span.clone(),
+							});
+						}
+					}
 				}
 
 				// Replace the dummy class environment with the real one before type checking the methods
@@ -2544,8 +2554,8 @@ impl<'a> TypeChecker<'a> {
 		let initialized_fields = visit_init.fields;
 
 		for field in fields.iter() {
-			// static fields cannot be initialized in the initializer
-			if field.is_static {
+			// inflight or static fields cannot be initialized in the initializer
+			if field.phase == Phase::Inflight || field.is_static {
 				continue;
 			}
 			if !initialized_fields.contains(&field.name.name) {

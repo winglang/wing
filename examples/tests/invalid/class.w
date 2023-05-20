@@ -1,3 +1,5 @@
+bring cloud;
+
 class C1 {
    x:num;
 // ^ "x" is not initialized
@@ -17,7 +19,7 @@ class C3 {
 
 class C4 {
   inflight var x: num;
-//               ^ "x" is not initialized
+//             ^ Inflight field "x" is not initialized
   inflight y: str;
-//         ^ "y" is not initialized
+//         ^ Inflight field "y" is not initialized
 }
