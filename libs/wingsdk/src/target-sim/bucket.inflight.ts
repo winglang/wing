@@ -71,7 +71,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Exists (key=${key}).`,
       activity: async () => {
-        return this.fileExists(key);
+        return this.objectKeys.has(key);
       },
     });
   }
