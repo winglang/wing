@@ -328,22 +328,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { payload } = this;
-  return payload;
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const { f, payload } = this;
-  const x = (await f.invoke(""));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
-}
-
-```
-

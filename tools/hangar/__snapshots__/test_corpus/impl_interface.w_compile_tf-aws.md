@@ -280,12 +280,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const { x } = this;
-  (await x.handle("hello world!"));
-}
-
-```
-

@@ -382,21 +382,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle() {
-  const {  } = this;
-  {console.log("hello, world")};
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const {  } = this;
-  {console.log("hello, world")};
-}
-
-```
-

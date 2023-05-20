@@ -332,21 +332,3 @@ new $App().synth();
 
 ```
 
-## proc1/index.js
-```js
-async handle(s) {
-  const {  } = this;
-}
-
-```
-
-## proc2/index.js
-```js
-async handle(s) {
-  const { str_to_str } = this;
-  (await str_to_str.invoke("one"));
-  {console.log((await str_to_str.invoke("two")))};
-}
-
-```
-
