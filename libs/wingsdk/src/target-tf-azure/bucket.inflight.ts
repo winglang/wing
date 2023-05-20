@@ -41,7 +41,7 @@ export class BucketClient implements IBucketClient {
    */
   public async exists(key: string): Promise<boolean> {
     const blobClient = this.containerClient.getBlobClient(key);
-    return await blobClient.exists();
+    return blobClient.exists();
   }
 
   /**
