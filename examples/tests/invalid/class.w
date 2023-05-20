@@ -2,7 +2,7 @@ bring cloud;
 
 class C1 {
    x:num;
-// ^ "x" is not initialized
+// ^ Preflight field "x" is not initialized
 }
 
 class C2 {}
@@ -34,15 +34,15 @@ class C6 {
   inflight x: num;
 //         ^ Inflight field "x" is not initialized
   y: num;
-//    ^ "y" is not initialized  
+//    ^ Preflight field "y" is not initialized  
   
   init() {
     this.x = 1;
-//       ^ "x" cannot be initialized in the preflight initializer
+//       ^ "x" cannot be initialized in the Preflight initializer
   }
 
   inflight init() {
     this.y = 1;
-//       ^ "y" cannot be initialized in the inflight initializer
+//       ^ "y" cannot be initialized in the Inflight initializer
   }
 }

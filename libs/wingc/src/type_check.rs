@@ -2272,7 +2272,7 @@ impl<'a> TypeChecker<'a> {
 					);
 
 					if let FunctionBodyRef::Statements(scope) = inflight_initializer.body() {
-						self.check_class_field_inflight_initialization(&scope, fields);
+						self.check_class_field_initialization(&scope, fields, Phase::Inflight);
 					}
 				} else {
 					for field in fields.iter() {
@@ -2294,7 +2294,7 @@ impl<'a> TypeChecker<'a> {
 				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
 
 				// Verify if all fields of a class/resource are initialized in the initializer.
-				self.check_class_field_initialization(&initializer.statements, fields);
+				self.check_class_field_initialization(&initializer.statements, fields, Phase::Preflight);
 
 				// Type check the inflight initializer
 				if let Some(inflight_initializer) = inflight_initializer {
@@ -2551,19 +2551,29 @@ impl<'a> TypeChecker<'a> {
 	///
 	/// * `scope` - The constructor scope (init)
 	/// * `fields` - All fields of a class
+	/// * `phase` - initializer phase
 	///
-	fn check_class_field_initialization(&mut self, scope: &Scope, fields: &[ClassField]) {
+	fn check_class_field_initialization(&mut self, scope: &Scope, fields: &[ClassField], phase: Phase) {
 		let mut visit_init = VisitClassInit::default();
 		visit_init.analyze_statements(&scope.statements);
 		let initialized_fields = visit_init.fields;
+
+		let (current_phase, forbidden_phase) = if phase == Phase::Inflight {
+			("Inflight", Phase::Preflight)
+		} else {
+			("Preflight", Phase::Inflight)
+		};
 
 		for field in fields.iter() {
 			let result = initialized_fields.iter().find(|&s| &s.name == &field.name.name);
 			// inflight or static fields cannot be initialized in the initializer
-			if field.phase == Phase::Inflight || field.is_static {
+			if field.phase == forbidden_phase || field.is_static {
 				if let Some(result) = result {
 					self.type_error(TypeError {
-						message: format!("\"{}\" cannot be initialized in the preflight initializer", result.name),
+						message: format!(
+							"\"{}\" cannot be initialized in the {} initializer",
+							result.name, current_phase
+						),
 						span: result.span.clone(),
 					});
 				};
@@ -2572,41 +2582,7 @@ impl<'a> TypeChecker<'a> {
 
 			if result == None {
 				self.type_error(TypeError {
-					message: format!("\"{}\" is not initialized", field.name.name),
-					span: field.name.span.clone(),
-				});
-			}
-		}
-	}
-
-	/// Validate if the inflight fields of a class are initialized in the inflight constructor (inflight init).
-	///
-	/// # Arguments
-	///
-	/// * `scope` - The constructor scope (init)
-	/// * `fields` - All fields of a class
-	///
-	fn check_class_field_inflight_initialization(&mut self, scope: &Scope, fields: &[ClassField]) {
-		let mut visit_init = VisitClassInit::default();
-		visit_init.analyze_statements(&scope.statements);
-		let initialized_fields = visit_init.fields;
-
-		for field in fields.iter() {
-			let result = initialized_fields.iter().find(|&s| &s.name == &field.name.name);
-			// preflight or static fields cannot be initialized in the inflight initializer
-			if field.phase == Phase::Preflight || field.is_static {
-				if let Some(result) = result {
-					self.type_error(TypeError {
-						message: format!("\"{}\" cannot be initialized in the inflight initializer", result.name),
-						span: result.span.clone(),
-					});
-				};
-				continue;
-			}
-
-			if result == None {
-				self.type_error(TypeError {
-					message: format!("Inflight field \"{}\" is not initialized", field.name.name),
+					message: format!("{} field \"{}\" is not initialized", current_phase, field.name.name),
 					span: field.name.span.clone(),
 				});
 			}
