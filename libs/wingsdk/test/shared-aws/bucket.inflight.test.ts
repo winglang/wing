@@ -240,7 +240,7 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
   );
 });
 
-test("check if key exists in the bucket", async () => {
+test("check if an object exists in the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
