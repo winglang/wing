@@ -23,3 +23,26 @@ class C4 {
   inflight y: str;
 //         ^ Inflight field "y" is not initialized
 }
+
+class C5 {
+  inflight x: num;
+//         ^ Inflight field "x" is not initialized
+  inflight init() {}
+}
+
+class C6 {
+  inflight x: num;
+//         ^ Inflight field "x" is not initialized
+  y: num;
+//    ^ "y" is not initialized  
+  
+  init() {
+    this.x = 1;
+//       ^ "x" cannot be initialized in the preflight initializer
+  }
+
+  inflight init() {
+    this.y = 1;
+//       ^ "y" cannot be initialized in the inflight initializer
+  }
+}
