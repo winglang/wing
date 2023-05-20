@@ -239,3 +239,23 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
     `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${KEY}`
   );
 });
+
+test("check if key exists in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(PutObjectCommand, { Bucket: BUCKET_NAME, Key: KEY, Body: VALUE })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.put(KEY, VALUE);
+  const existingKeyExists = await client.exists(KEY);
+  const nonExistentKeyExists = await client.exists("NON_EXISTENT_KEY");
+
+  // THEN
+  expect(existingKeyExists).toBe(true);
+  expect(nonExistentKeyExists).toBe(false);
+});
