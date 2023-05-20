@@ -878,7 +878,6 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("fooInc", "fooGet", "fooStatic", "inflightField");
         const __parent_this = this;
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-        this.inflightField = 1;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");

@@ -139,37 +139,37 @@ exports[`capture_reassignable.w > stderr 1`] = `
 
 exports[`class.w > stderr 1`] = `
 "error: \\"x\\" is not initialized
-  --> ../../../examples/tests/invalid/class.w:2:4
+  --> ../../../examples/tests/invalid/class.w:4:4
   |
-2 |    x:num;
+4 |    x:num;
   |    ^ \\"x\\" is not initialized
 
 
 error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
-  --> ../../../examples/tests/invalid/class.w:7:1
+  --> ../../../examples/tests/invalid/class.w:9:1
   |
-7 | new C2(1);
+9 | new C2(1);
   | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
 
 
-error: \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:19:18
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:21:16
    |
-19 |     inflight var x: num;
-   |                  ^ \\"x\\" is not initialized
+21 |   inflight var x: num;
+   |                ^ Inflight field \\"x\\" is not initialized
 
 
-error: \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:21:12
+error: Inflight field \\"y\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:23:12
    |
-21 |   inflight y: str;
-   |            ^ \\"y\\" is not initialized
+23 |   inflight y: str;
+   |            ^ Inflight field \\"y\\" is not initialized
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.w:13:14
+   --> ../../../examples/tests/invalid/class.w:15:14
    |
-13 |     this.x = \\"Hi\\";
+15 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 "
@@ -437,11 +437,11 @@ exports[`inflight_in_class.w > stderr 1`] = `
   |   ^^^^^^^^ Class cannot have inflight fields
 
 
-error: \\"field\\" is not initialized
+error: Inflight field \\"field\\" is not initialized
   --> ../../../examples/tests/invalid/inflight_in_class.w:2:12
   |
 2 |   inflight field: num; // No inflight fields in classes (only in resources)
-  |            ^^^^^ \\"field\\" is not initialized
+  |            ^^^^^ Inflight field \\"field\\" is not initialized
 
 "
 `;
@@ -857,20 +857,6 @@ exports[`reassign_to_nonreassignable.w > stderr 1`] = `
   |
 3 | x = x + 1;
   | ^^^^^^^^^^ Variable x is not reassignable 
-
-
-error: \\"inner\\" is not initialized
-  --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:6:12
-  |
-6 |   inflight inner: num;
-  |            ^^^^^ \\"inner\\" is not initialized
-
-
-error: \\"inflightF\\" is not initialized
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:16:12
-   |
-16 |   inflight inflightF: num;
-   |            ^^^^^^^^^ \\"inflightF\\" is not initialized
 
 
 error: Variable this.f is not reassignable 
