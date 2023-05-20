@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ put_json.wsim (no tests)
+pass ─ put_json.wsim » root/env0/test:putJson
 ```
 
