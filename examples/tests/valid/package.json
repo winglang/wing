@@ -5,7 +5,7 @@
     "constructs": "^10",
     "jsii-code-samples": "1.7.0",
     "node-fetch": "^2",
-    "projen": "0.67.65",
+    "projen": "^0.71.60",
     "uuid": "^9.0.0"
   },
   "volta": {
