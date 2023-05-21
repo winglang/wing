@@ -65,6 +65,7 @@ project.addFields({
   volta: rootPackageJson.volta,
 });
 
+// We use of symlinks between several projects but we do not use workspaces
 project.npmrc.addConfig("install-links", "false");
 
 project.synth();
