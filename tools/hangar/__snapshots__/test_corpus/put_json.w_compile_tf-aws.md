@@ -1,14 +1,29 @@
-# [hello.w](../../../../examples/tests/valid/hello.w) | compile | tf-aws
+# [put_json.w](../../../../examples/tests/valid/put_json.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ bucket }) {
+module.exports = function({ b }) {
   class  $Inflight1 {
     constructor({  }) {
     }
-    async handle(message)  {
+    async handle()  {
       {
-        (await bucket.put("wing.txt",`Hello, ${message}`));
+        const jsonObj1 = Object.freeze({"test":"test1"});
+        const jsonObj2 = Object.freeze({"test":"test2"});
+        (await b.putJson("test1.txt",jsonObj1));
+        (await b.putJson("test2.txt",jsonObj2));
+        const testJson1 = (await b.getJson("test1.txt"));
+        const testJson2 = (await b.getJson("test2.txt"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson1)["test"] === (jsonObj1)["test"])'`)})(((testJson1)["test"] === (jsonObj1)["test"]))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson2)["test"] === (jsonObj2)["test"])'`)})(((testJson2)["test"] === (jsonObj2)["test"]))};
+        const jsonObj3 = Object.freeze({"test":"test3"});
+        (await b.putJson("test3.txt",jsonObj3));
+        const testJson3 = (await b.getJson("test3.txt"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson3)["test"] === (jsonObj3)["test"])'`)})(((testJson3)["test"] === (jsonObj3)["test"]))};
+        (await b.delete("test1.txt"));
+        const files = (await b.list());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
       }
     }
   }
@@ -48,75 +63,62 @@ module.exports = function({ bucket }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE": {
+      "root_testputJson_IamRole_CEDB4108": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/IamRole",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE"
+            "path": "root/Default/Default/test:putJson/IamRole",
+            "uniqueId": "root_testputJson_IamRole_CEDB4108"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_cloudQueueAddConsumere46e5cb7_IamRolePolicy_756548A7": {
+      "root_testputJson_IamRolePolicy_D106D26E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/IamRolePolicy",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_IamRolePolicy_756548A7"
+            "path": "root/Default/Default/test:putJson/IamRolePolicy",
+            "uniqueId": "root_testputJson_IamRolePolicy_D106D26E"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testputJson_IamRole_CEDB4108.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudQueueAddConsumere46e5cb7_IamRolePolicyAttachment_3625F5B7": {
+      "root_testputJson_IamRolePolicyAttachment_3F78BC95": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_IamRolePolicyAttachment_3625F5B7"
+            "path": "root/Default/Default/test:putJson/IamRolePolicyAttachment",
+            "uniqueId": "root_testputJson_IamRolePolicyAttachment_3F78BC95"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE.name}"
-      }
-    },
-    "aws_lambda_event_source_mapping": {
-      "root_cloudQueue_EventSourceMapping_A2041279": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue/EventSourceMapping",
-            "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279"
-          }
-        },
-        "batch_size": 1,
-        "event_source_arn": "${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
-        "function_name": "${aws_lambda_function.root_cloudQueueAddConsumere46e5cb7_83E71EC8.function_name}"
+        "role": "${aws_iam_role.root_testputJson_IamRole_CEDB4108.name}"
       }
     },
     "aws_lambda_function": {
-      "root_cloudQueueAddConsumere46e5cb7_83E71EC8": {
+      "root_testputJson_074D2C39": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/Default",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_83E71EC8"
+            "path": "root/Default/Default/test:putJson/Default",
+            "uniqueId": "root_testputJson_074D2C39"
           }
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-e46e5cb7-c85740a2"
+            "WING_FUNCTION_NAME": "test-putJson-c8b24c50"
           }
         },
-        "function_name": "cloud-Queue-AddConsumer-e46e5cb7-c85740a2",
+        "function_name": "test-putJson-c8b24c50",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudQueueAddConsumere46e5cb7_IamRole_AE43C8FE.arn}",
+        "role": "${aws_iam_role.root_testputJson_IamRole_CEDB4108.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4.key}",
+        "s3_key": "${aws_s3_object.root_testputJson_S3Object_70486645.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -179,27 +181,16 @@ module.exports = function({ bucket }) {
       }
     },
     "aws_s3_object": {
-      "root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4": {
+      "root_testputJson_S3Object_70486645": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-e46e5cb7/S3Object",
-            "uniqueId": "root_cloudQueueAddConsumere46e5cb7_S3Object_343EB2E4"
+            "path": "root/Default/Default/test:putJson/S3Object",
+            "uniqueId": "root_testputJson_S3Object_70486645"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
-      }
-    },
-    "aws_sqs_queue": {
-      "root_cloudQueue_E3597F7A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "root_cloudQueue_E3597F7A"
-          }
-        },
-        "name": "cloud-Queue-c86e03d8"
       }
     }
   }
@@ -224,10 +215,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-        const bucket_client = context._lift(bucket);
+        const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            bucket: ${bucket_client},
+            b: ${b_client},
           })
         `);
       }
@@ -246,19 +237,18 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket, host, ["put"]);
+          this._registerBindObject(b, host, ["delete", "getJson", "list", "putJson"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    (queue.addConsumer(new $Inflight1(this,"$Inflight1")));
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:putJson",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "hello", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "put_json", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
