@@ -163,6 +163,7 @@ test("check that an object exists in the bucket", async () => {
     false,
     mockBlobServiceClient
   );
+  TEST_PATH = "happy";
 
   const objectExists = await client.exists("object1");
 
