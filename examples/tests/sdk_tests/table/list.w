@@ -8,7 +8,7 @@ let table = new cloud.Table(
 );
 
 
-test "test" {
+test "list" {
   table.insert("eyal", Json { gender: "male" });
   table.insert("revital", Json { gender: "female" });
   let unorderded = MutJson {};
