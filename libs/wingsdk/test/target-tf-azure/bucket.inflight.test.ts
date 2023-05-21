@@ -1,4 +1,5 @@
 import { Readable } from "stream";
+import { promiseHooks } from "v8";
 import { PagedAsyncIterableIterator, PageSettings } from "@azure/core-paging";
 import {
   BlobClient,
@@ -15,7 +16,6 @@ import {
 } from "@azure/storage-blob";
 import { test, expect, beforeEach, vi } from "vitest";
 import { BucketClient } from "../../src/target-tf-azure/bucket.inflight";
-import { promiseHooks } from "v8";
 
 vi.mock("@azure/storage-blob");
 
