@@ -45,7 +45,7 @@ jobs:
         run: |
           ls
           cd examples/tests/valid
-          wing copmile -t tf-aws bucket_keys.w
+          wing compile -t tf-aws bucket_keys.w
           cd target/bucket_keys.tfaws
           terraform init
           terraform apply -auto-approve
