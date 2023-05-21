@@ -44,13 +44,13 @@ jobs:
       - name: Run tests
         run: |
           ls
-          cd examples/tests/valid
-          wing compile -t tf-aws bucket_keys.w
-          cd target/bucket_keys.tfaws
-          terraform init
-          terraform apply -auto-approve
-          terraform destroy -auto-approve
-        # wing test -t tf-aws examples/tests/sdk_tests/*/*.w
+          wing test -t tf-aws examples/tests/sdk_tests/*/*.w
+        #   cd examples/tests/valid
+        #   wing compile -t tf-aws bucket_keys.w
+        #   cd target/bucket_keys.tfaws
+        #   terraform init
+        #   terraform apply -auto-approve
+        #   terraform destroy -auto-approve
         #   cd examples/tests/sdk_tests
         #   find . -type f -name "*.w" | while read file; do
         #     wing test -t tf-aws "$file"
