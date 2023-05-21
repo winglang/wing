@@ -2,7 +2,7 @@ bring cloud;
 
 let q = new cloud.Queue();
 
-test "test" {
+test "purge" {
   q.push("foo");
   q.push("bar");
   q.push("baz");
