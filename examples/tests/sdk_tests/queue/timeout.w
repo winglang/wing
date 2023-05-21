@@ -19,7 +19,7 @@ q.addConsumer(inflight () => {
 
 
 // TODO: this test fails sim due to issue: https://github.com/winglang/wing/issues/165
-test "test" {
+test "timeout" {
   // each push should result in a timeout
   q.push("foo");
   q.push("foo");
