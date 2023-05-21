@@ -7,7 +7,7 @@ let f = new cloud.Function(inflight ():str => {
 });
 
 
-test "function invoke" {
+test "invoke" {
   let x = f.invoke("");
   assert(x == payload);
 }
