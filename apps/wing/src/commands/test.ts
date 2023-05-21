@@ -9,6 +9,7 @@ import debug from "debug";
 import { promisify } from "util";
 import { withSpinner } from "../util";
 import { Target } from "./constants";
+import * as fs from "fs";
 
 const log = debug("wing:test");
 
@@ -157,10 +158,24 @@ async function testSimulator(synthDir: string) {
 }
 
 async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+  const stackName = process.env.CDK_STACK_NAME
+  if (!stackName) {
+    throw new Error(
+      "In order to successfully deploy using AWS-CDK, it is essential to define the environment variable CDK_STACK_NAME."
+    );
+  }
+
+  if (!isAwsCdkInstalled(synthDir)) {
+    throw new Error(
+      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud."
+    );
+  }
+
+  await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
   const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-    // const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
-    const testRunner = new TestRunnerClient("testincHandlerEDD01CD4");
+    const testArns = await awsCdkOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS.replace(/_/g, ""), stackName);
+    const testRunner = new TestRunnerClient(testArns);
 
     const tests = await testRunner.listTests();
     return [testRunner, pickOneTestPerEnvironment(tests)];
@@ -181,9 +196,30 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     console.log("One or more tests failed. Cleaning up resources...");
   }
 
-  await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
+  await withSpinner("aws-cdk destroy", () => awsCdkDestroy(synthDir));
 
   return results;
+}
+
+async function isAwsCdkInstalled(synthDir: string) {
+  await execCapture("cdk version", { cwd: synthDir });
+}
+
+export async function awsCdkDeploy(synthDir: string) {
+  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", { cwd: synthDir });
+}
+
+export async function awsCdkDestroy(synthDir: string) {
+  const removeFile = promisify(fs.rm);
+  await removeFile(synthDir.concat("/output.json"));
+  await execCapture("cdk destroy -f --ci true --app ./", { cwd: synthDir });
+}
+
+async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
+  const readFile = promisify(fs.readFile);
+  const file = await readFile(synthDir.concat("/output.json"));
+  const parsed = JSON.parse(Buffer.from(file).toString());
+  return parsed[stackName][name];
 }
 
 async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {

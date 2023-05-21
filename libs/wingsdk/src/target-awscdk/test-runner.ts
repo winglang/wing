@@ -5,7 +5,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost } from "../std";
 
-const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
+const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WINGTESTRUNNERFUNCTIONARNS";
 
 /**
  * AWS implementation of `cloud.TestRunner`.
