@@ -564,11 +564,11 @@ test("check if an object exists in the bucket", async () => {
 
   // WHEN
   await client.put(KEY, VALUE);
-  const existingKeyExists = await client.exists(KEY);
-  const nonExistentKeyExists = await client.exists("NON_EXISTENT_KEY");
+  const existingObjectExists = await client.exists(KEY);
+  const nonExistentObjectExists = await client.exists("NON_EXISTENT_KEY");
 
   // THEN
   await s.stop();
-  expect(existingKeyExists).toBe(true);
-  expect(nonExistentKeyExists).toBe(false);
+  expect(existingObjectExists).toBe(true);
+  expect(nonExistentObjectExists).toBe(false);
 });

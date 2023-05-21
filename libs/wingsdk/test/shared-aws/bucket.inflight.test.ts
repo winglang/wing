@@ -240,22 +240,36 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
   );
 });
 
-test("check if an object exists in the bucket", async () => {
+test("check that an object exists in the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
   const VALUE = "VALUE";
   s3Mock
-    .on(PutObjectCommand, { Bucket: BUCKET_NAME, Key: KEY, Body: VALUE })
-    .resolves({});
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{ Key: KEY }] });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
-  const response = await client.put(KEY, VALUE);
-  const existingKeyExists = await client.exists(KEY);
-  const nonExistentKeyExists = await client.exists("NON_EXISTENT_KEY");
+  const objectExists = await client.exists(KEY);
 
   // THEN
-  expect(existingKeyExists).toBe(true);
-  expect(nonExistentKeyExists).toBe(false);
+  expect(objectExists).toBe(true);
+});
+
+test("check that an object doesn't exist in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectExists = await client.exists(KEY);
+
+  // THEN
+  expect(objectExists).toBe(false);
 });
