@@ -1,5 +1,4 @@
-import { TerraformOutput } from "cdktf/lib/terraform-output";
-import { Lazy } from "cdktf/lib/tokens";
+import { CfnOutput, Lazy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import * as cloud from "../cloud";
@@ -19,8 +18,8 @@ export class TestRunner extends cloud.TestRunner {
 
     // This output is created so the CLI's `wing test` command can obtain a list
     // of all ARNs of test functions by running `terraform output`.
-    const output = new TerraformOutput(this, "TestFunctionArns", {
-      value: Lazy.stringValue({
+    const output = new CfnOutput(this, "TestFunctionArns", {
+      value: Lazy.string({
         produce: () => {
           return JSON.stringify([...this.getTestFunctionArns().entries()]);
         },
@@ -80,11 +79,10 @@ export class TestRunner extends cloud.TestRunner {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "TestRunnerClient",
-      [`process.env["${this.envTestFunctionArns()}"]`]
-    );
+      [`process.env["${this.envTestFunctionArns()}"]`]);
   }
 
   private envTestFunctionArns(): string {

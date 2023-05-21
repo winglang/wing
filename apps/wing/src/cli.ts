@@ -71,7 +71,7 @@ async function main() {
     .argument("<entrypoint...>", "all entrypoints to test")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "sim"])
+        .choices(["tf-aws", "sim", "awscdk"])
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")

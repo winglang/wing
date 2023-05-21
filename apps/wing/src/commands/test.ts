@@ -3,7 +3,7 @@ import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
 import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
-import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";
+import { TestRunnerClient } from "@winglang/sdk/lib/shared-aws/test-runner.inflight";
 import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
@@ -17,7 +17,7 @@ const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions {}
+export interface TestOptions extends CompileOptions { }
 
 export async function test(entrypoints: string[], options: TestOptions) {
   for (const entrypoint of entrypoints) {
@@ -39,6 +39,9 @@ async function testOne(entrypoint: string, options: TestOptions) {
       break;
     case Target.TF_AWS:
       await testTfAws(synthDir);
+      break;
+    case Target.AWSCDK:
+      await testAwsCdk(synthDir);
       break;
     default:
       throw new Error(`unsupported target ${options.target}`);
@@ -153,6 +156,36 @@ async function testSimulator(synthDir: string) {
   }
 }
 
+async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+
+  const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+    // const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+    const testRunner = new TestRunnerClient("testincHandlerEDD01CD4");
+
+    const tests = await testRunner.listTests();
+    return [testRunner, pickOneTestPerEnvironment(tests)];
+  });
+
+  const results = await withSpinner("Running tests...", async () => {
+    const results = new Array<sdk.cloud.TestResult>();
+    for (const path of tests) {
+      results.push(await testRunner.runTest(path));
+    }
+    return results;
+  });
+
+  const testReport = renderTestReport(synthDir, results);
+  console.log(testReport);
+
+  if (testResultsContainsFailure(results)) {
+    console.log("One or more tests failed. Cleaning up resources...");
+  }
+
+  await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
+
+  return results;
+}
+
 async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
   if (!isTerraformInstalled(synthDir)) {
     throw new Error(
@@ -168,7 +201,7 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
 
   const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
     const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
-    const testRunner = new TfawsTestRunnerClient(testArns);
+    const testRunner = new TestRunnerClient(testArns);
 
     const tests = await testRunner.listTests();
     return [testRunner, pickOneTestPerEnvironment(tests)];
