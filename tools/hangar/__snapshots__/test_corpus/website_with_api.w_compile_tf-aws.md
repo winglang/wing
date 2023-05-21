@@ -601,6 +601,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
@@ -635,6 +636,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
@@ -669,6 +671,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
