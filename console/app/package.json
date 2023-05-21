@@ -36,7 +36,7 @@
     "@wingconsole/server": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "@wingconsole/ui": "workspace:^",
-    "@winglang/sdk": "^0.16.6",
+    "@winglang/sdk": "^0.17.17",
     "analytics-node": "^6.2.0",
     "autoprefixer": "^10.4.14",
     "c8": "^7.13.0",
