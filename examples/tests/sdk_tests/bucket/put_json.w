@@ -2,8 +2,7 @@ bring cloud;
 
 let b = new cloud.Bucket();
 
-new cloud.Function(inflight () => {
-
+test "putJson" {
   let jsonObj1 = Json { test: "test1" };
   let jsonObj2 = Json { test: "test2" };
 
@@ -27,5 +26,4 @@ new cloud.Function(inflight () => {
   
   assert(files.contains("test1.txt") == false);
   assert(files.contains("test2.txt") == true);
-  
-}) as "test:putJson";
+}

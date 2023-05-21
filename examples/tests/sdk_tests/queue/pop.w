@@ -4,7 +4,7 @@ let NIL = "<<NIL>>";
 
 let q = new cloud.Queue();
 
-test "test" {
+test "pop" {
   let msgs = ["Foo", "Bar"];
   for msg in msgs {
     q.push(msg);

@@ -2,7 +2,7 @@ bring cloud;
 
 let b = new cloud.Bucket();
 
-new cloud.Function(inflight () => {
+test "put" {
   b.put("test1.txt", "Foo");
   b.put("test2.txt", "Bar");
 
@@ -22,5 +22,4 @@ new cloud.Function(inflight () => {
 
   let third = b.get("test2.txt");
   assert(third == "Baz");
-
-}) as "test:put";
+}

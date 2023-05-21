@@ -53,7 +53,7 @@ module.exports = function({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[]"
+      "value": "[[\"root/Default/Default/test:putJson\",\"${aws_lambda_function.root_testputJson_Handler_3A06E4A1.arn}\"]]"
     }
   },
   "provider": {
@@ -63,62 +63,62 @@ module.exports = function({ b }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testputJson_IamRole_CEDB4108": {
+      "root_testputJson_Handler_IamRole_54055E84": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:putJson/IamRole",
-            "uniqueId": "root_testputJson_IamRole_CEDB4108"
+            "path": "root/Default/Default/test:putJson/Handler/IamRole",
+            "uniqueId": "root_testputJson_Handler_IamRole_54055E84"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testputJson_IamRolePolicy_D106D26E": {
+      "root_testputJson_Handler_IamRolePolicy_CBA4EBC6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:putJson/IamRolePolicy",
-            "uniqueId": "root_testputJson_IamRolePolicy_D106D26E"
+            "path": "root/Default/Default/test:putJson/Handler/IamRolePolicy",
+            "uniqueId": "root_testputJson_Handler_IamRolePolicy_CBA4EBC6"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testputJson_IamRole_CEDB4108.name}"
+        "role": "${aws_iam_role.root_testputJson_Handler_IamRole_54055E84.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testputJson_IamRolePolicyAttachment_3F78BC95": {
+      "root_testputJson_Handler_IamRolePolicyAttachment_159906E5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:putJson/IamRolePolicyAttachment",
-            "uniqueId": "root_testputJson_IamRolePolicyAttachment_3F78BC95"
+            "path": "root/Default/Default/test:putJson/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testputJson_Handler_IamRolePolicyAttachment_159906E5"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testputJson_IamRole_CEDB4108.name}"
+        "role": "${aws_iam_role.root_testputJson_Handler_IamRole_54055E84.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testputJson_074D2C39": {
+      "root_testputJson_Handler_3A06E4A1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:putJson/Default",
-            "uniqueId": "root_testputJson_074D2C39"
+            "path": "root/Default/Default/test:putJson/Handler/Default",
+            "uniqueId": "root_testputJson_Handler_3A06E4A1"
           }
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "test-putJson-c8b24c50"
+            "WING_FUNCTION_NAME": "Handler-c8cf1c6a"
           }
         },
-        "function_name": "test-putJson-c8b24c50",
+        "function_name": "Handler-c8cf1c6a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testputJson_IamRole_CEDB4108.arn}",
+        "role": "${aws_iam_role.root_testputJson_Handler_IamRole_54055E84.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testputJson_S3Object_70486645.key}",
+        "s3_key": "${aws_s3_object.root_testputJson_Handler_S3Object_442C928F.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -181,11 +181,11 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_object": {
-      "root_testputJson_S3Object_70486645": {
+      "root_testputJson_Handler_S3Object_442C928F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:putJson/S3Object",
-            "uniqueId": "root_testputJson_S3Object_70486645"
+            "path": "root/Default/Default/test:putJson/Handler/S3Object",
+            "uniqueId": "root_testputJson_Handler_S3Object_442C928F"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -243,7 +243,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:putJson",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:putJson",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
