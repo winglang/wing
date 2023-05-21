@@ -5302,7 +5302,7 @@ Inflight interface for `Function`.
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-invoke(payload: str): any
+invoke(payload: str): str
 ```
 
 **Inflight client:** [true](#true)

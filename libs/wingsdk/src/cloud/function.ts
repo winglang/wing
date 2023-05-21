@@ -133,7 +133,7 @@ export interface IFunctionClient {
    * Invoke the function asynchronously with a given payload.
    * @inflight
    */
-  invoke(payload: string): Promise<any>;
+  invoke(payload: string): Promise<string>;
 }
 
 /**
@@ -142,7 +142,7 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IResource {}
+export interface IFunctionHandler extends IResource { }
 
 /**
  * Inflight client for `IFunctionHandler`.

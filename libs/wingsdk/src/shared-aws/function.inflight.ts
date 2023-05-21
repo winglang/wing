@@ -6,12 +6,12 @@ export class FunctionClient implements IFunctionClient {
   constructor(
     private readonly functionArn: string,
     private readonly lambdaClient = new LambdaClient({})
-  ) {}
+  ) { }
 
   /**
    * Invoke the function, passing the given payload as an argument.
    */
-  public async invoke(payload: string): Promise<any> {
+  public async invoke(payload: string): Promise<string> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
       Payload: fromUtf8(JSON.stringify(payload)),
@@ -19,8 +19,7 @@ export class FunctionClient implements IFunctionClient {
     const response = await this.lambdaClient.send(command);
     if (response.FunctionError) {
       throw new Error(
-        `Invoke failed with message: "${
-          response.FunctionError
+        `Invoke failed with message: "${response.FunctionError
         }". Full error: "${toUtf8(response.Payload!)}"`
       );
     }
