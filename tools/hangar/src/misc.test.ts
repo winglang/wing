@@ -28,7 +28,7 @@ test("unsupported resource in target", async ({ expect }) => {
         GOOGLE_PROJECT_ID: "test-project",
         GOOGLE_STORAGE_LOCATION: "us-central1",
       },
-    }).then((result) => sanitizeErrorMessage(result.stdout))
+    }).then((result) => (result.stdout = sanitizeErrorMessage(result.stdout)))
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     sanitizeErrorMessage(`
     "ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
