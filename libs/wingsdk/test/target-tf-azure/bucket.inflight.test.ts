@@ -4,6 +4,7 @@ import {
   BlobClient,
   BlobDeleteResponse,
   BlobDownloadResponseParsed,
+  BlobExistsOptions,
   BlobItem,
   BlobServiceClient,
   BlockBlobClient,
@@ -14,6 +15,7 @@ import {
 } from "@azure/storage-blob";
 import { test, expect, beforeEach, vi } from "vitest";
 import { BucketClient } from "../../src/target-tf-azure/bucket.inflight";
+import { promiseHooks } from "v8";
 
 vi.mock("@azure/storage-blob");
 
@@ -149,6 +151,45 @@ test("List objects from bucket", async () => {
   expect(response).toEqual(["object1", "object2"]);
 });
 
+test("check that an object exists in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+
+  const objectExists = await client.exists("object1");
+
+  // THEN
+  expect(objectExists).toEqual(true);
+});
+
+test("check that an object doesn't exist in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sad";
+
+  const objectExists = await client.exists("object1");
+
+  // THEN
+  expect(objectExists).toEqual(false);
+});
+
 // Mock Clients
 class MockBlobClient extends BlobClient {
   download(): Promise<BlobDownloadResponseParsed> {
@@ -159,6 +200,15 @@ class MockBlobClient extends BlobClient {
       });
     } else {
       return Promise.reject("some fake error");
+    }
+  }
+
+  exists(options?: BlobExistsOptions | undefined): Promise<boolean> {
+    options;
+    if (TEST_PATH === "happy") {
+      return Promise.resolve(true);
+    } else {
+      return Promise.resolve(false);
     }
   }
 }
