@@ -221,7 +221,10 @@ export async function checkTerraformStateIsEmpty(synthDir: string): Promise<bool
     const output = await execCapture("terraform state list", { cwd: synthDir });
     return !output.length;
   } catch (err: unknown) {
-    if ((err as Error).message.includes("No state file was found")) {
+    if (
+      (typeof err === "string" && err.includes("No state file was found")) ||
+      (err as Error).message.includes("No state file was found")
+    ) {
       return true;
     }
 
