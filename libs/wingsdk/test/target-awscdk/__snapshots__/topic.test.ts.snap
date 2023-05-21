@@ -2,6 +2,11 @@
 
 exports[`default topic behavior 1`] = `
 {
+  "Outputs": {
+    "WINGTESTRUNNERFUNCTIONARNS": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -76,6 +81,11 @@ return class Handler {
 
 exports[`topic with multiple subscribers 3`] = `
 {
+  "Outputs": {
+    "WINGTESTRUNNERFUNCTIONARNS": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -305,6 +315,11 @@ return class Handler {
 
 exports[`topic with subscriber function 2`] = `
 {
+  "Outputs": {
+    "WINGTESTRUNNERFUNCTIONARNS": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",

@@ -2,6 +2,11 @@
 
 exports[`basic function 1`] = `
 {
+  "Outputs": {
+    "WINGTESTRUNNERFUNCTIONARNS": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -97,6 +102,11 @@ exports[`basic function 1`] = `
 
 exports[`basic function with environment variables 1`] = `
 {
+  "Outputs": {
+    "WINGTESTRUNNERFUNCTIONARNS": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -198,6 +208,11 @@ exports[`basic function with environment variables 1`] = `
 
 exports[`basic function with timeout explicitly set 1`] = `
 {
+  "Outputs": {
+    "WINGTESTRUNNERFUNCTIONARNS": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",

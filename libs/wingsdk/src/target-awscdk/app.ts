@@ -9,6 +9,7 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { Queue } from "./queue";
 import { Secret } from "./secret";
+import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 
 import {
@@ -22,7 +23,6 @@ import {
 } from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 import { PluginManager } from "../core/plugin-manager";
-import { TestRunner } from "./test-runner";
 
 /**
  * AWS-CDK App props

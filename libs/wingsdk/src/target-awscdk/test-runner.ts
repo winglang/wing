@@ -82,7 +82,8 @@ export class TestRunner extends cloud.TestRunner {
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "TestRunnerClient",
-      [`process.env["${this.envTestFunctionArns()}"]`]);
+      [`process.env["${this.envTestFunctionArns()}"]`]
+    );
   }
 
   private envTestFunctionArns(): string {
