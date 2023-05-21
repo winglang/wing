@@ -1,16 +1,9 @@
 name: SDK Spec Testing
-# on:
-#   schedule:
-#     - cron: "0 * * * *"
-#   workflow_dispatch: {}
-#   release:
-#     types:
-#       - published
-
 on:
-  push:
-    branches:
-      - tsuf/improving-test-command
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch: {}
+
 jobs:
   install:
     name: Installation & Test
@@ -45,13 +38,3 @@ jobs:
         run: |
           ls
           wing test -t tf-aws examples/tests/sdk_tests/*/*.w
-        #   cd examples/tests/valid
-        #   wing compile -t tf-aws bucket_keys.w
-        #   cd target/bucket_keys.tfaws
-        #   terraform init
-        #   terraform apply -auto-approve
-        #   terraform destroy -auto-approve
-        #   cd examples/tests/sdk_tests
-        #   find . -type f -name "*.w" | while read file; do
-        #     wing test -t tf-aws "$file"
-        #   done
