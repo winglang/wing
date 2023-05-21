@@ -165,10 +165,10 @@
     },
     "timeout": {
       "sim": {"implemented": true},
-      "tf-aws": {"implemented": false},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": false}
+      "aws-cdk": {"implemented": true}
     },
     "add_consumer": {
       "sim": {"implemented": true},
@@ -192,11 +192,11 @@
       "aws-cdk": {"implemented": true}
     },
     "pop": {
-      "sim": {"implemented": false, "issue": 1385},
-      "tf-aws": {"implemented": false, "issue": 1385},
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": false, "issue": 1385}
+      "aws-cdk": {"implemented": true}
     },
     "purge": {
       "sim": {"implemented": true},
@@ -237,14 +237,14 @@
     },
     "timeout": {
       "sim": {"implemented": true},
-      "tf-aws": {"implemented": false},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": false}
+      "aws-cdk": {"implemented": true}
     },
     "memory": {
       "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
