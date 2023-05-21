@@ -28,6 +28,7 @@ Installation:
 git clone https://github.com/winglang/wing
 cd wing
 npm install
+(cd libs/wingsdk && cdktf get)
 ```
 
 :::note Nx Commands
