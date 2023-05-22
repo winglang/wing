@@ -1,49 +1,68 @@
-import { ColumnType } from "@winglang/sdk/lib/cloud/table.js";
+import { ColumnType as SdkColumnType } from "@winglang/sdk/lib/cloud/table.js";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { TableSchema, ITableClient, Json } from "../wingsdk.js";
 
+type ColumnType = "string" | "number" | "boolean" | "date" | "json";
+
 interface Column {
   name: string;
-  type: string;
+  type: ColumnType;
 }
 
-const getColumns = (columns: Record<string, ColumnType>): Column[] => {
-  const keys = Object.keys(ColumnType);
-  const values = Object.values(ColumnType);
+const getColumns = (
+  columns: Record<string, SdkColumnType>,
+  primaryKey?: string, // add primaryKey to columns if not exists
+): Column[] => {
+  const keys = Object.keys(SdkColumnType);
+  const values = Object.values(SdkColumnType);
 
-  return Object.keys(columns).map((key) => {
-    const index = values.indexOf(columns[key] as ColumnType);
-    const type = keys[index]?.toLowerCase() || "";
+  const newColumns = Object.keys(columns).map((key) => {
+    const index = values.indexOf(columns[key] as SdkColumnType);
+    const type = keys[index]?.toLowerCase() as ColumnType;
     return {
       name: key,
       type,
     };
   });
+
+  if (primaryKey && !newColumns.some((column) => column.name === primaryKey)) {
+    newColumns.unshift({
+      name: primaryKey,
+      type: "string",
+    });
+  }
+
+  return newColumns;
 };
 
-const parseRow = (row: any, schema: Column[]) => {
-  for (const key in row) {
-    const column = schema.find((item) => item.name === key);
-    if (!column) {
-      continue;
-    }
-    switch (column.type) {
-      case "number": {
-        const value = Number(row[key]);
-        if (!Number.isNaN(value)) {
-          row[key] = Number(row[key]);
+const parseRow = (row: any, schema: Column[]): any => {
+  const parsedRow: any = {};
+
+  for (const column of schema) {
+    const { name, type } = column;
+    if (row.hasOwnProperty(name)) {
+      let value = row[name];
+
+      switch (type) {
+        case "number": {
+          value = Number(value);
+          parsedRow[name] = Number.isNaN(value) ? row[name] : value;
+          break;
         }
-        break;
-      }
-      case "boolean": {
-        row[key] = Boolean(row[key]);
-        break;
+        case "boolean": {
+          parsedRow[name] = Boolean(value);
+          break;
+        }
+
+        default: {
+          parsedRow[name] = value;
+        }
       }
     }
   }
-  return row;
+  return parsedRow;
 };
 
 export const createTableRouter = () => {
@@ -63,10 +82,11 @@ export const createTableRouter = () => {
           input.resourcePath,
         ) as ITableClient;
         const rows = await client.list();
+        const primaryKey = schema.props.primaryKey;
         return {
           name: schema.props.name,
-          primaryKey: schema.props.primaryKey,
-          columns: getColumns(schema.props.columns),
+          primaryKey,
+          columns: getColumns(schema.props.columns, primaryKey),
           rows,
         };
       }),
@@ -100,7 +120,9 @@ export const createTableRouter = () => {
         const schema = simulator.getResourceConfig(
           input.resourcePath,
         ) as TableSchema;
-        const id = input.data[schema.props.primaryKey] as string;
+
+        const primaryKey = schema.props.primaryKey;
+        const id = input.data[primaryKey] as string;
         const columns = getColumns(schema.props.columns);
         await client.insert(id, parseRow(input.data, columns));
       }),
@@ -120,7 +142,9 @@ export const createTableRouter = () => {
         const schema = simulator.getResourceConfig(
           input.resourcePath,
         ) as TableSchema;
-        const id = input.data[schema.props.primaryKey] as string;
+
+        const primaryKey = schema.props.primaryKey;
+        const id = input.data[primaryKey] as string;
         const columns = getColumns(schema.props.columns);
         return await client.update(id, parseRow(input.data, columns));
       }),
