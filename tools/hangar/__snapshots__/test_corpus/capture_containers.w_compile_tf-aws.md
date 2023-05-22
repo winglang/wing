@@ -8,14 +8,14 @@ module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(0)) === "hello")'`)})(((await arr.at(0)) === "hello"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(1)) === "world")'`)})(((await arr.at(1)) === "world"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof arr.at === "function" ? await arr.at(0) : await arr.at.handle(0)) === "hello")'`)})(((typeof arr.at === "function" ? await arr.at(0) : await arr.at.handle(0)) === "hello"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof arr.at === "function" ? await arr.at(1) : await arr.at.handle(1)) === "world")'`)})(((typeof arr.at === "function" ? await arr.at(1) : await arr.at.handle(1)) === "world"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 2)'`)})((arr.length === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await mySet.has("my"))'`)})((await mySet.has("my")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof mySet.has === "function" ? await mySet.has("my") : await mySet.has.handle("my"))'`)})((typeof mySet.has === "function" ? await mySet.has("my") : await mySet.has.handle("my")))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySet.size === 2)'`)})((mySet.size === 2))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (myMap))'`)})(("world" in (myMap)))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(myMap).length === 2)'`)})((Object.keys(myMap).length === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arrOfMap.at(0))))'`)})(("bang" in ((await arrOfMap.at(0)))))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((typeof arrOfMap.at === "function" ? await arrOfMap.at(0) : await arrOfMap.at.handle(0))))'`)})(("bang" in ((typeof arrOfMap.at === "function" ? await arrOfMap.at(0) : await arrOfMap.at.handle(0)))))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
       }
     }

@@ -24,8 +24,8 @@ module.exports = function({ strToStr }) {
     }
     async handle(s)  {
       {
-        (await strToStr.invoke("one"));
-        {console.log((await strToStr.invoke("two")))};
+        (typeof strToStr.invoke === "function" ? await strToStr.invoke("one") : await strToStr.invoke.handle("one"));
+        {console.log((typeof strToStr.invoke === "function" ? await strToStr.invoke("two") : await strToStr.invoke.handle("two")))};
       }
     }
   }

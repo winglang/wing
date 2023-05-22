@@ -8,7 +8,7 @@ module.exports = function({ c }) {
     }
     async handle(msg)  {
       {
-        (await c.inc());
+        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
       }
     }
   }
@@ -25,18 +25,18 @@ module.exports = function({ q, predicate, js }) {
     }
     async handle()  {
       {
-        (await q.push("hello"));
-        (await q.push("world"));
+        (typeof q.push === "function" ? await q.push("hello") : await q.push.handle("hello"));
+        (typeof q.push === "function" ? await q.push("world") : await q.push.handle("world"));
         let i = 0;
         while ((i < 600)) {
           i = (i + 1);
-          if ((await predicate.test())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+          if ((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
             return;
           }
-          (await js.sleep(100));
+          (typeof js.sleep === "function" ? await js.sleep(100) : await js.sleep.handle(100));
         }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
       }
     }
   }
@@ -55,7 +55,7 @@ module.exports = function({  }) {
     async test()  {
       {
         const __parent_this = this;
-        return ((await this.c.peek()) === 2);
+        return ((typeof this.c.peek === "function" ? await this.c.peek() : await this.c.peek.handle()) === 2);
       }
     }
   }
