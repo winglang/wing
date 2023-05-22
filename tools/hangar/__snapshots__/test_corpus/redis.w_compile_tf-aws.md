@@ -1,5 +1,28 @@
 # [redis.w](../../../../examples/tests/valid/redis.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ r, r2 }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        const connection = (await r.rawClient());
+        (await connection.set("wing","does redis"));
+        const value = (await connection.get("wing"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
+        (await r2.set("wing","does redis again"));
+        const value2 = (await r2.get("wing"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -454,22 +477,47 @@ const redis = require('@winglang/sdk').redis;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const r_client = context._lift(r);
+        const r2_client = context._lift(r2);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            r: ${r_client},
+            r2: ${r2_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(r, host, ["rawClient"]);
+          this._registerBindObject(r2, host, ["get", "set"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");
     const r2 = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"r2");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        r: {
-          obj: r,
-          ops: ["del","get","hget","hset","rawClient","sadd","set","smembers","url"]
-        },
-        r2: {
-          obj: r2,
-          ops: ["del","get","hget","hset","rawClient","sadd","set","smembers","url"]
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -488,21 +536,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { r, r2 } = this;
-  const connection = (await r.rawClient());
-  (await connection.set("wing","does redis"));
-  const value = (await connection.get("wing"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
-  (await r2.set("wing","does redis again"));
-  const value2 = (await r2.get("wing"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
-}
 
 ```
 

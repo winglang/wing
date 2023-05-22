@@ -1,5 +1,24 @@
 # [approx_size.w](../../../../examples/tests/valid/approx_size.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ q }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
+        (await q.push("message"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 1)'`)})(((await q.approxSize()) === 1))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -21,7 +40,7 @@
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:approxSize\",\"${aws_lambda_function.root_testapproxSize_Handler_D7563579.arn}\"]]"
     }
   },
   "provider": {
@@ -31,61 +50,61 @@
   },
   "resource": {
     "aws_iam_role": {
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_testapproxSize_Handler_IamRole_03B77702": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/test:approxSize/Handler/IamRole",
+            "uniqueId": "root_testapproxSize_Handler_IamRole_03B77702"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_testapproxSize_Handler_IamRolePolicy_EB9BA626": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/test:approxSize/Handler/IamRolePolicy",
+            "uniqueId": "root_testapproxSize_Handler_IamRolePolicy_EB9BA626"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:PurgeQueue\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testapproxSize_Handler_IamRole_03B77702.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_testapproxSize_Handler_IamRolePolicyAttachment_C558EB70": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/test:approxSize/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testapproxSize_Handler_IamRolePolicyAttachment_C558EB70"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testapproxSize_Handler_IamRole_03B77702.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testtest_Handler_046C3415": {
+      "root_testapproxSize_Handler_D7563579": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/test:approxSize/Handler/Default",
+            "uniqueId": "root_testapproxSize_Handler_D7563579"
           }
         },
         "environment": {
           "variables": {
             "QUEUE_URL_31e95cbd": "${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c894e60c"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "Handler-c894e60c",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_testapproxSize_Handler_IamRole_03B77702.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_testapproxSize_Handler_S3Object_4F41B3AF.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -105,11 +124,11 @@
       }
     },
     "aws_s3_object": {
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_testapproxSize_Handler_S3Object_4F41B3AF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/test:approxSize/Handler/S3Object",
+            "uniqueId": "root_testapproxSize_Handler_S3Object_4F41B3AF"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -142,17 +161,43 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        q: {
-          obj: q,
-          ops: ["approxSize","purge","push"]
-        },
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
       }
-    })
-    );
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const q_client = context._lift(q);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            q: ${q_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(q, host, ["approxSize", "push"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:approxSize",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -171,17 +216,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { q } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
-  (await q.push("message"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 1)'`)})(((await q.approxSize()) === 1))};
-}
 
 ```
 

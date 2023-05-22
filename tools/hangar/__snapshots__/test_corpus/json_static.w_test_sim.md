@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ json_static.wsim (no tests)
+pass ─ json_static.wsim » root/env0/test:Access Json static inflight
 ```
 

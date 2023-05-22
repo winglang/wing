@@ -3575,6 +3575,7 @@ new std.ImmutableMap()
 | <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.values">values</a></code> | Returns the values of this map. |
 
 ---
 
@@ -3638,6 +3639,14 @@ size(): num
 Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `values` <a name="values" id="@winglang/sdk.std.ImmutableMap.values"></a>
+
+```wing
+values(): ImmutableArray
+```
+
+Returns the values of this map.
 
 
 
@@ -4159,8 +4168,10 @@ new std.MutableMap()
 | <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.MutableMap.keys">keys</a></code> | Returns the keys of this map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
 | <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.values">values</a></code> | Returns the values of this map. |
 
 ---
 
@@ -4231,6 +4242,14 @@ The key of the element to test for presence.
 
 ---
 
+##### `keys` <a name="keys" id="@winglang/sdk.std.MutableMap.keys"></a>
+
+```wing
+keys(): ImmutableArray
+```
+
+Returns the keys of this map.
+
 ##### `set` <a name="set" id="@winglang/sdk.std.MutableMap.set"></a>
 
 ```wing
@@ -4266,6 +4285,14 @@ size(): num
 Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `values` <a name="values" id="@winglang/sdk.std.MutableMap.values"></a>
+
+```wing
+values(): ImmutableArray
+```
+
+Returns the values of this map.
 
 
 
@@ -5533,6 +5560,7 @@ Inflight interface for `Queue`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
 
@@ -5547,6 +5575,16 @@ approxSize(): num
 **Inflight client:** [true](#true)
 
 Retrieve the approximate number of messages in the queue.
+
+##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
+
+```wing
+pop(): str
+```
+
+**Inflight client:** [true](#true)
+
+Pop a message from the queue.
 
 ##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
 
@@ -5581,7 +5619,7 @@ Payload to send to the queue.
 
 - *Extends:* <a href="#@winglang/sdk.core.IInspectable">IInspectable</a>, constructs.IConstruct
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Service">Service</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.Test">Test</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>, <a href="#@winglang/sdk.cloud.ITestHandler">ITestHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Service">Service</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.Test">Test</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>, <a href="#@winglang/sdk.cloud.ITestHandler">ITestHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 Abstract interface for `Resource`.
 

@@ -42,6 +42,12 @@ jobs:
       - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0
 
+      # Forces volta to load node and npm upfront, reducing conflict when running in parallel later
+      - name: Preload Node/NPM
+        run: |
+          node -v
+          npm -v
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
@@ -135,6 +141,12 @@ jobs:
       # Reads versions from root package.json "volta" section
       - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0
+
+      # Forces volta to load node and npm upfront, reducing conflict when running in parallel later
+      - name: Preload Node/NPM
+        run: |
+          node -v
+          npm -v
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1

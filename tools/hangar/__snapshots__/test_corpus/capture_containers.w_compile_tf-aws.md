@@ -1,5 +1,30 @@
 # [capture_containers.w](../../../../examples/tests/valid/capture_containers.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(0)) === "hello")'`)})(((await arr.at(0)) === "hello"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(1)) === "world")'`)})(((await arr.at(1)) === "world"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 2)'`)})((arr.length === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await mySet.has("my"))'`)})((await mySet.has("my")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySet.size === 2)'`)})((mySet.size === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (myMap))'`)})(("world" in (myMap)))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(myMap).length === 2)'`)})((Object.keys(myMap).length === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arrOfMap.at(0))))'`)})(("bang" in ((await arrOfMap.at(0)))))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -130,37 +155,59 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const arr_client = context._lift(arr);
+        const mySet_client = context._lift(mySet);
+        const myMap_client = context._lift(myMap);
+        const arrOfMap_client = context._lift(arrOfMap);
+        const j_client = context._lift(j);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            arr: ${arr_client},
+            mySet: ${mySet_client},
+            myMap: ${myMap_client},
+            arrOfMap: ${arrOfMap_client},
+            j: ${j_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(arr, host, ["at", "length"]);
+          this._registerBindObject(arrOfMap, host, ["at"]);
+          this._registerBindObject(j, host, []);
+          this._registerBindObject(myMap, host, ["has", "size"]);
+          this._registerBindObject(mySet, host, ["has", "size"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const arr = Object.freeze(["hello", "world"]);
     const mySet = Object.freeze(new Set(["my", "my", "set"]));
     const myMap = Object.freeze({"hello":123,"world":999});
     const arrOfMap = Object.freeze([Object.freeze({"bang":123})]);
     const j = Object.freeze({"a":"hello","b":"world"});
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:capture_containers",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        arr: {
-          obj: arr,
-          ops: []
-        },
-        arrOfMap: {
-          obj: arrOfMap,
-          ops: []
-        },
-        j: {
-          obj: j,
-          ops: []
-        },
-        myMap: {
-          obj: myMap,
-          ops: []
-        },
-        mySet: {
-          obj: mySet,
-          ops: []
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:capture_containers",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -179,23 +226,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { arr, arrOfMap, j, myMap, mySet } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(0)) === "hello")'`)})(((await arr.at(0)) === "hello"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(1)) === "world")'`)})(((await arr.at(1)) === "world"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 2)'`)})((arr.length === 2))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(await mySet.has("my"))'`)})((await mySet.has("my")))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySet.size === 2)'`)})((mySet.size === 2))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (myMap))'`)})(("world" in (myMap)))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(myMap).length === 2)'`)})((Object.keys(myMap).length === 2))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arrOfMap.at(0))))'`)})(("bang" in ((await arrOfMap.at(0)))))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
-}
 
 ```
 

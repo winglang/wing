@@ -1,4 +1,4 @@
-// These classes are used by Wing to provide JSII subsets of the JS Array class.
+// These classes are used by Wing to provide JSII subsets of the JS Map class.
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
@@ -71,6 +71,17 @@ export class ImmutableMap {
    * @returns an array containing the keys of this map
    */
   public keys(): ImmutableArray {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the values of this map
+   *
+   * @macro Object.values($self$)
+   *
+   * @returns an array containing the values of this map
+   */
+  public values(): ImmutableArray {
     throw new Error("Macro");
   }
 }
@@ -167,6 +178,28 @@ export class MutableMap {
   public set(key: string, value: T1): void {
     key;
     value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the keys of this map
+   *
+   * @macro Object.keys($self$)
+   *
+   * @returns an array containing the keys of this map
+   */
+  public keys(): ImmutableArray {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the values of this map
+   *
+   * @macro Object.values($self$)
+   *
+   * @returns an array containing the values of this map
+   */
+  public values(): ImmutableArray {
     throw new Error("Macro");
   }
 }

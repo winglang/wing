@@ -97,49 +97,42 @@ error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"fo
 `;
 
 exports[`capture_mutables.w > stderr 1`] = `
-"error: Unknown symbol \\"size\\"
-   --> ../../../examples/tests/invalid/capture_mutables.w:14:18
-   |
-14 |   assert(aCloned.size == 1);
-   |                  ^^^^ Unknown symbol \\"size\\"
-
-
-error: Cannot reference 'a' of type 'MutArray<str>' from an inflight context
+"error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
   --> ../../../examples/tests/invalid/capture_mutables.w:8:10
   |
 8 |   assert(a.length == 1);
-  |          ^ Cannot reference 'a' of type 'MutArray<str>' from an inflight context
+  |          ^ Cannot capture field 'a' with non-capturable type 'MutArray<str>'
 
 
-error: Cannot reference 's' of type 'MutSet<num>' from an inflight context
+error: Cannot capture field 's' with non-capturable type 'MutSet<num>'
    --> ../../../examples/tests/invalid/capture_mutables.w:10:10
    |
 10 |   assert(s.size == 1);
-   |          ^ Cannot reference 's' of type 'MutSet<num>' from an inflight context
+   |          ^ Cannot capture field 's' with non-capturable type 'MutSet<num>'
 
 
-error: Cannot reference 'm' of type 'MutMap<bool>' from an inflight context
+error: Cannot capture field 'm' with non-capturable type 'MutMap<bool>'
    --> ../../../examples/tests/invalid/capture_mutables.w:12:10
    |
 12 |   assert(m.size() == 1);
-   |          ^ Cannot reference 'm' of type 'MutMap<bool>' from an inflight context
+   |          ^ Cannot capture field 'm' with non-capturable type 'MutMap<bool>'
 
 
-error: Cannot reference 'aCloned' of type 'MutArray<str>' from an inflight context
+error: Cannot capture field 'aCloned' with non-capturable type 'MutArray<str>'
    --> ../../../examples/tests/invalid/capture_mutables.w:14:10
    |
-14 |   assert(aCloned.size == 1);
-   |          ^^^^^^^ Cannot reference 'aCloned' of type 'MutArray<str>' from an inflight context
+14 |   assert(aCloned.length == 1);
+   |          ^^^^^^^ Cannot capture field 'aCloned' with non-capturable type 'MutArray<str>'
 
 "
 `;
 
 exports[`capture_reassignable.w > stderr 1`] = `
-"error: Cannot capture a reassignable variable \\"x\\"
+"error: Cannot capture reassignable field 'x'
   --> ../../../examples/tests/invalid/capture_reassignable.w:6:15
   |
 6 |     log(\\"x: \${x}\\");
-  |               ^ Cannot capture a reassignable variable \\"x\\"
+  |               ^ Cannot capture reassignable field 'x'
 
 "
 `;
@@ -179,7 +172,7 @@ exports[`cloud_function_expects_inflight.w > stderr 1`] = `
   | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
 
 
-error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Inflight1\\" instead
    --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
    |  
  9 |   q.addConsumer(inflight (x: num) => {
@@ -187,7 +180,7 @@ error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\"
 10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
 11 | |   return;
 12 | | });
-   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Inflight1\\" instead
 
 "
 `;

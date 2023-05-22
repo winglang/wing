@@ -1,5 +1,24 @@
 # [capture_in_binary.w](../../../../examples/tests/valid/capture_in_binary.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ b, x }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await b.put("file","foo"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file")) === "foo")'`)})(((await b.get("file")) === "foo"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(12 === x)'`)})((12 === x))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -49,7 +68,7 @@
             "uniqueId": "root_testbinaryexpressions_Handler_IamRolePolicy_21D1AD89"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testbinaryexpressions_Handler_IamRole_D90ECB7F.name}"
       }
     },
@@ -175,22 +194,47 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const b_client = context._lift(b);
+        const x_client = context._lift(x);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            b: ${b_client},
+            x: ${x_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(b, host, ["get", "put"]);
+          this._registerBindObject(x, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const x = 12;
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:binary expressions",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        b: {
-          obj: b,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-        x: {
-          obj: x,
-          ops: []
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:binary expressions",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -209,17 +253,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { b, x } = this;
-  (await b.put("file","foo"));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file")) === "foo")'`)})(((await b.get("file")) === "foo"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(12 === x)'`)})((12 === x))};
-}
 
 ```
 

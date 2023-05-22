@@ -1,5 +1,32 @@
 # [resource_captures.w](../../../../examples/tests/valid/resource_captures.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ r }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (await r.testNoCapture());
+        (await r.testCaptureCollectionsOfData());
+        (await r.testCapturePrimitives());
+        (await r.testCaptureOptional());
+        (await r.testCaptureResource());
+        (await r.testNestedInflightField());
+        (await r.testNestedResource());
+        (await r.testExpressionRecursive());
+        (await r.testExternal());
+        (await r.testUserDefinedResource());
+        (await r.testInflightField());
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/Another.inflight.js
 ```js
 module.exports = function({  }) {
@@ -10,11 +37,13 @@ module.exports = function({  }) {
     }
     async meaningOfLife()  {
       {
+        const __parent_this = this;
         return 42;
       }
     }
     async anotherFunc()  {
       {
+        const __parent_this = this;
         return "42";
       }
     }
@@ -58,6 +87,7 @@ module.exports = function({  }) {
     }
     async testNoCapture()  {
       {
+        const __parent_this = this;
         const arr = Object.freeze([1, 2, 3]);
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 3)'`)})((arr.length === 3))};
         {console.log(`array.len=${arr.length}`)};
@@ -65,6 +95,7 @@ module.exports = function({  }) {
     }
     async testCaptureCollectionsOfData()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.arrayOfStr.length === 2)'`)})((this.arrayOfStr.length === 2))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.arrayOfStr.at(0)) === "s1")'`)})(((await this.arrayOfStr.at(0)) === "s1"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.arrayOfStr.at(1)) === "s2")'`)})(((await this.arrayOfStr.at(1)) === "s2"))};
@@ -77,6 +108,7 @@ module.exports = function({  }) {
     }
     async testCapturePrimitives()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.myStr === "myString")'`)})((this.myStr === "myString"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.myNum === 42)'`)})((this.myNum === 42))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.myBool === true)'`)})((this.myBool === true))};
@@ -84,11 +116,13 @@ module.exports = function({  }) {
     }
     async testCaptureOptional()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.myOptStr ?? "") === "myOptString")'`)})(((this.myOptStr ?? "") === "myOptString"))};
       }
     }
     async testCaptureResource()  {
       {
+        const __parent_this = this;
         (await this.myResource.put("f1.txt","f1"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.myResource.get("f1.txt")) === "f1")'`)})(((await this.myResource.get("f1.txt")) === "f1"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.myResource.list()).length === 1)'`)})(((await this.myResource.list()).length === 1))};
@@ -96,12 +130,14 @@ module.exports = function({  }) {
     }
     async testNestedInflightField()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.another.myField === "hello!")'`)})((this.another.myField === "hello!"))};
         {console.log(`field=${this.another.myField}`)};
       }
     }
     async testNestedResource()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.first.myResource.list()).length === 0)'`)})(((await this.another.first.myResource.list()).length === 0))};
         (await this.another.first.myResource.put("hello",this.myStr));
         {console.log(`this.another.first.myResource:${(await this.another.first.myResource.get("hello"))}`)};
@@ -109,23 +145,27 @@ module.exports = function({  }) {
     }
     async testExpressionRecursive()  {
       {
+        const __parent_this = this;
         (await this.myQueue.push(this.myStr));
       }
     }
     async testExternal()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.extBucket.list()).length === 0)'`)})(((await this.extBucket.list()).length === 0))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.extNum === 12)'`)})((this.extNum === 12))};
       }
     }
     async testUserDefinedResource()  {
       {
+        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.meaningOfLife()) === 42)'`)})(((await this.another.meaningOfLife()) === 42))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.anotherFunc()) === "42")'`)})(((await this.another.anotherFunc()) === "42"))};
       }
     }
     async testInflightField()  {
       {
+        const __parent_this = this;
         this.inflightField = 123;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.inflightField === 123)'`)})((this.inflightField === 123))};
       }
@@ -428,6 +468,7 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        const __parent_this = this;
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
@@ -461,6 +502,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("meaningOfLife", "anotherFunc");
+        const __parent_this = this;
         this.myField = "hello!";
         this.first = new First(this,"First");
       }
@@ -501,7 +543,8 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, externalBucket, externalNum) {
         super(scope, id);
-        this._addInflightOps("testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField");
+        this._addInflightOps("testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "inflightField");
+        const __parent_this = this;
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.myStr = "myString";
         this.myNum = 42;
@@ -518,6 +561,7 @@ class $Root extends $stdlib.std.Resource {
       }
        helloPreflight()  {
         {
+          const __parent_this = this;
           return this.another;
         }
       }
@@ -622,18 +666,44 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const r_client = context._lift(r);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            r: ${r_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const r = new MyResource(this,"MyResource",b,12);
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        r: {
-          obj: r,
-          ops: ["testCaptureCollectionsOfData","testCaptureOptional","testCapturePrimitives","testCaptureResource","testExpressionRecursive","testExternal","testInflightField","testNestedInflightField","testNestedResource","testNoCapture","testUserDefinedResource"]
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -652,25 +722,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { r } = this;
-  (await r.testNoCapture());
-  (await r.testCaptureCollectionsOfData());
-  (await r.testCapturePrimitives());
-  (await r.testCaptureOptional());
-  (await r.testCaptureResource());
-  (await r.testNestedInflightField());
-  (await r.testNestedResource());
-  (await r.testExpressionRecursive());
-  (await r.testExternal());
-  (await r.testUserDefinedResource());
-  (await r.testInflightField());
-}
 
 ```
 
