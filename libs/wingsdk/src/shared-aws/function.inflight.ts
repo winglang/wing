@@ -27,6 +27,12 @@ export class FunctionClient implements IFunctionClient {
     if (!response.Payload) {
       return "";
     }
-    return toUtf8(response.Payload);
+    const value = JSON.parse(toUtf8(response.Payload));
+    if (typeof value !== "string") {
+      throw new Error(
+        `function returned value of type ${typeof value}, not string`
+      );
+    }
+    return value;
   }
 }
