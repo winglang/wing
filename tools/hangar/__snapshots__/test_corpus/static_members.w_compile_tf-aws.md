@@ -23,8 +23,8 @@ module.exports = function({  }) {
           }
         }
         const inflightClass = new InflightClass();
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflightClass.inflightMethod()) === "Inflight method")'`)})(((await inflightClass.inflightMethod()) === "Inflight method"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.staticInflightMethod()) === "Static inflight method")'`)})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method")'`)})(((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method")'`)})(((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method"))};
       }
     }
   }
