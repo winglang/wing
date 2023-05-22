@@ -65,8 +65,10 @@ jobs:
           git diff --staged --patch --exit-code > /dev/null || echo "::set-output name=self_mutation_happened::true"
       - name: Push changes
         if: steps.token-check.outputs.HAS_TOKEN == 'true' && steps.self_mutation.outputs.self_mutation_happened
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |-
           git config user.name "monada-bot[bot]"
           git config user.email "monabot@monada.co"
           git commit -s -m "chore: self mutation"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git push origin HEAD:$HEAD_REF

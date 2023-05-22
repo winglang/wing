@@ -249,4 +249,7 @@ restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
 project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
 project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
+// We use symlinks between several projects but we do not use workspaces
+project.npmrc.addConfig("install-links", "false");
+
 project.synth();
