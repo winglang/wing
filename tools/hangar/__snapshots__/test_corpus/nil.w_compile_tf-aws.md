@@ -2,14 +2,14 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ knull }) {
+module.exports = function({ foo }) {
   class  $Inflight1 {
     constructor({  }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await knull.returnNil(true))) != null) === true)'`)})(((((await knull.returnNil(true))) != null) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await knull.returnNil(false))) != null) === false)'`)})(((((await knull.returnNil(false))) != null) === false))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.returnNil === "function" ? await foo.returnNil(true) : await foo.returnNil.handle(true))) != null) === true)'`)})(((((typeof foo.returnNil === "function" ? await foo.returnNil(true) : await foo.returnNil.handle(true))) != null) === true))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.returnNil === "function" ? await foo.returnNil(false) : await foo.returnNil.handle(false))) != null) === false)'`)})(((((typeof foo.returnNil === "function" ? await foo.returnNil(false) : await foo.returnNil.handle(false))) != null) === false))};
       }
     }
   }
@@ -20,19 +20,19 @@ module.exports = function({ knull }) {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function({ knull }) {
+module.exports = function({ foo }) {
   class  $Inflight2 {
     constructor({  }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await knull.getOptionalValue())) != null) === false)'`)})(((((await knull.getOptionalValue())) != null) === false))};
-        (await knull.setOptionalValue("hello"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await knull.getOptionalValue())) != null) === true)'`)})(((((await knull.getOptionalValue())) != null) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await knull.getOptionalValue()) !== null)'`)})(((await knull.getOptionalValue()) !== null))};
-        (await knull.setOptionalValue(null));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await knull.getOptionalValue())) != null) === false)'`)})(((((await knull.getOptionalValue())) != null) === false))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await knull.getOptionalValue()) === null)'`)})(((await knull.getOptionalValue()) === null))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
+        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue("hello") : await foo.setOptionalValue.handle("hello"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== null)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== null))};
+        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue(null) : await foo.setOptionalValue.handle(null));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === null)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === null))};
       }
     }
   }
@@ -41,10 +41,10 @@ module.exports = function({ knull }) {
 
 ```
 
-## clients/Knull.inflight.js
+## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Knull {
+  class  Foo {
     constructor({  }) {
     }
     async returnNil(t)  {
@@ -70,7 +70,7 @@ module.exports = function({  }) {
       }
     }
   }
-  return Knull;
+  return Foo;
 }
 
 ```
@@ -270,7 +270,7 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Knull extends $stdlib.std.Resource {
+    class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "optionalVar");
@@ -278,7 +278,7 @@ class $Root extends $stdlib.std.Resource {
         this.optionalVar = null;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Knull.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -287,8 +287,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const KnullClient = ${Knull._toInflightType(this).text};
-            const client = new KnullClient({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -311,13 +311,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-        const knull_client = context._lift(knull);
+        const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            knull: ${knull_client},
+            foo: ${foo_client},
           })
         `);
       }
@@ -336,7 +337,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(knull, host, ["returnNil"]);
+          this._registerBindObject(foo, host, ["returnNil"]);
         }
         super._registerBind(host, ops);
       }
@@ -345,13 +346,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
-        const knull_client = context._lift(knull);
+        const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            knull: ${knull_client},
+            foo: ${foo_client},
           })
         `);
       }
@@ -370,12 +372,12 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(knull, host, ["getOptionalValue", "setOptionalValue"]);
+          this._registerBindObject(foo, host, ["getOptionalValue", "setOptionalValue"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const knull = new Knull(this,"Knull");
+    const foo = new Foo(this,"Foo");
     this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:nil return",new $Inflight1(this,"$Inflight1"));
     this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:optional instance variable",new $Inflight2(this,"$Inflight2"));
   }

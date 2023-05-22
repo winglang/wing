@@ -1824,7 +1824,7 @@ impl<'a> TypeChecker<'a> {
 					)
 				} else {
 					let mut message = format!(
-						"Expected type to be \"{}\", but got \"{}\" instead.",
+						"Expected type to be \"{}\", but got \"{}\" instead",
 						expected_types[0], actual_type
 					);
 					if actual_type.is_nil() {
