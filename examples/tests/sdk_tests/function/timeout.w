@@ -19,7 +19,7 @@ let f = new cloud.Function(inflight () => {
 }, cloud.FunctionProps {timeout: 1s});
 
 // doesn't work yet- see issue: https://github.com/winglang/wing/issues/1980
-test "function timeout" {
+test "timeout" {
   f.invoke("");
   assert(c.peek() == 0);
 }
