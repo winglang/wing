@@ -1,5 +1,4 @@
 import { Readable } from "stream";
-import { promiseHooks } from "v8";
 import { PagedAsyncIterableIterator, PageSettings } from "@azure/core-paging";
 import {
   BlobClient,
