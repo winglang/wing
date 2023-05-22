@@ -22,7 +22,7 @@ test("invoke - happy path", async () => {
     })
     .resolves({
       StatusCode: 200,
-      Payload: fromUtf8(RESPONSE),
+      Payload: fromUtf8(JSON.stringify(RESPONSE)),
     });
 
   // WHEN
