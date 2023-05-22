@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import { join } from "path";
 import { directorySnapshot, mkdtemp } from "./util";
 import * as sim from "../src/target-sim";
 import { Simulator } from "../src/testing";
@@ -13,6 +15,12 @@ export class SimApp extends sim.App {
   private _synthesized: boolean = false;
   constructor() {
     super({ outdir: mkdtemp() });
+
+    // symlink the node_modules so we can test imports and stuffs
+    fs.symlinkSync(
+      join(__dirname, "..", "node_modules"),
+      join(this.outdir, "node_modules")
+    );
   }
 
   /**

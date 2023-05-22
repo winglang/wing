@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/testing";
+import { Simulator, Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `
@@ -187,13 +187,72 @@ test("invoke function with process.exit(1)", async () => {
   // WHEN
   const PAYLOAD = {};
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "process.exit is not a function"
+    "process.exit() was called with exit code 1"
   );
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
   expect(s.listTraces()[2].data.error).toMatchObject({
-    message: "process.exit is not a function",
+    message: "process.exit() was called with exit code 1",
   });
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("runtime environment tests", async () => {
+  const app = new SimApp();
+
+  let index = 0;
+
+  const newCloudFunction = (code: string) => {
+    const id = `func-${index++}`;
+    cloud.Function._newFunction(
+      app,
+      id,
+      Testing.makeHandler(
+        app,
+        `${id}.handler`,
+        `async handle() {
+          ${code}
+        }`
+      )
+    );
+
+    // returns an "invoker" for this function
+    return async (s: Simulator) => {
+      const fn = s.getResource("/" + id) as cloud.IFunctionClient;
+      return fn.invoke("");
+    };
+  };
+
+  const urlSearchParamsFunction = newCloudFunction(`
+    const query = "q=URLUtils.searchParams&topic=api";
+    const p = new URLSearchParams(query);
+    return p.get("topic");
+  `);
+
+  // check that fetch is a function (we can't really make network calls here)
+  const fetchFunction = newCloudFunction(`
+    return fetch;
+  `);
+
+  const cryptoFunction = newCloudFunction(`
+    const c = require("crypto");
+    return c;
+  `);
+
+  // check that we can import ESM modules
+  const esmModulesFunction = newCloudFunction(`
+    const { nanoid } = await import("nanoid");
+    return nanoid();
+  `);
+
+  // THEN
+  const s = await app.startSimulator();
+  await cryptoFunction(s);
+  expect(await urlSearchParamsFunction(s)).toBe("api");
+  expect(await fetchFunction(s)).toBeTypeOf("function");
+  expect(await esmModulesFunction(s)).toHaveLength(21);
+
+  await s.stop();
   expect(app.snapshot()).toMatchSnapshot();
 });

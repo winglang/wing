@@ -88,6 +88,9 @@ export function directorySnapshot(initialRoot: string) {
   const visit = (root: string, subdir: string, prefix = "") => {
     const files = readdirSync(join(root, subdir));
     for (const f of files) {
+      if (f === "node_modules") {
+        continue;
+      }
       const relpath = join(subdir, f);
       const abspath = join(root, relpath);
       const key = prefix + relpath;
