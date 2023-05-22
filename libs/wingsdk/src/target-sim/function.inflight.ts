@@ -21,6 +21,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
 
+  /**
+   * The path to the bundled function code. Assigned in `init()`.
+   */
   private bundle?: string;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
@@ -76,16 +79,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         };
 
         const sandboxConsole: any = {};
-        const levels = [
-          "debug",
-          "info",
-          "log",
-          "warn",
-          "error",
-          "dir",
-          "trace",
-        ];
-
+        const levels = ["debug", "info", "log", "warn", "error"];
         for (const level of levels) {
           sandboxConsole[level] = (...args: any[]) => {
             const message = util.format(...args);

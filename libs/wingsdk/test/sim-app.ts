@@ -28,7 +28,7 @@ export class SimApp extends sim.App {
 
   /**
    * A helper to define a new cloud.Function within this app.
-   * @param code The function code.
+   * @param code The function body.
    * @returns An "invoker" function which can be used to invoke the function after the simulator had
    * started.
    */
