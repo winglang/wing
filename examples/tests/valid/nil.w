@@ -1,6 +1,6 @@
 bring cloud;
 
-class Knull {
+class Foo {
   inflight var optionalVar: str?;
   
   init() {
@@ -23,19 +23,19 @@ class Knull {
   }
 }
 
-let knull = new Knull();
+let foo = new Foo();
 
 test "nil return" {
-  assert(knull.returnNil(true)? == true);
-  assert(knull.returnNil(false)? == false);
+  assert(foo.returnNil(true)? == true);
+  assert(foo.returnNil(false)? == false);
 }
 
 test "optional instance variable" {
-  assert(knull.getOptionalValue()? == false);
-  knull.setOptionalValue("hello");
-  assert(knull.getOptionalValue()? == true);
-  assert(knull.getOptionalValue() != nil);
-  knull.setOptionalValue(nil);
-  assert(knull.getOptionalValue()? == false);
-  assert(knull.getOptionalValue() == nil);
+  assert(foo.getOptionalValue()? == false);
+  foo.setOptionalValue("hello");
+  assert(foo.getOptionalValue()? == true);
+  assert(foo.getOptionalValue() != nil);
+  foo.setOptionalValue(nil);
+  assert(foo.getOptionalValue()? == false);
+  assert(foo.getOptionalValue() == nil);
 }
