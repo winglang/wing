@@ -1,8 +1,7 @@
-import { useTheme } from "@wingconsole/design-system";
+import { SpinnerLoader, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
 
-import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
 import { TextHighlight } from "../design-system/TextHighlight.js";
 
 export interface ResponseInputProps {
@@ -30,7 +29,7 @@ export const ResponseInput = ({
             "rounded text-sm border",
           )}
         >
-          <SpinnerLoader className="h-5 w-5" />
+          <SpinnerLoader size="sm" />
         </div>
       )}
       {!loading && empty && (

@@ -6,3 +6,4 @@ export * from "./progress-bar.js";
 
 export * from "./utils/use-controlled.js";
 export * from "./theme-provider.js";
+export * from "./spinner-loader.js";

@@ -175,7 +175,7 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
             theme.text2,
             theme.borderInput,
             "px-2.5 py-1.5",
-            "outline-none rounded borderpy-0.5 text-center inline-block w-full text-xs",
+            "outline-none rounded text-center inline-block w-full text-xs",
           )}
         >
           No files

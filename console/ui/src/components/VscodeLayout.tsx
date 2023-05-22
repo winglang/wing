@@ -1,3 +1,4 @@
+import { SpinnerLoader } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
 import { useContext } from "react";
@@ -7,7 +8,6 @@ import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
-import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
 import { useLayout } from "../utils/use-layout.js";
 

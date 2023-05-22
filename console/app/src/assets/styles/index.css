@@ -3,5 +3,11 @@
 @tailwind utilities;
 
 .draggable-frame {
-    -webkit-app-region: drag;
+  -webkit-app-region: drag;
+}
+
+input[type="date"].appearance-none::-webkit-inner-spin-button,
+input[type="date"].appearance-none::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
 }

@@ -8,6 +8,7 @@ import { createCounterRouter } from "./counter.js";
 import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
 import { createRedisRouter } from "./redis.js";
+import { createTableRouter } from "./table.js";
 import { createTestRouter } from "./test.js";
 import { createTopicRouter } from "./topic.js";
 import { createUpdaterRouter } from "./updater.js";
@@ -24,6 +25,7 @@ export const mergeAllRouters = () => {
     createTestRouter(),
     createTopicRouter(),
     createApiRouter(),
+    createTableRouter(),
     createUpdaterRouter(),
     createRedisRouter(),
     createConfigRouter(),

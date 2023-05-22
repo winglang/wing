@@ -54,6 +54,18 @@ new cloud.Function(inflight (message :str) :str => {
   return r.url();
 }) as "Redis interaction";
 
+
+let table = new cloud.Table(cloud.TableProps{
+  name: "simple-table",
+  primaryKey: "id",
+  columns: {
+    id: cloud.ColumnType.STRING,
+    name: cloud.ColumnType.STRING,
+    date: cloud.ColumnType.DATE,
+    active: cloud.ColumnType.BOOLEAN,
+  },
+});
+
 new cloud.Function(inflight (message: str) => {
   let previous = counter.inc();
   log("Assertion should fail: ${previous} === ${counter.peek()}");

@@ -7,3 +7,9 @@ body,
 #root {
   height: 100%;
 }
+
+input[type="date"].appearance-none::-webkit-inner-spin-button,
+input[type="date"].appearance-none::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}

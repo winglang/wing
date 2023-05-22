@@ -30,6 +30,9 @@ const getResourceBorderColor = (
     case "wingsdk.cloud.Api": {
       return "border-t-[3px] border-t-amber-500 group-hover:border-t-amber-500 group-focus:border-t-amber-500 dark:border-t-amber-500 dark:group-hover:border-t-amber-500 dark:group-focus:border-t-amber-500";
     }
+    case "wingsdk.cloud.Table": {
+      return "border-t-[3px] border-t-cyan-500 group-hover:border-t-cyan-500 group-focus:border-t-cyan-500 dark:border-t-cyan-500 dark:group-hover:border-t-cyan-500 dark:group-focus:border-t-cyan-500";
+    }
     case "wingsdk.redis.Redis": {
       return "border-t-[3px] border-t-red-700 group-hover:border-t-red-700 group-focus:border-t-red-700 dark:border-t-red-700 dark:group-hover:border-t-red-700 dark:group-focus:border-t-red-700";
     }
@@ -60,6 +63,7 @@ export const ContainerNode = ({
   ...props
 }: PropsWithChildren<ContainerNodeProps>) => {
   const { theme } = useTheme();
+  const borderColor = getResourceBorderColor(resourceType);
   return (
     // TODO: Fix a11y
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -85,7 +89,7 @@ export const ContainerNode = ({
           "flex relative",
           "rounded overflow-hidden",
           "border",
-          getResourceBorderColor(resourceType),
+          borderColor,
           "group-focus:border-sky-300 dark:group-focus:border-sky-500",
           theme.bg3,
           {
@@ -122,6 +126,7 @@ export const ContainerNode = ({
             "flex-1 flex items-center",
             "px-2.5 py-2",
             "rounded-br",
+            !borderColor && "rounded-tr",
             "group-focus:border-sky-300 dark:group-focus:border-sky-500",
             "transition-all",
             theme.bg3,

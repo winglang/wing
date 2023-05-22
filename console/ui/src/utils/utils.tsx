@@ -9,6 +9,7 @@ import {
   MegaphoneIcon,
   CloudIcon,
   BeakerIcon,
+  TableCellsIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArchiveBoxIcon as SolidArchiveBoxIcon,
@@ -20,6 +21,7 @@ import {
   MegaphoneIcon as SolidMegaphoneIcon,
   BeakerIcon as SolidBeakerIcon,
   CloudIcon as SolidCloudIcon,
+  TableCellsIcon as SolidTableCellsIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import { BaseResourceSchema } from "@wingconsole/server";
@@ -89,6 +91,9 @@ export const getResourceIconComponent = (
     }
     case "wingsdk.cloud.Api": {
       return solid ? SolidCloudIcon : CloudIcon;
+    }
+    case "wingsdk.cloud.Table": {
+      return solid ? SolidTableCellsIcon : TableCellsIcon;
     }
     case "cloud.Cron": {
       return solid ? SolidClockIcon : ClockIcon;
@@ -165,6 +170,14 @@ const getResourceIconColors = (options: {
         options.darkenOnGroupHover &&
           "group-hover:text-amber-600 dark:group-hover:text-amber-300",
         options.forceDarken && "text-amber-600 dark:text-amber-300",
+      ];
+    }
+    case "wingsdk.cloud.Table": {
+      return [
+        "text-cyan-500 dark:text-cyan-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-cyan-600 dark:group-hover:text-cyan-300",
+        options.forceDarken && "text-cyan-600 dark:text-cyan-300",
       ];
     }
     case "wingsdk.redis.Redis": {

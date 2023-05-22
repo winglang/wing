@@ -52,7 +52,7 @@ export const DefaultTheme: Theme = {
   text4GroupHover: "group-hover:text-slate-550 dark:group-hover:text-slate-350",
   textFocus: "text-sky-700 dark:text-sky-300",
   textInput:
-    "text-slate-900 placeholder:text-slate-500 dark:text-slate-300 dark:placeholder:text-slate-450",
+    "text-slate-900 placeholder:text-slate-500 dark:text-slate-300 dark:placeholder:text-slate-500",
   focusInput:
     "focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 outline-none",
   borderInput: "border-slate-300 dark:border-slate-900",

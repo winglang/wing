@@ -135,6 +135,14 @@ export const MetadataPanel = ({
 
           break;
         }
+        case "wingsdk.cloud.Table": {
+          resourceGroup = {
+            groupName: "Table",
+            icon: getResourceIconComponent(node.type),
+          };
+
+          break;
+        }
         case "wingsdk.redis.Redis": {
           resourceGroup = {
             groupName: "Redis",
