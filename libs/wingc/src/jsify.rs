@@ -27,7 +27,7 @@ use crate::{
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
+		SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -373,7 +373,7 @@ impl<'a> JSifier<'a> {
 				let function_type = callee.evaluated_type.borrow().unwrap();
 				let function_sig = function_type.as_function_sig();
 				assert!(
-					function_sig.is_some() || function_type.is_anything(),
+					function_sig.is_some() || function_type.is_anything() || function_type.is_handler_resource(),
 					"Expected expression to be callable"
 				);
 
@@ -401,7 +401,10 @@ impl<'a> JSifier<'a> {
 					}
 				}
 
-				format!("({}{}({}))", auto_await, expr_string, arg_string)
+				match ctx.phase {
+					Phase::Inflight => format!("(typeof {} === \"function\" ? {}{}({}) : {}{}.handle({}))", expr_string, auto_await, expr_string, arg_string, auto_await, expr_string, arg_string),
+					Phase::Independent | Phase::Preflight => format!("({}{}({}))", auto_await, expr_string, arg_string),
+				}
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
@@ -1487,22 +1490,31 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			key = format!("this.{}", key);
 		}
 
-		// if our last captured component is a resource and we don't have
-		// a qualification for it, it's currently an error.
 		if let Some(c) = capture.last() {
 			if let Some(v) = &c.variable {
-				if v.type_.as_resource().is_some() {
-					if qualification.len() == 0 {
-						self.diagnostics.push(Diagnostic {
-							message: format!(
-								"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
-								key, v.type_,
-							),
-							span: Some(node.span.clone()),
-						});
+				// if our last captured component is a non-handler resource and we don't have
+				// a qualification for it, it's currently an error.
+				if v.type_.is_resource() && !v.type_.is_handler_resource() && qualification.len() == 0 {
+					self.diagnostics.push(Diagnostic {
+						message: format!(
+							"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
+							key, v.type_,
+						),
+						span: Some(node.span.clone()),
+					});
 
-						return;
-					}
+					return;
+				}
+
+				// if this reference refers to an inflight function or handler resource,
+				// we need to give permission to the "handle" operation
+				if v.type_.is_inflight_function() || v.type_.is_handler_resource() {
+					self
+						.references
+						.entry(key)
+						.or_default()
+						.insert(HANDLE_METHOD_NAME.to_string());
+					return;
 				}
 			}
 		}

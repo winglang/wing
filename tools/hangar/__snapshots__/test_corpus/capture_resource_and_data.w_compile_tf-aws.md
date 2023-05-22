@@ -9,9 +9,9 @@ module.exports = function({ data, res, queue }) {
     async handle()  {
       {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
-        (await res.put("file.txt","world"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await res.get("file.txt")) === "world")'`)})(((await res.get("file.txt")) === "world"))};
-        (await queue.push("spirulina"));
+        (typeof res.put === "function" ? await res.put("file.txt","world") : await res.put.handle("file.txt","world"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof res.get === "function" ? await res.get("file.txt") : await res.get.handle("file.txt")) === "world")'`)})(((typeof res.get === "function" ? await res.get("file.txt") : await res.get.handle("file.txt")) === "world"))};
+        (typeof queue.push === "function" ? await queue.push("spirulina") : await queue.push.handle("spirulina"));
       }
     }
   }
@@ -211,6 +211,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");

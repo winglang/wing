@@ -8,7 +8,7 @@ module.exports = function({ x }) {
     }
     async handle()  {
       {
-        (await x.handle("hello world!"));
+        (typeof x.handle === "function" ? await x.handle("hello world!") : await x.handle.handle("hello world!"));
       }
     }
   }
@@ -149,6 +149,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");

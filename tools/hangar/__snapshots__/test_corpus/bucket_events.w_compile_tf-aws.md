@@ -60,7 +60,7 @@ module.exports = function({ other }) {
     async handle(key)  {
       {
         {console.log(`last key ${key}`)};
-        (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+        (typeof other.put === "function" ? await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])) : await other.put.handle("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
       }
     }
   }
@@ -94,11 +94,11 @@ module.exports = function({ b }) {
     }
     async handle()  {
       {
-        (await b.put("a","1"));
-        (await b.put("b","1"));
-        (await b.put("b","100"));
-        (await b.put("c","1"));
-        (await b.delete("c"));
+        (typeof b.put === "function" ? await b.put("a","1") : await b.put.handle("a","1"));
+        (typeof b.put === "function" ? await b.put("b","1") : await b.put.handle("b","1"));
+        (typeof b.put === "function" ? await b.put("b","100") : await b.put.handle("b","100"));
+        (typeof b.put === "function" ? await b.put("c","1") : await b.put.handle("c","1"));
+        (typeof b.delete === "function" ? await b.delete("c") : await b.delete.handle("c"));
       }
     }
   }
@@ -1321,6 +1321,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
@@ -1352,6 +1353,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
@@ -1383,6 +1385,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
@@ -1414,6 +1417,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
@@ -1448,6 +1452,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
@@ -1479,6 +1484,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight6.inflight.js".replace(/\\/g, "/");

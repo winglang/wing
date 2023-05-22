@@ -15,7 +15,7 @@ module.exports = function({  }) {
           }
         }
         ;
-        while (((await iterator(i)) < 3)) {
+        while (((typeof iterator === "function" ? await iterator(i) : await iterator.handle(i)) < 3)) {
           {console.log(`${i}`)};
         }
       }
@@ -184,6 +184,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");

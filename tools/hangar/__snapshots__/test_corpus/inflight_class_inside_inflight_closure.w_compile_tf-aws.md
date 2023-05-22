@@ -8,7 +8,7 @@ module.exports = function({ __parent_this }) {
     }
     async handle(payload)  {
       {
-        (await __parent_this.b.put("k","v"));
+        (typeof __parent_this.b.put === "function" ? await __parent_this.b.put("k","v") : await __parent_this.b.put.handle("k","v"));
         class InflightClass {
           constructor()  {
             this.field = "value";
@@ -21,7 +21,7 @@ module.exports = function({ __parent_this }) {
           }
         }
         const c = new InflightClass();
-        (await c.method());
+        (typeof c.method === "function" ? await c.method() : await c.method.handle());
       }
     }
   }
@@ -38,7 +38,7 @@ module.exports = function({ f }) {
     }
     async handle()  {
       {
-        (await f.invoke("text"));
+        (typeof f.invoke === "function" ? await f.invoke("text") : await f.invoke.handle("text"));
       }
     }
   }
@@ -314,6 +314,7 @@ class $Root extends $stdlib.std.Resource {
             constructor(scope, id, ) {
               super(scope, id);
               this._addInflightOps("handle");
+              this.display.hidden = true;
             }
             static _toInflightType(context) {
               const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
@@ -379,6 +380,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");

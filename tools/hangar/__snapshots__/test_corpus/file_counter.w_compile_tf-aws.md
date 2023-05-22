@@ -8,9 +8,9 @@ module.exports = function({ counter, bucket }) {
     }
     async handle(body)  {
       {
-        const next = (await counter.inc());
+        const next = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
         const key = `myfile-${"hi"}.txt`;
-        (await bucket.put(key,body));
+        (typeof bucket.put === "function" ? await bucket.put(key,body) : await bucket.put.handle(key,body));
       }
     }
   }
@@ -243,6 +243,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");

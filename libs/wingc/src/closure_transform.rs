@@ -5,9 +5,10 @@ use indexmap::IndexMap;
 use crate::{
 	ast::{
 		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
-		Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	fold::{self, Fold},
+	type_check::HANDLE_METHOD_NAME,
 };
 
 const PARENT_THIS_NAME: &str = "__parent_this";
@@ -165,7 +166,7 @@ impl Fold for ClosureTransformer {
 					span: expr.span.clone(),
 				};
 				let handle_name = Symbol {
-					name: "handle".to_string(),
+					name: HANDLE_METHOD_NAME.to_string(),
 					span: expr.span.clone(),
 				};
 
@@ -195,6 +196,37 @@ impl Fold for ClosureTransformer {
 				// we need to set this to false.
 				new_func_def.is_static = false;
 
+				// class_init_body :=
+				// ```
+				// this.display.hidden = true;
+				// ```
+				let class_init_body = vec![Stmt {
+					idx: 0,
+					kind: StmtKind::Assignment {
+						variable: Reference::InstanceMember {
+							object: Box::new(Expr {
+								kind: ExprKind::Reference(Reference::InstanceMember {
+									object: Box::new(Expr {
+										kind: ExprKind::Reference(Reference::Identifier(Symbol::new("this", expr.span.clone()))),
+										span: expr.span.clone(),
+										evaluated_type: RefCell::new(None),
+									}),
+									property: Symbol::new("display", expr.span.clone()),
+								}),
+								span: expr.span.clone(),
+								evaluated_type: RefCell::new(None),
+							}),
+							property: Symbol::new("hidden", expr.span.clone()),
+						},
+						value: Expr {
+							kind: ExprKind::Literal(Literal::Boolean(true)),
+							span: expr.span.clone(),
+							evaluated_type: RefCell::new(None),
+						},
+					},
+					span: expr.span.clone(),
+				}];
+
 				// class_def :=
 				// ```
 				// class <new_class_name> {
@@ -214,7 +246,7 @@ impl Fold for ClosureTransformer {
 								return_type: Some(Box::new(class_type_annotation.clone())),
 								phase: Phase::Preflight,
 							},
-							statements: Scope::new(vec![], expr.span.clone()),
+							statements: Scope::new(class_init_body, expr.span.clone()),
 							span: expr.span.clone(),
 						},
 						fields: class_fields,

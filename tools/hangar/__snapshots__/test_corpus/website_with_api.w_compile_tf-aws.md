@@ -9,7 +9,7 @@ module.exports = function({ usersTable }) {
     async handle(req)  {
       {
         return {
-        "body": Object.freeze({"users":(await usersTable.list())}),
+        "body": Object.freeze({"users":(typeof usersTable.list === "function" ? await usersTable.list() : await usersTable.list.handle())}),
         "status": 200,}
         ;
       }
@@ -35,7 +35,7 @@ module.exports = function({ usersTable }) {
           "status": 400,}
           ;
         }
-        (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+        (typeof usersTable.insert === "function" ? await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body) : await usersTable.insert.handle(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
         return {
         "body": Object.freeze({"user":(body)["id"]}),
         "status": 201,}
@@ -601,6 +601,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
@@ -635,6 +636,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
@@ -669,6 +671,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");

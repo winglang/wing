@@ -8,17 +8,17 @@ module.exports = function({ b }) {
     }
     async handle()  {
       {
-        (await b.put("foo","text"));
-        (await b.put("foo/","text"));
-        (await b.put("foo/bar","text"));
-        (await b.put("foo/bar/","text"));
-        (await b.put("foo/bar/baz","text"));
-        const objs = (await b.list());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(0)) === "foo")'`)})(((await objs.at(0)) === "foo"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(1)) === "foo/")'`)})(((await objs.at(1)) === "foo/"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(2)) === "foo/bar")'`)})(((await objs.at(2)) === "foo/bar"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(3)) === "foo/bar/")'`)})(((await objs.at(3)) === "foo/bar/"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(4)) === "foo/bar/baz")'`)})(((await objs.at(4)) === "foo/bar/baz"))};
+        (typeof b.put === "function" ? await b.put("foo","text") : await b.put.handle("foo","text"));
+        (typeof b.put === "function" ? await b.put("foo/","text") : await b.put.handle("foo/","text"));
+        (typeof b.put === "function" ? await b.put("foo/bar","text") : await b.put.handle("foo/bar","text"));
+        (typeof b.put === "function" ? await b.put("foo/bar/","text") : await b.put.handle("foo/bar/","text"));
+        (typeof b.put === "function" ? await b.put("foo/bar/baz","text") : await b.put.handle("foo/bar/baz","text"));
+        const objs = (typeof b.list === "function" ? await b.list() : await b.list.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(0) : await objs.at.handle(0)) === "foo")'`)})(((typeof objs.at === "function" ? await objs.at(0) : await objs.at.handle(0)) === "foo"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(1) : await objs.at.handle(1)) === "foo/")'`)})(((typeof objs.at === "function" ? await objs.at(1) : await objs.at.handle(1)) === "foo/"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(2) : await objs.at.handle(2)) === "foo/bar")'`)})(((typeof objs.at === "function" ? await objs.at(2) : await objs.at.handle(2)) === "foo/bar"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(3) : await objs.at.handle(3)) === "foo/bar/")'`)})(((typeof objs.at === "function" ? await objs.at(3) : await objs.at.handle(3)) === "foo/bar/"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(4) : await objs.at.handle(4)) === "foo/bar/baz")'`)})(((typeof objs.at === "function" ? await objs.at(4) : await objs.at.handle(4)) === "foo/bar/baz"))};
       }
     }
   }
@@ -206,6 +206,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");

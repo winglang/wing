@@ -8,12 +8,12 @@ module.exports = function({ r, r2 }) {
     }
     async handle()  {
       {
-        const connection = (await r.rawClient());
-        (await connection.set("wing","does redis"));
-        const value = (await connection.get("wing"));
+        const connection = (typeof r.rawClient === "function" ? await r.rawClient() : await r.rawClient.handle());
+        (typeof connection.set === "function" ? await connection.set("wing","does redis") : await connection.set.handle("wing","does redis"));
+        const value = (typeof connection.get === "function" ? await connection.get("wing") : await connection.get.handle("wing"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
-        (await r2.set("wing","does redis again"));
-        const value2 = (await r2.get("wing"));
+        (typeof r2.set === "function" ? await r2.set("wing","does redis again") : await r2.set.handle("wing","does redis again"));
+        const value2 = (typeof r2.get === "function" ? await r2.get("wing") : await r2.get.handle("wing"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
       }
     }
@@ -481,6 +481,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
