@@ -327,6 +327,7 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
+        Literal::Nil => "null".to_string(),
 				Literal::String(s) => s.to_string(),
 				Literal::InterpolatedString(s) => format!(
 					"`{}`",
@@ -1568,6 +1569,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					| Type::Boolean
 					| Type::Json
 					| Type::MutJson
+					| Type::Nil
 					| Type::Enum(_) => return vec![],
 					// TODO: collection types are unsupported for now
 					Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => None,

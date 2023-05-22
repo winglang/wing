@@ -148,6 +148,7 @@ pub enum Type {
 	Void,
 	Json,
 	MutJson,
+	Nil,
 	Optional(TypeRef),
 	Array(TypeRef),
 	MutArray(TypeRef),
@@ -556,6 +557,10 @@ impl Subtype for Type {
 				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
+			(Self::Nil, Self::Optional(_)) => {
+				// Nil is a subtype of Optional<T> for any T
+				true
+			}
 			(_, Self::Optional(r0)) => {
 				// A non-Optional type is a subtype of an Optional type if the non-optional's type is a subtype of the value type
 				// e.g. `String` is a subtype of `Optional<String>`
@@ -650,6 +655,7 @@ impl Display for Type {
 			Type::Void => write!(f, "void"),
 			Type::Json => write!(f, "Json"),
 			Type::MutJson => write!(f, "MutJson"),
+			Type::Nil => write!(f, "nil"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
@@ -855,6 +861,7 @@ impl TypeRef {
 			Type::Duration => true,
 			Type::Boolean => true,
 			Type::Json => true,
+			Type::Nil => true,
 			Type::Array(v) => v.is_capturable(),
 			Type::Map(v) => v.is_capturable(),
 			Type::Set(v) => v.is_capturable(),
@@ -882,6 +889,13 @@ impl TypeRef {
 			Type::Map(v) => v.is_mutable(),
 			Type::Set(v) => v.is_mutable(),
 			Type::Optional(v) => v.is_mutable(),
+			_ => false,
+		}
+	}
+
+	pub fn is_nil(&self) -> bool {
+		match &**self {
+			Type::Nil => true,
 			_ => false,
 		}
 	}
@@ -934,6 +948,7 @@ pub struct Types {
 	void_idx: usize,
 	json_idx: usize,
 	mut_json_idx: usize,
+	nil_idx: usize,
 
 	resource_base_type: Option<TypeRef>,
 }
@@ -957,6 +972,8 @@ impl Types {
 		let json_idx = types.len() - 1;
 		types.push(Box::new(Type::MutJson));
 		let mut_json_idx = types.len() - 1;
+		types.push(Box::new(Type::Nil));
+		let nil_idx = types.len() - 1;
 
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
@@ -975,6 +992,7 @@ impl Types {
 			void_idx,
 			json_idx,
 			mut_json_idx,
+			nil_idx,
 			resource_base_type: None,
 		}
 	}
@@ -985,6 +1003,10 @@ impl Types {
 
 	pub fn string(&self) -> TypeRef {
 		self.get_typeref(self.string_idx)
+	}
+
+	pub fn nil(&self) -> TypeRef {
+		self.get_typeref(self.nil_idx)
 	}
 
 	pub fn bool(&self) -> TypeRef {
@@ -1205,6 +1227,7 @@ impl<'a> TypeChecker<'a> {
 		match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => self.types.string(),
+				Literal::Nil => self.types.nil(),
 				Literal::InterpolatedString(s) => {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
@@ -1784,10 +1807,17 @@ impl<'a> TypeChecker<'a> {
 						expected_types_list, actual_type
 					)
 				} else {
-					format!(
-						"Expected type to be \"{}\", but got \"{}\" instead",
+					let mut message = format!(
+						"Expected type to be \"{}\", but got \"{}\" instead.",
 						expected_types[0], actual_type
-					)
+					);
+					if actual_type.is_nil() {
+						message = format!(
+							"{} (hint: to allow \"nil\" assignment use optional type: \"{}?\")",
+							message, expected_types[0]
+						);
+					}
+					message
 				},
 				span: Some(span.span()),
 			});
