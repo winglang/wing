@@ -67,6 +67,14 @@ pub struct JSifier<'a> {
 	app_name: String,
 }
 
+/// Preflight classes have two types of host binding methods:
+/// `Type` for binding static fields and methods to the host and
+/// `instance` for binding instance fields and methods to the host.
+enum BindMethod {
+	Type,
+	instance,
+}
+
 impl<'a> JSifier<'a> {
 	pub fn new(out_dir: &'a Path, app_name: &str, absolute_project_root: &'a Path, shim: bool) -> Self {
 		Self {
@@ -177,18 +185,14 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_reference(&mut self, reference: &Reference, ctx: &JSifyContext) -> String {
 		match reference {
-			Reference::Identifier(identifier) => self.jsify_symbol(identifier),
+			Reference::Identifier(identifier) => identifier.to_string(),
 			Reference::InstanceMember { object, property } => {
-				self.jsify_expression(object, ctx) + "." + &self.jsify_symbol(property)
+				self.jsify_expression(object, ctx) + "." + &property.to_string()
 			}
 			Reference::TypeMember { type_, property } => {
-				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &self.jsify_symbol(property)
+				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &property.to_string()
 			}
 		}
-	}
-
-	fn jsify_symbol(&self, symbol: &Symbol) -> String {
-		return symbol.name.to_string();
 	}
 
 	fn jsify_arg_list(
@@ -248,16 +252,16 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_user_defined_type(&self, user_defined_type: &UserDefinedType) -> String {
 		if user_defined_type.fields.is_empty() {
-			return self.jsify_symbol(&user_defined_type.root);
+			return user_defined_type.root.to_string();
 		} else {
 			format!(
 				"{}.{}",
-				self.jsify_symbol(&user_defined_type.root),
+				user_defined_type.root,
 				user_defined_type
 					.fields
 					.iter()
-					.map(|f| self.jsify_symbol(f))
-					.collect::<Vec<String>>()
+					.map(|f| f.to_string())
+					.collect_vec()
 					.join(".")
 			)
 		}
@@ -530,12 +534,12 @@ impl<'a> JSifier<'a> {
 			} => {
 				CodeMaker::one_line(format!(
 					"const {} = {};",
-					self.jsify_symbol(if let Some(identifier) = identifier {
+					if let Some(identifier) = identifier {
 						// use alias
 						identifier
 					} else {
 						module_name
-					}),
+					},
 					if module_name.name.starts_with("\"") {
 						// TODO so many assumptions here, would only work with a JS file, see:
 						// https://github.com/winglang/wing/issues/477
@@ -555,9 +559,9 @@ impl<'a> JSifier<'a> {
 			} => {
 				let initial_value = self.jsify_expression(initial_value, ctx);
 				return if *reassignable {
-					CodeMaker::one_line(format!("let {} = {};", self.jsify_symbol(var_name), initial_value))
+					CodeMaker::one_line(format!("let {var_name} = {initial_value};"))
 				} else {
-					CodeMaker::one_line(format!("const {} = {};", self.jsify_symbol(var_name), initial_value))
+					CodeMaker::one_line(format!("const {var_name} = {initial_value};"))
 				};
 			}
 			StmtKind::ForLoop {
@@ -567,8 +571,7 @@ impl<'a> JSifier<'a> {
 			} => {
 				let mut code = CodeMaker::default();
 				code.open(format!(
-					"for (const {} of {}) {{",
-					self.jsify_symbol(iterator),
+					"for (const {iterator} of {}) {{",
 					self.jsify_expression(iterable, ctx)
 				));
 				code.add_code(self.jsify_scope_body(statements, ctx));
@@ -644,7 +647,7 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Enum { name, values } => {
 				let mut code = CodeMaker::default();
-				code.open(format!("const {} = ", self.jsify_symbol(name)));
+				code.open(format!("const {name} = "));
 				code.add_code(self.jsify_enum(values));
 				code.close(";");
 				code
@@ -662,10 +665,9 @@ impl<'a> JSifier<'a> {
 
 				if let Some(catch_block) = catch_block {
 					if let Some(exception_var_symbol) = &catch_block.exception_var {
-						let exception_var_str = self.jsify_symbol(exception_var_symbol);
-						code.open(format!("catch ($error_{exception_var_str}) {{"));
+						code.open(format!("catch ($error_{exception_var_symbol}) {{"));
 						code.line(format!(
-							"const {exception_var_str} = $error_{exception_var_str}.message;"
+							"const {exception_var_symbol} = $error_{exception_var_symbol}.message;"
 						));
 					} else {
 						code.open("catch {");
@@ -711,7 +713,7 @@ impl<'a> JSifier<'a> {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
-			parameter_list.push(self.jsify_symbol(&p.name));
+			parameter_list.push(p.name.to_string());
 		}
 
 		let (name, arrow) = match name {
@@ -739,7 +741,7 @@ impl<'a> JSifier<'a> {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
-			parameter_list.push(self.jsify_symbol(&p.name));
+			parameter_list.push(p.name.to_string());
 		}
 
 		let (name, arrow) = match name {
@@ -800,7 +802,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_class_member(&mut self, member: &ClassField) -> CodeMaker {
-		CodeMaker::one_line(format!("{};", self.jsify_symbol(&member.name)))
+		CodeMaker::one_line(format!("{};", member.name.to_string()))
 	}
 
 	/// Jsify a resource
@@ -919,7 +921,7 @@ impl<'a> JSifier<'a> {
 			format!(" extends {}", STDLIB_CORE_RESOURCE)
 		};
 
-		let class_name = self.jsify_symbol(&class.name);
+		let class_name = class.name.to_string();
 		code.open(format!("class {class_name}{extends} {{"));
 		code.add_code(self.jsify_resource_constructor(
 			&class.initializer,
@@ -935,8 +937,9 @@ impl<'a> JSifier<'a> {
 
 		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
 		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
-		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, false));
-		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, true));
+		// Generate the the class's host binding methods
+		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::instance));
+		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Type));
 
 		code.close("}");
 
@@ -958,8 +961,8 @@ impl<'a> JSifier<'a> {
 			constructor
 				.parameters()
 				.iter()
-				.map(|p| self.jsify_symbol(&p.name))
-				.collect::<Vec<_>>()
+				.map(|p| p.name.to_string())
+				.collect_vec()
 				.join(", "),
 		));
 
@@ -1209,7 +1212,7 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 		code.open(format!(
 			"class {}{} {{",
-			self.jsify_symbol(&class.name),
+			class.name,
 			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
@@ -1296,26 +1299,36 @@ impl<'a> JSifier<'a> {
 		class: &AstClass,
 		refs: &BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
 		resource_type: TypeRef,
-		handle_statics: bool,
+		bind_method_kind: BindMethod,
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::default();
-		let (modifier, bind_method_name) = if handle_statics {
-			("static", "_registerTypeBind")
-		} else {
-			("", "_registerBind")
+		let (modifier, bind_method_name) = match bind_method_kind {
+			BindMethod::Type => ("static ", "_registerTypeBind"),
+			BindMethod::instance => ("", "_registerBind"),
 		};
-		bind_method.open(format!("{modifier} {bind_method_name}(host, ops) {{"));
-		let class_name = self.jsify_symbol(&class.name);
-		for (method_name, method_refs) in refs.iter().filter(|(m, _)| {
-			(*m == CLASS_INFLIGHT_INIT_NAME
-				|| !resource_type
-					.as_resource()
-					.unwrap()
-					.get_method(&m.as_str().into())
-					.expect(&format!("method {m} doesn't exist in {class_name}"))
-					.is_static)
-				^ handle_statics
-		}) {
+
+		let class_name = class.name.to_string();
+		let refs = refs
+			.iter()
+			.filter(|(m, _)| {
+				(*m == CLASS_INFLIGHT_INIT_NAME
+					|| !resource_type
+						.as_resource()
+						.unwrap()
+						.get_method(&m.as_str().into())
+						.expect(&format!("method {m} doesn't exist in {class_name}"))
+						.is_static)
+					^ (matches!(bind_method_kind, BindMethod::Type))
+			})
+			.collect_vec();
+
+		// Skip jsifying this method if there are no references (in this case we'll use super's register bind method)
+		if refs.is_empty() {
+			return bind_method;
+		}
+
+		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
+		for (method_name, method_refs) in refs {
 			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
 			for (field, ops) in method_refs {
 				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
@@ -1665,7 +1678,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				// Get the type we're accessing a member of
 				let t = resolve_user_defined_type(type_, &env, self.statement_index).expect("covered by type checking");
 
-				// If the type we're referencing ins't a preflight class then skip it
+				// If the type we're referencing isn't a preflight class then skip it
 				let Type::Resource(class) = &*t else {
 					return vec![];
 				};
