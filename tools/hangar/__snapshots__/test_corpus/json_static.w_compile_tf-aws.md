@@ -173,16 +173,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(jj, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const x = Object.freeze({"a":123,"b":{"c":456,"d":789}});

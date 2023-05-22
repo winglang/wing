@@ -504,7 +504,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
@@ -512,9 +512,6 @@ class $Root extends $stdlib.std.Resource {
           $Inflight1._registerBindObject(r2, host, ["get", "set"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");

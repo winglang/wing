@@ -491,14 +491,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           First._registerBindObject(this.myResource, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class Another extends $stdlib.std.Resource {
@@ -531,7 +528,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           Another._registerBindObject(this.first, host, []);
           Another._registerBindObject(this.myField, host, []);
@@ -541,9 +538,6 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("meaningOfLife")) {
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -615,7 +609,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           MyResource._registerBindObject(this.another, host, []);
           MyResource._registerBindObject(this.arrayOfStr, host, []);
@@ -671,9 +665,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Inflight1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -700,16 +691,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

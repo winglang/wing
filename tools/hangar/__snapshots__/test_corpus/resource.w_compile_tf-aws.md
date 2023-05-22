@@ -199,6 +199,28 @@ module.exports = function({  }) {
 
 ```
 
+## clients/InflightClass.inflight.js
+```js
+module.exports = function({  }) {
+  class  InflightClass {
+    constructor({  }) {
+    }
+    async inflight_class_instance_method()  {
+      {
+        return "inflight class instance method";
+      }
+    }
+    static async inflight_class_static_method()  {
+      {
+        return "inflight class static method";
+      }
+    }
+  }
+  return InflightClass;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -899,7 +921,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           Foo._registerBindObject(this.c, host, ["dec", "inc"]);
         }
@@ -964,7 +986,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           Bar._registerBindObject(this.b, host, []);
           Bar._registerBindObject(this.e, host, []);
@@ -1016,7 +1038,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
@@ -1025,9 +1047,6 @@ class $Root extends $stdlib.std.Resource {
           $Inflight1._registerBindObject(res.foo, host, ["inflightField"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class BigPublisher extends $stdlib.std.Resource {
@@ -1064,16 +1083,13 @@ class $Root extends $stdlib.std.Resource {
               })())
             `);
           }
-           _registerBind(host, ops) {
+          _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
               $Inflight2._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
-          }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
           }
         }
         (this.t.onMessage(new $Inflight2(this,"$Inflight2")));
@@ -1102,16 +1118,13 @@ class $Root extends $stdlib.std.Resource {
               })())
             `);
           }
-           _registerBind(host, ops) {
+          _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
               $Inflight3._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
-          }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
           }
         }
         (this.q.addConsumer(new $Inflight3(this,"$Inflight3")));
@@ -1140,16 +1153,13 @@ class $Root extends $stdlib.std.Resource {
               })())
             `);
           }
-           _registerBind(host, ops) {
+          _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
               $Inflight4._registerBindObject(__parent_this.q, host, ["push"]);
             }
             super._registerBind(host, ops);
-          }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
           }
         }
         (this.b2.onCreate(new $Inflight4(this,"$Inflight4")));
@@ -1180,7 +1190,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           BigPublisher._registerBindObject(this.b, host, []);
           BigPublisher._registerBindObject(this.b2, host, []);
@@ -1196,9 +1206,6 @@ class $Root extends $stdlib.std.Resource {
           BigPublisher._registerBindObject(this.t, host, ["publish"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight5 extends $stdlib.std.Resource {
@@ -1226,16 +1233,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
           $Inflight5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const MyEnum = 

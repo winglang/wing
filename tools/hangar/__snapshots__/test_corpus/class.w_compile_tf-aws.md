@@ -115,13 +115,10 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class C2 extends $stdlib.std.Resource {
@@ -150,14 +147,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           C2._registerBindObject(this.x, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class C3 extends $stdlib.std.Resource {
@@ -192,15 +186,12 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           C3._registerBindObject(this.x, host, []);
           C3._registerBindObject(this.y, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class C4 extends $stdlib.std.Resource {
@@ -232,13 +223,10 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     new C1(this,"C1");

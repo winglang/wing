@@ -1,5 +1,44 @@
 # [optionals.w](../../../../examples/tests/valid/optionals.w) | compile | tf-aws
 
+## clients/Sub.inflight.js
+```js
+module.exports = function({  }) {
+  class extends Super Sub {
+    constructor({ name }) {
+      super(name);
+    }
+  }
+  return Sub;
+}
+
+```
+
+## clients/Sub1.inflight.js
+```js
+module.exports = function({  }) {
+  class extends Super Sub1 {
+    constructor({ name }) {
+      super(name);
+    }
+  }
+  return Sub1;
+}
+
+```
+
+## clients/Super.inflight.js
+```js
+module.exports = function({  }) {
+  class  Super {
+    constructor({ name }) {
+      this.name = name;
+    }
+  }
+  return Super;
+}
+
+```
+
 ## main.tf.json
 ```json
 {

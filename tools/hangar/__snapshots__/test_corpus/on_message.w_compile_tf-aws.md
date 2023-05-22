@@ -468,7 +468,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           Predicate._registerBindObject(this.c, host, []);
         }
@@ -476,9 +476,6 @@ class $Root extends $stdlib.std.Resource {
           Predicate._registerBindObject(this.c, host, ["peek"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class TestHelper extends $stdlib.std.Resource {
@@ -505,7 +502,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         super._registerBind(host, ops);
@@ -541,16 +538,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(c, host, ["inc"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight2 extends $stdlib.std.Resource {
@@ -578,16 +572,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
           $Inflight2._registerBindObject(c, host, ["inc"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight3 extends $stdlib.std.Resource {
@@ -619,7 +610,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
@@ -628,9 +619,6 @@ class $Root extends $stdlib.std.Resource {
           $Inflight3._registerBindObject(t, host, ["publish"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");

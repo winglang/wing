@@ -188,7 +188,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-       _registerBind(host, ops) {
+      _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
@@ -199,9 +199,6 @@ class $Root extends $stdlib.std.Resource {
           $Inflight1._registerBindObject(mySet, host, ["has", "size"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const arr = Object.freeze(["hello", "world"]);
