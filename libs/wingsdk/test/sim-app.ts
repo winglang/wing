@@ -1,8 +1,9 @@
 import * as fs from "fs";
 import { join } from "path";
 import { directorySnapshot, mkdtemp } from "./util";
+import { Function, IFunctionClient } from "../src/cloud";
 import * as sim from "../src/target-sim";
-import { Simulator } from "../src/testing";
+import { Simulator, Testing } from "../src/testing";
 
 /**
  * A simulated app.
@@ -13,6 +14,8 @@ import { Simulator } from "../src/testing";
  */
 export class SimApp extends sim.App {
   private _synthesized: boolean = false;
+  private functionIndex: number = 0;
+
   constructor() {
     super({ outdir: mkdtemp() });
 
@@ -21,6 +24,33 @@ export class SimApp extends sim.App {
       join(__dirname, "..", "node_modules"),
       join(this.outdir, "node_modules")
     );
+  }
+
+  /**
+   * A helper to define a new cloud.Function within this app.
+   * @param code The function code.
+   * @returns An "invoker" function which can be used to invoke the function after the simulator had
+   * started.
+   */
+  public newCloudFunction(code: string) {
+    const id = `Function.${this.functionIndex++}`;
+    Function._newFunction(
+      this,
+      id,
+      Testing.makeHandler(
+        this,
+        `${id}.handler`,
+        `async handle() {
+          ${code}
+        }`
+      )
+    );
+
+    // returns an "invoker" for this function
+    return async (s: Simulator) => {
+      const fn = s.getResource("/" + id) as IFunctionClient;
+      return fn.invoke("");
+    };
   }
 
   /**

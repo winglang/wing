@@ -165,6 +165,22 @@ async function runSandbox(
       require, // to support requiring node.js sdk modules (others will be bundled)
     });
 
+    // emit an explicit error when trying to access `__dirname` and `__filename` because we cannot
+    // resolve these when bundling (this is true both for simulator and the cloud since we are
+    // bundling there as well).
+    const forbidGlobal = (name: string) => {
+      Object.defineProperty(context, name, {
+        get: () => {
+          throw new Error(
+            `${name} cannot be used within bundled cloud functions`
+          );
+        },
+      });
+    };
+
+    forbidGlobal("__dirname");
+    forbidGlobal("__filename");
+
     vm.runInContext(wrapper, context, {
       timeout: opts.timeout,
       filename: filepath,

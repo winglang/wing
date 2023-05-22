@@ -616,7 +616,7 @@ async handle() {
 
 exports[`runtime environment tests 1`] = `
 {
-  ".wing/func-0_c876d681.js": "exports.handler = async function(event) {
+  ".wing/function.0_c8d5fca2.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -636,7 +636,7 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/func-1_c8506f0f.js": "exports.handler = async function(event) {
+  ".wing/function.1_c89ed254.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -654,7 +654,7 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/func-2_c84e3cf1.js": "exports.handler = async function(event) {
+  ".wing/function.2_c8cd6c39.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -665,7 +665,7 @@ return class Handler {
   async handle() {
           
     const c = require(\\"crypto\\");
-    return c;
+    return c.createHash;
   
         }
 };
@@ -673,7 +673,7 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/func-3_c8615d46.js": "exports.handler = async function(event) {
+  ".wing/function.3_c8badafa.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -704,10 +704,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/func-0",
+        "path": "root/Function.0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/func-0_c876d681.js",
+          "sourceCodeFile": ".wing/function.0_c8d5fca2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -715,10 +715,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/func-1",
+        "path": "root/Function.1",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/func-1_c8506f0f.js",
+          "sourceCodeFile": ".wing/function.1_c89ed254.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -726,10 +726,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/func-2",
+        "path": "root/Function.2",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/func-2_c84e3cf1.js",
+          "sourceCodeFile": ".wing/function.2_c8cd6c39.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -737,10 +737,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/func-3",
+        "path": "root/Function.3",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/func-3_c8615d46.js",
+          "sourceCodeFile": ".wing/function.3_c8badafa.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -752,6 +752,130 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
+        "Function.0": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function.0",
+          "path": "root/Function.0",
+        },
+        "Function.0.handler": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Function.0.handler",
+          "path": "root/Function.0.handler",
+        },
+        "Function.1": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function.1",
+          "path": "root/Function.1",
+        },
+        "Function.1.handler": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Function.1.handler",
+          "path": "root/Function.1.handler",
+        },
+        "Function.2": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function.2",
+          "path": "root/Function.2",
+        },
+        "Function.2.handler": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Function.2.handler",
+          "path": "root/Function.2.handler",
+        },
+        "Function.3": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function.3",
+          "path": "root/Function.3",
+        },
+        "Function.3.handler": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Function.3.handler",
+          "path": "root/Function.3.handler",
+        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -767,130 +891,6 @@ return class Handler {
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "func-0": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "func-0",
-          "path": "root/func-0",
-        },
-        "func-0.handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "func-0.handler",
-          "path": "root/func-0.handler",
-        },
-        "func-1": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "func-1",
-          "path": "root/func-1",
-        },
-        "func-1.handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "func-1.handler",
-          "path": "root/func-1.handler",
-        },
-        "func-2": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "func-2",
-          "path": "root/func-2",
-        },
-        "func-2.handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "func-2.handler",
-          "path": "root/func-2.handler",
-        },
-        "func-3": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "func-3",
-          "path": "root/func-3",
-        },
-        "func-3.handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "func-3.handler",
-          "path": "root/func-3.handler",
         },
       },
       "constructInfo": {
