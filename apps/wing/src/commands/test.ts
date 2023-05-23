@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename, sep } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
@@ -15,24 +15,75 @@ const log = debug("wing:test");
 
 const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 
+const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
+
 /**
  * Options for the `test` command.
  */
 export interface TestOptions extends CompileOptions {}
 
 export async function test(entrypoints: string[], options: TestOptions) {
+  const startTime = Date.now();
+  const passing: string[] = [];
+  const failing: { testName: string; error: Error }[] = [];
   for (const entrypoint of entrypoints) {
-    await testOne(entrypoint, options);
+    try {
+      await testOne(entrypoint, options);
+      passing.push(generateTestName(entrypoint));
+    } catch (error) {
+      failing.push({ testName: generateTestName(entrypoint), error: error as Error });
+    }
   }
+  printResults(passing, failing, Date.now() - startTime);
+}
+
+function printResults(
+  passing: string[],
+  failing: { testName: string; error: Error }[],
+  duration: number
+) {
+  const durationInSeconds = duration / 1000;
+  console.log(" "); // for getting a new line- \n does't seem to work :(
+  console.log(`
+Tests Results:
+${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
+${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}
+${
+  failing.length
+    ? `
+${" "}
+Errors:` +
+      failing
+        .map(
+          ({ testName, error }) => `
+
+At ${testName}\n ${chalk.red(error.message)}
+        `
+        )
+        .join("\n\n")
+    : ""
+}
+
+${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
+    failing.length && passing.length ? chalk.dim(" |") : ""
+  }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
+    `(${failing.length + passing.length})`
+  )} 
+${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${durationInSeconds % 60}s
+`);
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
+  // since the test cleans up after each run, it's essential to create a temporary directory-
+  // at least one that is different then the usual compilation dir,  otherwise we might end up cleaning up the user's actual resources.
   const tempFile: string = Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
-  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () =>
-    compile(tempFile, {
-      ...options,
-      testing: true,
-    })
+  const synthDir = await withSpinner(
+    `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
+    () =>
+      compile(tempFile, {
+        ...options,
+        testing: true,
+      })
   );
 
   switch (options.target) {
@@ -153,7 +204,7 @@ async function testSimulator(synthDir: string) {
   rmSync(synthDir, { recursive: true, force: true });
 
   if (testResultsContainsFailure(results)) {
-    process.exit(1);
+    throw Error(results.map(({ error }) => error).join(", "));
   }
 }
 
@@ -167,12 +218,6 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
 
     await withSpinner("terraform init", async () => await terraformInit(synthDir));
 
-    if (!(await checkTerraformStateIsEmpty(synthDir))) {
-      console.warn(
-        `Terraform state is not empty. Running \`terraform destroy\` inside ${synthDir} to clean up any previous test runs:`
-      );
-      await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
-    }
     await withSpinner("terraform apply", () => terraformApply(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
@@ -214,23 +259,6 @@ async function cleanup(synthDir: string) {
 async function isTerraformInstalled(synthDir: string) {
   const output = await execCapture("terraform version", { cwd: synthDir });
   return output.startsWith("Terraform v");
-}
-
-export async function checkTerraformStateIsEmpty(synthDir: string): Promise<boolean> {
-  try {
-    const output = await execCapture("terraform state list", { cwd: synthDir });
-    return !output.length;
-  } catch (err: unknown) {
-    if (
-      (typeof err === "string" && err.includes("No state file was found")) ||
-      (err as Error).message.includes("No state file was found")
-    ) {
-      return true;
-    }
-
-    // An unexpected error occurred, rethrow it
-    throw err;
-  }
 }
 
 export async function terraformInit(synthDir: string) {
