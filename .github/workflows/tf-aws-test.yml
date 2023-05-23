@@ -1,4 +1,4 @@
-name: SDK Spec Testing
+name: SDK Spec AWS Tests
 on:
   schedule:
     - cron: "0 8 * * *"
