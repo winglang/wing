@@ -8,6 +8,7 @@ use crate::{
 		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	fold::{self, Fold},
+	type_check::HANDLE_METHOD_NAME,
 };
 
 const PARENT_THIS_NAME: &str = "__parent_this";
@@ -165,7 +166,7 @@ impl Fold for ClosureTransformer {
 					span: expr.span.clone(),
 				};
 				let handle_name = Symbol {
-					name: "handle".to_string(),
+					name: HANDLE_METHOD_NAME.to_string(),
 					span: expr.span.clone(),
 				};
 

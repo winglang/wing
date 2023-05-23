@@ -8,18 +8,18 @@ module.exports = function({ b }) {
     }
     async handle()  {
       {
-        (await b.put("test1.txt","Foo"));
-        (await b.put("test2.txt","Bar"));
-        const first = (await b.get("test1.txt"));
-        const second = (await b.get("test2.txt"));
+        (typeof b.put === "function" ? await b.put("test1.txt","Foo") : await b.put.handle("test1.txt","Foo"));
+        (typeof b.put === "function" ? await b.put("test2.txt","Bar") : await b.put.handle("test2.txt","Bar"));
+        const first = (typeof b.get === "function" ? await b.get("test1.txt") : await b.get.handle("test1.txt"));
+        const second = (typeof b.get === "function" ? await b.get("test2.txt") : await b.get.handle("test2.txt"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(first === "Foo")'`)})((first === "Foo"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(second === "Bar")'`)})((second === "Bar"))};
-        (await b.delete("test1.txt"));
-        const files = (await b.list());
+        (typeof b.delete === "function" ? await b.delete("test1.txt") : await b.delete.handle("test1.txt"));
+        const files = (typeof b.list === "function" ? await b.list() : await b.list.handle());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
-        (await b.put("test2.txt","Baz"));
-        const third = (await b.get("test2.txt"));
+        (typeof b.put === "function" ? await b.put("test2.txt","Baz") : await b.put.handle("test2.txt","Baz"));
+        const third = (typeof b.get === "function" ? await b.get("test2.txt") : await b.get.handle("test2.txt"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === "Baz")'`)})((third === "Baz"))};
       }
     }
@@ -50,7 +50,7 @@ module.exports = function({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[]"
+      "value": "[[\"root/Default/Default/test:put\",\"${aws_lambda_function.root_testput_Handler_FF744394.arn}\"]]"
     }
   },
   "provider": {
@@ -60,62 +60,62 @@ module.exports = function({ b }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testput_IamRole_1BBF32A6": {
+      "root_testput_Handler_IamRole_10DDB136": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:put/IamRole",
-            "uniqueId": "root_testput_IamRole_1BBF32A6"
+            "path": "root/Default/Default/test:put/Handler/IamRole",
+            "uniqueId": "root_testput_Handler_IamRole_10DDB136"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testput_IamRolePolicy_98659F09": {
+      "root_testput_Handler_IamRolePolicy_401F0ED6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:put/IamRolePolicy",
-            "uniqueId": "root_testput_IamRolePolicy_98659F09"
+            "path": "root/Default/Default/test:put/Handler/IamRolePolicy",
+            "uniqueId": "root_testput_Handler_IamRolePolicy_401F0ED6"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testput_IamRole_1BBF32A6.name}"
+        "role": "${aws_iam_role.root_testput_Handler_IamRole_10DDB136.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testput_IamRolePolicyAttachment_E73FB6BB": {
+      "root_testput_Handler_IamRolePolicyAttachment_32A06E74": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:put/IamRolePolicyAttachment",
-            "uniqueId": "root_testput_IamRolePolicyAttachment_E73FB6BB"
+            "path": "root/Default/Default/test:put/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testput_Handler_IamRolePolicyAttachment_32A06E74"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testput_IamRole_1BBF32A6.name}"
+        "role": "${aws_iam_role.root_testput_Handler_IamRole_10DDB136.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testput_449428F9": {
+      "root_testput_Handler_FF744394": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:put/Default",
-            "uniqueId": "root_testput_449428F9"
+            "path": "root/Default/Default/test:put/Handler/Default",
+            "uniqueId": "root_testput_Handler_FF744394"
           }
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "test-put-c899ce9b"
+            "WING_FUNCTION_NAME": "Handler-c8a253bd"
           }
         },
-        "function_name": "test-put-c899ce9b",
+        "function_name": "Handler-c8a253bd",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testput_IamRole_1BBF32A6.arn}",
+        "role": "${aws_iam_role.root_testput_Handler_IamRole_10DDB136.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
+        "s3_key": "${aws_s3_object.root_testput_Handler_S3Object_DE23D795.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -178,11 +178,11 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_object": {
-      "root_testput_S3Object_30BF1DDD": {
+      "root_testput_Handler_S3Object_DE23D795": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:put/S3Object",
-            "uniqueId": "root_testput_S3Object_30BF1DDD"
+            "path": "root/Default/Default/test:put/Handler/S3Object",
+            "uniqueId": "root_testput_Handler_S3Object_DE23D795"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -240,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:put",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:put",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
