@@ -210,7 +210,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(table, host, ["insert", "list"]);
+          $Inflight1._registerBindObject(table, host, ["insert", "list"]);
         }
         super._registerBind(host, ops);
       }
