@@ -327,7 +327,7 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
-        Literal::Nil => "null".to_string(),
+        Literal::Nil => "undefined".to_string(),
 				Literal::String(s) => s.to_string(),
 				Literal::InterpolatedString(s) => format!(
 					"`{}`",
