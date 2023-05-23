@@ -20,3 +20,7 @@ test "nillarooni" {
   foo.setBar(nil);
 //           ^^^ Expected type to be "num", but got "nil" instead (hint: to allow "nil" assignment use optional type: "num?")
 }
+
+if nil? {
+// ^^^ Expected optional type, found "nil"
+}
