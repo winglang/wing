@@ -66,7 +66,6 @@
     "jsii": "~5.0.0",
     "jsii-diff": "^1.73.0",
     "jsii-pacmak": "^1.73.0",
-    "nanoid": "^3.3.4",
     "npm-check-updates": "^16",
     "patch-package": "^6.5.1",
     "prettier": "^2.8.3",
@@ -105,7 +104,8 @@
     "mime-types": "^2.1.35",
     "safe-stable-stringify": "^1.0.1",
     "tar": "^6.1.13",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "vm2": "^3.9.16"
   },
   "bundledDependencies": [
     "@aws-sdk/client-cloudwatch-logs",
@@ -132,7 +132,8 @@
     "mime-types",
     "safe-stable-stringify",
     "tar",
-    "uuid"
+    "uuid",
+    "vm2"
   ],
   "engines": {
     "node": ">= 16.16.0"
