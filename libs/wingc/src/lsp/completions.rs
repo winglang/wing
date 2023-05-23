@@ -247,6 +247,7 @@ fn get_completions_from_type(
 		| Type::Boolean
 		| Type::Json
 		| Type::MutJson
+		| Type::Nil
 		| Type::Array(_)
 		| Type::MutArray(_)
 		| Type::Map(_)
@@ -371,6 +372,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				| Type::Void
 				| Type::Json
 				| Type::MutJson
+				| Type::Nil
 				| Type::Optional(_) => CompletionItemKind::CONSTANT,
 				Type::Function(_) => CompletionItemKind::FUNCTION,
 				Type::Struct(_) => CompletionItemKind::STRUCT,

@@ -215,11 +215,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.instanceField, host, []);
-        }
-        if (ops.includes("get123")) {
+          Foo._registerBindObject(this.instanceField, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("get123")) {
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight1 extends $stdlib.std.Resource {
