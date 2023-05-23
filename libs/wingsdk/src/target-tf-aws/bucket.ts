@@ -74,10 +74,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   protected eventHandlerLocation(): string {
-    return join(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      "bucket.onevent.inflight.js"
-    );
+    return join(__dirname, "bucket.onevent.inflight.js");
   }
 
   protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {

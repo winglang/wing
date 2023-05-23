@@ -275,6 +275,28 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreatec185c7e3C8EEFD1BC224D064": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketOnCreatec185c7e3D8FD482A",
+            "Arn",
+          ],
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId",
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "mybucketD601CBAA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
     "mybucketD601CBAA": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -299,8 +321,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketmybucketoncreateTopicPolicyB33830D6",
-        "mybucketmybucketoncreateTopic433C7365",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreatec185c7e3C8EEFD1BC224D064",
       ],
       "Properties": {
         "BucketName": {
@@ -308,13 +329,16 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         },
         "Managed": true,
         "NotificationConfiguration": {
-          "TopicConfigurations": [
+          "LambdaFunctionConfigurations": [
             {
               "Events": [
                 "s3:ObjectCreated:Put",
               ],
-              "TopicArn": {
-                "Ref": "mybucketmybucketoncreateTopic433C7365",
+              "LambdaFunctionArn": {
+                "Fn::GetAtt": [
+                  "mybucketOnCreatec185c7e3D8FD482A",
+                  "Arn",
+                ],
               },
             },
           ],
@@ -328,21 +352,21 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketmybucketoncreateOnMessagee556c41c8F9B8424": {
+    "mybucketOnCreatec185c7e3D8FD482A": {
       "DependsOn": [
-        "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168",
+        "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+          "S3Key": "12dca8e2baf154cd4361eac48e0640a590a13f454d682f24765e98bb78dafd4a.zip",
         },
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168",
+            "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD",
             "Arn",
           ],
         },
@@ -351,23 +375,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketmybucketoncreateOnMessagee556c41cAllowInvokemyprojectmybucketmybucketoncreateTopic6BA44E9889C1709A": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "mybucketmybucketoncreateOnMessagee556c41c8F9B8424",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": {
-          "Ref": "mybucketmybucketoncreateTopic433C7365",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168": {
+    "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -397,60 +405,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "mybucketmybucketoncreateOnMessagee556c41cTopic0D41E8E6": {
-      "Properties": {
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "mybucketmybucketoncreateOnMessagee556c41c8F9B8424",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": {
-          "Ref": "mybucketmybucketoncreateTopic433C7365",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "mybucketmybucketoncreateTopic433C7365": {
-      "Type": "AWS::SNS::Topic",
-    },
-    "mybucketmybucketoncreateTopicPolicyB33830D6": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sns:Publish",
-              "Condition": {
-                "ArnLike": {
-                  "aws:SourceArn": {
-                    "Fn::GetAtt": [
-                      "mybucketD601CBAA",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "s3.amazonaws.com",
-              },
-              "Resource": {
-                "Ref": "mybucketmybucketoncreateTopic433C7365",
-              },
-              "Sid": "0",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Topics": [
-          {
-            "Ref": "mybucketmybucketoncreateTopic433C7365",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::TopicPolicy",
     },
   },
   "Rules": {
@@ -667,6 +621,28 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnDeletec185c7e3D8631D576F9BD325": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketOnDeletec185c7e3A022E7E6",
+            "Arn",
+          ],
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId",
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "mybucketD601CBAA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
     "mybucketD601CBAA": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -691,8 +667,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketmybucketondeleteTopicPolicy2D3F2DB5",
-        "mybucketmybucketondeleteTopic8EB28EDB",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnDeletec185c7e3D8631D576F9BD325",
       ],
       "Properties": {
         "BucketName": {
@@ -700,13 +675,16 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         },
         "Managed": true,
         "NotificationConfiguration": {
-          "TopicConfigurations": [
+          "LambdaFunctionConfigurations": [
             {
               "Events": [
                 "s3:ObjectRemoved:*",
               ],
-              "TopicArn": {
-                "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+              "LambdaFunctionArn": {
+                "Fn::GetAtt": [
+                  "mybucketOnDeletec185c7e3A022E7E6",
+                  "Arn",
+                ],
               },
             },
           ],
@@ -720,21 +698,21 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketmybucketondeleteOnMessage9b0c156917D0373F": {
+    "mybucketOnDeletec185c7e3A022E7E6": {
       "DependsOn": [
-        "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB",
+        "mybucketOnDeletec185c7e3ServiceRole113BE170",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+          "S3Key": "12dca8e2baf154cd4361eac48e0640a590a13f454d682f24765e98bb78dafd4a.zip",
         },
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB",
+            "mybucketOnDeletec185c7e3ServiceRole113BE170",
             "Arn",
           ],
         },
@@ -743,23 +721,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketmybucketondeleteOnMessage9b0c1569AllowInvokemyprojectmybucketmybucketondeleteTopicC901E12172EE9293": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "mybucketmybucketondeleteOnMessage9b0c156917D0373F",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": {
-          "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB": {
+    "mybucketOnDeletec185c7e3ServiceRole113BE170": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -789,60 +751,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "mybucketmybucketondeleteOnMessage9b0c1569TopicEB6EC37E": {
-      "Properties": {
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "mybucketmybucketondeleteOnMessage9b0c156917D0373F",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": {
-          "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "mybucketmybucketondeleteTopic8EB28EDB": {
-      "Type": "AWS::SNS::Topic",
-    },
-    "mybucketmybucketondeleteTopicPolicy2D3F2DB5": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sns:Publish",
-              "Condition": {
-                "ArnLike": {
-                  "aws:SourceArn": {
-                    "Fn::GetAtt": [
-                      "mybucketD601CBAA",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "s3.amazonaws.com",
-              },
-              "Resource": {
-                "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
-              },
-              "Sid": "0",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Topics": [
-          {
-            "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::TopicPolicy",
     },
   },
   "Rules": {
@@ -1059,6 +967,28 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnEventc185c7e377677C50BE271300": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketOnEventc185c7e3FD4D7BFF",
+            "Arn",
+          ],
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId",
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "mybucketD601CBAA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
     "mybucketD601CBAA": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -1083,12 +1013,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketmybucketoncreateTopicPolicyB33830D6",
-        "mybucketmybucketoncreateTopic433C7365",
-        "mybucketmybucketondeleteTopicPolicy2D3F2DB5",
-        "mybucketmybucketondeleteTopic8EB28EDB",
-        "mybucketmybucketonupdateTopicPolicy2487AA4F",
-        "mybucketmybucketonupdateTopicD63E039F",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnEventc185c7e377677C50BE271300",
       ],
       "Properties": {
         "BucketName": {
@@ -1096,29 +1021,38 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         },
         "Managed": true,
         "NotificationConfiguration": {
-          "TopicConfigurations": [
+          "LambdaFunctionConfigurations": [
             {
               "Events": [
                 "s3:ObjectCreated:Put",
               ],
-              "TopicArn": {
-                "Ref": "mybucketmybucketoncreateTopic433C7365",
-              },
-            },
-            {
-              "Events": [
-                "s3:ObjectCreated:Post",
-              ],
-              "TopicArn": {
-                "Ref": "mybucketmybucketonupdateTopicD63E039F",
+              "LambdaFunctionArn": {
+                "Fn::GetAtt": [
+                  "mybucketOnEventc185c7e3FD4D7BFF",
+                  "Arn",
+                ],
               },
             },
             {
               "Events": [
                 "s3:ObjectRemoved:*",
               ],
-              "TopicArn": {
-                "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
+              "LambdaFunctionArn": {
+                "Fn::GetAtt": [
+                  "mybucketOnEventc185c7e3FD4D7BFF",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Events": [
+                "s3:ObjectCreated:Post",
+              ],
+              "LambdaFunctionArn": {
+                "Fn::GetAtt": [
+                  "mybucketOnEventc185c7e3FD4D7BFF",
+                  "Arn",
+                ],
               },
             },
           ],
@@ -1132,21 +1066,21 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketmybucketoncreateOnMessagee556c41c8F9B8424": {
+    "mybucketOnEventc185c7e3FD4D7BFF": {
       "DependsOn": [
-        "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168",
+        "mybucketOnEventc185c7e3ServiceRole3C4A0154",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+          "S3Key": "12dca8e2baf154cd4361eac48e0640a590a13f454d682f24765e98bb78dafd4a.zip",
         },
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168",
+            "mybucketOnEventc185c7e3ServiceRole3C4A0154",
             "Arn",
           ],
         },
@@ -1155,23 +1089,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketmybucketoncreateOnMessagee556c41cAllowInvokemyprojectmybucketmybucketoncreateTopic6BA44E9889C1709A": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "mybucketmybucketoncreateOnMessagee556c41c8F9B8424",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": {
-          "Ref": "mybucketmybucketoncreateTopic433C7365",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "mybucketmybucketoncreateOnMessagee556c41cServiceRole3AFEA168": {
+    "mybucketOnEventc185c7e3ServiceRole3C4A0154": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1201,308 +1119,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "mybucketmybucketoncreateOnMessagee556c41cTopic0D41E8E6": {
-      "Properties": {
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "mybucketmybucketoncreateOnMessagee556c41c8F9B8424",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": {
-          "Ref": "mybucketmybucketoncreateTopic433C7365",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "mybucketmybucketoncreateTopic433C7365": {
-      "Type": "AWS::SNS::Topic",
-    },
-    "mybucketmybucketoncreateTopicPolicyB33830D6": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sns:Publish",
-              "Condition": {
-                "ArnLike": {
-                  "aws:SourceArn": {
-                    "Fn::GetAtt": [
-                      "mybucketD601CBAA",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "s3.amazonaws.com",
-              },
-              "Resource": {
-                "Ref": "mybucketmybucketoncreateTopic433C7365",
-              },
-              "Sid": "0",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Topics": [
-          {
-            "Ref": "mybucketmybucketoncreateTopic433C7365",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::TopicPolicy",
-    },
-    "mybucketmybucketondeleteOnMessage9b0c156917D0373F": {
-      "DependsOn": [
-        "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 30,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "mybucketmybucketondeleteOnMessage9b0c1569AllowInvokemyprojectmybucketmybucketondeleteTopicC901E12172EE9293": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "mybucketmybucketondeleteOnMessage9b0c156917D0373F",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": {
-          "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "mybucketmybucketondeleteOnMessage9b0c1569ServiceRole54F120EB": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mybucketmybucketondeleteOnMessage9b0c1569TopicEB6EC37E": {
-      "Properties": {
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "mybucketmybucketondeleteOnMessage9b0c156917D0373F",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": {
-          "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "mybucketmybucketondeleteTopic8EB28EDB": {
-      "Type": "AWS::SNS::Topic",
-    },
-    "mybucketmybucketondeleteTopicPolicy2D3F2DB5": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sns:Publish",
-              "Condition": {
-                "ArnLike": {
-                  "aws:SourceArn": {
-                    "Fn::GetAtt": [
-                      "mybucketD601CBAA",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "s3.amazonaws.com",
-              },
-              "Resource": {
-                "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
-              },
-              "Sid": "0",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Topics": [
-          {
-            "Ref": "mybucketmybucketondeleteTopic8EB28EDB",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::TopicPolicy",
-    },
-    "mybucketmybucketonupdateOnMessagef51cc46c4A62B889": {
-      "DependsOn": [
-        "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 30,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "mybucketmybucketonupdateOnMessagef51cc46cAllowInvokemyprojectmybucketmybucketonupdateTopic6F3E4B24E908269E": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "mybucketmybucketonupdateOnMessagef51cc46c4A62B889",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": {
-          "Ref": "mybucketmybucketonupdateTopicD63E039F",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mybucketmybucketonupdateOnMessagef51cc46cTopic1566EEDE": {
-      "Properties": {
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "mybucketmybucketonupdateOnMessagef51cc46c4A62B889",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": {
-          "Ref": "mybucketmybucketonupdateTopicD63E039F",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "mybucketmybucketonupdateTopicD63E039F": {
-      "Type": "AWS::SNS::Topic",
-    },
-    "mybucketmybucketonupdateTopicPolicy2487AA4F": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sns:Publish",
-              "Condition": {
-                "ArnLike": {
-                  "aws:SourceArn": {
-                    "Fn::GetAtt": [
-                      "mybucketD601CBAA",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "s3.amazonaws.com",
-              },
-              "Resource": {
-                "Ref": "mybucketmybucketonupdateTopicD63E039F",
-              },
-              "Sid": "0",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Topics": [
-          {
-            "Ref": "mybucketmybucketonupdateTopicD63E039F",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::TopicPolicy",
     },
   },
   "Rules": {
@@ -1719,6 +1335,28 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdatec185c7e33DF9CD21169809C3": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketOnUpdatec185c7e36237E59F",
+            "Arn",
+          ],
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId",
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "mybucketD601CBAA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
     "mybucketD601CBAA": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -1743,8 +1381,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketmybucketonupdateTopicPolicy2487AA4F",
-        "mybucketmybucketonupdateTopicD63E039F",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdatec185c7e33DF9CD21169809C3",
       ],
       "Properties": {
         "BucketName": {
@@ -1752,13 +1389,16 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         },
         "Managed": true,
         "NotificationConfiguration": {
-          "TopicConfigurations": [
+          "LambdaFunctionConfigurations": [
             {
               "Events": [
                 "s3:ObjectCreated:Post",
               ],
-              "TopicArn": {
-                "Ref": "mybucketmybucketonupdateTopicD63E039F",
+              "LambdaFunctionArn": {
+                "Fn::GetAtt": [
+                  "mybucketOnUpdatec185c7e36237E59F",
+                  "Arn",
+                ],
               },
             },
           ],
@@ -1772,21 +1412,21 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketmybucketonupdateOnMessagef51cc46c4A62B889": {
+    "mybucketOnUpdatec185c7e36237E59F": {
       "DependsOn": [
-        "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C",
+        "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "7960dd5328d11c9402bdfae3d17c3a2100cd3fea4ee1ac7565dc6c34a918d7f8.zip",
+          "S3Key": "12dca8e2baf154cd4361eac48e0640a590a13f454d682f24765e98bb78dafd4a.zip",
         },
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C",
+            "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD",
             "Arn",
           ],
         },
@@ -1795,23 +1435,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketmybucketonupdateOnMessagef51cc46cAllowInvokemyprojectmybucketmybucketonupdateTopic6F3E4B24E908269E": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "mybucketmybucketonupdateOnMessagef51cc46c4A62B889",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": {
-          "Ref": "mybucketmybucketonupdateTopicD63E039F",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "mybucketmybucketonupdateOnMessagef51cc46cServiceRole59A6643C": {
+    "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1841,60 +1465,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "mybucketmybucketonupdateOnMessagef51cc46cTopic1566EEDE": {
-      "Properties": {
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "mybucketmybucketonupdateOnMessagef51cc46c4A62B889",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": {
-          "Ref": "mybucketmybucketonupdateTopicD63E039F",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "mybucketmybucketonupdateTopicD63E039F": {
-      "Type": "AWS::SNS::Topic",
-    },
-    "mybucketmybucketonupdateTopicPolicy2487AA4F": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sns:Publish",
-              "Condition": {
-                "ArnLike": {
-                  "aws:SourceArn": {
-                    "Fn::GetAtt": [
-                      "mybucketD601CBAA",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "s3.amazonaws.com",
-              },
-              "Resource": {
-                "Ref": "mybucketmybucketonupdateTopicD63E039F",
-              },
-              "Sid": "0",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Topics": [
-          {
-            "Ref": "mybucketmybucketonupdateTopicD63E039F",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::TopicPolicy",
     },
   },
   "Rules": {

@@ -7,14 +7,14 @@ import {
   Bucket as S3Bucket,
 } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { SnsDestination } from "aws-cdk-lib/aws-s3-notifications";
+import { LambdaDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost, Resource } from "../std";
+import { convertBetweenHandlers } from "../utils/convert";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -52,35 +52,133 @@ export class Bucket extends cloud.Bucket {
   }
 
   protected eventHandlerLocation(): string {
-    return join(
-      __dirname.replace("target-awscdk", "shared-aws"),
-      "bucket.onevent.inflight.js"
+    return join(__dirname, "bucket.onevent.inflight.js");
+  }
+
+  private onEventFunction(
+    event: string,
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnCreateProps
+  ): Function {
+    const hash = inflight.node.addr.slice(-8);
+    const functionHandler = convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-${event}-Handler-${hash}`,
+      inflight,
+      this.eventHandlerLocation(),
+      `BucketEventHandlerClient`
+    );
+
+    const fn = Function._newFunction(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-${event}-${hash}`,
+      functionHandler,
+      opts
+    );
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.CREATE,
+    });
+
+    if (!(fn instanceof Function)) {
+      throw new Error(
+        "Bucket only supports creating awscdk.Function right now"
+      );
+    }
+
+    return fn;
+  }
+
+  public onCreate(
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnCreateProps
+  ): void {
+    const fn = this.onEventFunction("OnCreate", inflight, opts);
+
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.CREATE],
+      new LambdaDestination(fn._function)
     );
   }
 
-  protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {
-    const handler = cloud.Topic._newTopic(
-      this,
-      `${this.node.id}-on_${actionType.toLowerCase()}`
+  public onDelete(
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnDeleteProps
+  ): void {
+    const fn = this.onEventFunction("OnDelete", inflight, opts);
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.DELETE,
+    });
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.DELETE,
+    });
+
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.DELETE],
+      new LambdaDestination(fn._function)
+    );
+  }
+
+  public onUpdate(
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnUpdateProps
+  ): void {
+    const fn = this.onEventFunction("OnUpdate", inflight, opts);
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.UPDATE,
+    });
+
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.UPDATE],
+      new LambdaDestination(fn._function)
+    );
+  }
+
+  public onEvent(
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnEventProps
+  ) {
+    const fn = this.onEventFunction("OnEvent", inflight, opts);
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.CREATE,
+    });
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.CREATE],
+      new LambdaDestination(fn._function)
     );
 
     Resource.addConnection({
       from: this,
-      to: handler,
-      relationship: actionType,
+      to: fn,
+      relationship: cloud.BucketEventType.DELETE,
     });
-
-    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
-    if (!(handler instanceof AWSTopic)) {
-      throw new Error("Topic only supports creating tfaws.Function right now");
-    }
-
     this.bucket.addEventNotification(
-      EVENTS[actionType],
-      new SnsDestination(handler._topic)
+      EVENTS[cloud.BucketEventType.DELETE],
+      new LambdaDestination(fn._function)
     );
 
-    return handler;
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.UPDATE,
+    });
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.UPDATE],
+      new LambdaDestination(fn._function)
+    );
   }
 
   /** @internal */
