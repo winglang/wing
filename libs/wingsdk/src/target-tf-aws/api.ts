@@ -13,13 +13,13 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { Code } from "../core/inflight";
-import { IInflightHost, Resource } from "../std";
-import { convertBetweenHandlers } from "../utils/convert";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../utils/resource-names";
+} from "../core/resource-names";
+import { convertBetweenHandlers } from "../shared/convert";
+import { IInflightHost, Resource } from "../std";
 
 /**
  * The stage name for the API, used in its url.

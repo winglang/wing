@@ -10,11 +10,11 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NameOptions, ResourceNames } from "../core/resource-names";
+import { createBundle } from "../shared/bundling";
 import { PolicyStatement } from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
-import { createBundle } from "../utils/bundling";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * Function names are limited to 64 characters.

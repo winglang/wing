@@ -5,9 +5,9 @@ import { DataAwsSecretsmanagerSecret } from "../.gen/providers/aws/data-aws-secr
 import { SecretsmanagerSecret } from "../.gen/providers/aws/secretsmanager-secret";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NameOptions, ResourceNames } from "../core/resource-names";
 import { calculateSecretPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * The secret name can contain ASCII letters, numbers, and the following characters: /_+=.@-

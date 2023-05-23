@@ -11,13 +11,13 @@ import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IResource } from "../std";
-import { createBundle } from "../utils/bundling";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../utils/resource-names";
+} from "../core/resource-names";
+import { createBundle } from "../shared/bundling";
+import { IResource } from "../std";
 
 /**
  * Function names are limited to 32 characters.

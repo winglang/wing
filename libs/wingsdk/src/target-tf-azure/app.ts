@@ -8,12 +8,12 @@ import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps } from "../core";
-import { CdktfApp } from "../shared-tf/app";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../utils/resource-names";
+} from "../core/resource-names";
+import { CdktfApp } from "../shared-tf/app";
 
 /**
  * Azure app props

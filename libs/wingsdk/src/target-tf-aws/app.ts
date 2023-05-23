@@ -36,9 +36,9 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
+import { NameOptions, ResourceNames } from "../core/resource-names";
 import { REDIS_FQN } from "../redis";
 import { CdktfApp } from "../shared-tf/app";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration

@@ -7,13 +7,13 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { Subnet } from "../.gen/providers/aws/subnet";
 import { Code } from "../core";
 import * as core from "../core";
-import * as redis from "../redis";
-import { IInflightHost } from "../std";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../utils/resource-names";
+} from "../core/resource-names";
+import * as redis from "../redis";
+import { IInflightHost } from "../std";
 
 const ELASTICACHE_NAME_OPTS: NameOptions = {
   maxLen: 50,
