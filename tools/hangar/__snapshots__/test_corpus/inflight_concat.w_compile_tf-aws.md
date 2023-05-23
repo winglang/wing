@@ -10,7 +10,7 @@ module.exports = function({  }) {
     async foo()  {
       {
         const __parent_this = this;
-        {console.log((await this.s1.concat(" world")))};
+        {console.log((typeof this.s1.concat === "function" ? await this.s1.concat(" world") : await this.s1.concat.handle(" world")))};
       }
     }
   }

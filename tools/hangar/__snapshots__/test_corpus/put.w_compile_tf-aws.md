@@ -8,18 +8,18 @@ module.exports = function({ b }) {
     }
     async handle()  {
       {
-        (await b.put("test1.txt","Foo"));
-        (await b.put("test2.txt","Bar"));
-        const first = (await b.get("test1.txt"));
-        const second = (await b.get("test2.txt"));
+        (typeof b.put === "function" ? await b.put("test1.txt","Foo") : await b.put.handle("test1.txt","Foo"));
+        (typeof b.put === "function" ? await b.put("test2.txt","Bar") : await b.put.handle("test2.txt","Bar"));
+        const first = (typeof b.get === "function" ? await b.get("test1.txt") : await b.get.handle("test1.txt"));
+        const second = (typeof b.get === "function" ? await b.get("test2.txt") : await b.get.handle("test2.txt"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(first === "Foo")'`)})((first === "Foo"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(second === "Bar")'`)})((second === "Bar"))};
-        (await b.delete("test1.txt"));
-        const files = (await b.list());
+        (typeof b.delete === "function" ? await b.delete("test1.txt") : await b.delete.handle("test1.txt"));
+        const files = (typeof b.list === "function" ? await b.list() : await b.list.handle());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
-        (await b.put("test2.txt","Baz"));
-        const third = (await b.get("test2.txt"));
+        (typeof b.put === "function" ? await b.put("test2.txt","Baz") : await b.put.handle("test2.txt","Baz"));
+        const third = (typeof b.get === "function" ? await b.get("test2.txt") : await b.get.handle("test2.txt"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === "Baz")'`)})((third === "Baz"))};
       }
     }

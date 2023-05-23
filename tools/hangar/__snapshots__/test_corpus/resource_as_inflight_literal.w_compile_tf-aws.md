@@ -8,7 +8,7 @@ module.exports = function({ fn }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof fn.invoke === "function" ? await fn.invoke("test") : await fn.invoke.handle("test")) === "hello world!")'`)})(((typeof fn.invoke === "function" ? await fn.invoke("test") : await fn.invoke.handle("test")) === "hello world!"))};
       }
     }
   }

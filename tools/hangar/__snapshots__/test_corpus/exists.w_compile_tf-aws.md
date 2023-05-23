@@ -1,4 +1,4 @@
-# [bucket_keys.w](../../../../examples/tests/valid/bucket_keys.w) | compile | tf-aws
+# [exists.w](../../../../examples/tests/valid/exists.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
@@ -8,17 +8,13 @@ module.exports = function({ b }) {
     }
     async handle()  {
       {
-        (typeof b.put === "function" ? await b.put("foo","text") : await b.put.handle("foo","text"));
-        (typeof b.put === "function" ? await b.put("foo/","text") : await b.put.handle("foo/","text"));
-        (typeof b.put === "function" ? await b.put("foo/bar","text") : await b.put.handle("foo/bar","text"));
-        (typeof b.put === "function" ? await b.put("foo/bar/","text") : await b.put.handle("foo/bar/","text"));
-        (typeof b.put === "function" ? await b.put("foo/bar/baz","text") : await b.put.handle("foo/bar/baz","text"));
-        const objs = (typeof b.list === "function" ? await b.list() : await b.list.handle());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(0) : await objs.at.handle(0)) === "foo")'`)})(((typeof objs.at === "function" ? await objs.at(0) : await objs.at.handle(0)) === "foo"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(1) : await objs.at.handle(1)) === "foo/")'`)})(((typeof objs.at === "function" ? await objs.at(1) : await objs.at.handle(1)) === "foo/"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(2) : await objs.at.handle(2)) === "foo/bar")'`)})(((typeof objs.at === "function" ? await objs.at(2) : await objs.at.handle(2)) === "foo/bar"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(3) : await objs.at.handle(3)) === "foo/bar/")'`)})(((typeof objs.at === "function" ? await objs.at(3) : await objs.at.handle(3)) === "foo/bar/"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof objs.at === "function" ? await objs.at(4) : await objs.at.handle(4)) === "foo/bar/baz")'`)})(((typeof objs.at === "function" ? await objs.at(4) : await objs.at.handle(4)) === "foo/bar/baz"))};
+        (typeof b.put === "function" ? await b.put("test1.txt","Foo") : await b.put.handle("test1.txt","Foo"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof b.exists === "function" ? await b.exists("test1.txt") : await b.exists.handle("test1.txt"))'`)})((typeof b.exists === "function" ? await b.exists("test1.txt") : await b.exists.handle("test1.txt")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(typeof b.exists === "function" ? await b.exists("test2.txt") : await b.exists.handle("test2.txt")))'`)})((!(typeof b.exists === "function" ? await b.exists("test2.txt") : await b.exists.handle("test2.txt"))))};
+        (typeof b.put === "function" ? await b.put("test2.txt","Bar") : await b.put.handle("test2.txt","Bar"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof b.exists === "function" ? await b.exists("test2.txt") : await b.exists.handle("test2.txt"))'`)})((typeof b.exists === "function" ? await b.exists("test2.txt") : await b.exists.handle("test2.txt")))};
+        (typeof b.delete === "function" ? await b.delete("test1.txt") : await b.delete.handle("test1.txt"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(typeof b.exists === "function" ? await b.exists("test1.txt") : await b.exists.handle("test1.txt")))'`)})((!(typeof b.exists === "function" ? await b.exists("test1.txt") : await b.exists.handle("test1.txt"))))};
       }
     }
   }
@@ -48,7 +44,7 @@ module.exports = function({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:exists\",\"${aws_lambda_function.root_testexists_Handler_D4B9F53C.arn}\"]]"
     }
   },
   "provider": {
@@ -58,62 +54,62 @@ module.exports = function({ b }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_testexists_Handler_IamRole_EFE1EDFF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/test:exists/Handler/IamRole",
+            "uniqueId": "root_testexists_Handler_IamRole_EFE1EDFF"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_testexists_Handler_IamRolePolicy_C3791F05": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/test:exists/Handler/IamRolePolicy",
+            "uniqueId": "root_testexists_Handler_IamRolePolicy_C3791F05"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testexists_Handler_IamRole_EFE1EDFF.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_testexists_Handler_IamRolePolicyAttachment_27BE8849": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/test:exists/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testexists_Handler_IamRolePolicyAttachment_27BE8849"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testexists_Handler_IamRole_EFE1EDFF.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testtest_Handler_046C3415": {
+      "root_testexists_Handler_D4B9F53C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/test:exists/Handler/Default",
+            "uniqueId": "root_testexists_Handler_D4B9F53C"
           }
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c823e891"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "Handler-c823e891",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_testexists_Handler_IamRole_EFE1EDFF.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_testexists_Handler_S3Object_2DD29570.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -176,11 +172,11 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_object": {
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_testexists_Handler_S3Object_2DD29570": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/test:exists/Handler/S3Object",
+            "uniqueId": "root_testexists_Handler_S3Object_2DD29570"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -232,18 +228,18 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(b, host, ["list", "put"]);
+          this._registerBindObject(b, host, ["delete", "exists", "put"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:exists",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "bucket_keys", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "exists", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

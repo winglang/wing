@@ -8,7 +8,7 @@ module.exports = function({ b, fileName }) {
     }
     async handle(msg)  {
       {
-        const x = (await b.getJson(fileName));
+        const x = (typeof b.getJson === "function" ? await b.getJson(fileName) : await b.getJson.handle(fileName));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
       }
     }
@@ -26,8 +26,8 @@ module.exports = function({ b, fileName, j, getJson }) {
     }
     async handle()  {
       {
-        (await b.putJson(fileName,j));
-        (await getJson.invoke(""));
+        (typeof b.putJson === "function" ? await b.putJson(fileName,j) : await b.putJson.handle(fileName,j));
+        (typeof getJson.invoke === "function" ? await getJson.invoke("") : await getJson.invoke.handle(""));
       }
     }
   }

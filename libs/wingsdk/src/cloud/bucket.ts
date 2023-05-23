@@ -55,7 +55,8 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.LIST,
       BucketInflightMethods.PUT,
       BucketInflightMethods.PUT_JSON,
-      BucketInflightMethods.PUBLIC_URL
+      BucketInflightMethods.PUBLIC_URL,
+      BucketInflightMethods.EXISTS
     );
 
     props;
@@ -222,6 +223,13 @@ export interface BucketDeleteOptions {
  */
 export interface IBucketClient {
   /**
+   * Check if an object exists in the bucket.
+   * @param key Key of the object.
+   * @inflight
+   */
+  exists(key: string): Promise<boolean>;
+
+  /**
    * Put an object in the bucket.
    * @param key Key of the object.
    * @param body Content of the object we want to store into the bucket.
@@ -379,4 +387,6 @@ export enum BucketInflightMethods {
   GET_JSON = "getJson",
   /** `Bucket.publicUrl */
   PUBLIC_URL = "publicUrl",
+  /** `Bucket.exists` */
+  EXISTS = "exists",
 }

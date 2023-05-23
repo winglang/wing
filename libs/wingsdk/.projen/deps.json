@@ -118,6 +118,10 @@
       "type": "build"
     },
     {
+      "name": "nanoid",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^16",
       "type": "build"
@@ -265,10 +269,6 @@
     },
     {
       "name": "uuid",
-      "type": "bundled"
-    },
-    {
-      "name": "vm2",
       "type": "bundled"
     },
     {

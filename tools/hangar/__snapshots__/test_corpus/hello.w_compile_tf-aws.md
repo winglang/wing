@@ -8,7 +8,7 @@ module.exports = function({ bucket }) {
     }
     async handle(message)  {
       {
-        (await bucket.put("wing.txt",`Hello, ${message}`));
+        (typeof bucket.put === "function" ? await bucket.put("wing.txt",`Hello, ${message}`) : await bucket.put.handle("wing.txt",`Hello, ${message}`));
       }
     }
   }
