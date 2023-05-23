@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          repository: winglang/wing
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
