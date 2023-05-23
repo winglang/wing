@@ -66,25 +66,25 @@ let table = new cloud.Table(cloud.TableProps{
   },
 });
 
-new cloud.Function(inflight (message: str) => {
+test "Increment counter" {
   let previous = counter.inc();
   log("Assertion should fail: ${previous} === ${counter.peek()}");
   assert(previous == 1);
-}) as "test: Increment counter";
+}
 
-new cloud.Function(inflight (message: str) => {
+test "Push message to the queue" {
  queue.push("hey");
-}) as "test: Push message to the queue";
+}
 
-new cloud.Function(inflight (message: str) => {
+test "Print"{
   log("Hello World!");
   assert(true);
-}) as "test: Print";
+}
 
-new cloud.Function(inflight (message: str) => {
-}) as "test: without assertions nor prints";
+test "without assertions nor prints" {
+}
 
-new cloud.Function(inflight (message: str) => {
+test "Add fixtures" {
   let arr = [1, 2, 3, 4, 5];
 
   log("Adding ${arr.length} files in the bucket..");
@@ -98,4 +98,4 @@ new cloud.Function(inflight (message: str) => {
   log("Setting up counter..");
   counter.reset();
   counter.inc(100);
-}) as "test: Add fixtures";
+}

@@ -18,6 +18,11 @@ import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
+const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
+
+const matchTest = (path: string) => {
+  return isTest.test(path) || isTestHandler.test(path);
+};
 
 export interface ExplorerItem {
   id: string;
@@ -110,7 +115,7 @@ export const createAppRouter = () => {
               return false;
             }
 
-            if (!input.showTests && isTest.test(node.path)) {
+            if (!input.showTests && matchTest(node.path)) {
               return false;
             }
 
@@ -141,7 +146,7 @@ export const createAppRouter = () => {
                     return false;
                   }
 
-                  if (!input.showTests && isTest.test(node.path)) {
+                  if (!input.showTests && matchTest(node.path)) {
                     return false;
                   }
 
@@ -175,8 +180,7 @@ export const createAppRouter = () => {
                   if (node.display?.hidden) {
                     return false;
                   }
-
-                  if (!input.showTests && isTest.test(node.path)) {
+                  if (!input.showTests && matchTest(node.path)) {
                     return false;
                   }
 
@@ -301,7 +305,7 @@ export const createAppRouter = () => {
             return false;
           }
 
-          if (!showTests && isTest.test(node.path)) {
+          if (!showTests && matchTest(node.path)) {
             return false;
           }
 
@@ -426,7 +430,7 @@ function createExplorerItemFromConstructTreeNode(
       ? Object.values(node.children)
           .filter((node) => {
             return (
-              !node.display?.hidden && (showTests || !isTest.test(node.path))
+              !node.display?.hidden && (showTests || !matchTest(node.path))
             );
           })
           .map((node) =>
@@ -465,7 +469,7 @@ function createMapNodeFromConstructTreeNode(
               return false;
             }
 
-            if (!showTests && isTest.test(node.path)) {
+            if (!showTests && matchTest(node.path)) {
               return false;
             }
 
@@ -489,7 +493,7 @@ function createMapEdgeFromConstructTreeNode(
   nodeMap: ConstructTreeNodeMap,
   showTests = false,
 ): MapEdge[] {
-  if (node.display?.hidden || (!showTests && isTest.test(node.path))) {
+  if (node.display?.hidden || (!showTests && matchTest(node.path))) {
     return [];
   }
 
@@ -502,7 +506,7 @@ function createMapEdgeFromConstructTreeNode(
         }
 
         const shouldRemove =
-          node.display?.hidden || (!showTests && isTest.test(node.path));
+          node.display?.hidden || (!showTests && matchTest(node.path));
         if (direction === "inbound" && !shouldRemove) {
           return true;
         }

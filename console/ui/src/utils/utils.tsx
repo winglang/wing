@@ -33,6 +33,11 @@ import { RedisIcon } from "../design-system/icons/RedisIcon.js";
 import { TreeMenuItem } from "./useTreeMenuItems.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
+const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
+
+const matchTest = (path: string) => {
+  return isTest.test(path) || isTestHandler.test(path);
+};
 
 export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {
   return items.flatMap((item) => {
@@ -67,7 +72,7 @@ export const getResourceIconComponent = (
   resourceType: BaseResourceSchema["type"] | undefined,
   { solid = true, resourceId }: { solid?: boolean; resourceId?: string } = {},
 ) => {
-  if (resourceId && isTest.test(resourceId)) {
+  if (resourceId && matchTest(resourceId)) {
     return solid ? SolidBeakerIcon : BeakerIcon;
   }
   switch (resourceType) {

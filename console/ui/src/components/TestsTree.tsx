@@ -25,7 +25,7 @@ export type TestStatus = "success" | "error" | "running" | "pending";
 
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
-  return test.replace(/test: /g, "");
+  return test.replace(/test:/g, "");
 };
 
 export interface TestItem {
