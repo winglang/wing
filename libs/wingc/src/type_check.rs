@@ -2591,7 +2591,9 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	/// Validate if the fields of a class are initialized in the preflight constructor (init).
+	/// Validate if the fields of a class are initialized in the constructor (init) according to the given phase.
+	/// For example, if the phase is preflight, then all non-static preflight fields must be initialized
+	/// and if the phase is inflight, then all non-static inflight fields must be initialized.
 	///
 	/// # Arguments
 	///
