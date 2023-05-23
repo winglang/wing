@@ -29,10 +29,10 @@ module.exports = function({ foo }) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
         (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue("hello") : await foo.setOptionalValue.handle("hello"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== null)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== null))};
-        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue(null) : await foo.setOptionalValue.handle(null));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== undefined)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== undefined))};
+        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue(undefined) : await foo.setOptionalValue.handle(undefined));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === null)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === null))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === undefined)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === undefined))};
       }
     }
   }
@@ -54,7 +54,7 @@ module.exports = function({  }) {
           const __parent_this = this;
           return "hello";
         }
-        return null;
+        return undefined;
       }
     }
     async setOptionalValue(msg)  {
@@ -275,7 +275,7 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "optionalVar");
         const __parent_this = this;
-        this.optionalVar = null;
+        this.optionalVar = undefined;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
