@@ -2071,8 +2071,6 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(condition, env);
 				self.validate_type_is_optional(cond_type, condition);
 
-				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
-
 				// Technically we only allow if let statements to be used with optionals
 				// and above validate_type_is_optional method will attach a diagnostic error if it is not.
 				// However to avoid panics this will allow code to continue if the type is not an optional
@@ -2085,6 +2083,9 @@ impl<'a> TypeChecker<'a> {
 					cond_type
 				};
 
+        let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+        
+        // Add the variable to if block scope
 				match stmt_env.define(
 					var_name,
 					SymbolKind::make_variable(var_type, false, true, env.phase),
@@ -2098,8 +2099,6 @@ impl<'a> TypeChecker<'a> {
 
 				statements.set_env(stmt_env);
 				self.inner_scopes.push(statements);
-
-				// Add if let variable to environment
 
 				if let Some(else_scope) = else_statements {
 					else_scope.set_env(SymbolEnv::new(
