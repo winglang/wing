@@ -10,7 +10,7 @@ module.exports = function({  }) {
     async foo()  {
       {
         const __parent_this = this;
-        {console.log((await this.s1.concat(" world")))};
+        {console.log((typeof this.s1.concat === "function" ? await this.s1.concat(" world") : await this.s1.concat.handle(" world")))};
       }
     }
   }
@@ -90,10 +90,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.s1, host, []);
+          R._registerBindObject(this.s1, host, []);
         }
         if (ops.includes("foo")) {
-          this._registerBindObject(this.s1, host, []);
+          R._registerBindObject(this.s1, host, []);
         }
         super._registerBind(host, ops);
       }

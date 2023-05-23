@@ -8,7 +8,7 @@ module.exports = function({ f }) {
     }
     async handle()  {
       {
-        (await f.call());
+        (typeof f.call === "function" ? await f.call() : await f.call.handle());
       }
     }
   }
@@ -25,7 +25,7 @@ module.exports = function({ f }) {
     }
     async handle()  {
       {
-        (await f.print("hey there"));
+        (typeof f.print === "function" ? await f.print("hey there") : await f.print.handle("hey there"));
       }
     }
   }
@@ -55,10 +55,10 @@ module.exports = function({  }) {
     async call()  {
       {
         const __parent_this = this;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regexInflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regexInflight("[a-z]+-\\d+","abc-123")))};
-        const uuid = (await Foo.getUuid());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof Foo.regexInflight === "function" ? await Foo.regexInflight("[a-z]+-\\d+","abc-123") : await Foo.regexInflight.handle("[a-z]+-\\d+","abc-123"))'`)})((typeof Foo.regexInflight === "function" ? await Foo.regexInflight("[a-z]+-\\d+","abc-123") : await Foo.regexInflight.handle("[a-z]+-\\d+","abc-123")))};
+        const uuid = (typeof Foo.getUuid === "function" ? await Foo.getUuid() : await Foo.getUuid.handle());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.getData()) === "Cool data!")'`)})(((await Foo.getData()) === "Cool data!"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof Foo.getData === "function" ? await Foo.getData() : await Foo.getData.handle()) === "Cool data!")'`)})(((typeof Foo.getData === "function" ? await Foo.getData() : await Foo.getData.handle()) === "Cool data!"))};
       }
     }
   }
@@ -296,16 +296,20 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("call")) {
+          Foo._registerBindObject(Foo, host, ["getData", "getUuid", "regexInflight"]);
         }
+        if (ops.includes("print")) {
+        }
+        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
         if (ops.includes("getData")) {
         }
         if (ops.includes("getUuid")) {
         }
-        if (ops.includes("print")) {
-        }
         if (ops.includes("regexInflight")) {
         }
-        super._registerBind(host, ops);
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight1 extends $stdlib.std.Resource {
@@ -338,7 +342,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(f, host, ["call"]);
+          $Inflight1._registerBindObject(f, host, ["call"]);
         }
         super._registerBind(host, ops);
       }
@@ -373,7 +377,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(f, host, ["print"]);
+          $Inflight2._registerBindObject(f, host, ["print"]);
         }
         super._registerBind(host, ops);
       }

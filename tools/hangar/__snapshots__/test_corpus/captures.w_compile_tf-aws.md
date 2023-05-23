@@ -8,16 +8,16 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
     }
     async handle(event)  {
       {
-        (await bucket1.put("file.txt","data"));
-        (await bucket2.get("file.txt"));
-        (await bucket2.get("file2.txt"));
-        (await bucket3.get("file3.txt"));
-        for (const stuff of (await bucket1.list())) {
+        (typeof bucket1.put === "function" ? await bucket1.put("file.txt","data") : await bucket1.put.handle("file.txt","data"));
+        (typeof bucket2.get === "function" ? await bucket2.get("file.txt") : await bucket2.get.handle("file.txt"));
+        (typeof bucket2.get === "function" ? await bucket2.get("file2.txt") : await bucket2.get.handle("file2.txt"));
+        (typeof bucket3.get === "function" ? await bucket3.get("file3.txt") : await bucket3.get.handle("file3.txt"));
+        for (const stuff of (typeof bucket1.list === "function" ? await bucket1.list() : await bucket1.list.handle())) {
           {console.log(stuff)};
         }
-        {console.log((await bucket2.publicUrl("file.txt")))};
+        {console.log((typeof bucket2.publicUrl === "function" ? await bucket2.publicUrl("file.txt") : await bucket2.publicUrl.handle("file.txt")))};
         try {
-          (await bucket1.publicUrl("file.txt"));
+          (typeof bucket1.publicUrl === "function" ? await bucket1.publicUrl("file.txt") : await bucket1.publicUrl.handle("file.txt"));
         }
         catch ($error_error) {
           const error = $error_error.message;
@@ -500,9 +500,9 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
-          this._registerBindObject(bucket2, host, ["get", "publicUrl"]);
-          this._registerBindObject(bucket3, host, ["get"]);
+          $Inflight1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
+          $Inflight1._registerBindObject(bucket2, host, ["get", "publicUrl"]);
+          $Inflight1._registerBindObject(bucket3, host, ["get"]);
         }
         super._registerBind(host, ops);
       }

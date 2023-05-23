@@ -8,7 +8,7 @@ module.exports = function({ __parent_this }) {
     }
     async handle(payload)  {
       {
-        (await __parent_this.b.put("k","v"));
+        (typeof __parent_this.b.put === "function" ? await __parent_this.b.put("k","v") : await __parent_this.b.put.handle("k","v"));
         class InflightClass {
           constructor()  {
             this.field = "value";
@@ -21,7 +21,7 @@ module.exports = function({ __parent_this }) {
           }
         }
         const c = new InflightClass();
-        (await c.method());
+        (typeof c.method === "function" ? await c.method() : await c.method.handle());
       }
     }
   }
@@ -38,7 +38,7 @@ module.exports = function({ f }) {
     }
     async handle()  {
       {
-        (await f.invoke("text"));
+        (typeof f.invoke === "function" ? await f.invoke("text") : await f.invoke.handle("text"));
       }
     }
   }
@@ -340,7 +340,7 @@ class $Root extends $stdlib.std.Resource {
               if (ops.includes("$inflight_init")) {
               }
               if (ops.includes("handle")) {
-                this._registerBindObject(__parent_this.b, host, ["put"]);
+                $Inflight1._registerBindObject(__parent_this.b, host, ["put"]);
               }
               super._registerBind(host, ops);
             }
@@ -371,7 +371,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.b, host, []);
+          PreflightClass._registerBindObject(this.b, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -406,7 +406,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(f, host, ["invoke"]);
+          $Inflight2._registerBindObject(f, host, ["invoke"]);
         }
         super._registerBind(host, ops);
       }

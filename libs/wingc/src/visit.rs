@@ -349,6 +349,7 @@ where
 				}
 			}
 		}
+		Literal::Nil => {}
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
 		Literal::Duration(_) => {}

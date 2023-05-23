@@ -505,10 +505,10 @@ error: Unable to qualify which operations are performed on 'this.b' of type 'Buc
 
 
 error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:47:13
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:47:18
    |
 47 |     let b = this.array.at(1);
-   |             ^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   |                  ^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
@@ -821,6 +821,30 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
     at async test (/Users/tsuf/Documents/wing/apps/wing/dist/commands/test.js:45:9)"
 `;
 
+exports[`nil.w > stderr 1`] = `
+"error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+  --> ../../../examples/tests/invalid/nil.w:3:14
+  |
+3 | let x: str = nil;
+  |              ^^^ Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+
+
+error: Expected optional type, found \\"nil\\"
+   --> ../../../examples/tests/invalid/nil.w:24:4
+   |
+24 | if nil? {
+   |    ^^^ Expected optional type, found \\"nil\\"
+
+
+error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+   --> ../../../examples/tests/invalid/nil.w:20:14
+   |
+20 |   foo.setBar(nil);
+   |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+
+"
+`;
+
 exports[`optionals.w > stderr 1`] = `
 "Error: error: Expected type to be \\"num\\", but got \\"num?\\" instead
   --> ../../../examples/tests/invalid/optionals.w:7:3
@@ -999,18 +1023,18 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
 `;
 
 exports[`resource_captures.w > stderr 1`] = `
-"Error: error: Cannot capture reassignable field 'reassignable'
-   --> ../../../examples/tests/invalid/resource_captures.w:18:12
+"error: Cannot capture reassignable field 'reassignable'
+   --> ../../../examples/tests/invalid/resource_captures.w:18:17
    |
 18 |     log(\\"\${this.reassignable}\\");
-   |            ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
+   |                 ^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
 
 
 error: Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
-   --> ../../../examples/tests/invalid/resource_captures.w:20:9
+   --> ../../../examples/tests/invalid/resource_captures.w:20:14
    |
 20 |     log(this.mutArray.at(0));
-   |         ^^^^^^^^^^^^^ Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
+   |              ^^^^^^^^ Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
 
 
 error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
@@ -1021,10 +1045,10 @@ error: Unable to qualify which operations are performed on 'this.bucket' of type
 
 
 error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
-   --> ../../../examples/tests/invalid/resource_captures.w:27:5
+   --> ../../../examples/tests/invalid/resource_captures.w:27:10
    |
 27 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   |          ^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
 
 
     at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:167:15)
