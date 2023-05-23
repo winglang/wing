@@ -342,7 +342,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(foo, host, ["returnNil"]);
+          $Inflight1._registerBindObject(foo, host, ["returnNil"]);
         }
         super._registerBind(host, ops);
       }
@@ -377,7 +377,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(foo, host, ["getOptionalValue", "setOptionalValue"]);
+          $Inflight2._registerBindObject(foo, host, ["getOptionalValue", "setOptionalValue"]);
         }
         super._registerBind(host, ops);
       }
