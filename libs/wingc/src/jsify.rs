@@ -72,7 +72,7 @@ pub struct JSifier<'a> {
 /// `instance` for binding instance fields and methods to the host.
 enum BindMethod {
 	Type,
-	instance,
+	Instance,
 }
 
 impl<'a> JSifier<'a> {
@@ -938,7 +938,7 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
 		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
 		// Generate the the class's host binding methods
-		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::instance));
+		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Instance));
 		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Type));
 
 		code.close("}");
@@ -1304,7 +1304,7 @@ impl<'a> JSifier<'a> {
 		let mut bind_method = CodeMaker::default();
 		let (modifier, bind_method_name) = match bind_method_kind {
 			BindMethod::Type => ("static ", "_registerTypeBind"),
-			BindMethod::instance => ("", "_registerBind"),
+			BindMethod::Instance => ("", "_registerBind"),
 		};
 
 		let class_name = class.name.to_string();
