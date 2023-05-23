@@ -22,7 +22,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly timeout: number;
 
   /**
-   * The path to the bundled function code. Assigned in `init()`.
+   * The bundle information (assigned during `init()`).
    */
   private bundle?: Bundle;
 
