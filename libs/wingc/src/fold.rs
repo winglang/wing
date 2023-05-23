@@ -27,8 +27,8 @@ pub trait Fold {
 	fn fold_interface(&mut self, node: Interface) -> Interface {
 		fold_interface(self, node)
 	}
-	fn fold_constructor(&mut self, node: Initializer) -> Initializer {
-		fold_constructor(self, node)
+	fn fold_initializer(&mut self, node: Initializer) -> Initializer {
+		fold_initializer(self, node)
 	}
 	fn fold_expr(&mut self, node: Expr) -> Expr {
 		fold_expr(self, node)
@@ -85,12 +85,12 @@ where
 			module_name: f.fold_symbol(module_name),
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},
-		StmtKind::VariableDef {
+		StmtKind::Let {
 			reassignable,
 			var_name,
 			initial_value,
 			type_,
-		} => StmtKind::VariableDef {
+		} => StmtKind::Let {
 			reassignable,
 			var_name: f.fold_symbol(var_name),
 			initial_value: f.fold_expr(initial_value),
@@ -178,7 +178,7 @@ where
 			.into_iter()
 			.map(|(name, def)| (f.fold_symbol(name), f.fold_function_definition(def)))
 			.collect(),
-		initializer: f.fold_constructor(node.initializer),
+		initializer: f.fold_initializer(node.initializer),
 		parent: node.parent.map(|parent| f.fold_user_defined_type(parent)),
 		implements: node
 			.implements
@@ -232,7 +232,7 @@ where
 	}
 }
 
-pub fn fold_constructor<F>(f: &mut F, node: Initializer) -> Initializer
+pub fn fold_initializer<F>(f: &mut F, node: Initializer) -> Initializer
 where
 	F: Fold + ?Sized,
 {
@@ -266,8 +266,8 @@ where
 			end: Box::new(f.fold_expr(*end)),
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
-		ExprKind::Call { function, arg_list } => ExprKind::Call {
-			function: Box::new(f.fold_expr(*function)),
+		ExprKind::Call { callee, arg_list } => ExprKind::Call {
+			callee: Box::new(f.fold_expr(*callee)),
 			arg_list: f.fold_args(arg_list),
 		},
 		ExprKind::Unary { op, exp } => ExprKind::Unary {
@@ -365,7 +365,6 @@ where
 		signature: f.fold_function_signature(node.signature),
 		is_static: node.is_static,
 		span: node.span,
-		captures: node.captures,
 	}
 }
 
@@ -445,6 +444,7 @@ where
 	UserDefinedType {
 		root: f.fold_symbol(node.root),
 		fields: node.fields.into_iter().map(|s| f.fold_symbol(s)).collect(),
+		span: node.span,
 	}
 }
 

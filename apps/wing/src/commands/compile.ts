@@ -8,8 +8,9 @@ import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { copyDir, normalPath } from "../util";
-import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
+import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import { existsSync } from "fs";
+import { Target } from "./constants";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -18,18 +19,6 @@ Error.stackTraceLimit = 50;
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 const WINGC_PREFLIGHT = "preflight.js";
-
-/**
- * Available targets for compilation.
- * This is passed from Commander to the `compile` function.
- */
-export enum Target {
-  TF_AWS = "tf-aws",
-  TF_AZURE = "tf-azure",
-  TF_GCP = "tf-gcp",
-  SIM = "sim",
-  AWSCDK = "awscdk",
-}
 
 const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AWS]: "tfaws",
@@ -155,7 +144,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
     for (const error of errors) {
-      const { message, span, level } = error;
+      const { message, span } = error;
       let files: File[] = [];
       let labels: Label[] = [];
 
@@ -178,7 +167,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         files,
         {
           message,
-          severity: level.toLowerCase() as Severity,
+          severity: "error",
           labels,
         },
         {

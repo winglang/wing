@@ -8,6 +8,7 @@ import {
   PutObjectCommand,
   GetBucketLocationCommand,
   S3Client,
+  GetObjectOutput,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { Duration, Json } from "../std";
@@ -18,6 +19,16 @@ export class BucketClient implements IBucketClient {
     private readonly _public: boolean = false,
     private readonly s3Client = new S3Client({})
   ) {}
+
+  public async exists(key: string): Promise<boolean> {
+    const command = new ListObjectsV2Command({
+      Bucket: this.bucketName,
+      Prefix: key,
+      MaxKeys: 1,
+    });
+    const resp: ListObjectsV2CommandOutput = await this.s3Client.send(command);
+    return !!resp.Contents && resp.Contents.length > 0;
+  }
 
   public async put(key: string, body: string): Promise<void> {
     const command = new PutObjectCommand({
@@ -38,22 +49,27 @@ export class BucketClient implements IBucketClient {
       Bucket: this.bucketName,
       Key: key,
     });
-    const resp = await this.s3Client.send(command);
-    return consumers.text(resp.Body as Readable);
+    let resp: GetObjectOutput;
+    try {
+      resp = await this.s3Client.send(command);
+    } catch (e) {
+      throw new Error(
+        `Object does not exist (key=${key}): ${(e as Error).stack}`
+      );
+    }
+    try {
+      return await consumers.text(resp.Body as Readable);
+    } catch (e) {
+      throw new Error(
+        `Object contents could not be read as text (key=${key}): ${
+          (e as Error).stack
+        })}`
+      );
+    }
   }
 
   public async getJson(key: string): Promise<Json> {
     return JSON.parse(await this.get(key));
-  }
-
-  private async exists(key: string): Promise<boolean> {
-    const command = new ListObjectsV2Command({
-      Bucket: this.bucketName,
-      Prefix: key,
-      MaxKeys: 1,
-    });
-    const resp: ListObjectsV2CommandOutput = await this.s3Client.send(command);
-    return !!resp.Contents && resp.Contents.length > 0;
   }
 
   private async getLocation(): Promise<string> {

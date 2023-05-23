@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ list.wsim » root/env0/test
+pass ─ list.wsim » root/env0/test:list
 ```
 

@@ -2,7 +2,7 @@ bring cloud;
 
 let counter = new cloud.Counter(initial: 0);
 
-new cloud.Function(inflight () => {
+test "reset" {
   assert(counter.peek() == 0);
   counter.inc();
   assert(counter.peek() == 1);
@@ -14,4 +14,4 @@ new cloud.Function(inflight () => {
   assert(counter.peek() == 0);
   counter.reset(88);
   assert(counter.peek() == 88);
-}) as "test:reset";
+}

@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ approx_size.wsim » root/env0/test
+pass ─ approx_size.wsim » root/env0/test:approxSize
 ```
 

@@ -1,10 +1,14 @@
 import { join } from "path";
+import { ITerraformDependable } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
-import { S3BucketNotification } from "../.gen/providers/aws/s3-bucket-notification";
+import {
+  S3BucketNotification,
+  S3BucketNotificationTopic,
+} from "../.gen/providers/aws/s3-bucket-notification";
 
 import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-public-access-block";
@@ -50,6 +54,8 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
 export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
+  private readonly notificationTopics: S3BucketNotificationTopic[] = [];
+  private readonly notificationDependencies: ITerraformDependable[] = [];
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -84,22 +90,26 @@ export class Bucket extends cloud.Bucket {
 
     handler.addPermissionToPublish(this, "s3.amazonaws.com", this.bucket.arn);
 
-    new S3BucketNotification(
-      this,
-      `S3Object_on_${actionType.toLowerCase()}_notifier`,
-      {
-        bucket: this.bucket.id,
-        topic: [
-          {
-            events: EVENTS[actionType],
-            topicArn: handler.arn,
-          },
-        ],
-        dependsOn: [handler.permissions],
-      }
-    );
+    this.notificationTopics.push({
+      id: `on-${actionType.toLowerCase()}-notification`,
+      events: EVENTS[actionType],
+      topicArn: handler.arn,
+    });
+
+    this.notificationDependencies.push(handler.permissions);
 
     return handler;
+  }
+
+  public _preSynthesize() {
+    super._preSynthesize();
+    if (this.notificationTopics.length) {
+      new S3BucketNotification(this, `S3BucketNotification`, {
+        bucket: this.bucket.id,
+        topic: this.notificationTopics,
+        dependsOn: this.notificationDependencies,
+      });
+    }
   }
 
   /** @internal */

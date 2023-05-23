@@ -1,5 +1,24 @@
 # [std_string.w](../../../../examples/tests/valid/std_string.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ s1, s2 }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
+        {console.log((typeof (typeof s1.split === "function" ? await s1.split(" ") : await s1.split.handle(" ")).at === "function" ? await (typeof s1.split === "function" ? await s1.split(" ") : await s1.split.handle(" ")).at(1) : await (typeof s1.split === "function" ? await s1.split(" ") : await s1.split.handle(" ")).at.handle(1)))};
+        {console.log((typeof s1.concat === "function" ? await s1.concat(s2) : await s1.concat.handle(s2)))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -21,7 +40,7 @@
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:string\",\"${aws_lambda_function.root_teststring_0FD8A9C3.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:string\",\"${aws_lambda_function.root_teststring_Handler_0FEC3C02.arn}\"]]"
     }
   },
   "provider": {
@@ -31,60 +50,60 @@
   },
   "resource": {
     "aws_iam_role": {
-      "root_teststring_IamRole_A23B11BC": {
+      "root_teststring_Handler_IamRole_5A8EA2E8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:string/IamRole",
-            "uniqueId": "root_teststring_IamRole_A23B11BC"
+            "path": "root/Default/Default/test:string/Handler/IamRole",
+            "uniqueId": "root_teststring_Handler_IamRole_5A8EA2E8"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_teststring_IamRolePolicy_E68C254E": {
+      "root_teststring_Handler_IamRolePolicy_6CA5C6A2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:string/IamRolePolicy",
-            "uniqueId": "root_teststring_IamRolePolicy_E68C254E"
+            "path": "root/Default/Default/test:string/Handler/IamRolePolicy",
+            "uniqueId": "root_teststring_Handler_IamRolePolicy_6CA5C6A2"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_teststring_IamRole_A23B11BC.name}"
+        "role": "${aws_iam_role.root_teststring_Handler_IamRole_5A8EA2E8.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_teststring_IamRolePolicyAttachment_CF9D26FE": {
+      "root_teststring_Handler_IamRolePolicyAttachment_FACB7AC7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:string/IamRolePolicyAttachment",
-            "uniqueId": "root_teststring_IamRolePolicyAttachment_CF9D26FE"
+            "path": "root/Default/Default/test:string/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_teststring_Handler_IamRolePolicyAttachment_FACB7AC7"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_teststring_IamRole_A23B11BC.name}"
+        "role": "${aws_iam_role.root_teststring_Handler_IamRole_5A8EA2E8.name}"
       }
     },
     "aws_lambda_function": {
-      "root_teststring_0FD8A9C3": {
+      "root_teststring_Handler_0FEC3C02": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:string/Default",
-            "uniqueId": "root_teststring_0FD8A9C3"
+            "path": "root/Default/Default/test:string/Handler/Default",
+            "uniqueId": "root_teststring_Handler_0FEC3C02"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "test-string-c8b12930"
+            "WING_FUNCTION_NAME": "Handler-c8a1f7f0"
           }
         },
-        "function_name": "test-string-c8b12930",
+        "function_name": "Handler-c8a1f7f0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_teststring_IamRole_A23B11BC.arn}",
+        "role": "${aws_iam_role.root_teststring_Handler_IamRole_5A8EA2E8.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_teststring_S3Object_9049C921.key}",
+        "s3_key": "${aws_s3_object.root_teststring_Handler_S3Object_01023DE4.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -104,11 +123,11 @@
       }
     },
     "aws_s3_object": {
-      "root_teststring_S3Object_9049C921": {
+      "root_teststring_Handler_S3Object_01023DE4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:string/S3Object",
-            "uniqueId": "root_teststring_S3Object_9049C921"
+            "path": "root/Default/Default/test:string/Handler/S3Object",
+            "uniqueId": "root_teststring_Handler_S3Object_01023DE4"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -130,6 +149,44 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const s1_client = context._lift(s1);
+        const s2_client = context._lift(s2);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            s1: ${s1_client},
+            s2: ${s2_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(s1, host, []);
+          this._registerBindObject(s2, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const s1 = "some string";
     const s2 = "s are immutable";
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s1.length === 11)'`)})((s1.length === 11))};
@@ -147,20 +204,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(("   some string   ".trim()) === "some string")'`)})((("   some string   ".trim()) === "some string"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '("Some String".toLocaleUpperCase() === "SOME STRING")'`)})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(("hello" + " world") === "hello world")'`)})((("hello" + " world") === "hello world"))};
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:string",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        s1: {
-          obj: s1,
-          ops: []
-        },
-        s2: {
-          obj: s2,
-          ops: []
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:string",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -179,17 +223,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { s1, s2 } = this;
-  {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
-  {console.log((await (await s1.split(" ")).at(1)))};
-  {console.log((await s1.concat(s2)))};
-}
 
 ```
 

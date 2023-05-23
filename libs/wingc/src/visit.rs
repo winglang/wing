@@ -17,7 +17,7 @@ use crate::ast::{
 ///
 /// ```ignore
 /// impl<'ast> Visit<'ast> for ExprVisitor {
-///   fn visit_item_fn(&mut self, exp: &'ast Expr) {
+///   fn visit_expr(&mut self, exp: &'ast Expr) {
 ///     println!("Expr with span={}", exp.span);
 ///
 ///     // Delegate to the default impl to visit any nested expressions.
@@ -98,7 +98,7 @@ where
 				v.visit_symbol(identifier);
 			}
 		}
-		StmtKind::VariableDef {
+		StmtKind::Let {
 			reassignable: _,
 			var_name,
 			initial_value,
@@ -286,8 +286,8 @@ where
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
 		}
-		ExprKind::Call { function, arg_list } => {
-			v.visit_expr(function);
+		ExprKind::Call { callee, arg_list } => {
+			v.visit_expr(callee);
 			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {

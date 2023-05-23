@@ -38,7 +38,6 @@ const project = new cdk.JsiiProject({
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
     // preflight dependencies
-    "debug",
     "esbuild-wasm",
     "safe-stable-stringify",
     // aws client dependencies
@@ -68,13 +67,11 @@ const project = new cdk.JsiiProject({
     "cron-parser",
     // shared client dependencies
     "ioredis",
-    "vm2",
   ],
   devDeps: [
     `@cdktf/provider-aws@^12.0.1`, // only for testing Wing plugins
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
-    "@types/debug",
     "@types/fs-extra",
     "@types/mime-types",
     "@types/tar",
@@ -88,6 +85,7 @@ const project = new cdk.JsiiProject({
     "vitest",
     "@types/uuid",
     "@vitest/coverage-c8",
+    "nanoid", // for ESM import test in target-sim/function.test.ts
   ],
   jest: false,
   prettier: true,
@@ -250,5 +248,8 @@ restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
 
 project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
 project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
+
+// We use symlinks between several projects but we do not use workspaces
+project.npmrc.addConfig("install-links", "false");
 
 project.synth();

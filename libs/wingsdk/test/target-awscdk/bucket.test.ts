@@ -4,7 +4,7 @@ import { test, expect } from "vitest";
 import { Bucket, IBucketEventHandler } from "../../src/cloud";
 import { NodeJsCode, Inflight } from "../../src/core";
 import * as awscdk from "../../src/target-awscdk";
-import { mkdtemp } from "../../src/util";
+import { mkdtemp } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",

@@ -204,7 +204,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -248,7 +248,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -423,7 +423,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -467,7 +467,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -646,7 +646,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -690,7 +690,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -827,8 +827,8 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
   "wingsdk.sim.EventMapping created.",
   "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\").",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\").",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\").",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -958,7 +958,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -1002,7 +1002,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -1179,7 +1179,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
@@ -1223,7 +1223,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "add_consumer",
+                "relationship": "consumer",
                 "resource": "root/my_queue",
               },
             ],

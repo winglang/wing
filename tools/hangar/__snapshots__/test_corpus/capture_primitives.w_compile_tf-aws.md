@@ -1,5 +1,36 @@
 # [capture_primitives.w](../../../../examples/tests/valid/capture_primitives.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(s)  {
+      {
+        {console.log(myStr)};
+        const n = myNum;
+        {console.log(`${n}`)};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
+        if (myBool) {
+          {console.log("bool=true")};
+        }
+        else {
+          {console.log("bool=false")};
+        }
+        const min = myDur.minutes;
+        const sec = myDur.seconds;
+        const hr = myDur.hours;
+        const split = (typeof `min=${min} sec=${sec} hr=${hr}`.split === "function" ? await `min=${min} sec=${sec} hr=${hr}`.split(" ") : await `min=${min} sec=${sec} hr=${hr}`.split.handle(" "));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -130,37 +161,59 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const my_str = "hello, string";
-    const my_num = 1234;
-    const my_bool = true;
-    const my_second_bool = false;
-    const my_dur = $stdlib.std.Duration.fromSeconds(600);
-    const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        my_bool: {
-          obj: my_bool,
-          ops: []
-        },
-        my_dur: {
-          obj: my_dur,
-          ops: []
-        },
-        my_num: {
-          obj: my_num,
-          ops: []
-        },
-        my_second_bool: {
-          obj: my_second_bool,
-          ops: []
-        },
-        my_str: {
-          obj: my_str,
-          ops: []
-        },
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
       }
-    })
-    ;
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const myStr_client = context._lift(myStr);
+        const myNum_client = context._lift(myNum);
+        const mySecondBool_client = context._lift(mySecondBool);
+        const myBool_client = context._lift(myBool);
+        const myDur_client = context._lift(myDur);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            myStr: ${myStr_client},
+            myNum: ${myNum_client},
+            mySecondBool: ${mySecondBool_client},
+            myBool: ${myBool_client},
+            myDur: ${myDur_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(myBool, host, []);
+          this._registerBindObject(myDur, host, []);
+          this._registerBindObject(myNum, host, []);
+          this._registerBindObject(mySecondBool, host, []);
+          this._registerBindObject(myStr, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const myStr = "hello, string";
+    const myNum = 1234;
+    const myBool = true;
+    const mySecondBool = false;
+    const myDur = $stdlib.std.Duration.fromSeconds(600);
+    const handler = new $Inflight1(this,"$Inflight1");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler);
   }
 }
@@ -180,29 +233,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(s) {
-  const { my_bool, my_dur, my_num, my_second_bool, my_str } = this;
-  {console.log(my_str)};
-  const n = my_num;
-  {console.log(`${n}`)};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(my_second_bool === false)'`)})((my_second_bool === false))};
-  if (my_bool) {
-    {console.log("bool=true")};
-  }
-  else {
-    {console.log("bool=false")};
-  }
-  const min = my_dur.minutes;
-  const sec = my_dur.seconds;
-  const hr = my_dur.hours;
-  const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
-}
 
 ```
 

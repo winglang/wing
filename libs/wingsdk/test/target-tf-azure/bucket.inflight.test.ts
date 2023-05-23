@@ -4,6 +4,7 @@ import {
   BlobClient,
   BlobDeleteResponse,
   BlobDownloadResponseParsed,
+  BlobExistsOptions,
   BlobItem,
   BlobServiceClient,
   BlockBlobClient,
@@ -17,6 +18,9 @@ import { BucketClient } from "../../src/target-tf-azure/bucket.inflight";
 
 vi.mock("@azure/storage-blob");
 
+type TestPath = "happy" | "sad";
+let TEST_PATH: TestPath;
+
 const mockBlobServiceClient = new BlobServiceClient(
   "https://some-fake-url.com"
 );
@@ -26,6 +30,7 @@ mockBlobServiceClient.getContainerClient = vi.fn(() => {
 
 beforeEach(() => {
   vi.clearAllMocks;
+  TEST_PATH = "happy";
 });
 
 test("get object from a bucket", async () => {
@@ -45,6 +50,27 @@ test("get object from a bucket", async () => {
 
   // THEN
   expect(response).toEqual("some fake content");
+});
+
+test("get an invalid object from a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sad";
+
+  // THEN
+  await expect(() => client.get(KEY)).rejects.toThrowError(
+    /Object does not exist/
+  );
 });
 
 test("put an object into a bucket", async () => {
@@ -124,13 +150,66 @@ test("List objects from bucket", async () => {
   expect(response).toEqual(["object1", "object2"]);
 });
 
+test("check that an object exists in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "happy";
+
+  const objectExists = await client.exists("object1");
+
+  // THEN
+  expect(objectExists).toEqual(true);
+});
+
+test("check that an object doesn't exist in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sad";
+
+  const objectExists = await client.exists("object1");
+
+  // THEN
+  expect(objectExists).toEqual(false);
+});
+
 // Mock Clients
 class MockBlobClient extends BlobClient {
   download(): Promise<BlobDownloadResponseParsed> {
-    return Promise.resolve({
-      _response: null as any,
-      readableStreamBody: createMockStream("some fake content"),
-    });
+    if (TEST_PATH === "happy") {
+      return Promise.resolve({
+        _response: null as any,
+        readableStreamBody: createMockStream("some fake content"),
+      });
+    } else {
+      return Promise.reject("some fake error");
+    }
+  }
+
+  exists(options?: BlobExistsOptions | undefined): Promise<boolean> {
+    options;
+    if (TEST_PATH === "happy") {
+      return Promise.resolve(true);
+    } else {
+      return Promise.resolve(false);
+    }
   }
 }
 

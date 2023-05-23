@@ -60,11 +60,13 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return topicClient.publish(key);
   }
 
-  private async fileExists(key: string): Promise<boolean> {
-    return fs.promises
-      .access(join(this.fileDir, key))
-      .then(() => true)
-      .catch(() => false);
+  public async exists(key: string): Promise<boolean> {
+    return this.context.withTrace({
+      message: `Exists (key=${key}).`,
+      activity: async () => {
+        return this.objectKeys.has(key);
+      },
+    });
   }
 
   public async put(key: string, value: string): Promise<void> {
@@ -80,7 +82,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put Json (key=${key}).`,
       activity: async () => {
-        const actionType: BucketEventType = (await this.fileExists(key))
+        const actionType: BucketEventType = this.objectKeys.has(key)
           ? BucketEventType.UPDATE
           : BucketEventType.CREATE;
 
@@ -96,7 +98,13 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const hash = this.hashKey(key);
         const filename = join(this.fileDir, hash);
-        return fs.promises.readFile(filename, "utf8");
+        try {
+          return await fs.promises.readFile(filename, "utf8");
+        } catch (e) {
+          throw new Error(
+            `Object does not exist (key=${key}): ${(e as Error).stack}`
+          );
+        }
       },
     });
   }

@@ -2,11 +2,11 @@ bring cloud;
 
 let q = new cloud.Queue();
 
-new cloud.Function(inflight () => {
+test "purge" {
   q.push("foo");
   q.push("bar");
   q.push("baz");
-  assert(q.approx_size() == 3);
+  assert(q.approxSize() == 3);
   q.purge();
-  assert(q.approx_size() == 0);
-}) as "test";
+  assert(q.approxSize() == 0);
+}

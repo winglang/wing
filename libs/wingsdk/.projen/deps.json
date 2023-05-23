@@ -10,10 +10,6 @@
       "type": "build"
     },
     {
-      "name": "@types/debug",
-      "type": "build"
-    },
-    {
       "name": "@types/express",
       "type": "build"
     },
@@ -119,6 +115,10 @@
     {
       "name": "jsii",
       "version": "~5.0.0",
+      "type": "build"
+    },
+    {
+      "name": "nanoid",
       "type": "build"
     },
     {
@@ -244,10 +244,6 @@
       "type": "bundled"
     },
     {
-      "name": "debug",
-      "type": "bundled"
-    },
-    {
       "name": "esbuild-wasm",
       "type": "bundled"
     },
@@ -273,10 +269,6 @@
     },
     {
       "name": "uuid",
-      "type": "bundled"
-    },
-    {
-      "name": "vm2",
       "type": "bundled"
     },
     {

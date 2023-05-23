@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ resource_captures_globals.wsim » root/env0/test
+pass ─ resource_captures_globals.wsim » root/env0/test:test
 ```
 

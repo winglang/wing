@@ -1,20 +1,49 @@
 # [resource_captures.w](../../../../examples/tests/valid/resource_captures.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ r }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (typeof r.testNoCapture === "function" ? await r.testNoCapture() : await r.testNoCapture.handle());
+        (typeof r.testCaptureCollectionsOfData === "function" ? await r.testCaptureCollectionsOfData() : await r.testCaptureCollectionsOfData.handle());
+        (typeof r.testCapturePrimitives === "function" ? await r.testCapturePrimitives() : await r.testCapturePrimitives.handle());
+        (typeof r.testCaptureOptional === "function" ? await r.testCaptureOptional() : await r.testCaptureOptional.handle());
+        (typeof r.testCaptureResource === "function" ? await r.testCaptureResource() : await r.testCaptureResource.handle());
+        (typeof r.testNestedInflightField === "function" ? await r.testNestedInflightField() : await r.testNestedInflightField.handle());
+        (typeof r.testNestedResource === "function" ? await r.testNestedResource() : await r.testNestedResource.handle());
+        (typeof r.testExpressionRecursive === "function" ? await r.testExpressionRecursive() : await r.testExpressionRecursive.handle());
+        (typeof r.testExternal === "function" ? await r.testExternal() : await r.testExternal.handle());
+        (typeof r.testUserDefinedResource === "function" ? await r.testUserDefinedResource() : await r.testUserDefinedResource.handle());
+        (typeof r.testInflightField === "function" ? await r.testInflightField() : await r.testInflightField.handle());
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/Another.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  Another {
-    constructor({ first, my_field }) {
+    constructor({ first, myField }) {
       this.first = first;
-      this.my_field = my_field;
+      this.myField = myField;
     }
-    async meaning_of_life()  {
+    async meaningOfLife()  {
       {
+        const __parent_this = this;
         return 42;
       }
     }
-    async another_func()  {
+    async anotherFunc()  {
       {
+        const __parent_this = this;
         return "42";
       }
     }
@@ -26,10 +55,10 @@ module.exports = function() {
 
 ## clients/First.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  First {
-    constructor({ my_resource }) {
-      this.my_resource = my_resource;
+    constructor({ myResource }) {
+      this.myResource = myResource;
     }
   }
   return First;
@@ -39,95 +68,106 @@ module.exports = function() {
 
 ## clients/MyResource.inflight.js
 ```js
-module.exports = function() {
+module.exports = function({  }) {
   class  MyResource {
-    constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_opt_str, my_queue, my_resource, my_str, set_of_str, unused_resource }) {
+    constructor({ another, arrayOfStr, extBucket, extNum, mapOfNum, myBool, myNum, myOptStr, myQueue, myResource, myStr, setOfStr, unusedResource }) {
       this.another = another;
-      this.array_of_str = array_of_str;
-      this.ext_bucket = ext_bucket;
-      this.ext_num = ext_num;
-      this.map_of_num = map_of_num;
-      this.my_bool = my_bool;
-      this.my_num = my_num;
-      this.my_opt_str = my_opt_str;
-      this.my_queue = my_queue;
-      this.my_resource = my_resource;
-      this.my_str = my_str;
-      this.set_of_str = set_of_str;
-      this.unused_resource = unused_resource;
+      this.arrayOfStr = arrayOfStr;
+      this.extBucket = extBucket;
+      this.extNum = extNum;
+      this.mapOfNum = mapOfNum;
+      this.myBool = myBool;
+      this.myNum = myNum;
+      this.myOptStr = myOptStr;
+      this.myQueue = myQueue;
+      this.myResource = myResource;
+      this.myStr = myStr;
+      this.setOfStr = setOfStr;
+      this.unusedResource = unusedResource;
     }
-    async test_no_capture()  {
+    async testNoCapture()  {
       {
+        const __parent_this = this;
         const arr = Object.freeze([1, 2, 3]);
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 3)'`)})((arr.length === 3))};
         {console.log(`array.len=${arr.length}`)};
       }
     }
-    async test_capture_collections_of_data()  {
+    async testCaptureCollectionsOfData()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.array_of_str.length === 2)'`)})((this.array_of_str.length === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.array_of_str.at(0)) === "s1")'`)})(((await this.array_of_str.at(0)) === "s1"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.array_of_str.at(1)) === "s2")'`)})(((await this.array_of_str.at(1)) === "s2"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.map_of_num)["k1"] === 11)'`)})(((this.map_of_num)["k1"] === 11))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.map_of_num)["k2"] === 22)'`)})(((this.map_of_num)["k2"] === 22))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.set_of_str.has("s1"))'`)})((await this.set_of_str.has("s1")))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.set_of_str.has("s2"))'`)})((await this.set_of_str.has("s2")))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await this.set_of_str.has("s3")))'`)})((!(await this.set_of_str.has("s3"))))};
+        const __parent_this = this;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.arrayOfStr.length === 2)'`)})((this.arrayOfStr.length === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof this.arrayOfStr.at === "function" ? await this.arrayOfStr.at(0) : await this.arrayOfStr.at.handle(0)) === "s1")'`)})(((typeof this.arrayOfStr.at === "function" ? await this.arrayOfStr.at(0) : await this.arrayOfStr.at.handle(0)) === "s1"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof this.arrayOfStr.at === "function" ? await this.arrayOfStr.at(1) : await this.arrayOfStr.at.handle(1)) === "s2")'`)})(((typeof this.arrayOfStr.at === "function" ? await this.arrayOfStr.at(1) : await this.arrayOfStr.at.handle(1)) === "s2"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.mapOfNum)["k1"] === 11)'`)})(((this.mapOfNum)["k1"] === 11))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.mapOfNum)["k2"] === 22)'`)})(((this.mapOfNum)["k2"] === 22))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.setOfStr.has === "function" ? await this.setOfStr.has("s1") : await this.setOfStr.has.handle("s1"))'`)})((typeof this.setOfStr.has === "function" ? await this.setOfStr.has("s1") : await this.setOfStr.has.handle("s1")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.setOfStr.has === "function" ? await this.setOfStr.has("s2") : await this.setOfStr.has.handle("s2"))'`)})((typeof this.setOfStr.has === "function" ? await this.setOfStr.has("s2") : await this.setOfStr.has.handle("s2")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(typeof this.setOfStr.has === "function" ? await this.setOfStr.has("s3") : await this.setOfStr.has.handle("s3")))'`)})((!(typeof this.setOfStr.has === "function" ? await this.setOfStr.has("s3") : await this.setOfStr.has.handle("s3"))))};
       }
     }
-    async test_capture_primitives()  {
+    async testCapturePrimitives()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_str === "my_string")'`)})((this.my_str === "my_string"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_num === 42)'`)})((this.my_num === 42))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_bool === true)'`)})((this.my_bool === true))};
+        const __parent_this = this;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.myStr === "myString")'`)})((this.myStr === "myString"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.myNum === 42)'`)})((this.myNum === 42))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.myBool === true)'`)})((this.myBool === true))};
       }
     }
-    async test_capture_optional()  {
+    async testCaptureOptional()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.my_opt_str ?? "") === "my_opt_string")'`)})(((this.my_opt_str ?? "") === "my_opt_string"))};
+        const __parent_this = this;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.myOptStr ?? "") === "myOptString")'`)})(((this.myOptStr ?? "") === "myOptString"))};
       }
     }
-    async test_capture_resource()  {
+    async testCaptureResource()  {
       {
-        (await this.my_resource.put("f1.txt","f1"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.my_resource.get("f1.txt")) === "f1")'`)})(((await this.my_resource.get("f1.txt")) === "f1"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.my_resource.list()).length === 1)'`)})(((await this.my_resource.list()).length === 1))};
+        const __parent_this = this;
+        (typeof this.myResource.put === "function" ? await this.myResource.put("f1.txt","f1") : await this.myResource.put.handle("f1.txt","f1"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof this.myResource.get === "function" ? await this.myResource.get("f1.txt") : await this.myResource.get.handle("f1.txt")) === "f1")'`)})(((typeof this.myResource.get === "function" ? await this.myResource.get("f1.txt") : await this.myResource.get.handle("f1.txt")) === "f1"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof this.myResource.list === "function" ? await this.myResource.list() : await this.myResource.list.handle()).length === 1)'`)})(((typeof this.myResource.list === "function" ? await this.myResource.list() : await this.myResource.list.handle()).length === 1))};
       }
     }
-    async test_nested_preflight_field()  {
+    async testNestedInflightField()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.another.my_field === "hello!")'`)})((this.another.my_field === "hello!"))};
-        {console.log(`field=${this.another.my_field}`)};
+        const __parent_this = this;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.another.myField === "hello!")'`)})((this.another.myField === "hello!"))};
+        {console.log(`field=${this.another.myField}`)};
       }
     }
-    async test_nested_resource()  {
+    async testNestedResource()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.first.my_resource.list()).length === 0)'`)})(((await this.another.first.my_resource.list()).length === 0))};
-        (await this.another.first.my_resource.put("hello",this.my_str));
-        {console.log(`this.another.first.my_resource:${(await this.another.first.my_resource.get("hello"))}`)};
+        const __parent_this = this;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof this.another.first.myResource.list === "function" ? await this.another.first.myResource.list() : await this.another.first.myResource.list.handle()).length === 0)'`)})(((typeof this.another.first.myResource.list === "function" ? await this.another.first.myResource.list() : await this.another.first.myResource.list.handle()).length === 0))};
+        (typeof this.another.first.myResource.put === "function" ? await this.another.first.myResource.put("hello",this.myStr) : await this.another.first.myResource.put.handle("hello",this.myStr));
+        {console.log(`this.another.first.myResource:${(typeof this.another.first.myResource.get === "function" ? await this.another.first.myResource.get("hello") : await this.another.first.myResource.get.handle("hello"))}`)};
       }
     }
-    async test_expression_recursive()  {
+    async testExpressionRecursive()  {
       {
-        (await this.my_queue.push(this.my_str));
+        const __parent_this = this;
+        (typeof this.myQueue.push === "function" ? await this.myQueue.push(this.myStr) : await this.myQueue.push.handle(this.myStr));
       }
     }
-    async test_external()  {
+    async testExternal()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.ext_bucket.list()).length === 0)'`)})(((await this.ext_bucket.list()).length === 0))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.ext_num === 12)'`)})((this.ext_num === 12))};
+        const __parent_this = this;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof this.extBucket.list === "function" ? await this.extBucket.list() : await this.extBucket.list.handle()).length === 0)'`)})(((typeof this.extBucket.list === "function" ? await this.extBucket.list() : await this.extBucket.list.handle()).length === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.extNum === 12)'`)})((this.extNum === 12))};
       }
     }
-    async test_user_defined_resource()  {
+    async testUserDefinedResource()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.meaning_of_life()) === 42)'`)})(((await this.another.meaning_of_life()) === 42))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.another_func()) === "42")'`)})(((await this.another.another_func()) === "42"))};
+        const __parent_this = this;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof this.another.meaningOfLife === "function" ? await this.another.meaningOfLife() : await this.another.meaningOfLife.handle()) === 42)'`)})(((typeof this.another.meaningOfLife === "function" ? await this.another.meaningOfLife() : await this.another.meaningOfLife.handle()) === 42))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof this.another.anotherFunc === "function" ? await this.another.anotherFunc() : await this.another.anotherFunc.handle()) === "42")'`)})(((typeof this.another.anotherFunc === "function" ? await this.another.anotherFunc() : await this.another.anotherFunc.handle()) === "42"))};
       }
     }
-    async test_inflight_field()  {
+    async testInflightField()  {
       {
-        this.inflight_field = 123;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.inflight_field === 123)'`)})((this.inflight_field === 123))};
+        const __parent_this = this;
+        this.inflightField = 123;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.inflightField === 123)'`)})((this.inflightField === 123))};
       }
     }
   }
@@ -157,7 +197,7 @@ module.exports = function() {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test\",\"${aws_lambda_function.root_test_AAE85061.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
     }
   },
   "provider": {
@@ -186,46 +226,46 @@ module.exports = function() {
       }
     },
     "aws_iam_role": {
-      "root_test_IamRole_6CDC2D16": {
+      "root_testtest_Handler_IamRole_6C1728D1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRole",
-            "uniqueId": "root_test_IamRole_6CDC2D16"
+            "path": "root/Default/Default/test:test/Handler/IamRole",
+            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_test_IamRolePolicy_474A6820": {
+      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRolePolicy",
-            "uniqueId": "root_test_IamRolePolicy_474A6820"
+            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
+            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\",\"${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\",\"${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_MyResource_Another_First_cloudBucket_5E92C18E.arn}\",\"${aws_s3_bucket.root_MyResource_Another_First_cloudBucket_5E92C18E.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_MyResource_Another_First_cloudBucket_5E92C18E.arn}\",\"${aws_s3_bucket.root_MyResource_Another_First_cloudBucket_5E92C18E.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_MyResource_cloudQueue_156CFA11.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_test_IamRolePolicyAttachment_1102A28A": {
+      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/IamRolePolicyAttachment",
-            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A"
+            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.name}"
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_lambda_function": {
-      "root_test_AAE85061": {
+      "root_testtest_Handler_046C3415": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/Default",
-            "uniqueId": "root_test_AAE85061"
+            "path": "root/Default/Default/test:test/Handler/Default",
+            "uniqueId": "root_testtest_Handler_046C3415"
           }
         },
         "environment": {
@@ -238,16 +278,16 @@ module.exports = function() {
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
             "QUEUE_URL_ea9f63d6": "${aws_sqs_queue.root_MyResource_cloudQueue_156CFA11.url}",
-            "WING_FUNCTION_NAME": "test-c8b6eece"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
           }
         },
-        "function_name": "test-c8b6eece",
+        "function_name": "Handler-c8f4f2a1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -388,11 +428,11 @@ module.exports = function() {
       }
     },
     "aws_s3_object": {
-      "root_test_S3Object_A16CD789": {
+      "root_testtest_Handler_S3Object_71CD07AC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test/S3Object",
-            "uniqueId": "root_test_S3Object_A16CD789"
+            "path": "root/Default/Default/test:test/Handler/S3Object",
+            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -428,16 +468,23 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+        const __parent_this = this;
+        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
-      _toInflight() {
-        const my_resource_client = this._lift(this.my_resource);
+      static _toInflightType(context) {
         const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const myResource_client = this._lift(this.myResource);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const First = require("${self_client_path}")({});
-            const client = new First({
-              my_resource: ${my_resource_client},
+            const FirstClient = ${First._toInflightType(this).text};
+            const client = new FirstClient({
+              myResource: ${myResource_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -446,7 +493,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.my_resource, host, []);
+          this._registerBindObject(this.myResource, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -454,20 +501,27 @@ class $Root extends $stdlib.std.Resource {
     class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("meaning_of_life", "another_func");
-        this.my_field = "hello!";
+        this._addInflightOps("meaningOfLife", "anotherFunc");
+        const __parent_this = this;
+        this.myField = "hello!";
         this.first = new First(this,"First");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
       }
       _toInflight() {
         const first_client = this._lift(this.first);
-        const my_field_client = this._lift(this.my_field);
-        const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
+        const myField_client = this._lift(this.myField);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const Another = require("${self_client_path}")({});
-            const client = new Another({
+            const AnotherClient = ${Another._toInflightType(this).text};
+            const client = new AnotherClient({
               first: ${first_client},
-              my_field: ${my_field_client},
+              myField: ${myField_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -477,70 +531,78 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.first, host, []);
-          this._registerBindObject(this.my_field, host, []);
+          this._registerBindObject(this.myField, host, []);
         }
-        if (ops.includes("another_func")) {
+        if (ops.includes("anotherFunc")) {
         }
-        if (ops.includes("meaning_of_life")) {
+        if (ops.includes("meaningOfLife")) {
         }
         super._registerBind(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
-      constructor(scope, id, external_bucket, external_num) {
+      constructor(scope, id, externalBucket, externalNum) {
         super(scope, id);
-        this._addInflightOps("test_no_capture", "test_capture_collections_of_data", "test_capture_primitives", "test_capture_optional", "test_capture_resource", "test_nested_preflight_field", "test_nested_resource", "test_expression_recursive", "test_external", "test_user_defined_resource", "test_inflight_field");
-        this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-        this.my_str = "my_string";
-        this.my_num = 42;
-        this.my_bool = true;
-        this.my_opt_str = "my_opt_string";
-        this.array_of_str = Object.freeze(["s1", "s2"]);
-        this.map_of_num = Object.freeze({"k1":11,"k2":22});
-        this.set_of_str = Object.freeze(new Set(["s1", "s2", "s1"]));
+        this._addInflightOps("testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "inflightField");
+        const __parent_this = this;
+        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+        this.myStr = "myString";
+        this.myNum = 42;
+        this.myBool = true;
+        this.myOptStr = "myOptString";
+        this.arrayOfStr = Object.freeze(["s1", "s2"]);
+        this.mapOfNum = Object.freeze({"k1":11,"k2":22});
+        this.setOfStr = Object.freeze(new Set(["s1", "s2", "s1"]));
         this.another = new Another(this,"Another");
-        this.my_queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-        this.ext_bucket = external_bucket;
-        this.ext_num = external_num;
-        this.unused_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this.myQueue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+        this.extBucket = externalBucket;
+        this.extNum = externalNum;
+        this.unusedResource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
-       hello_preflight()  {
+       helloPreflight()  {
         {
+          const __parent_this = this;
           return this.another;
         }
       }
-      _toInflight() {
-        const another_client = this._lift(this.another);
-        const array_of_str_client = this._lift(this.array_of_str);
-        const ext_bucket_client = this._lift(this.ext_bucket);
-        const ext_num_client = this._lift(this.ext_num);
-        const map_of_num_client = this._lift(this.map_of_num);
-        const my_bool_client = this._lift(this.my_bool);
-        const my_num_client = this._lift(this.my_num);
-        const my_opt_str_client = this._lift(this.my_opt_str);
-        const my_queue_client = this._lift(this.my_queue);
-        const my_resource_client = this._lift(this.my_resource);
-        const my_str_client = this._lift(this.my_str);
-        const set_of_str_client = this._lift(this.set_of_str);
-        const unused_resource_client = this._lift(this.unused_resource);
+      static _toInflightType(context) {
         const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const another_client = this._lift(this.another);
+        const arrayOfStr_client = this._lift(this.arrayOfStr);
+        const extBucket_client = this._lift(this.extBucket);
+        const extNum_client = this._lift(this.extNum);
+        const mapOfNum_client = this._lift(this.mapOfNum);
+        const myBool_client = this._lift(this.myBool);
+        const myNum_client = this._lift(this.myNum);
+        const myOptStr_client = this._lift(this.myOptStr);
+        const myQueue_client = this._lift(this.myQueue);
+        const myResource_client = this._lift(this.myResource);
+        const myStr_client = this._lift(this.myStr);
+        const setOfStr_client = this._lift(this.setOfStr);
+        const unusedResource_client = this._lift(this.unusedResource);
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const MyResource = require("${self_client_path}")({});
-            const client = new MyResource({
+            const MyResourceClient = ${MyResource._toInflightType(this).text};
+            const client = new MyResourceClient({
               another: ${another_client},
-              array_of_str: ${array_of_str_client},
-              ext_bucket: ${ext_bucket_client},
-              ext_num: ${ext_num_client},
-              map_of_num: ${map_of_num_client},
-              my_bool: ${my_bool_client},
-              my_num: ${my_num_client},
-              my_opt_str: ${my_opt_str_client},
-              my_queue: ${my_queue_client},
-              my_resource: ${my_resource_client},
-              my_str: ${my_str_client},
-              set_of_str: ${set_of_str_client},
-              unused_resource: ${unused_resource_client},
+              arrayOfStr: ${arrayOfStr_client},
+              extBucket: ${extBucket_client},
+              extNum: ${extNum_client},
+              mapOfNum: ${mapOfNum_client},
+              myBool: ${myBool_client},
+              myNum: ${myNum_client},
+              myOptStr: ${myOptStr_client},
+              myQueue: ${myQueue_client},
+              myResource: ${myResource_client},
+              myStr: ${myStr_client},
+              setOfStr: ${setOfStr_client},
+              unusedResource: ${unusedResource_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -550,72 +612,98 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           this._registerBindObject(this.another, host, []);
-          this._registerBindObject(this.array_of_str, host, []);
-          this._registerBindObject(this.ext_bucket, host, []);
-          this._registerBindObject(this.ext_num, host, []);
-          this._registerBindObject(this.map_of_num, host, []);
-          this._registerBindObject(this.my_bool, host, []);
-          this._registerBindObject(this.my_num, host, []);
-          this._registerBindObject(this.my_opt_str, host, []);
-          this._registerBindObject(this.my_queue, host, []);
-          this._registerBindObject(this.my_resource, host, []);
-          this._registerBindObject(this.my_str, host, []);
-          this._registerBindObject(this.set_of_str, host, []);
-          this._registerBindObject(this.unused_resource, host, []);
+          this._registerBindObject(this.arrayOfStr, host, []);
+          this._registerBindObject(this.extBucket, host, []);
+          this._registerBindObject(this.extNum, host, []);
+          this._registerBindObject(this.mapOfNum, host, []);
+          this._registerBindObject(this.myBool, host, []);
+          this._registerBindObject(this.myNum, host, []);
+          this._registerBindObject(this.myOptStr, host, []);
+          this._registerBindObject(this.myQueue, host, []);
+          this._registerBindObject(this.myResource, host, []);
+          this._registerBindObject(this.myStr, host, []);
+          this._registerBindObject(this.setOfStr, host, []);
+          this._registerBindObject(this.unusedResource, host, []);
         }
-        if (ops.includes("test_capture_collections_of_data")) {
-          this._registerBindObject(this.array_of_str, host, ["at", "length"]);
-          this._registerBindObject(this.map_of_num, host, ["get"]);
-          this._registerBindObject(this.set_of_str, host, ["has"]);
+        if (ops.includes("testCaptureCollectionsOfData")) {
+          this._registerBindObject(this.arrayOfStr, host, ["at", "length"]);
+          this._registerBindObject(this.mapOfNum, host, ["get"]);
+          this._registerBindObject(this.setOfStr, host, ["has"]);
         }
-        if (ops.includes("test_capture_optional")) {
-          this._registerBindObject(this.my_opt_str, host, []);
+        if (ops.includes("testCaptureOptional")) {
+          this._registerBindObject(this.myOptStr, host, []);
         }
-        if (ops.includes("test_capture_primitives")) {
-          this._registerBindObject(this.my_bool, host, []);
-          this._registerBindObject(this.my_num, host, []);
-          this._registerBindObject(this.my_str, host, []);
+        if (ops.includes("testCapturePrimitives")) {
+          this._registerBindObject(this.myBool, host, []);
+          this._registerBindObject(this.myNum, host, []);
+          this._registerBindObject(this.myStr, host, []);
         }
-        if (ops.includes("test_capture_resource")) {
-          this._registerBindObject(this.my_resource, host, ["get", "list", "put"]);
+        if (ops.includes("testCaptureResource")) {
+          this._registerBindObject(this.myResource, host, ["get", "list", "put"]);
         }
-        if (ops.includes("test_expression_recursive")) {
-          this._registerBindObject(this.my_queue, host, ["push"]);
-          this._registerBindObject(this.my_str, host, []);
+        if (ops.includes("testExpressionRecursive")) {
+          this._registerBindObject(this.myQueue, host, ["push"]);
+          this._registerBindObject(this.myStr, host, []);
         }
-        if (ops.includes("test_external")) {
-          this._registerBindObject(this.ext_bucket, host, ["list"]);
-          this._registerBindObject(this.ext_num, host, []);
+        if (ops.includes("testExternal")) {
+          this._registerBindObject(this.extBucket, host, ["list"]);
+          this._registerBindObject(this.extNum, host, []);
         }
-        if (ops.includes("test_inflight_field")) {
+        if (ops.includes("testInflightField")) {
         }
-        if (ops.includes("test_nested_preflight_field")) {
-          this._registerBindObject(this.another.my_field, host, []);
+        if (ops.includes("testNestedInflightField")) {
+          this._registerBindObject(this.another.myField, host, []);
         }
-        if (ops.includes("test_nested_resource")) {
-          this._registerBindObject(this.another.first.my_resource, host, ["get", "list", "put"]);
-          this._registerBindObject(this.my_str, host, []);
+        if (ops.includes("testNestedResource")) {
+          this._registerBindObject(this.another.first.myResource, host, ["get", "list", "put"]);
+          this._registerBindObject(this.myStr, host, []);
         }
-        if (ops.includes("test_no_capture")) {
+        if (ops.includes("testNoCapture")) {
         }
-        if (ops.includes("test_user_defined_resource")) {
-          this._registerBindObject(this.another, host, ["another_func", "meaning_of_life"]);
+        if (ops.includes("testUserDefinedResource")) {
+          this._registerBindObject(this.another, host, ["anotherFunc", "meaningOfLife"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const r_client = context._lift(r);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            r: ${r_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const r = new MyResource(this,"MyResource",b,12);
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        r: {
-          obj: r,
-          ops: ["test_capture_collections_of_data","test_capture_optional","test_capture_primitives","test_capture_resource","test_expression_recursive","test_external","test_inflight_field","test_nested_preflight_field","test_nested_resource","test_no_capture","test_user_defined_resource"]
-        },
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -634,25 +722,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { r } = this;
-  (await r.test_no_capture());
-  (await r.test_capture_collections_of_data());
-  (await r.test_capture_primitives());
-  (await r.test_capture_optional());
-  (await r.test_capture_resource());
-  (await r.test_nested_preflight_field());
-  (await r.test_nested_resource());
-  (await r.test_expression_recursive());
-  (await r.test_external());
-  (await r.test_user_defined_resource());
-  (await r.test_inflight_field());
-}
 
 ```
 

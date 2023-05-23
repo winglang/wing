@@ -5,10 +5,10 @@ let bucket2 = new cloud.Bucket() as "bucket2";
 let bucket3 = new cloud.Bucket() as "bucket3";
 
 //Array tests
-let empty_array = Array<num>[];
-assert(empty_array.length == 0);
-let empty_array2 = MutArray<num>[];
-assert(empty_array2.length == 0);
+let emptyArray = Array<num>[];
+assert(emptyArray.length == 0);
+let emptyArray2 = MutArray<num>[];
+assert(emptyArray2.length == 0);
 let arr1 = [1, 2, 3];
 assert(arr1.length == 3);
 assert(arr1.at(1) == 2);
@@ -32,10 +32,10 @@ assert(arr7.length == 3);
 assert(arr7.at(1) == 2);
 
 //Map tests
-let empty_map = Map<num>{};
-assert(empty_map.size() == 0);
-let empty_map2 = MutMap<num>{};
-assert(empty_map2.size() == 0);
+let emptyMap = Map<num>{};
+assert(emptyMap.size() == 0);
+let emptyMap2 = MutMap<num>{};
+assert(emptyMap2.size() == 0);
 let m1 = {"a":1, "b":2, "c":3};
 assert(m1.size() == 3);
 assert(m1.get("b") == 2);
@@ -59,16 +59,38 @@ assert(m7.size() == 3);
 assert(m7.get("b") == 2);
 assert(m7.has("b"));
 assert(m4.has("boom") == false);
-let m8 = {"a": "a1", b: "b1", c: "c1"};
+let m8 = {"a": "a1", "b": "b1", "c": "c1"};
 assert(m8.keys().at(0) == "a");
 assert(m8.keys().at(1) == "b");
 assert(m8.keys().at(2) == "c");
+assert(m8.values().at(0) == "a1");
+assert(m8.values().at(1) == "b1");
+assert(m8.values().at(2) == "c1");
+for val in m8.keys() {
+  assert(!val.endsWith("1"));
+}
+for val in m8.values() {
+  assert(val.endsWith("1"));
+}
+let m9 = MutMap<str>{"a": "a1", "b": "b1", "c": "c1"};
+assert(m9.keys().at(0) == "a");
+assert(m9.keys().at(1) == "b");
+assert(m9.keys().at(2) == "c");
+assert(m9.values().at(0) == "a1");
+assert(m9.values().at(1) == "b1");
+assert(m9.values().at(2) == "c1");
+for val in m9.keys() {
+  assert(!val.endsWith("1"));
+}
+for val in m9.values() {
+  assert(val.endsWith("1"));
+}
 
 //Set tests
-let empty_set = Set<num>{};
-assert(empty_set.size == 0);
-let empty_set2 = MutSet<num>{};
-assert(empty_set2.size == 0);
+let emptySet = Set<num>{};
+assert(emptySet.size == 0);
+let emptySet2 = MutSet<num>{};
+assert(emptySet2.size == 0);
 let s2: Set<num> = {1, 2, 3};
 assert(s2.size == 3);
 assert(s2.has(1));

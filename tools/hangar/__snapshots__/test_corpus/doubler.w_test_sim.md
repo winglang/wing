@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ doubler.wsim (no tests)
+pass ─ doubler.wsim » root/env0/test:f(2) == 8
 ```
 

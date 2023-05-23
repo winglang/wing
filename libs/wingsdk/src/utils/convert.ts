@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
+import { normalPath } from "./misc";
 import { NodeJsCode } from "../core";
 import { IInflightHost, IResource, Resource } from "../std";
-import { normalPath } from "../util";
 
 /**
  * Convert a resource with a single method into a resource with a different

@@ -1,5 +1,28 @@
 # [dec.w](../../../../examples/tests/valid/dec.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ counter }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 1)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 1))};
+        const dec1 = (typeof counter.dec === "function" ? await counter.dec() : await counter.dec.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 0)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec1 === 1)'`)})((dec1 === 1))};
+        const dec2 = (typeof counter.dec === "function" ? await counter.dec(2) : await counter.dec.handle(2));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === (-2))'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === (-2)))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === 0)'`)})((dec2 === 0))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -21,7 +44,7 @@
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:dec\",\"${aws_lambda_function.root_testdec_5FCBD51D.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:dec\",\"${aws_lambda_function.root_testdec_Handler_AE114D79.arn}\"]]"
     }
   },
   "provider": {
@@ -50,61 +73,61 @@
       }
     },
     "aws_iam_role": {
-      "root_testdec_IamRole_8DEDAEC6": {
+      "root_testdec_Handler_IamRole_3E911C09": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:dec/IamRole",
-            "uniqueId": "root_testdec_IamRole_8DEDAEC6"
+            "path": "root/Default/Default/test:dec/Handler/IamRole",
+            "uniqueId": "root_testdec_Handler_IamRole_3E911C09"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testdec_IamRolePolicy_BE3410FB": {
+      "root_testdec_Handler_IamRolePolicy_26A5726A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:dec/IamRolePolicy",
-            "uniqueId": "root_testdec_IamRolePolicy_BE3410FB"
+            "path": "root/Default/Default/test:dec/Handler/IamRolePolicy",
+            "uniqueId": "root_testdec_Handler_IamRolePolicy_26A5726A"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testdec_IamRole_8DEDAEC6.name}"
+        "role": "${aws_iam_role.root_testdec_Handler_IamRole_3E911C09.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testdec_IamRolePolicyAttachment_B2D849CF": {
+      "root_testdec_Handler_IamRolePolicyAttachment_7CF9599B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:dec/IamRolePolicyAttachment",
-            "uniqueId": "root_testdec_IamRolePolicyAttachment_B2D849CF"
+            "path": "root/Default/Default/test:dec/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testdec_Handler_IamRolePolicyAttachment_7CF9599B"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testdec_IamRole_8DEDAEC6.name}"
+        "role": "${aws_iam_role.root_testdec_Handler_IamRole_3E911C09.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testdec_5FCBD51D": {
+      "root_testdec_Handler_AE114D79": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:dec/Default",
-            "uniqueId": "root_testdec_5FCBD51D"
+            "path": "root/Default/Default/test:dec/Handler/Default",
+            "uniqueId": "root_testdec_Handler_AE114D79"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "test-dec-c8be30d1"
+            "WING_FUNCTION_NAME": "Handler-c8daa879"
           }
         },
-        "function_name": "test-dec-c8be30d1",
+        "function_name": "Handler-c8daa879",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testdec_IamRole_8DEDAEC6.arn}",
+        "role": "${aws_iam_role.root_testdec_Handler_IamRole_3E911C09.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testdec_S3Object_4EEC24A1.key}",
+        "s3_key": "${aws_s3_object.root_testdec_Handler_S3Object_E6EDF071.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -124,11 +147,11 @@
       }
     },
     "aws_s3_object": {
-      "root_testdec_S3Object_4EEC24A1": {
+      "root_testdec_Handler_S3Object_E6EDF071": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:dec/S3Object",
-            "uniqueId": "root_testdec_S3Object_4EEC24A1"
+            "path": "root/Default/Default/test:dec/Handler/S3Object",
+            "uniqueId": "root_testdec_Handler_S3Object_E6EDF071"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -150,17 +173,43 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 1 });
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:dec",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        counter: {
-          obj: counter,
-          ops: ["dec","inc","peek","reset"]
-        },
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
       }
-    })
-    );
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const counter_client = context._lift(counter);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            counter: ${counter_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(counter, host, ["dec", "peek"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 1 });
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:dec",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -179,21 +228,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { counter } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
-  const dec1 = (await counter.dec());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec1 === 1)'`)})((dec1 === 1))};
-  const dec2 = (await counter.dec(2));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === (-2))'`)})(((await counter.peek()) === (-2)))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === 0)'`)})((dec2 === 0))};
-}
 
 ```
 

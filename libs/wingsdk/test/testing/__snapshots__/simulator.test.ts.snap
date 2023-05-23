@@ -24,13 +24,30 @@ exports[`provides raw tree data 1`] = `
         "attributes": {
           "wing:resource:connections": [],
         },
+        "children": {
+          "Handler": {
+            "attributes": {
+              "wing:resource:connections": [],
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.245",
+            },
+            "display": {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
+            },
+            "id": "Handler",
+            "path": "root/test/Handler",
+          },
+        },
         "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.1.245",
         },
         "display": {
-          "description": "A cloud function (FaaS)",
-          "title": "Function",
+          "description": "A cloud unit test.",
+          "title": "Test",
         },
         "id": "test",
         "path": "root/test",
@@ -74,7 +91,7 @@ exports[`run all tests > single test 1`] = `
         "data": {
           "message": "hi",
         },
-        "sourcePath": "root/test",
+        "sourcePath": "root/test/Handler",
         "sourceType": "wingsdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
         "type": "log",
@@ -85,7 +102,7 @@ exports[`run all tests > single test 1`] = `
           "result": undefined,
           "status": "success",
         },
-        "sourcePath": "root/test",
+        "sourcePath": "root/test/Handler",
         "sourceType": "wingsdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
         "type": "resource",
@@ -105,7 +122,7 @@ exports[`run single test > happy path 1`] = `
       "data": {
         "message": "hi",
       },
-      "sourcePath": "root/test",
+      "sourcePath": "root/test/Handler",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "log",
@@ -116,7 +133,7 @@ exports[`run single test > happy path 1`] = `
         "result": undefined,
         "status": "success",
       },
-      "sourcePath": "root/test",
+      "sourcePath": "root/test/Handler",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
@@ -131,10 +148,10 @@ exports[`run single test > test failure 1`] = `
 <sanitized>
 <sanitized>
 <sanitized>
+    at Script.runInContext (node:vm:141:12)
+    at Object.runInContext (node:vm:297:6)
 <sanitized>
-<sanitized>
-<sanitized>
-<sanitized>
+    at new Promise (<anonymous>)
 <sanitized>
 <sanitized>
 <sanitized>",
@@ -145,7 +162,7 @@ exports[`run single test > test failure 1`] = `
       "data": {
         "message": "I am about to fail",
       },
-      "sourcePath": "root/test",
+      "sourcePath": "root/test/Handler",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "log",
@@ -156,7 +173,7 @@ exports[`run single test > test failure 1`] = `
         "message": "Invoke (payload=\\"\\").",
         "status": "failure",
       },
-      "sourcePath": "root/test",
+      "sourcePath": "root/test/Handler",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
