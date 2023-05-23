@@ -2620,7 +2620,8 @@ impl<'a> TypeChecker<'a> {
 					self.type_error(TypeError {
 						message: format!(
 							"\"{}\" cannot be initialized in the {} initializer",
-							matching_field.name, current_phase
+							matching_field.name,
+							current_phase.to_lowercase()
 						),
 						span: matching_field.span.clone(),
 					});

@@ -180,18 +180,18 @@ error: Inflight field \\"x\\" is not initialized
    |            ^ Inflight field \\"x\\" is not initialized
 
 
-error: \\"y\\" cannot be initialized in the Inflight initializer
+error: \\"y\\" cannot be initialized in the inflight initializer
    --> ../../../examples/tests/invalid/class.w:45:10
    |
 45 |     this.y = 1;
-   |          ^ \\"y\\" cannot be initialized in the Inflight initializer
+   |          ^ \\"y\\" cannot be initialized in the inflight initializer
 
 
-error: \\"x\\" cannot be initialized in the Preflight initializer
+error: \\"x\\" cannot be initialized in the preflight initializer
    --> ../../../examples/tests/invalid/class.w:40:10
    |
 40 |     this.x = 1;
-   |          ^ \\"x\\" cannot be initialized in the Preflight initializer
+   |          ^ \\"x\\" cannot be initialized in the preflight initializer
 
 
 error: Preflight field \\"y\\" is not initialized
