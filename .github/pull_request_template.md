@@ -16,12 +16,12 @@ In plain English, describe your approach to addressing the issue linked above. F
 
 ### Checklist
 
-- [ ] I have updated the PR title to match [Winglang's style guide](https://docs.winglang.io/contributors/pull_requests#how-are-pull-request-titles-formatted)\
+- [ ] I have updated the PR title to match [Winglang's style guide](https://docs.winglang.io/contributors/pull_requests#how-are-pull-request-titles-formatted)
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation if applicable
 - [ ] I have added tests that prove my fix is effective or that my feature works if applicable
-- [ ] If my code modifies how tests are executed or modifies code that might be platform-sensitive (related to paths, CLIs, etc.) I have requested the label `pr/e2e-full` to run tests on all platforms
+- [ ] My code changes how tests are executed or modifies code that might be platform-sensitive (related to paths, etc.), so I would like the label `pr/e2e-full` to be added to run tests on all platforms
 
 <!-- If this is still a work in progress, feel free to open a draft PR until you're able to check off all the items on the list above -->
 
