@@ -2083,9 +2083,9 @@ impl<'a> TypeChecker<'a> {
 					cond_type
 				};
 
-        let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
-        
-        // Add the variable to if block scope
+				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+
+				// Add the variable to if block scope
 				match stmt_env.define(
 					var_name,
 					SymbolKind::make_variable(var_type, false, true, env.phase),

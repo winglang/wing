@@ -601,7 +601,7 @@ impl<'a> JSifier<'a> {
 				code.open(format!("if ({}) {{", self.jsify_expression(condition, ctx)));
 				code.line(format!(
 					"const {} = {};",
-					self.jsify_symbol(var_name),
+					var_name,
 					self.jsify_expression(condition, ctx)
 				));
 				code.add_code(self.jsify_scope_body(statements, ctx));
