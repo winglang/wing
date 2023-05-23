@@ -431,12 +431,12 @@ pub enum StmtKind {
 		condition: Expr,
 		statements: Scope,
 	},
-  IfLet {
-    condition: Expr,
-    statements: Scope,
-    var_name: Symbol,
-    else_statements: Option<Scope>
-  },
+	IfLet {
+		condition: Expr,
+		statements: Scope,
+		var_name: Symbol,
+		else_statements: Option<Scope>,
+	},
 	If {
 		condition: Expr,
 		statements: Scope,

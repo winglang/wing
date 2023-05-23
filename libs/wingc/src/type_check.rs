@@ -830,13 +830,13 @@ impl TypeRef {
 		}
 	}
 
-  // Returns the type of an optional type, or None if the type is not optional.
-  pub fn optional_type(&self) -> Option<TypeRef> {
-    match **self {
-      Type::Optional(t) => Some(t),
-      _ => None,
-    }
-  }
+	// Returns the type of an optional type, or None if the type is not optional.
+	pub fn optional_type(&self) -> Option<TypeRef> {
+		match **self {
+			Type::Optional(t) => Some(t),
+			_ => None,
+		}
+	}
 
 	/// Returns the item type of a collection type, or None if the type is not a collection.
 	pub fn collection_item_type(&self) -> Option<TypeRef> {
@@ -1851,17 +1851,14 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-  fn validate_type_is_optional(&mut self, actual_type: TypeRef, span: &impl Spanned) {
-    if !actual_type.is_option() {
-      self.diagnostics.borrow_mut().push(Diagnostic {
-        message: format!(
-          "Expected type to be optional, but got \"{}\" instead",
-          actual_type
-        ),
-        span: Some(span.span()),
-      });
-    }
-  }
+	fn validate_type_is_optional(&mut self, actual_type: TypeRef, span: &impl Spanned) {
+		if !actual_type.is_option() {
+			self.diagnostics.borrow_mut().push(Diagnostic {
+				message: format!("Expected type to be optional, but got \"{}\" instead", actual_type),
+				span: Some(span.span()),
+			});
+		}
+	}
 
 	pub fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
@@ -2065,50 +2062,46 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(statements);
 			}
 			StmtKind::Break | StmtKind::Continue => {}
-      StmtKind::IfLet { 
-        condition,
-        statements,
-        var_name,
-        else_statements
-      } => {
-        let cond_type = self.type_check_exp(condition, env);
-        self.validate_type_is_optional(cond_type, condition);
+			StmtKind::IfLet {
+				condition,
+				statements,
+				var_name,
+				else_statements,
+			} => {
+				let cond_type = self.type_check_exp(condition, env);
+				self.validate_type_is_optional(cond_type, condition);
 
-        let mut stmt_env = SymbolEnv::new (
-          Some(env.get_ref()),
-					env.return_type,
-					false,
-					env.phase,
-					stmt.idx,
-        );
-        
-        // Technically we only allow if let statements to be used with optionals
-        // and above validate_type_is_optional method will attach a diagnostic error if it is not.
-        // However to avoid panics this will allow code to continue if the type is not an optional
-        // and complete the type checking process for additional errors.
-        let var_type = if cond_type.is_option() {
-          cond_type.optional_type().expect("Optional types should always have a type")
-        } else {
-          cond_type
-        };
+				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
 
-        match stmt_env.define(
-          var_name,
-          SymbolKind::make_variable(var_type, false, true, env.phase),
-          StatementIdx::Top,
-        ) {
-          Err(type_error) => {
+				// Technically we only allow if let statements to be used with optionals
+				// and above validate_type_is_optional method will attach a diagnostic error if it is not.
+				// However to avoid panics this will allow code to continue if the type is not an optional
+				// and complete the type checking process for additional errors.
+				let var_type = if cond_type.is_option() {
+					cond_type
+						.optional_type()
+						.expect("Optional types should always have a type")
+				} else {
+					cond_type
+				};
+
+				match stmt_env.define(
+					var_name,
+					SymbolKind::make_variable(var_type, false, true, env.phase),
+					StatementIdx::Top,
+				) {
+					Err(type_error) => {
 						self.type_error(type_error);
 					}
-          _ => {}
-        }
+					_ => {}
+				}
 
-        statements.set_env(stmt_env);
+				statements.set_env(stmt_env);
 				self.inner_scopes.push(statements);
 
-        // Add if let variable to environment
+				// Add if let variable to environment
 
-        if let Some(else_scope) = else_statements {
+				if let Some(else_scope) = else_statements {
 					else_scope.set_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
@@ -2118,7 +2111,7 @@ impl<'a> TypeChecker<'a> {
 					));
 					self.inner_scopes.push(else_scope);
 				}
-      }
+			}
 			StmtKind::If {
 				condition,
 				statements,

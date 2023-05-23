@@ -69,6 +69,54 @@ class $Root extends $stdlib.std.Resource {
     const optionalSup = new Super();
     const s = (optionalSup ?? new Sub());
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.name === "Super")'`)})((s.name === "Super"))};
+    let name = {
+    "first": "John",
+    "last": "Doe",}
+    ;
+    if (name) {
+      const n = name;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(n.first === "John")'`)})((n.first === "John"))};
+    }
+    name = undefined;
+    if (name) {
+      const n = name;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+    }
+    else {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+    }
+    const tryParseName =  (fullName) =>  {
+      {
+        const parts = (fullName.split(" "));
+        if ((parts.length < 1)) {
+          return undefined;
+        }
+        return {
+        "first": (parts.at(0)),
+        "last": (parts.at(1)),}
+        ;
+      }
+    }
+    ;
+    if ((tryParseName("Good Name"))) {
+      const parsedName = (tryParseName("Good Name"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "Good")'`)})((parsedName.first === "Good"))};
+      if (parsedName.last) {
+        const lastName = parsedName.last;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(lastName === "Name")'`)})((lastName === "Name"))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+      }
+    }
+    if ((tryParseName("BadName"))) {
+      const parsedName = (tryParseName("BadName"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "BadName")'`)})((parsedName.first === "BadName"))};
+      if (parsedName.last) {
+        const lastName = parsedName.last;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+      }
+    }
   }
 }
 class $App extends $AppBase {
