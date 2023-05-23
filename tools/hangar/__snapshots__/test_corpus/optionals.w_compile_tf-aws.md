@@ -43,17 +43,20 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     class Super {
       constructor()  {
+        const __parent_this = this;
         this.name = "Super";
       }
       name;
     }
     class Sub extends Super {
       constructor()  {
+        const __parent_this = this;
         this.name = "Sub";
       }
     }
     class Sub1 extends Super {
       constructor()  {
+        const __parent_this = this;
         this.name = "Sub";
       }
     }

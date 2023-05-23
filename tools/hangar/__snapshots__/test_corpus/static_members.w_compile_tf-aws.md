@@ -1,5 +1,38 @@
 # [static_members.w](../../../../examples/tests/valid/static_members.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        class InflightClass {
+          constructor()  {
+          }
+          async inflightMethod()  {
+            {
+              return "Inflight method";
+            }
+          }
+          static async staticInflightMethod()  {
+            {
+              return "Static inflight method";
+            }
+          }
+        }
+        const inflightClass = new InflightClass();
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method")'`)})(((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method")'`)})(((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method"))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
@@ -152,6 +185,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("get123");
+        const __parent_this = this;
         this.instanceField = 100;
       }
       static m()  {
@@ -188,15 +222,42 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const foo = new Foo(this,"Foo");
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instanceField === 100)'`)})((foo.instanceField === 100))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.m()) === 99)'`)})(((Foo.m()) === 99))};
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -215,31 +276,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const {  } = this;
-  class InflightClass {
-    constructor()  {
-    }
-    async inflightMethod()  {
-      {
-        return "Inflight method";
-      }
-    }
-    static async staticInflightMethod()  {
-      {
-        return "Static inflight method";
-      }
-    }
-  }
-  const inflightClass = new InflightClass();
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflightClass.inflightMethod()) === "Inflight method")'`)})(((await inflightClass.inflightMethod()) === "Inflight method"))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.staticInflightMethod()) === "Static inflight method")'`)})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
-}
 
 ```
 

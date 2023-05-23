@@ -1,9 +1,11 @@
 import { IConstruct } from "constructs";
-import { Inflight, InflightBindings, NodeJsCode } from "../core";
-import { IResource } from "../std";
+import { InflightBindings, NodeJsCode } from "../core";
+import { serializeImmutableData } from "../core/internal";
+import { IInflightHost, IResource, Resource } from "../std";
 
 /**
  * Test utilities.
+ * TODO: move this to `test/` - it should not be under `src/`
  */
 export class Testing {
   /**
@@ -25,9 +27,56 @@ export class Testing {
     code: string,
     bindings: InflightBindings = {}
   ): IResource {
-    return new Inflight(scope, id, {
-      code: NodeJsCode.fromInline(code),
-      bindings,
-    });
+    const clients: Record<string, string> = {};
+
+    for (const [k, v] of Object.entries(bindings)) {
+      clients[k] = serializeImmutableData(v.obj);
+    }
+
+    // implements IFunctionHandler
+    class Handler extends Resource {
+      constructor() {
+        super(scope, id);
+
+        // pretend as if we have a field for each binding
+        for (const [field, value] of Object.entries(bindings)) {
+          (this as any)[field] = value.obj;
+        }
+
+        this.display.title = "Inflight";
+        this.display.description = "An inflight resource";
+        this.display.hidden = true;
+
+        this._addInflightOps("handle");
+      }
+
+      public _toInflight(): NodeJsCode {
+        return NodeJsCode.fromInline(
+          `new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  ${code}
+};
+})())({
+${Object.entries(clients)
+  .map(([name, client]) => `${name}: ${client}`)
+  .join(",\n")}
+})`
+        );
+      }
+
+      public _registerBind(host: IInflightHost, ops: string[]): void {
+        for (const v of Object.values(bindings)) {
+          this._registerBindObject(v.obj, host, v.ops);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+
+    return new Handler();
   }
 }

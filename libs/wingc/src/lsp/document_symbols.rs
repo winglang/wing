@@ -35,7 +35,7 @@ impl Visit<'_> for DocumentSymbolVisitor {
 						.push(create_document_symbol(symbol, SymbolKind::VARIABLE));
 				}
 			}
-			StmtKind::VariableDef { var_name, .. } => {
+			StmtKind::Let { var_name, .. } => {
 				let symbol = var_name;
 				self
 					.document_symbols

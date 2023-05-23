@@ -1,5 +1,41 @@
 # [statements_if.w](../../../../examples/tests/valid/statements_if.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        if (true) {
+          const x = 2;
+          if ((true && ((x + 2) === 4))) {
+            if ((true && ((x + 3) === 4))) {
+              {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            }
+            else if ((true && ((x + 3) === 6))) {
+              {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            }
+            else if ((false || ((x + 3) === 5))) {
+              {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+            }
+            else {
+              {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            }
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          }
+        }
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -130,6 +166,38 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     if (true) {
       const x = 2;
       const f = false;
@@ -154,12 +222,7 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
       }
     }
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    );
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -178,34 +241,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const {  } = this;
-  if (true) {
-    const x = 2;
-    if ((true && ((x + 2) === 4))) {
-      if ((true && ((x + 3) === 4))) {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-      }
-      else if ((true && ((x + 3) === 6))) {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-      }
-      else if ((false || ((x + 3) === 5))) {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
-      }
-      else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-      }
-    }
-    else {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-    }
-  }
-}
 
 ```
 

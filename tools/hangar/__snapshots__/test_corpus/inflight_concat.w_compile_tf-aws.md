@@ -9,7 +9,8 @@ module.exports = function({  }) {
     }
     async foo()  {
       {
-        {console.log((await this.s1.concat(" world")))};
+        const __parent_this = this;
+        {console.log((typeof this.s1.concat === "function" ? await this.s1.concat(" world") : await this.s1.concat.handle(" world")))};
       }
     }
   }
@@ -64,6 +65,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("foo");
+        const __parent_this = this;
         this.s1 = "hello";
       }
       static _toInflightType(context) {

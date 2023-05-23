@@ -81,7 +81,7 @@ The SDK specification currently models these APIs using the `Json` or `Blob` typ
 
 Some APIs return a list of results that may be too large to fit in memory, or too large to fetch from the cloud all at once.
 In these cases, APIs can return an `Iterator` object.
-An `Iterator` is an object with a `next()` method and a `has_next()` method, which return the next page of results and whether there are more results to fetch, respectively.
+An `Iterator` is an object with a `next()` method and a `hasNext()` method, which return the next page of results and whether there are more results to fetch, respectively.
 The `Iterator` object also implements the [async iterator protocol in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols), so it can be used within `for...of` loops in TypeScript or in Wing.
 
 ### Event handlers
@@ -89,29 +89,29 @@ The `Iterator` object also implements the [async iterator protocol in JavaScript
 Some resources can automatically emit events as a result of an action or a change to their state.
 These events are "fire-and-forget" notifications which may not always be delivered in order, and which don't expect a response to be sent back by the listener(s).
 
-Resources that emit events in a "fire-and-forget" fashion should make their events listenable through a method named `on_<event>`.
+Resources that emit events in a "fire-and-forget" fashion should make their events listenable through a method named `on<Event>`.
 
 > Reqtag: `sdk:on-event-name` > <span id="sdk:on-event-name"/>
 
-For example, a `cloud.Bucket` can emit events whenever an object is uploaded, and these events can be listened to by calling `on_upload` on the bucket:
+For example, a `cloud.Bucket` can emit events whenever an object is uploaded, and these events can be listened to by calling `onCreate` on the bucket:
 
 ```ts
 // wing
 let bucket = new cloud.Bucket();
-bucket.on_upload(inflight (file: str) => {
+bucket.onCreate(inflight (file: str) => {
   log.info("File uploaded: " + file);
 });
 ```
 
-The argument to an `on_<event>` method is called an event handler.
-An event handler is any resource that implements an interface with a single `handle_<event>` method.
+The argument to an `on<Event>` method is called an event handler.
+An event handler is any resource that implements an interface with a single `handle<Event>` method.
 For example:
 
 ```ts
 // wing
 
 interface IOnUploadEventHandler {
-  inflight handle_upload_event(event: BucketUploadEvent);
+  inflight handleUploadEvent(event: BucketUploadEvent);
 }
 ```
 
@@ -125,7 +125,7 @@ let x1 = inflight (event: MyEvent) => {
 };
 
 resource X implements IMyEventHandler {
-  inflight handle_myevent(event: MyEvent) {
+  inflight handleMyevent(event: MyEvent) {
     log.info("Event received: " + event);
   }
 }
@@ -134,7 +134,7 @@ let x2 = new X();
 
 > Reqtag: `sdk:event-handler-conversion` > <span id="sdk:event-handler-conversion"/>
 
-In the example with `bucket.on_upload` from earlier this section, when the method is called, cloud infrastructure is automatically added to invoke the event handler's `handle` method whenever an object is added to the bucket.
+In the example with `bucket.onCreate` from earlier this section, when the method is called, cloud infrastructure is automatically added to invoke the event handler's `handle` method whenever an object is added to the bucket.
 
 Users can define their own event-based APIs by making use of the `Topic` resource.
 For example, suppose you want to extend `cloud.Counter` so that it triggers an event whenever a threshold is reached or exceeded:
@@ -143,12 +143,12 @@ For example, suppose you want to extend `cloud.Counter` so that it triggers an e
 // wing
 
 let counter = new CounterWithThreshold(threshold: 10);
-counter.on_threshold(inflight (event: ThresholdReachedEvent) => {
+counter.onThreshold(inflight (event: ThresholdReachedEvent) => {
   log.info("Threshold reached: " + event.value);
 });
 ```
 
-You can implement this by defining a `CounterWithThreshold` resource with an `on_threshold` method, and use a `Topic` to publish events:
+You can implement this by defining a `CounterWithThreshold` resource with an `onThreshold` method, and use a `Topic` to publish events:
 
 ```ts
 // wing
@@ -168,25 +168,25 @@ resource CounterWithThreshold extends cloud.Counter {
   }
 
   inflight inc(amount?: num) {
-    let new_value = super.inc(amount);
-    if new_value >= this._threshold {
+    let newValue = super.inc(amount);
+    if newValue >= this._threshold {
       this._topic.publish(ThresholdReachedEvent {
-        value: new_value,
-        time_reached: time.now(),
+        value: newValue,
+        timeReached: time.now(),
       });
     }
     return value;
   }
 
-  // or: on_threshold(handler: EventHandler<ThresholdReachedEvent>)
-  on_threshold(handler: inflight (event: ThresholdReachedEvent) => void) {
-    return this._topic.on_message(handler);
+  // or: onThreshold(handler: EventHandler<ThresholdReachedEvent>)
+  onThreshold(handler: inflight (event: ThresholdReachedEvent) => void) {
+    return this._topic.onMessage(handler);
   }
 }
 
 struct ThresholdReachedEvent {
   value: num;
-  time_reached: Time;
+  timeReached: Time;
 }
 ```
 
@@ -253,61 +253,71 @@ resource Bucket {
   /**
    * Run an inflight whenever an object is uploaded to the bucket.
    */
-  on_upload(fn: inflight (key: str) => void, opts: BucketOnUploadProps?): void;
+  onCreate(fn: inflight (key: str) => void, opts: BucketOnUploadProps?): void;
 
   /**
    * Run an inflight whenever an object is deleted from the bucket.
    */
-  on_delete(fn: inflight (key: str) => void, opts: BucketOnDeleteProps?): void;
+  onDelete(fn: inflight (key: str) => void, opts: BucketOnDeleteProps?): void;
 
   /**
    * Run an inflight whenever an object is updated in the bucket.
    */
-  on_update(fn: inflight (key: str) => void, opts: BucketOnUpdateProps?): void;
+  onUpdate(fn: inflight (key: str) => void, opts: BucketOnUpdateProps?): void;
 
   /**
    * Run an inflight whenever an object is uploaded, modified, or deleted from the bucket.
    */
-  on_event(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): void;
+  onEvent(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): void;
 
   /**
    * Add an object to the bucket that is uploaded when the app is deployed.
    */
-  add_object(key: str, value: Blob): void;
+  addObject(key: str, body: str): void;
 
   /**
    * Upload an object to the bucket.
    */
-  inflight put(key: str, value: Blob): void;
+  inflight put(key: str, body: str): void;
 
   /**
-   * Upload a Json object to bucket
+   * Upload a Json object to bucket.
    */
-  inflight put_json(key: str, value: Json): void;
+  inflight putJson(key: str, body: Json): void;
 
   /**
    * Get an object from the bucket.
    *
    * @throws Will throw if the object doesn't exist.
    */
-  inflight get(key: str): Blob;
+  inflight get(key: str): str;
 
   /**
    * Get an object from the bucket if it exists.
    */
-  inflight try_get(key: str): Blob?;
+  inflight tryGet(key: str): str | nil;
+
+  /**
+   * Get a Json object from the bucket.
+   */
+  inflight getJson(key: str, body: Json): void;
+
+  /**
+   * Get a Json object from the bucket if it exists.
+   */
+  inflight tryGetJson(key: str): Json | nil;
 
   /**
    * Delete an object from the bucket.
    *
    * @throws Will throw if the object doesn't exist.
    */
-  inflight delete(key: str): void;
+  inflight delete(key: str, opts: BucketDeleteOptions?): void;
 
   /**
    * Delete an object from the bucket if it exists.
    */
-  inflight try_delete(key: str): bool;
+  inflight tryDelete(key: str): bool;
 
   /**
    * Check if an object exists in the bucket.
@@ -338,29 +348,29 @@ resource Bucket {
   /**
    * List all objects in the bucket with the given prefix.
    */
-  inflight list(prefix: str?): Iterator<str>;
+  inflight list(prefix?: str): Array<str>; // return an iterator in the future
 
   /**
    * Returns a url to the given object key. Does not check if the object exists.
    *
    * @throws Will throw if the bucket is not public.
    */
-  inflight public_url(key: str): str;
+  inflight publicUrl(key: str): str;
 
   /**
    * Returns a signed url to the given object. This URL can be used by anyone to
    * access the object until the link expires (defaults to 24 hours).
    */
-  inflight signed_url(key: str, duration?: duration): str;
+  inflight signedUrl(key: str, duration?: duration): str;
 }
 
 struct ObjectMetadata {
   /** The size of the object in bytes. */
   size: Size;
   /** The time the object was last modified. */
-  last_modified: Date; // or an ISO timestamp `str` until we have Date API support
+  lastModified: Date; // or an ISO timestamp `str` until we have Date API support
   /** The content type of the object, if it is known. */
-  content_type: str?;
+  contentType: str?;
 }
 
 struct BucketOnUploadProps { /* elided */ }
@@ -426,7 +436,7 @@ struct QueueProps {
    * Initialize the queue with a set of messages.
    * @default []
    */
-   initialMessages?: string[];
+   initialMessages?: Array<str>;
 }
 
 resource Queue {
@@ -441,12 +451,12 @@ resource Queue {
   /**
    * Run an inflight in a cloud function whenever a message is pushed to the queue.
    */
-  add_consumer(fn: inflight (message: Json) => void, opts: QueueAddConsumerProps?): void;
+  addConsumer(fn: inflight (message: Json) => void, opts: QueueAddConsumerProps?): void;
 
   /**
    * Return the approximate message count of the queue.
    */
-  inflight get approx_size(): num;
+  inflight get approxSize(): num;
 
   /**
    * Push a message to the queue.
@@ -454,9 +464,9 @@ resource Queue {
   inflight push(message: Json): void;
 
   /**
-   * Pops (deletes and returns) a message from the queue.
+   * Pops (deletes and returns) a message from the queue if any.
    */
-  inflight pop(): Json;
+  inflight pop(): Json?;
 
   /**
    * Remove all messages from the queue.
@@ -534,7 +544,7 @@ resource Function {
   /**
    * Add an environment variable to the function.
    */
-  add_env(key: str, value: str): void;
+  addEnv(key: str, value: str): void;
 
   /**
    * Invoke the function.
@@ -545,14 +555,14 @@ resource Function {
   /**
    * Invoke the function, but do not wait for the result.
    */
-  inflight invoke_async(payload: Json): void;
+  inflight invokeAsync(payload: Json): void;
 }
 ```
 
 Future extensions:
 
-- `on_invoke(fn: inflight (payload: Json) => void): cloud.Function`
-- `on_resolve(fn: inflight(result: Json) => void): cloud.Function`
+- `onInvoke(fn: inflight (payload: Json) => void): cloud.Function`
+- `onResolve(fn: inflight(result: Json) => void): cloud.Function`
 
 ## Counter
 
@@ -580,14 +590,14 @@ resource Counter {
    * The `key` parameter can be used to update different counters.
    * @default - value: 1, key: "default"
    */
-  inflight inc(value: num?, key: string?): num;
+  inflight inc(value: num?, key: str?): num;
 
   /**
    * Decrement tahe counter, returning the previous value.
    * The `key` parameter can be used to update different counters.
    * @default - value: 1, key: "default"
    */
-  inflight dec(value: num?, key: string?): num;
+  inflight dec(value: num?, key: str?): num;
 
   /**
    * Get the current value of a counter. Using this API is prone to race
@@ -595,13 +605,13 @@ resource Counter {
    * time it is used in your code.
    * @default - key: "default"
    */
-  inflight peek(key: string?): number;
+  inflight peek(key: str?): number;
 
   /**
    * Reset a counter to a given value.
    * @default - value: 0, key: "default"
    */
-  inflight reset(value?: num, key: string?): void;
+  inflight reset(value?: num, key: str?): void;
 }
 ```
 
@@ -620,7 +630,7 @@ assert(counter.peek("bar") == 2);
 
 Future extensions:
 
-- `on_change(fn: inflight (delta: num, new_value: num) => void): cloud.Function`
+- `onChange(fn: inflight (delta: num, newValue: num) => void): cloud.Function`
 
 ## Topic
 
@@ -638,7 +648,7 @@ resource Topic {
   /**
    * Run an inflight whenever a message is published to the topic.
    */
-  on_message(fn: inflight (message: Json) => void, opts: TopicOnPublishProps?): void;
+  onMessage(fn: inflight (message: Json) => void, opts: TopicOnPublishProps?): void;
 
   /**
    * Publish a message to the topic.
@@ -662,20 +672,20 @@ resource Schedule {
    * Trigger events according to a cron schedule.
    * @example "0 0 * * *" - midnight every day
    */
-  static from_cron(cron: str): Schedule;
+  static fromCron(cron: str): Schedule;
 
   /**
    * Trigger events at a periodic rate.
    * @example 1 hour
    */
-  static from_rate(rate: duration): Schedule;
+  static fromRate(rate: duration): Schedule;
 
   private init(/* elided */): Schedule;
 
   /**
    * Run an inflight whenever the schedule triggers.
    */
-  on_tick(fn: inflight () => void, opts: ScheduleOnTickProps?): void;
+  onTick(fn: inflight () => void, opts: ScheduleOnTickProps?): void;
 }
 
 struct ScheduleOnTickProps { /* elided */ }
@@ -688,14 +698,14 @@ Example:
 bring cloud;
 
 // Run a function every hour.
-let every_hour = new cloud.Schedule.fromRate(1h); // implicit scope and id?
+let everyHour = new cloud.Schedule.fromRate(1h); // implicit scope and id?
 
-every_hour.on_tick(inflight () => {
+everyHour.onTick(inflight () => {
   // ...
 });
 ```
 
-Future extensions: inflight `next_tick(): Duration` method?
+Future extensions: inflight `nextTick(): Duration` method?
 
 ## Website
 
@@ -721,11 +731,11 @@ struct WebsiteProps {
 
   /**
    * used for adding dynamic content to the website after deployment
-   * @param file_path the bucket key to add
+   * @param filePath the bucket key to add
    * @param obj the object to write to the key
    * @returns the json file path
    */
-  add_json(file_path: str, obj: Json): str;
+  addJson(filePath: str, obj: Json): str;
 }
 
 resource Website {
@@ -837,18 +847,18 @@ struct ApiCorsProps {
    * The list of allowed headers.
    * @example ["Content-Type"]
    */
-  headers: Array<str>;
+  headers: Map<str>?;
 
   /**
    * The list of exposed headers.
    * @example ["Content-Type"]
    */
-  exposed_headers: Array<str>;
+  exposedHeaders: Array<str>;
 
   /**
    * Whether to allow credentials.
    */
-  allow_credentials: bool;
+  allowCredentials: bool;
 }
 
 struct ApiRequest {
@@ -930,7 +940,7 @@ The metric resource represents a metric that can be used to trigger events when 
 struct MetricProps {
   /**
    * The metric's name.
-   * @example "bytes_uploaded"
+   * @example "bytesUploaded"
    */
   name: str;
 
@@ -953,7 +963,7 @@ resource Metric {
 
   /**
    * The metric's name.
-   * @example "bytes_uploaded"
+   * @example "bytesUploaded"
    */
   name: str;
 
@@ -972,7 +982,7 @@ resource Metric {
   /**
    * Run an inflight whenever the metric exceeds the specified threshold.
    */
-  on_threshold(fn: inflight () => void, opts: MetricOnThresholdProps): void;
+  onThreshold(fn: inflight () => void, opts: MetricOnThresholdProps): void;
 
   /**
    * Record a value for the metric at the current point in time.
@@ -996,7 +1006,7 @@ struct MetricOnThresholdProps {
    * The comparison operator to use.
    * @default ComparisonOperator.GreaterThanThreshold
    */
-  comparison_operator: ComparisonOperator;
+  comparisonOperator: ComparisonOperator;
 }
 
 // operators available on AWS: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#aws-resource-cloudwatch-alarm-properties
@@ -1040,7 +1050,7 @@ let secret = new cloud.Secret(name: "my-api-key");
 
 new cloud.Function(inflight () => {
   // securely retrieve key value at runtime
-  let api_key = secret.value();
+  let apiKey = secret.value();
 });
 ```
 
@@ -1066,7 +1076,7 @@ struct SecretProps {
   /**
    * Retrieve the value of the secret.
    * @throws if the secret doesn't exist.
-   * @returns the secret value as string.
+   * @returns the secret value as str.
    */
   inflight value(): str;
 
@@ -1075,7 +1085,7 @@ struct SecretProps {
    * @throws if the secret doesn't exist or cannot be parsed as JSON
    * @returns the secret value parsed as JSON
    */
-  value_json(options?: GetSecretValueOptions): Promise<Json>;
+  valueJson(options?: GetSecretValueOptions): Promise<Json>;
 }
 ```
 
@@ -1126,7 +1136,7 @@ struct ServiceProps {
    * The directory containing the service's source code to package with
    * buildpack.
    */
-  buildpack_path: str;
+  buildpackPath: str;
 
   /**
    * The service's environment variables.
@@ -1170,7 +1180,7 @@ resource Service {
    * The directory containing the service's source code to package with
    * buildpack.
    */
-  buildpack_path: str;
+  buildpackPath: str;
 
   /**
    * The service's command.
@@ -1200,7 +1210,7 @@ resource Service {
   /**
    * Add an environment variable to the service.
    */
-  add_env(key: str, value: str): void;
+  addEnv(key: str, value: str): void;
 
   /**
    * Send a request to the service.
@@ -1236,7 +1246,7 @@ struct ServiceResponse {
   /**
    * The response's status code.
    */
-  status_code: number;
+  statusCode: number;
 
   /**
    * The response's headers.
@@ -1280,7 +1290,7 @@ struct TableProps {
    * The table's primary key. No two rows can have the same value for the
    * primary key.
    */
-  primary_key: str;
+  primaryKey: str;
 }
 
 enum ColumnType {
@@ -1307,7 +1317,7 @@ resource Table {
   /**
    * The table's primary key.
    */
-  primary_key: str;
+  primaryKey: str;
 
   /**
    * Insert a row into the table.
@@ -1338,6 +1348,6 @@ resource Table {
 
 Future extensions:
 
-- `on_insert(fn: inflight (row: Map<Json>) => void): cloud.Function;`
-- `on_update(fn: inflight (row: Map<Json>) => void): cloud.Function;`
-- `on_delete(fn: inflight (row: Map<Json>) => void): cloud.Function;`
+- `onInsert(fn: inflight (row: Map<Json>) => void): cloud.Function;`
+- `onUpdate(fn: inflight (row: Map<Json>) => void): cloud.Function;`
+- `onDelete(fn: inflight (row: Map<Json>) => void): cloud.Function;`

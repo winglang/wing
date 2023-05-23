@@ -1,5 +1,28 @@
 # [dec.w](../../../../examples/tests/valid/dec.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ counter }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 1)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 1))};
+        const dec1 = (typeof counter.dec === "function" ? await counter.dec() : await counter.dec.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 0)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec1 === 1)'`)})((dec1 === 1))};
+        const dec2 = (typeof counter.dec === "function" ? await counter.dec(2) : await counter.dec.handle(2));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === (-2))'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === (-2)))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === 0)'`)})((dec2 === 0))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -150,17 +173,43 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 1 });
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:dec",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        counter: {
-          obj: counter,
-          ops: ["dec","inc","peek","reset"]
-        },
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
       }
-    })
-    );
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const counter_client = context._lift(counter);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            counter: ${counter_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(counter, host, ["dec", "peek"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 1 });
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:dec",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -179,21 +228,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { counter } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
-  const dec1 = (await counter.dec());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec1 === 1)'`)})((dec1 === 1))};
-  const dec2 = (await counter.dec(2));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === (-2))'`)})(((await counter.peek()) === (-2)))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === 0)'`)})((dec2 === 0))};
-}
 
 ```
 

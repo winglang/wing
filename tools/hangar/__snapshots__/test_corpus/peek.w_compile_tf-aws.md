@@ -1,5 +1,25 @@
 # [peek.w](../../../../examples/tests/valid/peek.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ c }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0))};
+        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 1)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 1))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -150,17 +170,43 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:peek",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        c: {
-          obj: c,
-          ops: ["dec","inc","peek","reset"]
-        },
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
       }
-    })
-    );
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const c_client = context._lift(c);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            c: ${c_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(c, host, ["inc", "peek"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:peek",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
@@ -179,18 +225,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle() {
-  const { c } = this;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
-  (await c.inc());
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 1)'`)})(((await c.peek()) === 1))};
-}
 
 ```
 

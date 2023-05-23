@@ -1,5 +1,41 @@
 # [json_bucket.w](../../../../examples/tests/valid/json_bucket.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ b, fileName }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(msg)  {
+      {
+        const x = (typeof b.getJson === "function" ? await b.getJson(fileName) : await b.getJson.handle(fileName));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({ b, fileName, j, getJson }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        (typeof b.putJson === "function" ? await b.putJson(fileName,j) : await b.putJson.handle(fileName,j));
+        (typeof getJson.invoke === "function" ? await getJson.invoke("") : await getJson.invoke.handle(""));
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -58,7 +94,7 @@
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}"
       },
       "root_testput_Handler_IamRolePolicy_401F0ED6": {
@@ -68,7 +104,7 @@
             "uniqueId": "root_testput_Handler_IamRolePolicy_401F0ED6"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testput_Handler_IamRole_10DDB136.name}"
       }
     },
@@ -243,45 +279,93 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const b_client = context._lift(b);
+        const fileName_client = context._lift(fileName);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            b: ${b_client},
+            fileName: ${fileName_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(b, host, ["getJson"]);
+          this._registerBindObject(fileName, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const b_client = context._lift(b);
+        const fileName_client = context._lift(fileName);
+        const j_client = context._lift(j);
+        const getJson_client = context._lift(getJson);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            b: ${b_client},
+            fileName: ${fileName_client},
+            j: ${j_client},
+            getJson: ${getJson_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(b, host, ["putJson"]);
+          this._registerBindObject(fileName, host, []);
+          this._registerBindObject(getJson, host, ["invoke"]);
+          this._registerBindObject(j, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const fileName = "file.json";
     const j = Object.freeze({"persons":[{"age":30,"name":"hasan","fears":["heights", "failure"]}]});
-    const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        b: {
-          obj: b,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-        fileName: {
-          obj: fileName,
-          ops: []
-        },
-      }
-    })
-    );
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:put",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        b: {
-          obj: b,
-          ops: ["delete","get","getJson","list","publicUrl","put","putJson"]
-        },
-        fileName: {
-          obj: fileName,
-          ops: []
-        },
-        getJson: {
-          obj: getJson,
-          ops: ["invoke"]
-        },
-        j: {
-          obj: j,
-          ops: []
-        },
-      }
-    })
-    );
+    const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:put",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {
@@ -300,26 +384,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(msg) {
-  const { b, fileName } = this;
-  const x = (await b.getJson(fileName));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const { b, fileName, getJson, j } = this;
-  (await b.putJson(fileName,j));
-  (await getJson.invoke(""));
-}
 
 ```
 

@@ -1,5 +1,39 @@
 # [asynchronous_model_implicit_await_in_functions.w](../../../../examples/tests/valid/asynchronous_model_implicit_await_in_functions.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({  }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle(s)  {
+      {
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({ strToStr }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle(s)  {
+      {
+        (typeof strToStr.invoke === "function" ? await strToStr.invoke("one") : await strToStr.invoke.handle("one"));
+        {console.log((typeof strToStr.invoke === "function" ? await strToStr.invoke("two") : await strToStr.invoke.handle("two")))};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -207,23 +241,76 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class $Inflight1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const strToStr_client = context._lift(strToStr);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            strToStr: ${strToStr_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          this._registerBindObject(strToStr, host, ["invoke"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    const strToStr = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"strToStr",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
-      bindings: {
-      }
-    })
-    );
-    const func = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"func",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        strToStr: {
-          obj: strToStr,
-          ops: ["invoke"]
-        },
-      }
-    })
-    );
+    const strToStr = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"strToStr",new $Inflight1(this,"$Inflight1"));
+    const func = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"func",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {
@@ -242,24 +329,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(s) {
-  const {  } = this;
-}
-
-```
-
-## proc2/index.js
-```js
-async handle(s) {
-  const { strToStr } = this;
-  (await strToStr.invoke("one"));
-  {console.log((await strToStr.invoke("two")))};
-}
 
 ```
 
