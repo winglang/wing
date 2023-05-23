@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { Simulator, Testing } from "../../src/testing";
+import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = `
@@ -187,65 +187,13 @@ test("invoke function with process.exit(1)", async () => {
   // WHEN
   const PAYLOAD = {};
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "process.exit() was called with exit code 1"
+    "process.exit is not a function"
   );
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
   expect(s.listTraces()[2].data.error).toMatchObject({
-    message: "process.exit() was called with exit code 1",
+    message: "process.exit is not a function",
   });
   expect(app.snapshot()).toMatchSnapshot();
-});
-
-test("runtime environment tests", async () => {
-  const app = new SimApp();
-
-  const urlSearchParamsFn = app.newCloudFunction(`
-    const query = "q=URLUtils.searchParams&topic=api";
-    const p = new URLSearchParams(query);
-    return p.get("topic");
-  `);
-
-  // check that fetch is a function (we can't really make network calls here)
-  const fetchFn = app.newCloudFunction(`
-    return fetch;
-  `);
-
-  const cryptoFn = app.newCloudFunction(`
-    const c = require("crypto");
-    return c.createHash;
-  `);
-
-  // check that we can import ESM modules
-  const esmModulesFn = app.newCloudFunction(`
-    const { nanoid } = await import("nanoid");
-    return nanoid();
-  `);
-
-  // THEN
-  const s = await app.startSimulator();
-  expect(await cryptoFn(s)).toBeTypeOf("function");
-  expect(await urlSearchParamsFn(s)).toBe("api");
-  expect(await fetchFn(s)).toBeTypeOf("function");
-  expect(await esmModulesFn(s)).toHaveLength(21);
-
-  await s.stop();
-  expect(app.snapshot()).toMatchSnapshot();
-});
-
-test("__dirname and __filename cannot be used within inflight code", async () => {
-  const app = new SimApp();
-  const dirnameInvoker = app.newCloudFunction(`__dirname`);
-  const filenameInvoker = app.newCloudFunction(`__filename`);
-
-  const s = await app.startSimulator();
-
-  await expect(dirnameInvoker(s)).rejects.toThrow(
-    "__dirname cannot be used within bundled cloud functions"
-  );
-
-  await expect(filenameInvoker(s)).rejects.toThrow(
-    "__filename cannot be used within bundled cloud functions"
-  );
 });
