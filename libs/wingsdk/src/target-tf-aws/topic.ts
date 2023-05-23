@@ -6,8 +6,8 @@ import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { NameOptions, ResourceNames } from "../core/resource-names";
 import { convertBetweenHandlers } from "../shared/convert";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { IInflightHost, Resource } from "../std";
 

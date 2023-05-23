@@ -4,7 +4,7 @@ import { SECRET_TYPE, SecretSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { ResourceNames } from "../core/resource-names";
+import { ResourceNames } from "../shared/resource-names";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 

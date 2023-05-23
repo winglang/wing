@@ -7,12 +7,12 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { Subnet } from "../.gen/providers/aws/subnet";
 import { Code } from "../core";
 import * as core from "../core";
+import * as redis from "../redis";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../core/resource-names";
-import * as redis from "../redis";
+} from "../shared/resource-names";
 import { IInflightHost } from "../std";
 
 const ELASTICACHE_NAME_OPTS: NameOptions = {

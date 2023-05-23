@@ -11,12 +11,12 @@ import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { createBundle } from "../shared/bundling";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../core/resource-names";
-import { createBundle } from "../shared/bundling";
+} from "../shared/resource-names";
 import { IResource } from "../std";
 
 /**

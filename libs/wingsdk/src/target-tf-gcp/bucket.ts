@@ -10,7 +10,7 @@ import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../core/resource-names";
+} from "../shared/resource-names";
 import { IInflightHost } from "../std";
 
 /**

@@ -3,7 +3,7 @@ import { Function } from "./function";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { NameOptions, ResourceNames } from "../core/resource-names";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IInflightHost } from "../std";
 
 /**

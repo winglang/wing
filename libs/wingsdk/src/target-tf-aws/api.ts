@@ -13,12 +13,12 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { Code } from "../core/inflight";
+import { convertBetweenHandlers } from "../shared/convert";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../core/resource-names";
-import { convertBetweenHandlers } from "../shared/convert";
+} from "../shared/resource-names";
 import { IInflightHost, Resource } from "../std";
 
 /**

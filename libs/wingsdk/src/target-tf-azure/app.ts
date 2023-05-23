@@ -12,7 +12,7 @@ import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../core/resource-names";
+} from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 
 /**

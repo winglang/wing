@@ -36,8 +36,8 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
-import { NameOptions, ResourceNames } from "../core/resource-names";
 import { REDIS_FQN } from "../redis";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 
 /**
