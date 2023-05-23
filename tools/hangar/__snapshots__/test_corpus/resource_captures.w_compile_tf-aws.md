@@ -88,7 +88,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
       {
         const __parent_this = this;
-        this.inflightField = 1;
+        this.inflightField = 123;
       }
     }
     async testNoCapture()  {
@@ -172,7 +172,6 @@ module.exports = function({  }) {
     async testInflightField()  {
       {
         const __parent_this = this;
-        this.inflightField = 123;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.inflightField === 123)'`)})((this.inflightField === 123))};
       }
     }

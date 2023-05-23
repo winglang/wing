@@ -44,7 +44,7 @@ class MyResource {
 
   inflight inflightField: num;
   inflight init() {
-    this.inflightField = 1;
+    this.inflightField = 123;
   }
 
   init(externalBucket: cloud.Bucket, externalNum: num) {
@@ -131,7 +131,6 @@ class MyResource {
   }
 
   inflight testInflightField() {
-    this.inflightField = 123;
     assert(this.inflightField == 123);
   }
 }
