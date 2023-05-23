@@ -199,28 +199,6 @@ module.exports = function({  }) {
 
 ```
 
-## clients/InflightClass.inflight.js
-```js
-module.exports = function({  }) {
-  class  InflightClass {
-    constructor({  }) {
-    }
-    async inflight_class_instance_method()  {
-      {
-        return "inflight class instance method";
-      }
-    }
-    static async inflight_class_static_method()  {
-      {
-        return "inflight class static method";
-      }
-    }
-  }
-  return InflightClass;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
