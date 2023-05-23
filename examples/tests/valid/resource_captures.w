@@ -42,7 +42,7 @@ class MyResource {
   extBucket: cloud.Bucket;
   extNum: num;
 
-  inflight var inflightField: num;
+  inflight inflightField: num;
   inflight init() {
     this.inflightField = 1;
   }
