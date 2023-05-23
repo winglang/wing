@@ -2611,22 +2611,22 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		for field in fields.iter() {
-			let result = initialized_fields.iter().find(|&s| &s.name == &field.name.name);
+			let matching_field = initialized_fields.iter().find(|&s| &s.name == &field.name.name);
 			// inflight or static fields cannot be initialized in the initializer
 			if field.phase == forbidden_phase || field.is_static {
-				if let Some(result) = result {
+				if let Some(matching_field) = matching_field {
 					self.type_error(TypeError {
 						message: format!(
 							"\"{}\" cannot be initialized in the {} initializer",
-							result.name, current_phase
+							matching_field.name, current_phase
 						),
-						span: result.span.clone(),
+						span: matching_field.span.clone(),
 					});
 				};
 				continue;
 			}
 
-			if result == None {
+			if matching_field == None {
 				self.type_error(TypeError {
 					message: format!("{} field \"{}\" is not initialized", current_phase, field.name.name),
 					span: field.name.span.clone(),

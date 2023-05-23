@@ -10,7 +10,7 @@ module.exports = function({ c5 }) {
       {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.x === 123)'`)})((c5.x === 123))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 321)'`)})((c5.y === 321))};
-        (await c5.set(111));
+        (typeof c5.set === "function" ? await c5.set(111) : await c5.set.handle(111));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 111)'`)})((c5.y === 111))};
       }
     }

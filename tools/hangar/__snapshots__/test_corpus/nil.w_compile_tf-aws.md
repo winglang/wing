@@ -47,6 +47,12 @@ module.exports = function({  }) {
   class  Foo {
     constructor({  }) {
     }
+    async $inflight_init()  {
+      {
+        const __parent_this = this;
+        this.optionalVar = undefined;
+      }
+    }
     async returnNil(t)  {
       {
         const __parent_this = this;
@@ -275,7 +281,6 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "optionalVar");
         const __parent_this = this;
-        this.optionalVar = undefined;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
