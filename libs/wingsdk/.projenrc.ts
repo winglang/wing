@@ -67,6 +67,7 @@ const project = new cdk.JsiiProject({
     "cron-parser",
     // shared client dependencies
     "ioredis",
+    "vm2",
   ],
   devDeps: [
     `@cdktf/provider-aws@^12.0.1`, // only for testing Wing plugins
@@ -85,7 +86,6 @@ const project = new cdk.JsiiProject({
     "vitest",
     "@types/uuid",
     "@vitest/coverage-c8",
-    "nanoid", // for ESM import test in target-sim/function.test.ts
   ],
   jest: false,
   prettier: true,
