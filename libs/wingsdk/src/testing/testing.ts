@@ -5,7 +5,6 @@ import { IInflightHost, IResource, Resource } from "../std";
 
 /**
  * Test utilities.
- * TODO: move this to `test/` - it should not be under `src/`
  */
 export class Testing {
   /**
