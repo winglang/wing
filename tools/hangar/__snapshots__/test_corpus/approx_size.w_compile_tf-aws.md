@@ -8,9 +8,9 @@ module.exports = function({ q }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
-        (await q.push("message"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 1)'`)})(((await q.approxSize()) === 1))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0))};
+        (typeof q.push === "function" ? await q.push("message") : await q.push.handle("message"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 1)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 1))};
       }
     }
   }

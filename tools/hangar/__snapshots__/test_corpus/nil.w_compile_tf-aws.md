@@ -1,14 +1,15 @@
-# [extern_implementation.w](../../../../examples/tests/valid/extern_implementation.w) | compile | tf-aws
+# [nil.w](../../../../examples/tests/valid/nil.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ f }) {
+module.exports = function({ foo }) {
   class  $Inflight1 {
     constructor({  }) {
     }
     async handle()  {
       {
-        (typeof f.call === "function" ? await f.call() : await f.call.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.returnNil === "function" ? await foo.returnNil(true) : await foo.returnNil.handle(true))) != null) === true)'`)})(((((typeof foo.returnNil === "function" ? await foo.returnNil(true) : await foo.returnNil.handle(true))) != null) === true))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.returnNil === "function" ? await foo.returnNil(false) : await foo.returnNil.handle(false))) != null) === false)'`)})(((((typeof foo.returnNil === "function" ? await foo.returnNil(false) : await foo.returnNil.handle(false))) != null) === false))};
       }
     }
   }
@@ -19,13 +20,19 @@ module.exports = function({ f }) {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function({ f }) {
+module.exports = function({ foo }) {
   class  $Inflight2 {
     constructor({  }) {
     }
     async handle()  {
       {
-        (typeof f.print === "function" ? await f.print("hey there") : await f.print.handle("hey there"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
+        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue("hello") : await foo.setOptionalValue.handle("hello"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== undefined)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== undefined))};
+        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue(undefined) : await foo.setOptionalValue.handle(undefined));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === undefined)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === undefined))};
       }
     }
   }
@@ -40,25 +47,26 @@ module.exports = function({  }) {
   class  Foo {
     constructor({  }) {
     }
-    static async regexInflight(pattern, text)  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
-    }
-    static async getUuid()  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["getUuid"])()
-    }
-    static async getData()  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["getData"])()
-    }
-    async print(msg)  {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
-    }
-    async call()  {
+    async returnNil(t)  {
       {
         const __parent_this = this;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof Foo.regexInflight === "function" ? await Foo.regexInflight("[a-z]+-\\d+","abc-123") : await Foo.regexInflight.handle("[a-z]+-\\d+","abc-123"))'`)})((typeof Foo.regexInflight === "function" ? await Foo.regexInflight("[a-z]+-\\d+","abc-123") : await Foo.regexInflight.handle("[a-z]+-\\d+","abc-123")))};
-        const uuid = (typeof Foo.getUuid === "function" ? await Foo.getUuid() : await Foo.getUuid.handle());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof Foo.getData === "function" ? await Foo.getData() : await Foo.getData.handle()) === "Cool data!")'`)})(((typeof Foo.getData === "function" ? await Foo.getData() : await Foo.getData.handle()) === "Cool data!"))};
+        if (t) {
+          const __parent_this = this;
+          return "hello";
+        }
+        return undefined;
+      }
+    }
+    async setOptionalValue(msg)  {
+      {
+        const __parent_this = this;
+        this.optionalVar = msg;
+      }
+    }
+    async getOptionalValue()  {
+      {
+        const __parent_this = this;
+        return this.optionalVar;
       }
     }
   }
@@ -88,7 +96,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:call\",\"${aws_lambda_function.root_testcall_Handler_C73C89A7.arn}\"],[\"root/Default/Default/test:console\",\"${aws_lambda_function.root_testconsole_Handler_DD0D6BBA.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:nil return\",\"${aws_lambda_function.root_testnilreturn_Handler_3225915F.arn}\"],[\"root/Default/Default/test:optional instance variable\",\"${aws_lambda_function.root_testoptionalinstancevariable_Handler_47D78041.arn}\"]]"
     }
   },
   "provider": {
@@ -98,114 +106,114 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testcall_Handler_IamRole_B9068115": {
+      "root_testnilreturn_Handler_IamRole_47507CA4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/Handler/IamRole",
-            "uniqueId": "root_testcall_Handler_IamRole_B9068115"
+            "path": "root/Default/Default/test:nil return/Handler/IamRole",
+            "uniqueId": "root_testnilreturn_Handler_IamRole_47507CA4"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testconsole_Handler_IamRole_65E31A0B": {
+      "root_testoptionalinstancevariable_Handler_IamRole_191EFCE1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/Handler/IamRole",
-            "uniqueId": "root_testconsole_Handler_IamRole_65E31A0B"
+            "path": "root/Default/Default/test:optional instance variable/Handler/IamRole",
+            "uniqueId": "root_testoptionalinstancevariable_Handler_IamRole_191EFCE1"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testcall_Handler_IamRolePolicy_E93D23FF": {
+      "root_testnilreturn_Handler_IamRolePolicy_B6986683": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/Handler/IamRolePolicy",
-            "uniqueId": "root_testcall_Handler_IamRolePolicy_E93D23FF"
+            "path": "root/Default/Default/test:nil return/Handler/IamRolePolicy",
+            "uniqueId": "root_testnilreturn_Handler_IamRolePolicy_B6986683"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testcall_Handler_IamRole_B9068115.name}"
+        "role": "${aws_iam_role.root_testnilreturn_Handler_IamRole_47507CA4.name}"
       },
-      "root_testconsole_Handler_IamRolePolicy_0247158D": {
+      "root_testoptionalinstancevariable_Handler_IamRolePolicy_588B9479": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/Handler/IamRolePolicy",
-            "uniqueId": "root_testconsole_Handler_IamRolePolicy_0247158D"
+            "path": "root/Default/Default/test:optional instance variable/Handler/IamRolePolicy",
+            "uniqueId": "root_testoptionalinstancevariable_Handler_IamRolePolicy_588B9479"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testconsole_Handler_IamRole_65E31A0B.name}"
+        "role": "${aws_iam_role.root_testoptionalinstancevariable_Handler_IamRole_191EFCE1.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testcall_Handler_IamRolePolicyAttachment_D5A14EE2": {
+      "root_testnilreturn_Handler_IamRolePolicyAttachment_E13D851A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcall_Handler_IamRolePolicyAttachment_D5A14EE2"
+            "path": "root/Default/Default/test:nil return/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testnilreturn_Handler_IamRolePolicyAttachment_E13D851A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcall_Handler_IamRole_B9068115.name}"
+        "role": "${aws_iam_role.root_testnilreturn_Handler_IamRole_47507CA4.name}"
       },
-      "root_testconsole_Handler_IamRolePolicyAttachment_88293121": {
+      "root_testoptionalinstancevariable_Handler_IamRolePolicyAttachment_EEBB1730": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testconsole_Handler_IamRolePolicyAttachment_88293121"
+            "path": "root/Default/Default/test:optional instance variable/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testoptionalinstancevariable_Handler_IamRolePolicyAttachment_EEBB1730"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testconsole_Handler_IamRole_65E31A0B.name}"
+        "role": "${aws_iam_role.root_testoptionalinstancevariable_Handler_IamRole_191EFCE1.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testcall_Handler_C73C89A7": {
+      "root_testnilreturn_Handler_3225915F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/Handler/Default",
-            "uniqueId": "root_testcall_Handler_C73C89A7"
+            "path": "root/Default/Default/test:nil return/Handler/Default",
+            "uniqueId": "root_testnilreturn_Handler_3225915F"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8074088"
+            "WING_FUNCTION_NAME": "Handler-c8668556"
           }
         },
-        "function_name": "Handler-c8074088",
+        "function_name": "Handler-c8668556",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcall_Handler_IamRole_B9068115.arn}",
+        "role": "${aws_iam_role.root_testnilreturn_Handler_IamRole_47507CA4.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcall_Handler_S3Object_343DEC5F.key}",
+        "s3_key": "${aws_s3_object.root_testnilreturn_Handler_S3Object_DEC9B907.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testconsole_Handler_DD0D6BBA": {
+      "root_testoptionalinstancevariable_Handler_47D78041": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/Handler/Default",
-            "uniqueId": "root_testconsole_Handler_DD0D6BBA"
+            "path": "root/Default/Default/test:optional instance variable/Handler/Default",
+            "uniqueId": "root_testoptionalinstancevariable_Handler_47D78041"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8fb077d"
+            "WING_FUNCTION_NAME": "Handler-c8a1de9c"
           }
         },
-        "function_name": "Handler-c8fb077d",
+        "function_name": "Handler-c8a1de9c",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testconsole_Handler_IamRole_65E31A0B.arn}",
+        "role": "${aws_iam_role.root_testoptionalinstancevariable_Handler_IamRole_191EFCE1.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testconsole_Handler_S3Object_12E2B161.key}",
+        "s3_key": "${aws_s3_object.root_testoptionalinstancevariable_Handler_S3Object_938977CF.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -225,22 +233,22 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_testcall_Handler_S3Object_343DEC5F": {
+      "root_testnilreturn_Handler_S3Object_DEC9B907": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/Handler/S3Object",
-            "uniqueId": "root_testcall_Handler_S3Object_343DEC5F"
+            "path": "root/Default/Default/test:nil return/Handler/S3Object",
+            "uniqueId": "root_testnilreturn_Handler_S3Object_DEC9B907"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testconsole_Handler_S3Object_12E2B161": {
+      "root_testoptionalinstancevariable_Handler_S3Object_938977CF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:console/Handler/S3Object",
-            "uniqueId": "root_testconsole_Handler_S3Object_12E2B161"
+            "path": "root/Default/Default/test:optional instance variable/Handler/S3Object",
+            "uniqueId": "root_testoptionalinstancevariable_Handler_S3Object_938977CF"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -265,14 +273,9 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call");
+        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "optionalVar");
         const __parent_this = this;
-      }
-      static getGreeting(name)  {
-        return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
-      }
-      static v4()  {
-        return (require("<ABSOLUTE_PATH>/index.js")["v4"])()
+        this.optionalVar = undefined;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
@@ -295,15 +298,11 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
-        if (ops.includes("call")) {
+        if (ops.includes("getOptionalValue")) {
         }
-        if (ops.includes("getData")) {
+        if (ops.includes("returnNil")) {
         }
-        if (ops.includes("getUuid")) {
-        }
-        if (ops.includes("print")) {
-        }
-        if (ops.includes("regexInflight")) {
+        if (ops.includes("setOptionalValue")) {
         }
         super._registerBind(host, ops);
       }
@@ -316,10 +315,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-        const f_client = context._lift(f);
+        const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            f: ${f_client},
+            foo: ${foo_client},
           })
         `);
       }
@@ -338,7 +337,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(f, host, ["call"]);
+          this._registerBindObject(foo, host, ["returnNil"]);
         }
         super._registerBind(host, ops);
       }
@@ -351,10 +350,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
-        const f_client = context._lift(f);
+        const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            f: ${f_client},
+            foo: ${foo_client},
           })
         `);
       }
@@ -373,21 +372,19 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(f, host, ["print"]);
+          this._registerBindObject(foo, host, ["getOptionalValue", "setOptionalValue"]);
         }
         super._registerBind(host, ops);
       }
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.getGreeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.getGreeting("Wingding")) === "Hello, Wingding!"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
-    const f = new Foo(this,"Foo");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:call",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:console",new $Inflight2(this,"$Inflight2"));
+    const foo = new Foo(this,"Foo");
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:nil return",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:optional instance variable",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "extern_implementation", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "nil", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

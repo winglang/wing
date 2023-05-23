@@ -148,6 +148,7 @@ pub enum Type {
 	Void,
 	Json,
 	MutJson,
+	Nil,
 	Optional(TypeRef),
 	Array(TypeRef),
 	MutArray(TypeRef),
@@ -165,6 +166,8 @@ pub enum Type {
 
 pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
+
+pub const HANDLE_METHOD_NAME: &'static str = "handle";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -222,7 +225,7 @@ impl Interface {
 
 impl Display for Interface {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&"handle".into(), None) {
+		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None) {
 			let method = method.as_variable().unwrap();
 			if method.phase == Phase::Inflight {
 				write!(f, "{} ({})", self.name.name, method.type_)
@@ -384,7 +387,7 @@ impl Subtype for Type {
 				}
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
-				if let Some((method, _)) = r0.get_env().lookup_ext(&"handle".into(), None).ok() {
+				if let Some((method, _)) = r0.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None).ok() {
 					let method = method.as_variable().unwrap();
 					if method.phase != Phase::Inflight {
 						return false;
@@ -477,12 +480,12 @@ impl Subtype for Type {
 
 				// Next, check that the method's name is "handle"
 				let (handler_method_name, handler_method_type) = handler_method.unwrap();
-				if handler_method_name != "handle" {
+				if handler_method_name != HANDLE_METHOD_NAME {
 					return false;
 				}
 
 				// Then get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = res.get_method(&"handle".into()) {
+				let res_handle_type = if let Some(method) = res.get_method(&HANDLE_METHOD_NAME.into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
@@ -494,6 +497,25 @@ impl Subtype for Type {
 
 				// Finally check if they're subtypes
 				res_handle_type.is_subtype_of(&handler_method_type)
+			}
+			(Self::Resource(res), Self::Function(_)) => {
+				// To support flexible inflight closures, we say that any
+				// preflight class with an inflight method named "handle" is a subtype of
+				// any matching inflight type.
+
+				// Get the type of the resource's "handle" method if it has one
+				let res_handle_type = if let Some(method) = res.get_method(&HANDLE_METHOD_NAME.into()) {
+					if method.type_.is_inflight_function() {
+						method.type_
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				};
+
+				// Finally check if they're subtypes
+				(*res_handle_type).is_subtype_of(other)
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
@@ -555,6 +577,10 @@ impl Subtype for Type {
 				let l: &Type = l0;
 				let r: &Type = r0;
 				l.is_subtype_of(r)
+			}
+			(Self::Nil, Self::Optional(_)) => {
+				// Nil is a subtype of Optional<T> for any T
+				true
 			}
 			(_, Self::Optional(r0)) => {
 				// A non-Optional type is a subtype of an Optional type if the non-optional's type is a subtype of the value type
@@ -650,6 +676,7 @@ impl Display for Type {
 			Type::Void => write!(f, "void"),
 			Type::Json => write!(f, "Json"),
 			Type::MutJson => write!(f, "MutJson"),
+			Type::Nil => write!(f, "nil"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
@@ -766,43 +793,38 @@ impl TypeRef {
 	}
 
 	pub fn is_anything(&self) -> bool {
-		if let Type::Anything = **self {
-			true
-		} else {
-			false
+		matches!(**self, Type::Anything)
+	}
+
+	pub fn is_resource(&self) -> bool {
+		matches!(**self, Type::Resource(_))
+	}
+
+	/// Returns whether the type is a preflight class with an inflight method named "handle"
+	pub fn is_handler_resource(&self) -> bool {
+		if let Type::Resource(ref class) = **self {
+			return class
+				.methods(true)
+				.any(|(name, type_)| name == HANDLE_METHOD_NAME && type_.is_inflight_function());
 		}
+		false
 	}
 
 	pub fn is_void(&self) -> bool {
-		if let Type::Void = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Void)
 	}
 
 	pub fn is_option(&self) -> bool {
-		if let Type::Optional(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Optional(_))
 	}
 
 	pub fn is_immutable_collection(&self) -> bool {
-		if let Type::Array(_) | Type::Map(_) | Type::Set(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Array(_) | Type::Map(_) | Type::Set(_))
 	}
 
 	pub fn is_inflight_function(&self) -> bool {
 		if let Type::Function(ref sig) = **self {
-			if sig.phase == Phase::Inflight {
-				return true;
-			}
-			true
+			sig.phase == Phase::Inflight
 		} else {
 			false
 		}
@@ -822,27 +844,14 @@ impl TypeRef {
 	}
 
 	pub fn is_mutable_collection(&self) -> bool {
-		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
-			true
-		} else {
-			false
-		}
-	}
-
-	pub fn is_primitive(&self) -> bool {
-		if let Type::Number | Type::String | Type::Duration | Type::Boolean = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::MutArray(_) | Type::MutMap(_) | Type::MutSet(_))
 	}
 
 	pub fn is_iterable(&self) -> bool {
-		if let Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(
+			**self,
+			Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_)
+		)
 	}
 
 	pub fn is_capturable(&self) -> bool {
@@ -855,6 +864,7 @@ impl TypeRef {
 			Type::Duration => true,
 			Type::Boolean => true,
 			Type::Json => true,
+			Type::Nil => true,
 			Type::Array(v) => v.is_capturable(),
 			Type::Map(v) => v.is_capturable(),
 			Type::Set(v) => v.is_capturable(),
@@ -866,7 +876,7 @@ impl TypeRef {
 			Type::MutArray(_) => false,
 			Type::MutMap(_) => false,
 			Type::MutSet(_) => false,
-			Type::Function(_) => false, // TODO: https://github.com/winglang/wing/issues/2236
+			Type::Function(sig) => sig.phase == Phase::Inflight,
 			Type::Class(_) => false,
 		}
 	}
@@ -882,6 +892,13 @@ impl TypeRef {
 			Type::Map(v) => v.is_mutable(),
 			Type::Set(v) => v.is_mutable(),
 			Type::Optional(v) => v.is_mutable(),
+			_ => false,
+		}
+	}
+
+	pub fn is_nil(&self) -> bool {
+		match &**self {
+			Type::Nil => true,
 			_ => false,
 		}
 	}
@@ -934,6 +951,7 @@ pub struct Types {
 	void_idx: usize,
 	json_idx: usize,
 	mut_json_idx: usize,
+	nil_idx: usize,
 
 	resource_base_type: Option<TypeRef>,
 }
@@ -957,6 +975,8 @@ impl Types {
 		let json_idx = types.len() - 1;
 		types.push(Box::new(Type::MutJson));
 		let mut_json_idx = types.len() - 1;
+		types.push(Box::new(Type::Nil));
+		let nil_idx = types.len() - 1;
 
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
@@ -975,6 +995,7 @@ impl Types {
 			void_idx,
 			json_idx,
 			mut_json_idx,
+			nil_idx,
 			resource_base_type: None,
 		}
 	}
@@ -985,6 +1006,10 @@ impl Types {
 
 	pub fn string(&self) -> TypeRef {
 		self.get_typeref(self.string_idx)
+	}
+
+	pub fn nil(&self) -> TypeRef {
+		self.get_typeref(self.nil_idx)
 	}
 
 	pub fn bool(&self) -> TypeRef {
@@ -1205,6 +1230,7 @@ impl<'a> TypeChecker<'a> {
 		match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => self.types.string(),
+				Literal::Nil => self.types.nil(),
 				Literal::InterpolatedString(s) => {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
@@ -1440,7 +1466,20 @@ impl<'a> TypeChecker<'a> {
 
 				// Make sure this is a function signature type
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
-					func_sig
+					func_sig.clone()
+				} else if let Some(res) = func_type.as_resource() {
+					// return the signature of the "handle" method
+					let lookup_res = res.get_method(&HANDLE_METHOD_NAME.into());
+					let handle_type = if let Some(method) = lookup_res {
+						method.type_
+					} else {
+						return self.expr_error(callee, "should be a function or method".to_string());
+					};
+					if let Some(sig_type) = handle_type.as_function_sig() {
+						sig_type.clone()
+					} else {
+						return self.expr_error(callee, "should be a function or method".to_string());
+					}
 				} else {
 					return self.expr_error(callee, "should be a function or method".to_string());
 				};
@@ -1784,10 +1823,17 @@ impl<'a> TypeChecker<'a> {
 						expected_types_list, actual_type
 					)
 				} else {
-					format!(
+					let mut message = format!(
 						"Expected type to be \"{}\", but got \"{}\" instead",
 						expected_types[0], actual_type
-					)
+					);
+					if actual_type.is_nil() {
+						message = format!(
+							"{} (hint: to allow \"nil\" assignment use optional type: \"{}?\")",
+							message, expected_types[0]
+						);
+					}
+					message
 				},
 				span: Some(span.span()),
 			});
