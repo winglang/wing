@@ -1,4 +1,4 @@
-name: SDK Spec Testing
+name: SDK Spec AWS Tests
 on:
   schedule:
     - cron: "0 8 * * *"
@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          repository: winglang/wing
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
