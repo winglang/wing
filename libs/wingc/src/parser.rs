@@ -185,6 +185,7 @@ impl<'s> Parser<'s> {
 			"expression_statement" => StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap())?),
 			"block" => StmtKind::Scope(self.build_scope(statement_node)),
 			"if_statement" => self.build_if_statement(statement_node)?,
+      "if_let_statement" => self.build_if_let_statement(statement_node)?,
 			"for_in_loop" => self.build_for_statement(statement_node)?,
 			"while_statement" => self.build_while_statement(statement_node)?,
 			"break_statement" => self.build_break_statement(statement_node)?,
@@ -299,6 +300,23 @@ impl<'s> Parser<'s> {
 		}
 		Ok(StmtKind::Continue)
 	}
+
+  fn build_if_let_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+    let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+    let condition = self.build_expression(&statement_node.child_by_field_name("value").unwrap())?;
+    let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+    let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
+			Some(self.build_scope(&else_block))
+		} else {
+			None
+		};
+    Ok(StmtKind::IfLet {
+      condition: condition,
+      statements: if_block,
+      var_name: name ,
+      else_statements: else_block,
+    })
+  }
 
 	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());

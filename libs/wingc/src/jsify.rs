@@ -588,6 +588,26 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
+      StmtKind::IfLet { 
+        condition, 
+        statements, 
+        var_name,
+        else_statements
+      } => {
+        let mut code = CodeMaker::default();
+        code.open(format!("if ({}) {{", self.jsify_expression(condition, ctx)));
+        code.line(format!("const {} = {};", self.jsify_symbol(var_name), self.jsify_expression(condition, ctx)));
+        code.add_code(self.jsify_scope_body(statements, ctx));
+        code.close("}");
+
+        if let Some(else_scope) = else_statements {
+					code.open("else {");
+					code.add_code(self.jsify_scope_body(else_scope, ctx));
+					code.close("}");
+				}
+        
+        code
+      }
 			StmtKind::If {
 				condition,
 				statements,

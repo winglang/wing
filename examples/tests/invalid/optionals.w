@@ -33,3 +33,8 @@ optionalSub1 ?? new Sub2();
 //               ^ error: Sub2 is not a subtype of Sub1
 optionalSub1 ?? new Super();
 //               ^ error: Super? is not a subtype of Sub1
+
+
+if let x = true {
+//         ^^^^ Expected type to be optional, but got "bool" instead
+}
