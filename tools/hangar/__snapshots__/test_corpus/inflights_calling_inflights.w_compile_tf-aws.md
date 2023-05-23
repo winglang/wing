@@ -447,7 +447,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(globalBucket, host, ["put"]);
+          $Inflight1._registerBindObject(globalBucket, host, ["put"]);
         }
         super._registerBind(host, ops);
       }
@@ -482,7 +482,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(storeInBucket, host, ["handle"]);
+          $Inflight2._registerBindObject(storeInBucket, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
@@ -519,8 +519,8 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(func1, host, ["invoke"]);
-          this._registerBindObject(globalBucket, host, ["get"]);
+          $Inflight3._registerBindObject(func1, host, ["invoke"]);
+          $Inflight3._registerBindObject(globalBucket, host, ["get"]);
         }
         super._registerBind(host, ops);
       }
@@ -560,7 +560,7 @@ class $Root extends $stdlib.std.Resource {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(globalBucket, host, ["list"]);
+              $Inflight4._registerBindObject(globalBucket, host, ["list"]);
             }
             super._registerBind(host, ops);
           }
@@ -589,10 +589,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.closure, host, []);
+          MyResource._registerBindObject(this.closure, host, []);
         }
         if (ops.includes("foo")) {
-          this._registerBindObject(this.closure, host, ["handle"]);
+          MyResource._registerBindObject(this.closure, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
@@ -627,7 +627,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(x, host, ["foo"]);
+          $Inflight5._registerBindObject(x, host, ["foo"]);
         }
         super._registerBind(host, ops);
       }
