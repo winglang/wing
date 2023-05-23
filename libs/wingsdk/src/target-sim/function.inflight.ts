@@ -3,7 +3,6 @@ import { tmpdir } from "os";
 import * as path from "path";
 import * as util from "util";
 import * as vm from "vm";
-import { build } from "esbuild-wasm";
 import {
   FUNCTION_TYPE,
   FunctionAttributes,
@@ -14,6 +13,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
+import { Bundle, createBundle } from "../utils/bundling";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
@@ -24,7 +24,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   /**
    * The path to the bundled function code. Assigned in `init()`.
    */
-  private bundle?: string;
+  private bundle?: Bundle;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
     if (props.sourceCodeLanguage !== "javascript") {
@@ -38,18 +38,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   public async init(): Promise<FunctionAttributes> {
     const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-    const outfile = path.join(workdir, "index.js");
-    await build({
-      bundle: true,
-      entryPoints: [this.filename],
-      outfile: outfile,
-      minify: false,
-      platform: "node",
-      target: "node16",
-    });
 
-    this.bundle = outfile;
-
+    this.bundle = createBundle(this.filename, workdir);
     return {};
   }
 
@@ -93,7 +83,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           };
         }
 
-        return runSandbox(this.bundle, payload, {
+        return runSandbox(this.bundle.entrypointPath, payload, {
           timeout: this.timeout,
           context: {
             process: sandboxProcess,
