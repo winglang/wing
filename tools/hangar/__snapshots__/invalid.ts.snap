@@ -725,6 +725,30 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 "
 `;
 
+exports[`nil.w > stderr 1`] = `
+"error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+  --> ../../../examples/tests/invalid/nil.w:3:14
+  |
+3 | let x: str = nil;
+  |              ^^^ Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+
+
+error: Expected optional type, found \\"nil\\"
+   --> ../../../examples/tests/invalid/nil.w:24:4
+   |
+24 | if nil? {
+   |    ^^^ Expected optional type, found \\"nil\\"
+
+
+error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+   --> ../../../examples/tests/invalid/nil.w:20:14
+   |
+20 |   foo.setBar(nil);
+   |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+
+"
+`;
+
 exports[`optionals.w > stderr 1`] = `
 "error: Expected type to be \\"num\\", but got \\"num?\\" instead
   --> ../../../examples/tests/invalid/optionals.w:7:3
