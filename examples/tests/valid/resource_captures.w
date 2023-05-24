@@ -42,9 +42,10 @@ class MyResource {
   extBucket: cloud.Bucket;
   extNum: num;
 
-
-  // Needs to be var since we don't support inflight inits yet.
-  inflight var inflightField: num;
+  inflight inflightField: num;
+  inflight init() {
+    this.inflightField = 123;
+  }
 
   init(externalBucket: cloud.Bucket, externalNum: num) {
     this.myResource = new cloud.Bucket();
@@ -130,7 +131,6 @@ class MyResource {
   }
 
   inflight testInflightField() {
-    this.inflightField = 123;
     assert(this.inflightField == 123);
   }
 }

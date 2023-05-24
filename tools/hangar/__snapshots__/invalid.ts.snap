@@ -138,24 +138,73 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`class.w > stderr 1`] = `
-"error: \\"x\\" is not initialized
-  --> ../../../examples/tests/invalid/class.w:2:4
+"error: Preflight field \\"x\\" is not initialized
+  --> ../../../examples/tests/invalid/class.w:4:4
   |
-2 |    x:num;
-  |    ^ \\"x\\" is not initialized
+4 |    x:num;
+  |    ^ Preflight field \\"x\\" is not initialized
 
 
 error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
-  --> ../../../examples/tests/invalid/class.w:7:1
+  --> ../../../examples/tests/invalid/class.w:9:1
   |
-7 | new C2(1);
+9 | new C2(1);
   | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.w:13:14
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:21:16
    |
-13 |     this.x = \\"Hi\\";
+21 |   inflight var x: num;
+   |                ^ Inflight field \\"x\\" is not initialized
+
+
+error: Inflight field \\"y\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:23:12
+   |
+23 |   inflight y: str;
+   |            ^ Inflight field \\"y\\" is not initialized
+
+
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:28:12
+   |
+28 |   inflight x: num;
+   |            ^ Inflight field \\"x\\" is not initialized
+
+
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:34:12
+   |
+34 |   inflight x: num;
+   |            ^ Inflight field \\"x\\" is not initialized
+
+
+error: \\"y\\" cannot be initialized in the inflight initializer
+   --> ../../../examples/tests/invalid/class.w:45:10
+   |
+45 |     this.y = 1;
+   |          ^ \\"y\\" cannot be initialized in the inflight initializer
+
+
+error: \\"x\\" cannot be initialized in the preflight initializer
+   --> ../../../examples/tests/invalid/class.w:40:10
+   |
+40 |     this.x = 1;
+   |          ^ \\"x\\" cannot be initialized in the preflight initializer
+
+
+error: Preflight field \\"y\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:36:3
+   |
+36 |   y: num;
+   |   ^ Preflight field \\"y\\" is not initialized
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/class.w:15:14
+   |
+15 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 "
@@ -421,6 +470,13 @@ exports[`inflight_in_class.w > stderr 1`] = `
   |
 2 |   inflight field: num; // No inflight fields in classes (only in resources)
   |   ^^^^^^^^ Class cannot have inflight fields
+
+
+error: Inflight field \\"field\\" is not initialized
+  --> ../../../examples/tests/invalid/inflight_in_class.w:2:12
+  |
+2 |   inflight field: num; // No inflight fields in classes (only in resources)
+  |            ^^^^^ Inflight field \\"field\\" is not initialized
 
 "
 `;
