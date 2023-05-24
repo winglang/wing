@@ -2073,7 +2073,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Technically we only allow if let statements to be used with optionals
 				// and above validate_type_is_optional method will attach a diagnostic error if it is not.
-				// However to avoid panics this will allow code to continue if the type is not an optional
+				// However for the sake of verbose diagnostics we'll allow the code to continue if the type is not an optional
 				// and complete the type checking process for additional errors.
 				let var_type = if cond_type.is_option() {
 					cond_type
