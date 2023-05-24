@@ -130,9 +130,9 @@ where
 			var_name,
 			else_statements,
 		} => {
+			v.visit_symbol(var_name);
 			v.visit_expr(condition);
 			v.visit_scope(statements);
-			v.visit_symbol(var_name);
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);
 			}
