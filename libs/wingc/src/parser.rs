@@ -29,7 +29,6 @@ pub struct Parser<'a> {
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
-	"nil" => "see https://github.com/winglang/wing/issues/433",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
 	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
 	"pure_closure" => "see https://github.com/winglang/wing/issues/474",
@@ -1178,7 +1177,7 @@ impl<'s> Parser<'s> {
 				)),
 				expression_span,
 			)),
-			"nil" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
+			"nil_value" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
 			"bool" => Ok(Expr::new(
 				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
