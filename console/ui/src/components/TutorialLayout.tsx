@@ -3,7 +3,6 @@ import classNames from "classnames";
 
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
-import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
 import { useLayout } from "../utils/use-layout.js";
@@ -12,14 +11,10 @@ import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";
 import { MapView } from "./map-view/map-view.js";
 import { MetadataPanel } from "./MetadataPanel.js";
-import { StatusBar } from "./StatusBar.js";
 import { TestsTree } from "./TestsTree.js";
 import { LayoutProps } from "./VscodeLayout.js";
 
-export const PlaygroundLayout = ({
-  cloudAppState,
-  wingVersion,
-}: LayoutProps) => {
+export const TutorialLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
   const {
     selectedItems,
     setSelectedItems,
@@ -65,7 +60,7 @@ export const PlaygroundLayout = ({
           <div className="flex-1 flex">
             <div className="flex-1 flex flex-col">
               <MapView
-                showMapControls={true}
+                showMapControls={false}
                 showTests={showTests}
                 selectedNodeId={selectedItems[0]}
                 onSelectedNodeIdChange={(nodeId) =>
@@ -113,14 +108,6 @@ export const PlaygroundLayout = ({
             displayLinks={false}
             displayWingTitle={false}
           />
-          <RightResizableWidget
-            className={classNames(
-              theme.border3,
-              "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[15rem] border-r border-b",
-            )}
-          >
-            <TestsTree />
-          </RightResizableWidget>
           <div
             className={classNames(
               theme.border3,
@@ -161,11 +148,6 @@ export const PlaygroundLayout = ({
           </div>
         </TopResizableWidget>
       }
-      <StatusBar
-        wingVersion={wingVersion}
-        cloudAppState={cloudAppState}
-        isError={cloudAppState === "error"}
-      />
     </div>
   );
 };
