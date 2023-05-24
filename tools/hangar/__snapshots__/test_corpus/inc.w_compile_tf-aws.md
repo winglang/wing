@@ -8,17 +8,17 @@ module.exports = function({ counter }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-        const r0 = (await counter.inc());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 0)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 0))};
+        const r0 = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(r0 === 0)'`)})((r0 === 0))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
-        const r1 = (await counter.inc());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 1)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 1))};
+        const r1 = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(r1 === 1)'`)})((r1 === 1))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 2)'`)})(((await counter.peek()) === 2))};
-        const r2 = (await counter.inc(10));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 2)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 2))};
+        const r2 = (typeof counter.inc === "function" ? await counter.inc(10) : await counter.inc.handle(10));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(r2 === 2)'`)})((r2 === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
-        const r3 = (await counter.inc());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 12)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 12))};
+        const r3 = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(r3 === 12)'`)})((r3 === 12))};
       }
     }
@@ -208,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc", "peek"]);
+          $Inflight1._registerBindObject(counter, host, ["inc", "peek"]);
         }
         super._registerBind(host, ops);
       }

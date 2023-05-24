@@ -9,7 +9,7 @@ module.exports = function({ usersTable }) {
     async handle(req)  {
       {
         return {
-        "body": Object.freeze({"users":(await usersTable.list())}),
+        "body": Object.freeze({"users":(typeof usersTable.list === "function" ? await usersTable.list() : await usersTable.list.handle())}),
         "status": 200,}
         ;
       }
@@ -35,7 +35,7 @@ module.exports = function({ usersTable }) {
           "status": 400,}
           ;
         }
-        (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+        (typeof usersTable.insert === "function" ? await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body) : await usersTable.insert.handle(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
         return {
         "body": Object.freeze({"user":(body)["id"]}),
         "status": 201,}
@@ -627,7 +627,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(usersTable, host, ["list"]);
+          $Inflight1._registerBindObject(usersTable, host, ["list"]);
         }
         super._registerBind(host, ops);
       }
@@ -662,7 +662,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(usersTable, host, ["insert"]);
+          $Inflight2._registerBindObject(usersTable, host, ["insert"]);
         }
         super._registerBind(host, ops);
       }

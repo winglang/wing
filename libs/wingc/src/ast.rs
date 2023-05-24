@@ -581,6 +581,7 @@ pub enum Literal {
 	Number(f64),
 	Duration(f64),
 	Boolean(bool),
+	Nil,
 }
 
 #[derive(Debug)]

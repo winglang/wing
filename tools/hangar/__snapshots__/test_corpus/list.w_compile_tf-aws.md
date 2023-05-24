@@ -8,10 +8,10 @@ module.exports = function({ table }) {
     }
     async handle()  {
       {
-        (await table.insert("eyal",Object.freeze({"gender":"male"})));
-        (await table.insert("revital",Object.freeze({"gender":"female"})));
+        (typeof table.insert === "function" ? await table.insert("eyal",Object.freeze({"gender":"male"})) : await table.insert.handle("eyal",Object.freeze({"gender":"male"})));
+        (typeof table.insert === "function" ? await table.insert("revital",Object.freeze({"gender":"female"})) : await table.insert.handle("revital",Object.freeze({"gender":"female"})));
         const unorderded = {};
-        for (const u of (await table.list())) {
+        for (const u of (typeof table.list === "function" ? await table.list() : await table.list.handle())) {
           ((obj, args) => { obj[args[0]] = args[1]; })(unorderded, [((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((u)["name"]),u]);
         }
         const revital = (unorderded)["revital"];
@@ -210,7 +210,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(table, host, ["insert", "list"]);
+          $Inflight1._registerBindObject(table, host, ["insert", "list"]);
         }
         super._registerBind(host, ops);
       }

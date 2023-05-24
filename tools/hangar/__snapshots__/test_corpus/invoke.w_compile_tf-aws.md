@@ -25,7 +25,7 @@ module.exports = function({ f, payload }) {
     }
     async handle()  {
       {
-        const x = (await f.invoke(""));
+        const x = (typeof f.invoke === "function" ? await f.invoke("") : await f.invoke.handle(""));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
       }
     }
@@ -261,7 +261,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(payload, host, []);
+          $Inflight1._registerBindObject(payload, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -298,8 +298,8 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(f, host, ["invoke"]);
-          this._registerBindObject(payload, host, []);
+          $Inflight2._registerBindObject(f, host, ["invoke"]);
+          $Inflight2._registerBindObject(payload, host, []);
         }
         super._registerBind(host, ops);
       }

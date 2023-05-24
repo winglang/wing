@@ -8,7 +8,7 @@ module.exports = function({ c }) {
     }
     async handle()  {
       {
-        (await c.inc());
+        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
       }
     }
   }
@@ -25,7 +25,7 @@ module.exports = function({ c }) {
     }
     async handle()  {
       {
-        (await c.inc());
+        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
       }
     }
   }
@@ -43,18 +43,18 @@ module.exports = function({ t, predicate, TestHelper }) {
     async handle()  {
       {
         for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
-          (await t.publish("msg"));
+          (typeof t.publish === "function" ? await t.publish("msg") : await t.publish.handle("msg"));
         }
         let i = 0;
         while ((i < 600)) {
           i = (i + 1);
-          if ((await predicate.test())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+          if ((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
             return;
           }
-          (await TestHelper.sleep(100));
+          (typeof TestHelper.sleep === "function" ? await TestHelper.sleep(100) : await TestHelper.sleep.handle(100));
         }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
       }
     }
   }
@@ -73,7 +73,7 @@ module.exports = function({  }) {
     async test()  {
       {
         const __parent_this = this;
-        return ((await this.c.peek()) === 10);
+        return ((typeof this.c.peek === "function" ? await this.c.peek() : await this.c.peek.handle()) === 10);
       }
     }
   }
@@ -470,10 +470,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.c, host, []);
+          Predicate._registerBindObject(this.c, host, []);
         }
         if (ops.includes("test")) {
-          this._registerBindObject(this.c, host, ["peek"]);
+          Predicate._registerBindObject(this.c, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -505,9 +505,12 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
         }
+        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
         if (ops.includes("sleep")) {
         }
-        super._registerBind(host, ops);
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight1 extends $stdlib.std.Resource {
@@ -540,7 +543,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(c, host, ["inc"]);
+          $Inflight1._registerBindObject(c, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -575,7 +578,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(c, host, ["inc"]);
+          $Inflight2._registerBindObject(c, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -614,8 +617,9 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(predicate, host, ["test"]);
-          this._registerBindObject(t, host, ["publish"]);
+          $Inflight3._registerBindObject(TestHelper, host, ["sleep"]);
+          $Inflight3._registerBindObject(predicate, host, ["test"]);
+          $Inflight3._registerBindObject(t, host, ["publish"]);
         }
         super._registerBind(host, ops);
       }
