@@ -10,11 +10,11 @@ module.exports = function({ q, NIL }) {
       {
         const msgs = Object.freeze(["Foo", "Bar"]);
         for (const msg of msgs) {
-          (await q.push(msg));
+          (typeof q.push === "function" ? await q.push(msg) : await q.push.handle(msg));
         }
-        const first = ((await q.pop()) ?? NIL);
-        const second = ((await q.pop()) ?? NIL);
-        const third = ((await q.pop()) ?? NIL);
+        const first = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
+        const second = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
+        const third = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
@@ -200,8 +200,8 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(NIL, host, []);
-          this._registerBindObject(q, host, ["pop", "push"]);
+          $Inflight1._registerBindObject(NIL, host, []);
+          $Inflight1._registerBindObject(q, host, ["pop", "push"]);
         }
         super._registerBind(host, ops);
       }
