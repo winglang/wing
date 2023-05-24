@@ -623,6 +623,8 @@ impl<'a> JSifier<'a> {
 				//    log(x);
 				//  }
 				// }
+				// The temporary scope is created so that intermediate variables created by consecutive `if let` clauses
+				// do not interfere with each other.
 				code.open("{");
 				let if_let_value = "$IF_LET_VALUE".to_string();
 				code.line(format!(
