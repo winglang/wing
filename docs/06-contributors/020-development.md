@@ -169,8 +169,9 @@ Note: In CI, tests likely run much slower than on your local machine, so you may
 
 ## How do I work only on the compiler?
 
-The following command runs the cargo tests, currently just ensures the valid examples compile and the
-invalid ones do not.
+The following command runs the rust tests in wingc, including verification that valid tests compile, invalid tests do not compile, and none of them panic.
+
+It will also make sure to update any snapshots.
 
 ```sh
 npx nx test wingc
