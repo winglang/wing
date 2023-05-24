@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/util.env.w to sim...
+✔ Compiling valid/util.env.w to sim...
 pass ─ util.env.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/util.env.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/statements_variable_declarations.w to sim...
+✔ Compiling valid/statements_variable_declarations.w to sim...
 pass ─ statements_variable_declarations.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/statements_variable_declarations.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

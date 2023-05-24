@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/while_loop_await.w to sim...
+✔ Compiling valid/while_loop_await.w to sim...
 pass ─ while_loop_await.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/while_loop_await.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

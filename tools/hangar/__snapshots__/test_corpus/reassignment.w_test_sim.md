@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/reassignment.w to sim...
+✔ Compiling valid/reassignment.w to sim...
 pass ─ reassignment.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/reassignment.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/bring_awscdk.w to sim...
+✔ Compiling valid/bring_awscdk.w to sim...
 pass ─ bring_awscdk.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/bring_awscdk.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

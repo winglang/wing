@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/json.w to sim...
+✔ Compiling valid/json.w to sim...
 pass ─ json.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/json.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

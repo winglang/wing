@@ -2,9 +2,19 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/resource_captures_globals.w to sim...
+✔ Compiling valid/resource_captures_globals.w to sim...
 pass ─ resource_captures_globals.wsim » root/env0/test:test                                             
 pass ─ resource_captures_globals.wsim » root/env1/test:access cloud resource through static methods only
+ 
+
+Tests Results:
+    ✓ valid/resource_captures_globals.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

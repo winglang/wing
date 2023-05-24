@@ -2,9 +2,19 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/resource.w to sim...
+✔ Compiling valid/resource.w to sim...
 pass ─ resource.wsim » root/env0/test:test             
 pass ─ resource.wsim » root/env1/test:dependency cycles
+ 
+
+Tests Results:
+    ✓ valid/resource.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/hello.w to sim...
+✔ Compiling valid/hello.w to sim...
 pass ─ hello.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/hello.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,11 +2,21 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
+- Compiling valid/anon_function.w to sim...
 1
 2
 3
-✔ Compiling to sim...
+✔ Compiling valid/anon_function.w to sim...
 pass ─ anon_function.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/anon_function.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

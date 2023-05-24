@@ -2,9 +2,19 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
+- Compiling valid/forward_decl.w to sim...
 hi
-✔ Compiling to sim...
+✔ Compiling valid/forward_decl.w to sim...
 pass ─ forward_decl.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/forward_decl.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

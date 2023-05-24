@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling bucket/events.w to sim...
+✔ Compiling bucket/events.w to sim...
 pass ─ events.wsim » root/env0/counter is incremented 10 times
+ 
+
+Tests Results:
+    ✓ bucket/events.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

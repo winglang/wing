@@ -1,5 +1,25 @@
 # [class.w](../../../../examples/tests/valid/class.w) | compile | tf-aws
 
+## clients/$Inflight1.inflight.js
+```js
+module.exports = function({ c5 }) {
+  class  $Inflight1 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.x === 123)'`)})((c5.x === 123))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 321)'`)})((c5.y === 321))};
+        (typeof c5.set === "function" ? await c5.set(111) : await c5.set.handle(111));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 111)'`)})((c5.y === 111))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
 ## clients/C1.inflight.js
 ```js
 module.exports = function({  }) {
@@ -47,6 +67,31 @@ module.exports = function({  }) {
     }
   }
   return C4;
+}
+
+```
+
+## clients/C5.inflight.js
+```js
+module.exports = function({  }) {
+  class  C5 {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+      {
+        const __parent_this = this;
+        this.x = 123;
+        this.y = 321;
+      }
+    }
+    async set(b)  {
+      {
+        const __parent_this = this;
+        this.y = b;
+      }
+    }
+  }
+  return C5;
 }
 
 ```

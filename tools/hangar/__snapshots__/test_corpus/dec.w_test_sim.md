@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling counter/dec.w to sim...
+✔ Compiling counter/dec.w to sim...
 pass ─ dec.wsim » root/env0/test:dec
+ 
+
+Tests Results:
+    ✓ counter/dec.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

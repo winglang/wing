@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/interface.w to sim...
+✔ Compiling valid/interface.w to sim...
 pass ─ interface.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/interface.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,9 +2,19 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/inflights_calling_inflights.w to sim...
+✔ Compiling valid/inflights_calling_inflights.w to sim...
 pass ─ inflights_calling_inflights.wsim » root/env0/test:inflights can call other inflights 
 pass ─ inflights_calling_inflights.wsim » root/env1/test:variable can be an inflight closure
+ 
+
+Tests Results:
+    ✓ valid/inflights_calling_inflights.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/bucket_keys.w to sim...
+✔ Compiling valid/bucket_keys.w to sim...
 pass ─ bucket_keys.wsim » root/env0/test:test
+ 
+
+Tests Results:
+    ✓ valid/bucket_keys.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/try_catch.w to sim...
+✔ Compiling valid/try_catch.w to sim...
 pass ─ try_catch.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/try_catch.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/table.w to sim...
+✔ Compiling valid/table.w to sim...
 pass ─ table.wsim (no tests)
+ 
+
+Tests Results:
+    ✓ valid/table.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

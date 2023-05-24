@@ -13,10 +13,10 @@ invalidWingFiles.forEach((wingFile) => {
     );
 
     const out = await runWingCommand({
-      cwd: tmpDir, 
-      wingFile: relativeWingFile, 
-      args, 
-      shouldSucceed: false
+      cwd: tmpDir,
+      wingFile: relativeWingFile,
+      args,
+      shouldSucceed: true,
     });
 
     const stderr = out.stderr;

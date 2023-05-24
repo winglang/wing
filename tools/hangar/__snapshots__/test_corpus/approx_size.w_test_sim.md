@@ -2,8 +2,18 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling queue/approx_size.w to sim...
+✔ Compiling queue/approx_size.w to sim...
 pass ─ approx_size.wsim » root/env0/test:approxSize
+ 
+
+Tests Results:
+    ✓ queue/approx_size.w
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 
