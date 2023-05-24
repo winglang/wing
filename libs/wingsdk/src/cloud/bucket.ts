@@ -129,7 +129,8 @@ export abstract class Bucket extends Resource {
       inflight,
       // since uses __dirname should be specified under the target directory
       this.eventHandlerLocation(),
-      "BucketEventHandlerClient"
+      "BucketEventHandlerClient",
+      { eventType }
     );
   }
 
