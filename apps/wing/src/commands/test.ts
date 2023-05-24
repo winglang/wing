@@ -204,7 +204,7 @@ async function testSimulator(synthDir: string) {
   rmSync(synthDir, { recursive: true, force: true });
 
   if (testResultsContainsFailure(results)) {
-    throw Error(results.map(({ error }) => error).join(", "));
+    throw Error(results.map(({ error }) => error).join("\n"));
   }
 }
 
