@@ -8,7 +8,7 @@ module.exports = function({ bucket }) {
     }
     async handle(message)  {
       {
-        (await bucket.put("wing.txt",`Hello, ${message}`));
+        (typeof bucket.put === "function" ? await bucket.put("wing.txt",`Hello, ${message}`) : await bucket.put.handle("wing.txt",`Hello, ${message}`));
       }
     }
   }
@@ -246,7 +246,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket, host, ["put"]);
+          $Inflight1._registerBindObject(bucket, host, ["put"]);
         }
         super._registerBind(host, ops);
       }

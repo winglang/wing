@@ -8,8 +8,8 @@ module.exports = function({ b, x }) {
     }
     async handle()  {
       {
-        (await b.put("file","foo"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file")) === "foo")'`)})(((await b.get("file")) === "foo"))};
+        (typeof b.put === "function" ? await b.put("file","foo") : await b.put.handle("file","foo"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.get === "function" ? await b.get("file") : await b.get.handle("file")) === "foo")'`)})(((typeof b.get === "function" ? await b.get("file") : await b.get.handle("file")) === "foo"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(12 === x)'`)})((12 === x))};
       }
     }
@@ -226,8 +226,8 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["get", "put"]);
-          this._registerBindObject(x, host, []);
+          $Inflight1._registerBindObject(b, host, ["get", "put"]);
+          $Inflight1._registerBindObject(x, host, []);
         }
         super._registerBind(host, ops);
       }

@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ class.wsim (no tests)
+pass ─ class.wsim » root/env0/test:access inflight field
 ```
 

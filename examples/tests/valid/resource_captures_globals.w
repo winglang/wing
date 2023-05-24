@@ -71,6 +71,7 @@ class MyResource {
     assert(globalAnother.myField == "hello!");
     globalAnother.first.myResource.put("key", "value");
     assert(globalAnother.myMethod() > 0);
+    assert(Another.myStaticMethod() > 0);
     //assert(this.localCounter.peek() > 0); // TODO: this fails, why?
   }
 }
@@ -79,4 +80,10 @@ let res = new MyResource();
 
 test "test" {
   res.myPut();
+}
+
+test "access cloud resource through static methods only" {
+  // Call a static method which access a (global) cloud resource
+  // the capturing should work through the Type binding mechanism
+  assert(Another.myStaticMethod() == 0);
 }
