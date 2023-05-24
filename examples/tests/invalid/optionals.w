@@ -38,3 +38,9 @@ optionalSub1 ?? new Super();
 if let x = true {
 //         ^^^^ Expected type to be optional, but got "bool" instead
 }
+
+let var hi: str = "hi";
+if let hi = hi {
+  hi = "bye";
+//^^^^^^^^^^^ Variable hi is not reassignable 
+}
