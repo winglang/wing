@@ -4,7 +4,7 @@
 ```log
 - Compiling valid/class.w to sim...
 ✔ Compiling valid/class.w to sim...
-pass ─ class.wsim (no tests)
+pass ─ class.wsim » root/env0/test:access inflight field
  
 
 Tests Results:
