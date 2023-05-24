@@ -68,19 +68,89 @@ export class BucketClient implements IBucketClient {
     }
   }
 
+  public async tryGet(key: string): Promise<string | undefined> {
+    if (await this.exists(key)) {
+      return this.get(key);
+    }
+
+    return undefined;
+  }
+
   public async getJson(key: string): Promise<Json> {
     return JSON.parse(await this.get(key));
   }
 
-  private async getLocation(): Promise<string> {
-    const command = new GetBucketLocationCommand({
+  public async tryGetJson(key: string): Promise<Json | undefined> {
+    if (await this.exists(key)) {
+      return this.getJson(key);
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Delete an existing object using a key from the bucket
+   * @param key Key of the object.
+   * @param opts Option object supporting additional strategies to delete an item from a bucket
+   */
+  public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
+    const mustExist = opts?.mustExist ?? false;
+
+    const command = new DeleteObjectCommand({
+      Key: key,
       Bucket: this.bucketName,
     });
-    //Buckets in Region us-east-1 have a LocationConstraint of null.
-    //https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLocation.html#API_GetBucketLocation_ResponseSyntax
-    const { LocationConstraint: region = "us-east-1" } =
+
+    try {
       await this.s3Client.send(command);
-    return region;
+    } catch (er) {
+      const error = er as any;
+      if (!mustExist && error.name === "NoSuchKey") {
+        return;
+      }
+
+      throw Error(`unable to delete "${key}": ${error.message}`);
+    }
+  }
+
+  public async tryDelete(key: string): Promise<boolean> {
+    if (await this.exists(key)) {
+      this.delete(key);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * List all keys in the bucket.
+   * @param prefix Limits the response to keys that begin with the specified prefix
+   * TODO - add pagination support, currently returns all existing keys in the bucket
+   * https://github.com/winglang/wing/issues/315
+   */
+  public async list(prefix?: string): Promise<string[]> {
+    const list: string[] = [];
+    let fetchMore = true;
+    let marker: string | undefined = undefined;
+    while (fetchMore) {
+      const command = new ListObjectsV2Command({
+        Bucket: this.bucketName,
+        Prefix: prefix,
+        StartAfter: marker,
+      });
+      const resp: ListObjectsV2CommandOutput = await this.s3Client.send(
+        command
+      );
+      for (const content of resp.Contents ?? []) {
+        if (content.Key === undefined) {
+          continue;
+        }
+        list.push(content.Key);
+      }
+      fetchMore = resp?.IsTruncated ?? false;
+      marker = list.length > 0 ? list.at(-1) : undefined;
+    }
+    return list;
   }
 
   /**
@@ -117,59 +187,14 @@ export class BucketClient implements IBucketClient {
     );
   }
 
-  /**
-   * List all keys in the bucket.
-   * @param prefix Limits the response to keys that begin with the specified prefix
-   * TODO - add pagination support, currently returns all existing keys in the bucket
-   * https://github.com/winglang/wing/issues/315
-   */
-  public async list(prefix?: string): Promise<string[]> {
-    const list: string[] = [];
-    let fetchMore = true;
-    let marker: string | undefined = undefined;
-    while (fetchMore) {
-      const command = new ListObjectsV2Command({
-        Bucket: this.bucketName,
-        Prefix: prefix,
-        StartAfter: marker,
-      });
-      const resp: ListObjectsV2CommandOutput = await this.s3Client.send(
-        command
-      );
-      for (const content of resp.Contents ?? []) {
-        if (content.Key === undefined) {
-          continue;
-        }
-        list.push(content.Key);
-      }
-      fetchMore = resp?.IsTruncated ?? false;
-      marker = list.length > 0 ? list.at(-1) : undefined;
-    }
-    return list;
-  }
-
-  /**
-   * Delete an existing object using a key from the bucket
-   * @param key Key of the object.
-   * @param opts Option object supporting additional strategies to delete an item from a bucket
-   */
-  public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
-    const mustExist = opts?.mustExist ?? false;
-
-    const command = new DeleteObjectCommand({
-      Key: key,
+  private async getLocation(): Promise<string> {
+    const command = new GetBucketLocationCommand({
       Bucket: this.bucketName,
     });
-
-    try {
+    //Buckets in Region us-east-1 have a LocationConstraint of null.
+    //https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLocation.html#API_GetBucketLocation_ResponseSyntax
+    const { LocationConstraint: region = "us-east-1" } =
       await this.s3Client.send(command);
-    } catch (er) {
-      const error = er as any;
-      if (!mustExist && error.name === "NoSuchKey") {
-        return;
-      }
-
-      throw Error(`unable to delete "${key}": ${error.message}`);
-    }
+    return region;
   }
 }

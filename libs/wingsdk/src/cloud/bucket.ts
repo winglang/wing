@@ -56,7 +56,10 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.PUT,
       BucketInflightMethods.PUT_JSON,
       BucketInflightMethods.PUBLIC_URL,
-      BucketInflightMethods.EXISTS
+      BucketInflightMethods.EXISTS,
+      BucketInflightMethods.TRY_GET,
+      BucketInflightMethods.TRY_GET_JSON,
+      BucketInflightMethods.TRY_DELETE
     );
 
     props;
@@ -255,6 +258,14 @@ export interface IBucketClient {
   get(key: string): Promise<string>;
 
   /**
+   * Get an object from the bucket if it exists
+   * @param key Key of the object.
+   * @returns the contents of the object as a string if it exists, nil otherwise
+   * @inflight
+   */
+  tryGet(key: string): Promise<string | undefined>;
+
+  /**
    * Retrieve a Json object from the bucket.
    * @param key Key of the object.
    * @Throws if no object with the given key exists.
@@ -262,6 +273,30 @@ export interface IBucketClient {
    * @inflight
    */
   getJson(key: string): Promise<Json>;
+
+  /**
+   * Gets an object from the bucket if it exists, parsing it as Json.
+   * @param key Key of the object.
+   * @returns the contents of the object as Json if it exists, nil otherwise
+   * @inflight
+   */
+  tryGetJson(key: string): Promise<Json | undefined>;
+
+  /**
+   * Delete an existing object using a key from the bucket
+   * @param key Key of the object.
+   * @param opts Options available for delete an item from a bucket.
+   * @inflight
+   */
+  delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
+
+  /**
+   * Delete an object from the bucket if it exists.
+   * @param key Key of the object.
+   * @returns the result of the delete operation
+   * @inflight
+   */
+  tryDelete(key: string): Promise<boolean>;
 
   /**
    * Retrieve existing objects keys from the bucket.
@@ -277,14 +312,6 @@ export interface IBucketClient {
    * @inflight
    */
   publicUrl(key: string): Promise<string>;
-
-  /**
-   * Delete an existing object using a key from the bucket
-   * @param key Key of the object.
-   * @param opts Options available for delete an item from a bucket.
-   * @inflight
-   */
-  delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
 }
 
 /**
@@ -381,12 +408,18 @@ export enum BucketInflightMethods {
   LIST = "list",
   /** `Bucket.delete` */
   DELETE = "delete",
-  /** `Bucket.putJson */
+  /** `Bucket.putJson` */
   PUT_JSON = "putJson",
-  /** `Bucket.getJson */
+  /** `Bucket.getJson` */
   GET_JSON = "getJson",
-  /** `Bucket.publicUrl */
+  /** `Bucket.publicUrl` */
   PUBLIC_URL = "publicUrl",
   /** `Bucket.exists` */
   EXISTS = "exists",
+  /** `Bucket.tryGet` */
+  TRY_GET = "tryGet",
+  /** `Bucket.tryGetJson` */
+  TRY_GET_JSON = "tryGetJson",
+  /** `Bucket.tryDelete` */
+  TRY_DELETE = "tryDelete",
 }
