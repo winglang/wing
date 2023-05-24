@@ -18,30 +18,28 @@ test("unsupported resource in target", async ({ expect }) => {
   `
   );
 
-  await expect(
-    runWingCommand({
-      cwd: workdir,
-      wingFile: entrypoint,
-      args: ["compile", "--target", "tf-gcp"],
-      shouldSucceed: true,
-      env: {
-        GOOGLE_PROJECT_ID: "test-project",
-        GOOGLE_STORAGE_LOCATION: "us-central1",
-      },
-    }).then((result) => (result.stdout = sanitizeErrorMessage(result.stdout)))
-  ).rejects.toThrowErrorMatchingInlineSnapshot(
-    sanitizeErrorMessage(`
+  const result = await runWingCommand({
+    cwd: workdir,
+    wingFile: entrypoint,
+    args: ["compile", "--target", "tf-gcp"],
+    shouldSucceed: false,
+    env: {
+      GOOGLE_PROJECT_ID: "test-project",
+      GOOGLE_STORAGE_LOCATION: "us-central1",
+    },
+  });
+
+  expect(sanitizeErrorMessage(result.stderr)).toMatchInlineSnapshot(`
     "ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
 
-    target/test.tfgcp.872059.tmp/.wing/preflight.js:8
+    target/test.tfgcp.[REDACTED].tmp/.wing/preflight.js:8
          constructor(scope, id) {
            super(scope, id);
     >>     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Schedule\\",this,\\"cloud.Schedule\\");
          }
        }
     "
-  `)
-  );
+  `);
 });
 
 // Remove random numbers from generated test artifact folder
