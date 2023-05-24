@@ -2806,7 +2806,7 @@ impl<'a> TypeChecker<'a> {
 
 			// if we're importing from the the wing sdk, eagerly import all the types within it
 			// because they're critical to a typical dx when using wing
-			// TODO: Improve lazy loading for types in the LSP https://github.com/winglang/wing/issues/2340
+			// TODO: Improve lazy loading for types in the LSP https://github.com/winglang/wing/issues/2639
 			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
 				importer.deep_import_submodule_to_env(&jsii.alias.name);
 			}
