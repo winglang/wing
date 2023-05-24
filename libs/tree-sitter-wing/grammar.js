@@ -324,7 +324,7 @@ module.exports = grammar({
       ),
 
     // Primitives
-    _literal: ($) => choice($.string, $.number, $.bool, $.duration, $.nil),
+    _literal: ($) => choice($.string, $.number, $.bool, $.duration, $.nil_value),
 
     number: ($) => choice($._integer, $._decimal),
     _integer: ($) => choice("0", /[1-9]\d*/),
@@ -336,7 +336,7 @@ module.exports = grammar({
     seconds: ($) => seq(field("value", $.number), "s"),
     minutes: ($) => seq(field("value", $.number), "m"),
     hours: ($) => seq(field("value", $.number), "h"),
-    nil: ($) => "nil",
+    nil_value: ($) => "nil",
     string: ($) =>
       seq(
         '"',

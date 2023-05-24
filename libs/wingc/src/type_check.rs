@@ -899,6 +899,12 @@ impl TypeRef {
 	pub fn is_nil(&self) -> bool {
 		match &**self {
 			Type::Nil => true,
+			Type::Array(t) => t.is_nil(),
+			Type::MutArray(t) => t.is_nil(),
+			Type::Map(t) => t.is_nil(),
+			Type::MutMap(t) => t.is_nil(),
+			Type::Set(t) => t.is_nil(),
+			Type::MutSet(t) => t.is_nil(),
 			_ => false,
 		}
 	}
@@ -1963,6 +1969,12 @@ impl<'a> TypeChecker<'a> {
 					self.type_error(TypeError {
 						message: format!("Cannot assign expression of type \"{}\" to a variable", inferred_type),
 						span: var_name.span.clone(),
+					});
+				}
+				if explicit_type.is_none() && inferred_type.is_nil() {
+					self.type_error(TypeError {
+						message: "Cannot assign nil value to variables without explicit optional type".to_string(),
+						span: initial_value.span.clone(),
 					});
 				}
 				if let Some(explicit_type) = explicit_type {
