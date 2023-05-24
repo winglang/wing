@@ -796,6 +796,20 @@ error: Expected optional type, found \\"nil\\"
    |    ^^^ Expected optional type, found \\"nil\\"
 
 
+error: Cannot assign nil value to variables without explicit optional type
+   --> ../../../examples/tests/invalid/nil.w:28:18
+   |
+28 | let nilWannabe = nil;
+   |                  ^^^ Cannot assign nil value to variables without explicit optional type
+
+
+error: Cannot assign nil value to variables without explicit optional type
+   --> ../../../examples/tests/invalid/nil.w:31:17
+   |
+31 | let nilGaggle = [nil, nil, nil];
+   |                 ^^^^^^^^^^^^^^^ Cannot assign nil value to variables without explicit optional type
+
+
 error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
    --> ../../../examples/tests/invalid/nil.w:20:14
    |
