@@ -269,6 +269,7 @@ module.exports = grammar({
     continue_statement: ($) => seq("continue", $._semicolon),
     
     if_let_statement: ($) => seq(
+      // TODO: support "if let var"
       "if let",
       field("name", $.identifier),
       "=",
