@@ -20,6 +20,16 @@ export class BucketClient implements IBucketClient {
     private readonly s3Client = new S3Client({})
   ) {}
 
+  public async exists(key: string): Promise<boolean> {
+    const command = new ListObjectsV2Command({
+      Bucket: this.bucketName,
+      Prefix: key,
+      MaxKeys: 1,
+    });
+    const resp: ListObjectsV2CommandOutput = await this.s3Client.send(command);
+    return !!resp.Contents && resp.Contents.length > 0;
+  }
+
   public async put(key: string, body: string): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
@@ -60,32 +70,6 @@ export class BucketClient implements IBucketClient {
 
   public async getJson(key: string): Promise<Json> {
     return JSON.parse(await this.get(key));
-  }
-
-  private async exists(key: string): Promise<boolean> {
-    const command = new ListObjectsV2Command({
-      Bucket: this.bucketName,
-      Prefix: key,
-      MaxKeys: 1,
-    });
-    const resp: ListObjectsV2CommandOutput = await this.s3Client.send(command);
-    return !!resp.Contents && resp.Contents.length > 0;
-  }
-
-  public async tryGet(key: string): Promise<string | undefined> {
-    if (await this.exists(key)) {
-      return this.get(key);
-    }
-
-    return undefined;
-  }
-
-  public async tryGetJson(key: string): Promise<Json | undefined> {
-    if (await this.exists(key)) {
-      return this.getJson(key);
-    }
-
-    return undefined;
   }
 
   private async getLocation(): Promise<string> {

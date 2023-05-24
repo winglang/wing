@@ -55,7 +55,8 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.LIST,
       BucketInflightMethods.PUT,
       BucketInflightMethods.PUT_JSON,
-      BucketInflightMethods.PUBLIC_URL
+      BucketInflightMethods.PUBLIC_URL,
+      BucketInflightMethods.EXISTS
     );
 
     props;
@@ -222,6 +223,13 @@ export interface BucketDeleteOptions {
  */
 export interface IBucketClient {
   /**
+   * Check if an object exists in the bucket.
+   * @param key Key of the object.
+   * @inflight
+   */
+  exists(key: string): Promise<boolean>;
+
+  /**
    * Put an object in the bucket.
    * @param key Key of the object.
    * @param body Content of the object we want to store into the bucket.
@@ -277,20 +285,6 @@ export interface IBucketClient {
    * @inflight
    */
   delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
-
-  /**
-   * Get an object from the bucket if it exists
-   * @param key Key of the object.
-   * @returns the contents of the object as a string if it exists, nil otherwise
-   */
-  tryGet(key: string): Promise<string | undefined>;
-
-  /**
-   * Gets an object from the bucket if it exists, parsing it as Json.
-   * @param key Key of the object.
-   * @returns the contents of the object as Json if it exists, nil otherwise
-   */
-  tryGetJson(key: string): Promise<Json | undefined>;
 }
 
 /**
@@ -387,14 +381,12 @@ export enum BucketInflightMethods {
   LIST = "list",
   /** `Bucket.delete` */
   DELETE = "delete",
-  /** `Bucket.putJson` */
+  /** `Bucket.putJson */
   PUT_JSON = "putJson",
-  /** `Bucket.getJson` */
+  /** `Bucket.getJson */
   GET_JSON = "getJson",
-  /** `Bucket.publicUrl` */
+  /** `Bucket.publicUrl */
   PUBLIC_URL = "publicUrl",
-  /** `Bucket.tryGet` */
-  TRY_GET = "tryGet",
-  /** `Bucket.tryGetJson` */
-  TRY_GET_JSON = "tryGetJson",
+  /** `Bucket.exists` */
+  EXISTS = "exists",
 }
