@@ -1,4 +1,4 @@
-import { basename, sep } from "path";
+import { basename } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
@@ -15,75 +15,26 @@ const log = debug("wing:test");
 
 const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 
-const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
-
 /**
  * Options for the `test` command.
  */
 export interface TestOptions extends CompileOptions {}
 
 export async function test(entrypoints: string[], options: TestOptions) {
-  const startTime = Date.now();
-  const passing: string[] = [];
-  const failing: { testName: string; error: Error }[] = [];
   for (const entrypoint of entrypoints) {
-    try {
-      await testOne(entrypoint, options);
-      passing.push(generateTestName(entrypoint));
-    } catch (error) {
-      failing.push({ testName: generateTestName(entrypoint), error: error as Error });
-    }
+    await testOne(entrypoint, options);
   }
-  printResults(passing, failing, Date.now() - startTime);
-}
-
-function printResults(
-  passing: string[],
-  failing: { testName: string; error: Error }[],
-  duration: number
-) {
-  const durationInSeconds = duration / 1000;
-  console.log(" "); // for getting a new line- \n does't seem to work :(
-  console.log(`
-Tests Results:
-${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
-${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}
-${
-  failing.length
-    ? `
-${" "}
-Errors:` +
-      failing
-        .map(
-          ({ testName, error }) => `
-
-At ${testName}\n ${chalk.red(error.message)}
-        `
-        )
-        .join("\n\n")
-    : ""
-}
-
-${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
-    failing.length && passing.length ? chalk.dim(" |") : ""
-  }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
-    `(${failing.length + passing.length})`
-  )} 
-${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${durationInSeconds % 60}s
-`);
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
   // since the test cleans up after each run, it's essential to create a temporary directory-
   // at least one that is different then the usual compilation dir,  otherwise we might end up cleaning up the user's actual resources.
   const tempFile: string = Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
-  const synthDir = await withSpinner(
-    `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
-    () =>
-      compile(tempFile, {
-        ...options,
-        testing: true,
-      })
+  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () =>
+    compile(tempFile, {
+      ...options,
+      testing: true,
+    })
   );
 
   switch (options.target) {
