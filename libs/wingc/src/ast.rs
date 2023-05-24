@@ -432,9 +432,9 @@ pub enum StmtKind {
 		statements: Scope,
 	},
 	IfLet {
-		condition: Expr,
-		statements: Scope,
 		var_name: Symbol,
+		value: Expr,
+		statements: Scope,
 		else_statements: Option<Scope>,
 	},
 	If {

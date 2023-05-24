@@ -303,7 +303,7 @@ impl<'s> Parser<'s> {
 
 	fn build_if_let_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
-		let condition = self.build_expression(&statement_node.child_by_field_name("value").unwrap())?;
+		let value = self.build_expression(&statement_node.child_by_field_name("value").unwrap())?;
 		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
 			Some(self.build_scope(&else_block))
@@ -311,9 +311,9 @@ impl<'s> Parser<'s> {
 			None
 		};
 		Ok(StmtKind::IfLet {
-			condition: condition,
-			statements: if_block,
 			var_name: name,
+			value,
+			statements: if_block,
 			else_statements: else_block,
 		})
 	}

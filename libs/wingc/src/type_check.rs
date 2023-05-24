@@ -830,14 +830,6 @@ impl TypeRef {
 		}
 	}
 
-	// Returns the type of an optional type, or None if the type is not optional.
-	pub fn optional_type(&self) -> Option<TypeRef> {
-		match **self {
-			Type::Optional(t) => Some(t),
-			_ => None,
-		}
-	}
-
 	/// Returns the item type of a collection type, or None if the type is not a collection.
 	pub fn collection_item_type(&self) -> Option<TypeRef> {
 		match **self {
@@ -1851,15 +1843,6 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn validate_type_is_optional(&mut self, actual_type: TypeRef, span: &impl Spanned) {
-		if !actual_type.is_option() {
-			self.diagnostics.borrow_mut().push(Diagnostic {
-				message: format!("Expected type to be optional, but got \"{}\" instead", actual_type),
-				span: Some(span.span()),
-			});
-		}
-	}
-
 	pub fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
 		for statement in scope.statements.iter() {
@@ -2063,25 +2046,25 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Break | StmtKind::Continue => {}
 			StmtKind::IfLet {
-				condition,
+				value,
 				statements,
 				var_name,
 				else_statements,
 			} => {
-				let cond_type = self.type_check_exp(condition, env);
-				self.validate_type_is_optional(cond_type, condition);
+				let cond_type = self.type_check_exp(value, env);
+
+				if !cond_type.is_option() {
+					self.diagnostics.borrow_mut().push(Diagnostic {
+						message: format!("Expected type to be optional, but got \"{}\" instead", cond_type),
+						span: Some(value.span()),
+					});
+				}
 
 				// Technically we only allow if let statements to be used with optionals
 				// and above validate_type_is_optional method will attach a diagnostic error if it is not.
 				// However for the sake of verbose diagnostics we'll allow the code to continue if the type is not an optional
 				// and complete the type checking process for additional errors.
-				let var_type = if cond_type.is_option() {
-					cond_type
-						.optional_type()
-						.expect("Optional types should always have a type")
-				} else {
-					cond_type
-				};
+				let var_type = cond_type.maybe_unwrap_option();
 
 				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
 

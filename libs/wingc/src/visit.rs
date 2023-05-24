@@ -125,13 +125,13 @@ where
 		}
 		StmtKind::Break | StmtKind::Continue => {}
 		StmtKind::IfLet {
-			condition,
+			value,
 			statements,
 			var_name,
 			else_statements,
 		} => {
 			v.visit_symbol(var_name);
-			v.visit_expr(condition);
+			v.visit_expr(value);
 			v.visit_scope(statements);
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);

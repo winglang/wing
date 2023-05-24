@@ -76,3 +76,35 @@ if let parsedName = tryParseName("BadName") {
     assert(false); // No last name should exist
   }
 }
+
+// check that falsey values are handled correctly
+let falsy: bool? = false;
+if let f = falsy {
+  assert(f == false);
+} else {
+  assert(false);
+}
+
+// Shadow for days
+let shadow: str? = "root";
+if let shadow = shadow {
+  assert(shadow == "root");
+  let shadow1: str? = "nested";
+  if let shadow1 = shadow1 {
+    assert(shadow1 == "nested");
+  } else {
+    assert(false);
+  }
+}
+
+// return out of if let
+let fun = (a: str?): str => {
+  if let y = a {
+    return y;
+  } else {
+    return "default";
+  }
+};
+
+assert(fun("hello") == "hello");
+assert(fun(nil) == "default");
