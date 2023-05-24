@@ -1178,7 +1178,7 @@ impl<'s> Parser<'s> {
 				)),
 				expression_span,
 			)),
-			"nil" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
+			"nil_value" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
 			"bool" => Ok(Expr::new(
 				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
