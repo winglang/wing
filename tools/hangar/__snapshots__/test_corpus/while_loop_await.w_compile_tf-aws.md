@@ -15,7 +15,7 @@ module.exports = function({  }) {
           }
         }
         ;
-        while (((await iterator(i)) < 3)) {
+        while (((typeof iterator === "function" ? await iterator(i) : await iterator.handle(i)) < 3)) {
           {console.log(`${i}`)};
         }
       }

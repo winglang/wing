@@ -4968,6 +4968,7 @@ Inflight interface for `Bucket`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
@@ -5002,6 +5003,24 @@ Key of the object.
 - *Type:* <a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a>
 
 Options available for delete an item from a bucket.
+
+---
+
+##### `exists` <a name="exists" id="@winglang/sdk.cloud.IBucketClient.exists"></a>
+
+```wing
+exists(key: str): bool
+```
+
+**Inflight client:** [true](#true)
+
+Check if an object exists in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.exists.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
 
 ---
 

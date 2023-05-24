@@ -38,7 +38,7 @@ export function convertBetweenHandlers(
     }
 
     public _registerBind(host: IInflightHost, ops: string[]): void {
-      this._registerBindObject(this.handler, host, ["handle"]);
+      NewHandler._registerBindObject(this.handler, host, ["handle"]);
       super._registerBind(host, ops);
     }
   }

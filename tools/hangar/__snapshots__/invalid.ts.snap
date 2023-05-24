@@ -138,24 +138,73 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`class.w > stderr 1`] = `
-"error: \\"x\\" is not initialized
-  --> ../../../examples/tests/invalid/class.w:2:4
+"error: Preflight field \\"x\\" is not initialized
+  --> ../../../examples/tests/invalid/class.w:4:4
   |
-2 |    x:num;
-  |    ^ \\"x\\" is not initialized
+4 |    x:num;
+  |    ^ Preflight field \\"x\\" is not initialized
 
 
 error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
-  --> ../../../examples/tests/invalid/class.w:7:1
+  --> ../../../examples/tests/invalid/class.w:9:1
   |
-7 | new C2(1);
+9 | new C2(1);
   | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.w:13:14
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:21:16
    |
-13 |     this.x = \\"Hi\\";
+21 |   inflight var x: num;
+   |                ^ Inflight field \\"x\\" is not initialized
+
+
+error: Inflight field \\"y\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:23:12
+   |
+23 |   inflight y: str;
+   |            ^ Inflight field \\"y\\" is not initialized
+
+
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:28:12
+   |
+28 |   inflight x: num;
+   |            ^ Inflight field \\"x\\" is not initialized
+
+
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:34:12
+   |
+34 |   inflight x: num;
+   |            ^ Inflight field \\"x\\" is not initialized
+
+
+error: \\"y\\" cannot be initialized in the inflight initializer
+   --> ../../../examples/tests/invalid/class.w:45:10
+   |
+45 |     this.y = 1;
+   |          ^ \\"y\\" cannot be initialized in the inflight initializer
+
+
+error: \\"x\\" cannot be initialized in the preflight initializer
+   --> ../../../examples/tests/invalid/class.w:40:10
+   |
+40 |     this.x = 1;
+   |          ^ \\"x\\" cannot be initialized in the preflight initializer
+
+
+error: Preflight field \\"y\\" is not initialized
+   --> ../../../examples/tests/invalid/class.w:36:3
+   |
+36 |   y: num;
+   |   ^ Preflight field \\"y\\" is not initialized
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/class.w:15:14
+   |
+15 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 "
@@ -422,6 +471,13 @@ exports[`inflight_in_class.w > stderr 1`] = `
 2 |   inflight field: num; // No inflight fields in classes (only in resources)
   |   ^^^^^^^^ Class cannot have inflight fields
 
+
+error: Inflight field \\"field\\" is not initialized
+  --> ../../../examples/tests/invalid/inflight_in_class.w:2:12
+  |
+2 |   inflight field: num; // No inflight fields in classes (only in resources)
+  |            ^^^^^ Inflight field \\"field\\" is not initialized
+
 "
 `;
 
@@ -441,10 +497,10 @@ error: Unable to qualify which operations are performed on 'this.b' of type 'Buc
 
 
 error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:47:13
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:47:18
    |
 47 |     let b = this.array.at(1);
-   |             ^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   |                  ^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
 
 "
 `;
@@ -725,6 +781,30 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 "
 `;
 
+exports[`nil.w > stderr 1`] = `
+"error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+  --> ../../../examples/tests/invalid/nil.w:3:14
+  |
+3 | let x: str = nil;
+  |              ^^^ Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+
+
+error: Expected optional type, found \\"nil\\"
+   --> ../../../examples/tests/invalid/nil.w:24:4
+   |
+24 | if nil? {
+   |    ^^^ Expected optional type, found \\"nil\\"
+
+
+error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+   --> ../../../examples/tests/invalid/nil.w:20:14
+   |
+20 |   foo.setBar(nil);
+   |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+
+"
+`;
+
 exports[`optionals.w > stderr 1`] = `
 "error: Expected type to be \\"num\\", but got \\"num?\\" instead
   --> ../../../examples/tests/invalid/optionals.w:7:3
@@ -880,17 +960,17 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
 
 exports[`resource_captures.w > stderr 1`] = `
 "error: Cannot capture reassignable field 'reassignable'
-   --> ../../../examples/tests/invalid/resource_captures.w:18:12
+   --> ../../../examples/tests/invalid/resource_captures.w:18:17
    |
 18 |     log(\\"\${this.reassignable}\\");
-   |            ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
+   |                 ^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
 
 
 error: Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
-   --> ../../../examples/tests/invalid/resource_captures.w:20:9
+   --> ../../../examples/tests/invalid/resource_captures.w:20:14
    |
 20 |     log(this.mutArray.at(0));
-   |         ^^^^^^^^^^^^^ Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
+   |              ^^^^^^^^ Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
 
 
 error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
@@ -901,10 +981,10 @@ error: Unable to qualify which operations are performed on 'this.bucket' of type
 
 
 error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
-   --> ../../../examples/tests/invalid/resource_captures.w:27:5
+   --> ../../../examples/tests/invalid/resource_captures.w:27:10
    |
 27 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   |          ^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
 
 "
 `;
