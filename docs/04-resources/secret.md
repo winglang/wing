@@ -44,6 +44,7 @@ new cloud.Function(inflight () => {
 ### Simulator (`sim`)
 
 When using a secret in Wing's simulator, a secrets file must be added to your home directory at `~/.wing/secrets.json`.
+The simulator will look up secrets in this file by their `name`.
 Secrets should be saved in a JSON format:
 
 ```json
@@ -55,8 +56,8 @@ Secrets should be saved in a JSON format:
 
 ### AWS (`tf-aws` and `awscdk`)
 
-AWS implementations of `cloud.Secret` use AWS Secrets Manager.
-Before deploying your application, you must create a secret in the AWS account with the same name as the secret in your Wing application.
+AWS implementations of `cloud.Secret` use [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html).
+Before deploying your application, you must create a secret in the AWS account with the same `name` as the secret in your Wing application.
 You can do this using the AWS CLI:
 
 ```bash
