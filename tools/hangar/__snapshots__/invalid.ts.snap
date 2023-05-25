@@ -876,17 +876,10 @@ error: Expected type to be optional, but got \\"bool\\" instead
    |            ^^^^ Expected type to be optional, but got \\"bool\\" instead
 
 
-error: Expected type to be optional, but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:43:13
-   |
-43 | if let hi = hi {
-   |             ^^ Expected type to be optional, but got \\"str\\" instead
-
-
 error: Variable hi is not reassignable 
-   --> ../../../examples/tests/invalid/optionals.w:44:3
+   --> ../../../examples/tests/invalid/optionals.w:46:3
    |
-44 |   hi = \\"bye\\";
+46 |   hi = \\"bye\\";
    |   ^^^^^^^^^^^ Variable hi is not reassignable 
 
 "

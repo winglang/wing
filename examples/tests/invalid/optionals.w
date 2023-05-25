@@ -39,8 +39,10 @@ if let x = true {
 //         ^^^^ Expected type to be optional, but got "bool" instead
 }
 
-let var hi: str = "hi";
+let var hi: str? = "hi";
 if let hi = hi {
+  // shadowed variable hi is not re-assignable, to reassign vars in if let 
+  // requires using `if let var` statement 
   hi = "bye";
 //^^^^^^^^^^^ Variable hi is not reassignable 
 }
