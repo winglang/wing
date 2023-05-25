@@ -591,6 +591,61 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
+			StmtKind::IfLet {
+				value,
+				statements,
+				var_name,
+				else_statements,
+			} => {
+				let mut code = CodeMaker::default();
+				// To enable shadowing variables in if let statements, the following does some scope trickery
+				// take for example the following wing code:
+				// let x: str? = "hello";
+				// if let x = x {
+				//   log(x);
+				// }
+				//
+				// If we attempted to just do the following JS code
+				//
+				// const x = "hello"
+				// if (x != undefined) {
+				//   const x = x;  <== Reference error, "Cannot access 'x' before initialization"
+				//   log(x);
+				// }
+				//
+				// To work around this, we can generate a temporary scope, then use an intermediate variable to carry the
+				// shadowed value, like so:
+				// const x = "hello"
+				// {
+				//  const $IF_LET_VALUE = x; <== intermediate variable that expires at the end of the scope
+				//  if (x != undefined) {
+				//    const x = $IF_LET_VALUE;
+				//    log(x);
+				//  }
+				// }
+				// The temporary scope is created so that intermediate variables created by consecutive `if let` clauses
+				// do not interfere with each other.
+				code.open("{");
+				let if_let_value = "$IF_LET_VALUE".to_string();
+				code.line(format!(
+					"const {} = {};",
+					if_let_value,
+					self.jsify_expression(value, ctx)
+				));
+				code.open(format!("if ({} != undefined) {{", self.jsify_expression(value, ctx)));
+				code.line(format!("const {} = {};", var_name, if_let_value));
+				code.add_code(self.jsify_scope_body(statements, ctx));
+				code.close("}");
+
+				if let Some(else_scope) = else_statements {
+					code.open("else {");
+					code.add_code(self.jsify_scope_body(else_scope, ctx));
+					code.close("}");
+				}
+
+				code.close("}");
+				code
+			}
 			StmtKind::If {
 				condition,
 				statements,
