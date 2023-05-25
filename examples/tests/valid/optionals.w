@@ -121,7 +121,6 @@ class Node {
   }
 }
 
-// BST [8, 3, 10, 1, 6, 14, nil, 13]
 let tree = new Node(
   8, 
   new Node(
@@ -146,8 +145,6 @@ let notThere = tree.right?.right?.right;
 assert(thirteen == 13);
 assert(notThere == nil);
 
-let one = tree.left?.left;
-
-if let o = one {
+if let o = tree.left?.left {
   assert(o.value == 1);
 }
