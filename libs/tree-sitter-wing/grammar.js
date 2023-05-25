@@ -126,7 +126,7 @@ module.exports = grammar({
         "struct",
         field("name", $.identifier),
         optional(seq("extends", commaSep(field("extends", $.custom_type)))),
-        braced(repeat($.struct_field))
+        braced(repeat(field("field", $.struct_field)))
       ),
     struct_field: ($) =>
       seq(field("name", $.identifier), $._type_annotation, $._semicolon),
