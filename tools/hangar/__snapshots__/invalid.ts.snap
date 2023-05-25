@@ -1245,18 +1245,18 @@ error: \\"x\\" is not initialized
    |                  ^^^^^^^^^^ \\"x\\" is not initialized
 
 
-error: Struct fields must be immutable types, received: MutArray<str>
+error: Struct fields must have immutable types
    --> ../../../examples/tests/invalid/structs.w:20:3
    |
 20 |   f: MutArray<str>;
-   |   ^ Struct fields must be immutable types, received: MutArray<str>
+   |   ^ Struct fields must have immutable types
 
 
-error: Struct fields must be immutable types, received: Map<Array<MutArray<str>>>
+error: Struct fields must have immutable types
    --> ../../../examples/tests/invalid/structs.w:25:3
    |
 25 |   f: Map<Array<MutArray<str>>>;
-   |   ^ Struct fields must be immutable types, received: Map<Array<MutArray<str>>>
+   |   ^ Struct fields must have immutable types
 
 
 error: Unknown symbol \\"badField\\"

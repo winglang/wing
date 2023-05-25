@@ -102,13 +102,6 @@ impl SymbolKind {
 		}
 	}
 
-	pub fn is_reassignable(&self) -> bool {
-		match self {
-			SymbolKind::Variable(VariableInfo { reassignable: true, .. }) => true,
-			_ => false,
-		}
-	}
-
 	fn as_namespace_ref(&self) -> Option<NamespaceRef> {
 		match self {
 			SymbolKind::Namespace(ns) => Some(*ns),
@@ -2497,10 +2490,7 @@ impl<'a> TypeChecker<'a> {
 				for field in fields.iter() {
 					let field_type = self.resolve_type_annotation(&field.member_type, env);
 					if field_type.is_mutable() {
-						self.spanned_error(
-							&field.name,
-							format!("Struct fields must be immutable types, received: {}", field_type),
-						);
+						self.spanned_error(&field.name, "Struct fields must have immutable types");
 					}
 					match struct_env.define(
 						&field.name,
@@ -3606,24 +3596,6 @@ pub fn resolve_user_defined_type(
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
 	}
-}
-
-pub fn resolve_user_defined_type_by_fqn(
-	user_defined_type_name: &str,
-	env: &SymbolEnv,
-	statement_idx: usize,
-) -> Result<TypeRef, TypeError> {
-	let mut fields = user_defined_type_name
-		.split('.')
-		.map(|s| Symbol::global(s))
-		.collect_vec();
-	let root = fields.remove(0);
-	let user_defined_type = UserDefinedType {
-		root,
-		fields,
-		span: WingSpan::default(),
-	};
-	resolve_user_defined_type(&user_defined_type, env, statement_idx)
 }
 
 #[cfg(test)]
