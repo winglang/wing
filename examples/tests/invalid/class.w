@@ -50,5 +50,11 @@ class C6 {
 let x = 5;
 
 class C7 extends x {
-               //^ Preflight class C7's parent "x" is not a class
+               //^ Expected 'x' to be a type but it's a variable
+}
+
+struct S1 {}
+
+class C8 extends S1 {
+               //^^ Preflight class C8's parent is not a class
 }

@@ -29,7 +29,7 @@ use wingii::type_system::TypeSystem;
 
 use self::class_fields_init::VisitClassInit;
 use self::jsii_importer::JsiiImportSpec;
-use self::symbol_env::{LookupResult, SymbolEnvIter};
+use self::symbol_env::{LookupResult, SymbolEnvIter, SymbolEnvRef};
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -1487,7 +1487,7 @@ impl<'a> TypeChecker<'a> {
 						return self.expr_error(callee, "Expected a function or method");
 					}
 				} else {
-					return self.expr_error(callee, "Expected be a function or method");
+					return self.expr_error(callee, "Expected a function or method");
 				};
 
 				if !env.phase.can_call_to(&func_sig.phase) {
@@ -2259,34 +2259,9 @@ impl<'a> TypeChecker<'a> {
 					self.stmt_error(stmt, "Cannot define a preflight class in inflight scope");
 				}
 
-				// Verify parent is actually a known Class/Resource and get their env
-				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
-					let t = self
-						.resolve_user_defined_type(parent_type, env, stmt.idx)
-						.unwrap_or_else(|e| self.type_error(e));
-					if *is_resource {
-						if let Type::Resource(ref class) = *t {
-							(Some(t), Some(class.env.get_ref()))
-						} else {
-							self.general_type_error(format!("Preflight class {}'s parent \"{}\" is not a class", name, t));
-							(None, None)
-						}
-					} else {
-						if let Type::Class(ref class) = *t {
-							(Some(t), Some(class.env.get_ref()))
-						} else {
-							self.general_type_error(format!("Inflight class {}'s parent \"{}\" is not a class", name, t));
-							(None, None)
-						}
-					}
-				} else if *is_resource {
-					// if this is a resource and we don't have a parent, then we implicitly set it to `std.Resource`
-					let t = self.types.resource_base_type();
-					let env = t.as_resource().unwrap().env.get_ref();
-					(Some(t), Some(env))
-				} else {
-					(None, None)
-				};
+				// Verify parent is a known class and get their env
+				let (parent_class, parent_class_env) =
+					self.extract_parent_class(parent.as_ref(), *is_resource, name, env, stmt);
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
 				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
@@ -3442,6 +3417,59 @@ impl<'a> TypeChecker<'a> {
 
 		// If the type is still not found, return the original error
 		res
+	}
+
+	fn extract_parent_class(
+		&mut self,
+		parent_udt: Option<&UserDefinedType>,
+		is_resource: bool,
+		name: &Symbol,
+		env: &mut SymbolEnv,
+		stmt: &Stmt,
+	) -> (Option<TypeRef>, Option<SymbolEnvRef>) {
+		if parent_udt.is_none() {
+			if is_resource {
+				// if this is a resource and we don't have a parent, then we implicitly set it to `std.Resource`
+				let t = self.types.resource_base_type();
+				let env = t.as_resource().unwrap().env.get_ref();
+				return (Some(t), Some(env));
+			} else {
+				return (None, None);
+			}
+		}
+		// Safety: we return early if parent_udt is None
+		let parent_udt = parent_udt.unwrap();
+
+		let parent_type = self.resolve_user_defined_type(parent_udt, env, stmt.idx);
+		let parent_type = match parent_type {
+			Ok(t) => t,
+			Err(e) => {
+				self.type_error(e);
+				return (None, None);
+			}
+		};
+
+		if is_resource {
+			if let Type::Resource(ref class) = *parent_type {
+				(Some(parent_type), Some(class.env.get_ref()))
+			} else {
+				self.diagnostics.borrow_mut().push(Diagnostic {
+					message: format!("Preflight class {}'s parent \"{}\" is not a class", name, parent_type),
+					span: Some(parent_udt.span.clone()),
+				});
+				(None, None)
+			}
+		} else {
+			if let Type::Class(ref class) = *parent_type {
+				(Some(parent_type), Some(class.env.get_ref()))
+			} else {
+				self.diagnostics.borrow_mut().push(Diagnostic {
+					message: format!("Inflight class {}'s parent \"{}\" is not a class", name, parent_type),
+					span: Some(parent_udt.span.clone()),
+				});
+				(None, None)
+			}
+		}
 	}
 }
 
