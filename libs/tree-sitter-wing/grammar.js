@@ -104,6 +104,7 @@ module.exports = grammar({
         $.break_statement,
         $.continue_statement,
         $.if_statement,
+        $.if_let_statement,
         $.struct_definition,
         $.enum_definition,
         $.try_catch_statement,
@@ -266,6 +267,16 @@ module.exports = grammar({
     break_statement: ($) => seq("break", $._semicolon),
 
     continue_statement: ($) => seq("continue", $._semicolon),
+    
+    if_let_statement: ($) => seq(
+      // TODO: support "if let var"
+      "if let",
+      field("name", $.identifier),
+      "=",
+      field("value", $.expression),
+      field("block", $.block),
+      optional(seq("else", field("else_block", $.block)))
+    ),
 
     if_statement: ($) =>
       seq(

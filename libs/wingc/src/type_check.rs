@@ -2057,6 +2057,55 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(statements);
 			}
 			StmtKind::Break | StmtKind::Continue => {}
+			StmtKind::IfLet {
+				value,
+				statements,
+				var_name,
+				else_statements,
+			} => {
+				let cond_type = self.type_check_exp(value, env);
+
+				if !cond_type.is_option() {
+					self.diagnostics.borrow_mut().push(Diagnostic {
+						message: format!("Expected type to be optional, but got \"{}\" instead", cond_type),
+						span: Some(value.span()),
+					});
+				}
+
+				// Technically we only allow if let statements to be used with optionals
+				// and above validate_type_is_optional method will attach a diagnostic error if it is not.
+				// However for the sake of verbose diagnostics we'll allow the code to continue if the type is not an optional
+				// and complete the type checking process for additional errors.
+				let var_type = cond_type.maybe_unwrap_option();
+
+				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+
+				// Add the variable to if block scope
+				match stmt_env.define(
+					var_name,
+					SymbolKind::make_variable(var_type, false, true, env.phase),
+					StatementIdx::Top,
+				) {
+					Err(type_error) => {
+						self.type_error(type_error);
+					}
+					_ => {}
+				}
+
+				statements.set_env(stmt_env);
+				self.inner_scopes.push(statements);
+
+				if let Some(else_scope) = else_statements {
+					else_scope.set_env(SymbolEnv::new(
+						Some(env.get_ref()),
+						env.return_type,
+						false,
+						env.phase,
+						stmt.idx,
+					));
+					self.inner_scopes.push(else_scope);
+				}
+			}
 			StmtKind::If {
 				condition,
 				statements,

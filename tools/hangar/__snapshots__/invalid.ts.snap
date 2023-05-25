@@ -868,6 +868,20 @@ error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
 34 | optionalSub1 ?? new Super();
    |                 ^^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Super\\" instead
 
+
+error: Expected type to be optional, but got \\"bool\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:38:12
+   |
+38 | if let x = true {
+   |            ^^^^ Expected type to be optional, but got \\"bool\\" instead
+
+
+error: Variable hi is not reassignable 
+   --> ../../../examples/tests/invalid/optionals.w:46:3
+   |
+46 |   hi = \\"bye\\";
+   |   ^^^^^^^^^^^ Variable hi is not reassignable 
+
 "
 `;
 
