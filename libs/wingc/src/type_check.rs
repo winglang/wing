@@ -3415,9 +3415,7 @@ impl<'a> TypeChecker<'a> {
 		object: &Box<Expr>,
 	) -> VariableInfo {
 		match *instance_type {
-			Type::Optional(t) => {
-				self.resolve_variable_from_instance_type(t, property, env, object)
-			}
+			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, object),
 			Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class_like(class, property),
 			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
 			Type::Anything => VariableInfo {
