@@ -447,6 +447,10 @@ error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num)
 
 
 error: Expected an interface, instead found type \\"Bucket\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:14:14
+   |
+14 | class C impl cloud.Bucket {
+   |              ^^^^^^^^^^^^ Expected an interface, instead found type \\"Bucket\\"
 
 
 error: Class \\"r\\" does not implement method \\"method1\\" of interface \\"I3\\"
@@ -563,6 +567,10 @@ error: Unknown symbol \\"IDontExist\\"
 
 
 error: Expected an interface, instead found type \\"ISomeClass\\"
+   --> ../../../examples/tests/invalid/interface.w:16:34
+   |
+16 | interface ISomeInterface extends ISomeClass {
+   |                                  ^^^^^^^^^^ Expected an interface, instead found type \\"ISomeClass\\"
 
 
 error: Symbol \\"foo\\" already defined in this scope
@@ -1027,6 +1035,10 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 
 exports[`resource_inflight.w > stderr 1`] = `
 "error: Cannot create preflight class \\"Bucket\\" in inflight phase
+  --> ../../../examples/tests/invalid/resource_inflight.w:4:3
+  |
+4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
+  |   ^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"Bucket\\" in inflight phase
 
 "
 `;
@@ -1233,18 +1245,18 @@ error: \\"x\\" is not initialized
    |                  ^^^^^^^^^^ \\"x\\" is not initialized
 
 
-error: struct fields must be immutable got: MutArray<str>
+error: Struct fields must be immutable types, received: MutArray<str>
    --> ../../../examples/tests/invalid/structs.w:20:3
    |
 20 |   f: MutArray<str>;
-   |   ^ struct fields must be immutable got: MutArray<str>
+   |   ^ Struct fields must be immutable types, received: MutArray<str>
 
 
-error: struct fields must be immutable got: Map<Array<MutArray<str>>>
+error: Struct fields must be immutable types, received: Map<Array<MutArray<str>>>
    --> ../../../examples/tests/invalid/structs.w:25:3
    |
 25 |   f: Map<Array<MutArray<str>>>;
-   |   ^ struct fields must be immutable got: Map<Array<MutArray<str>>>
+   |   ^ Struct fields must be immutable types, received: Map<Array<MutArray<str>>>
 
 
 error: Unknown symbol \\"badField\\"
@@ -1262,6 +1274,10 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is not a class
+   --> ../../../examples/tests/invalid/structs.w:47:13
+   |
+47 | let x = new cloud.BucketProps(1);
+   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is not a class
 
 "
 `;

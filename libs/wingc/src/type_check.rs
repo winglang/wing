@@ -1153,19 +1153,6 @@ impl<'a> TypeChecker<'a> {
 		);
 	}
 
-	fn resolve_static_error(&self, property: &Symbol, message: String) -> VariableInfo {
-		self.diagnostics.borrow_mut().push(Diagnostic {
-			message,
-			span: Some(property.span.clone()),
-		});
-		VariableInfo {
-			type_: self.types.error(),
-			reassignable: false,
-			phase: Phase::Independent,
-			is_static: true,
-		}
-	}
-
 	fn spanned_error<S: Into<String>>(&self, spanned: &impl Spanned, message: S) {
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			message: message.into(),
@@ -1190,18 +1177,12 @@ impl<'a> TypeChecker<'a> {
 		self.types.error()
 	}
 
-	fn variable_error(&self, type_error: TypeError) -> VariableInfo {
-		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().push(Diagnostic {
-			message,
-			span: Some(span),
-		});
-
+	fn make_error_variable_info(&self, is_static: bool) -> VariableInfo {
 		VariableInfo {
 			type_: self.types.error(),
 			reassignable: false,
 			phase: Phase::Independent,
-			is_static: false,
+			is_static,
 		}
 	}
 
@@ -3154,23 +3135,20 @@ impl<'a> TypeChecker<'a> {
 					if let Some(var) = var.as_variable() {
 						var
 					} else {
-						self.variable_error(TypeError {
-							message: format!(
-								"Expected identifier \"{}\" to be a variable, but it's a {}",
-								symbol.name, var
-							),
-							span: symbol.span.clone(),
-						})
+						self.spanned_error(
+							symbol,
+							format!("Expected identifier \"{symbol}\" to be a variable, but it's a {var}",),
+						);
+						self.make_error_variable_info(false)
 					}
 				} else {
 					// Give a specific error message if someone tries to write "print" instead of "log"
 					if symbol.name == "print" {
-						self.variable_error(TypeError {
-							message: "Unknown symbol \"print\", did you mean to use \"log\"?".to_string(),
-							span: symbol.span.clone(),
-						})
+						self.spanned_error(symbol, "Unknown symbol \"print\", did you mean to use \"log\"?");
+						self.make_error_variable_info(false)
 					} else {
-						self.variable_error(lookup_result_to_type_error(lookup_res, symbol))
+						self.type_error(lookup_result_to_type_error(lookup_res, symbol));
+						self.make_error_variable_info(false)
 					}
 				}
 			}
@@ -3298,12 +3276,7 @@ impl<'a> TypeChecker<'a> {
 							object,
 							format!("Property access unsupported on type \"{}\"", instance_type),
 						);
-						VariableInfo {
-							type_: self.types.error(),
-							reassignable: false,
-							phase: Phase::Independent,
-							is_static: false,
-						}
+						self.make_error_variable_info(false)
 					}
 				};
 
@@ -3320,7 +3293,7 @@ impl<'a> TypeChecker<'a> {
 				let type_ = self
 					.resolve_user_defined_type(type_, env, self.statement_idx)
 					.expect("Type annotation should have been verified by `expr_maybe_type`");
-				return match *type_ {
+				match *type_ {
 					Type::Enum(ref e) => {
 						if e.values.contains(property) {
 							VariableInfo {
@@ -3330,10 +3303,11 @@ impl<'a> TypeChecker<'a> {
 								is_static: true,
 							}
 						} else {
-							self.resolve_static_error(
+							self.spanned_error(
 								property,
 								format!("Enum \"{}\" does not contain value \"{}\"", type_, property.name),
-							)
+							);
+							self.make_error_variable_info(true)
 						}
 					}
 					Type::Class(ref c) | Type::Resource(ref c) => match c.env.lookup(&property, None) {
@@ -3341,22 +3315,29 @@ impl<'a> TypeChecker<'a> {
 							if v.is_static {
 								v.clone()
 							} else {
-								self.resolve_static_error(
+								self.spanned_error(
 									property,
 									format!(
 										"Class \"{}\" contains a member \"{}\" but it is not static",
 										type_, property.name
 									),
-								)
+								);
+								self.make_error_variable_info(true)
 							}
 						}
-						_ => self.resolve_static_error(
-							property,
-							format!("No member \"{}\" in class \"{}\"", property.name, type_),
-						),
+						_ => {
+							self.spanned_error(
+								property,
+								format!("No member \"{}\" in class \"{}\"", property.name, type_),
+							);
+							self.make_error_variable_info(true)
+						}
 					},
-					_ => self.resolve_static_error(property, format!("\"{}\" not a valid reference", reference)),
-				};
+					_ => {
+						self.spanned_error(property, format!("\"{}\" not a valid reference", reference));
+						self.make_error_variable_info(true)
+					}
+				}
 			}
 		}
 	}
@@ -3367,15 +3348,17 @@ impl<'a> TypeChecker<'a> {
 		if let LookupResult::Found(field, _) = lookup_res {
 			let var = field.as_variable().expect("Expected property to be a variable");
 			if var.is_static {
-				self.variable_error(TypeError {
-					message: format!("Cannot access static property \"{}\" from instance", property.name),
-					span: property.span.clone(),
-				})
+				self.spanned_error(
+					property,
+					format!("Cannot access static property \"{property}\" from instance"),
+				);
+				self.make_error_variable_info(false)
 			} else {
 				var
 			}
 		} else {
-			self.variable_error(lookup_result_to_type_error(lookup_res, property))
+			self.type_error(lookup_result_to_type_error(lookup_res, property));
+			self.make_error_variable_info(false)
 		}
 	}
 
