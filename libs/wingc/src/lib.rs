@@ -9,7 +9,7 @@ extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
-use diagnostic::{print_diagnostics, Diagnostic, Diagnostics};
+use diagnostic::{Diagnostic, Diagnostics};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -305,10 +305,6 @@ pub fn compile(
 	// Validate that every Expr has an evaluated_type
 	let mut tc_assert = TypeCheckAssert;
 	tc_assert.visit_scope(&scope);
-
-	// Print diagnostics
-	print_diagnostics(&parse_diagnostics);
-	print_diagnostics(&type_check_diagnostics);
 
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
