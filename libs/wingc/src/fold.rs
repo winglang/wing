@@ -109,6 +109,17 @@ where
 			condition: f.fold_expr(condition),
 			statements: f.fold_scope(statements),
 		},
+		StmtKind::IfLet {
+			value,
+			statements,
+			var_name,
+			else_statements,
+		} => StmtKind::IfLet {
+			value: f.fold_expr(value),
+			statements: f.fold_scope(statements),
+			var_name: f.fold_symbol(var_name),
+			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
+		},
 		StmtKind::If {
 			condition,
 			statements,

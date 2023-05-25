@@ -13,19 +13,23 @@ errorWingFiles.forEach((wingFile) => {
     );
 
     const out = await runWingCommand({
-      cwd: tmpDir, 
-      wingFile: relativeWingFile, 
-      args, 
-      shouldSucceed: false
+      cwd: tmpDir,
+      wingFile: relativeWingFile,
+      args,
+      shouldSucceed: false,
     });
 
     const stderr = out.stderr;
 
     const stderrSanitized = stderr
       // Remove absolute paths
-      .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
+      // Normalize paths
+      .replaceAll("\\", "/")
       // Normalize line endings
-      .replaceAll("\r\n", "\n");
+      .replaceAll("\r\n", "\n")
+      // Remove random numbers from generated test artifact folder
+      // e.g. "{...}.wsim.927822.tmp/{...}" => "{...}.wsim.[REDACTED].tmp/{...}"
+      .replaceAll(/\.wsim\.\d+\.tmp/g, ".wsim.[REDACTED].tmp");
 
     expect(stderrSanitized).toMatchSnapshot("stderr");
   });
