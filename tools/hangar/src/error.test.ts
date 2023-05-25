@@ -23,7 +23,6 @@ errorWingFiles.forEach((wingFile) => {
 
     const stderrSanitized = stderr
       // Remove absolute paths
-      .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
       // Normalize paths
       .replaceAll("\\", "/")
       // Normalize line endings
