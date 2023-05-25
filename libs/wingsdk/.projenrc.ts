@@ -195,9 +195,13 @@ keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 `;
 
-const docsPath = "../../docs/04-reference/wingsdk-api.md";
+const docsPath = "../../docs/05-reference/wingsdk-api.md";
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
+
+// copy resource docs from src/cloud to docs
+docgen.exec(`cp -r src/cloud/*.md ../../docs/04-resources/`);
+
 docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);

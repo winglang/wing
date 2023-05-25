@@ -1,7 +1,7 @@
 import * as vm from "vm";
 
 import { rmSync, mkdirSync, promises as fsPromise } from "fs";
-import { basename, dirname, join, resolve } from "path";
+import { basename, dirname, join, resolve, relative } from "path";
 import * as os from "os";
 
 import chalk from "chalk";
@@ -223,40 +223,43 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   try {
     vm.runInContext(artifact, context);
   } catch (e: any) {
-    console.error(e.message);
+    const output = new Array<string>();
 
-    if (process.env.DEBUG) {
-      if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
-        console.log();
-        console.log(
-          "  " +
-            chalk.bold.white("note:") +
-            " " +
-            chalk.white(`intermediate javascript code (${artifactPath}):`)
-        );
-        const lineNumber =
-          Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
-        const lines = artifact.split("\n");
-        let startLine = Math.max(lineNumber - 2, 0);
-        let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+    output.push(chalk.red(`ERROR: ${e.message}`));
 
-        // print line and its surrounding lines
-        for (let i = startLine; i <= finishLine; i++) {
-          if (i === lineNumber) {
-            console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
-          } else {
-            console.log("   " + chalk.dim(lines[i]));
-          }
+    if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
+      const lineNumber =
+        Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
+      const relativeArtifactPath = relative(process.cwd(), artifactPath);
+      log("relative artifact path: %s", relativeArtifactPath);
+
+      output.push("");
+      output.push(chalk.underline(chalk.dim(`${relativeArtifactPath}:${lineNumber}`)));
+
+      const lines = artifact.split("\n");
+      let startLine = Math.max(lineNumber - 2, 0);
+      let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+
+      // print line and its surrounding lines
+      for (let i = startLine; i <= finishLine; i++) {
+        if (i === lineNumber) {
+          output.push(chalk.bold.red(">> ") + chalk.red(lines[i]));
+        } else {
+          output.push("   " + chalk.dim(lines[i]));
         }
       }
 
-      console.error(
-        "--------------------------------- STACK TRACE ---------------------------------"
-      );
-      console.error((e as any).stack);
+      output.push("");
     }
 
-    return process.exit(1);
+    if (process.env.DEBUG) {
+      output.push(
+        "--------------------------------- STACK TRACE ---------------------------------"
+      );
+      output.push((e as any).stack);
+    }
+
+    throw new Error(output.join("\n"));
   }
 
   if (os.platform() === "win32") {
