@@ -4,11 +4,16 @@
   "implicitDependencies": ["sdk", "wingii", "tree-sitter-wing"],
   "targets": {
     "test": {
-      "dependsOn": ["lint"],
+      "dependsOn": ["^build", "lint"],
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo test",
         "cwd": "libs/wingc"
+      },
+      "configurations": {
+        "release": {
+          "command": "INSTA_UPDATE=\"no\" cargo test"
+        }
       }
     },
     "lint": {

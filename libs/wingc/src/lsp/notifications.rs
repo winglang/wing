@@ -34,10 +34,7 @@ pub unsafe fn send_notification(
 	))
 	.unwrap();
 	let data = std::str::from_utf8(std::slice::from_raw_parts(data, data_length as usize)).unwrap();
-	panic!(
-		"send_notification called on non-wasm32 target: {} {}",
-		notification_type, data
-	);
+	dbg!(format!("send_notification: {} {}", notification_type, data));
 }
 
 pub fn send_diagnostics(uri: &Url, diagnostics: &Diagnostics) {
