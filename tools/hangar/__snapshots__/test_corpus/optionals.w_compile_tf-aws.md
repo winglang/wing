@@ -1,5 +1,20 @@
 # [optionals.w](../../../../examples/tests/valid/optionals.w) | compile | tf-aws
 
+## clients/Node.inflight.js
+```js
+module.exports = function({  }) {
+  class  Node {
+    constructor({ left, right, value }) {
+      this.left = left;
+      this.right = right;
+      this.value = value;
+    }
+  }
+  return Node;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -58,6 +73,47 @@ class $Root extends $stdlib.std.Resource {
       constructor()  {
         const __parent_this = this;
         this.name = "Sub";
+      }
+    }
+    class Node extends $stdlib.std.Resource {
+      constructor(scope, id, value, left, right) {
+        super(scope, id);
+        const __parent_this = this;
+        this.value = value;
+        this.left = left;
+        this.right = right;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Node.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const left_client = this._lift(this.left);
+        const right_client = this._lift(this.right);
+        const value_client = this._lift(this.value);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const NodeClient = ${Node._toInflightType(this).text};
+            const client = new NodeClient({
+              left: ${left_client},
+              right: ${right_client},
+              value: ${value_client},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Node._registerBindObject(this.left, host, []);
+          Node._registerBindObject(this.right, host, []);
+          Node._registerBindObject(this.value, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     const x = 4;
@@ -182,6 +238,11 @@ class $Root extends $stdlib.std.Resource {
     ;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((fun("hello")) === "hello")'`)})(((fun("hello")) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((fun(undefined)) === "default")'`)})(((fun(undefined)) === "default"))};
+    const tree = new Node(this,"eight",8,new Node(this,"three",3,new Node(this,"one",1,undefined,undefined),new Node(this,"six",6,undefined,undefined)),new Node(this,"ten",10,undefined,new Node(this,"fourteen",14,new Node(this,"thirteen",13,undefined,undefined),undefined)));
+    const thirteen = tree.right.right.left.value;
+    const notThere = tree.right.right.right;
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(thirteen === 13)'`)})((thirteen === 13))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(notThere === undefined)'`)})((notThere === undefined))};
   }
 }
 class $App extends $AppBase {

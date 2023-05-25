@@ -3242,6 +3242,7 @@ impl<'a> TypeChecker<'a> {
 
 				let instance_type = self.type_check_exp(object, env);
 				let res = match *instance_type {
+					Type::Optional(t) => self.get_property_from_class_like(t.as_class_or_resource().unwrap(), property),
 					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class_like(class, property),
 					Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
 					Type::Anything => VariableInfo {
@@ -3321,7 +3322,6 @@ impl<'a> TypeChecker<'a> {
 						property,
 					),
 					Type::Struct(ref s) => self.get_property_from_class_like(s, property),
-
 					_ => {
 						self.spanned_error(
 							object,
