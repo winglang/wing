@@ -181,40 +181,8 @@ static bool scan_automatic_block(TSLexer *lexer)
   if (!scan_whitespace_and_comments(lexer))
     return false;
 
-  switch (lexer->lookahead)
-  {
-  case ',':
-  case '.':
-  case ':':
-  case ';':
-  case '{':
-  case '*':
-  case '%':
-  case '>':
-  case '<':
-  case '=':
-  case '[':
-  case '(':
-  case '?':
-  case '^':
-  case '|':
-  case '&':
-  case '/':
+  if (lexer->lookahead != '{')
     return false;
-
-  // Insert a block before `--` and `++`, but not before binary `+` or `-`.
-  case '+':
-    skip(lexer);
-    return lexer->lookahead == '+';
-  case '-':
-    skip(lexer);
-    return lexer->lookahead == '-';
-
-  // Don't insert a block before `!=`, but do insert one before a unary `!`.
-  case '!':
-    skip(lexer);
-    return lexer->lookahead != '=';
-  }
 
   return true;
 }
