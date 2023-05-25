@@ -145,3 +145,9 @@ let notThere = tree.right?.right?.right;
 
 assert(thirteen == 13);
 assert(notThere == nil);
+
+let one = tree.left?.left;
+
+if let o = one {
+  assert(o.value == 1);
+}
