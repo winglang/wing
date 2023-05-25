@@ -162,6 +162,8 @@ pub mod test_utils {
 		let mut char_pos = 0_i32;
 		let mut line_pos = 0_i32;
 		// Note: `.chars()` may not 1-to-1 map with characters as expected if using things like emojis
+		// This generally acceptable for testing, but should not be assumed to be the case in the real language server
+		// TODO: Add support for grapheme clusters
 		for char in content.chars() {
 			if char == '^' {
 				break;

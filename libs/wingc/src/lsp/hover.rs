@@ -321,6 +321,8 @@ mod tests {
 	/// First parameter will be the name of the tests, as well as the identifier to use for the list of completion in the asserts (see last parameter)
 	/// Second parameter is the wing code block as a string literal
 	/// After the first two parameters, any additional are optional statements that should be used for asserting on the given hover data.
+	///
+	/// Result is a [Hover] object
 	macro_rules! test_hover_list {
 		($name:ident, $code:literal, $($assertion:stmt)*) => {
 			#[test]

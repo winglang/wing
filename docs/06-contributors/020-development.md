@@ -191,8 +191,11 @@ To check that your code passes all the lints, run:
 npx nx lint wingc
 ```
 
-If you are using VS Code, you can show clippy errors in your IDE by installing the rust-analyzer extension and setting the option "Rust-analyzer › Check: Command" to "clippy" instead of "check".
+### Optional VSCode extensions for working on the compiler
 
+You can show clippy errors in your IDE by installing the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension and setting the option "Rust-analyzer › Check: Command" to "clippy" instead of "check".
+
+The [insta](https://marketplace.visualstudio.com/items?itemName=mitsuhiko.insta) extension allows you to view snapshots in the tests files.
 
 ## How do I make changes to the Wing grammar?
 
