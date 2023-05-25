@@ -42,8 +42,15 @@ test("unsupported resource in target", async ({ expect }) => {
   `);
 });
 
-// Remove random numbers from generated test artifact folder
-// e.g. "{...}.tfgcp.927822.tmp/{...}" => "{...}.tfgcp.[REDACTED].tmp/{...}"
 function sanitizeErrorMessage(inputString: string): string {
-  return inputString.replaceAll(/\.tfgcp\.\d+\.tmp/g, ".tfgcp.[REDACTED].tmp");
+  let sanitizedString = inputString
+    // Normalize paths
+    .replaceAll("\\", "/")
+    // Normalize line endings
+    .replaceAll("\r\n", "\n")
+    // Remove random numbers from generated test artifact folder
+    // e.g. "{...}.tfgcp.927822.tmp/{...}" => "{...}.tfgcp.[REDACTED].tmp/{...}"
+    .replaceAll(/\.tfgcp\.\d+\.tmp/g, ".tfgcp.[REDACTED].tmp");
+
+  return sanitizedString;
 }
