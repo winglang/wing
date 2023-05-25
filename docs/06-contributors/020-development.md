@@ -169,8 +169,9 @@ Note: In CI, tests likely run much slower than on your local machine, so you may
 
 ## How do I work only on the compiler?
 
-The following command runs the cargo tests, currently just ensures the valid examples compile and the
-invalid ones do not.
+The following command runs the rust tests in wingc, including verification that valid tests compile, invalid tests do not compile, and none of them panic.
+
+It will also make sure to update any snapshots.
 
 ```sh
 npx nx test wingc
@@ -190,8 +191,11 @@ To check that your code passes all the lints, run:
 npx nx lint wingc
 ```
 
-If you are using VS Code, you can show clippy errors in your IDE by installing the rust-analyzer extension and setting the option "Rust-analyzer › Check: Command" to "clippy" instead of "check".
+### Optional VSCode extensions for working on the compiler
 
+You can show clippy errors in your IDE by installing the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension and setting the option "Rust-analyzer › Check: Command" to "clippy" instead of "check".
+
+The [insta](https://marketplace.visualstudio.com/items?itemName=mitsuhiko.insta) extension allows you to view snapshots in the tests files.
 
 ## How do I make changes to the Wing grammar?
 

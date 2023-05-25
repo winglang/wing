@@ -2838,10 +2838,11 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
-			// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
-			// because they aren't typically resolved through the same process as other types
-			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
-				importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+			// if we're importing from the the wing sdk, eagerly import all the types within it
+			// because they're critical to a typical dx when using wing
+			// TODO: Improve lazy loading for types in the LSP https://github.com/winglang/wing/issues/2639
+			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
+				importer.deep_import_submodule_to_env(&jsii.alias.name);
 			}
 
 			importer.import_submodules_to_env(env);

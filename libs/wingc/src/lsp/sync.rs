@@ -117,3 +117,72 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 		types,
 	};
 }
+
+#[cfg(test)]
+pub mod test_utils {
+	use std::str::FromStr;
+	use uuid::Uuid;
+
+	use lsp_types::*;
+
+	use super::on_document_did_open;
+
+	static LANGUAGE_ID: &str = "wing";
+
+	/// Loads a file into the language server
+	///
+	/// Returns a `TextDocumentPositionParams` with the generated URI and a cursor position of an indicated position in the file (using `//^`)
+	///
+	/// Example that gives you the position of the "o" in "Resource.":
+	/// ```
+	/// load_file_with_contents(
+	/// r#"
+	/// class Resource {
+	/// 	static hello() {}
+	/// }
+	///
+	/// Resource.
+	///  //^"#
+	/// )
+	/// ```
+	///
+	pub fn load_file_with_contents(content: &str) -> TextDocumentPositionParams {
+		let filename = format!("file:///{}.w", Uuid::new_v4());
+		let uri = Url::from_str(&filename).unwrap();
+		on_document_did_open(DidOpenTextDocumentParams {
+			text_document: lsp_types::TextDocumentItem {
+				uri: uri.clone(),
+				language_id: LANGUAGE_ID.to_string(),
+				version: 0,
+				text: content.to_string(),
+			},
+		});
+
+		// find the character cursor position by looking for the character above the ^
+		let mut char_pos = 0_i32;
+		let mut line_pos = 0_i32;
+		// Note: `.chars()` may not 1-to-1 map with characters as expected if using things like emojis
+		// This generally acceptable for testing, but should not be assumed to be the case in the real language server
+		// TODO: Add support for grapheme clusters
+		for char in content.chars() {
+			if char == '^' {
+				break;
+			} else if char == '\n' {
+				char_pos = 0;
+				line_pos += 1;
+			} else {
+				char_pos += 1;
+			}
+		}
+
+		let cursor_position = Position {
+			line: (line_pos - 1).max(0) as u32,
+			character: char_pos as u32,
+		};
+
+		return TextDocumentPositionParams {
+			text_document: TextDocumentIdentifier { uri },
+			position: cursor_position,
+		};
+	}
+}
