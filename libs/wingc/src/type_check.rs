@@ -1168,18 +1168,18 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn expr_error(&self, expr: &Expr, message: String) -> TypeRef {
+	fn expr_error<S: Into<String>>(&self, expr: &Expr, message: S) -> TypeRef {
 		self.diagnostics.borrow_mut().push(Diagnostic {
-			message,
+			message: message.into(),
 			span: Some(expr.span.clone()),
 		});
 
 		self.types.anything()
 	}
 
-	fn stmt_error(&self, stmt: &Stmt, message: String) {
+	fn stmt_error<S: Into<String>>(&self, stmt: &Stmt, message: S) {
 		self.diagnostics.borrow_mut().push(Diagnostic {
-			message,
+			message: message.into(),
 			span: Some(stmt.span.clone()),
 		});
 	}
@@ -1479,15 +1479,15 @@ impl<'a> TypeChecker<'a> {
 					let handle_type = if let Some(method) = lookup_res {
 						method.type_
 					} else {
-						return self.expr_error(callee, "should be a function or method".to_string());
+						return self.expr_error(callee, "Expected a function or method");
 					};
 					if let Some(sig_type) = handle_type.as_function_sig() {
 						sig_type.clone()
 					} else {
-						return self.expr_error(callee, "should be a function or method".to_string());
+						return self.expr_error(callee, "Expected a function or method");
 					}
 				} else {
-					return self.expr_error(callee, "should be a function or method".to_string());
+					return self.expr_error(callee, "Expected be a function or method");
 				};
 
 				if !env.phase.can_call_to(&func_sig.phase) {
@@ -1551,7 +1551,7 @@ impl<'a> TypeChecker<'a> {
 					if self.in_json > 0 {
 						self.types.add_type(Type::Array(self.types.json()))
 					} else {
-						self.expr_error(exp, "Cannot infer type of empty array".to_owned());
+						self.expr_error(exp, "Cannot infer type of empty array");
 						self.types.add_type(Type::Array(self.types.anything()))
 					}
 				};
@@ -1642,7 +1642,7 @@ impl<'a> TypeChecker<'a> {
 					if self.in_json > 0 {
 						self.types.add_type(Type::Map(self.types.json()))
 					} else {
-						self.expr_error(exp, "Cannot infer type of empty map".to_owned());
+						self.expr_error(exp, "Cannot infer type of empty map");
 						self.types.add_type(Type::Map(self.types.anything()))
 					}
 				};
@@ -1669,7 +1669,7 @@ impl<'a> TypeChecker<'a> {
 					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env);
 					self.types.add_type(Type::Set(some_val_type))
 				} else {
-					self.expr_error(exp, "Cannot infer type of empty set".to_owned());
+					self.expr_error(exp, "Cannot infer type of empty set");
 					self.types.add_type(Type::Set(self.types.anything()))
 				};
 
@@ -1731,7 +1731,7 @@ impl<'a> TypeChecker<'a> {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
 			expected_struct
 		} else {
-			self.expr_error(value, "Named arguments provided for non-struct argument".to_string());
+			self.expr_error(value, "Named arguments provided for non-struct argument");
 			return;
 		};
 
@@ -1791,7 +1791,7 @@ impl<'a> TypeChecker<'a> {
 			return self.expr_error(
 				exp,
 				format!(
-					"Expected \"Json\" elements to be Json Value (https://www.json.org/json-en.html), but got \"{}\" which is not Json Value",
+					"Expected \"Json\" elements to be Json values (https://www.json.org/json-en.html), but got \"{}\" which is not a Json value",
 					actual_type
 				),
 			);
@@ -2233,10 +2233,7 @@ impl<'a> TypeChecker<'a> {
 					if !env.return_type.is_void() {
 						self.validate_type(return_type, env.return_type, return_expression);
 					} else {
-						self.stmt_error(
-							stmt,
-							"Return statement outside of function cannot return a value".to_string(),
-						);
+						self.stmt_error(stmt, "Return statement outside of function cannot return a value");
 					}
 				} else {
 					if !env.return_type.is_void() {
@@ -2259,7 +2256,7 @@ impl<'a> TypeChecker<'a> {
 			}) => {
 				// Resources cannot be defined inflight
 				if *is_resource && env.phase == Phase::Inflight {
-					self.stmt_error(stmt, "Cannot define a preflight class in inflight scope".to_string());
+					self.stmt_error(stmt, "Cannot define a preflight class in inflight scope");
 				}
 
 				// Verify parent is actually a known Class/Resource and get their env
@@ -2271,7 +2268,8 @@ impl<'a> TypeChecker<'a> {
 						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
 						} else {
-							panic!("Preflight class {}'s parent {} is not a preflight class", name, t);
+							self.general_type_error(format!("Preflight class {}'s parent \"{}\" is not a class", name, t));
+							(None, None)
 						}
 					} else {
 						if let Type::Class(ref class) = *t {

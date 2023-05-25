@@ -7,42 +7,48 @@ class C1 {
 
 class C2 {}
 new C2(1);
-// ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating "C2"
+//^^^^^^^ Expected 0 arguments but got 1 when instantiating "C2"
 
 class C3 {
   x: num;
   init() {
     this.x = "Hi";
-  //         ^^^^ Expected type to be "num", but got "str" instead
+           //^^^^ Expected type to be "num", but got "str" instead
   }
 }
 
 class C4 {
   inflight var x: num;
-//             ^ Inflight field "x" is not initialized
+             //^ Inflight field "x" is not initialized
   inflight y: str;
-//         ^ Inflight field "y" is not initialized
+         //^ Inflight field "y" is not initialized
 }
 
 class C5 {
   inflight x: num;
-//         ^ Inflight field "x" is not initialized
+         //^ Inflight field "x" is not initialized
   inflight init() {}
 }
 
 class C6 {
   inflight x: num;
-//         ^ Inflight field "x" is not initialized
+         //^ Inflight field "x" is not initialized
   y: num;
-//    ^ Preflight field "y" is not initialized  
+//^ Preflight field "y" is not initialized  
   
   init() {
     this.x = 1;
-//       ^ "x" cannot be initialized in the Preflight initializer
+       //^ "x" cannot be initialized in the Preflight initializer
   }
 
   inflight init() {
     this.y = 1;
-//       ^ "y" cannot be initialized in the Inflight initializer
+       //^ "y" cannot be initialized in the Inflight initializer
   }
+}
+
+let x = 5;
+
+class C7 extends x {
+               //^ Preflight class C7's parent "x" is not a class
 }
