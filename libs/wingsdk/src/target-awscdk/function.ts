@@ -10,8 +10,8 @@ import {
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { createBundle } from "../shared/bundling";
 import { PolicyStatement } from "../shared-aws";
-import { createBundle } from "../utils/bundling";
 
 /**
  * AWS implementation of `cloud.Function`.

@@ -3,8 +3,8 @@ import { Function } from "./function";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IInflightHost } from "../std";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * Table names must be between 3 and 255 characters.

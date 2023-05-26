@@ -11,9 +11,9 @@ import {
 } from "./util";
 import * as cloud from "../cloud";
 import { Code } from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
 import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing";
-import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * Simulator implementation of `cloud.Schedule`.
