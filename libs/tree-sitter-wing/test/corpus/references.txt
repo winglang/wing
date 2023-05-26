@@ -14,7 +14,9 @@ test1.test2.test3;
           (nested_identifier
             object: (reference
               (reference_identifier))
+            accessor_type: (accessor)
             property: (member_identifier)))
+        accessor_type: (accessor)
         property: (member_identifier)))))
 
 ================================================================================
@@ -34,6 +36,8 @@ test1.test2.test3();
             (nested_identifier
               object: (reference
                 (reference_identifier))
+              accessor_type: (accessor)
               property: (member_identifier)))
+          accessor_type: (accessor)
           property: (member_identifier)))
       args: (argument_list))))

@@ -652,7 +652,11 @@ pub enum Reference {
 	/// A simple identifier: `x`
 	Identifier(Symbol),
 	/// A reference to a member nested inside some object `expression.x`
-	InstanceMember { object: Box<Expr>, property: Symbol, optional_accessor: bool},
+	InstanceMember {
+		object: Box<Expr>,
+		property: Symbol,
+		optional_accessor: bool,
+	},
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember { type_: UserDefinedType, property: Symbol },
 }
@@ -661,7 +665,11 @@ impl Display for Reference {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self {
 			Reference::Identifier(symb) => write!(f, "{}", symb.name),
-			Reference::InstanceMember { object, property, optional_accessor: _ } => {
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _,
+			} => {
 				let obj_str = match &object.kind {
 					ExprKind::Reference(r) => format!("{}", r),
 					_ => "object".to_string(), // TODO!

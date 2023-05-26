@@ -186,9 +186,11 @@ impl<'a> JSifier<'a> {
 	fn jsify_reference(&mut self, reference: &Reference, ctx: &JSifyContext) -> String {
 		match reference {
 			Reference::Identifier(identifier) => identifier.to_string(),
-			Reference::InstanceMember { object, property, optional_accessor: _} => {
-				self.jsify_expression(object, ctx) + "." + &property.to_string()
-			}
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _,
+			} => self.jsify_expression(object, ctx) + "." + &property.to_string(),
 			Reference::TypeMember { type_, property } => {
 				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &property.to_string()
 			}
@@ -1679,7 +1681,11 @@ impl<'a> FieldReferenceVisitor<'a> {
 					kind: ComponentKind::Member(var),
 				}];
 			}
-			Reference::InstanceMember { object, property, optional_accessor: optional_chain } => {
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _optional_chain,
+			} => {
 				let obj_type = object.evaluated_type.borrow().unwrap();
 				let component_kind = match &*obj_type {
 					Type::Void => unreachable!("cannot reference a member of void"),
