@@ -159,12 +159,6 @@ pub struct UserDefinedType {
 	pub span: WingSpan,
 }
 
-impl Spanned for UserDefinedType {
-	fn span(&self) -> WingSpan {
-		self.span.clone()
-	}
-}
-
 impl Display for UserDefinedType {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut name = self.root.name.clone();
@@ -691,6 +685,12 @@ pub trait Spanned {
 	fn span(&self) -> WingSpan;
 }
 
+impl Spanned for WingSpan {
+	fn span(&self) -> WingSpan {
+		self.clone()
+	}
+}
+
 impl Spanned for Stmt {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
@@ -704,6 +704,18 @@ impl Spanned for Expr {
 }
 
 impl Spanned for Symbol {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl Spanned for TypeAnnotation {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl Spanned for UserDefinedType {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}
