@@ -7,9 +7,9 @@ import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
 import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
-import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * Simulator implementation of `cloud.Topic`
