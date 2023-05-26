@@ -1,6 +1,6 @@
 import { TableAttributes, TableSchema } from "./schema-resources";
 import { ColumnType, ITableClient } from "../cloud";
-import { validateRow } from "../shared-targets/table";
+import { validateRow } from "../shared/table-utils";
 import { Json } from "../std";
 import {
   ISimulatorContext,

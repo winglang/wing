@@ -6,9 +6,9 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { IInflightHost, Resource } from "../std";
-import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * AWS implementation of `cloud.Queue`.
