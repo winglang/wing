@@ -59,12 +59,12 @@ let consumerHandler = inflight(message: str) => {
   log("Doing some work with message: ${message}");
 };
 
-// Now we can use the preflight api of topic to register the consumer handler
+// Now we can use a preflight method of topic to register the consumer handler
 // to be invoked when a message is published to the topic.
 topic.onMessage(consumerHandler);
 
 // Then we define the producer inflight handler
-let publisherHandler = inflight() => {
+let publisherHandler = inflight () => {
   // Here we use the inflight api to publish a message to the topic.
   topic.publish("Here are those launch codes you asked for.");
 };
