@@ -1,3 +1,5 @@
+bring cloud;
+
 struct A {
   x: str;
 }
@@ -41,3 +43,6 @@ struct Dazzle {
 
 struct Showtime extends Razzle, Dazzle {}
 //     ^^^^^^^^ struct "Showtime" extends "Dazzle" which introduces a conflicting member "a"
+
+let x = new cloud.BucketProps(1);
+          //^ Cannot instantiate type "BucketProps" because it is not a class

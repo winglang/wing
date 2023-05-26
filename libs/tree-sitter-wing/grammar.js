@@ -104,6 +104,7 @@ module.exports = grammar({
         $.break_statement,
         $.continue_statement,
         $.if_statement,
+        $.if_let_statement,
         $.struct_definition,
         $.enum_definition,
         $.try_catch_statement,
@@ -266,6 +267,16 @@ module.exports = grammar({
     break_statement: ($) => seq("break", $._semicolon),
 
     continue_statement: ($) => seq("continue", $._semicolon),
+    
+    if_let_statement: ($) => seq(
+      // TODO: support "if let var"
+      "if let",
+      field("name", $.identifier),
+      "=",
+      field("value", $.expression),
+      field("block", $.block),
+      optional(seq("else", field("else_block", $.block)))
+    ),
 
     if_statement: ($) =>
       seq(
@@ -313,7 +324,7 @@ module.exports = grammar({
       ),
 
     // Primitives
-    _literal: ($) => choice($.string, $.number, $.bool, $.duration),
+    _literal: ($) => choice($.string, $.number, $.bool, $.duration, $.nil_value),
 
     number: ($) => choice($._integer, $._decimal),
     _integer: ($) => choice("0", /[1-9]\d*/),
@@ -325,7 +336,7 @@ module.exports = grammar({
     seconds: ($) => seq(field("value", $.number), "s"),
     minutes: ($) => seq(field("value", $.number), "m"),
     hours: ($) => seq(field("value", $.number), "h"),
-
+    nil_value: ($) => "nil",
     string: ($) =>
       seq(
         '"',

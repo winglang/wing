@@ -303,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(strToStr, host, ["invoke"]);
+          $Inflight2._registerBindObject(strToStr, host, ["invoke"]);
         }
         super._registerBind(host, ops);
       }

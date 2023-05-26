@@ -89,10 +89,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.data, host, []);
+          Foo._registerBindObject(this.data, host, []);
         }
         if (ops.includes("getStuff")) {
-          this._registerBindObject(this.data.field0, host, []);
+          Foo._registerBindObject(this.data.field0, host, []);
         }
         super._registerBind(host, ops);
       }
