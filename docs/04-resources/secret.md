@@ -12,7 +12,7 @@ Storing a secret allows you to use the value in different compute tasks while on
 
 ## Usage
 
-### Creating a secret
+### Defining a secret
 
 ```js
 bring cloud;
@@ -24,7 +24,7 @@ let secret = new cloud.Secret(
 
 Before deploying your application, you will be expected to store the secret value in a secure place according to the target-specific instructions below.
 
-### Using a secret
+### Retrieving secret values
 
 ```js
 bring cloud;
