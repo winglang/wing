@@ -2,7 +2,7 @@
 title: cloud.Bucket 
 id: bucket
 description: A built-in resource for handling object storage in the cloud.
-keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, secrets]
+keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, Object storage, Buckets]
 ---
 
 The `cloud.Bucket` resource represents a container for storing data in the cloud.
@@ -10,11 +10,11 @@ The `cloud.Bucket` resource represents a container for storing data in the cloud
 Buckets are a common way to store arbitrary files (images, videos, etc.), but can also be used to store structured data like JSON or CSV files.
 
 Buckets in the cloud use object storage, which is optimized for storing large amounts of data with high availability.
-Unlike other kinds of storage like file storage, data is not stored in a hierarchical structure, but rather as a flat list of objects.
+Unlike other kinds of storage like file storage, data is not stored in a hierarchical structure, but rather as a flat list of objects, each associated with a key.
 
 ## Usage
 
-### Creating a bucket
+### Defining a bucket
 
 ```js
 bring cloud;
@@ -23,6 +23,8 @@ let bucket = new cloud.Bucket(
   public: true, // optional, defaults to `false`
 );
 ```
+
+### Populating objects during deployment
 
 If you have static data that you want to upload to the bucket each time your app is deployed, you can call the preflight method `addObject`:
 
@@ -36,11 +38,50 @@ bucket.addObject("my-file.txt", "Hello, world!");
 
 ### Using a bucket inflight
 
-TODO
+```js
+bring cloud;
+
+let bucket = new cloud.Bucket();
+
+inflight () => {
+  bucket.put("file.txt", "Hello, world!");
+  bucket.putJson("person.json", Json { name: "Alice" });
+
+  let fileData = bucket.get("file.txt");
+  assert(fileData == "Hello, world!");
+
+  let jsonData = bucket.getJson("person.json");
+  assert(jsonData.get("name") == "Alice");
+
+  let keys = bucket.list();
+  assert(keys.at(0) == "file.txt");
+  assert(keys.at(1) == "person.json");
+
+  bucket.delete("file.txt");
+};
+```
 
 ### Run code on bucket events
 
-TODO
+You can use the preflight methods `onCreate`, `onUpdate`, and `onDelete` to define code that should run when an object is uploaded, updated, or removed from the bucket.
+
+Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
+
+```js
+let store = new cloud.Bucket();
+let copies = new cloud.Bucket() as "Backup";
+
+store.onCreate(inflight (key: str) => {
+  let data = store.get(key);
+  if !key.endsWith(".log") {
+    copies.put(key, data);
+  }
+});
+
+store.onDelete(inflight (key: str) => {
+  log("Deleted " + key);
+});
+```
 
 ## Target-specific details
 

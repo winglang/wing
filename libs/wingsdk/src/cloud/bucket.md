@@ -38,11 +38,50 @@ bucket.addObject("my-file.txt", "Hello, world!");
 
 ### Using a bucket inflight
 
-TODO
+```js
+bring cloud;
+
+let bucket = new cloud.Bucket();
+
+inflight () => {
+  bucket.put("file.txt", "Hello, world!");
+  bucket.putJson("person.json", Json { name: "Alice" });
+
+  let fileData = bucket.get("file.txt");
+  assert(fileData == "Hello, world!");
+
+  let jsonData = bucket.getJson("person.json");
+  assert(jsonData.get("name") == "Alice");
+
+  let keys = bucket.list();
+  assert(keys.at(0) == "file.txt");
+  assert(keys.at(1) == "person.json");
+
+  bucket.delete("file.txt");
+};
+```
 
 ### Run code on bucket events
 
-TODO
+You can use the preflight methods `onCreate`, `onUpdate`, and `onDelete` to define code that should run when an object is uploaded, updated, or removed from the bucket.
+
+Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
+
+```js
+let store = new cloud.Bucket();
+let copies = new cloud.Bucket() as "Backup";
+
+store.onCreate(inflight (key: str) => {
+  let data = store.get(key);
+  if !key.endsWith(".log") {
+    copies.put(key, data);
+  }
+});
+
+store.onDelete(inflight (key: str) => {
+  log("Deleted " + key);
+});
+```
 
 ## Target-specific details
 
