@@ -19,7 +19,7 @@ bring cloud;
 let topic = new cloud.Topic();
 ```
 
-### Using a topic
+### Subscribing to a topic
 
 ```js
 bring cloud;
