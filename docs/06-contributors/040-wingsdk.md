@@ -27,6 +27,9 @@ These files are not checked in because they are quite large.
 [JSII]: https://github.com/aws/jsii
 [Projen]: https://github.com/projen/projen
 
+## 🗺️ How is the SDK organized?
+
+Check out [this document](https://github.com/winglang/wing/blob/main/libs/wingsdk/src/README.md) for a summary of what's contained in each module of the SDK's source code.
 
 ## 🧱 How do I add a dependency to the SDK?
 
