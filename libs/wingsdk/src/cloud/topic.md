@@ -39,7 +39,7 @@ bring cloud;
 
 let topic = new cloud.Topic();
 
-inflight() => {
+inflight () => {
   topic.publish("Hello World!");
 };
 ```
