@@ -64,7 +64,7 @@ let consumerHandler = inflight(message: str) => {
 topic.onMessage(consumerHandler);
 
 // Then we define the producer inflight handler
-let publisherHandler = inflight() => {
+let publisherHandler = inflight () => {
   // Here we use the inflight api to publish a message to the topic.
   topic.publish("Here are those launch codes you asked for.");
 };
