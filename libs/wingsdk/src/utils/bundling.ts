@@ -10,8 +10,14 @@ export interface Bundle {
   hash: string;
 }
 
-export function createBundle(entrypoint: string): Bundle {
-  const outdir = entrypoint + ".bundle";
+/**
+ * Bundles a javascript entrypoint into a single file.
+ * @param entrypoint The javascript entrypoint
+ * @param outputDir Defaults to `${entrypoint}.bundle`
+ * @returns Bundle information
+ */
+export function createBundle(entrypoint: string, outputDir?: string): Bundle {
+  const outdir = outputDir ?? entrypoint + ".bundle";
   mkdirSync(outdir, { recursive: true });
   const outfile = join(outdir, "index.js");
 

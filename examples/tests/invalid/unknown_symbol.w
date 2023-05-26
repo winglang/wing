@@ -24,3 +24,7 @@ class SomeResource {
                       //^ Unknown symbol
   }
 }
+
+class A extends B {
+              //^ Unknown symbol
+}

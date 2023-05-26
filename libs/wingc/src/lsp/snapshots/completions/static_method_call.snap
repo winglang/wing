@@ -1,0 +1,19 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: hello
+  kind: 2
+  detail: "preflight (): void"
+  insertText: hello($0)
+  insertTextFormat: 2
+- label: addConnection
+  kind: 2
+  detail: "preflight (AddConnectionProps): void"
+  insertText: addConnection($0)
+  insertTextFormat: 2
+- label: isConstruct
+  kind: 2
+  detail: "preflight (any): bool"
+  insertText: isConstruct($0)
+  insertTextFormat: 2
+

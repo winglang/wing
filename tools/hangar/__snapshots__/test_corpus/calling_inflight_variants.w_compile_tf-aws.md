@@ -270,12 +270,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.inflight1, host, []);
+          Foo._registerBindObject(this.inflight1, host, []);
         }
         if (ops.includes("callFn")) {
         }
         if (ops.includes("makeFn")) {
-          this._registerBindObject(this.inflight1, host, ["handle"]);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
@@ -310,7 +310,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(foo, host, ["callFn"]);
+          $Inflight2._registerBindObject(foo, host, ["callFn"]);
         }
         super._registerBind(host, ops);
       }

@@ -5,6 +5,7 @@ import { IInflightHost, IResource, Resource } from "../std";
 
 /**
  * Test utilities.
+ * TODO: move this to `test/` - it should not be under `src/`
  */
 export class Testing {
   /**
@@ -70,7 +71,7 @@ ${Object.entries(clients)
 
       public _registerBind(host: IInflightHost, ops: string[]): void {
         for (const v of Object.values(bindings)) {
-          this._registerBindObject(v.obj, host, v.ops);
+          Handler._registerBindObject(v.obj, host, v.ops);
         }
         super._registerBind(host, ops);
       }
