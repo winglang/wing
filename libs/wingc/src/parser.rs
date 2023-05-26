@@ -930,10 +930,16 @@ impl<'s> Parser<'s> {
 			} else {
 				self.build_expression(&object_expr)?
 			};
+      let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
+      let optional_accessor = match accessor_sym.name.as_str() {
+        "?." => true,
+        _ => false
+      };
 			Ok(Expr {
 				kind: ExprKind::Reference(Reference::InstanceMember {
 					object: Box::new(object_expr),
 					property: self.node_symbol(&property)?,
+          optional_accessor,
 				}),
 				span: self.node_span(&nested_node),
 				evaluated_type: RefCell::new(None),

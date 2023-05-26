@@ -378,7 +378,7 @@ where
 		Reference::Identifier(s) => {
 			v.visit_symbol(s);
 		}
-		Reference::InstanceMember { property, object } => {
+		Reference::InstanceMember { property, object, optional_accessor: _} => {
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}

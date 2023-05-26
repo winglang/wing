@@ -3056,7 +3056,7 @@ impl<'a> TypeChecker<'a> {
 						}
 						break;
 					}
-					Reference::InstanceMember { object, property } => {
+					Reference::InstanceMember { object, property, optional_accessor: _ } => {
 						path.push(property.clone());
 						curr_expr = &object;
 					}
@@ -3142,7 +3142,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 			}
-			Reference::InstanceMember { object, property } => {
+			Reference::InstanceMember { object, property, optional_accessor } => {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.
 				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and transform this
 				// reference into a type reference.
@@ -3269,6 +3269,19 @@ impl<'a> TypeChecker<'a> {
 						self.make_error_variable_info(false)
 					}
 				};
+
+        // Check if the object is an optional type. If it is ensure the use of optional chaining.
+        let ref_is_option = object.evaluated_type.borrow().unwrap().is_option();
+
+				if ref_is_option && !optional_accessor {
+					self.spanned_error(
+						object,
+						format!(
+							"Property access on optional type \"{}\" requires optional accessor: \"?.\"",
+							object.evaluated_type.borrow().unwrap()
+						),
+					);
+				}
 
 				if force_reassignable {
 					VariableInfo {
