@@ -69,6 +69,119 @@ class $Root extends $stdlib.std.Resource {
     const optionalSup = new Super();
     const s = (optionalSup ?? new Sub());
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.name === "Super")'`)})((s.name === "Super"))};
+    let name = {
+    "first": "John",
+    "last": "Doe",}
+    ;
+    {
+      const $IF_LET_VALUE = name;
+      if (name != undefined) {
+        const n = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(n.first === "John")'`)})((n.first === "John"))};
+      }
+    }
+    name = undefined;
+    {
+      const $IF_LET_VALUE = name;
+      if (name != undefined) {
+        const n = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+      }
+    }
+    const tryParseName =  (fullName) =>  {
+      {
+        const parts = (fullName.split(" "));
+        if ((parts.length < 1)) {
+          return undefined;
+        }
+        return {
+        "first": (parts.at(0)),
+        "last": (parts.at(1)),}
+        ;
+      }
+    }
+    ;
+    {
+      const $IF_LET_VALUE = (tryParseName("Good Name"));
+      if ((tryParseName("Good Name")) != undefined) {
+        const parsedName = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "Good")'`)})((parsedName.first === "Good"))};
+        {
+          const $IF_LET_VALUE = parsedName.last;
+          if (parsedName.last != undefined) {
+            const lastName = $IF_LET_VALUE;
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(lastName === "Name")'`)})((lastName === "Name"))};
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          }
+        }
+      }
+    }
+    {
+      const $IF_LET_VALUE = (tryParseName("BadName"));
+      if ((tryParseName("BadName")) != undefined) {
+        const parsedName = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "BadName")'`)})((parsedName.first === "BadName"))};
+        {
+          const $IF_LET_VALUE = parsedName.last;
+          if (parsedName.last != undefined) {
+            const lastName = $IF_LET_VALUE;
+            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          }
+        }
+      }
+    }
+    const falsy = false;
+    {
+      const $IF_LET_VALUE = falsy;
+      if (falsy != undefined) {
+        const f = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(f === false)'`)})((f === false))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+      }
+    }
+    const shadow = "root";
+    {
+      const $IF_LET_VALUE = shadow;
+      if (shadow != undefined) {
+        const shadow = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(shadow === "root")'`)})((shadow === "root"))};
+        const shadow1 = "nested";
+        {
+          const $IF_LET_VALUE = shadow1;
+          if (shadow1 != undefined) {
+            const shadow1 = $IF_LET_VALUE;
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(shadow1 === "nested")'`)})((shadow1 === "nested"))};
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          }
+        }
+      }
+    }
+    const fun =  (a) =>  {
+      {
+        {
+          const $IF_LET_VALUE = a;
+          if (a != undefined) {
+            const y = $IF_LET_VALUE;
+            return y;
+          }
+          else {
+            return "default";
+          }
+        }
+      }
+    }
+    ;
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((fun("hello")) === "hello")'`)})(((fun("hello")) === "hello"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((fun(undefined)) === "default")'`)})(((fun(undefined)) === "default"))};
   }
 }
 class $App extends $AppBase {

@@ -5,7 +5,7 @@ let x: str = nil;
 
 class Foo {
   inflight var bar: num;
-  init() {
+  inflight init() {
     this.bar = 1;
   }
 
@@ -24,3 +24,9 @@ test "nillarooni" {
 if nil? {
 // ^^^ Expected optional type, found "nil"
 }
+
+let nilWannabe = nil;
+//               ^^^ Cannot assign nil value to variables without explicit optional type
+
+let nilGaggle = [nil, nil, nil];
+//              ^^^^^^^^^^^^^^^ Cannot assign nil value to variables without explicit optional type

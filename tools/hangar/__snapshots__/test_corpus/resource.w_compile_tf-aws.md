@@ -901,17 +901,20 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.c, host, ["dec", "inc"]);
+          Foo._registerBindObject(this.c, host, ["dec", "inc"]);
         }
         if (ops.includes("fooGet")) {
-          this._registerBindObject(this.c, host, ["peek"]);
+          Foo._registerBindObject(this.c, host, ["peek"]);
         }
         if (ops.includes("fooInc")) {
-          this._registerBindObject(this.c, host, ["inc"]);
-        }
-        if (ops.includes("fooStatic")) {
+          Foo._registerBindObject(this.c, host, ["inc"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("fooStatic")) {
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -963,21 +966,27 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.b, host, []);
-          this._registerBindObject(this.e, host, []);
-          this._registerBindObject(this.foo, host, []);
-          this._registerBindObject(this.name, host, []);
-        }
-        if (ops.includes("barStatic")) {
+          Bar._registerBindObject(this.b, host, []);
+          Bar._registerBindObject(this.e, host, []);
+          Bar._registerBindObject(this.foo, host, []);
+          Bar._registerBindObject(this.name, host, []);
         }
         if (ops.includes("myMethod")) {
-          this._registerBindObject(this.b, host, ["get", "put"]);
-          this._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
+          Bar._registerBindObject(Foo, host, ["fooStatic"]);
+          Bar._registerBindObject(this.b, host, ["get", "put"]);
+          Bar._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
         }
         if (ops.includes("testTypeAccess")) {
-          this._registerBindObject(this.e, host, []);
+          Bar._registerBindObject(Bar, host, ["barStatic"]);
+          Bar._registerBindObject(Foo, host, ["fooStatic"]);
+          Bar._registerBindObject(this.e, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("barStatic")) {
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight1 extends $stdlib.std.Resource {
@@ -1012,9 +1021,9 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket, host, ["list"]);
-          this._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
-          this._registerBindObject(res.foo, host, ["inflightField"]);
+          $Inflight1._registerBindObject(bucket, host, ["list"]);
+          $Inflight1._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
+          $Inflight1._registerBindObject(res.foo, host, ["inflightField"]);
         }
         super._registerBind(host, ops);
       }
@@ -1058,7 +1067,7 @@ class $Root extends $stdlib.std.Resource {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.b, host, ["put"]);
+              $Inflight2._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
@@ -1094,7 +1103,7 @@ class $Root extends $stdlib.std.Resource {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.b, host, ["put"]);
+              $Inflight3._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
@@ -1130,7 +1139,7 @@ class $Root extends $stdlib.std.Resource {
             if (ops.includes("$inflight_init")) {
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.q, host, ["push"]);
+              $Inflight4._registerBindObject(__parent_this.q, host, ["push"]);
             }
             super._registerBind(host, ops);
           }
@@ -1165,18 +1174,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.b, host, []);
-          this._registerBindObject(this.b2, host, []);
-          this._registerBindObject(this.q, host, []);
-          this._registerBindObject(this.t, host, []);
+          BigPublisher._registerBindObject(this.b, host, []);
+          BigPublisher._registerBindObject(this.b2, host, []);
+          BigPublisher._registerBindObject(this.q, host, []);
+          BigPublisher._registerBindObject(this.t, host, []);
         }
         if (ops.includes("getObjectCount")) {
-          this._registerBindObject(this.b, host, ["list"]);
+          BigPublisher._registerBindObject(this.b, host, ["list"]);
         }
         if (ops.includes("publish")) {
-          this._registerBindObject(this.b2, host, ["put"]);
-          this._registerBindObject(this.q, host, ["push"]);
-          this._registerBindObject(this.t, host, ["publish"]);
+          BigPublisher._registerBindObject(this.b2, host, ["put"]);
+          BigPublisher._registerBindObject(this.q, host, ["push"]);
+          BigPublisher._registerBindObject(this.t, host, ["publish"]);
         }
         super._registerBind(host, ops);
       }
@@ -1211,7 +1220,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
+          $Inflight5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
         }
         super._registerBind(host, ops);
       }

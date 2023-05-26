@@ -1,12 +1,12 @@
 use crate::{
-	ast::{Reference, Stmt, StmtKind},
+	ast::{Reference, Stmt, StmtKind, Symbol},
 	visit::{self, Visit},
 };
 
 /// Determine a list of all fields that are initialized in a class constructor.
 #[derive(Default)]
 pub struct VisitClassInit {
-	pub fields: Vec<String>,
+	pub fields: Vec<Symbol>,
 }
 
 impl VisitClassInit {
@@ -20,19 +20,15 @@ impl VisitClassInit {
 impl Visit<'_> for VisitClassInit {
 	fn visit_stmt(&mut self, node: &Stmt) {
 		match &node.kind {
-			StmtKind::Assignment { variable, value: _ } => {
-				visit::visit_reference(self, variable);
-			}
+			StmtKind::Assignment { variable, value: _ } => match &variable {
+				Reference::InstanceMember { property, object: _ } => self.fields.push(Symbol {
+					name: property.name.clone(),
+					span: property.span.clone(),
+				}),
+				_ => (),
+			},
 			_ => (),
 		}
 		visit::visit_stmt(self, node);
-	}
-
-	fn visit_reference(&mut self, node: &Reference) {
-		match node {
-			Reference::InstanceMember { property, object: _ } => self.fields.push(property.name.clone()),
-			_ => (),
-		}
-		visit::visit_reference(self, node);
 	}
 }
