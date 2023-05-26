@@ -31,8 +31,9 @@ topic.onMessage(inflight (message: str) => {
 });
 ```
 
-### Using a topic inflight
-The inflight api for a topic allows for publishing messages to the topic.
+### Publishing to a topic
+
+The inflight method `publish` sends a message to all of the topic's subscribers.
 ```js
 bring cloud;
 
