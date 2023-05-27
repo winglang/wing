@@ -245,6 +245,9 @@ jobs:
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
+      
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
@@ -253,12 +256,17 @@ jobs:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.build.outputs.version }}"
 
-      - name: Check published VSCode Version
-        id: vscode-version
-        run: echo "version=$(npx -y vsce show Monada.vscode-wing --json | jq '.versions[0].version' -r)" >> $GITHUB_OUTPUT
+      - name: Check git diff of VSCode Extension
+        id: git-diff-vscode-wing
+        run: |
+          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- apps/vscode-wing; then
+            echo "::set-output name=diff::false"
+          else
+            echo "::set-output name=diff::true"
+          fi
 
       - name: Publish Extension to Visual Studio Marketplace
-        if: ${{ steps.vscode-version.outputs.version != needs.build.outputs.version }}
+        if: steps.git-diff-vscode-wing.outputs.diff == 'true'
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
