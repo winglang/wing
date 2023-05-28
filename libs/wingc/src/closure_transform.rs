@@ -4,8 +4,8 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
-		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature,
+		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType, FunctionBody,
 	},
 	fold::{self, Fold},
 	type_check::HANDLE_METHOD_NAME,
@@ -133,14 +133,6 @@ impl Fold for ClosureTransformer {
 		new_node
 	}
 
-	fn fold_initializer(&mut self, node: Initializer) -> Initializer {
-		let prev_inside_scope_with_this = self.inside_scope_with_this;
-		self.inside_scope_with_this = true;
-		let new_node = fold::fold_initializer(self, node);
-		self.inside_scope_with_this = prev_inside_scope_with_this;
-		new_node
-	}
-
 	fn fold_expr(&mut self, expr: Expr) -> Expr {
 		// Inflight closures that are themselves defined inflight do not need
 		// to be transformed, since they are not created in preflight.
@@ -239,14 +231,15 @@ impl Fold for ClosureTransformer {
 				let class_def = Stmt {
 					kind: StmtKind::Class(Class {
 						name: new_class_name.clone(),
-						is_resource: true,
-						initializer: Initializer {
+						phase: Phase::Preflight,
+						initializer: FunctionDefinition {
 							signature: FunctionSignature {
 								parameters: class_init_params,
 								return_type: Some(Box::new(class_type_annotation.clone())),
 								phase: Phase::Preflight,
 							},
-							statements: Scope::new(class_init_body, expr.span.clone()),
+							is_static: false,
+							body: FunctionBody::Statements(Scope::new(class_init_body, expr.span.clone())),
 							span: expr.span.clone(),
 						},
 						fields: class_fields,

@@ -1,5 +1,5 @@
 use crate::ast::{
-	ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
+	ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
 	Interface, InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 	TypeAnnotationKind, UserDefinedType,
 };
@@ -42,7 +42,7 @@ pub trait Visit<'ast> {
 	fn visit_interface(&mut self, node: &'ast Interface) {
 		visit_interface(self, node);
 	}
-	fn visit_constructor(&mut self, node: &'ast Initializer) {
+	fn visit_constructor(&mut self, node: &'ast FunctionDefinition) {
 		visit_constructor(self, node);
 	}
 	fn visit_expr(&mut self, node: &'ast Expr) {
@@ -260,12 +260,11 @@ where
 	}
 }
 
-pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast Initializer)
+pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast FunctionDefinition)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	v.visit_function_signature(&node.signature);
-	v.visit_scope(&node.statements);
+	v.visit_function_definition(node);
 }
 
 pub fn visit_expr<'ast, V>(v: &mut V, node: &'ast Expr)

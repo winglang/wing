@@ -1,7 +1,7 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
 use crate::ast::{
-	Class, Expr, FunctionBody, FunctionDefinition, Initializer, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+	Class, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 };
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
@@ -145,9 +145,15 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 		self.visit_symbol(&node.name);
 
-		self.visit_constructor(&node.initializer);
+		self.visit_function_definition(&node.initializer);
 
-		self.with_scope(&node.initializer.statements, |v| {
+		let scope = if let FunctionBody::Statements(statements) = &node.initializer.body {
+			statements
+		} else {
+			panic!("Initializer cannot be 'extern'");
+		};
+
+		self.with_scope(&scope, |v| {
 			for field in &node.fields {
 				v.visit_symbol(&field.name);
 				v.visit_type_annotation(&field.member_type);
@@ -160,23 +166,23 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		});
 	}
 
-	fn visit_constructor(&mut self, node: &'a Initializer) {
-		if self.is_found() {
-			return;
-		}
+	// fn visit_constructor(&mut self, node: &'a FunctionDefinition) {
+	// 	if self.is_found() {
+	// 		return;
+	// 	}
 
-		if let Some(return_type) = &node.signature.return_type {
-			self.visit_type_annotation(return_type);
-		}
+	// 	if let Some(return_type) = &node.signature.return_type {
+	// 		self.visit_type_annotation(return_type);
+	// 	}
 
-		self.with_scope(&node.statements, |v| {
-			for param in &node.signature.parameters {
-				v.visit_function_parameter(&param);
-			}
-		});
+	// 	self.with_scope(&node.statements, |v| {
+	// 		for param in &node.signature.parameters {
+	// 			v.visit_function_parameter(&param);
+	// 		}
+	// 	});
 
-		self.visit_scope(&node.statements);
-	}
+	// 	self.visit_scope(&node.statements);
+	// }
 
 	fn visit_symbol(&mut self, node: &'a Symbol) {
 		if self.is_found() || !self.should_check_span(&node.span) {

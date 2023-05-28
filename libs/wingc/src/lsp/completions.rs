@@ -222,7 +222,6 @@ fn get_completions_from_type(
 ) -> Vec<CompletionItem> {
 	match &**type_ {
 		Type::Class(c) => get_completions_from_class(c, current_phase, is_instance),
-		Type::Resource(c) => get_completions_from_class(c, current_phase, is_instance),
 		Type::Interface(i) => get_completions_from_class(i, current_phase, is_instance),
 		Type::Struct(s) => get_completions_from_class(s, current_phase, is_instance),
 		Type::Enum(enum_) => {
@@ -360,8 +359,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				| Type::MutMap(_)
 				| Type::Set(_)
 				| Type::MutSet(_)
-				| Type::Class(_)
-				| Type::Resource(_) => CompletionItemKind::CLASS,
+				| Type::Class(_) => CompletionItemKind::CLASS,
 				Type::Anything
 				| Type::Number
 				| Type::String
@@ -378,12 +376,11 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
 			detail: Some(
-				if t.as_resource().is_some() {
-					"preflight class"
+				if let Some(c) = t.as_class_any_phase() {
+					format!("{} class", c.phase).to_string()
 				} else {
-					"inflight class"
-				}
-				.to_string(),
+					String::default()
+				},
 			),
 			..Default::default()
 		},

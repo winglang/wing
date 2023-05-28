@@ -64,7 +64,7 @@ impl<'a> LookupResult<'a> {
 	pub fn unwrap(self) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
 		match self {
 			LookupResult::Found(kind, info) => (kind, info),
-			LookupResult::NotFound(_) => panic!("LookupResult::unwrap() called on LookupResult::NotFound"),
+			LookupResult::NotFound(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
 			LookupResult::DefinedLater => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
 			LookupResult::ExpectedNamespace(symbol) => panic!(
 				"LookupResult::unwrap() called on LookupResult::ExpectedNamespace({:?})",
@@ -133,6 +133,16 @@ impl SymbolEnv {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
 			});
+		}
+
+		// if this is a variable, verify that it adheres to the phase rules
+		if let SymbolKind::Variable(v) = &kind {
+			if self.phase == Phase::Inflight && v.phase == Phase::Preflight {
+				return Err(TypeError { 
+					span: symbol.span.clone(), 
+					message: format!("Unable to define the preflight member \"{}\" within an inflight scope", symbol.name),
+				});
+			}
 		}
 
 		self.symbol_map.insert(symbol.name.clone(), (pos, kind));

@@ -256,27 +256,27 @@ pub enum FunctionBody {
 	External(String),
 }
 
-impl FunctionBody {
-	pub fn as_ref(&self) -> FunctionBodyRef {
-		match self {
-			FunctionBody::Statements(statements) => FunctionBodyRef::Statements(statements),
-			FunctionBody::External(external) => FunctionBodyRef::External(external),
-		}
-	}
-}
+// impl FunctionBody {
+// 	pub fn as_ref(&self) -> FunctionBody {
+// 		match self {
+// 			FunctionBody::Statements(statements) => FunctionBodyRef::Statements(statements),
+// 			FunctionBody::External(external) => FunctionBodyRef::External(external),
+// 		}
+// 	}
+// }
 
-pub enum FunctionBodyRef<'a> {
-	Statements(&'a Scope),
-	External(&'a String),
-}
+// pub enum FunctionBodyRef<'a> {
+// 	Statements(&'a Scope),
+// 	External(&'a String),
+// }
 
-pub trait MethodLike<'a> {
-	fn body(&self) -> FunctionBodyRef;
-	fn parameters(&self) -> &Vec<FunctionParameter>;
-	fn signature(&self) -> &FunctionSignature;
-	fn is_static(&self) -> bool;
-	fn span(&self) -> WingSpan;
-}
+// pub trait MethodLike<'a> {
+// 	fn body(&self) -> FunctionBodyRef;
+// 	fn parameters(&self) -> &Vec<FunctionParameter>;
+// 	fn signature(&self) -> &FunctionSignature;
+// 	fn is_static(&self) -> bool;
+// 	fn span(&self) -> WingSpan;
+// }
 
 #[derive(Debug)]
 pub struct FunctionDefinition {
@@ -286,60 +286,59 @@ pub struct FunctionDefinition {
 	pub signature: FunctionSignature,
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
-
 	pub span: WingSpan,
 }
 
-impl MethodLike<'_> for FunctionDefinition {
-	fn body(&self) -> FunctionBodyRef {
-		self.body.as_ref()
-	}
+// impl MethodLike<'_> for FunctionDefinition {
+// 	fn body(&self) -> FunctionBodyRef {
+// 		self.body.as_ref()
+// 	}
 
-	fn parameters(&self) -> &Vec<FunctionParameter> {
-		&self.signature.parameters
-	}
+// 	fn parameters(&self) -> &Vec<FunctionParameter> {
+// 		&self.signature.parameters
+// 	}
 
-	fn signature(&self) -> &FunctionSignature {
-		&self.signature
-	}
+// 	fn signature(&self) -> &FunctionSignature {
+// 		&self.signature
+// 	}
 
-	fn is_static(&self) -> bool {
-		self.is_static
-	}
+// 	fn is_static(&self) -> bool {
+// 		self.is_static
+// 	}
 
-	fn span(&self) -> WingSpan {
-		self.span.clone()
-	}
-}
+// 	fn span(&self) -> WingSpan {
+// 		self.span.clone()
+// 	}
+// }
 
-#[derive(Debug)]
-pub struct Initializer {
-	pub signature: FunctionSignature,
-	pub statements: Scope,
-	pub span: WingSpan,
-}
+// #[derive(Debug)]
+// pub struct Initializer {
+// 	pub signature: FunctionSignature,
+// 	pub statements: Scope,
+// 	pub span: WingSpan,
+// }
 
-impl MethodLike<'_> for Initializer {
-	fn body(&self) -> FunctionBodyRef {
-		FunctionBodyRef::Statements(&self.statements)
-	}
+// impl MethodLike<'_> for Initializer {
+// 	fn body(&self) -> FunctionBodyRef {
+// 		FunctionBodyRef::Statements(&self.statements)
+// 	}
 
-	fn parameters(&self) -> &Vec<FunctionParameter> {
-		&self.signature.parameters
-	}
+// 	fn parameters(&self) -> &Vec<FunctionParameter> {
+// 		&self.signature.parameters
+// 	}
 
-	fn signature(&self) -> &FunctionSignature {
-		&self.signature
-	}
+// 	fn signature(&self) -> &FunctionSignature {
+// 		&self.signature
+// 	}
 
-	fn is_static(&self) -> bool {
-		true
-	}
+// 	fn is_static(&self) -> bool {
+// 		true
+// 	}
 
-	fn span(&self) -> WingSpan {
-		self.span.clone()
-	}
-}
+// 	fn span(&self) -> WingSpan {
+// 		self.span.clone()
+// 	}
+// }
 
 #[derive(Derivative, Debug)]
 pub struct Stmt {
@@ -390,11 +389,11 @@ pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
-	pub initializer: Initializer,
+	pub initializer: FunctionDefinition,
 	pub inflight_initializer: Option<FunctionDefinition>,
 	pub parent: Option<UserDefinedType>,
 	pub implements: Vec<UserDefinedType>,
-	pub is_resource: bool,
+	pub phase: Phase,
 }
 
 #[derive(Debug)]
