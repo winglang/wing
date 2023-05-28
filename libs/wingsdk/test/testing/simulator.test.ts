@@ -2,9 +2,9 @@ import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
 import { Bucket, ITestRunnerClient, TestResult } from "../../src/cloud";
 import { InflightBindings } from "../../src/core";
+import { Test } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-import { Test } from "../../src/std";
 
 describe("run single test", () => {
   test("test not found", async () => {

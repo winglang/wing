@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
+import { Test } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-import { Test } from "../../src/std";
 
 const INFLIGHT_CODE = `
 async handle(event) {

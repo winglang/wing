@@ -2779,7 +2779,7 @@ primary key.
 
 Properties for `Test`.
 
-This is the type users see when constructing a cloud.Test instance.
+This is the type users see when constructing a std.Test instance.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.std.TestProps.Initializer"></a>
 
@@ -5988,9 +5988,9 @@ data to be updated.
 
 - *Implemented By:* <a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a>
 
-**Inflight client:** [@winglang/sdk.cloud.ITestHandlerClient](#@winglang/sdk.cloud.ITestHandlerClient)
+**Inflight client:** [@winglang/sdk.std.ITestHandlerClient](#@winglang/sdk.std.ITestHandlerClient)
 
-Interface with an inflight "handle" method that can be used to construct a `cloud.Test`.
+Interface with an inflight "handle" method that can be used to construct a `std.Test`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
