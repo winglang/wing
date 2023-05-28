@@ -256,28 +256,6 @@ pub enum FunctionBody {
 	External(String),
 }
 
-// impl FunctionBody {
-// 	pub fn as_ref(&self) -> FunctionBody {
-// 		match self {
-// 			FunctionBody::Statements(statements) => FunctionBodyRef::Statements(statements),
-// 			FunctionBody::External(external) => FunctionBodyRef::External(external),
-// 		}
-// 	}
-// }
-
-// pub enum FunctionBodyRef<'a> {
-// 	Statements(&'a Scope),
-// 	External(&'a String),
-// }
-
-// pub trait MethodLike<'a> {
-// 	fn body(&self) -> FunctionBodyRef;
-// 	fn parameters(&self) -> &Vec<FunctionParameter>;
-// 	fn signature(&self) -> &FunctionSignature;
-// 	fn is_static(&self) -> bool;
-// 	fn span(&self) -> WingSpan;
-// }
-
 #[derive(Debug)]
 pub struct FunctionDefinition {
 	/// The function implementation.
@@ -288,57 +266,6 @@ pub struct FunctionDefinition {
 	pub is_static: bool,
 	pub span: WingSpan,
 }
-
-// impl MethodLike<'_> for FunctionDefinition {
-// 	fn body(&self) -> FunctionBodyRef {
-// 		self.body.as_ref()
-// 	}
-
-// 	fn parameters(&self) -> &Vec<FunctionParameter> {
-// 		&self.signature.parameters
-// 	}
-
-// 	fn signature(&self) -> &FunctionSignature {
-// 		&self.signature
-// 	}
-
-// 	fn is_static(&self) -> bool {
-// 		self.is_static
-// 	}
-
-// 	fn span(&self) -> WingSpan {
-// 		self.span.clone()
-// 	}
-// }
-
-// #[derive(Debug)]
-// pub struct Initializer {
-// 	pub signature: FunctionSignature,
-// 	pub statements: Scope,
-// 	pub span: WingSpan,
-// }
-
-// impl MethodLike<'_> for Initializer {
-// 	fn body(&self) -> FunctionBodyRef {
-// 		FunctionBodyRef::Statements(&self.statements)
-// 	}
-
-// 	fn parameters(&self) -> &Vec<FunctionParameter> {
-// 		&self.signature.parameters
-// 	}
-
-// 	fn signature(&self) -> &FunctionSignature {
-// 		&self.signature
-// 	}
-
-// 	fn is_static(&self) -> bool {
-// 		true
-// 	}
-
-// 	fn span(&self) -> WingSpan {
-// 		self.span.clone()
-// 	}
-// }
 
 #[derive(Derivative, Debug)]
 pub struct Stmt {

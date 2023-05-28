@@ -39,6 +39,8 @@ const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
+const INFLIGHT_CLIENTS_DIR: &str = "clients";
+
 const TARGET_CODE: &str = "const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);";
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
@@ -83,6 +85,10 @@ impl<'a> JSifier<'a> {
 			app_name: app_name.to_string(),
 			absolute_project_root,
 		}
+	}
+
+	fn js_resolve_path(path_name: &str) -> String {
+		format!("\"./{}\".replace(/\\\\/g, \"/\")", path_name)
 	}
 
 	pub fn jsify(&mut self, scope: &'a Scope) -> String {
@@ -778,7 +784,7 @@ impl<'a> JSifier<'a> {
 
 		let (name, arrow) = match name {
 			Some(name) => (name, ""),
-			None => ("", " =>"),
+			None => ("", "=> "),
 		};
 
 		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
@@ -827,14 +833,10 @@ impl<'a> JSifier<'a> {
 			modifiers.push("async")
 		}
 
-		let modifiers = if modifiers.is_empty() {
-			String::default()
-		} else {
-			modifiers.join(" ") + " "
-		};
+		let modifiers = modifiers.join(" ");
 
 		let mut code = CodeMaker::default();
-		code.open(format!("{modifiers}{name}({parameters}){arrow} {{"));
+		code.open(format!("{modifiers} {name}({parameters}) {arrow} {{"));
 		code.add_code(body);
 		code.close("}");
 
@@ -974,7 +976,6 @@ impl<'a> JSifier<'a> {
 			// Generate the the class's host binding methods
 			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Instance));
 			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Type));
-
 			code.close("}");
 		} else {
 
@@ -997,7 +998,7 @@ impl<'a> JSifier<'a> {
 
 			code.line(format!("const {class_name} = {};", require_code.to_string().trim()));
 		}
-
+		
 		code
 	}
 
@@ -1059,13 +1060,13 @@ impl<'a> JSifier<'a> {
 		free_inflight_variables: &IndexSet<String>,
 		referenced_preflight_types: &IndexMap<String, TypeRef>,
 	) -> CodeMaker {
-		let client_path = inflight_filename(class);
+		let client_path = Self::js_resolve_path(&format!("{INFLIGHT_CLIENTS_DIR}/{}", inflight_filename(class)));
 
 		let mut code = CodeMaker::default();
 
 		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
 
-		code.line(format!("const self_client_path = \"./{client_path}\";"));
+		code.line(format!("const self_client_path = {client_path};"));
 
 		// create an inflight client for each object that is captured from the environment
 		for var_name in free_inflight_variables {
@@ -1103,6 +1104,7 @@ impl<'a> JSifier<'a> {
 		code.close("})");
 
 		code.close("`);");
+
 		code.close("}");
 		code
 	}
@@ -1196,7 +1198,7 @@ impl<'a> JSifier<'a> {
 
 		let name = &class.name.name;
 		class_code.open(format!(
-			"class {name}{} {{",
+			"class  {name}{} {{",
 			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
@@ -1269,8 +1271,10 @@ impl<'a> JSifier<'a> {
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		fs::create_dir_all(&self.out_dir).expect("Creating inflight clients");
-		let relative_file_path = format!("{}/{}", self.out_dir.to_string_lossy(), inflight_filename(class));
+		let clients_dir = format!("{}/{INFLIGHT_CLIENTS_DIR}", self.out_dir.to_string_lossy());
+		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
+		let client_file_name = inflight_filename(class);
+		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
 		fs::write(&relative_file_path, code.to_string()).expect("Writing client inflight source");
 	}
 
@@ -1832,5 +1836,5 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 }
 
 fn inflight_filename(class: &AstClass) -> String {
-	format!("inflight.{}.js", class.name.name)
+	format!("{}.inflight.js", class.name.name)
 }

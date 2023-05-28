@@ -190,9 +190,9 @@ impl<'s> Parser<'s> {
 			"break_statement" => self.build_break_statement(statement_node)?,
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
-			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?,
-			"resource_definition" => self.build_class_statement(statement_node, Phase::Preflight)?,
-			"interface_definition" => self.build_interface_statement(statement_node, Phase::Preflight)?,
+			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
+			"resource_definition" => self.build_class_statement(statement_node, phase)?,        // `class` without a modifier inherits from scope
+			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,

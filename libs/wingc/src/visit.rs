@@ -42,9 +42,6 @@ pub trait Visit<'ast> {
 	fn visit_interface(&mut self, node: &'ast Interface) {
 		visit_interface(self, node);
 	}
-	fn visit_constructor(&mut self, node: &'ast FunctionDefinition) {
-		visit_constructor(self, node);
-	}
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
 	}
@@ -219,7 +216,7 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	v.visit_constructor(&node.initializer);
+	v.visit_function_definition(&node.initializer);
 
 	if let Some(inflight_init) = &node.inflight_initializer {
 		v.visit_function_definition(inflight_init);
@@ -258,13 +255,6 @@ where
 	for extend in &node.extends {
 		v.visit_user_defined_type(extend);
 	}
-}
-
-pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast FunctionDefinition)
-where
-	V: Visit<'ast> + ?Sized,
-{
-	v.visit_function_definition(node);
 }
 
 pub fn visit_expr<'ast, V>(v: &mut V, node: &'ast Expr)

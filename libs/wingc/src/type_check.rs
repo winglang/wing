@@ -2680,7 +2680,7 @@ impl<'a> TypeChecker<'a> {
 						name: "this".into(),
 						span: method_name.span.clone(),
 					},
-					SymbolKind::make_variable(class_type, false, true, method_sig.phase),
+					SymbolKind::make_variable(class_type, false, true, class_env.phase),
 					StatementIdx::Top,
 				)
 				.expect("Expected `this` to be added to constructor env");

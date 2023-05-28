@@ -21,11 +21,11 @@ let w: str = x ?? 3;
 x ?? "hello";
 //  default type (str) must be same as wrapped type (num)
 
-inflight class Super {
+class Super {
 }
-inflight class Sub1 extends Super {
+class Sub1 extends Super {
 }
-inflight class Sub2 extends Super {
+class Sub2 extends Super {
 }
 
 let optionalSub1: Sub1? = new Sub1();
