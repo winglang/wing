@@ -76,6 +76,13 @@ error: \\"cloud\\" is already defined
 4 | bring cloud;
   |       ^^^^^ \\"cloud\\" is already defined
 
+
+error: \\"fs\\" is not a built-in module
+  --> ../../../examples/tests/invalid/bring.w:6:1
+  |
+6 | bring fs;
+  | ^^^^^^^^^ \\"fs\\" is not a built-in module
+
 "
 `;
 
