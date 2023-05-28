@@ -935,17 +935,8 @@ impl<'a> JSifier<'a> {
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_capturable_field_names(resource_type);
 
-		// Add inflight init's refs
-		// By default all captured fields are needed in the inflight init method
-		let init_refs = BTreeMap::from_iter(captured_fields.iter().map(|f| (format!("this.{f}"), BTreeSet::new())));
-		// Check what's actually used in the init method
-		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
-		// Add the init refs to the refs map
-		for (k, v) in init_refs {
-			if !init_refs_entry.contains_key(&k) {
-				init_refs_entry.insert(k, v);
-			}
-		}
+		// Add bindings for the inflight init
+		self.add_inflight_init_refs(&mut refs, &captured_fields, &free_vars);
 
 		// Jsify inflight client
 		let inflight_methods = class
@@ -998,6 +989,7 @@ impl<'a> JSifier<'a> {
 
 		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
 		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
+
 		// Generate the the class's host binding methods
 		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Instance));
 		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Type));
@@ -1402,6 +1394,25 @@ impl<'a> JSifier<'a> {
 		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
 		bind_method.close("}");
 		bind_method
+	}
+
+	fn add_inflight_init_refs(
+		&self,
+		refs: &mut BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
+		captured_fields: &[String],
+		free_vars: &IndexSet<String>,
+	) {
+		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
+
+		// All captured fields are needed in the inflight init method
+		for field in captured_fields {
+			init_refs_entry.entry(format!("this.{field}")).or_default();
+		}
+
+		// All free variables are needed in the inflight init method
+		for free_var in free_vars {
+			init_refs_entry.entry(free_var.clone()).or_default();
+		}
 	}
 }
 

@@ -165,7 +165,7 @@ impl<'s> Parser<'s> {
 		Scope {
 			statements: scope_node
 				.named_children(&mut cursor)
-				.filter(|child| !child.is_extra())
+				.filter(|child| !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK")
 				.enumerate()
 				.filter_map(|(i, st_node)| self.build_statement(&st_node, i).ok())
 				.collect(),
@@ -1399,6 +1399,8 @@ impl<'s> Parser<'s> {
 		for node in iter {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
 				_ = self.add_error::<()>("Expected ';'", &node);
+			} else if node.kind() == "AUTOMATIC_BLOCK" {
+				_ = self.add_error::<()>("Expected block", &node);
 			} else if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
 					if node.named_child_count() == 0 {
