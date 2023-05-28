@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
-import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
+import { Test } from "../../src/std";
 
 const INFLIGHT_CODE = `
 async handle(event) {
@@ -12,7 +12,7 @@ test("create a test", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new cloud.Test(app, "test:my_test", handler);
+  new Test(app, "test:my_test", handler);
 
   // THEN
   const s = await app.startSimulator();

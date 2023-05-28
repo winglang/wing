@@ -30,7 +30,7 @@ use crate::{
 		ClassLike, SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
 use self::{codemaker::CodeMaker, free_var_scanner::FreeVariableScanner};
@@ -251,12 +251,19 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_user_defined_type(&self, user_defined_type: &UserDefinedType) -> String {
+		// "std" is implicitly imported, so replace with "$stdlib.std".
+		let root = if user_defined_type.root == WINGSDK_STD_MODULE.into() {
+			format!("{STDLIB}.{WINGSDK_STD_MODULE}")
+		} else {
+			user_defined_type.root.to_string()
+		};
+
 		if user_defined_type.fields.is_empty() {
-			return user_defined_type.root.to_string();
+			return root;
 		} else {
 			format!(
 				"{}.{}",
-				user_defined_type.root,
+				root,
 				user_defined_type
 					.fields
 					.iter()
