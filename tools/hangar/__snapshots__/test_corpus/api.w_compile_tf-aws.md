@@ -8,7 +8,7 @@ module.exports = function({ counter }) {
     }
     async handle(request)  {
       {
-        const count = (await counter.inc());
+        const count = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
         const bodyResponse = Object.freeze({"count":count});
         const resp = {
         "body": bodyResponse,
@@ -32,7 +32,7 @@ module.exports = function({ api }) {
     async handle()  {
       {
         const url = api.url;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http://")'`)})(url.startsWith("http://"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
       }
     }
   }
@@ -71,26 +71,6 @@ module.exports = function({  }) {
     }
   }
   return A;
-}
-
-```
-
-## clients/Foo.inflight.js
-```js
-module.exports = function() {
-  class  Foo {
-    constructor({ api }) {
-      this.api = api;
-    }
-    async handle(message)  {
-      {
-        const __parent_this = this;
-        const url = this.api.url;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http://")'`)})(url.startsWith("http://"))};
-      }
-    }
-  }
-  return Foo;
 }
 
 ```
@@ -337,6 +317,7 @@ module.exports = function() {
         },
         "environment": {
           "variables": {
+            "CLOUD_API_C8B1D888": "${aws_api_gateway_stage.root_A_cloudApi_api_stage_EEF6B12C.invoke_url}",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-155b3888-c85af51e"
           }
         },
@@ -388,6 +369,7 @@ module.exports = function() {
         },
         "environment": {
           "variables": {
+            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8315524"
           }
         },
@@ -497,6 +479,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
@@ -520,9 +503,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight1._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -531,6 +515,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
@@ -554,9 +539,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(api, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(api.url, host, []);
+          $Inflight2._registerBindObject(api.url, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -570,6 +556,7 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
+            this.display.hidden = true;
           }
           static _toInflightType(context) {
             const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
@@ -593,9 +580,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight3._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.api.url, host, []);
+              $Inflight3._registerBindObject(__parent_this.api.url, host, []);
             }
             super._registerBind(host, ops);
           }
@@ -624,7 +612,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.api, host, []);
+          A._registerBindObject(this.api, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -653,21 +641,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(request) {
-  const { counter } = this;
-  const count = (await counter.inc());
-  const bodyResponse = Object.freeze({"count":count});
-  const resp = {
-  "body": bodyResponse,
-  "status": 200,}
-  ;
-  return resp;
-}
 
 ```
 

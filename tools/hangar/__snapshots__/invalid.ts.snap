@@ -201,6 +201,20 @@ error: Preflight field \\"y\\" is not initialized
    |   ^ Preflight field \\"y\\" is not initialized
 
 
+error: Expected 'x' to be a type but it's a variable
+   --> ../../../examples/tests/invalid/class.w:52:18
+   |
+52 | class C7 extends x {
+   |                  ^ Expected 'x' to be a type but it's a variable
+
+
+error: Preflight class C8's parent \\"S1\\" is not a class
+   --> ../../../examples/tests/invalid/class.w:58:18
+   |
+58 | class C8 extends S1 {
+   |                  ^^ Preflight class C8's parent \\"S1\\" is not a class
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/class.w:15:14
    |
@@ -230,12 +244,6 @@ error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\"
 11 | |   return;
 12 | | });
    | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Inflight1\\" instead
-
-"
-`;
-
-exports[`construction.w > stderr 1`] = `
-"error: Cannot instantiate type \\"BucketProps\\" because it is not a class
 
 "
 `;
@@ -439,6 +447,10 @@ error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num)
 
 
 error: Expected an interface, instead found type \\"Bucket\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:14:14
+   |
+14 | class C impl cloud.Bucket {
+   |              ^^^^^^^^^^^^ Expected an interface, instead found type \\"Bucket\\"
 
 
 error: Class \\"r\\" does not implement method \\"method1\\" of interface \\"I3\\"
@@ -555,6 +567,10 @@ error: Unknown symbol \\"IDontExist\\"
 
 
 error: Expected an interface, instead found type \\"ISomeClass\\"
+   --> ../../../examples/tests/invalid/interface.w:16:34
+   |
+16 | interface ISomeInterface extends ISomeClass {
+   |                                  ^^^^^^^^^^ Expected an interface, instead found type \\"ISomeClass\\"
 
 
 error: Symbol \\"foo\\" already defined in this scope
@@ -630,18 +646,18 @@ error: Unknown symbol \\"set\\"
    |             ^^^ Unknown symbol \\"set\\"
 
 
-error: Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
    --> ../../../examples/tests/invalid/json.w:24:18
    |
 24 | let jArr = Json [bkt];
-   |                  ^^^ Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+   |                  ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
 
 
-error: Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
    --> ../../../examples/tests/invalid/json.w:27:28
    |
 27 | let jsonObj = Json { boom: bkt };
-   |                            ^^^ Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+   |                            ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
 
 "
 `;
@@ -665,16 +681,16 @@ exports[`missing_semicolon.w > stderr 1`] = `
 
 
 error: Expected ';'
-   --> ../../../examples/tests/invalid/missing_semicolon.w:15:10
+   --> ../../../examples/tests/invalid/missing_semicolon.w:16:10
    |
-15 | let x = 5
+16 | let x = 5
    |          ^ Expected ';'
 
 
 error: Expected '}'
-   --> ../../../examples/tests/invalid/missing_semicolon.w:19:28
+   --> ../../../examples/tests/invalid/missing_semicolon.w:20:28
    |
-19 | //           ^ '}' expected
+20 |            //^ '}' expected
    |                            ^ Expected '}'
 
 "
@@ -796,6 +812,20 @@ error: Expected optional type, found \\"nil\\"
    |    ^^^ Expected optional type, found \\"nil\\"
 
 
+error: Cannot assign nil value to variables without explicit optional type
+   --> ../../../examples/tests/invalid/nil.w:28:18
+   |
+28 | let nilWannabe = nil;
+   |                  ^^^ Cannot assign nil value to variables without explicit optional type
+
+
+error: Cannot assign nil value to variables without explicit optional type
+   --> ../../../examples/tests/invalid/nil.w:31:17
+   |
+31 | let nilGaggle = [nil, nil, nil];
+   |                 ^^^^^^^^^^^^^^^ Cannot assign nil value to variables without explicit optional type
+
+
 error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
    --> ../../../examples/tests/invalid/nil.w:20:14
    |
@@ -853,6 +883,20 @@ error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
    |
 34 | optionalSub1 ?? new Super();
    |                 ^^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Super\\" instead
+
+
+error: Expected type to be optional, but got \\"bool\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:38:12
+   |
+38 | if let x = true {
+   |            ^^^^ Expected type to be optional, but got \\"bool\\" instead
+
+
+error: Variable hi is not reassignable 
+   --> ../../../examples/tests/invalid/optionals.w:46:3
+   |
+46 |   hi = \\"bye\\";
+   |   ^^^^^^^^^^^ Variable hi is not reassignable 
 
 "
 `;
@@ -949,11 +993,11 @@ error: Variable arg is not reassignable
 `;
 
 exports[`resource_access_field_as_method.w > stderr 1`] = `
-"error: should be a function or method
+"error: Expected a function or method
   --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:1
   |
 9 | x.name();
-  | ^^^^^^ should be a function or method
+  | ^^^^^^ Expected a function or method
 
 "
 `;
@@ -991,6 +1035,10 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 
 exports[`resource_inflight.w > stderr 1`] = `
 "error: Cannot create preflight class \\"Bucket\\" in inflight phase
+  --> ../../../examples/tests/invalid/resource_inflight.w:4:3
+  |
+4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
+  |   ^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"Bucket\\" in inflight phase
 
 "
 `;
@@ -1041,9 +1089,6 @@ error: Expected 'b' to be a type but it's a variable
   |                          ^ Expected 'b' to be a type but it's a variable
 
 
-error: Inflight class c's parent \\"any\\" is not a class
-
-
 error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:4:14
   |
@@ -1056,9 +1101,6 @@ error: Expected 'b' to be a type but it's a variable
   |
 5 | inflight class e extends b {}
   |                          ^ Expected 'b' to be a type but it's a variable
-
-
-error: Inflight class e's parent \\"any\\" is not a class
 
 "
 `;
@@ -1190,45 +1232,52 @@ error: Expected 2 arguments but got 1
 
 exports[`structs.w > stderr 1`] = `
 "error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
-  --> ../../../examples/tests/invalid/structs.w:9:8
-  |
-9 | struct C extends B {
-  |        ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
+   --> ../../../examples/tests/invalid/structs.w:11:8
+   |
+11 | struct C extends B {
+   |        ^ Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
 
 
 error: \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/structs.w:14:18
+   --> ../../../examples/tests/invalid/structs.w:16:18
    |
-14 | let someStruct = B { y: 5 };
+16 | let someStruct = B { y: 5 };
    |                  ^^^^^^^^^^ \\"x\\" is not initialized
 
 
-error: struct fields must be immutable got: MutArray<str>
-   --> ../../../examples/tests/invalid/structs.w:18:3
+error: Struct fields must have immutable types
+   --> ../../../examples/tests/invalid/structs.w:20:3
    |
-18 |   f: MutArray<str>;
-   |   ^ struct fields must be immutable got: MutArray<str>
+20 |   f: MutArray<str>;
+   |   ^ Struct fields must have immutable types
 
 
-error: struct fields must be immutable got: Map<Array<MutArray<str>>>
-   --> ../../../examples/tests/invalid/structs.w:23:3
+error: Struct fields must have immutable types
+   --> ../../../examples/tests/invalid/structs.w:25:3
    |
-23 |   f: Map<Array<MutArray<str>>>;
-   |   ^ struct fields must be immutable got: Map<Array<MutArray<str>>>
+25 |   f: Map<Array<MutArray<str>>>;
+   |   ^ Struct fields must have immutable types
 
 
 error: Unknown symbol \\"badField\\"
-   --> ../../../examples/tests/invalid/structs.w:30:7
+   --> ../../../examples/tests/invalid/structs.w:32:7
    |
-30 | log(a.badField);
+32 | log(a.badField);
    |       ^^^^^^^^ Unknown symbol \\"badField\\"
 
 
 error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
-   --> ../../../examples/tests/invalid/structs.w:42:8
+   --> ../../../examples/tests/invalid/structs.w:44:8
    |
-42 | struct Showtime extends Razzle, Dazzle {}
+44 | struct Showtime extends Razzle, Dazzle {}
    |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+
+
+error: Cannot instantiate type \\"BucketProps\\" because it is not a class
+   --> ../../../examples/tests/invalid/structs.w:47:13
+   |
+47 | let x = new cloud.BucketProps(1);
+   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is not a class
 
 "
 `;
@@ -1327,6 +1376,13 @@ error: Unknown symbol \\"y\\"
   |
 9 | let x = 2 + y;
   |             ^ Unknown symbol \\"y\\"
+
+
+error: Unknown symbol \\"B\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.w:28:17
+   |
+28 | class A extends B {
+   |                 ^ Unknown symbol \\"B\\"
 
 
 error: Unknown symbol \\"assert\\"

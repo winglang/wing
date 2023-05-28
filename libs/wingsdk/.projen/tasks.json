@@ -124,13 +124,16 @@
       "description": "Generate API.md from .jsii manifest",
       "steps": [
         {
+          "exec": "cp -r src/cloud/*.md ../../docs/04-resources/"
+        },
+        {
           "exec": "jsii-docgen -o API.md -l wing"
         },
         {
-          "exec": "echo '---\ntitle: API Reference\nid: sdk\ndescription: Wing SDK API Reference\nkeywords: [Wing sdk, sdk, Wing API Reference]\n---\n' > ../../docs/04-reference/wingsdk-api.md"
+          "exec": "echo '---\ntitle: API Reference\nid: sdk\ndescription: Wing SDK API Reference\nkeywords: [Wing sdk, sdk, Wing API Reference]\n---\n' > ../../docs/05-reference/wingsdk-api.md"
         },
         {
-          "exec": "cat API.md >> ../../docs/04-reference/wingsdk-api.md"
+          "exec": "cat API.md >> ../../docs/05-reference/wingsdk-api.md"
         }
       ]
     },
