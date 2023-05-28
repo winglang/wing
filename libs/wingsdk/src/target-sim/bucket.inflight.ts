@@ -111,7 +111,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   public async tryGet(key: string): Promise<string | undefined> {
     if (await this.exists(key)) {
-      return this.get(key);
+      return await this.get(key);
     }
 
     return undefined;
@@ -130,7 +130,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   public async tryGetJson(key: string): Promise<Json | undefined> {
     if (await this.exists(key)) {
-      return this.getJson(key);
+      return await this.getJson(key);
     }
 
     return undefined;
@@ -161,7 +161,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   public async tryDelete(key: string): Promise<boolean> {
     if (await this.exists(key)) {
-      this.delete(key);
+      await this.delete(key);
       return true;
     }
 

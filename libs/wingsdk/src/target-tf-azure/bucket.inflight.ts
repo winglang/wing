@@ -107,11 +107,11 @@ export class BucketClient implements IBucketClient {
    * @returns string content of the object as string
    */
   public async tryGet(key: string): Promise<string | undefined> {
-    try {
+    if (await this.exists(key)) {
       return await this.get(key);
-    } catch (error) {
-      return undefined;
     }
+
+    return undefined;
   }
 
   /**
@@ -131,11 +131,11 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async tryGetJson(key: string): Promise<Json | undefined> {
-    try {
+    if (await this.exists(key)) {
       return await this.getJson(key);
-    } catch (error) {
-      return undefined;
     }
+
+    return undefined;
   }
 
   /**
@@ -172,7 +172,7 @@ export class BucketClient implements IBucketClient {
    */
   public async tryDelete(key: string): Promise<boolean> {
     if (await this.exists(key)) {
-      this.delete(key);
+      await this.delete(key);
       return true;
     }
 
