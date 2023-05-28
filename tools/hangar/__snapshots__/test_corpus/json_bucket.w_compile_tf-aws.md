@@ -309,6 +309,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(b, host, []);
+          $Inflight1._registerBindObject(fileName, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(b, host, ["getJson"]);
@@ -351,6 +353,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(b, host, []);
+          $Inflight2._registerBindObject(fileName, host, []);
+          $Inflight2._registerBindObject(getJson, host, []);
+          $Inflight2._registerBindObject(j, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight2._registerBindObject(b, host, ["putJson"]);
