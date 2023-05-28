@@ -244,6 +244,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(bucket, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(bucket, host, ["put"]);

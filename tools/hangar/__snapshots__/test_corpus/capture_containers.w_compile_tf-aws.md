@@ -191,6 +191,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(arr, host, []);
+          $Inflight1._registerBindObject(arrOfMap, host, []);
+          $Inflight1._registerBindObject(j, host, []);
+          $Inflight1._registerBindObject(myMap, host, []);
+          $Inflight1._registerBindObject(mySet, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(arr, host, ["at", "length"]);

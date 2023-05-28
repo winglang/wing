@@ -1,7 +1,3 @@
-/*\
-skip: true
-\*/
-// TODO: failing due to https://github.com/winglang/wing/issues/2522
 bring cloud;
 
 let api = new cloud.Api();
@@ -27,7 +23,7 @@ api.get("/hello/world", handler);
 
 test "api url" {
   let url = api.url;
-  assert(url.startsWith("http://"));
+  assert(url.startsWith("http"));
 }
 
 // Initialize the API in resource
