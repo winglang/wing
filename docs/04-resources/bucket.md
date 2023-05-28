@@ -105,7 +105,7 @@ The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](ht
 
 ## API Reference
 
-The full list of APIs for `cloud.Bucket` is available in the [API Reference](../05-reference/wingsdk-api.md).
+The full list of APIs for `cloud.Secret` is available in the [API Reference](../05-reference/wingsdk-api.md).
 
 
 
