@@ -76,34 +76,9 @@ module.exports = function({ counter, b }) {
     }
     async handle()  {
       {
-        class Predicate {
-          constructor(counterVal)  {
-            this.counterVal = counterVal;
-          }
-          counterVal;
-          static async sleep(ms)  {
-            return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
-          }
-          async assertion()  {
-            {
-              return ((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === this.counterVal);
-            }
-          }
-          async testAssertion()  {
-            {
-              let i = 0;
-              while ((i < 12)) {
-                i = (i + 1);
-                if ((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())) {
-                  {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
-                  return;
-                }
-                (typeof Predicate.sleep === "function" ? await Predicate.sleep((1000 * 10)) : await Predicate.sleep.handle((1000 * 10)));
-              }
-              {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
-            }
-          }
-        }
+        const Predicate = require("./Predicate.inflight.js")({
+          counter: counter,
+        });
         (typeof b.put === "function" ? await b.put("a","1") : await b.put.handle("a","1"));
         (typeof b.put === "function" ? await b.put("b","1") : await b.put.handle("b","1"));
         (typeof b.put === "function" ? await b.put("c","1") : await b.put.handle("c","1"));
@@ -114,6 +89,43 @@ module.exports = function({ counter, b }) {
     }
   }
   return $Inflight5;
+}
+
+```
+
+## clients/Predicate.inflight.js
+```js
+module.exports = function({ counter }) {
+  class  Predicate {
+     constructor(counterVal)  {
+      {
+        this.counterVal = counterVal;
+      }
+    }
+    static async sleep(ms)  {
+      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
+    }
+    async assertion()  {
+      {
+        return ((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === this.counterVal);
+      }
+    }
+    async testAssertion()  {
+      {
+        let i = 0;
+        while ((i < 12)) {
+          i = (i + 1);
+          if ((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
+            return;
+          }
+          (typeof Predicate.sleep === "function" ? await Predicate.sleep((1000 * 10)) : await Predicate.sleep.handle((1000 * 10)));
+        }
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
+      }
+    }
+  }
+  return Predicate;
 }
 
 ```

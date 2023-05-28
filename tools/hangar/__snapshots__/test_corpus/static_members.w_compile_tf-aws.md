@@ -8,20 +8,8 @@ module.exports = function({  }) {
     }
     async handle()  {
       {
-        class InflightClass {
-          constructor()  {
-          }
-          async inflightMethod()  {
-            {
-              return "Inflight method";
-            }
-          }
-          static async staticInflightMethod()  {
-            {
-              return "Static inflight method";
-            }
-          }
-        }
+        const InflightClass = require("./InflightClass.inflight.js")({
+        });
         const inflightClass = new InflightClass();
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method")'`)})(((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method")'`)})(((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method"))};
@@ -47,6 +35,30 @@ module.exports = function({  }) {
     }
   }
   return Foo;
+}
+
+```
+
+## clients/InflightClass.inflight.js
+```js
+module.exports = function({  }) {
+  class  InflightClass {
+     constructor()  {
+      {
+      }
+    }
+    async inflightMethod()  {
+      {
+        return "Inflight method";
+      }
+    }
+    static async staticInflightMethod()  {
+      {
+        return "Static inflight method";
+      }
+    }
+  }
+  return InflightClass;
 }
 
 ```

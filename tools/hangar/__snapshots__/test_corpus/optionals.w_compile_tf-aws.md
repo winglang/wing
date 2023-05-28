@@ -1,5 +1,44 @@
 # [optionals.w](../../../../examples/tests/valid/optionals.w) | compile | tf-aws
 
+## clients/Sub.inflight.js
+```js
+module.exports = function({  }) {
+  class  Sub extends Super {
+    constructor({ name }) {
+      super(name);
+    }
+  }
+  return Sub;
+}
+
+```
+
+## clients/Sub1.inflight.js
+```js
+module.exports = function({  }) {
+  class  Sub1 extends Super {
+    constructor({ name }) {
+      super(name);
+    }
+  }
+  return Sub1;
+}
+
+```
+
+## clients/Super.inflight.js
+```js
+module.exports = function({  }) {
+  class  Super {
+    constructor({ name }) {
+      this.name = name;
+    }
+  }
+  return Super;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -41,23 +80,101 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Super {
-      constructor()  {
+    class Super extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
         const __parent_this = this;
         this.name = "Super";
       }
-      name;
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Super.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const name_client = this._lift(this.name);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const SuperClient = ${Super._toInflightType(this).text};
+            const client = new SuperClient({
+              name: ${name_client},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Super._registerBindObject(this.name, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
     class Sub extends Super {
-      constructor()  {
+      constructor(scope, id, ) {
         const __parent_this = this;
         this.name = "Sub";
       }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Sub.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const name_client = this._lift(this.name);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const SubClient = ${Sub._toInflightType(this).text};
+            const client = new SubClient({
+              name: ${name_client},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Sub._registerBindObject(this.name, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
     class Sub1 extends Super {
-      constructor()  {
+      constructor(scope, id, ) {
         const __parent_this = this;
         this.name = "Sub";
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Sub1.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        const name_client = this._lift(this.name);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const Sub1Client = ${Sub1._toInflightType(this).text};
+            const client = new Sub1Client({
+              name: ${name_client},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Sub1._registerBindObject(this.name, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     const x = 4;
@@ -66,8 +183,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((x ?? 5) === 4)'`)})(((x ?? 5) === 4))};
     const y = (x ?? 5);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 4)'`)})((y === 4))};
-    const optionalSup = new Super();
-    const s = (optionalSup ?? new Sub());
+    const optionalSup = new Super(this,"Super");
+    const s = (optionalSup ?? new Sub(this,"Sub"));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.name === "Super")'`)})((s.name === "Super"))};
     let name = {
     "first": "John",

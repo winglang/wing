@@ -9,17 +9,8 @@ module.exports = function({ __parent_this }) {
     async handle(payload)  {
       {
         (typeof __parent_this.b.put === "function" ? await __parent_this.b.put("k","v") : await __parent_this.b.put.handle("k","v"));
-        class InflightClass {
-          constructor()  {
-            this.field = "value";
-          }
-          field;
-          async method()  {
-            {
-              {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.field === "value")'`)})((this.field === "value"))};
-            }
-          }
-        }
+        const InflightClass = require("./InflightClass.inflight.js")({
+        });
         const c = new InflightClass();
         (typeof c.method === "function" ? await c.method() : await c.method.handle());
       }
@@ -43,6 +34,26 @@ module.exports = function({ f }) {
     }
   }
   return $Inflight2;
+}
+
+```
+
+## clients/InflightClass.inflight.js
+```js
+module.exports = function({  }) {
+  class  InflightClass {
+     constructor()  {
+      {
+        this.field = "value";
+      }
+    }
+    async method()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.field === "value")'`)})((this.field === "value"))};
+      }
+    }
+  }
+  return InflightClass;
 }
 
 ```
