@@ -23,11 +23,11 @@ use crate::{
 		StmtKind, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	debug,
-	diagnostic::{Diagnostic, Diagnostics},
+	diagnostic::{Diagnostic, Diagnostics, WingSpan},
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
+		ClassLike, SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -65,6 +65,14 @@ pub struct JSifier<'a> {
 	absolute_project_root: &'a Path,
 	shim: bool,
 	app_name: String,
+}
+
+/// Preflight classes have two types of host binding methods:
+/// `Type` for binding static fields and methods to the host and
+/// `instance` for binding instance fields and methods to the host.
+enum BindMethod {
+	Type,
+	Instance,
 }
 
 impl<'a> JSifier<'a> {
@@ -177,18 +185,14 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_reference(&mut self, reference: &Reference, ctx: &JSifyContext) -> String {
 		match reference {
-			Reference::Identifier(identifier) => self.jsify_symbol(identifier),
+			Reference::Identifier(identifier) => identifier.to_string(),
 			Reference::InstanceMember { object, property } => {
-				self.jsify_expression(object, ctx) + "." + &self.jsify_symbol(property)
+				self.jsify_expression(object, ctx) + "." + &property.to_string()
 			}
 			Reference::TypeMember { type_, property } => {
-				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &self.jsify_symbol(property)
+				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &property.to_string()
 			}
 		}
-	}
-
-	fn jsify_symbol(&self, symbol: &Symbol) -> String {
-		return symbol.name.to_string();
 	}
 
 	fn jsify_arg_list(
@@ -248,16 +252,16 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_user_defined_type(&self, user_defined_type: &UserDefinedType) -> String {
 		if user_defined_type.fields.is_empty() {
-			return self.jsify_symbol(&user_defined_type.root);
+			return user_defined_type.root.to_string();
 		} else {
 			format!(
 				"{}.{}",
-				self.jsify_symbol(&user_defined_type.root),
+				user_defined_type.root,
 				user_defined_type
 					.fields
 					.iter()
-					.map(|f| self.jsify_symbol(f))
-					.collect::<Vec<String>>()
+					.map(|f| f.to_string())
+					.collect_vec()
 					.join(".")
 			)
 		}
@@ -327,6 +331,7 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
+        Literal::Nil => "undefined".to_string(),
 				Literal::String(s) => s.to_string(),
 				Literal::InterpolatedString(s) => format!(
 					"`{}`",
@@ -372,7 +377,7 @@ impl<'a> JSifier<'a> {
 				let function_type = callee.evaluated_type.borrow().unwrap();
 				let function_sig = function_type.as_function_sig();
 				assert!(
-					function_sig.is_some() || function_type.is_anything(),
+					function_sig.is_some() || function_type.is_anything() || function_type.is_handler_resource(),
 					"Expected expression to be callable"
 				);
 
@@ -400,7 +405,10 @@ impl<'a> JSifier<'a> {
 					}
 				}
 
-				format!("({}{}({}))", auto_await, expr_string, arg_string)
+				match ctx.phase {
+					Phase::Inflight => format!("(typeof {} === \"function\" ? {}{}({}) : {}{}.handle({}))", expr_string, auto_await, expr_string, arg_string, auto_await, expr_string, arg_string),
+					Phase::Independent | Phase::Preflight => format!("({}{}({}))", auto_await, expr_string, arg_string),
+				}
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
@@ -530,12 +538,12 @@ impl<'a> JSifier<'a> {
 			} => {
 				CodeMaker::one_line(format!(
 					"const {} = {};",
-					self.jsify_symbol(if let Some(identifier) = identifier {
+					if let Some(identifier) = identifier {
 						// use alias
 						identifier
 					} else {
 						module_name
-					}),
+					},
 					if module_name.name.starts_with("\"") {
 						// TODO so many assumptions here, would only work with a JS file, see:
 						// https://github.com/winglang/wing/issues/477
@@ -555,9 +563,9 @@ impl<'a> JSifier<'a> {
 			} => {
 				let initial_value = self.jsify_expression(initial_value, ctx);
 				return if *reassignable {
-					CodeMaker::one_line(format!("let {} = {};", self.jsify_symbol(var_name), initial_value))
+					CodeMaker::one_line(format!("let {var_name} = {initial_value};"))
 				} else {
-					CodeMaker::one_line(format!("const {} = {};", self.jsify_symbol(var_name), initial_value))
+					CodeMaker::one_line(format!("const {var_name} = {initial_value};"))
 				};
 			}
 			StmtKind::ForLoop {
@@ -567,8 +575,7 @@ impl<'a> JSifier<'a> {
 			} => {
 				let mut code = CodeMaker::default();
 				code.open(format!(
-					"for (const {} of {}) {{",
-					self.jsify_symbol(iterator),
+					"for (const {iterator} of {}) {{",
 					self.jsify_expression(iterable, ctx)
 				));
 				code.add_code(self.jsify_scope_body(statements, ctx));
@@ -584,6 +591,61 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
+			StmtKind::IfLet {
+				value,
+				statements,
+				var_name,
+				else_statements,
+			} => {
+				let mut code = CodeMaker::default();
+				// To enable shadowing variables in if let statements, the following does some scope trickery
+				// take for example the following wing code:
+				// let x: str? = "hello";
+				// if let x = x {
+				//   log(x);
+				// }
+				//
+				// If we attempted to just do the following JS code
+				//
+				// const x = "hello"
+				// if (x != undefined) {
+				//   const x = x;  <== Reference error, "Cannot access 'x' before initialization"
+				//   log(x);
+				// }
+				//
+				// To work around this, we can generate a temporary scope, then use an intermediate variable to carry the
+				// shadowed value, like so:
+				// const x = "hello"
+				// {
+				//  const $IF_LET_VALUE = x; <== intermediate variable that expires at the end of the scope
+				//  if (x != undefined) {
+				//    const x = $IF_LET_VALUE;
+				//    log(x);
+				//  }
+				// }
+				// The temporary scope is created so that intermediate variables created by consecutive `if let` clauses
+				// do not interfere with each other.
+				code.open("{");
+				let if_let_value = "$IF_LET_VALUE".to_string();
+				code.line(format!(
+					"const {} = {};",
+					if_let_value,
+					self.jsify_expression(value, ctx)
+				));
+				code.open(format!("if ({} != undefined) {{", self.jsify_expression(value, ctx)));
+				code.line(format!("const {} = {};", var_name, if_let_value));
+				code.add_code(self.jsify_scope_body(statements, ctx));
+				code.close("}");
+
+				if let Some(else_scope) = else_statements {
+					code.open("else {");
+					code.add_code(self.jsify_scope_body(else_scope, ctx));
+					code.close("}");
+				}
+
+				code.close("}");
+				code
+			}
 			StmtKind::If {
 				condition,
 				statements,
@@ -644,7 +706,7 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Enum { name, values } => {
 				let mut code = CodeMaker::default();
-				code.open(format!("const {} = ", self.jsify_symbol(name)));
+				code.open(format!("const {name} = "));
 				code.add_code(self.jsify_enum(values));
 				code.close(";");
 				code
@@ -662,10 +724,9 @@ impl<'a> JSifier<'a> {
 
 				if let Some(catch_block) = catch_block {
 					if let Some(exception_var_symbol) = &catch_block.exception_var {
-						let exception_var_str = self.jsify_symbol(exception_var_symbol);
-						code.open(format!("catch ($error_{exception_var_str}) {{"));
+						code.open(format!("catch ($error_{exception_var_symbol}) {{"));
 						code.line(format!(
-							"const {exception_var_str} = $error_{exception_var_str}.message;"
+							"const {exception_var_symbol} = $error_{exception_var_symbol}.message;"
 						));
 					} else {
 						code.open("catch {");
@@ -711,7 +772,7 @@ impl<'a> JSifier<'a> {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
-			parameter_list.push(self.jsify_symbol(&p.name));
+			parameter_list.push(p.name.to_string());
 		}
 
 		let (name, arrow) = match name {
@@ -739,7 +800,7 @@ impl<'a> JSifier<'a> {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
-			parameter_list.push(self.jsify_symbol(&p.name));
+			parameter_list.push(p.name.to_string());
 		}
 
 		let (name, arrow) = match name {
@@ -800,7 +861,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_class_member(&mut self, member: &ClassField) -> CodeMaker {
-		CodeMaker::one_line(format!("{};", self.jsify_symbol(&member.name)))
+		CodeMaker::one_line(format!("{};", member.name.to_string()))
 	}
 
 	/// Jsify a resource
@@ -872,17 +933,8 @@ impl<'a> JSifier<'a> {
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_capturable_field_names(resource_type);
 
-		// Add inflight init's refs
-		// By default all captured fields are needed in the inflight init method
-		let init_refs = BTreeMap::from_iter(captured_fields.iter().map(|f| (format!("this.{f}"), BTreeSet::new())));
-		// Check what's actually used in the init method
-		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
-		// Add the init refs to the refs map
-		for (k, v) in init_refs {
-			if !init_refs_entry.contains_key(&k) {
-				init_refs_entry.insert(k, v);
-			}
-		}
+		// Add bindings for the inflight init
+		self.add_inflight_init_refs(&mut refs, &captured_fields, &free_vars);
 
 		// Jsify inflight client
 		let inflight_methods = class
@@ -919,7 +971,8 @@ impl<'a> JSifier<'a> {
 			format!(" extends {}", STDLIB_CORE_RESOURCE)
 		};
 
-		code.open(format!("class {}{} {{", self.jsify_symbol(&class.name), extends));
+		let class_name = class.name.to_string();
+		code.open(format!("class {class_name}{extends} {{"));
 		code.add_code(self.jsify_resource_constructor(
 			&class.initializer,
 			class.parent.is_none(),
@@ -935,20 +988,9 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
 		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
 
-		let mut bind_method = CodeMaker::default();
-		bind_method.open("_registerBind(host, ops) {");
-		for (method_name, method_refs) in refs {
-			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (field, ops) in method_refs {
-				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
-				bind_method.line(format!("this._registerBindObject({field}, host, [{ops_strings}]);",));
-			}
-			bind_method.close("}");
-		}
-		bind_method.line("super._registerBind(host, ops);");
-		bind_method.close("}");
-
-		code.add_code(bind_method);
+		// Generate the the class's host binding methods
+		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Instance));
+		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Type));
 
 		code.close("}");
 
@@ -970,8 +1012,8 @@ impl<'a> JSifier<'a> {
 			constructor
 				.parameters()
 				.iter()
-				.map(|p| self.jsify_symbol(&p.name))
-				.collect::<Vec<_>>()
+				.map(|p| p.name.to_string())
+				.collect_vec()
 				.join(", "),
 		));
 
@@ -1221,7 +1263,7 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 		code.open(format!(
 			"class {}{} {{",
-			self.jsify_symbol(&class.name),
+			class.name,
 			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
@@ -1302,6 +1344,74 @@ impl<'a> JSifier<'a> {
 		scanner.visit_class(class);
 		scanner.free_vars
 	}
+
+	fn jsify_register_bind_method(
+		&self,
+		class: &AstClass,
+		refs: &BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
+		resource_type: TypeRef,
+		bind_method_kind: BindMethod,
+	) -> CodeMaker {
+		let mut bind_method = CodeMaker::default();
+		let (modifier, bind_method_name) = match bind_method_kind {
+			BindMethod::Type => ("static ", "_registerTypeBind"),
+			BindMethod::Instance => ("", "_registerBind"),
+		};
+
+		let class_name = class.name.to_string();
+		let refs = refs
+			.iter()
+			.filter(|(m, _)| {
+				(*m == CLASS_INFLIGHT_INIT_NAME
+					|| !resource_type
+						.as_resource()
+						.unwrap()
+						.get_method(&m.as_str().into())
+						.expect(&format!("method {m} doesn't exist in {class_name}"))
+						.is_static)
+					^ (matches!(bind_method_kind, BindMethod::Type))
+			})
+			.collect_vec();
+
+		// Skip jsifying this method if there are no references (in this case we'll use super's register bind method)
+		if refs.is_empty() {
+			return bind_method;
+		}
+
+		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
+		for (method_name, method_refs) in refs {
+			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
+			for (field, ops) in method_refs {
+				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+				bind_method.line(format!(
+					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",
+				));
+			}
+			bind_method.close("}");
+		}
+		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
+		bind_method.close("}");
+		bind_method
+	}
+
+	fn add_inflight_init_refs(
+		&self,
+		refs: &mut BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
+		captured_fields: &[String],
+		free_vars: &IndexSet<String>,
+	) {
+		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
+
+		// All captured fields are needed in the inflight init method
+		for field in captured_fields {
+			init_refs_entry.entry(format!("this.{field}")).or_default();
+		}
+
+		// All free variables are needed in the inflight init method
+		for free_var in free_vars {
+			init_refs_entry.entry(free_var.clone()).or_default();
+		}
+	}
 }
 
 fn is_mutable_collection(expression: &Expr) -> bool {
@@ -1380,11 +1490,16 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			// TODO: chnge this "==" to make sure first.symbol is the same variable definition as something in free_vars
 			// todo this i'll need to have a "unique id" on the variable definition stored in the environment and then
 			// do a lookup for first.symbol and compare the id's
-			Some(first) => self.free_vars.iter().any(|v| v.name == first.symbol.name),
+			Some(first) => self.free_vars.iter().any(|v| v.name == first.text),
 			None => false,
 		};
 
-		if !is_field_reference && !is_free_var {
+		let is_type_reference = match parts.first() {
+			Some(first) => matches!(first.kind, ComponentKind::ClassType(_)),
+			None => false,
+		};
+
+		if !is_field_reference && !is_free_var && !is_type_reference {
 			visit::visit_expr(self, node);
 			return;
 		}
@@ -1403,69 +1518,74 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 		while index < parts.len() {
 			let curr = parts.get(index).unwrap();
 
-			let Some(variable) = &curr.variable else {
-				panic!("unexpected - all components should have a variable at this point");
-			};
+			match &curr.kind {
+				ComponentKind::Member(variable) => {
+					// we have lift off (reached an inflight component)! break our search.
+					if variable.phase == Phase::Inflight {
+						break;
+					}
 
-			// we have lift off (reached an inflight component)! break our search.
-			if variable.phase == Phase::Inflight {
-				break;
-			}
+					// now we need to verify that the component can be captured.
+					// (1) non-reassignable
+					// (2) capturable type (immutable/resource).
 
-			// now we need to verify that the component can be captured.
-			// (1) non-reassignable
-			// (2) capturable type (immutable/resource).
+					// if the variable is reassignable, bail out
+					if variable.reassignable {
+						self.diagnostics.push(Diagnostic {
+							message: format!("Cannot capture reassignable field '{curr}'"),
+							span: Some(curr.span.clone()),
+						});
 
-			// if the variable is reassignable, bail out
-			if variable.reassignable {
-				self.diagnostics.push(Diagnostic {
-					message: format!("Cannot capture reassignable field '{}'", curr.text),
-					span: Some(curr.expr.span.clone()),
-				});
+						return;
+					}
 
-				return;
-			}
+					// if this type is not capturable, bail out
+					if !variable.type_.is_capturable() {
+						self.diagnostics.push(Diagnostic {
+							message: format!(
+								"Cannot capture field '{curr}' with non-capturable type '{}'",
+								variable.type_
+							),
+							span: Some(curr.span.clone()),
+						});
 
-			// if this type is not capturable, bail out
-			if !variable.type_.is_capturable() {
-				self.diagnostics.push(Diagnostic {
-					message: format!(
-						"Cannot capture field '{}' with non-capturable type '{}'",
-						curr.text, variable.type_
-					),
-					span: Some(curr.expr.span.clone()),
-				});
+						return;
+					}
 
-				return;
-			}
+					// okay, so we have a non-reassignable, capturable type.
+					// one more special case is collections. we currently only support
+					// collections which do not include resources because we cannot
+					// qualify the capture.
+					if let Some(inner_type) = variable.type_.collection_item_type() {
+						if inner_type.as_resource().is_some() {
+							self.diagnostics.push(Diagnostic {
+								message: format!(
+									"Capturing collection of resources is not supported yet (type is '{}')",
+									variable.type_,
+								),
+								span: Some(curr.span.clone()),
+							});
 
-			// okay, so we have a non-reassignable, capturable type.
-			// one more special case is collections. we currently only support
-			// collections which do not include resources because we cannot
-			// qualify the capture.
-			if let Some(inner_type) = variable.type_.collection_item_type() {
-				if inner_type.as_resource().is_some() {
-					self.diagnostics.push(Diagnostic {
-						message: format!(
-							"Capturing collection of resources is not supported yet (type is '{}')",
-							variable.type_,
-						),
-						span: Some(curr.expr.span.clone()),
-					});
+							return;
+						}
+					}
 
-					return;
+					// accumulate "curr" into capture
+					capture.push(curr);
+					index = index + 1;
+
+					// if "curr" is a collection, break here because the following
+					// components are going to be simple identifiers (TODO: is this a bug in
+					// how we model the API of collections?)
+					if variable.type_.collection_item_type().is_some() {
+						break;
+					}
 				}
-			}
-
-			// accumulate "curr" into capture
-			capture.push(curr);
-			index = index + 1;
-
-			// if "curr" is a collection, break here because the following
-			// components are going to be simple identifiers (TODO: is this a bug in
-			// how we model the API of collections?)
-			if variable.type_.collection_item_type().is_some() {
-				break;
+				ComponentKind::ClassType(_) => {
+					capture.push(curr);
+					index = index + 1;
+				}
+				ComponentKind::Unsupported => panic!("all components should be valid at this point"),
 			}
 		}
 
@@ -1486,22 +1606,31 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			key = format!("this.{}", key);
 		}
 
-		// if our last captured component is a resource and we don't have
-		// a qualification for it, it's currently an error.
 		if let Some(c) = capture.last() {
-			if let Some(v) = &c.variable {
-				if v.type_.as_resource().is_some() {
-					if qualification.len() == 0 {
-						self.diagnostics.push(Diagnostic {
-							message: format!(
-								"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
-								key, v.type_,
-							),
-							span: Some(node.span.clone()),
-						});
+			if let ComponentKind::Member(v) = &c.kind {
+				// if our last captured component is a non-handler resource and we don't have
+				// a qualification for it, it's currently an error.
+				if v.type_.is_resource() && !v.type_.is_handler_resource() && qualification.len() == 0 {
+					self.diagnostics.push(Diagnostic {
+						message: format!(
+							"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
+							key, v.type_,
+						),
+						span: Some(node.span.clone()),
+					});
 
-						return;
-					}
+					return;
+				}
+
+				// if this reference refers to an inflight function or handler resource,
+				// we need to give permission to the "handle" operation
+				if v.type_.is_inflight_function() || v.type_.is_handler_resource() {
+					self
+						.references
+						.entry(key)
+						.or_default()
+						.insert(HANDLE_METHOD_NAME.to_string());
+					return;
 				}
 			}
 		}
@@ -1513,15 +1642,20 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 }
 
 #[derive(Clone, Debug)]
-
-struct Component<'a> {
-	expr: &'a Expr,
-	symbol: Symbol,
+struct Component {
 	text: String,
-	variable: Option<VariableInfo>,
+	span: WingSpan,
+	kind: ComponentKind,
 }
 
-impl Display for Component<'_> {
+#[derive(Clone, Debug)]
+enum ComponentKind {
+	Member(VariableInfo),
+	ClassType(TypeRef),
+	Unsupported,
+}
+
+impl Display for Component {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{}", self.text)
 	}
@@ -1529,8 +1663,12 @@ impl Display for Component<'_> {
 
 impl<'a> FieldReferenceVisitor<'a> {
 	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
-		match &node.kind {
-			ExprKind::Reference(Reference::Identifier(x)) => {
+		let ExprKind::Reference(ref_expr) = &node.kind else {
+			return vec![];
+		};
+
+		match ref_expr {
+			Reference::Identifier(x) => {
 				let env = self.env.unwrap();
 
 				// To obtain information about the variable we're referencing (like its type and
@@ -1547,16 +1685,14 @@ impl<'a> FieldReferenceVisitor<'a> {
 				}
 
 				return vec![Component {
-					expr: node,
-					symbol: x.clone(),
-					text: x.name.to_string(),
-					variable: Some(var),
+					text: x.name.clone(),
+					span: x.span.clone(),
+					kind: ComponentKind::Member(var),
 				}];
 			}
-
-			ExprKind::Reference(Reference::InstanceMember { object, property }) => {
+			Reference::InstanceMember { object, property } => {
 				let obj_type = object.evaluated_type.borrow().unwrap();
-				let var = match &*obj_type {
+				let component_kind = match &*obj_type {
 					Type::Void => unreachable!("cannot reference a member of void"),
 					Type::Function(_) => unreachable!("cannot reference a member of a function"),
 					Type::Optional(_) => unreachable!("cannot reference a member of an optional"),
@@ -1568,10 +1704,13 @@ impl<'a> FieldReferenceVisitor<'a> {
 					| Type::Boolean
 					| Type::Json
 					| Type::MutJson
+					| Type::Nil
 					| Type::Enum(_) => return vec![],
 					// TODO: collection types are unsupported for now
-					Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => None,
-					Type::Class(cls) => Some(
+					Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
+						ComponentKind::Unsupported
+					}
+					Type::Class(cls) => ComponentKind::Member(
 						cls
 							.env
 							.lookup(&property, None)
@@ -1579,7 +1718,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 							.as_variable()
 							.unwrap(),
 					),
-					Type::Resource(cls) => Some(
+					Type::Resource(cls) => ComponentKind::Member(
 						cls
 							.env
 							.lookup(&property, None)
@@ -1587,7 +1726,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 							.as_variable()
 							.unwrap(),
 					),
-					Type::Interface(iface) => Some(
+					Type::Interface(iface) => ComponentKind::Member(
 						iface
 							.env
 							.lookup(&property, None)
@@ -1595,7 +1734,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 							.as_variable()
 							.unwrap(),
 					),
-					Type::Struct(st) => Some(
+					Type::Struct(st) => ComponentKind::Member(
 						st.env
 							.lookup(&property, None)
 							.expect("covered by type checking")
@@ -1605,17 +1744,47 @@ impl<'a> FieldReferenceVisitor<'a> {
 				};
 
 				let prop = vec![Component {
-					expr: node,
-					symbol: property.clone(),
-					variable: var,
-					text: property.name.to_string(),
+					text: property.name.clone(),
+					span: property.span.clone(),
+					kind: component_kind,
 				}];
 
 				let obj = self.analyze_expr(&object);
 				return [obj, prop].concat();
 			}
+			Reference::TypeMember { type_, property } => {
+				let env = self.env.unwrap();
 
-			_ => vec![],
+				// Get the type we're accessing a member of
+				let t = resolve_user_defined_type(type_, &env, self.statement_index).expect("covered by type checking");
+
+				// If the type we're referencing isn't a preflight class then skip it
+				let Type::Resource(class) = &*t else {
+					return vec![];
+				};
+
+				// To obtain information about the variable we're referencing (like its type and
+				// whether it's reassignable), we look it up in the class's env.
+				let var = class
+					.env
+					.lookup(&property, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.expect("reference to a non-variable");
+
+				return vec![
+					Component {
+						text: format!("{type_}"),
+						span: type_.span.clone(),
+						kind: ComponentKind::ClassType(t),
+					},
+					Component {
+						text: property.name.clone(),
+						span: property.span.clone(),
+						kind: ComponentKind::Member(var),
+					},
+				];
+			}
 		}
 	}
 }

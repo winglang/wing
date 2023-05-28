@@ -9,9 +9,9 @@ module.exports = function({ data, res, queue }) {
     async handle()  {
       {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
-        (await res.put("file.txt","world"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await res.get("file.txt")) === "world")'`)})(((await res.get("file.txt")) === "world"))};
-        (await queue.push("spirulina"));
+        (typeof res.put === "function" ? await res.put("file.txt","world") : await res.put.handle("file.txt","world"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof res.get === "function" ? await res.get("file.txt") : await res.get.handle("file.txt")) === "world")'`)})(((typeof res.get === "function" ? await res.get("file.txt") : await res.get.handle("file.txt")) === "world"))};
+        (typeof queue.push === "function" ? await queue.push("spirulina") : await queue.push.handle("spirulina"));
       }
     }
   }
@@ -239,11 +239,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(data, host, []);
+          $Inflight1._registerBindObject(queue, host, []);
+          $Inflight1._registerBindObject(res, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(data, host, ["size"]);
-          this._registerBindObject(queue, host, ["push"]);
-          this._registerBindObject(res, host, ["get", "put"]);
+          $Inflight1._registerBindObject(data, host, ["size"]);
+          $Inflight1._registerBindObject(queue, host, ["push"]);
+          $Inflight1._registerBindObject(res, host, ["get", "put"]);
         }
         super._registerBind(host, ops);
       }

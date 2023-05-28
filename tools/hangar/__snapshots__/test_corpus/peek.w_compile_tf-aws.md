@@ -8,10 +8,10 @@ module.exports = function({ c }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
-        (await c.inc());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 1)'`)})(((await c.peek()) === 1))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0))};
+        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 1)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 1))};
       }
     }
   }
@@ -198,9 +198,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(c, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(c, host, ["inc", "peek"]);
+          $Inflight1._registerBindObject(c, host, ["inc", "peek"]);
         }
         super._registerBind(host, ops);
       }

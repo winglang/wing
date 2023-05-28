@@ -8,7 +8,7 @@ module.exports = function({ counterA }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterA.peek()) === 0)'`)})(((await counterA.peek()) === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterA.peek === "function" ? await counterA.peek() : await counterA.peek.handle()) === 0)'`)})(((typeof counterA.peek === "function" ? await counterA.peek() : await counterA.peek.handle()) === 0))};
       }
     }
   }
@@ -25,7 +25,7 @@ module.exports = function({ counterB }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterB.peek()) === 500)'`)})(((await counterB.peek()) === 500))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterB.peek === "function" ? await counterB.peek() : await counterB.peek.handle()) === 500)'`)})(((typeof counterB.peek === "function" ? await counterB.peek() : await counterB.peek.handle()) === 500))};
       }
     }
   }
@@ -42,7 +42,7 @@ module.exports = function({ counterC }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterC.peek()) === (-198))'`)})(((await counterC.peek()) === (-198)))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterC.peek === "function" ? await counterC.peek() : await counterC.peek.handle()) === (-198))'`)})(((typeof counterC.peek === "function" ? await counterC.peek() : await counterC.peek.handle()) === (-198)))};
       }
     }
   }
@@ -395,9 +395,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(counterA, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterA, host, ["peek"]);
+          $Inflight1._registerBindObject(counterA, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -430,9 +431,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(counterB, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterB, host, ["peek"]);
+          $Inflight2._registerBindObject(counterB, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -465,9 +467,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight3._registerBindObject(counterC, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterC, host, ["peek"]);
+          $Inflight3._registerBindObject(counterC, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }

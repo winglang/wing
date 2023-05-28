@@ -8,14 +8,14 @@ module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(0)) === "hello")'`)})(((await arr.at(0)) === "hello"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(1)) === "world")'`)})(((await arr.at(1)) === "world"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof arr.at === "function" ? await arr.at(0) : await arr.at.handle(0)) === "hello")'`)})(((typeof arr.at === "function" ? await arr.at(0) : await arr.at.handle(0)) === "hello"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof arr.at === "function" ? await arr.at(1) : await arr.at.handle(1)) === "world")'`)})(((typeof arr.at === "function" ? await arr.at(1) : await arr.at.handle(1)) === "world"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 2)'`)})((arr.length === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await mySet.has("my"))'`)})((await mySet.has("my")))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof mySet.has === "function" ? await mySet.has("my") : await mySet.has.handle("my"))'`)})((typeof mySet.has === "function" ? await mySet.has("my") : await mySet.has.handle("my")))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySet.size === 2)'`)})((mySet.size === 2))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (myMap))'`)})(("world" in (myMap)))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(myMap).length === 2)'`)})((Object.keys(myMap).length === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arrOfMap.at(0))))'`)})(("bang" in ((await arrOfMap.at(0)))))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((typeof arrOfMap.at === "function" ? await arrOfMap.at(0) : await arrOfMap.at.handle(0))))'`)})(("bang" in ((typeof arrOfMap.at === "function" ? await arrOfMap.at(0) : await arrOfMap.at.handle(0)))))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
       }
     }
@@ -191,13 +191,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(arr, host, []);
+          $Inflight1._registerBindObject(arrOfMap, host, []);
+          $Inflight1._registerBindObject(j, host, []);
+          $Inflight1._registerBindObject(myMap, host, []);
+          $Inflight1._registerBindObject(mySet, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(arr, host, ["at", "length"]);
-          this._registerBindObject(arrOfMap, host, ["at"]);
-          this._registerBindObject(j, host, []);
-          this._registerBindObject(myMap, host, ["has", "size"]);
-          this._registerBindObject(mySet, host, ["has", "size"]);
+          $Inflight1._registerBindObject(arr, host, ["at", "length"]);
+          $Inflight1._registerBindObject(arrOfMap, host, ["at"]);
+          $Inflight1._registerBindObject(j, host, []);
+          $Inflight1._registerBindObject(myMap, host, ["has", "size"]);
+          $Inflight1._registerBindObject(mySet, host, ["has", "size"]);
         }
         super._registerBind(host, ops);
       }

@@ -33,3 +33,16 @@ optionalSub1 ?? new Sub2();
 //               ^ error: Sub2 is not a subtype of Sub1
 optionalSub1 ?? new Super();
 //               ^ error: Super? is not a subtype of Sub1
+
+
+if let x = true {
+//         ^^^^ Expected type to be optional, but got "bool" instead
+}
+
+let var hi: str? = "hi";
+if let hi = hi {
+  // shadowed variable hi is not re-assignable, to reassign vars in if let 
+  // requires using `if let var` statement 
+  hi = "bye";
+//^^^^^^^^^^^ Variable hi is not reassignable 
+}

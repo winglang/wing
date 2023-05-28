@@ -54,15 +54,15 @@ changelog. To that end, pull request titles must follow this convention:
   * `repo` - change related to repository behavior (e.g. pull request templates, issue templates,
     etc).
 * `<subject>`
-  * Should be all lowercase and without a period (improves aesthetics of changelog).
+  * Prefer lowercase (except for proper nouns) and do not include a period (improves aesthetics of changelog).
   * For `fix` changes, subject should describe the problem, not the solution (e.g. `fix(cli): intermediate.js file not found` instead of ~`fix(cli): make sure output directory exists`~).
   * For `feat` changes, subject should describe the feature, not the activity of adding the feature (e.g. `feat(sdk): google cloud platform support` instead of `feat(sdk): add tf-gcp target to sdk`).
   * For `rfc` changes, subject should be the title of the rfc (e.g. `rfc(cli): run command` instead
     of `rfc(cli): rfc for run cli run command`).
 
-### How to run tests for all OSes in Pull Requests
+### How to run tests for all operating systems in pull requests
 
-In PRs, by default we only run tests for the same OS and node version that we build with (Linux, Node 18 currently).
+In pull requests, by default we only run tests for the same operating system and Node version that we build with (Linux, Node 18 currently).
 
-If you want to run tests for all OSes, you can add the `🧪 pr/e2e-full` label to your PR. 
-This label must be present before the build job starts, so if you add it after the build job has started, you will need to manually re-trigger the build.
+If you want to run tests for all operating systems, you can add the `🧪 pr/e2e-full` label to your PR. 
+This label must be present before the build job starts, so if you add it after the build job has started, you will need to re-trigger the build by pushing a new commit to your PR.

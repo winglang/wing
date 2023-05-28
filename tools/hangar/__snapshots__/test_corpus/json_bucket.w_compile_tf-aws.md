@@ -8,7 +8,7 @@ module.exports = function({ b, fileName }) {
     }
     async handle(msg)  {
       {
-        const x = (await b.getJson(fileName));
+        const x = (typeof b.getJson === "function" ? await b.getJson(fileName) : await b.getJson.handle(fileName));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
       }
     }
@@ -26,8 +26,8 @@ module.exports = function({ b, fileName, j, getJson }) {
     }
     async handle()  {
       {
-        (await b.putJson(fileName,j));
-        (await getJson.invoke(""));
+        (typeof b.putJson === "function" ? await b.putJson(fileName,j) : await b.putJson.handle(fileName,j));
+        (typeof getJson.invoke === "function" ? await getJson.invoke("") : await getJson.invoke.handle(""));
       }
     }
   }
@@ -309,10 +309,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(b, host, []);
+          $Inflight1._registerBindObject(fileName, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["getJson"]);
-          this._registerBindObject(fileName, host, []);
+          $Inflight1._registerBindObject(b, host, ["getJson"]);
+          $Inflight1._registerBindObject(fileName, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -351,12 +353,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(b, host, []);
+          $Inflight2._registerBindObject(fileName, host, []);
+          $Inflight2._registerBindObject(getJson, host, []);
+          $Inflight2._registerBindObject(j, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["putJson"]);
-          this._registerBindObject(fileName, host, []);
-          this._registerBindObject(getJson, host, ["invoke"]);
-          this._registerBindObject(j, host, []);
+          $Inflight2._registerBindObject(b, host, ["putJson"]);
+          $Inflight2._registerBindObject(fileName, host, []);
+          $Inflight2._registerBindObject(getJson, host, ["invoke"]);
+          $Inflight2._registerBindObject(j, host, []);
         }
         super._registerBind(host, ops);
       }

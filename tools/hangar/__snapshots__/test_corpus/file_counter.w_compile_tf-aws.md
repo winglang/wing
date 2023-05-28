@@ -8,9 +8,9 @@ module.exports = function({ counter, bucket }) {
     }
     async handle(body)  {
       {
-        const next = (await counter.inc());
+        const next = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
         const key = `myfile-${"hi"}.txt`;
-        (await bucket.put(key,body));
+        (typeof bucket.put === "function" ? await bucket.put(key,body) : await bucket.put.handle(key,body));
       }
     }
   }
@@ -269,10 +269,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(bucket, host, []);
+          $Inflight1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket, host, ["put"]);
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight1._registerBindObject(bucket, host, ["put"]);
+          $Inflight1._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }

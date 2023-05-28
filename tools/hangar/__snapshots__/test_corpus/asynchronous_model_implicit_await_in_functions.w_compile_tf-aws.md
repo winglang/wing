@@ -24,8 +24,8 @@ module.exports = function({ strToStr }) {
     }
     async handle(s)  {
       {
-        (await strToStr.invoke("one"));
-        {console.log((await strToStr.invoke("two")))};
+        (typeof strToStr.invoke === "function" ? await strToStr.invoke("one") : await strToStr.invoke.handle("one"));
+        {console.log((typeof strToStr.invoke === "function" ? await strToStr.invoke("two") : await strToStr.invoke.handle("two")))};
       }
     }
   }
@@ -301,9 +301,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(strToStr, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(strToStr, host, ["invoke"]);
+          $Inflight2._registerBindObject(strToStr, host, ["invoke"]);
         }
         super._registerBind(host, ops);
       }

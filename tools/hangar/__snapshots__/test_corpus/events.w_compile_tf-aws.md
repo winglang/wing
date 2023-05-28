@@ -8,7 +8,7 @@ module.exports = function({ counter }) {
     }
     async handle(key)  {
       {
-        (await counter.inc());
+        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
       }
     }
   }
@@ -25,7 +25,7 @@ module.exports = function({ counter }) {
     }
     async handle(key)  {
       {
-        (await counter.inc());
+        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
       }
     }
   }
@@ -42,7 +42,7 @@ module.exports = function({ counter }) {
     }
     async handle(key)  {
       {
-        (await counter.inc());
+        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
       }
     }
   }
@@ -59,7 +59,7 @@ module.exports = function({ counter }) {
     }
     async handle(key)  {
       {
-        (await counter.inc());
+        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
       }
     }
   }
@@ -86,7 +86,7 @@ module.exports = function({ counter, b }) {
           }
           async assertion()  {
             {
-              return ((await counter.peek()) === this.counterVal);
+              return ((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === this.counterVal);
             }
           }
           async testAssertion()  {
@@ -94,22 +94,22 @@ module.exports = function({ counter, b }) {
               let i = 0;
               while ((i < 12)) {
                 i = (i + 1);
-                if ((await this.assertion())) {
-                  {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+                if ((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())) {
+                  {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
                   return;
                 }
-                (await Predicate.sleep((1000 * 10)));
+                (typeof Predicate.sleep === "function" ? await Predicate.sleep((1000 * 10)) : await Predicate.sleep.handle((1000 * 10)));
               }
-              {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+              {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
             }
           }
         }
-        (await b.put("a","1"));
-        (await b.put("b","1"));
-        (await b.put("c","1"));
-        (await b.put("b","100"));
-        (await b.delete("c"));
-        (await new Predicate(10).testAssertion());
+        (typeof b.put === "function" ? await b.put("a","1") : await b.put.handle("a","1"));
+        (typeof b.put === "function" ? await b.put("b","1") : await b.put.handle("b","1"));
+        (typeof b.put === "function" ? await b.put("c","1") : await b.put.handle("c","1"));
+        (typeof b.put === "function" ? await b.put("b","100") : await b.put.handle("b","100"));
+        (typeof b.delete === "function" ? await b.delete("c") : await b.delete.handle("c"));
+        (typeof new Predicate(10).testAssertion === "function" ? await new Predicate(10).testAssertion() : await new Predicate(10).testAssertion.handle());
       }
     }
   }
@@ -979,9 +979,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight1._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -1014,9 +1015,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight2._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -1049,9 +1051,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight3._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight3._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -1084,9 +1087,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight4._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight4._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -1121,10 +1125,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight5._registerBindObject(b, host, []);
+          $Inflight5._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["delete", "put"]);
-          this._registerBindObject(counter, host, ["peek"]);
+          $Inflight5._registerBindObject(b, host, ["delete", "put"]);
+          $Inflight5._registerBindObject(counter, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }

@@ -8,12 +8,12 @@ module.exports = function({ r, r2 }) {
     }
     async handle()  {
       {
-        const connection = (await r.rawClient());
-        (await connection.set("wing","does redis"));
-        const value = (await connection.get("wing"));
+        const connection = (typeof r.rawClient === "function" ? await r.rawClient() : await r.rawClient.handle());
+        (typeof connection.set === "function" ? await connection.set("wing","does redis") : await connection.set.handle("wing","does redis"));
+        const value = (typeof connection.get === "function" ? await connection.get("wing") : await connection.get.handle("wing"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
-        (await r2.set("wing","does redis again"));
-        const value2 = (await r2.get("wing"));
+        (typeof r2.set === "function" ? await r2.set("wing","does redis again") : await r2.set.handle("wing","does redis again"));
+        const value2 = (typeof r2.get === "function" ? await r2.get("wing") : await r2.get.handle("wing"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
       }
     }
@@ -507,10 +507,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(r, host, []);
+          $Inflight1._registerBindObject(r2, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(r, host, ["rawClient"]);
-          this._registerBindObject(r2, host, ["get", "set"]);
+          $Inflight1._registerBindObject(r, host, ["rawClient"]);
+          $Inflight1._registerBindObject(r2, host, ["get", "set"]);
         }
         super._registerBind(host, ops);
       }

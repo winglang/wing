@@ -8,11 +8,11 @@ module.exports = function({ res, bucket }) {
     }
     async handle()  {
       {
-        const s = (await res.myMethod());
+        const s = (typeof res.myMethod === "function" ? await res.myMethod() : await res.myMethod.handle());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof bucket.list === "function" ? await bucket.list() : await bucket.list.handle()).length === 1)'`)})(((typeof bucket.list === "function" ? await bucket.list() : await bucket.list.handle()).length === 1))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
-        (await res.testTypeAccess());
+        (typeof res.testTypeAccess === "function" ? await res.testTypeAccess() : await res.testTypeAccess.handle());
       }
     }
   }
@@ -29,7 +29,7 @@ module.exports = function({ __parent_this }) {
     }
     async handle()  {
       {
-        (await __parent_this.b.put("foo1.txt","bar"));
+        (typeof __parent_this.b.put === "function" ? await __parent_this.b.put("foo1.txt","bar") : await __parent_this.b.put.handle("foo1.txt","bar"));
       }
     }
   }
@@ -46,7 +46,7 @@ module.exports = function({ __parent_this }) {
     }
     async handle()  {
       {
-        (await __parent_this.b.put("foo2.txt","bar"));
+        (typeof __parent_this.b.put === "function" ? await __parent_this.b.put("foo2.txt","bar") : await __parent_this.b.put.handle("foo2.txt","bar"));
       }
     }
   }
@@ -63,7 +63,7 @@ module.exports = function({ __parent_this }) {
     }
     async handle()  {
       {
-        (await __parent_this.q.push("foo"));
+        (typeof __parent_this.q.push === "function" ? await __parent_this.q.push("foo") : await __parent_this.q.push.handle("foo"));
       }
     }
   }
@@ -80,8 +80,8 @@ module.exports = function({ bigOlPublisher }) {
     }
     async handle()  {
       {
-        (await bigOlPublisher.publish("foo"));
-        const count = (await bigOlPublisher.getObjectCount());
+        (typeof bigOlPublisher.publish === "function" ? await bigOlPublisher.publish("foo") : await bigOlPublisher.publish.handle("foo"));
+        const count = (typeof bigOlPublisher.getObjectCount === "function" ? await bigOlPublisher.getObjectCount() : await bigOlPublisher.getObjectCount.handle());
       }
     }
   }
@@ -108,10 +108,10 @@ module.exports = function({ Foo, MyEnum }) {
     async myMethod()  {
       {
         const __parent_this = this;
-        (await this.foo.fooInc());
-        const s = (await Foo.fooStatic());
-        (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
-        return (await this.b.get("foo"));
+        (typeof this.foo.fooInc === "function" ? await this.foo.fooInc() : await this.foo.fooInc.handle());
+        const s = (typeof Foo.fooStatic === "function" ? await Foo.fooStatic() : await Foo.fooStatic.handle());
+        (typeof this.b.put === "function" ? await this.b.put("foo",`counter is: ${(typeof this.foo.fooGet === "function" ? await this.foo.fooGet() : await this.foo.fooGet.handle())}`) : await this.b.put.handle("foo",`counter is: ${(typeof this.foo.fooGet === "function" ? await this.foo.fooGet() : await this.foo.fooGet.handle())}`));
+        return (typeof this.b.get === "function" ? await this.b.get("foo") : await this.b.get.handle("foo"));
       }
     }
     async testTypeAccess()  {
@@ -119,8 +119,8 @@ module.exports = function({ Foo, MyEnum }) {
         const __parent_this = this;
         if (true) {
           const __parent_this = this;
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof Bar.barStatic === "function" ? await Bar.barStatic() : await Bar.barStatic.handle()) === "bar static")'`)})(((typeof Bar.barStatic === "function" ? await Bar.barStatic() : await Bar.barStatic.handle()) === "bar static"))};
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof Foo.fooStatic === "function" ? await Foo.fooStatic() : await Foo.fooStatic.handle()) === "foo static")'`)})(((typeof Foo.fooStatic === "function" ? await Foo.fooStatic() : await Foo.fooStatic.handle()) === "foo static"))};
           {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
         }
       }
@@ -144,15 +144,15 @@ module.exports = function({  }) {
     async publish(s)  {
       {
         const __parent_this = this;
-        (await this.t.publish(s));
-        (await this.q.push(s));
-        (await this.b2.put("foo",s));
+        (typeof this.t.publish === "function" ? await this.t.publish(s) : await this.t.publish.handle(s));
+        (typeof this.q.push === "function" ? await this.q.push(s) : await this.q.push.handle(s));
+        (typeof this.b2.put === "function" ? await this.b2.put("foo",s) : await this.b2.put.handle("foo",s));
       }
     }
     async getObjectCount()  {
       {
         const __parent_this = this;
-        return (await this.b.list()).length;
+        return (typeof this.b.list === "function" ? await this.b.list() : await this.b.list.handle()).length;
       }
     }
   }
@@ -172,20 +172,20 @@ module.exports = function({  }) {
       {
         const __parent_this = this;
         this.inflightField = 123;
-        (await this.c.inc(110));
-        (await this.c.dec(10));
+        (typeof this.c.inc === "function" ? await this.c.inc(110) : await this.c.inc.handle(110));
+        (typeof this.c.dec === "function" ? await this.c.dec(10) : await this.c.dec.handle(10));
       }
     }
     async fooInc()  {
       {
         const __parent_this = this;
-        (await this.c.inc());
+        (typeof this.c.inc === "function" ? await this.c.inc() : await this.c.inc.handle());
       }
     }
     async fooGet()  {
       {
         const __parent_this = this;
-        return (await this.c.peek());
+        return (typeof this.c.peek === "function" ? await this.c.peek() : await this.c.peek.handle());
       }
     }
     static async fooStatic()  {
@@ -422,7 +422,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
+            "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
+            "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "b2-on_create-OnMessage-d05c64b5-c85f4411"
           }
         },
@@ -448,8 +453,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
+            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-fe215853-c89a66f3"
           }
         },
@@ -475,8 +484,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
+            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-c351460f-c82610b4"
           }
         },
@@ -901,17 +914,20 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.c, host, ["dec", "inc"]);
+          Foo._registerBindObject(this.c, host, ["dec", "inc"]);
         }
         if (ops.includes("fooGet")) {
-          this._registerBindObject(this.c, host, ["peek"]);
+          Foo._registerBindObject(this.c, host, ["peek"]);
         }
         if (ops.includes("fooInc")) {
-          this._registerBindObject(this.c, host, ["inc"]);
-        }
-        if (ops.includes("fooStatic")) {
+          Foo._registerBindObject(this.c, host, ["inc"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("fooStatic")) {
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -963,21 +979,27 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.b, host, []);
-          this._registerBindObject(this.e, host, []);
-          this._registerBindObject(this.foo, host, []);
-          this._registerBindObject(this.name, host, []);
-        }
-        if (ops.includes("barStatic")) {
+          Bar._registerBindObject(this.b, host, []);
+          Bar._registerBindObject(this.e, host, []);
+          Bar._registerBindObject(this.foo, host, []);
+          Bar._registerBindObject(this.name, host, []);
         }
         if (ops.includes("myMethod")) {
-          this._registerBindObject(this.b, host, ["get", "put"]);
-          this._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
+          Bar._registerBindObject(Foo, host, ["fooStatic"]);
+          Bar._registerBindObject(this.b, host, ["get", "put"]);
+          Bar._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
         }
         if (ops.includes("testTypeAccess")) {
-          this._registerBindObject(this.e, host, []);
+          Bar._registerBindObject(Bar, host, ["barStatic"]);
+          Bar._registerBindObject(Foo, host, ["fooStatic"]);
+          Bar._registerBindObject(this.e, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("barStatic")) {
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight1 extends $stdlib.std.Resource {
@@ -1010,11 +1032,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(bucket, host, []);
+          $Inflight1._registerBindObject(res, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket, host, ["list"]);
-          this._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
-          this._registerBindObject(res.foo, host, ["inflightField"]);
+          $Inflight1._registerBindObject(bucket, host, ["list"]);
+          $Inflight1._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
+          $Inflight1._registerBindObject(res.foo, host, ["inflightField"]);
         }
         super._registerBind(host, ops);
       }
@@ -1056,9 +1080,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight2._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.b, host, ["put"]);
+              $Inflight2._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
@@ -1092,9 +1117,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight3._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.b, host, ["put"]);
+              $Inflight3._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
@@ -1128,9 +1154,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight4._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.q, host, ["push"]);
+              $Inflight4._registerBindObject(__parent_this.q, host, ["push"]);
             }
             super._registerBind(host, ops);
           }
@@ -1165,18 +1192,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.b, host, []);
-          this._registerBindObject(this.b2, host, []);
-          this._registerBindObject(this.q, host, []);
-          this._registerBindObject(this.t, host, []);
+          BigPublisher._registerBindObject(this.b, host, []);
+          BigPublisher._registerBindObject(this.b2, host, []);
+          BigPublisher._registerBindObject(this.q, host, []);
+          BigPublisher._registerBindObject(this.t, host, []);
         }
         if (ops.includes("getObjectCount")) {
-          this._registerBindObject(this.b, host, ["list"]);
+          BigPublisher._registerBindObject(this.b, host, ["list"]);
         }
         if (ops.includes("publish")) {
-          this._registerBindObject(this.b2, host, ["put"]);
-          this._registerBindObject(this.q, host, ["push"]);
-          this._registerBindObject(this.t, host, ["publish"]);
+          BigPublisher._registerBindObject(this.b2, host, ["put"]);
+          BigPublisher._registerBindObject(this.q, host, ["push"]);
+          BigPublisher._registerBindObject(this.t, host, ["publish"]);
         }
         super._registerBind(host, ops);
       }
@@ -1209,9 +1236,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight5._registerBindObject(bigOlPublisher, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
+          $Inflight5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
         }
         super._registerBind(host, ops);
       }

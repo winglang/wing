@@ -529,6 +529,7 @@ test("Given a public bucket when reaching to a non existent key, public url it s
 });
 
 test("Given a public bucket, when giving one of its keys, we should get it's public url", async () => {
+  // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
 
@@ -548,4 +549,26 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
     // @ts-expect-error (reaching into private property)
     `${client.fileDir}/${KEY}`
   );
+});
+
+test("check if an object exists in the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  await client.put(KEY, VALUE);
+  const existingObjectExists = await client.exists(KEY);
+  const nonExistentObjectExists = await client.exists("NON_EXISTENT_KEY");
+
+  // THEN
+  await s.stop();
+  expect(existingObjectExists).toBe(true);
+  expect(nonExistentObjectExists).toBe(false);
 });

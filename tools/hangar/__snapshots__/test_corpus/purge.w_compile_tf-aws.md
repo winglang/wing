@@ -8,12 +8,12 @@ module.exports = function({ q }) {
     }
     async handle()  {
       {
-        (await q.push("foo"));
-        (await q.push("bar"));
-        (await q.push("baz"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 3)'`)})(((await q.approxSize()) === 3))};
-        (await q.purge());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
+        (typeof q.push === "function" ? await q.push("foo") : await q.push.handle("foo"));
+        (typeof q.push === "function" ? await q.push("bar") : await q.push.handle("bar"));
+        (typeof q.push === "function" ? await q.push("baz") : await q.push.handle("baz"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 3)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 3))};
+        (typeof q.purge === "function" ? await q.purge() : await q.purge.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0))};
       }
     }
   }
@@ -192,9 +192,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(q, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(q, host, ["approxSize", "purge", "push"]);
+          $Inflight1._registerBindObject(q, host, ["approxSize", "purge", "push"]);
         }
         super._registerBind(host, ops);
       }

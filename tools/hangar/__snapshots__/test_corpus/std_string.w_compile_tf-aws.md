@@ -9,8 +9,8 @@ module.exports = function({ s1, s2 }) {
     async handle()  {
       {
         {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
-        {console.log((await (await s1.split(" ")).at(1)))};
-        {console.log((await s1.concat(s2)))};
+        {console.log((typeof (typeof s1.split === "function" ? await s1.split(" ") : await s1.split.handle(" ")).at === "function" ? await (typeof s1.split === "function" ? await s1.split(" ") : await s1.split.handle(" ")).at(1) : await (typeof s1.split === "function" ? await s1.split(" ") : await s1.split.handle(" ")).at.handle(1)))};
+        {console.log((typeof s1.concat === "function" ? await s1.concat(s2) : await s1.concat.handle(s2)))};
       }
     }
   }
@@ -179,10 +179,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(s1, host, []);
+          $Inflight1._registerBindObject(s2, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(s1, host, []);
-          this._registerBindObject(s2, host, []);
+          $Inflight1._registerBindObject(s1, host, []);
+          $Inflight1._registerBindObject(s2, host, []);
         }
         super._registerBind(host, ops);
       }

@@ -8,7 +8,7 @@ module.exports = function({ x }) {
     }
     async handle()  {
       {
-        (await x.handle("hello world!"));
+        (typeof x.handle === "function" ? await x.handle("hello world!") : await x.handle.handle("hello world!"));
       }
     }
   }
@@ -173,9 +173,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(x, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(x, host, ["handle"]);
+          $Inflight1._registerBindObject(x, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
