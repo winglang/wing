@@ -3436,7 +3436,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		} else {
 			self.diagnostics.borrow_mut().push(Diagnostic {
-				message: format!("unable to resolve parent type {}", parent_type),
+				message: format!("Base class \"{}\" is not a class", parent_type),
 				span: Some(parent_udt.span.clone()),
 			});
 			(None, None)
@@ -3587,7 +3587,7 @@ pub fn resolve_user_defined_type(
 		} else {
 			let symb = nested_name.last().unwrap();
 			Err(TypeError {
-				message: format!("Expected '{}' to be a type but it's a {symb_kind}", symb.name),
+				message: format!("Expected \"{}\" to be a type but it's a {symb_kind}", symb.name),
 				span: symb.span.clone(),
 			})
 		}
