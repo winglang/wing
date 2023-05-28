@@ -85,10 +85,6 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	// fn js_resolve_path(path_name: &str) -> String {
-	// 	format!("\"./{}\".replace(/\\\\/g, \"/\")", path_name)
-	// }
-
 	pub fn jsify(&mut self, scope: &'a Scope) -> String {
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
