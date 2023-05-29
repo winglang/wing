@@ -32,9 +32,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   // To workaround the issue, spawn a new process and invoke esbuild inside it.
 
   let esbuildScript = [
-    `const esbuild = require("${normalPath(
-      require.resolve("esbuild-wasm")
-    )}");`,
+    `const esbuild = require("esbuild-wasm");`,
     `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
       entrypoint
     )}"], outfile: "${normalPath(outfile)}", ${nodePathString}
