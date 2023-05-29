@@ -9,7 +9,7 @@ extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
-use diagnostic::{print_diagnostics, Diagnostic, Diagnostics};
+use diagnostic::{Diagnostic, Diagnostics};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -47,7 +47,6 @@ mod wasm_util;
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 
 const WINGSDK_STD_MODULE: &'static str = "std";
-const WINGSDK_FS_MODULE: &'static str = "fs";
 const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 const WINGSDK_UTIL_MODULE: &'static str = "util";
@@ -305,10 +304,6 @@ pub fn compile(
 	// Validate that every Expr has an evaluated_type
 	let mut tc_assert = TypeCheckAssert;
 	tc_assert.visit_scope(&scope);
-
-	// Print diagnostics
-	print_diagnostics(&parse_diagnostics);
-	print_diagnostics(&type_check_diagnostics);
 
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;

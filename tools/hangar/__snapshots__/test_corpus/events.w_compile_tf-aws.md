@@ -979,6 +979,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(counter, host, ["inc"]);
@@ -1014,6 +1015,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight2._registerBindObject(counter, host, ["inc"]);
@@ -1049,6 +1051,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight3._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight3._registerBindObject(counter, host, ["inc"]);
@@ -1084,6 +1087,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight4._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight4._registerBindObject(counter, host, ["inc"]);
@@ -1121,6 +1125,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight5._registerBindObject(b, host, []);
+          $Inflight5._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight5._registerBindObject(b, host, ["delete", "put"]);

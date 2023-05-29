@@ -7,8 +7,6 @@
 pass ─ bring_cdktf.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/bring_cdktf.w
 
 
 

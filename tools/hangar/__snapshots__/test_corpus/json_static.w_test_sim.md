@@ -7,8 +7,6 @@
 pass ─ json_static.wsim » root/env0/test:Access Json static inflight
  
 
-Tests Results:
-    ✓ valid/json_static.w
 
 
 

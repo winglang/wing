@@ -7,8 +7,6 @@
 pass ─ bring_projen.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/bring_projen.w
 
 
 

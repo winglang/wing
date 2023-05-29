@@ -8,7 +8,7 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ITableClient } from "../cloud";
-import { validateRow } from "../shared-targets/table";
+import { validateRow } from "../shared/table-utils";
 import { Json } from "../std";
 
 export class TableClient implements ITableClient {

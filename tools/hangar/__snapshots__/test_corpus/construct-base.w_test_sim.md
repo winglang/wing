@@ -11,8 +11,6 @@ display name of wing resource: no display name
 pass ─ construct-base.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/construct-base.w
 
 
 

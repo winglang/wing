@@ -186,9 +186,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let found_scope = scope_visitor.found_scope.unwrap_or(root_scope);
 		let found_env = found_scope.env.borrow();
 		let found_env = found_env.as_ref().expect("Scope should have an env");
-		let found_stmt_index = scope_visitor
-			.found_stmt_index
-			.expect("Found scope should have a statement index");
+		let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
 
 		let mut completions = vec![];
 
@@ -487,4 +485,109 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 
 		visit_type_annotation(self, node);
 	}
+}
+
+#[cfg(test)]
+mod tests {
+	use crate::lsp::completions::*;
+	use crate::lsp::sync::test_utils::*;
+	use lsp_types::*;
+
+	/// Creates a snapshot test for a given wing program's completions at a given position
+	/// In the wing program, place a comment "//^" into the text where the "^" is pointing to the desired character position
+	///
+	/// First parameter will be the name of the tests, as well as the identifier to use for the list of completion in the asserts (see last parameter)
+	/// Second parameter is the wing code block as a string literal
+	/// After the first two parameters, any additional are optional statements that should be used for asserting on the given completions.
+	///
+	/// Result is a list of [CompletionItem]s
+	macro_rules! test_completion_list {
+		($name:ident, $code:literal, $($assertion:stmt)*) => {
+			#[test]
+			fn $name() {
+				let text_document_position = load_file_with_contents($code);
+				let completion = on_completion(CompletionParams {
+					context: None,
+					text_document_position,
+					work_done_progress_params: Default::default(),
+					partial_result_params: Default::default(),
+				});
+
+				if let CompletionResponse::Array($name) = completion {
+					insta::with_settings!(
+						{
+							prepend_module_to_snapshot => false,
+							omit_expression => true,
+							snapshot_path => "./snapshots/completions",
+						}, {
+							insta::assert_yaml_snapshot!($name);
+						}
+					);
+					$($assertion)*
+				} else {
+					panic!("Expected array of completions");
+				}
+			}
+		};
+	}
+
+	test_completion_list!(empty, "", assert!(empty.len() > 0));
+
+	test_completion_list!(
+		new_expression_nested,
+		r#"
+bring cloud;
+
+new cloud. 
+        //^"#,
+		assert!(new_expression_nested.len() > 0)
+
+		// all items are classes
+		assert!(new_expression_nested.iter().all(|item| item.kind == Some(CompletionItemKind::CLASS)))
+
+		// all items are preflight
+		// TODO https://github.com/winglang/wing/issues/2512
+		// assert!(new_expression_nested.iter().all(|item| item.detail.as_ref().unwrap().starts_with("preflight")))
+	);
+
+	test_completion_list!(
+		static_method_call,
+		r#"
+class Resource {
+	static hello() {}
+}
+
+Resource. 
+       //^"#,
+		assert!(static_method_call.len() > 0)
+
+		assert!(static_method_call.iter().filter(|c| c.label == "hello").count() == 1)
+	);
+
+	test_completion_list!(
+		only_show_symbols_in_scope,
+		r#"
+let a = 1;
+
+if a == 1 {
+	let x = "";
+}
+	
+let b =  
+			//^
+			
+let c = 3;"#,
+		assert!(only_show_symbols_in_scope.len() > 0)
+
+		assert!(only_show_symbols_in_scope.iter().all(|c| c.label != "c"))
+	);
+
+	test_completion_list!(
+		incomplete_if_statement,
+		r#"
+let a = MutMap<str> {};
+if a. 
+   //^"#,
+		assert!(incomplete_if_statement.len() > 0)
+	);
 }

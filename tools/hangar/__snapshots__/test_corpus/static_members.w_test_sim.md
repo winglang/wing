@@ -7,8 +7,6 @@
 pass ─ static_members.wsim » root/env0/test:test
  
 
-Tests Results:
-    ✓ valid/static_members.w
 
 
 

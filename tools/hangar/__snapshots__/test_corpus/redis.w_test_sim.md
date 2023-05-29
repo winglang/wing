@@ -7,8 +7,6 @@
 pass ─ redis.wsim » root/env0/test:test
  
 
-Tests Results:
-    ✓ valid/redis.w
 
 
 

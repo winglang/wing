@@ -591,6 +591,61 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
+			StmtKind::IfLet {
+				value,
+				statements,
+				var_name,
+				else_statements,
+			} => {
+				let mut code = CodeMaker::default();
+				// To enable shadowing variables in if let statements, the following does some scope trickery
+				// take for example the following wing code:
+				// let x: str? = "hello";
+				// if let x = x {
+				//   log(x);
+				// }
+				//
+				// If we attempted to just do the following JS code
+				//
+				// const x = "hello"
+				// if (x != undefined) {
+				//   const x = x;  <== Reference error, "Cannot access 'x' before initialization"
+				//   log(x);
+				// }
+				//
+				// To work around this, we can generate a temporary scope, then use an intermediate variable to carry the
+				// shadowed value, like so:
+				// const x = "hello"
+				// {
+				//  const $IF_LET_VALUE = x; <== intermediate variable that expires at the end of the scope
+				//  if (x != undefined) {
+				//    const x = $IF_LET_VALUE;
+				//    log(x);
+				//  }
+				// }
+				// The temporary scope is created so that intermediate variables created by consecutive `if let` clauses
+				// do not interfere with each other.
+				code.open("{");
+				let if_let_value = "$IF_LET_VALUE".to_string();
+				code.line(format!(
+					"const {} = {};",
+					if_let_value,
+					self.jsify_expression(value, ctx)
+				));
+				code.open(format!("if ({} != undefined) {{", self.jsify_expression(value, ctx)));
+				code.line(format!("const {} = {};", var_name, if_let_value));
+				code.add_code(self.jsify_scope_body(statements, ctx));
+				code.close("}");
+
+				if let Some(else_scope) = else_statements {
+					code.open("else {");
+					code.add_code(self.jsify_scope_body(else_scope, ctx));
+					code.close("}");
+				}
+
+				code.close("}");
+				code
+			}
 			StmtKind::If {
 				condition,
 				statements,
@@ -878,17 +933,8 @@ impl<'a> JSifier<'a> {
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_capturable_field_names(resource_type);
 
-		// Add inflight init's refs
-		// By default all captured fields are needed in the inflight init method
-		let init_refs = BTreeMap::from_iter(captured_fields.iter().map(|f| (format!("this.{f}"), BTreeSet::new())));
-		// Check what's actually used in the init method
-		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
-		// Add the init refs to the refs map
-		for (k, v) in init_refs {
-			if !init_refs_entry.contains_key(&k) {
-				init_refs_entry.insert(k, v);
-			}
-		}
+		// Add bindings for the inflight init
+		self.add_inflight_init_refs(&mut refs, &captured_fields, &free_vars);
 
 		// Jsify inflight client
 		let inflight_methods = class
@@ -941,6 +987,7 @@ impl<'a> JSifier<'a> {
 
 		code.add_code(self.jsify_to_inflight_type_method(&class.name, &free_vars, &referenced_preflight_types));
 		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
+
 		// Generate the the class's host binding methods
 		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Instance));
 		code.add_code(self.jsify_register_bind_method(class, &refs, resource_type, BindMethod::Type));
@@ -1345,6 +1392,25 @@ impl<'a> JSifier<'a> {
 		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
 		bind_method.close("}");
 		bind_method
+	}
+
+	fn add_inflight_init_refs(
+		&self,
+		refs: &mut BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
+		captured_fields: &[String],
+		free_vars: &IndexSet<String>,
+	) {
+		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
+
+		// All captured fields are needed in the inflight init method
+		for field in captured_fields {
+			init_refs_entry.entry(format!("this.{field}")).or_default();
+		}
+
+		// All free variables are needed in the inflight init method
+		for free_var in free_vars {
+			init_refs_entry.entry(free_var.clone()).or_default();
+		}
 	}
 }
 

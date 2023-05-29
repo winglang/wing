@@ -7,8 +7,6 @@
 pass ─ table.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/table.w
 
 
 

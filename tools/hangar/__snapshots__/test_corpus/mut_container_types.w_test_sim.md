@@ -7,8 +7,6 @@
 pass ─ mut_container_types.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/mut_container_types.w
 
 
 

@@ -7,8 +7,6 @@
 pass ─ peek.wsim » root/env0/test:peek
  
 
-Tests Results:
-    ✓ counter/peek.w
 
 
 

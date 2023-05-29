@@ -7,8 +7,6 @@
 pass ─ invoke.wsim » root/env0/test:invoke
  
 
-Tests Results:
-    ✓ function/invoke.w
 
 
 

@@ -7,8 +7,6 @@
 pass ─ list.wsim » root/env0/test:list
  
 
-Tests Results:
-    ✓ table/list.w
 
 
 

@@ -7,8 +7,6 @@
 pass ─ api_valid_path.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/api_valid_path.w
 
 
 

@@ -10,8 +10,6 @@
 pass ─ anon_function.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/anon_function.w
 
 
 

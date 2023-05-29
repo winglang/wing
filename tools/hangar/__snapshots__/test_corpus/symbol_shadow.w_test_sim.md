@@ -10,8 +10,6 @@ pass ─ symbol_shadow.wsim » root/env2/test:inflight on top should capture top
 pass ─ symbol_shadow.wsim » root/env3/test:insideInflight should capture the right scope             
  
 
-Tests Results:
-    ✓ valid/symbol_shadow.w
 
 
 

@@ -7,8 +7,6 @@
 pass ─ resource_as_inflight_literal.wsim » root/env0/test:test
  
 
-Tests Results:
-    ✓ valid/resource_as_inflight_literal.w
 
 
 

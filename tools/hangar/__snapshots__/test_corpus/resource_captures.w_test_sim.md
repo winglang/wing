@@ -10,8 +10,6 @@ pass ┌ resource_captures.wsim » root/env0/test:test
      └ this.another.first.myResource:myString
  
 
-Tests Results:
-    ✓ valid/resource_captures.w
 
 
 

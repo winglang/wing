@@ -14,8 +14,6 @@ pass ┌ print.wsim » root/env1/test:log2
      └ inflight log 2.2
  
 
-Tests Results:
-    ✓ valid/print.w
 
 
 

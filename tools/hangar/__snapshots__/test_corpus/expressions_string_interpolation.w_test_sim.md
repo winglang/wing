@@ -7,8 +7,6 @@
 pass ─ expressions_string_interpolation.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/expressions_string_interpolation.w
 
 
 

@@ -7,8 +7,6 @@
 pass ─ bucket_keys.wsim » root/env0/test:test
  
 
-Tests Results:
-    ✓ valid/bucket_keys.w
 
 
 

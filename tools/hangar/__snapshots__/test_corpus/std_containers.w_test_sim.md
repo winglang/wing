@@ -7,8 +7,6 @@
 pass ─ std_containers.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/std_containers.w
 
 
 

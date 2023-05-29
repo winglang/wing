@@ -7,8 +7,6 @@
 pass ─ exists.wsim » root/env0/test:exists
  
 
-Tests Results:
-    ✓ bucket/exists.w
 
 
 

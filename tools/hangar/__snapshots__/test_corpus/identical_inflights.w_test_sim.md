@@ -7,8 +7,6 @@
 pass ─ identical_inflights.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/identical_inflights.w
 
 
 

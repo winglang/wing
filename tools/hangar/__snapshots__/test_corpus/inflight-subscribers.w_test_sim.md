@@ -7,8 +7,6 @@
 pass ─ inflight-subscribers.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/inflight-subscribers.w
 
 
 

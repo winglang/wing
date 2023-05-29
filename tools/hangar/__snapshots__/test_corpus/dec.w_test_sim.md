@@ -7,8 +7,6 @@
 pass ─ dec.wsim » root/env0/test:dec
  
 
-Tests Results:
-    ✓ counter/dec.w
 
 
 

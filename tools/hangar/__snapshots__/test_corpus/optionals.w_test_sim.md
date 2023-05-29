@@ -7,8 +7,6 @@
 pass ─ optionals.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/optionals.w
 
 
 

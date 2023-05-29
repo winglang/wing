@@ -7,9 +7,9 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
 import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing";
-import { convertBetweenHandlers } from "../utils/convert";
 
 export class Service extends cloud.Service implements ISimulatorResource {
   private readonly autoStart: boolean;

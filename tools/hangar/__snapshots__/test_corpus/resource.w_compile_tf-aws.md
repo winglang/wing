@@ -422,7 +422,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
+            "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
+            "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "b2-on_create-OnMessage-d05c64b5-c85f4411"
           }
         },
@@ -448,8 +453,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
+            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-fe215853-c89a66f3"
           }
         },
@@ -475,8 +484,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
+            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-c351460f-c82610b4"
           }
         },
@@ -1019,6 +1032,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(bucket, host, []);
+          $Inflight1._registerBindObject(res, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(bucket, host, ["list"]);
@@ -1065,6 +1080,7 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight2._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
               $Inflight2._registerBindObject(__parent_this.b, host, ["put"]);
@@ -1101,6 +1117,7 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight3._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
               $Inflight3._registerBindObject(__parent_this.b, host, ["put"]);
@@ -1137,6 +1154,7 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight4._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
               $Inflight4._registerBindObject(__parent_this.q, host, ["push"]);
@@ -1218,6 +1236,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight5._registerBindObject(bigOlPublisher, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);

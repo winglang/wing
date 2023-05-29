@@ -7,8 +7,6 @@
 pass ─ structs.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/structs.w
 
 
 

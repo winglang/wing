@@ -9,8 +9,6 @@ pass ┌ extern_implementation.wsim » root/env1/test:console
      └ printing hey there
  
 
-Tests Results:
-    ✓ valid/extern_implementation.w
 
 
 

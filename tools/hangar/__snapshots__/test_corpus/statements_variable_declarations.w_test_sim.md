@@ -7,8 +7,6 @@
 pass ─ statements_variable_declarations.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/statements_variable_declarations.w
 
 
 

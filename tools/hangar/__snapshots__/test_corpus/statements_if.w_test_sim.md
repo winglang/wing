@@ -7,8 +7,6 @@
 pass ─ statements_if.wsim » root/env0/test:test
  
 
-Tests Results:
-    ✓ valid/statements_if.w
 
 
 

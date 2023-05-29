@@ -7,8 +7,6 @@
 pass ─ capture_primitives.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/capture_primitives.w
 
 
 

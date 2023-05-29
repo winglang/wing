@@ -7,8 +7,6 @@
 pass ─ reset.wsim » root/env0/test:reset
  
 
-Tests Results:
-    ✓ counter/reset.w
 
 
 

@@ -7,8 +7,6 @@
 pass ─ bring_jsii.wsim » root/env0/test:sayHello
  
 
-Tests Results:
-    ✓ valid/bring_jsii.w
 
 
 

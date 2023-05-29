@@ -7,8 +7,6 @@
 pass ─ events.wsim » root/env0/counter is incremented 10 times
  
 
-Tests Results:
-    ✓ bucket/events.w
 
 
 

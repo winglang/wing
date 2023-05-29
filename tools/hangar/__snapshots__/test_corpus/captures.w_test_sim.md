@@ -7,8 +7,6 @@
 pass ─ captures.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/captures.w
 
 
 

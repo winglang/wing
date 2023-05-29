@@ -7,8 +7,6 @@
 pass ─ reassignment.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/reassignment.w
 
 
 

@@ -7,8 +7,6 @@
 pass ─ capture_containers.wsim » root/env0/test:capture_containers
  
 
-Tests Results:
-    ✓ valid/capture_containers.w
 
 
 

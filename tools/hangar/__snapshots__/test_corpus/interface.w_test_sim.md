@@ -7,8 +7,6 @@
 pass ─ interface.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/interface.w
 
 
 

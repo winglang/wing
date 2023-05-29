@@ -8,8 +8,6 @@ website is up and running on ${root/env0/cloud.Website#attrs.url}!
 pass ─ website.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/website.w
 
 
 

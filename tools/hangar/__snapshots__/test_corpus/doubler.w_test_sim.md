@@ -7,8 +7,6 @@
 pass ─ doubler.wsim » root/env0/test:f(2) == 8
  
 
-Tests Results:
-    ✓ valid/doubler.w
 
 
 

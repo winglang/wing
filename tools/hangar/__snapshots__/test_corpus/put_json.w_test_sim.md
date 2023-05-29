@@ -7,8 +7,6 @@
 pass ─ put_json.wsim » root/env0/test:putJson
  
 
-Tests Results:
-    ✓ bucket/put_json.w
 
 
 

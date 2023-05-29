@@ -10,8 +10,6 @@ pass ┌ std_string.wsim » root/env0/test:string
      └ some strings are immutable
  
 
-Tests Results:
-    ✓ valid/std_string.w
 
 
 

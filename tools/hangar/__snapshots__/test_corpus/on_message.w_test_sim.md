@@ -7,8 +7,6 @@
 pass ─ on_message.wsim » root/env0/test:onMessage
  
 
-Tests Results:
-    ✓ topic/on_message.w
 
 
 

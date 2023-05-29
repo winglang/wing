@@ -7,8 +7,6 @@
 pass ─ capture_resource_with_no_inflight.wsim » root/env0/test:test
  
 
-Tests Results:
-    ✓ valid/capture_resource_with_no_inflight.w
 
 
 

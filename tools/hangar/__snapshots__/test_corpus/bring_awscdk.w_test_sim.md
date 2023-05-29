@@ -7,8 +7,6 @@
 pass ─ bring_awscdk.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/bring_awscdk.w
 
 
 

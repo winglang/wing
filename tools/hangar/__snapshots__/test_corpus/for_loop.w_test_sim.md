@@ -105,8 +105,6 @@ for x in (z*2)..0 { ... } <=> x = 2
 pass ─ for_loop.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/for_loop.w
 
 
 

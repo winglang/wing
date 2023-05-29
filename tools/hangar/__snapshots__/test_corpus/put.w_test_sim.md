@@ -7,8 +7,6 @@
 pass ─ put.wsim » root/env0/test:put
  
 
-Tests Results:
-    ✓ bucket/put.w
 
 
 

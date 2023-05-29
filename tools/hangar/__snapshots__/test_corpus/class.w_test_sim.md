@@ -7,8 +7,6 @@
 pass ─ class.wsim » root/env0/test:access inflight field
  
 
-Tests Results:
-    ✓ valid/class.w
 
 
 

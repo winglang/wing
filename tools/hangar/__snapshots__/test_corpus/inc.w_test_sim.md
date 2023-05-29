@@ -7,8 +7,6 @@
 pass ─ inc.wsim » root/env0/test:inc
  
 
-Tests Results:
-    ✓ counter/inc.w
 
 
 

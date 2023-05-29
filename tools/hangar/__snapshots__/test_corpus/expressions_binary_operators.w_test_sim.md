@@ -7,8 +7,6 @@
 pass ─ expressions_binary_operators.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/expressions_binary_operators.w
 
 
 

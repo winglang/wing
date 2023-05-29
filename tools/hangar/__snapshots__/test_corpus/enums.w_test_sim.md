@@ -7,8 +7,6 @@
 pass ─ enums.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/enums.w
 
 
 

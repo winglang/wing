@@ -7,8 +7,6 @@
 pass ─ while.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/while.w
 
 
 

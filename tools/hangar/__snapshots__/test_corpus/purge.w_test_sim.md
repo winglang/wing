@@ -7,8 +7,6 @@
 pass ─ purge.wsim » root/env0/test:purge
  
 
-Tests Results:
-    ✓ queue/purge.w
 
 
 

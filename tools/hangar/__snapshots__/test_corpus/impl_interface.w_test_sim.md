@@ -7,8 +7,6 @@
 pass ─ impl_interface.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/impl_interface.w
 
 
 

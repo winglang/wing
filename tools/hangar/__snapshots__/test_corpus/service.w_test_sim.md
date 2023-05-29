@@ -7,8 +7,6 @@
 pass ─ service.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/service.w
 
 
 

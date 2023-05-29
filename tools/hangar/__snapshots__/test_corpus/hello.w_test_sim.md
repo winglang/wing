@@ -7,8 +7,6 @@
 pass ─ hello.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/hello.w
 
 
 

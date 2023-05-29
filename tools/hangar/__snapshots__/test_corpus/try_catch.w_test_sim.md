@@ -7,8 +7,6 @@
 pass ─ try_catch.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/try_catch.w
 
 
 

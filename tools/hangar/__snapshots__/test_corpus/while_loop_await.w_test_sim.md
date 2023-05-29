@@ -7,8 +7,6 @@
 pass ─ while_loop_await.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/while_loop_await.w
 
 
 

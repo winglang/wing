@@ -8,8 +8,6 @@ pass ─ inflights_calling_inflights.wsim » root/env0/test:inflights can call o
 pass ─ inflights_calling_inflights.wsim » root/env1/test:variable can be an inflight closure
  
 
-Tests Results:
-    ✓ valid/inflights_calling_inflights.w
 
 
 

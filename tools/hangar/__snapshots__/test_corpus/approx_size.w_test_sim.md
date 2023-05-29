@@ -7,8 +7,6 @@
 pass ─ approx_size.wsim » root/env0/test:approxSize
  
 
-Tests Results:
-    ✓ queue/approx_size.w
 
 
 

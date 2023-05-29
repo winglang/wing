@@ -6,8 +6,6 @@ use lsp_types::{Position, Range};
 
 use serde::Serialize;
 
-use crate::debug;
-
 pub type FileId = String;
 pub type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
@@ -171,12 +169,6 @@ impl Ord for Diagnostic {
 impl PartialOrd for Diagnostic {
 	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
 		self.span.partial_cmp(&other.span)
-	}
-}
-
-pub fn print_diagnostics(diagnostics: &Diagnostics) {
-	for diagnostic in diagnostics {
-		debug!("{}", diagnostic);
 	}
 }
 

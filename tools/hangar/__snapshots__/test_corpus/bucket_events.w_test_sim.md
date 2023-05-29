@@ -22,8 +22,6 @@ pass ┌ bucket_events.wsim » root/env0/test:test
      └ other bucket event called!
  
 
-Tests Results:
-    ✓ valid/bucket_events.w
 
 
 

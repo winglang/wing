@@ -7,8 +7,6 @@
 pass ─ calling_inflight_variants.wsim » root/env0/test:calling different types of inflights
  
 
-Tests Results:
-    ✓ valid/calling_inflight_variants.w
 
 
 

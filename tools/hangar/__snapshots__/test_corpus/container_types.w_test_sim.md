@@ -7,8 +7,6 @@
 pass ─ container_types.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/container_types.w
 
 
 

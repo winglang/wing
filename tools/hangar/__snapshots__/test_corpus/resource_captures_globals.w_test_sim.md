@@ -8,8 +8,6 @@ pass ─ resource_captures_globals.wsim » root/env0/test:test
 pass ─ resource_captures_globals.wsim » root/env1/test:access cloud resource through static methods only
  
 
-Tests Results:
-    ✓ valid/resource_captures_globals.w
 
 
 

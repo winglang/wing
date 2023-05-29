@@ -7,8 +7,6 @@
 pass ─ json.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/json.w
 
 
 

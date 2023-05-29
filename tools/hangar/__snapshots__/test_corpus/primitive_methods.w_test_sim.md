@@ -8,8 +8,6 @@
 pass ─ primitive_methods.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/primitive_methods.w
 
 
 

@@ -7,8 +7,6 @@
 pass ─ inflight_concat.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/inflight_concat.w
 
 
 

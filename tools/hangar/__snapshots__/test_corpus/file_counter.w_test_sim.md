@@ -7,8 +7,6 @@
 pass ─ file_counter.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/file_counter.w
 
 
 

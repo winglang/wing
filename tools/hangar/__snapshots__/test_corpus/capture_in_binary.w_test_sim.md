@@ -7,8 +7,6 @@
 pass ─ capture_in_binary.wsim » root/env0/test:binary expressions
  
 
-Tests Results:
-    ✓ valid/capture_in_binary.w
 
 
 

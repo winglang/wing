@@ -7,8 +7,6 @@
 pass ─ inflight_class_inside_inflight_closure.wsim » root/env0/test:it works
  
 
-Tests Results:
-    ✓ valid/inflight_class_inside_inflight_closure.w
 
 
 

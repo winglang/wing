@@ -7,8 +7,6 @@
 pass ─ website_with_api.wsim (no tests)
  
 
-Tests Results:
-    ✓ valid/website_with_api.w
 
 
 

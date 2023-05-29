@@ -7,8 +7,6 @@
 pass ─ pop.wsim » root/env0/test:pop
  
 
-Tests Results:
-    ✓ queue/pop.w
 
 
 
