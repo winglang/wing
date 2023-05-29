@@ -15,6 +15,10 @@ const log = debug("wing:test");
 
 const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 
+/**
+ * @param path path to the test/s file
+ * @returns the file name and parent dir in the following format: "folder/file.ext"
+ */
 const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 
 /**
@@ -28,8 +32,19 @@ export async function test(entrypoints: string[], options: TestOptions) {
   const failing: { testName: string; error: Error }[] = [];
   for (const entrypoint of entrypoints) {
     try {
-      await testOne(entrypoint, options);
-      passing.push(generateTestName(entrypoint));
+      const results: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
+      if (results?.some(({ pass }) => !pass)) {
+        failing.push(
+          ...results
+            ?.filter(({ pass }) => !pass)
+            .map((item) => ({
+              testName: generateTestName(entrypoint),
+              error: new Error(item.error),
+            }))
+        );
+      } else {
+        passing.push(generateTestName(entrypoint));
+      }
     } catch (error) {
       failing.push({ testName: generateTestName(entrypoint), error: error as Error });
     }
@@ -43,13 +58,18 @@ function printResults(
   duration: number
 ) {
   const durationInSeconds = duration / 1000;
+  const totalSum = failing.length + passing.length;
   console.log(" "); // for getting a new line- \n does't seem to work :(
   console.log(`
-Tests Results:
-${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
-${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}
 ${
-  failing.length
+  totalSum > 1
+    ? `Tests Results:
+${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
+${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}`
+    : ""
+}
+${
+  failing.length && totalSum > 1
     ? `
 ${" "}
 Errors:` +
@@ -66,10 +86,10 @@ At ${testName}\n ${chalk.red(error.message)}
 
 ${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
     failing.length && passing.length ? chalk.dim(" |") : ""
-  }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
-    `(${failing.length + passing.length})`
-  )} 
-${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${durationInSeconds % 60}s
+  }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(`(${totalSum})`)} 
+${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(durationInSeconds % 60).toFixed(
+    2
+  )}s
 `);
 }
 
@@ -88,10 +108,10 @@ async function testOne(entrypoint: string, options: TestOptions) {
 
   switch (options.target) {
     case Target.SIM:
-      await testSimulator(synthDir);
+      return await testSimulator(synthDir);
       break;
     case Target.TF_AWS:
-      await testTfAws(synthDir);
+      return await testTfAws(synthDir);
       break;
     default:
       throw new Error(`unsupported target ${options.target}`);
@@ -246,8 +266,9 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
     return results;
   } catch (err) {
     console.warn((err as Error).message);
+    return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    cleanup(synthDir);
+    await cleanup(synthDir);
   }
 }
 
