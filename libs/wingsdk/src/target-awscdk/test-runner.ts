@@ -17,7 +17,7 @@ export class TestRunner extends cloud.TestRunner {
     super(scope, id, props);
 
     // This output is created so the CLI's `wing test` command can obtain a list
-    // of all ARNs of test functions by running `terraform output`.
+    // of all ARNs of test functions
     const output = new CfnOutput(this, "TestFunctionArns", {
       value: Lazy.string({
         produce: () => {
