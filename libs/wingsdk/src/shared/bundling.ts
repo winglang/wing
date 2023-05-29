@@ -32,16 +32,16 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   // To workaround the issue, spawn a new process and invoke esbuild inside it.
 
   let esbuildScript = [
-    `const esbuild = require("esbuild-wasm");`,
+    `const esbuild = require("${normalPath(
+      require.resolve("esbuild-wasm")
+    )}");`,
     `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
       entrypoint
     )}"], outfile: "${normalPath(outfile)}", ${nodePathString}
     minify: false, platform: "node", target: "node16", external: ["aws-sdk"],
    });`,
   ].join("\n");
-  let result = spawnSync(process.argv[0], ["-e", esbuildScript], {
-    cwd: __dirname,
-  });
+  let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
   if (result.status !== 0) {
     throw new Error(
       `Failed to bundle function: ${result.stderr.toString("utf-8")}`
