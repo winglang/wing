@@ -145,120 +145,122 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`class.w > stderr 1`] = `
-"error: Unexpected 'parameter_list'
-   --> ../../../examples/tests/invalid/class.w:15:7
+"error: Expected block
+   --> ../../../examples/tests/invalid/class.w:17:17
    |
-15 |   init(foo: str)
-   |       ^^^^^^^^^^ Unexpected 'parameter_list'
+17 |   init(foo: str)
+   |                 ^ Expected block
 
 
-"error: Preflight field \\"x\\" is not initialized
+error: Preflight field \\"x\\" is not initialized
   --> ../../../examples/tests/invalid/class.w:4:4
   |
 4 |    x:num;
   |    ^ Preflight field \\"x\\" is not initialized
 
 
-error: Expected 0 arguments but got 1
-  --> ../../../examples/tests/invalid/class.w:7:1
-  |
-7 | new C2(1);
-  | ^^^^^^^^^ Expected 0 arguments but got 1
-
-
-error: Expected 0 named argument(s)
-   --> ../../../examples/tests/invalid/class.w:11:1
-   |
-11 | new C9(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
-
-
-error: Expected 0 named argument(s)
-   --> ../../../examples/tests/invalid/class.w:20:1
-   |
-20 | new C10(foo: \\"bar\\"); 
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
-
-
-error: Expected 0 named argument(s)
-   --> ../../../examples/tests/invalid/class.w:23:1
-   |
-23 | new C10(\\"hello\\", foo: \\"bar\\"); 
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
-error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
+error: Expected 0 argument(s) but got 1
   --> ../../../examples/tests/invalid/class.w:9:1
   |
 9 | new C2(1);
-  | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
+  | ^^^^^^^^^ Expected 0 argument(s) but got 1
+
+
+error: Expected 0 argument(s) but got 1
+   --> ../../../examples/tests/invalid/class.w:13:1
+   |
+13 | new C9({token: \\"1\\"});
+   | ^^^^^^^^^^^^^^^^^^^^ Expected 0 argument(s) but got 1
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/class.w:19:1
+   |
+19 | new C10(); 
+   | ^^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/class.w:22:1
+   |
+22 | new C10(foo: \\"bar\\"); 
+   | ^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: class C10 does not expect any named argument
+   --> ../../../examples/tests/invalid/class.w:25:1
+   |
+25 | new C10(\\"hello\\", foo: \\"bar\\"); 
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ class C10 does not expect any named argument
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:21:16
+   --> ../../../examples/tests/invalid/class.w:37:16
    |
-21 |   inflight var x: num;
+37 |   inflight var x: num;
    |                ^ Inflight field \\"x\\" is not initialized
 
 
 error: Inflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:23:12
+   --> ../../../examples/tests/invalid/class.w:39:12
    |
-23 |   inflight y: str;
+39 |   inflight y: str;
    |            ^ Inflight field \\"y\\" is not initialized
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:28:12
+   --> ../../../examples/tests/invalid/class.w:44:12
    |
-28 |   inflight x: num;
+44 |   inflight x: num;
    |            ^ Inflight field \\"x\\" is not initialized
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:34:12
+   --> ../../../examples/tests/invalid/class.w:50:12
    |
-34 |   inflight x: num;
+50 |   inflight x: num;
    |            ^ Inflight field \\"x\\" is not initialized
 
 
 error: \\"y\\" cannot be initialized in the inflight initializer
-   --> ../../../examples/tests/invalid/class.w:45:10
+   --> ../../../examples/tests/invalid/class.w:61:10
    |
-45 |     this.y = 1;
+61 |     this.y = 1;
    |          ^ \\"y\\" cannot be initialized in the inflight initializer
 
 
 error: \\"x\\" cannot be initialized in the preflight initializer
-   --> ../../../examples/tests/invalid/class.w:40:10
+   --> ../../../examples/tests/invalid/class.w:56:10
    |
-40 |     this.x = 1;
+56 |     this.x = 1;
    |          ^ \\"x\\" cannot be initialized in the preflight initializer
 
 
 error: Preflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:36:3
+   --> ../../../examples/tests/invalid/class.w:52:3
    |
-36 |   y: num;
+52 |   y: num;
    |   ^ Preflight field \\"y\\" is not initialized
 
 
 error: Expected 'x' to be a type but it's a variable
-   --> ../../../examples/tests/invalid/class.w:52:18
+   --> ../../../examples/tests/invalid/class.w:68:18
    |
-52 | class C7 extends x {
+68 | class C7 extends x {
    |                  ^ Expected 'x' to be a type but it's a variable
 
 
 error: Preflight class C8's parent \\"S1\\" is not a class
-   --> ../../../examples/tests/invalid/class.w:58:18
+   --> ../../../examples/tests/invalid/class.w:74:18
    |
-58 | class C8 extends S1 {
+74 | class C8 extends S1 {
    |                  ^^ Preflight class C8's parent \\"S1\\" is not a class
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.w:29:14
+   --> ../../../examples/tests/invalid/class.w:31:14
    |
-29 |     this.x = \\"Hi\\";
+31 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 "

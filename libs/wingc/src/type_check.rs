@@ -804,11 +804,7 @@ impl TypeRef {
 	}
 
 	pub fn is_struct(&self) -> bool {
-		if let Type::Struct(_) = **self {
-			true
-		} else {
-			false
-		}
+		matches!(**self, Type::Struct(_))
 	}
 
 	pub fn is_void(&self) -> bool {
@@ -1370,23 +1366,28 @@ impl<'a> TypeChecker<'a> {
 				let min_args = constructor_sig.min_parameters();
 				if pos_args_count < min_args {
 					let err_text = format!(
-							"Expected {} positional argument(s) but got {}",
-							min_args, pos_args_count
-						);
-					return self.expr_error(exp, err_text);
+						"Expected {} positional argument(s) but got {}",
+						min_args, pos_args_count
+					);
+					self.spanned_error(exp, err_text);
+					return self.types.error();
 				}
 
 				if !arg_list.named_args.is_empty() {
 					let last_arg = match constructor_sig.parameters.last() {
 						Some(arg) => arg.maybe_unwrap_option(),
 						None => {
-							return self.expr_error(exp, format!("Expected 0 named argument(s)"
-							));
-						},
+							self.spanned_error(exp, "Expected 0 named argument(s)");
+							return self.types.error();
+						}
 					};
-					
+
 					if !last_arg.is_struct() {
-						return self.expr_error(exp, format!("class {} does not expect any named argument", class_symbol.name));
+						self.spanned_error(
+							exp,
+							format!("class {} does not expect any named argument", class_symbol.name),
+						);
+						return self.types.error();
 					}
 
 					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
@@ -1396,10 +1397,7 @@ impl<'a> TypeChecker<'a> {
 				let max_args = constructor_sig.max_parameters();
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
-						format!(
-							"Expected {} arguments but got {}",
-							min_args, arg_count
-						)
+						format!("Expected {} argument(s) but got {}", min_args, arg_count)
 					} else {
 						format!(
 							"Expected between {} and {} arguments but got {}",
@@ -1493,23 +1491,28 @@ impl<'a> TypeChecker<'a> {
 				let min_args = func_sig.min_parameters();
 				if pos_args_count < min_args {
 					let err_text = format!(
-							"Expected {} positional argument(s) but got {}",
-							min_args, pos_args_count
-						);
-					return self.expr_error(exp, err_text);
+						"Expected {} positional argument(s) but got {}",
+						min_args, pos_args_count
+					);
+					self.spanned_error(exp, err_text);
+					return self.types.error();
 				}
 
 				if !arg_list.named_args.is_empty() {
 					let last_arg = match func_sig.parameters.last() {
 						Some(arg) => arg.maybe_unwrap_option(),
 						None => {
-							return self.expr_error(exp, format!("Expected 0 named arguments for func at {}", exp.span().to_string()
-							));
-						},
+							self.spanned_error(
+								exp,
+								format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
+							);
+							return self.types.error();
+						}
 					};
 
 					if !last_arg.is_struct() {
-						return self.expr_error(exp, format!("No named arguments expected"));
+						self.spanned_error(exp, "No named arguments expected");
+						return self.types.error();
 					}
 
 					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);

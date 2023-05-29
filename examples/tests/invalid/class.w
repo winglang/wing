@@ -10,7 +10,7 @@ new C2(1);
 //^^^^^^^ Expected 0 argument(s) but got 1
 
 class C9 {}
-new C4(token: "1");
+new C9(token: "1");
 //^^^^^^^ Expected 0 named argument(s)"
 
 class C10 {
@@ -23,7 +23,7 @@ new C10(foo: "bar");
 //^^^^^^^ Expected 1 positional argument(s) but got 0
 
 new C10("hello", foo: "bar"); 
-//^^^^^^^ class C5 does not expect any named argument
+//^^^^^^^ class C10 does not expect any named argument
 
 class C3 {
   x: num;
