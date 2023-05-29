@@ -197,6 +197,13 @@ You can show clippy errors in your IDE by installing the [rust-analyzer](https:/
 
 The [insta](https://marketplace.visualstudio.com/items?itemName=mitsuhiko.insta) extension allows you to view snapshots in the tests files.
 
+## How do I debug the Wing compiler on VSCode?
+
+To debug the Rust compiler on VSCode, first you need to install the [CodeLLDB extension](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb).<br/>
+Next, you can use the `Debug Wing Compiler` launch configuration available on our [launch.json](https://github.com/winglang/wing/blob/main/.vscode/launch.json).
+
+Hit F5 to start debugging. You'll be prompted to insert the path to the `.w` file you want to debug.<br/>You can use the `${workspaceFolder}/examples/tests/valid/hello.w` file for example.
+
 ## How do I make changes to the Wing grammar?
 
 After making changes to `grammar.js`, run:
