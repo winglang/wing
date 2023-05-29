@@ -1,0 +1,49 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: clear
+  kind: 2
+  detail: "(): void"
+  insertText: clear($0)
+  insertTextFormat: 2
+- label: copy
+  kind: 2
+  detail: "(): ImmutableMap"
+  insertText: copy($0)
+  insertTextFormat: 2
+- label: delete
+  kind: 2
+  detail: "(str): bool"
+  insertText: delete($0)
+  insertTextFormat: 2
+- label: get
+  kind: 2
+  detail: "(str): T1"
+  insertText: get($0)
+  insertTextFormat: 2
+- label: has
+  kind: 2
+  detail: "(str): bool"
+  insertText: has($0)
+  insertTextFormat: 2
+- label: keys
+  kind: 2
+  detail: "(): ImmutableArray"
+  insertText: keys($0)
+  insertTextFormat: 2
+- label: set
+  kind: 2
+  detail: "(str, T1): void"
+  insertText: set($0)
+  insertTextFormat: 2
+- label: size
+  kind: 2
+  detail: "(): num"
+  insertText: size($0)
+  insertTextFormat: 2
+- label: values
+  kind: 2
+  detail: "(): ImmutableArray"
+  insertText: values($0)
+  insertTextFormat: 2
+

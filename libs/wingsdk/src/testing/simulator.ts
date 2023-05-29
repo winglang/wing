@@ -4,9 +4,9 @@ import { Tree } from "./tree";
 import { Trace, TraceType } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
+import { readJsonSync } from "../shared/misc";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
-import { readJsonSync } from "../utils/misc";
 
 /**
  * Props for `Simulator`.

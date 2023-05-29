@@ -197,13 +197,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(myBool, host, []);
+          $Inflight1._registerBindObject(myDur, host, []);
+          $Inflight1._registerBindObject(myNum, host, []);
+          $Inflight1._registerBindObject(mySecondBool, host, []);
+          $Inflight1._registerBindObject(myStr, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(myBool, host, []);
-          this._registerBindObject(myDur, host, []);
-          this._registerBindObject(myNum, host, []);
-          this._registerBindObject(mySecondBool, host, []);
-          this._registerBindObject(myStr, host, []);
+          $Inflight1._registerBindObject(myBool, host, []);
+          $Inflight1._registerBindObject(myDur, host, []);
+          $Inflight1._registerBindObject(myNum, host, []);
+          $Inflight1._registerBindObject(mySecondBool, host, []);
+          $Inflight1._registerBindObject(myStr, host, []);
         }
         super._registerBind(host, ops);
       }

@@ -395,9 +395,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(counterA, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterA, host, ["peek"]);
+          $Inflight1._registerBindObject(counterA, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -430,9 +431,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(counterB, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterB, host, ["peek"]);
+          $Inflight2._registerBindObject(counterB, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -465,9 +467,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight3._registerBindObject(counterC, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counterC, host, ["peek"]);
+          $Inflight3._registerBindObject(counterC, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }

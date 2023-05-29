@@ -8,6 +8,7 @@
 enum TokenType
 {
   AUTOMATIC_SEMICOLON,
+  AUTOMATIC_BLOCK,
 };
 
 void *tree_sitter_wing_external_scanner_create() { return NULL; }
@@ -151,6 +152,42 @@ static bool scan_automatic_semicolon(TSLexer *lexer)
 }
 
 /**
+ * Check if an automatic empty block ( `{}` ) could be inserted
+ *
+ * @return true if an automatic block was found (aka "inserted"), false otherwise
+ */
+static bool scan_automatic_block(TSLexer *lexer)
+{
+  lexer->result_symbol = AUTOMATIC_BLOCK;
+  lexer->mark_end(lexer);
+
+  for (;;)
+  {
+    if (lexer->lookahead == 0)
+      return true;
+    if (lexer->lookahead == '}')
+      return false;
+    if (lexer->is_at_included_range_start(lexer))
+      return true;
+    if (lexer->lookahead == '\n')
+      break;
+    if (!iswspace(lexer->lookahead))
+      return false;
+    skip(lexer);
+  }
+
+  skip(lexer);
+
+  if (!scan_whitespace_and_comments(lexer))
+    return false;
+
+  if (lexer->lookahead != '{')
+    return false;
+
+  return true;
+}
+
+/**
  * Entrypoint of the external scanner.
  *
  * @return true if the external scanner was able to scan a token, false otherwise
@@ -161,6 +198,9 @@ bool tree_sitter_wing_external_scanner_scan(void *payload, TSLexer *lexer,
   if (valid_symbols[AUTOMATIC_SEMICOLON])
   {
     bool ret = scan_automatic_semicolon(lexer);
+    return ret;
+  } else if (valid_symbols[AUTOMATIC_BLOCK]) {
+    bool ret = scan_automatic_block(lexer);
     return ret;
   }
 

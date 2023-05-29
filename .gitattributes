@@ -1,1 +1,4 @@
 * text=auto eol=lf
+
+# These files are copied from libs/wingsdk
+/docs/04-resources/*.md linguist-generated

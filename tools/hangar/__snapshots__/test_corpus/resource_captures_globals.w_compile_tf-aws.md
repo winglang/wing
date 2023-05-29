@@ -17,6 +17,23 @@ module.exports = function({ res }) {
 
 ```
 
+## clients/$Inflight2.inflight.js
+```js
+module.exports = function({ Another }) {
+  class  $Inflight2 {
+    constructor({  }) {
+    }
+    async handle()  {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof Another.myStaticMethod === "function" ? await Another.myStaticMethod() : await Another.myStaticMethod.handle()) === 0)'`)})(((typeof Another.myStaticMethod === "function" ? await Another.myStaticMethod() : await Another.myStaticMethod.handle()) === 0))};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
 ## clients/Another.inflight.js
 ```js
 module.exports = function({ globalCounter }) {
@@ -64,7 +81,7 @@ module.exports = function({  }) {
 
 ## clients/MyResource.inflight.js
 ```js
-module.exports = function({ globalBucket, globalStr, globalBool, globalNum, globalArrayOfStr, globalMapOfNum, globalSetOfStr, globalAnother }) {
+module.exports = function({ globalBucket, globalStr, globalBool, globalNum, globalArrayOfStr, globalMapOfNum, globalSetOfStr, globalAnother, Another }) {
   class  MyResource {
     constructor({ localCounter, localTopic }) {
       this.localCounter = localCounter;
@@ -84,6 +101,7 @@ module.exports = function({ globalBucket, globalStr, globalBool, globalNum, glob
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalAnother.myField === "hello!")'`)})((globalAnother.myField === "hello!"))};
         (typeof globalAnother.first.myResource.put === "function" ? await globalAnother.first.myResource.put("key","value") : await globalAnother.first.myResource.put.handle("key","value"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof globalAnother.myMethod === "function" ? await globalAnother.myMethod() : await globalAnother.myMethod.handle()) > 0)'`)})(((typeof globalAnother.myMethod === "function" ? await globalAnother.myMethod() : await globalAnother.myMethod.handle()) > 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof Another.myStaticMethod === "function" ? await Another.myStaticMethod() : await Another.myStaticMethod.handle()) > 0)'`)})(((typeof Another.myStaticMethod === "function" ? await Another.myStaticMethod() : await Another.myStaticMethod.handle()) > 0))};
       }
     }
   }
@@ -132,7 +150,7 @@ module.exports = function({ globalCounter, $parentThis }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"],[\"root/Default/Default/test:access cloud resource through static methods only\",\"${aws_lambda_function.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797.arn}\"]]"
     }
   },
   "provider": {
@@ -187,6 +205,15 @@ module.exports = function({ globalCounter, $parentThis }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
+      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRole",
+            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
       "root_testtest_Handler_IamRole_6C1728D1": {
         "//": {
           "metadata": {
@@ -205,8 +232,18 @@ module.exports = function({ globalCounter, $parentThis }) {
             "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicy_389E9A62"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.name}"
+      },
+      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicy",
+            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.name}"
       },
       "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
         "//": {
@@ -230,6 +267,16 @@ module.exports = function({ globalCounter, $parentThis }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.name}"
       },
+      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_B013CEF2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_B013CEF2"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.name}"
+      },
       "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
         "//": {
           "metadata": {
@@ -251,8 +298,13 @@ module.exports = function({ globalCounter, $parentThis }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.bucket}",
+            "BUCKET_NAME_ae5b06c6_IS_PUBLIC": "false",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
+            "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86"
           }
         },
@@ -263,6 +315,32 @@ module.exports = function({ globalCounter, $parentThis }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_MyResource_cloudTopicOnMessagef10eb240_S3Object_7458F840.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/Default",
+            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797"
+          }
+        },
+        "environment": {
+          "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "WING_FUNCTION_NAME": "Handler-c8de1ef1"
+          }
+        },
+        "function_name": "Handler-c8de1ef1",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -421,6 +499,17 @@ module.exports = function({ globalCounter, $parentThis }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
+      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/S3Object",
+            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
       "root_testtest_Handler_S3Object_71CD07AC": {
         "//": {
           "metadata": {
@@ -499,7 +588,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.myResource, host, []);
+          First._registerBindObject(this.myResource, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -538,17 +627,20 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(globalCounter, host, ["peek"]);
-          this._registerBindObject(this.first, host, []);
-          this._registerBindObject(this.myField, host, []);
+          Another._registerBindObject(globalCounter, host, ["peek"]);
+          Another._registerBindObject(this.first, host, []);
+          Another._registerBindObject(this.myField, host, []);
         }
         if (ops.includes("myMethod")) {
-          this._registerBindObject(globalCounter, host, ["inc", "peek"]);
-        }
-        if (ops.includes("myStaticMethod")) {
-          this._registerBindObject(globalCounter, host, ["peek"]);
+          Another._registerBindObject(globalCounter, host, ["inc", "peek"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("myStaticMethod")) {
+          Another._registerBindObject(globalCounter, host, ["peek"]);
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -589,10 +681,12 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              R._registerBindObject($parentThis, host, []);
+              R._registerBindObject(globalCounter, host, []);
             }
             if (ops.includes("handle")) {
-              this._registerBindObject($parentThis.localCounter, host, ["inc"]);
-              this._registerBindObject(globalCounter, host, ["inc"]);
+              R._registerBindObject($parentThis.localCounter, host, ["inc"]);
+              R._registerBindObject(globalCounter, host, ["inc"]);
             }
             super._registerBind(host, ops);
           }
@@ -609,6 +703,7 @@ class $Root extends $stdlib.std.Resource {
         const globalMapOfNum_client = context._lift(globalMapOfNum);
         const globalSetOfStr_client = context._lift(globalSetOfStr);
         const globalAnother_client = context._lift(globalAnother);
+        const AnotherClient = Another._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             globalBucket: ${globalBucket_client},
@@ -619,6 +714,7 @@ class $Root extends $stdlib.std.Resource {
             globalMapOfNum: ${globalMapOfNum_client},
             globalSetOfStr: ${globalSetOfStr_client},
             globalAnother: ${globalAnother_client},
+            Another: ${AnotherClient.text},
           })
         `);
       }
@@ -639,21 +735,30 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.localCounter, host, []);
-          this._registerBindObject(this.localTopic, host, []);
+          MyResource._registerBindObject(globalAnother, host, []);
+          MyResource._registerBindObject(globalArrayOfStr, host, []);
+          MyResource._registerBindObject(globalBool, host, []);
+          MyResource._registerBindObject(globalBucket, host, []);
+          MyResource._registerBindObject(globalMapOfNum, host, []);
+          MyResource._registerBindObject(globalNum, host, []);
+          MyResource._registerBindObject(globalSetOfStr, host, []);
+          MyResource._registerBindObject(globalStr, host, []);
+          MyResource._registerBindObject(this.localCounter, host, []);
+          MyResource._registerBindObject(this.localTopic, host, []);
         }
         if (ops.includes("myPut")) {
-          this._registerBindObject(globalAnother, host, ["myMethod"]);
-          this._registerBindObject(globalAnother.first.myResource, host, ["put"]);
-          this._registerBindObject(globalAnother.myField, host, []);
-          this._registerBindObject(globalArrayOfStr, host, ["at"]);
-          this._registerBindObject(globalBool, host, []);
-          this._registerBindObject(globalBucket, host, ["put"]);
-          this._registerBindObject(globalMapOfNum, host, ["get"]);
-          this._registerBindObject(globalNum, host, []);
-          this._registerBindObject(globalSetOfStr, host, ["has"]);
-          this._registerBindObject(globalStr, host, []);
-          this._registerBindObject(this.localTopic, host, ["publish"]);
+          MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
+          MyResource._registerBindObject(globalAnother, host, ["myMethod"]);
+          MyResource._registerBindObject(globalAnother.first.myResource, host, ["put"]);
+          MyResource._registerBindObject(globalAnother.myField, host, []);
+          MyResource._registerBindObject(globalArrayOfStr, host, ["at"]);
+          MyResource._registerBindObject(globalBool, host, []);
+          MyResource._registerBindObject(globalBucket, host, ["put"]);
+          MyResource._registerBindObject(globalMapOfNum, host, ["get"]);
+          MyResource._registerBindObject(globalNum, host, []);
+          MyResource._registerBindObject(globalSetOfStr, host, ["has"]);
+          MyResource._registerBindObject(globalStr, host, []);
+          MyResource._registerBindObject(this.localTopic, host, ["publish"]);
         }
         super._registerBind(host, ops);
       }
@@ -686,9 +791,45 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(res, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(res, host, ["myPut"]);
+          $Inflight1._registerBindObject(res, host, ["myPut"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Inflight2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const AnotherClient = Another._toInflightType(context);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            Another: ${AnotherClient.text},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+          $Inflight2._registerBindObject(Another, host, ["myStaticMethod"]);
         }
         super._registerBind(host, ops);
       }
@@ -704,6 +845,7 @@ class $Root extends $stdlib.std.Resource {
     const globalAnother = new Another(this,"Another");
     const res = new MyResource(this,"MyResource");
     this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:access cloud resource through static methods only",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

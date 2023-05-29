@@ -979,9 +979,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight1._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -1014,9 +1015,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight2._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -1049,9 +1051,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight3._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight3._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -1084,9 +1087,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight4._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc"]);
+          $Inflight4._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -1121,10 +1125,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight5._registerBindObject(b, host, []);
+          $Inflight5._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["delete", "put"]);
-          this._registerBindObject(counter, host, ["peek"]);
+          $Inflight5._registerBindObject(b, host, ["delete", "put"]);
+          $Inflight5._registerBindObject(counter, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
