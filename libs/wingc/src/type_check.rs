@@ -10,9 +10,9 @@ use crate::ast::{
 };
 use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
 use crate::{
-	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
+	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP,
+	WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -2167,9 +2167,9 @@ impl<'a> TypeChecker<'a> {
 						// If the module name is a built-in module, then we use @winglang/sdk as the library name,
 						// and import the module as a namespace. If the user doesn't specify an identifier, then
 						// we use the module name as the identifier.
-						// For example, `bring fs` will import the `fs` namespace from @winglang/sdk and assign it
-						// to an identifier named `fs`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE => {
+						// For example, `bring cloud` will import the `cloud` namespace from @winglang/sdk and assign it
+						// to an identifier named `cloud`.
+						WINGSDK_CLOUD_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
 							alias = identifier.as_ref().unwrap_or(&module_name);
