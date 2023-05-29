@@ -190,6 +190,98 @@ test("check that an object doesn't exist in the bucket", async () => {
   expect(objectExists).toEqual(false);
 });
 
+test("tryGet an existing object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "happy";
+
+  const objectTryGet = await client.tryGet(KEY);
+
+  // THEN
+  expect(objectTryGet).toEqual("some fake content");
+});
+
+test("tryGet a non-existent object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sad";
+
+  const objectTryGet = await client.tryGet(KEY);
+
+  // THEN
+  expect(objectTryGet).toEqual(undefined);
+});
+
+// test("tryGetJson an existing object from the bucket", async () => {
+//   // TODO
+// });
+
+// test("tryGetJson a non-existent object from the bucket", async () => {
+//   // TODO
+// });
+
+test("tryDelete an existing object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "happy";
+
+  const objectTryDelete = await client.tryDelete(KEY);
+
+  // THEN
+  expect(objectTryDelete).toEqual(true);
+});
+
+test("tryDelete a non-existent object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sad";
+
+  const objectTryDelete = await client.tryDelete(KEY);
+
+  // THEN
+  expect(objectTryDelete).toEqual(false);
+});
+
 // Mock Clients
 class MockBlobClient extends BlobClient {
   download(): Promise<BlobDownloadResponseParsed> {
@@ -211,6 +303,8 @@ class MockBlobClient extends BlobClient {
       return Promise.resolve(false);
     }
   }
+
+  tryGetJson;
 }
 
 class MockBlockBlobClient extends BlockBlobClient {
