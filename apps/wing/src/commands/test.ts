@@ -46,6 +46,7 @@ export async function test(entrypoints: string[], options: TestOptions) {
         passing.push(generateTestName(entrypoint));
       }
     } catch (error) {
+      console.log((error as Error).message);
       failing.push({ testName: generateTestName(entrypoint), error: error as Error });
     }
   }
@@ -65,7 +66,9 @@ ${
   totalSum > 1
     ? `Tests Results:
 ${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
-${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}`
+${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}
+${" "}
+`
     : ""
 }
 ${

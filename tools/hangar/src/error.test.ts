@@ -19,9 +19,9 @@ errorWingFiles.forEach((wingFile) => {
       shouldSucceed: false,
     });
 
-    const stderr = out.stderr;
+    const stdout = out.stdout;
 
-    const stderrSanitized = stderr
+    const stdoutSanitized = stdout
       // Remove absolute paths
       // Normalize paths
       .replaceAll("\\", "/")
@@ -31,6 +31,6 @@ errorWingFiles.forEach((wingFile) => {
       // e.g. "{...}.wsim.927822.tmp/{...}" => "{...}.wsim.[REDACTED].tmp/{...}"
       .replaceAll(/\.wsim\.\d+\.tmp/g, ".wsim.[REDACTED].tmp");
 
-    expect(stderrSanitized).toMatchSnapshot("stderr");
+    expect(stdoutSanitized).toMatchSnapshot();
   });
 });

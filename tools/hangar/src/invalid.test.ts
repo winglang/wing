@@ -19,14 +19,14 @@ invalidWingFiles.forEach((wingFile) => {
       shouldSucceed: true,
     });
 
-    const stderr = out.stderr;
+    const stdout = out.stdout;
 
-    const stderrSanitized = stderr
+    const stdoutSanitized = stdout
       // Remove absolute paths
       .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
       // Normalize line endings
       .replaceAll("\r\n", "\n");
 
-    expect(stderrSanitized).toMatchSnapshot("stderr");
+    expect(stdoutSanitized).toMatchSnapshot();
   });
 });
