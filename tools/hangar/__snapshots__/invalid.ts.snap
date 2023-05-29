@@ -166,11 +166,11 @@ error: Expected 0 argument(s) but got 1
   | ^^^^^^^^^ Expected 0 argument(s) but got 1
 
 
-error: Expected 0 argument(s) but got 1
+error: Expected 0 named argument(s)
    --> ../../../examples/tests/invalid/class.w:13:1
    |
-13 | new C9({token: \\"1\\"});
-   | ^^^^^^^^^^^^^^^^^^^^ Expected 0 argument(s) but got 1
+13 | new C9(token: \\"1\\");
+   | ^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
 
 
 error: Expected 1 positional argument(s) but got 0
