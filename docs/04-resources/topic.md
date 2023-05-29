@@ -19,7 +19,7 @@ bring cloud;
 let topic = new cloud.Topic();
 ```
 
-### Using a topic
+### Subscribing to a topic
 
 ```js
 bring cloud;
@@ -31,14 +31,15 @@ topic.onMessage(inflight (message: str) => {
 });
 ```
 
-### Using a topic inflight
-The inflight api for a topic allows for publishing messages to the topic.
+### Publishing to a topic
+
+The inflight method `publish` sends a message to all of the topic's subscribers.
 ```js
 bring cloud;
 
 let topic = new cloud.Topic();
 
-inflight() => {
+inflight () => {
   topic.publish("Hello World!");
 };
 ```
@@ -59,12 +60,12 @@ let consumerHandler = inflight(message: str) => {
   log("Doing some work with message: ${message}");
 };
 
-// Now we can use the preflight api of topic to register the consumer handler
+// Now we can use a preflight method of topic to register the consumer handler
 // to be invoked when a message is published to the topic.
 topic.onMessage(consumerHandler);
 
 // Then we define the producer inflight handler
-let publisherHandler = inflight() => {
+let publisherHandler = inflight () => {
   // Here we use the inflight api to publish a message to the topic.
   topic.publish("Here are those launch codes you asked for.");
 };
