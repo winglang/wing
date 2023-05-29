@@ -41,7 +41,9 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     minify: false, platform: "node", target: "node16", external: ["aws-sdk"],
    });`,
   ].join("\n");
-  let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
+  let result = spawnSync(process.argv[0], ["-e", esbuildScript], {
+    cwd: __dirname,
+  });
   if (result.status !== 0) {
     throw new Error(
       `Failed to bundle function: ${result.stderr.toString("utf-8")}`
