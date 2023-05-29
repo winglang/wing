@@ -10,9 +10,9 @@ use crate::ast::{
 };
 use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
 use crate::{
-	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
+	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP,
+	WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -621,7 +621,7 @@ impl FunctionSignature {
 			.iter()
 			.rev()
 			// TODO - as a hack we treat `anything` arguments like optionals so that () => {} can be a subtype of (any) => {}
-			.take_while(|arg| arg.is_option() || arg.is_anything())
+			.take_while(|arg| arg.is_option() || arg.is_struct() || arg.is_anything())
 			.count();
 
 		self.parameters.len() - num_optionals
@@ -801,6 +801,10 @@ impl TypeRef {
 				.any(|(name, type_)| name == HANDLE_METHOD_NAME && type_.is_inflight_function());
 		}
 		false
+	}
+
+	pub fn is_struct(&self) -> bool {
+		matches!(**self, Type::Struct(_))
 	}
 
 	pub fn is_void(&self) -> bool {
@@ -1357,25 +1361,47 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
+				// Verify arity
+				let pos_args_count = arg_list.pos_args.len();
+				let min_args = constructor_sig.min_parameters();
+				if pos_args_count < min_args {
+					let err_text = format!(
+						"Expected {} positional argument(s) but got {}",
+						min_args, pos_args_count
+					);
+					self.spanned_error(exp, err_text);
+					return self.types.error();
+				}
+
 				if !arg_list.named_args.is_empty() {
-					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
+					let last_arg = match constructor_sig.parameters.last() {
+						Some(arg) => arg.maybe_unwrap_option(),
+						None => {
+							self.spanned_error(exp, "Expected 0 named argument(s)");
+							return self.types.error();
+						}
+					};
+
+					if !last_arg.is_struct() {
+						self.spanned_error(
+							exp,
+							format!("class {} does not expect any named argument", class_symbol.name),
+						);
+						return self.types.error();
+					}
+
 					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
-				// Verify arity
 				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = constructor_sig.min_parameters();
 				let max_args = constructor_sig.max_parameters();
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
-						format!(
-							"Expected {} arguments but got {} when instantiating \"{}\"",
-							min_args, arg_count, type_
-						)
+						format!("Expected {} argument(s) but got {}", min_args, arg_count)
 					} else {
 						format!(
-							"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
-							min_args, max_args, arg_count, type_
+							"Expected between {} and {} arguments but got {}",
+							min_args, max_args, arg_count
 						)
 					};
 					self.spanned_error(exp, err_text);
@@ -1460,8 +1486,35 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
+				// Verify arity
+				let pos_args_count = arg_list.pos_args.len();
+				let min_args = func_sig.min_parameters();
+				if pos_args_count < min_args {
+					let err_text = format!(
+						"Expected {} positional argument(s) but got {}",
+						min_args, pos_args_count
+					);
+					self.spanned_error(exp, err_text);
+					return self.types.error();
+				}
+
 				if !arg_list.named_args.is_empty() {
-					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
+					let last_arg = match func_sig.parameters.last() {
+						Some(arg) => arg.maybe_unwrap_option(),
+						None => {
+							self.spanned_error(
+								exp,
+								format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
+							);
+							return self.types.error();
+						}
+					};
+
+					if !last_arg.is_struct() {
+						self.spanned_error(exp, "No named arguments expected");
+						return self.types.error();
+					}
+
 					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
@@ -2167,9 +2220,9 @@ impl<'a> TypeChecker<'a> {
 						// If the module name is a built-in module, then we use @winglang/sdk as the library name,
 						// and import the module as a namespace. If the user doesn't specify an identifier, then
 						// we use the module name as the identifier.
-						// For example, `bring fs` will import the `fs` namespace from @winglang/sdk and assign it
-						// to an identifier named `fs`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE => {
+						// For example, `bring cloud` will import the `cloud` namespace from @winglang/sdk and assign it
+						// to an identifier named `cloud`.
+						WINGSDK_CLOUD_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
 							alias = identifier.as_ref().unwrap_or(&module_name);

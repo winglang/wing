@@ -235,6 +235,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(b, host, ["delete", "getJson", "list", "putJson"]);

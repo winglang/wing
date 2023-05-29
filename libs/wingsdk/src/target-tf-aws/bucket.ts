@@ -16,13 +16,13 @@ import { S3BucketServerSideEncryptionConfigurationA } from "../.gen/providers/aw
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { calculateBucketPermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../utils/resource-names";
+} from "../shared/resource-names";
+import { calculateBucketPermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
