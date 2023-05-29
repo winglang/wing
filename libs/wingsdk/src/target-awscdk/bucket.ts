@@ -14,7 +14,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost, Resource } from "../std";
-import { convertBetweenHandlers } from "../utils/convert";
+import { convertBetweenHandlers } from "../shared/convert";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
