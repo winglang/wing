@@ -602,19 +602,34 @@ impl<'s> Parser<'s> {
 					parameters: vec![],
 					return_type: Some(Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-							root: name.clone(),
-							fields: vec![],
-							span: name.span.clone(),
+							root: name.clone(), fields: vec![], span: WingSpan::default(),
 						}),
-						span: name.span.clone(),
+						span: WingSpan::default(),
 					})),
-					phase: class_phase,
+					phase: Phase::Preflight,
 				},
-				body: FunctionBody::Statements(Scope {
-					env: RefCell::new(None),
-					statements: vec![],
-					span: name.span.clone(),
-				}),
+				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
+				is_static: false,
+				span: name.span.clone(),
+			},
+		};
+
+		let inflight_initializer = match inflight_initializer {
+			Some(init) => init,
+
+			// add a default inflight initializer if none is defined
+			None => FunctionDefinition {
+				signature: FunctionSignature {
+					parameters: vec![],
+					return_type: Some(Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+							root: name.clone(), fields: vec![], span: WingSpan::default(),
+						}),
+						span: WingSpan::default(),
+					})),
+					phase: Phase::Inflight,
+				},
+				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: name.span.clone(),
 			},

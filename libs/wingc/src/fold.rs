@@ -194,7 +194,7 @@ where
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
 		phase: node.phase,
-		inflight_initializer: node.inflight_initializer.map(|init| f.fold_function_definition(init)),
+		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
 	}
 }
 

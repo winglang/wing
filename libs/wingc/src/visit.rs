@@ -217,10 +217,7 @@ where
 	v.visit_symbol(&node.name);
 
 	v.visit_function_definition(&node.initializer);
-
-	if let Some(inflight_init) = &node.inflight_initializer {
-		v.visit_function_definition(inflight_init);
-	}
+	v.visit_function_definition(&node.inflight_initializer);
 
 	for field in &node.fields {
 		v.visit_symbol(&field.name);

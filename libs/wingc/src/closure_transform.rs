@@ -246,7 +246,12 @@ impl Fold for ClosureTransformer {
 						implements: vec![],
 						parent: None,
 						methods: vec![(handle_name.clone(), new_func_def)],
-						inflight_initializer: None,
+						inflight_initializer: FunctionDefinition {
+							signature: FunctionSignature { parameters: vec![], return_type: None, phase: Phase::Inflight },
+							is_static: false,
+							body: FunctionBody::Statements(Scope::new(vec![], expr.span.clone())),
+							span: expr.span.clone(),
+						},
 					}),
 					idx: self.nearest_stmt_idx,
 					span: expr.span.clone(),

@@ -941,64 +941,41 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 		let class_name = class.name.to_string();
 
-		if class.phase == Phase::Preflight {
-			// Get all preflight methods to be jsified to the preflight class
-			let preflight_methods = class
-				.methods
-				.iter()
-				.filter(|(_, m)| m.signature.phase != Phase::Inflight)
-				.collect_vec();
+		// Get all preflight methods to be jsified to the preflight class
+		let preflight_methods = class
+			.methods
+			.iter()
+			.filter(|(_, m)| m.signature.phase != Phase::Inflight)
+			.collect_vec();
 
-
-			// default base class for preflight classes is `core.Resource`
-			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_user_defined_type(parent))
-			} else {
-				format!(" extends {}", STDLIB_CORE_RESOURCE)
-			};
-
-			code.open(format!("class {class_name}{extends} {{"));
-			code.add_code(self.jsify_constructor(
-				&class.initializer,
-				class.parent.is_none(),
-				&inflight_methods,
-				&inflight_fields,
-				ctx,
-			));
-
-			for (n, m) in preflight_methods {
-				code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
-			}
-
-			code.add_code(self.jsify_to_inflight_type_method(&class, &free_vars, &referenced_preflight_types));
-			code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
-
-			// Generate the the class's host binding methods
-			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Instance));
-			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Type));
-			code.close("}");
+		// default base class for preflight classes is `core.Resource`
+		let extends = if let Some(parent) = &class.parent {
+			format!(" extends {}", self.jsify_user_defined_type(parent))
 		} else {
+			format!(" extends {}", STDLIB_CORE_RESOURCE)
+		};
 
-			let mut require_code = CodeMaker::default();
+		code.open(format!("class {class_name}{extends} {{"));
+		code.add_code(self.jsify_constructor(
+			&class.initializer,
+			class.parent.is_none(),
+			&inflight_methods,
+			&inflight_fields,
+			ctx,
+		));
 
-			require_code.open(format!("require(\"./{}\")({{", inflight_filename(class)));
-	
-			for var_name in free_vars {
-				require_code.line(format!("{var_name}: {var_name},"));
-			}
-	
-			//TODO: for the time being, we are not allowing referencing inflight vars or preflight types.
-			assert!(referenced_preflight_types.is_empty());
-
-			// for (type_name, _) in referenced_preflight_types {
-			// 	require_code.line(format!("{type_name}: ${{{type_name}Client.text}},"));
-			// }
-	
-			require_code.close("})");
-
-			code.line(format!("const {class_name} = {};", require_code.to_string().trim()));
+		for (n, m) in preflight_methods {
+			code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
 		}
-		
+
+		code.add_code(self.jsify_to_inflight_type_method(&class, &free_vars, &referenced_preflight_types));
+		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
+
+		// Generate the the class's host binding methods
+		code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Instance));
+		code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Type));
+		code.close("}");
+	
 		code
 	}
 
@@ -1076,12 +1053,8 @@ impl<'a> JSifier<'a> {
 		// create an inflight type for each referenced preflight type
 		for (n, t) in referenced_preflight_types {
 			match &**t {
-				Type::Class(c) => {
-					if c.phase == Phase::Preflight {
-						code.line(format!("const {n}Client = {n}._toInflightType(context);"));
-					} else {
-
-					}
+				Type::Class(_) => {
+					code.line(format!("const {n}Client = {n}._toInflightType(context);"));
 				}
 				Type::Enum(e) => {
 					code.open(format!("const {n}Client = {STDLIB}.core.NodeJsCode.fromInline(`"));
@@ -1231,23 +1204,21 @@ impl<'a> JSifier<'a> {
 			class_code.close("}");				
 		}
 
-		if let Some(inflight_init) = &class.inflight_initializer {
-			let inflight_init_name = if class.phase == Phase::Preflight {
-				CLASS_INFLIGHT_INIT_NAME
-			} else {
-				JS_CONSTRUCTOR
-			};
+		let inflight_init_name = if class.phase == Phase::Preflight {
+			CLASS_INFLIGHT_INIT_NAME
+		} else {
+			JS_CONSTRUCTOR
+		};
 
-			class_code.add_code(self.jsify_function(
-				Some(inflight_init_name),
-				inflight_init,
-				true,
-				&JSifyContext {
-					in_json: ctx.in_json,
-					phase: inflight_init.signature.phase,
-				},
-			));
-		}
+		class_code.add_code(self.jsify_function(
+			Some(inflight_init_name),
+			&class.inflight_initializer,
+			true,
+			&JSifyContext {
+				in_json: ctx.in_json,
+				phase: class.inflight_initializer.signature.phase,
+			},
+		));
 
 		for (name, def) in inflight_methods {
 			class_code.add_code(self.jsify_function(
@@ -1304,14 +1275,12 @@ impl<'a> JSifier<'a> {
 		}
 
 		// Also add field rerferences from the inflight initializer
-		if let Some(inflight_init) = &resource_class.inflight_initializer {
-			let visitor = FieldReferenceVisitor::new(inflight_init, free_vars);
-			let (refs, find_diags) = visitor.find_refs();
+		let visitor = FieldReferenceVisitor::new(&resource_class.inflight_initializer, free_vars);
+		let (refs, find_diags) = visitor.find_refs();
 
-			self.diagnostics.extend(find_diags);
+		self.diagnostics.extend(find_diags);
 
-			result.insert(CLASS_INFLIGHT_INIT_NAME.to_string(), refs);
-		}
+		result.insert(CLASS_INFLIGHT_INIT_NAME.to_string(), refs);
 
 		return result;
 	}
@@ -1800,6 +1769,21 @@ impl<'a> PreflightTypeRefVisitor<'a> {
 		self.visit_scope(self.function_scope);
 		self.references
 	}
+
+	fn add_ref(&mut self, type_name: String) {
+		// Lookup the type in the current env and see where it was defined
+		if let LookupResult::Found(kind, _) = (*self.env).lookup_nested_str(&type_name, None) {
+			// This must be a type reference
+			if let SymbolKind::Type(t) = kind {
+				// If this user type was defined preflight then store it
+				self.references.insert(type_name, *t);
+			} else {
+				panic!("Expected {type_name} to be a type");
+			}
+		} else {
+			panic!("Unknown symbol: {type_name}, should be covered by type checking");
+		}		
+	}
 }
 
 impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
@@ -1810,6 +1794,19 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 		self.env = backup_env;
 	}
 
+	fn visit_type_annotation(&mut self, node: &'ast crate::ast::TypeAnnotation) {
+		if let TypeAnnotationKind::UserDefined(u) = &node.kind {
+			let root = u.root.name.as_str();
+			let mut arr = vec![root];
+			arr.extend(u.fields.iter().map(|f| f.name.as_str()));
+
+			let path = arr.join(".");
+			self.add_ref(path);
+		}
+
+		visit::visit_type_annotation(self, node);
+	}
+
 	fn visit_reference(&mut self, node: &'ast Reference) {
 		if let Reference::TypeMember { type_, .. } = node {
 			// Skip standard lib types, for now they are available through the macro outputs on call expressions
@@ -1817,21 +1814,10 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 				return;
 			}
 			let type_name = type_.to_string();
-			// Lookup the type in the current env and see where it was defined
-			if let LookupResult::Found(kind, info) = (*self.env).lookup_nested_str(&type_name, None) {
-				// This must be a type reference
-				if let SymbolKind::Type(t) = kind {
-					// If this user type was defined preflight then store it
-					if info.phase == Phase::Preflight {
-						self.references.insert(type_name, *t);
-					}
-				} else {
-					panic!("Expected {type_name} to be a type");
-				}
-			} else {
-				panic!("Unknown symbol: {type_name}, should be covered by type checking");
-			}
+			self.add_ref(type_name);
 		}
+
+		visit::visit_reference(self, node);
 	}
 }
 

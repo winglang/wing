@@ -1388,7 +1388,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(*arg_type, *param_type, arg_expr);
 				}
 
-				// If this is a Resource then create a new type for this resource object
+				// If this is a preflight class then create a new type for this resource object
 				if type_.is_preflight_class() {
 					// Get reference to resource object's scope
 					let obj_scope_type = if let Some(obj_scope) = obj_scope {
@@ -2286,6 +2286,7 @@ impl<'a> TypeChecker<'a> {
 						_ => {}
 					};
 				}
+
 				// Add methods to the class env
 				for (method_name, method_def) in methods.iter() {
 					self.add_method_to_class_env(
@@ -2307,29 +2308,17 @@ impl<'a> TypeChecker<'a> {
 				let mut inflight_init_symb = Symbol::global(CLASS_INFLIGHT_INIT_NAME);
 
 				// Add the inflight initializer to the class env
-				if let Some(inflight_initializer) = inflight_initializer {
-					inflight_init_symb.span = inflight_initializer.span.clone();
-					self.add_method_to_class_env(
-						&inflight_initializer.signature,
-						env,
-						Some(class_type),
-						&mut class_env,
-						&inflight_init_symb,
-					);
+				inflight_init_symb.span = inflight_initializer.span.clone();
+				self.add_method_to_class_env(
+					&inflight_initializer.signature,
+					env,
+					Some(class_type),
+					&mut class_env,
+					&inflight_init_symb,
+				);
 
-					if let FunctionBody::Statements(scope) = &inflight_initializer.body {
-						self.check_class_field_initialization(&scope, fields, Phase::Inflight);
-					}
-				} else {
-					for field in fields.iter() {
-						// inflight fields needs to be initialized in the inflight initializer
-						if field.phase == Phase::Inflight {
-							self.spanned_error(
-								&field.name,
-								format!("Inflight field \"{}\" is not initialized", field.name.name),
-							);
-						}
-					}
+				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
+					self.check_class_field_initialization(&scope, fields, Phase::Inflight);
 				}
 
 				// Replace the dummy class environment with the real one before type checking the methods
@@ -2348,16 +2337,14 @@ impl<'a> TypeChecker<'a> {
 				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
 
 				// Type check the inflight initializer
-				if let Some(inflight_initializer) = inflight_initializer {
-					self.type_check_method(
-						class_env,
-						&inflight_init_symb,
-						env,
-						stmt.idx,
-						inflight_initializer,
-						class_type,
-					);
-				}
+				self.type_check_method(
+					class_env,
+					&inflight_init_symb,
+					env,
+					stmt.idx,
+					inflight_initializer,
+					class_type,
+				);
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
 				// https://github.com/winglang/wing/issues/1124
