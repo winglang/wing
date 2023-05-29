@@ -13,7 +13,6 @@ import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { PolicyStatement } from "../shared-aws";
 import { IInflightHost } from "../std";
-import { createBundle } from "../utils/bundling";
 
 /**
  * AWS implementation of `cloud.Function`.
