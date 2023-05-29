@@ -5,8 +5,8 @@ import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule
 import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
 import { Resource } from "../std";
-import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * AWS implementation of `cloud.Schedule`.

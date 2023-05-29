@@ -573,12 +573,21 @@ if a == 1 {
 	let x = "";
 }
 	
-let b = 
+let b =  
 			//^
 			
 let c = 3;"#,
 		assert!(only_show_symbols_in_scope.len() > 0)
 
 		assert!(only_show_symbols_in_scope.iter().all(|c| c.label != "c"))
+	);
+
+	test_completion_list!(
+		incomplete_if_statement,
+		r#"
+let a = MutMap<str> {};
+if a. 
+   //^"#,
+		assert!(incomplete_if_statement.len() > 0)
 	);
 }
