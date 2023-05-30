@@ -376,7 +376,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
 			detail: Some(
-				if let Some(c) = t.as_class_any_phase() {
+				if let Some(c) = t.as_class() {
 					format!("{} class", c.phase).to_string()
 				} else {
 					String::default()

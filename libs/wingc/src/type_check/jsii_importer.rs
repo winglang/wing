@@ -567,7 +567,7 @@ impl<'a> JsiiImporter<'a> {
 			};
 
 			// Validate the base class is either a class or a resource
-			if base_class_type.as_class_any_phase().is_none() {
+			if base_class_type.as_class().is_none() {
 				panic!("Base class {} of {} is not a resource", base_class_name, type_name);
 			}
 			Some(base_class_type)
@@ -577,7 +577,7 @@ impl<'a> JsiiImporter<'a> {
 
 		// Get env of base class/resource
 		let base_class_env = if let Some(base_class_type) = base_class_type {
-			let base_class = base_class_type.as_class_any_phase().expect(&format!(
+			let base_class = base_class_type.as_class().expect(&format!(
 				"Base class {} of {} is not a class",
 				base_class_type, type_name
 			));
@@ -639,6 +639,7 @@ impl<'a> JsiiImporter<'a> {
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
 			phase: class_phase,
+			declaration_phase: Phase::Preflight,
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);

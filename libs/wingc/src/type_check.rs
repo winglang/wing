@@ -190,6 +190,9 @@ pub struct Class {
 	pub is_abstract: bool,
 	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
+
+	/// The phase in which this class was declared
+	pub declaration_phase: Phase,
 }
 
 #[derive(Derivative)]
@@ -711,14 +714,14 @@ impl TypeRef {
 		None
 	}
 
-	pub fn as_mut_class_or_resource(&mut self) -> Option<&mut Class> {
+	pub fn as_mut_class(&mut self) -> Option<&mut Class> {
 		match **self {
 			Type::Class(ref mut class) => Some(class),
 			_ => None,
 		}
 	}
 
-	pub fn as_class_any_phase(&self) -> Option<&Class> {
+	pub fn as_class(&self) -> Option<&Class> {
 		if let Type::Class(ref class) = **self {
 			return Some(class);
 		}
@@ -1402,7 +1405,7 @@ impl<'a> TypeChecker<'a> {
 
 					// Verify the object scope is an actually resource
 					if let Some(obj_scope_type) = obj_scope_type {
-						if obj_scope_type.as_class_preflight().is_none() {
+						if !obj_scope_type.is_preflight_class() {
 							self.spanned_error(
 								exp,
 								format!(
@@ -1431,9 +1434,9 @@ impl<'a> TypeChecker<'a> {
 				// Make sure this is a function signature type
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig.clone()
-				} else if let Some(res) = func_type.as_class_preflight() {
+				} else if let Some(class) = func_type.as_class_preflight() {
 					// return the signature of the "handle" method
-					let lookup_res = res.get_method(&HANDLE_METHOD_NAME.into());
+					let lookup_res = class.get_method(&HANDLE_METHOD_NAME.into());
 					let handle_type = if let Some(method) = lookup_res {
 						method.type_
 					} else {
@@ -2260,6 +2263,7 @@ impl<'a> TypeChecker<'a> {
 					is_abstract: false,
 					phase: *phase,
 					type_parameters: None, // TODO no way to have generic args in wing yet
+					declaration_phase: env.phase,
 				};
 				let mut class_type = self.types.add_type(Type::Class(class_spec));
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
@@ -2303,12 +2307,15 @@ impl<'a> TypeChecker<'a> {
 					name: CLASS_INIT_NAME.into(),
 					span: initializer.span.clone(),
 				};
+				
 				self.add_method_to_class_env(&initializer.signature, env, None, &mut class_env, &init_symb);
 
-				let mut inflight_init_symb = Symbol::global(CLASS_INFLIGHT_INIT_NAME);
+				let inflight_init_symb = Symbol {
+					name: CLASS_INFLIGHT_INIT_NAME.into(),
+					span: inflight_initializer.span.clone()
+				};
 
 				// Add the inflight initializer to the class env
-				inflight_init_symb.span = inflight_initializer.span.clone();
 				self.add_method_to_class_env(
 					&inflight_initializer.signature,
 					env,
@@ -2322,8 +2329,8 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Replace the dummy class environment with the real one before type checking the methods
-				class_type.as_mut_class_or_resource().unwrap().env = class_env;
-				let class_env = &class_type.as_class_any_phase().unwrap().env;
+				class_type.as_mut_class().unwrap().env = class_env;
+				let class_env = &class_type.as_class().unwrap().env;
 
 				// Type check constructor
 				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
@@ -2641,7 +2648,7 @@ impl<'a> TypeChecker<'a> {
 		// Lookup the method in the class_env
 		let method_type = class_env
 			.lookup(&method_name, None)
-			.expect("Expected method to be in class env")
+			.expect(format!("Expected method '{}' to be in class env", method_name.name).as_str())
 			.as_variable()
 			.expect("Expected method to be a variable")
 			.type_;
@@ -2841,7 +2848,7 @@ impl<'a> TypeChecker<'a> {
 		type_params: Vec<TypeRef>,
 	) -> TypeRef {
 		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().0.as_type().unwrap();
-		let original_type_class = original_type.as_class_any_phase().unwrap();
+		let original_type_class = original_type.as_class().unwrap();
 		let original_type_params = if let Some(tp) = original_type_class.type_parameters.as_ref() {
 			tp
 		} else {
@@ -2877,11 +2884,12 @@ impl<'a> TypeChecker<'a> {
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params),
 			phase: original_type_class.phase,
+			declaration_phase: original_type_class.declaration_phase,
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
-		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
+		let new_type_class = new_type.as_mut_class().unwrap();
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
@@ -2972,7 +2980,7 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			// Handle generic return types
 			// TODO: If a generic class has a method that returns another generic, it must be a builtin
-			if let Some(c) = type_to_maybe_replace.as_class_any_phase() {
+			if let Some(c) = type_to_maybe_replace.as_class() {
 				if let Some(type_parameters) = &c.type_parameters {
 					// For now all our generics only have a single type parameter so use the first type parameter as our "T1"
 					let t1 = type_parameters[0];
@@ -3180,27 +3188,27 @@ impl<'a> TypeChecker<'a> {
 					// Lookup wingsdk std types, hydrating generics if necessary
 					Type::Array(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
-						self.get_property_from_class_like(new_class.as_class_any_phase().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutArray(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
-						self.get_property_from_class_like(new_class.as_class_any_phase().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::Set(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
-						self.get_property_from_class_like(new_class.as_class_any_phase().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutSet(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
-						self.get_property_from_class_like(new_class.as_class_any_phase().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::Map(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
-						self.get_property_from_class_like(new_class.as_class_any_phase().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutMap(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
-						self.get_property_from_class_like(new_class.as_class_any_phase().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::Json => self.get_property_from_class_like(
 						env
@@ -3209,7 +3217,7 @@ impl<'a> TypeChecker<'a> {
 							.0
 							.as_type()
 							.unwrap()
-							.as_class_any_phase()
+							.as_class()
 							.unwrap(),
 						property,
 					),
@@ -3220,7 +3228,7 @@ impl<'a> TypeChecker<'a> {
 							.0
 							.as_type()
 							.unwrap()
-							.as_class_any_phase()
+							.as_class()
 							.unwrap(),
 						property,
 					),
@@ -3231,7 +3239,7 @@ impl<'a> TypeChecker<'a> {
 							.0
 							.as_type()
 							.unwrap()
-							.as_class_any_phase()
+							.as_class()
 							.unwrap(),
 						property,
 					),
@@ -3242,7 +3250,7 @@ impl<'a> TypeChecker<'a> {
 							.0
 							.as_type()
 							.unwrap()
-							.as_class_any_phase()
+							.as_class()
 							.unwrap(),
 						property,
 					),
@@ -3389,7 +3397,7 @@ impl<'a> TypeChecker<'a> {
 	) -> (Option<TypeRef>, Option<SymbolEnvRef>) {
 		if parent_udt.is_none() {
 			if phase == Phase::Preflight {
-				// if this is a resource and we don't have a parent, then we implicitly set it to `std.Resource`
+				// if this is a preflight and we don't have a parent, then we implicitly set it to `std.Resource`
 				let t = self.types.resource_base_type();
 				let env = t.as_class_preflight().unwrap().env.get_ref();
 				return (Some(t), Some(env));
@@ -3409,7 +3417,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		};
 
-		if let Some(parent_class) = parent_type.as_class_any_phase() {
+		if let Some(parent_class) = parent_type.as_class() {
 			if parent_class.phase == phase {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {

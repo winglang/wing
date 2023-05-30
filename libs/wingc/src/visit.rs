@@ -45,6 +45,9 @@ pub trait Visit<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
 	}
+	fn visit_expr_new(&mut self, node: &'ast Expr, class: &'ast TypeAnnotation, obj_id: &'ast Option<String>, obj_scope: &'ast Option<Box<Expr>>, arg_list: &'ast ArgList) {
+		visit_expr_new(self, node, &class, obj_id, obj_scope, arg_list);
+	}
 	fn visit_literal(&mut self, node: &'ast Literal) {
 		visit_literal(self, node);
 	}
@@ -254,6 +257,17 @@ where
 	}
 }
 
+pub fn visit_expr_new<'ast, V>(v: &mut V, _node: &'ast Expr, class: &'ast TypeAnnotation, _obj_id: &'ast Option<String>, obj_scope: &'ast Option<Box<Expr>>, arg_list: &'ast ArgList)
+	where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_type_annotation(class);
+	if let Some(scope) = obj_scope {
+		v.visit_expr(&scope);
+	}
+	v.visit_args(arg_list);
+}
+
 pub fn visit_expr<'ast, V>(v: &mut V, node: &'ast Expr)
 where
 	V: Visit<'ast> + ?Sized,
@@ -261,15 +275,11 @@ where
 	match &node.kind {
 		ExprKind::New {
 			class,
-			obj_id: _,
+			obj_id,
 			obj_scope,
 			arg_list,
 		} => {
-			v.visit_type_annotation(class);
-			if let Some(scope) = obj_scope {
-				v.visit_expr(scope);
-			}
-			v.visit_args(arg_list);
+			v.visit_expr_new(node, class, obj_id, obj_scope, &arg_list);
 		}
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);

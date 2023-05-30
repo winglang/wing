@@ -8,7 +8,7 @@ use crate::{
 use std::collections::{btree_map, BTreeMap, HashSet};
 use std::fmt::Debug;
 
-use super::{UnsafeRef, VariableInfo};
+use super::{UnsafeRef, VariableInfo, CLASS_INIT_NAME};
 
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
@@ -138,7 +138,7 @@ impl SymbolEnv {
 		// if this is a variable, verify that it adheres to the phase rules (notice that "this" is bound
 		// to the phase of the class).
 		if let SymbolKind::Variable(v) = &kind {
-			if self.phase == Phase::Inflight && v.phase == Phase::Preflight && symbol.name != "this" {
+			if self.phase == Phase::Inflight && v.phase == Phase::Preflight && symbol.name != "this" && symbol.name != CLASS_INIT_NAME {
 				return Err(TypeError { 
 					span: symbol.span.clone(), 
 					message: format!("Unable to define the preflight member \"{}\" within an inflight scope", symbol.name),
