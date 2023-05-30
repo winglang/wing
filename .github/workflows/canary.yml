@@ -1,7 +1,7 @@
 name: Canary Testing
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: "0 * * * *"
   workflow_dispatch: {}
   release:
     types:
@@ -42,3 +42,10 @@ jobs:
       - name: Run Test
         run: |
           wing test test_bucket.w
+      - name: Download examples/tests/valid/hello.w
+        run: |
+          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.w > hello.w
+          cat hello.w
+      - name: Run Compile
+        run: |
+          wing compile hello.w -t tf-aws
