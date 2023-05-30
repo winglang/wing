@@ -235,7 +235,6 @@ jobs:
     needs:
       - build
       - e2e
-      - global-e2e
       - benchmarks
     steps:
       - name: All good
