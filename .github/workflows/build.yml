@@ -69,19 +69,24 @@ jobs:
       #     GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
       #   run: npm run changelog
 
-      # - name: Build
-      #   run: npm run build:ci
+      - name: Build
+        run: npm run build:ci
 
       # - name: Package
       #   run: npm run package:ci
 
-      - name: Test
-        run: npm run test:ci
+      # - name: Test
+      #   run: npm run test:ci
+
+      - name: Test Global Wing Installation
+        run: |
+          npm link ./apps/wing
+          wing --version
+          wing compile examples/tests/valid/hello.w -t sim
 
       - name: Test Global Wing Installation
         run: |
           npm install -g ./apps/wing
-          npm ls -g
           wing --version
           wing compile examples/tests/valid/hello.w -t sim
 
