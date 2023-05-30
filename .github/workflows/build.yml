@@ -76,7 +76,7 @@ jobs:
       - name: Test Global Wing Installation
         run: |
           npm install -g ./apps/wing
-          wing compile examples/tests/valid/hello.w -t sim
+          wing compile examples/tests/valid/hello.w -t tf-aws
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v3
