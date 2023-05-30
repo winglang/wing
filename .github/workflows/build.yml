@@ -81,7 +81,7 @@ jobs:
       - name: Test
         run: npm run test:ci
 
-      - name: Check git diff of WING CLI
+      - name: Check git diff of Wing CLI
         id: git-diff-wing-cli
         run: |
           if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- apps/wing; then
@@ -317,6 +317,7 @@ jobs:
           autocomplete-spec-name: wing
           spec-path: new-fig-cli-generated.ts
           integration: commander
+          new-spec-version: ${{ needs.build.outputs.version }}
 
       - name: Rename Docs
         run: mv docs "docs-${{ needs.build.outputs.version }}.tgz"
