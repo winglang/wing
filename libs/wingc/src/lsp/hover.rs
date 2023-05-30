@@ -308,3 +308,83 @@ fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover
 		range: Some((&expr.span).into()),
 	});
 }
+
+#[cfg(test)]
+mod tests {
+	use crate::lsp::hover::*;
+	use crate::lsp::sync::test_utils::*;
+	use lsp_types::*;
+
+	/// Creates a snapshot test for a given wing program's hover at a given position
+	/// In the wing program, place a comment "//^" into the text where the "^" is pointing to the desired character position
+	///
+	/// First parameter will be the name of the tests, as well as the identifier to use for the list of completion in the asserts (see last parameter)
+	/// Second parameter is the wing code block as a string literal
+	/// After the first two parameters, any additional are optional statements that should be used for asserting on the given hover data.
+	///
+	/// Result is a [Hover] object
+	macro_rules! test_hover_list {
+		($name:ident, $code:literal, $($assertion:stmt)*) => {
+			#[test]
+			fn $name() {
+				let text_document_position_params = load_file_with_contents($code);
+				let hover = on_hover(HoverParams {
+					text_document_position_params,
+					work_done_progress_params: Default::default(),
+				});
+
+				if let Some($name) = hover {
+					insta::with_settings!(
+						{
+							prepend_module_to_snapshot => false,
+							omit_expression => true,
+							snapshot_path => "./snapshots/hovers",
+						}, {
+							insta::assert_yaml_snapshot!($name);
+						}
+					);
+					$($assertion)*
+				} else {
+					panic!("Expected hover data");
+				}
+			}
+		};
+	}
+
+	test_hover_list!(
+		new_expression_nested,
+		r#"
+bring cloud;
+
+new cloud. 
+   //^"#,
+	);
+
+	test_hover_list!(
+		class_symbol,
+		r#"
+bring cloud;
+
+let bucket = new cloud.Bucket();
+   //^"#,
+	);
+
+	test_hover_list!(
+		class_symbol_in_closure,
+		r#"
+bring cloud;
+
+let bucket = new cloud.Bucket();
+   //^"#,
+	);
+
+	test_hover_list!(
+		class_property,
+		r#"
+bring cloud;
+
+let bucket = new cloud.Bucket();
+bucket.addObject
+      //^"#,
+	);
+}

@@ -24,7 +24,7 @@ module.exports = grammar({
 
   word: ($) => $.identifier,
 
-  externals: ($) => [$.AUTOMATIC_SEMICOLON],
+  externals: ($) => [$.AUTOMATIC_SEMICOLON, $.AUTOMATIC_BLOCK],
 
   precedences: ($) => [
     // Handle ambiguity in case of empty literal: `a = {}`
@@ -40,7 +40,8 @@ module.exports = grammar({
   rules: {
     // Basics
     source: ($) => repeat($._statement),
-    block: ($) => seq("{", optional(repeat($._statement)), "}"),
+    block: ($) =>
+      choice(braced(optional(repeat($._statement))), $.AUTOMATIC_BLOCK),
     _semicolon: ($) => choice(";", $.AUTOMATIC_SEMICOLON),
     comment: ($) =>
       token(
@@ -61,11 +62,13 @@ module.exports = grammar({
     _reference_identifier: ($) => alias($.identifier, $.reference_identifier),
 
     custom_type: ($) =>
-      prec.right(seq(
-        field("object", $._type_identifier),
-        // While the final "fields" identifier is optional in this grammar, upstream parsing will fail if it is not present
-        repeat(seq(".", optional(field("fields", $._type_identifier))))
-      )),
+      prec.right(
+        seq(
+          field("object", $._type_identifier),
+          // While the final "fields" identifier is optional in this grammar, upstream parsing will fail if it is not present
+          repeat(seq(".", optional(field("fields", $._type_identifier))))
+        )
+      ),
 
     nested_identifier: ($) =>
       prec(
@@ -104,9 +107,10 @@ module.exports = grammar({
         $.break_statement,
         $.continue_statement,
         $.if_statement,
+        $.if_let_statement,
         $.struct_definition,
         $.enum_definition,
-        $.try_catch_statement,
+        $.try_catch_statement
       ),
 
     short_import_statement: ($) =>
@@ -122,9 +126,7 @@ module.exports = grammar({
         "struct",
         field("name", $.identifier),
         optional(seq("extends", commaSep(field("extends", $.custom_type)))),
-        "{",
-        field("field", repeat($.struct_field)),
-        "}"
+        braced(repeat(field("field", $.struct_field)))
       ),
     struct_field: ($) =>
       seq(field("name", $.identifier), $._type_annotation, $._semicolon),
@@ -133,9 +135,7 @@ module.exports = grammar({
       seq(
         "enum",
         field("enum_name", $.identifier),
-        "{",
-        commaSep(alias($.identifier, $.enum_field)),
-        "}"
+        braced(commaSep(alias($.identifier, $.enum_field)))
       ),
 
     return_statement: ($) =>
@@ -178,9 +178,9 @@ module.exports = grammar({
         optional(seq("impl", field("implements", commaSep1($.custom_type)))),
         field("implementation", $.class_implementation)
       ),
+
     class_implementation: ($) =>
-      seq(
-        "{",
+      braced(
         repeat(
           choice(
             $.initializer,
@@ -188,9 +188,9 @@ module.exports = grammar({
             $.inflight_method_definition,
             $.class_field
           )
-        ),
-        "}"
+        )
       ),
+
     class_field: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
@@ -212,8 +212,7 @@ module.exports = grammar({
         field("implementation", $.resource_implementation)
       ),
     resource_implementation: ($) =>
-      seq(
-        "{",
+      braced(
         repeat(
           choice(
             $.initializer,
@@ -221,8 +220,7 @@ module.exports = grammar({
             $.inflight_method_definition,
             $.class_field
           )
-        ),
-        "}"
+        )
       ),
 
     interface_definition: ($) =>
@@ -233,12 +231,10 @@ module.exports = grammar({
         field("implementation", $.interface_implementation)
       ),
     interface_implementation: ($) =>
-      seq(
-        "{",
+      braced(
         repeat(
           choice($.method_signature, $.inflight_method_signature, $.class_field)
-        ),
-        "}"
+        )
       ),
 
     inclusive_range: ($) => "=",
@@ -266,6 +262,17 @@ module.exports = grammar({
     break_statement: ($) => seq("break", $._semicolon),
 
     continue_statement: ($) => seq("continue", $._semicolon),
+
+    if_let_statement: ($) =>
+      seq(
+        // TODO: support "if let var"
+        "if let",
+        field("name", $.identifier),
+        "=",
+        field("value", $.expression),
+        field("block", $.block),
+        optional(seq("else", field("else_block", $.block)))
+      ),
 
     if_statement: ($) =>
       seq(
@@ -313,7 +320,8 @@ module.exports = grammar({
       ),
 
     // Primitives
-    _literal: ($) => choice($.string, $.number, $.bool, $.duration, $.nil),
+    _literal: ($) =>
+      choice($.string, $.number, $.bool, $.duration, $.nil_value),
 
     number: ($) => choice($._integer, $._decimal),
     _integer: ($) => choice("0", /[1-9]\d*/),
@@ -325,7 +333,7 @@ module.exports = grammar({
     seconds: ($) => seq(field("value", $.number), "s"),
     minutes: ($) => seq(field("value", $.number), "m"),
     hours: ($) => seq(field("value", $.number), "h"),
-    nil: ($) => "nil",
+    nil_value: ($) => "nil",
     string: ($) =>
       seq(
         '"',
@@ -400,14 +408,16 @@ module.exports = grammar({
       ),
 
     new_expression: ($) =>
-      prec.right(seq(
-        "new",
-        field("class", choice($.custom_type, $.mutable_container_type)),
-        // While "args" is optional in this grammar, upstream parsing will fail if it is not present
-        field("args", optional($.argument_list)),
-        field("id", optional($.new_object_id)),
-        field("scope", optional($.new_object_scope))
-      )),
+      prec.right(
+        seq(
+          "new",
+          field("class", choice($.custom_type, $.mutable_container_type)),
+          // While "args" is optional in this grammar, upstream parsing will fail if it is not present
+          field("args", optional($.argument_list)),
+          field("id", optional($.new_object_id)),
+          field("scope", optional($.new_object_scope))
+        )
+      ),
 
     new_object_id: ($) => seq("as", $.string),
 
@@ -619,23 +629,17 @@ module.exports = grammar({
     set_literal: ($) =>
       seq(
         optional(field("type", $._builtin_container_type)),
-        "{",
-        commaSep(field("element", $.expression)),
-        "}"
+        braced(commaSep(field("element", $.expression)))
       ),
     map_literal: ($) =>
       seq(
         optional(field("type", $._builtin_container_type)),
-        "{",
-        commaSep(field("member", $.map_literal_member)),
-        "}"
+        braced(commaSep(field("member", $.map_literal_member)))
       ),
     struct_literal: ($) =>
       seq(
         field("type", $.custom_type),
-        "{",
-        field("fields", commaSep($.struct_literal_member)),
-        "}"
+        braced(commaSep(field("fields", $.struct_literal_member)))
       ),
 
     map_literal_member: ($) =>
@@ -652,9 +656,16 @@ module.exports = grammar({
     _json_types: ($) => choice("Json", "MutJson"),
 
     test_statement: ($) =>
-      seq("test", field("name", $.string), field("block", $.block))
+      seq("test", field("name", $.string), field("block", $.block)),
   },
 });
+
+/**
+ * @param {Rule} rule
+ */
+function braced(rule) {
+  return choice(seq("{", rule, "}"));
+}
 
 /**
  * @param {Rule} rule
