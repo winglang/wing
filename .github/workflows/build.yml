@@ -98,11 +98,11 @@ jobs:
           path: apps/wing/*.tgz
 
       - name: Generate the fig spec
-        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        # if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
         run: cd apps/wing && npm run generate-fig-spec
 
       - name: Upload fig spec
-        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        # if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: wing
