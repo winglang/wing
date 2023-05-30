@@ -78,6 +78,11 @@ jobs:
       - name: Test
         run: npm run test:ci
 
+      - name: Test Global Wing Installation
+        run: |
+          npm install -g ./apps/wing
+          wing compile examples/tests/valid/hello.w -t sim
+
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v3
         with:
