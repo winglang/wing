@@ -81,6 +81,9 @@ jobs:
       - name: Install Wing Globally
         run: npm install -g ./apps/wing
 
+      - run: npm ls -g
+      - run: echo PATH=$PATH:/opt/hostedtoolcache/volta/1.1.1/x64/tools/image/node/18.12.1/lib
+
       - name: Test Global Wing Installation
         run: winglang compile examples/tests/valid/hello.w -t sim
 
