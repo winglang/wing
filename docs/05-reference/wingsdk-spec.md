@@ -407,7 +407,9 @@ Future extensions:
 > - What is the API for message deduplication?
 > - Should the API use "push"/"pop" terminology or "send"/"receive" terminology?
 
-A Queue represents a data structure that holds a list of items. The distinguishing characteristic of a Queue in our API is its design to interact with a single consumer service.
+A Queue represents a data structure that holds a list of items. Using a queue, you can send, store, and receive messages between software components at any volume, without losing messages or requiring other services to be available.
+
+Any number of producers can push messages to the queue, and a single consumer can pop messages from the queue.
 
 **Scalability and Simultaneous Runs**: The Queue is built for scalability and supports the simultaneous execution of multiple instances of the same consumer service. This means that multiple instances of the same consumer service can run concurrently, each one processing items from the Queue independently. This setup ensures efficient and scalable data processing. It's crucial to understand that each item in the queue is processed by exactly one instance of the consumer. 
 
