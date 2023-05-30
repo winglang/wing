@@ -407,14 +407,11 @@ Future extensions:
 > - What is the API for message deduplication?
 > - Should the API use "push"/"pop" terminology or "send"/"receive" terminology?
 
-The queue resource represents a message buffer that can be used to decouple workloads between a set of producers and a set of consumers.
-Using a queue, you can send, store, and receive messages between software components at any volume, without losing messages or requiring other services to be available.
+A Queue represents a data structure that holds a list of items. Using a queue, you can send, store, and receive messages between software components at any volume, without losing messages or requiring other services to be available.
 
-Any number of producers can push messages to the queue, and any number of consumers can pop messages from the queue.
-When a consumer function receives a batch of messages, it is responsible for processing each message in the batch and acknowledging that the message has been processed by deleting it from the queue.
-If a consumer function does not acknowledge a message, the message will be re-delivered to another consumer function.
+Any number of producers can push messages to the queue, and a single consumer can pop messages from the queue.
 
-A queue is not FIFO (first-in-first-out), so messages may be delivered out of order.
+**Scalability and Simultaneous Runs**: The Queue is built for scalability and supports the simultaneous execution of multiple instances of the same consumer service. This means that multiple instances of the same consumer service can run concurrently, each one processing items from the Queue independently. This setup ensures efficient and scalable data processing. It's crucial to understand that each item in the queue is processed by exactly one instance of the consumer. 
 
 **Stateful:** Yes
 
