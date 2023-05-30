@@ -88,7 +88,7 @@ It includes an assembly of different features that serve that purpose:
 * [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
 * [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
 * Automatic generation of IAM policies and other cloud mechanics based on intent.
-* Local functional simulaor with a visualization and interaction [console](https://docs.winglang.io/getting-started/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
+* Local functional simulator with a visualization and interaction [console](https://docs.winglang.io/getting-started/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
 * [Native JSON](https://docs.winglang.io/reference/spec#114-json-type) and schema validation support.
 * [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
 * [Implicit async](https://docs.winglang.io/reference/spec#113-asynchronous-model), explicit defer.

@@ -212,11 +212,13 @@ impl Fold for ClosureTransformer {
 										evaluated_type: RefCell::new(None),
 									}),
 									property: Symbol::new("display", expr.span.clone()),
+									optional_accessor: false,
 								}),
 								span: expr.span.clone(),
 								evaluated_type: RefCell::new(None),
 							}),
 							property: Symbol::new("hidden", expr.span.clone()),
+							optional_accessor: false,
 						},
 						value: Expr {
 							kind: ExprKind::Literal(Literal::Boolean(true)),

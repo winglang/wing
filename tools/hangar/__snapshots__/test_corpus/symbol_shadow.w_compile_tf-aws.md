@@ -440,6 +440,7 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight2._registerBindObject(s, host, []);
             }
             if (ops.includes("handle")) {
               $Inflight2._registerBindObject(s, host, []);
@@ -501,6 +502,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight3._registerBindObject(s, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight3._registerBindObject(s, host, []);
@@ -572,6 +574,7 @@ class $Root extends $stdlib.std.Resource {
         }
         _registerBind(host, ops) {
           if (ops.includes("$inflight_init")) {
+            $Inflight1._registerBindObject(s, host, []);
           }
           if (ops.includes("handle")) {
             $Inflight1._registerBindObject(s, host, []);

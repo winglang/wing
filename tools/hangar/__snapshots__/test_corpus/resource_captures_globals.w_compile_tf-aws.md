@@ -232,7 +232,7 @@ module.exports = function({ globalCounter, $parentThis }) {
             "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicy_389E9A62"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.name}"
       },
       "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF": {
@@ -298,8 +298,13 @@ module.exports = function({ globalCounter, $parentThis }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.bucket}",
+            "BUCKET_NAME_ae5b06c6_IS_PUBLIC": "false",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
+            "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86"
           }
         },
@@ -676,6 +681,8 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              R._registerBindObject($parentThis, host, []);
+              R._registerBindObject(globalCounter, host, []);
             }
             if (ops.includes("handle")) {
               R._registerBindObject($parentThis.localCounter, host, ["inc"]);
@@ -728,6 +735,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          MyResource._registerBindObject(globalAnother, host, []);
+          MyResource._registerBindObject(globalArrayOfStr, host, []);
+          MyResource._registerBindObject(globalBool, host, []);
+          MyResource._registerBindObject(globalBucket, host, []);
+          MyResource._registerBindObject(globalMapOfNum, host, []);
+          MyResource._registerBindObject(globalNum, host, []);
+          MyResource._registerBindObject(globalSetOfStr, host, []);
+          MyResource._registerBindObject(globalStr, host, []);
           MyResource._registerBindObject(this.localCounter, host, []);
           MyResource._registerBindObject(this.localTopic, host, []);
         }
@@ -776,6 +791,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(res, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(res, host, ["myPut"]);
