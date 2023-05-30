@@ -60,3 +60,26 @@ let b: B = B { a: a };
 
 let c = b.a.val;
 //      ^^^ Property access on optional type "A?" requires optional accessor: "?."
+struct Foo {
+  val: str?;
+}
+
+struct Bar {
+  foo: Foo?;
+}
+
+struct Baz {
+  bar: Bar?;
+}
+
+let baz: Baz = Baz {
+  bar: Bar {
+    foo: Foo {
+      val: "hello"
+    }
+  }
+};
+
+// Ensure that ?. returns T? rather than T
+let val: str = baz?.bar?.foo?.val;
+//             ^^^^^^^^^^^^^^^^^^ Expected type to be "str", but got "str?" instead
