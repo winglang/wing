@@ -1,7 +1,7 @@
 name: Canary Testing
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: '0 * * * *'
   workflow_dispatch: {}
   release:
     types:
