@@ -46,3 +46,17 @@ if let hi = hi {
   hi = "bye";
 //^^^^^^^^^^^ Variable hi is not reassignable 
 }
+
+struct A {
+  val: num?;
+}
+
+struct B {
+  a: A?;
+}
+
+let a: A = A { val: 1 };
+let b: B = B { a: a };
+
+let c = b.a.val;
+//      ^^^ Property access on optional type "A?" requires optional accessor: "?."
