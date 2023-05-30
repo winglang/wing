@@ -41,7 +41,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version-file: package.json
+          node-version-file: ".node-version"
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
