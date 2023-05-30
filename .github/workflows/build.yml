@@ -38,15 +38,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Reads versions from root package.json "volta" section
-      - name: Setup Node/NPM with pinned Volta version
-        uses: volta-cli/action@v4.0.0
-
-      # Forces volta to load node and npm upfront, reducing conflict when running in parallel later
-      - name: Preload Node/NPM
-        run: |
-          node -v
-          npm -v
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: package.json
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -143,15 +138,10 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
-      # Reads versions from root package.json "volta" section
-      - name: Setup Node/NPM with pinned Volta version
-        uses: volta-cli/action@v4.0.0
-
-      # Forces volta to load node and npm upfront, reducing conflict when running in parallel later
-      - name: Preload Node/NPM
-        run: |
-          node -v
-          npm -v
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: package.json
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
