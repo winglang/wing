@@ -224,13 +224,68 @@ jobs:
           npm run test:generate
           npm run test --shard=${{ matrix.shard }}
 
+  global-e2e:
+    name: "Global E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
+    needs:
+      - build
+    strategy:
+      fail-fast: true
+      matrix:
+        runner: [ubuntu, macos, windows]
+        # Note: Node 19.7.0 is pinned due to regressions in later versions
+        # See https://github.com/nodejs/node/issues/47096
+        node: ["18", "19.7.0"]
+        shard: ["1/2", "2/2"]
+        full_run:
+          # Do a full run on push or when the PR is labeled "pr/e2e-full"
+          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
+        exclude:
+          - runner: macos
+            full_run: false
+          - runner: windows
+            full_run: false
+          - runner: ubuntu
+            node: "19.7.0"
+            full_run: false
+    runs-on: "${{ matrix.runner }}-latest"
+    env:
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: |
+            tools/hangar
+            examples/tests/valid
+            examples/tests/invalid
+          install-command: npm ci
+
+      - name: Link Wing Globally
+        run: npm install -g apps/wing
+
+      - name: Run Hello Test
+        run: wing compile examples/tests/valid/hello.w
+
   quality-gate:
     name: Quality Gate
     runs-on: ubuntu-latest
-    needs: 
-     - build
-     - e2e
-     - benchmarks
+    needs:
+      - build
+      - e2e
+      - global-e2e
+      - benchmarks
     steps:
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
