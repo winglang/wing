@@ -80,12 +80,6 @@ jobs:
 
       - name: Test Global Wing Installation
         run: |
-          npm link ./apps/wing
-          wing --version
-          wing compile examples/tests/valid/hello.w -t sim
-
-      - name: Test Global Wing Installation
-        run: |
           npm install -g ./apps/wing
           wing --version
           wing compile examples/tests/valid/hello.w -t sim
