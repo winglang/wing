@@ -32,11 +32,14 @@ jobs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
+      wing-cli-changed: ${{ steps.git-diff-wing-cli.outputs.diff }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      
+      - uses: actions/setup-node@v2
 
       # Reads versions from root package.json "volta" section
       - name: Setup Node/NPM with pinned Volta version
@@ -78,11 +81,32 @@ jobs:
       - name: Test
         run: npm run test:ci
 
+      - name: Check git diff of WING CLI
+        id: git-diff-wing-cli
+        run: |
+          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- apps/wing; then
+            echo "::set-output name=diff::false"
+          else
+            echo "::set-output name=diff::true"
+          fi
+
       - name: Upload Wing CLI
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: wing
           path: apps/wing/*.tgz
+
+      - name: Generate the fig spec
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        run: cd apps/wing && npm run generate-fig-spec
+
+      - name: Upload fig spec
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: wing
+          path: apps/wing/new-fig-cli-generated.ts
 
       - name: Upload WingSDK
         uses: actions/upload-artifact@v3
@@ -282,9 +306,17 @@ jobs:
         run: echo "version=$(npm view winglang version)" >> $GITHUB_OUTPUT
 
       - name: Publish Wing
-        if: ${{ steps.wing-version.outputs.version != needs.build.outputs.version }}
+        if: needs.build.outputs.wing-cli-changed == 'true'
         working-directory: wing
         run: npm publish *.tgz --access public
+
+      - name: Create Autocomplete PR
+        uses: withfig/push-to-fig-autocomplete-action@v1
+        with:
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          autocomplete-spec-name: wing
+          spec-path: new-fig-cli-generated.ts
+          integration: commander
 
       - name: Rename Docs
         run: mv docs "docs-${{ needs.build.outputs.version }}.tgz"

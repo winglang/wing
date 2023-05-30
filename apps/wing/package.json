@@ -29,22 +29,23 @@
     "unbump": "node unversion.js"
   },
   "dependencies": {
+    "@winglang/sdk": "file:../../libs/wingsdk",
     "chalk": "^4.1.2",
     "codespan-wasm": "0.3.0",
-    "commander": "^10.0.0",
+    "commander": "^8.0.0",
     "compare-versions": "^5.0.3",
     "debug": "^4.3.4",
     "open": "^8.4.0",
     "ora": "^5.4.1",
     "update-notifier": "^6.0.2",
     "vscode-languageserver": "^8.0.2",
-    "wasi-js": "^1.7.3",
-    "@winglang/sdk": "file:../../libs/wingsdk"
+    "wasi-js": "^1.7.3"
   },
   "bundleDependencies": [
     "wasi-js"
   ],
   "devDependencies": {
+    "@fig/complete-commander": "^2.0.1",
     "@types/debug": "^4.1.7",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.11.18",

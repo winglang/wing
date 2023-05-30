@@ -6,6 +6,7 @@ import { satisfies } from "compare-versions";
 
 import { Command, Option } from "commander";
 import { run_server } from "./commands/lsp";
+import { addCompletionSpecCommand } from '@fig/complete-commander'
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
@@ -78,6 +79,8 @@ async function main() {
     .action(actionErrorHandler(test));
 
   program.command("docs").description("Open the Wing documentation").action(docs);
+
+  addCompletionSpecCommand(program);
 
   program.parse();
 }
