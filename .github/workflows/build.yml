@@ -81,6 +81,8 @@ jobs:
       - name: Install Wing Globally
         run: npm install -g ./apps/wing
 
+      - run: npm ls -g
+
       - name: Test Global Wing Installation
         run: wing compile examples/tests/valid/hello.w -t sim
 
