@@ -204,8 +204,10 @@ Duration <DURATION>
 "
 `;
 
-exports[`class.w > stderr 1`] = `
-"error: Expected block
+exports[`class.w 1`] = `
+"- Compiling invalid/class.w to sim...
+✖ Compiling invalid/class.w to sim...
+error: Expected block
    --> ../../../examples/tests/invalid/class.w:17:17
    |
 17 |   init(foo: str)
