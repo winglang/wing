@@ -49,6 +49,7 @@ test("can create sequential files in a bucket", async () => {
 
   // WHEN
   await pusher.push("kachow!");
+  await sleep(500);
   await pusher.push("zoom!");
   await sleep(500);
 
