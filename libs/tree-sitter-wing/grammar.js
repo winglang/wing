@@ -83,13 +83,13 @@ module.exports = grammar({
               $.json_container_type
             )
           ),
-          field("accessor_type", $.accessor),
+          field("accessor_type", $._accessor),
           // While the "property" identifier is optional in this grammar, upstream parsing will fail if it is not present
           optional(field("property", $._member_identifier))
         )
       ),
 
-    accessor: ($) => choice(".", "?."),
+    _accessor: ($) => choice(".", "?."),
 
     inflight_specifier: ($) => "inflight",
 

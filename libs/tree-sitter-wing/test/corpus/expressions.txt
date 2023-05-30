@@ -111,7 +111,6 @@ obj.method();
         (nested_identifier
           object: (reference
             (reference_identifier))
-          accessor_type: (accessor)
           property: (member_identifier)))
       args: (argument_list))))
 
@@ -133,7 +132,6 @@ x == obj.method();
           (nested_identifier
             object: (reference
               (reference_identifier))
-            accessor_type: (accessor)
             property: (member_identifier)))
         args: (argument_list)))))
 
@@ -419,9 +417,7 @@ a?;
               (nested_identifier
                 object: (reference
                   (reference_identifier))
-                accessor_type: (accessor)
                 property: (member_identifier)))
-            accessor_type: (accessor)
             property: (member_identifier)))))))
 
 ================================================================================
