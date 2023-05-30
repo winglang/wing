@@ -3241,95 +3241,6 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				let instance_type = self.type_check_exp(object, env);
-				let res = match *instance_type {
-					Type::Optional(t) => self.get_property_from_class_like(t.as_class_or_resource().unwrap(), property),
-					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class_like(class, property),
-					Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
-					Type::Anything => VariableInfo {
-						type_: instance_type,
-						reassignable: false,
-						phase: env.phase,
-						is_static: false,
-					},
-
-					// Lookup wingsdk std types, hydrating generics if necessary
-					Type::Array(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::MutArray(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::Set(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::MutSet(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::Map(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::MutMap(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::Json => self.get_property_from_class_like(
-						env
-							.lookup_nested_str(WINGSDK_JSON, None)
-							.unwrap()
-							.0
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap(),
-						property,
-					),
-					Type::MutJson => self.get_property_from_class_like(
-						env
-							.lookup_nested_str(WINGSDK_MUT_JSON, None)
-							.unwrap()
-							.0
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap(),
-						property,
-					),
-					Type::String => self.get_property_from_class_like(
-						env
-							.lookup_nested_str(WINGSDK_STRING, None)
-							.unwrap()
-							.0
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap(),
-						property,
-					),
-					Type::Duration => self.get_property_from_class_like(
-						env
-							.lookup_nested_str(WINGSDK_DURATION, None)
-							.unwrap()
-							.0
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap(),
-						property,
-					),
-					Type::Struct(ref s) => self.get_property_from_class_like(s, property),
-					_ => {
-						self.spanned_error(
-							object,
-							format!("Property access unsupported on type \"{}\"", instance_type),
-						);
-						self.make_error_variable_info(false)
-					}
-				};
 				let res = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// Check if the object is an optional type. If it is ensure the use of optional chaining.
@@ -3495,15 +3406,13 @@ impl<'a> TypeChecker<'a> {
 				property,
 			),
 			Type::Struct(ref s) => self.get_property_from_class_like(s, property),
-			_ => VariableInfo {
-				type_: self.expr_error(
+			_ => {
+				self.spanned_error(
 					object,
 					format!("Property access unsupported on type \"{}\"", instance_type),
-				),
-				reassignable: false,
-				phase: Phase::Independent,
-				is_static: false,
-			},
+				);
+				self.make_error_variable_info(false)
+			}
 		}
 	}
 

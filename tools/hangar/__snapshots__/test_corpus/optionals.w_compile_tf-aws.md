@@ -243,10 +243,9 @@ class $Root extends $stdlib.std.Resource {
     const notThere = tree.right.right.right;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(thirteen === 13)'`)})((thirteen === 13))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(notThere === undefined)'`)})((notThere === undefined))};
-    const one = tree.left.left;
     {
-      const $IF_LET_VALUE = one;
-      if (one != undefined) {
+      const $IF_LET_VALUE = tree.left.left;
+      if (tree.left.left != undefined) {
         const o = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.value === 1)'`)})((o.value === 1))};
       }

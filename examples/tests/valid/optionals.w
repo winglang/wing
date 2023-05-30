@@ -139,7 +139,7 @@ let tree = new Node(
   ) as "ten",
 ) as "eight";
 
-let thirteen = tree.right?.right?.left.value;
+let thirteen = tree.right?.right?.left?.value;
 let notThere = tree.right?.right?.right;
 
 assert(thirteen == 13);
