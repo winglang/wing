@@ -108,3 +108,43 @@ let fun = (a: str?): str => {
 
 assert(fun("hello") == "hello");
 assert(fun(nil) == "default");
+
+class Node {
+  value: num;
+  left: Node?;
+  right: Node?;
+
+  init(value: num, left: Node?, right: Node?) {
+    this.value = value;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+let tree = new Node(
+  8, 
+  new Node(
+    3,
+    new Node(1, nil, nil) as "one",
+    new Node(6, nil, nil) as "six",
+  ) as "three",
+  new Node(
+    10,
+    nil,
+    new Node(
+      14, 
+      new Node(13, nil, nil) as "thirteen", 
+      nil
+    ) as "fourteen",
+  ) as "ten",
+) as "eight";
+
+let thirteen = tree.right?.right?.left?.value;
+let notThere = tree.right?.right?.right;
+
+assert(thirteen == 13);
+assert(notThere == nil);
+
+if let o = tree.left?.left {
+  assert(o.value == 1);
+}
