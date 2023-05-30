@@ -72,11 +72,11 @@ jobs:
       - name: Build
         run: npm run build:ci
 
-      # - name: Package
-      #   run: npm run package:ci
+      - name: Package
+        run: npm run package:ci
 
-      # - name: Test
-      #   run: npm run test:ci
+      - name: Test
+        run: npm run test:ci
 
       - name: Test Global Wing Installation
         run: |
