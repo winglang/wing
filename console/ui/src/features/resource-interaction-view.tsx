@@ -1,5 +1,4 @@
 import { BucketView } from "../components/resource-views/BucketView.js";
-import { QueueView } from "../components/resource-views/QueueView.js";
 import { RedisView } from "../components/resource-views/RedisView.js";
 import { TopicView } from "../components/resource-views/TopicView.js";
 import { UnsupportedView } from "../components/resource-views/UnsupportedView.js";
@@ -7,6 +6,7 @@ import { UnsupportedView } from "../components/resource-views/UnsupportedView.js
 import { ApiInteractionView } from "./api-interaction-view.js";
 import { CounterInteractionView } from "./counter-interaction-view.js";
 import { FunctionInteractionView } from "./function-interaction-view.js";
+import { QueueInteractionView } from "./queue-interaction-view.js";
 import { ScheduleInteractionView } from "./schedule-interaction-view.js";
 import { TableInteractionView } from "./table-interaction-view.js";
 
@@ -21,7 +21,7 @@ export const ResourceInteractionView = ({
   const getResourceView = () => {
     switch (resourceType) {
       case "wingsdk.cloud.Queue": {
-        return <QueueView resourcePath={resourcePath} />;
+        return <QueueInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Function": {
         return <FunctionInteractionView resourcePath={resourcePath} />;
