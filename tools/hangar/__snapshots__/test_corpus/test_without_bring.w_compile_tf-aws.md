@@ -1,18 +1,15 @@
-# [approx_size.w](../../../../examples/tests/valid/approx_size.w) | compile | tf-aws
+# [test_without_bring.w](../../../../examples/tests/valid/test_without_bring.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ q }) {
-  class $Inflight1 {
+module.exports = function({  }) {
+  class  $Inflight1 {
     constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
-      (await q.push("message"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 1)'`)})(((await q.approxSize()) === 1))};
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+      }
     }
   }
   return $Inflight1;
@@ -41,7 +38,7 @@ module.exports = function({ q }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:approxSize\",\"${aws_lambda_function.root_testapproxSize_Handler_D7563579.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:hello test\",\"${aws_lambda_function.root_testhellotest_Handler_A1EDD8CF.arn}\"]]"
     }
   },
   "provider": {
@@ -51,61 +48,60 @@ module.exports = function({ q }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testapproxSize_Handler_IamRole_03B77702": {
+      "root_testhellotest_Handler_IamRole_2903B933": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:approxSize/Handler/IamRole",
-            "uniqueId": "root_testapproxSize_Handler_IamRole_03B77702"
+            "path": "root/Default/Default/test:hello test/Handler/IamRole",
+            "uniqueId": "root_testhellotest_Handler_IamRole_2903B933"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testapproxSize_Handler_IamRolePolicy_EB9BA626": {
+      "root_testhellotest_Handler_IamRolePolicy_DB5486F4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:approxSize/Handler/IamRolePolicy",
-            "uniqueId": "root_testapproxSize_Handler_IamRolePolicy_EB9BA626"
+            "path": "root/Default/Default/test:hello test/Handler/IamRolePolicy",
+            "uniqueId": "root_testhellotest_Handler_IamRolePolicy_DB5486F4"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testapproxSize_Handler_IamRole_03B77702.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testhellotest_Handler_IamRole_2903B933.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testapproxSize_Handler_IamRolePolicyAttachment_C558EB70": {
+      "root_testhellotest_Handler_IamRolePolicyAttachment_30E4F47D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:approxSize/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testapproxSize_Handler_IamRolePolicyAttachment_C558EB70"
+            "path": "root/Default/Default/test:hello test/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testhellotest_Handler_IamRolePolicyAttachment_30E4F47D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testapproxSize_Handler_IamRole_03B77702.name}"
+        "role": "${aws_iam_role.root_testhellotest_Handler_IamRole_2903B933.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testapproxSize_Handler_D7563579": {
+      "root_testhellotest_Handler_A1EDD8CF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:approxSize/Handler/Default",
-            "uniqueId": "root_testapproxSize_Handler_D7563579"
+            "path": "root/Default/Default/test:hello test/Handler/Default",
+            "uniqueId": "root_testhellotest_Handler_A1EDD8CF"
           }
         },
         "environment": {
           "variables": {
-            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
-            "WING_FUNCTION_NAME": "Handler-c894e60c"
+            "WING_FUNCTION_NAME": "Handler-c8123dd7"
           }
         },
-        "function_name": "Handler-c894e60c",
+        "function_name": "Handler-c8123dd7",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testapproxSize_Handler_IamRole_03B77702.arn}",
+        "role": "${aws_iam_role.root_testhellotest_Handler_IamRole_2903B933.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testapproxSize_Handler_S3Object_4F41B3AF.key}",
+        "s3_key": "${aws_s3_object.root_testhellotest_Handler_S3Object_7FB6518B.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -125,27 +121,16 @@ module.exports = function({ q }) {
       }
     },
     "aws_s3_object": {
-      "root_testapproxSize_Handler_S3Object_4F41B3AF": {
+      "root_testhellotest_Handler_S3Object_7FB6518B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:approxSize/Handler/S3Object",
-            "uniqueId": "root_testapproxSize_Handler_S3Object_4F41B3AF"
+            "path": "root/Default/Default/test:hello test/Handler/S3Object",
+            "uniqueId": "root_testhellotest_Handler_S3Object_7FB6518B"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
-      }
-    },
-    "aws_sqs_queue": {
-      "root_cloudQueue_E3597F7A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "root_cloudQueue_E3597F7A"
-          }
-        },
-        "name": "cloud-Queue-c86e03d8"
       }
     }
   }
@@ -159,7 +144,6 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -171,10 +155,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-        const q_client = context._lift(q);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            q: ${q_client},
           })
         `);
       }
@@ -191,21 +173,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(q, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(q, host, ["approxSize", "push"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:approxSize",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:hello test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "approx_size", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "test_without_bring", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
