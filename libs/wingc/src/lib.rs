@@ -9,7 +9,8 @@ extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
-use diagnostic::{Diagnostic, Diagnostics};
+use colored::Colorize;
+use diagnostic::{Diagnostic, Diagnostics, WingSpan};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -21,6 +22,7 @@ use wingii::type_system::TypeSystem;
 
 use crate::parser::Parser;
 use std::alloc::{alloc, dealloc, Layout};
+use std::backtrace::{Backtrace, BacktraceStatus};
 use std::cell::RefCell;
 
 use std::fs;
@@ -252,6 +254,53 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.expect("Failed to add builtin");
 }
 
+struct CompilationContext {
+	/// Description of current compilation phase
+	phase: String,
+
+	/// Location in sound we're currently processing
+	span: WingSpan,
+}
+
+static mut COMPILATION_CONTEXT: Option<CompilationContext> = None;
+
+/// Set global information about the current compilation phase.
+/// This is used for diagnostics, specifically for custom panic messages.
+///
+/// # Arguments
+///
+/// * `phase` - Description of current compilation phase, should end with 'ing' (building, parsing, etc.)
+/// * `span` - Location in source we're currently processing.
+fn set_compilation_context(phase: &str, span: &WingSpan) {
+	// Mutable statics are unsafe across threads, as long as we're accessing this form our single (main) thread, we're fine
+	unsafe {
+		COMPILATION_CONTEXT = Some(CompilationContext {
+			phase: phase.to_string(),
+			span: span.clone(),
+		});
+	}
+}
+
+fn compilation_phase() -> String {
+	unsafe {
+		if let Some(ref c) = COMPILATION_CONTEXT {
+			c.phase.clone()
+		} else {
+			"something".to_string()
+		}
+	}
+}
+
+fn compilation_span() -> WingSpan {
+	unsafe {
+		if let Some(ref c) = COMPILATION_CONTEXT {
+			c.span.clone()
+		} else {
+			WingSpan::default()
+		}
+	}
+}
+
 pub fn compile(
 	source_path: &Path,
 	out_dir: Option<&Path>,
@@ -277,6 +326,21 @@ pub fn compile(
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
+
+	std::panic::set_hook(Box::new(|pi| {
+		eprintln!(
+			"Compiler bug when performing {} on {} | {}",
+			compilation_phase(),
+			compilation_span(),
+			pi.to_string().bold().white()
+		);
+
+		// Print backtrace if RUST_BACKTRACE=1
+		let bt = Backtrace::capture();
+		if bt.status() == BacktraceStatus::Captured {
+			eprintln!("Backtrace:\n{}", bt);
+		}
+	}));
 
 	// -- PARSING PHASE --
 	let (scope, parse_diagnostics) = parse(&source_path);

@@ -24,6 +24,7 @@ use crate::{
 	},
 	debug,
 	diagnostic::{Diagnostic, Diagnostics, WingSpan},
+	set_compilation_context,
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
@@ -91,6 +92,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	pub fn jsify(&mut self, scope: &Scope) -> String {
+		set_compilation_context("jsifying", &scope.span);
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
@@ -173,6 +175,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
+		set_compilation_context("jsifying", &scope.span);
 		let mut code = CodeMaker::default();
 
 		for statement in scope.statements.iter() {
@@ -270,6 +273,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_expression(&mut self, expression: &Expr, ctx: &JSifyContext) -> String {
+		set_compilation_context("jsifying", &expression.span);
 		let auto_await = match ctx.phase {
 			Phase::Inflight => "await ",
 			_ => "",
@@ -532,6 +536,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
+		set_compilation_context("jsifying", &statement.span);
 		match &statement.kind {
 			StmtKind::Bring {
 				module_name,
@@ -1213,7 +1218,11 @@ impl<'a> JSifier<'a> {
 
 		// if this class has a "handle" method, we are going to turn it into a callable function
 		// so that instances of this class can also be called like regular functions
-		if inflight_methods.iter().find(|(name, _)| name.name == HANDLE_METHOD_NAME).is_some() {
+		if inflight_methods
+			.iter()
+			.find(|(name, _)| name.name == HANDLE_METHOD_NAME)
+			.is_some()
+		{
 			class_code.line(format!("const $obj = (...args) => this.{HANDLE_METHOD_NAME}(...args);"));
 			class_code.line("Object.setPrototypeOf($obj, this);");
 			class_code.line("return $obj;");

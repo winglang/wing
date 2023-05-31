@@ -13,7 +13,7 @@ use crate::ast::{
 	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::WINGSDK_STD_MODULE;
+use crate::{set_compilation_context, WINGSDK_STD_MODULE};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -160,6 +160,8 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_scope(&self, scope_node: &Node) -> Scope {
+		let span = self.node_span(scope_node);
+		set_compilation_context("parsing", &span);
 		let mut cursor = scope_node.walk();
 
 		Scope {
@@ -170,11 +172,13 @@ impl<'s> Parser<'s> {
 				.filter_map(|(i, st_node)| self.build_statement(&st_node, i).ok())
 				.collect(),
 			env: RefCell::new(None), // env should be set later when scope is type-checked
-			span: self.node_span(scope_node),
+			span,
 		}
 	}
 
 	fn build_statement(&self, statement_node: &Node, idx: usize) -> DiagnosticResult<Stmt> {
+		let span = self.node_span(statement_node);
+		set_compilation_context("parsing", &span);
 		let stmt_kind = match statement_node.kind() {
 			"short_import_statement" => self.build_bring_statement(statement_node)?,
 
@@ -203,7 +207,7 @@ impl<'s> Parser<'s> {
 
 		Ok(Stmt {
 			kind: stmt_kind,
-			span: self.node_span(statement_node),
+			span,
 			idx,
 		})
 	}
@@ -1040,8 +1044,9 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_expression(&self, exp_node: &Node) -> DiagnosticResult<Expr> {
+		let expression_span = self.node_span(exp_node);
+		set_compilation_context("parsing", &expression_span);
 		let expression_node = &self.check_error(*exp_node, "expression")?;
-		let expression_span = self.node_span(expression_node);
 		match expression_node.kind() {
 			"new_expression" => {
 				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap())?;
@@ -1424,6 +1429,8 @@ impl<'s> Parser<'s> {
 		let name_text = self.node_text(&name_node);
 		let test_id = format!("test:{}", &name_text[1..name_text.len() - 1]);
 		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+		let statements_span = statements.span.clone();
+		let span = self.node_span(statement_node);
 
 		let inflight_closure = Expr {
 			kind: ExprKind::FunctionClosure(FunctionDefinition {
@@ -1434,21 +1441,22 @@ impl<'s> Parser<'s> {
 					phase: Phase::Inflight,
 				},
 				is_static: true,
-				span: WingSpan::default(),
+				span: statements_span.clone(),
 			}),
-			span: WingSpan::default(),
+			span: statements_span.clone(),
 			evaluated_type: RefCell::new(None),
 		};
 
+		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr {
 			kind: ExprKind::New {
 				class: TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 						root: Symbol::global("cloud"),
 						fields: vec![Symbol::global("Test")],
-						span: WingSpan::default(),
+						span: type_span.clone(),
 					}),
-					span: WingSpan::default(),
+					span: type_span.clone(),
 				},
 				obj_id: Some(test_id),
 				obj_scope: None,
@@ -1457,7 +1465,7 @@ impl<'s> Parser<'s> {
 					named_args: IndexMap::new(),
 				},
 			},
-			span: self.node_span(statement_node),
+			span,
 			evaluated_type: RefCell::new(None),
 		}))
 	}
