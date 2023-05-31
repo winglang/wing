@@ -407,10 +407,9 @@ impl<'a> JSifier<'a> {
 					}
 				}
 
-				match ctx.phase {
-					Phase::Inflight => format!("(typeof {} === \"function\" ? {}{}({}) : {}{}.handle({}))", expr_string, auto_await, expr_string, arg_string, auto_await, expr_string, arg_string),
-					Phase::Independent | Phase::Preflight => format!("({}{}({}))", auto_await, expr_string, arg_string),
-				}
+				// NOTE: if the expression is a "handle" class, the object itself is callable (see
+				// `jsify_class_inflight` below), so we can just call it as-is.
+				format!("({auto_await}{expr_string}({arg_string}))")
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
@@ -685,9 +684,11 @@ impl<'a> JSifier<'a> {
 			)),
 			StmtKind::Scope(scope) => {
 				let mut code = CodeMaker::default();
-				code.open("{");
-				code.add_code(self.jsify_scope_body(scope, ctx));
-				code.close("}");
+				if !scope.statements.is_empty() {
+					code.open("{");
+					code.add_code(self.jsify_scope_body(scope, ctx));
+					code.close("}");
+				}
 				code
 			}
 			StmtKind::Return(exp) => {
@@ -985,18 +986,12 @@ impl<'a> JSifier<'a> {
 			let mut code = CodeMaker::default();
 			let client_path = Self::js_resolve_path(&inflight_filename(class));
 
-			code.open(format!("const {class_name} = require({client_path})({{"));
+			let mut captures = free_vars.iter().collect_vec();
+			captures.extend(referenced_preflight_types.iter().map(|f|f.0).collect_vec());
+			let captures = captures.iter().join(",");
 			
-			// for var_name in free_inflight_variables {
-			// 	code.line(format!("{var_name}: ${{{var_name}_client}},"));
-			// }
-			
-			for (type_name, _) in referenced_preflight_types {
-				code.line(format!("{type_name}: ${{{type_name}Client.text}},"));
-			}
-
-			code.close("})");
-	
+			let mut code = CodeMaker::default();
+			code.line(format!("const {class_name} = require({client_path})({{{captures}}});"));
 			code
 		}
 	}
@@ -1223,6 +1218,14 @@ impl<'a> JSifier<'a> {
 				class_code.line(format!("this.{} = {};", name, name));
 			}
 	
+			// if this class has a "handle" method, we are going to turn it into a callable function
+			// so that instances of this class can also be called like regular functions
+			if inflight_methods.iter().find(|(name, _)| name.name == HANDLE_METHOD_NAME).is_some() {
+				class_code.line(format!("const $obj = (...args) => this.{HANDLE_METHOD_NAME}(...args);"));
+				class_code.line("Object.setPrototypeOf($obj, this);");
+				class_code.line("return $obj;");
+			}
+
 			class_code.close("}");				
 		}
 
