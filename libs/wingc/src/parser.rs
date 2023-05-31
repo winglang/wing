@@ -13,7 +13,7 @@ use crate::ast::{
 	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::WINGSDK_STD_MODULE;
+use crate::{WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -945,10 +945,16 @@ impl<'s> Parser<'s> {
 			} else {
 				self.build_expression(&object_expr)?
 			};
+			let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
+			let optional_accessor = match accessor_sym.name.as_str() {
+				"?." => true,
+				_ => false,
+			};
 			Ok(Expr {
 				kind: ExprKind::Reference(Reference::InstanceMember {
 					object: Box::new(object_expr),
 					property: self.node_symbol(&property)?,
+					optional_accessor,
 				}),
 				span: self.node_span(&nested_node),
 				evaluated_type: RefCell::new(None),
@@ -1453,8 +1459,8 @@ impl<'s> Parser<'s> {
 			kind: ExprKind::New {
 				class: TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-						root: Symbol::global("cloud"),
-						fields: vec![Symbol::global("Test")],
+						root: Symbol::global(WINGSDK_STD_MODULE),
+						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
 						span: WingSpan::default(),
 					}),
 					span: WingSpan::default(),

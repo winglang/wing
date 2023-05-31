@@ -3,30 +3,31 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        if (true) {
-          const x = 2;
-          if ((true && ((x + 2) === 4))) {
-            if ((true && ((x + 3) === 4))) {
-              {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-            }
-            else if ((true && ((x + 3) === 6))) {
-              {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-            }
-            else if ((false || ((x + 3) === 5))) {
-              {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
-            }
-            else {
-              {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-            }
+      if (true) {
+        const x = 2;
+        if ((true && ((x + 2) === 4))) {
+          if ((true && ((x + 3) === 4))) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          }
+          else if ((true && ((x + 3) === 6))) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          }
+          else if ((false || ((x + 3) === 5))) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
           }
           else {
             {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
           }
+        }
+        else {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
         }
       }
     }
@@ -160,6 +161,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -222,7 +224,7 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
       }
     }
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

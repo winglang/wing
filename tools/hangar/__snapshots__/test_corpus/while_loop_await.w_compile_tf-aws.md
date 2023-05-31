@@ -3,21 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(body)  {
-      {
-        const i = 0;
-        const iterator = async (j) =>  {
-          {
-            return (j + 1);
-          }
-        }
-        ;
-        while (((typeof iterator === "function" ? await iterator(i) : await iterator.handle(i)) < 3)) {
-          {console.log(`${i}`)};
-        }
+      const i = 0;
+      const iterator = async (j) =>  {
+        return (j + 1);
+      }
+      ;
+      while (((await iterator(i)) < 3)) {
+        {console.log(`${i}`)};
       }
     }
   }
@@ -174,6 +173,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;

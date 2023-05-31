@@ -3,16 +3,17 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ usersTable }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
-      {
-        return {
-        "body": Object.freeze({"users":(typeof usersTable.list === "function" ? await usersTable.list() : await usersTable.list.handle())}),
-        "status": 200,}
-        ;
-      }
+      return {
+      "body": Object.freeze({"users":(await usersTable.list())}),
+      "status": 200,}
+      ;
     }
   }
   return $Inflight1;
@@ -23,24 +24,25 @@ module.exports = function({ usersTable }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ usersTable }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
-      {
-        const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
-        if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
-          return {
-          "body": Object.freeze({"error":"incomplete details"}),
-          "status": 400,}
-          ;
-        }
-        (typeof usersTable.insert === "function" ? await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body) : await usersTable.insert.handle(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+      const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
+      if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
         return {
-        "body": Object.freeze({"user":(body)["id"]}),
-        "status": 201,}
+        "body": Object.freeze({"error":"incomplete details"}),
+        "status": 400,}
         ;
       }
+      (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+      return {
+      "body": Object.freeze({"user":(body)["id"]}),
+      "status": 201,}
+      ;
     }
   }
   return $Inflight2;
@@ -51,16 +53,17 @@ module.exports = function({ usersTable }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
-      {
-        return {
-        "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
-        "status": 204,}
-        ;
-      }
+      return {
+      "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
+      "status": 204,}
+      ;
     }
   }
   return $Inflight3;
@@ -591,6 +594,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;

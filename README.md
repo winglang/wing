@@ -18,6 +18,8 @@
   <a href="https://docs.winglang.io/contributors/">Contribute</a>
 </p>
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing/tree/hasan%2Fdev-container)
+
 **Winglang** is a new open-source programming language designed for the cloud (aka "*cloud-oriented*"). 
 Wing enables developers to build distributed systems that leverage cloud services as first-class citizens by combining infrastructure ***and*** application code in a safe and unified programming model (aka "*cloud-oriented*").
 Wing programs can be executed locally (*yes, no internet required*) using a fully-functional simulator, or deployed to any cloud provider (*yes, Wing programs are portable across providers*).

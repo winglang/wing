@@ -3,13 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ fn }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof fn.invoke === "function" ? await fn.invoke("test") : await fn.invoke.handle("test")) === "hello world!")'`)})(((typeof fn.invoke === "function" ? await fn.invoke("test") : await fn.invoke.handle("test")) === "hello world!"))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
     }
   }
   return $Inflight1;
@@ -20,14 +21,15 @@ module.exports = function({ fn }) {
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(message)  {
-      {
-        const __parent_this = this;
-        return "hello world!";
-      }
+      const __parent_this = this;
+      return "hello world!";
     }
   }
   return Foo;
@@ -225,6 +227,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -300,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const fn = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new Foo(this,"Foo"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
