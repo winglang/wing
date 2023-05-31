@@ -983,7 +983,6 @@ impl<'a> JSifier<'a> {
 		
 			code	
 		} else {
-			let mut code = CodeMaker::default();
 			let client_path = Self::js_resolve_path(&inflight_filename(class));
 
 			let mut captures = free_vars.iter().collect_vec();
