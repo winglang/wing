@@ -5,6 +5,9 @@
 module.exports = function({  }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(m)  {
       {
@@ -22,12 +25,15 @@ module.exports = function({  }) {
 module.exports = function({ handler }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(x)  {
       {
         const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })(x);
-        const y = (typeof handler === "function" ? await handler(xStr) : await handler.handle(xStr));
-        const z = (typeof handler === "function" ? await handler(y) : await handler.handle(y));
+        const y = (await handler(xStr));
+        const z = (await handler(y));
         return ((args) => { return JSON.stringify(args[0], null, args[1]) })([z]);
       }
     }
@@ -42,6 +48,9 @@ module.exports = function({ handler }) {
 module.exports = function({  }) {
   class  $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(x)  {
       {
@@ -59,10 +68,13 @@ module.exports = function({  }) {
 module.exports = function({ f }) {
   class  $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        const result = (typeof f.invoke === "function" ? await f.invoke("2") : await f.invoke.handle("2"));
+        const result = (await f.invoke("2"));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(result === "8")'`)})((result === "8"))};
       }
     }
@@ -82,8 +94,8 @@ module.exports = function({  }) {
     async invoke(message)  {
       {
         const __parent_this = this;
-        (typeof this.func.handle === "function" ? await this.func.handle(message) : await this.func.handle.handle(message));
-        (typeof this.func.handle === "function" ? await this.func.handle(message) : await this.func.handle.handle(message));
+        (await this.func.handle(message));
+        (await this.func.handle(message));
       }
     }
   }

@@ -5,6 +5,9 @@
 module.exports = function({  }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
@@ -22,11 +25,14 @@ module.exports = function({  }) {
 module.exports = function({ foo }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.callFn === "function" ? await foo.callFn(true) : await foo.callFn.handle(true)) === 1)'`)})(((typeof foo.callFn === "function" ? await foo.callFn(true) : await foo.callFn.handle(true)) === 1))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.callFn === "function" ? await foo.callFn(false) : await foo.callFn.handle(false)) === 2)'`)})(((typeof foo.callFn === "function" ? await foo.callFn(false) : await foo.callFn.handle(false)) === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.callFn(true)) === 1)'`)})(((await foo.callFn(true)) === 1))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.callFn(false)) === 2)'`)})(((await foo.callFn(false)) === 2))};
       }
     }
   }
@@ -69,8 +75,8 @@ module.exports = function({  }) {
     async callFn(x)  {
       {
         const __parent_this = this;
-        const partialFn = (typeof this.makeFn === "function" ? await this.makeFn(x) : await this.makeFn.handle(x));
-        return (typeof partialFn === "function" ? await partialFn() : await partialFn.handle());
+        const partialFn = (await this.makeFn(x));
+        return (await partialFn());
       }
     }
   }

@@ -5,6 +5,9 @@
 module.exports = function({  }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
       {
@@ -25,11 +28,14 @@ module.exports = function({  }) {
 module.exports = function({ f, api }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
         const username = "tsuf";
-        const res = (typeof f.get === "function" ? await f.get(`${api.url}/users/${username}`) : await f.get.handle(`${api.url}/users/${username}`));
+        const res = (await f.get(`${api.url}/users/${username}`));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
       }

@@ -5,6 +5,9 @@
 module.exports = function({ payload }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
@@ -22,10 +25,13 @@ module.exports = function({ payload }) {
 module.exports = function({ f, payload }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        const x = (typeof f.invoke === "function" ? await f.invoke("") : await f.invoke.handle(""));
+        const x = (await f.invoke(""));
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
       }
     }

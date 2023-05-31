@@ -5,6 +5,9 @@
 module.exports = function({ greeting }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {

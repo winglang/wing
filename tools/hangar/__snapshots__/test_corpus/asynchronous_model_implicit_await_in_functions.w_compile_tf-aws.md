@@ -5,6 +5,9 @@
 module.exports = function({  }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(s)  {
       {
@@ -21,11 +24,14 @@ module.exports = function({  }) {
 module.exports = function({ strToStr }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(s)  {
       {
-        (typeof strToStr.invoke === "function" ? await strToStr.invoke("one") : await strToStr.invoke.handle("one"));
-        {console.log((typeof strToStr.invoke === "function" ? await strToStr.invoke("two") : await strToStr.invoke.handle("two")))};
+        (await strToStr.invoke("one"));
+        {console.log((await strToStr.invoke("two")))};
       }
     }
   }

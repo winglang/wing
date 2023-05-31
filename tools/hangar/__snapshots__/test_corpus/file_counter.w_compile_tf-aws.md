@@ -5,12 +5,15 @@
 module.exports = function({ counter, bucket }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(body)  {
       {
-        const next = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        const next = (await counter.inc());
         const key = `myfile-${"hi"}.txt`;
-        (typeof bucket.put === "function" ? await bucket.put(key,body) : await bucket.put.handle(key,body));
+        (await bucket.put(key,body));
       }
     }
   }

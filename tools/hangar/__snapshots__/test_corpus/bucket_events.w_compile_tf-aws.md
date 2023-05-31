@@ -5,6 +5,9 @@
 module.exports = function({  }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
@@ -22,6 +25,9 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
@@ -39,6 +45,9 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class  $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
@@ -56,11 +65,14 @@ module.exports = function({  }) {
 module.exports = function({ other }) {
   class  $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
         {console.log(`last key ${key}`)};
-        (typeof other.put === "function" ? await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])) : await other.put.handle("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+        (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
       }
     }
   }
@@ -74,6 +86,9 @@ module.exports = function({ other }) {
 module.exports = function({  }) {
   class  $Inflight5 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
@@ -91,14 +106,17 @@ module.exports = function({  }) {
 module.exports = function({ b }) {
   class  $Inflight6 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        (typeof b.put === "function" ? await b.put("a","1") : await b.put.handle("a","1"));
-        (typeof b.put === "function" ? await b.put("b","1") : await b.put.handle("b","1"));
-        (typeof b.put === "function" ? await b.put("b","100") : await b.put.handle("b","100"));
-        (typeof b.put === "function" ? await b.put("c","1") : await b.put.handle("c","1"));
-        (typeof b.delete === "function" ? await b.delete("c") : await b.delete.handle("c"));
+        (await b.put("a","1"));
+        (await b.put("b","1"));
+        (await b.put("b","100"));
+        (await b.put("c","1"));
+        (await b.delete("c"));
       }
     }
   }

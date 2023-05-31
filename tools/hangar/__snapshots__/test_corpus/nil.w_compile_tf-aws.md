@@ -5,11 +5,14 @@
 module.exports = function({ foo }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.returnNil === "function" ? await foo.returnNil(true) : await foo.returnNil.handle(true))) != null) === true)'`)})(((((typeof foo.returnNil === "function" ? await foo.returnNil(true) : await foo.returnNil.handle(true))) != null) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.returnNil === "function" ? await foo.returnNil(false) : await foo.returnNil.handle(false))) != null) === false)'`)})(((((typeof foo.returnNil === "function" ? await foo.returnNil(false) : await foo.returnNil.handle(false))) != null) === false))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.returnNil(true))) != null) === true)'`)})(((((await foo.returnNil(true))) != null) === true))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.returnNil(false))) != null) === false)'`)})(((((await foo.returnNil(false))) != null) === false))};
       }
     }
   }
@@ -23,16 +26,19 @@ module.exports = function({ foo }) {
 module.exports = function({ foo }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
-        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue("hello") : await foo.setOptionalValue.handle("hello"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== undefined)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== undefined))};
-        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue(undefined) : await foo.setOptionalValue.handle(undefined));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === undefined)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === undefined))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === false)'`)})(((((await foo.getOptionalValue())) != null) === false))};
+        (await foo.setOptionalValue("hello"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === true)'`)})(((((await foo.getOptionalValue())) != null) === true))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.getOptionalValue()) !== undefined)'`)})(((await foo.getOptionalValue()) !== undefined))};
+        (await foo.setOptionalValue(undefined));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === false)'`)})(((((await foo.getOptionalValue())) != null) === false))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.getOptionalValue()) === undefined)'`)})(((await foo.getOptionalValue()) === undefined))};
       }
     }
   }

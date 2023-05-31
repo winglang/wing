@@ -407,10 +407,9 @@ impl<'a> JSifier<'a> {
 					}
 				}
 
-				match ctx.phase {
-					Phase::Inflight => format!("(typeof {} === \"function\" ? {}{}({}) : {}{}.handle({}))", expr_string, auto_await, expr_string, arg_string, auto_await, expr_string, arg_string),
-					Phase::Independent | Phase::Preflight => format!("({}{}({}))", auto_await, expr_string, arg_string),
-				}
+				// NOTE: if the expression is a "handle" class, the object itself is callable (see
+				// `jsify_class_inflight` below), so we can just call it as-is.
+				format!("({auto_await}{expr_string}({arg_string}))")
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
@@ -620,7 +619,7 @@ impl<'a> JSifier<'a> {
 				// const x = "hello"
 				// {
 				//  const $IF_LET_VALUE = x; <== intermediate variable that expires at the end of the scope
-				//  if (x != undefined) {
+				//  if ($IF_LET_VALUE != undefined) {
 				//    const x = $IF_LET_VALUE;
 				//    log(x);
 				//  }
@@ -634,7 +633,7 @@ impl<'a> JSifier<'a> {
 					if_let_value,
 					self.jsify_expression(value, ctx)
 				));
-				code.open(format!("if ({} != undefined) {{", self.jsify_expression(value, ctx)));
+				code.open(format!("if ({if_let_value} != undefined) {{"));
 				code.line(format!("const {} = {};", var_name, if_let_value));
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
@@ -685,9 +684,7 @@ impl<'a> JSifier<'a> {
 			)),
 			StmtKind::Scope(scope) => {
 				let mut code = CodeMaker::default();
-				code.open("{");
 				code.add_code(self.jsify_scope_body(scope, ctx));
-				code.close("}");
 				code
 			}
 			StmtKind::Return(exp) => {
@@ -1212,6 +1209,14 @@ impl<'a> JSifier<'a> {
 
 		for name in &my_captures {
 			class_code.line(format!("this.{} = {};", name, name));
+		}
+
+		// if this class has a "handle" method, we are going to turn it into a callable function
+		// so that instances of this class can also be called like regular functions
+		if inflight_methods.iter().find(|(name, _)| name.name == HANDLE_METHOD_NAME).is_some() {
+			class_code.line(format!("const $obj = (...args) => this.{HANDLE_METHOD_NAME}(...args);"));
+			class_code.line("Object.setPrototypeOf($obj, this);");
+			class_code.line("return $obj;");
 		}
 
 		class_code.close("}");

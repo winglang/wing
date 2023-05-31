@@ -5,10 +5,13 @@
 module.exports = function({ counter }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
-        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        (await counter.inc());
       }
     }
   }
@@ -22,10 +25,13 @@ module.exports = function({ counter }) {
 module.exports = function({ counter }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
-        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        (await counter.inc());
       }
     }
   }
@@ -39,10 +45,13 @@ module.exports = function({ counter }) {
 module.exports = function({ counter }) {
   class  $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
-        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        (await counter.inc());
       }
     }
   }
@@ -56,10 +65,13 @@ module.exports = function({ counter }) {
 module.exports = function({ counter }) {
   class  $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
       {
-        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        (await counter.inc());
       }
     }
   }
@@ -73,6 +85,9 @@ module.exports = function({ counter }) {
 module.exports = function({ counter, b }) {
   class  $Inflight5 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
@@ -86,7 +101,7 @@ module.exports = function({ counter, b }) {
           }
           async assertion()  {
             {
-              return ((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === this.counterVal);
+              return ((await counter.peek()) === this.counterVal);
             }
           }
           async testAssertion()  {
@@ -94,22 +109,22 @@ module.exports = function({ counter, b }) {
               let i = 0;
               while ((i < 12)) {
                 i = (i + 1);
-                if ((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())) {
-                  {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
+                if ((await this.assertion())) {
+                  {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
                   return;
                 }
-                (typeof Predicate.sleep === "function" ? await Predicate.sleep((1000 * 10)) : await Predicate.sleep.handle((1000 * 10)));
+                (await Predicate.sleep((1000 * 10)));
               }
-              {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
+              {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
             }
           }
         }
-        (typeof b.put === "function" ? await b.put("a","1") : await b.put.handle("a","1"));
-        (typeof b.put === "function" ? await b.put("b","1") : await b.put.handle("b","1"));
-        (typeof b.put === "function" ? await b.put("c","1") : await b.put.handle("c","1"));
-        (typeof b.put === "function" ? await b.put("b","100") : await b.put.handle("b","100"));
-        (typeof b.delete === "function" ? await b.delete("c") : await b.delete.handle("c"));
-        (typeof new Predicate(10).testAssertion === "function" ? await new Predicate(10).testAssertion() : await new Predicate(10).testAssertion.handle());
+        (await b.put("a","1"));
+        (await b.put("b","1"));
+        (await b.put("c","1"));
+        (await b.put("b","100"));
+        (await b.delete("c"));
+        (await new Predicate(10).testAssertion());
       }
     }
   }

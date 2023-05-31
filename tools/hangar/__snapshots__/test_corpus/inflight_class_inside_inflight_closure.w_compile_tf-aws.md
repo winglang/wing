@@ -5,10 +5,13 @@
 module.exports = function({ __parent_this }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(payload)  {
       {
-        (typeof __parent_this.b.put === "function" ? await __parent_this.b.put("k","v") : await __parent_this.b.put.handle("k","v"));
+        (await __parent_this.b.put("k","v"));
         class InflightClass {
           constructor()  {
             this.field = "value";
@@ -21,7 +24,7 @@ module.exports = function({ __parent_this }) {
           }
         }
         const c = new InflightClass();
-        (typeof c.method === "function" ? await c.method() : await c.method.handle());
+        (await c.method());
       }
     }
   }
@@ -35,10 +38,13 @@ module.exports = function({ __parent_this }) {
 module.exports = function({ f }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        (typeof f.invoke === "function" ? await f.invoke("text") : await f.invoke.handle("text"));
+        (await f.invoke("text"));
       }
     }
   }

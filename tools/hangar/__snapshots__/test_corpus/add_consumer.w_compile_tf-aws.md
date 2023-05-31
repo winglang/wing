@@ -5,10 +5,13 @@
 module.exports = function({ c }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(msg)  {
       {
-        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
+        (await c.inc());
       }
     }
   }
@@ -22,21 +25,24 @@ module.exports = function({ c }) {
 module.exports = function({ q, predicate, js }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        (typeof q.push === "function" ? await q.push("hello") : await q.push.handle("hello"));
-        (typeof q.push === "function" ? await q.push("world") : await q.push.handle("world"));
+        (await q.push("hello"));
+        (await q.push("world"));
         let i = 0;
         while ((i < 600)) {
           i = (i + 1);
-          if ((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
+          if ((await predicate.test())) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
             return;
           }
-          (typeof js.sleep === "function" ? await js.sleep(100) : await js.sleep.handle(100));
+          (await js.sleep(100));
         }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
       }
     }
   }
@@ -55,7 +61,7 @@ module.exports = function({  }) {
     async test()  {
       {
         const __parent_this = this;
-        return ((typeof this.c.peek === "function" ? await this.c.peek() : await this.c.peek.handle()) === 2);
+        return ((await this.c.peek()) === 2);
       }
     }
   }

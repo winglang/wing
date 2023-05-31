@@ -5,11 +5,14 @@
 module.exports = function({ b, x }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        (typeof b.put === "function" ? await b.put("file","foo") : await b.put.handle("file","foo"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.get === "function" ? await b.get("file") : await b.get.handle("file")) === "foo")'`)})(((typeof b.get === "function" ? await b.get("file") : await b.get.handle("file")) === "foo"))};
+        (await b.put("file","foo"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file")) === "foo")'`)})(((await b.get("file")) === "foo"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(12 === x)'`)})((12 === x))};
       }
     }

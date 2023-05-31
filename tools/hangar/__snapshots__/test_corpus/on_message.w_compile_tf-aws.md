@@ -5,10 +5,13 @@
 module.exports = function({ c }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
+        (await c.inc());
       }
     }
   }
@@ -22,10 +25,13 @@ module.exports = function({ c }) {
 module.exports = function({ c }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
+        (await c.inc());
       }
     }
   }
@@ -39,22 +45,25 @@ module.exports = function({ c }) {
 module.exports = function({ t, predicate, TestHelper }) {
   class  $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
         for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
-          (typeof t.publish === "function" ? await t.publish("msg") : await t.publish.handle("msg"));
+          (await t.publish("msg"));
         }
         let i = 0;
         while ((i < 600)) {
           i = (i + 1);
-          if ((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
+          if ((await predicate.test())) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
             return;
           }
-          (typeof TestHelper.sleep === "function" ? await TestHelper.sleep(100) : await TestHelper.sleep.handle(100));
+          (await TestHelper.sleep(100));
         }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
       }
     }
   }
@@ -73,7 +82,7 @@ module.exports = function({  }) {
     async test()  {
       {
         const __parent_this = this;
-        return ((typeof this.c.peek === "function" ? await this.c.peek() : await this.c.peek.handle()) === 10);
+        return ((await this.c.peek()) === 10);
       }
     }
   }

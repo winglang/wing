@@ -5,10 +5,13 @@
 module.exports = function({ x }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        (typeof x.handle === "function" ? await x.handle("hello world!") : await x.handle.handle("hello world!"));
+        (await x.handle("hello world!"));
       }
     }
   }
@@ -22,6 +25,9 @@ module.exports = function({ x }) {
 module.exports = function({  }) {
   class  A {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(msg)  {
       {

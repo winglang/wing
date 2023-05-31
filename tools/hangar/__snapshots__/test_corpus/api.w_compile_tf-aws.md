@@ -5,10 +5,13 @@
 module.exports = function({ counter }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(request)  {
       {
-        const count = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        const count = (await counter.inc());
         const bodyResponse = Object.freeze({"count":count});
         const resp = {
         "body": bodyResponse,
@@ -28,6 +31,9 @@ module.exports = function({ counter }) {
 module.exports = function({ api }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
@@ -46,6 +52,9 @@ module.exports = function({ api }) {
 module.exports = function({ __parent_this }) {
   class  $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
       {

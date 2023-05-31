@@ -5,6 +5,9 @@
 module.exports = function({ s }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
@@ -22,6 +25,9 @@ module.exports = function({ s }) {
 module.exports = function({ s }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
@@ -39,6 +45,9 @@ module.exports = function({ s }) {
 module.exports = function({ s }) {
   class  $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
@@ -56,6 +65,9 @@ module.exports = function({ s }) {
 module.exports = function({  }) {
   class  $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {

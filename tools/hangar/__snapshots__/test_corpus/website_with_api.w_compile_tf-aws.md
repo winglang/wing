@@ -5,11 +5,14 @@
 module.exports = function({ usersTable }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
       {
         return {
-        "body": Object.freeze({"users":(typeof usersTable.list === "function" ? await usersTable.list() : await usersTable.list.handle())}),
+        "body": Object.freeze({"users":(await usersTable.list())}),
         "status": 200,}
         ;
       }
@@ -25,6 +28,9 @@ module.exports = function({ usersTable }) {
 module.exports = function({ usersTable }) {
   class  $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
       {
@@ -35,7 +41,7 @@ module.exports = function({ usersTable }) {
           "status": 400,}
           ;
         }
-        (typeof usersTable.insert === "function" ? await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body) : await usersTable.insert.handle(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+        (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
         return {
         "body": Object.freeze({"user":(body)["id"]}),
         "status": 201,}
@@ -53,6 +59,9 @@ module.exports = function({ usersTable }) {
 module.exports = function({  }) {
   class  $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
       {

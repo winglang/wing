@@ -5,6 +5,9 @@
 module.exports = function({  }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(body)  {
       {
@@ -15,7 +18,7 @@ module.exports = function({  }) {
           }
         }
         ;
-        while (((typeof iterator === "function" ? await iterator(i) : await iterator.handle(i)) < 3)) {
+        while (((await iterator(i)) < 3)) {
           {console.log(`${i}`)};
         }
       }

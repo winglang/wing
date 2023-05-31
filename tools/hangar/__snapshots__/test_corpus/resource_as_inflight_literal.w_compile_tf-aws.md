@@ -5,10 +5,13 @@
 module.exports = function({ fn }) {
   class  $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof fn.invoke === "function" ? await fn.invoke("test") : await fn.invoke.handle("test")) === "hello world!")'`)})(((typeof fn.invoke === "function" ? await fn.invoke("test") : await fn.invoke.handle("test")) === "hello world!"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
       }
     }
   }
@@ -22,6 +25,9 @@ module.exports = function({ fn }) {
 module.exports = function({  }) {
   class  Foo {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(message)  {
       {
