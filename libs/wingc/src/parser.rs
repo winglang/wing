@@ -739,7 +739,9 @@ impl<'s> Parser<'s> {
 		let func_sig = self.build_function_signature(&interface_element, phase)?;
 		match func_sig.return_type {
 			Some(_) => Ok((method_name, func_sig)),
-			None => self.add_error::<(Symbol, FunctionSignature)>("Expected method return type".to_string(), &interface_element),
+			None => {
+				self.add_error::<(Symbol, FunctionSignature)>("Expected method return type".to_string(), &interface_element)
+			}
 		}
 	}
 
@@ -850,20 +852,18 @@ impl<'s> Parser<'s> {
 					.filter_map(|param_type| self.build_type_annotation(&param_type).ok())
 					.collect::<Vec<TypeAnnotation>>();
 				match type_node.child_by_field_name("return_type") {
-					Some(return_type) => {
-						Ok(TypeAnnotation {
-							kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
-								param_types,
-								return_type: Box::new(self.build_type_annotation(&return_type)?),
-								phase: if type_node.child_by_field_name("inflight").is_some() {
-									Phase::Inflight
-								} else {
-									Phase::Preflight
-								},
-							}),
-							span,
-						})
-					},
+					Some(return_type) => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
+							param_types,
+							return_type: Box::new(self.build_type_annotation(&return_type)?),
+							phase: if type_node.child_by_field_name("inflight").is_some() {
+								Phase::Inflight
+							} else {
+								Phase::Preflight
+							},
+						}),
+						span,
+					}),
 					None => self.add_error("Expected function return type".to_string(), &type_node),
 				}
 			}

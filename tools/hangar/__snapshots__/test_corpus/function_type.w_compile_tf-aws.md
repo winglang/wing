@@ -3,12 +3,13 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(x)  {
-      {
-      }
     }
   }
   return $Inflight1;
@@ -19,12 +20,13 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(x)  {
-      {
-      }
     }
   }
   return $Inflight2;
@@ -35,18 +37,14 @@ module.exports = function({  }) {
 ## clients/C.inflight.js
 ```js
 module.exports = function({  }) {
-  class  C {
+  class C {
     constructor({  }) {
     }
     async my_method3(x)  {
-      {
-        const __parent_this = this;
-      }
+      const __parent_this = this;
     }
     async my_method4(x)  {
-      {
-        const __parent_this = this;
-      }
+      const __parent_this = this;
     }
   }
   return C;
@@ -90,6 +88,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
@@ -166,14 +165,10 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
        my_method(x)  {
-        {
-          const __parent_this = this;
-        }
+        const __parent_this = this;
       }
        my_method2(x)  {
-        {
-          const __parent_this = this;
-        }
+        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/C.inflight.js".replace(/\\/g, "/");
@@ -204,23 +199,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const my_func =  (callback) =>  {
-      {
-      }
     }
     ;
     const my_func2 =  (callback) =>  {
-      {
-      }
     }
     ;
     const my_func3 =  (x) =>  {
-      {
-      }
     }
     ;
     const my_func4 =  (x) =>  {
-      {
-      }
     }
     ;
     const my_func5 = new $Inflight1(this,"$Inflight1");
