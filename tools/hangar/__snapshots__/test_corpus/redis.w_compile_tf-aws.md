@@ -3,19 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ r, r2 }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const connection = (typeof r.rawClient === "function" ? await r.rawClient() : await r.rawClient.handle());
-        (typeof connection.set === "function" ? await connection.set("wing","does redis") : await connection.set.handle("wing","does redis"));
-        const value = (typeof connection.get === "function" ? await connection.get("wing") : await connection.get.handle("wing"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
-        (typeof r2.set === "function" ? await r2.set("wing","does redis again") : await r2.set.handle("wing","does redis again"));
-        const value2 = (typeof r2.get === "function" ? await r2.get("wing") : await r2.get.handle("wing"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
-      }
+      const connection = (await r.rawClient());
+      (await connection.set("wing","does redis"));
+      const value = (await connection.get("wing"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
+      (await r2.set("wing","does redis again"));
+      const value2 = (await r2.get("wing"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
     }
   }
   return $Inflight1;

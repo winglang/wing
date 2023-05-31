@@ -1,7 +1,7 @@
 import { spawnSync } from "child_process";
 import * as crypto from "crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { join, resolve } from "path";
 import { normalPath } from "./misc";
 
 export interface Bundle {
@@ -17,7 +17,7 @@ export interface Bundle {
  * @returns Bundle information
  */
 export function createBundle(entrypoint: string, outputDir?: string): Bundle {
-  const outdir = outputDir ?? entrypoint + ".bundle";
+  const outdir = resolve(outputDir ?? entrypoint + ".bundle");
   mkdirSync(outdir, { recursive: true });
   const outfile = join(outdir, "index.js");
 
@@ -34,7 +34,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   let esbuildScript = [
     `const esbuild = require("esbuild-wasm");`,
     `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
-      entrypoint
+      resolve(entrypoint)
     )}"], outfile: "${normalPath(outfile)}", ${nodePathString}
     minify: false, platform: "node", target: "node16", external: ["aws-sdk"],
    });`,
