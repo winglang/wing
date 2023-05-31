@@ -3,13 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ bucket }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(message)  {
-      {
-        (typeof bucket.put === "function" ? await bucket.put("wing.txt",`Hello, ${message}`) : await bucket.put.handle("wing.txt",`Hello, ${message}`));
-      }
+      (await bucket.put("wing.txt",`Hello, ${message}`));
     }
   }
   return $Inflight1;
@@ -210,6 +211,7 @@ module.exports = function({ bucket }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -244,6 +246,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(bucket, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(bucket, host, ["put"]);

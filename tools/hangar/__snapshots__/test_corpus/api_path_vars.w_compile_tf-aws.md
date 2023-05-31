@@ -2,17 +2,18 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function() {
-  class  $Inflight1 {
+module.exports = function({  }) {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
-      {
-        return {
-        "body": Object.freeze({"user":(req.vars)["name"]}),
-        "status": 200,}
-        ;
-      }
+      return {
+      "body": Object.freeze({"user":(req.vars)["name"]}),
+      "status": 200,}
+      ;
     }
   }
   return $Inflight1;
@@ -22,17 +23,18 @@ module.exports = function() {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function({ api, f }) {
-  class  $Inflight2 {
+module.exports = function({ f, api }) {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const username = "tsuf";
-        const res = (await f.get(`${api.url}/users/${username}`));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
-      }
+      const username = "tsuf";
+      const res = (await f.get(`${api.url}/users/${username}`));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
     }
   }
   return $Inflight2;
@@ -43,7 +45,7 @@ module.exports = function({ api, f }) {
 ## clients/Fetch.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Fetch {
+  class Fetch {
     constructor({  }) {
     }
     async get(url)  {
@@ -238,12 +240,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-<<<<<<< HEAD
-            "WING_FUNCTION_NAME": "test-c8b6eece"
-=======
             "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
->>>>>>> main
           }
         },
         "function_name": "Handler-c8f4f2a1",
@@ -318,6 +316,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -360,13 +359,20 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
-      _toInflight() {
+      static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1 = require("${self_client_path}")({});
-            const client = new $Inflight1({
+            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
+            const client = new $Inflight1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -385,18 +391,24 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const f_client = context._lift(f);
+        const api_client = context._lift(api);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            f: ${f_client},
+            api: ${api_client},
+          })
+        `);
       }
       _toInflight() {
-        const api_client = this._lift(api);
-        const f_client = this._lift(f);
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2 = require("${self_client_path}")({
-              api: ${api_client},
-              f: ${f_client},
-            });
-            const client = new $Inflight2({
+            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+            const client = new $Inflight2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -405,10 +417,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(api, host, []);
+          $Inflight2._registerBindObject(f, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(api.url, host, []);
-          this._registerBindObject(f, host, ["get"]);
+          $Inflight2._registerBindObject(api.url, host, []);
+          $Inflight2._registerBindObject(f, host, ["get"]);
         }
         super._registerBind(host, ops);
       }
@@ -417,24 +431,7 @@ class $Root extends $stdlib.std.Resource {
     const handler = new $Inflight1(this,"$Inflight1");
     (api.get("/users/{name}",handler));
     const f = new Fetch(this,"Fetch");
-<<<<<<< HEAD
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $Inflight2(this,"$Inflight2"));
-=======
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
-      bindings: {
-        api: {
-          obj: api,
-          ops: []
-        },
-        f: {
-          obj: f,
-          ops: ["get"]
-        },
-      }
-    })
-    );
->>>>>>> main
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {
@@ -453,31 +450,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
-```
-
-## proc1/index.js
-```js
-async handle(req) {
-  const {  } = this;
-  const vars = (req.vars ?? Object.freeze({"name":""}));
-  return {
-  "body": Object.freeze({"user":(vars)["name"]}),
-  "status": 200,}
-  ;
-}
-
-```
-
-## proc2/index.js
-```js
-async handle() {
-  const { api, f } = this;
-  const username = "tsuf";
-  const res = (await f.get(`${api.url}/users/${username}`));
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
-}
 
 ```
 

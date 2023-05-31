@@ -5,10 +5,10 @@ import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-sou
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { IInflightHost, Resource } from "../std";
-import { convertBetweenHandlers } from "../utils/convert";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * Queue names are limited to 80 characters.

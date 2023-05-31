@@ -3,13 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(m)  {
-      {
-        return `Hello ${m}!`;
-      }
+      return `Hello ${m}!`;
     }
   }
   return $Inflight1;
@@ -20,16 +21,17 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ handler }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(x)  {
-      {
-        const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })(x);
-        const y = (typeof handler === "function" ? await handler(xStr) : await handler.handle(xStr));
-        const z = (typeof handler === "function" ? await handler(y) : await handler.handle(y));
-        return ((args) => { return JSON.stringify(args[0], null, args[1]) })([z]);
-      }
+      const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })(x);
+      const y = (await handler(xStr));
+      const z = (await handler(y));
+      return ((args) => { return JSON.stringify(args[0], null, args[1]) })([z]);
     }
   }
   return $Inflight2;
@@ -40,13 +42,14 @@ module.exports = function({ handler }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(x)  {
-      {
-        return (x * 2);
-      }
+      return (x * 2);
     }
   }
   return $Inflight3;
@@ -57,14 +60,15 @@ module.exports = function({  }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ f }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const result = (typeof f.invoke === "function" ? await f.invoke("2") : await f.invoke.handle("2"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(result === "8")'`)})((result === "8"))};
-      }
+      const result = (await f.invoke("2"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(result === "8")'`)})((result === "8"))};
     }
   }
   return $Inflight4;
@@ -75,16 +79,14 @@ module.exports = function({ f }) {
 ## clients/Doubler.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Doubler {
+  class Doubler {
     constructor({ func }) {
       this.func = func;
     }
     async invoke(message)  {
-      {
-        const __parent_this = this;
-        (typeof this.func.handle === "function" ? await this.func.handle(message) : await this.func.handle.handle(message));
-        (typeof this.func.handle === "function" ? await this.func.handle(message) : await this.func.handle.handle(message));
-      }
+      const __parent_this = this;
+      (await this.func.handle(message));
+      (await this.func.handle(message));
     }
   }
   return Doubler;
@@ -95,7 +97,7 @@ module.exports = function({  }) {
 ## clients/Doubler2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Doubler2 {
+  class Doubler2 {
     constructor({  }) {
     }
   }
@@ -294,6 +296,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -375,45 +378,44 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
        makeFunc(handler)  {
-        {
-          const __parent_this = this;
-          class $Inflight2 extends $stdlib.std.Resource {
-            constructor(scope, id, ) {
-              super(scope, id);
-              this._addInflightOps("handle");
-              this.display.hidden = true;
-            }
-            static _toInflightType(context) {
-              const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
-              const handler_client = context._lift(handler);
-              return $stdlib.core.NodeJsCode.fromInline(`
-                require("${self_client_path}")({
-                  handler: ${handler_client},
-                })
-              `);
-            }
-            _toInflight() {
-              return $stdlib.core.NodeJsCode.fromInline(`
-                (await (async () => {
-                  const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-                  const client = new $Inflight2Client({
-                  });
-                  if (client.$inflight_init) { await client.$inflight_init(); }
-                  return client;
-                })())
-              `);
-            }
-            _registerBind(host, ops) {
-              if (ops.includes("$inflight_init")) {
-              }
-              if (ops.includes("handle")) {
-                $Inflight2._registerBindObject(handler, host, ["handle"]);
-              }
-              super._registerBind(host, ops);
-            }
+        const __parent_this = this;
+        class $Inflight2 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle");
+            this.display.hidden = true;
           }
-          return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Inflight2(this,"$Inflight2"));
+          static _toInflightType(context) {
+            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+            const handler_client = context._lift(handler);
+            return $stdlib.core.NodeJsCode.fromInline(`
+              require("${self_client_path}")({
+                handler: ${handler_client},
+              })
+            `);
+          }
+          _toInflight() {
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
+                const client = new $Inflight2Client({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("$inflight_init")) {
+              $Inflight2._registerBindObject(handler, host, []);
+            }
+            if (ops.includes("handle")) {
+              $Inflight2._registerBindObject(handler, host, ["handle"]);
+            }
+            super._registerBind(host, ops);
+          }
         }
+        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Inflight2(this,"$Inflight2"));
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/Doubler2.inflight.js".replace(/\\/g, "/");
@@ -499,6 +501,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight4._registerBindObject(f, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight4._registerBindObject(f, host, ["invoke"]);
@@ -509,7 +512,7 @@ class $Root extends $stdlib.std.Resource {
     const fn = new Doubler(this,"Doubler",new $Inflight1(this,"$Inflight1"));
     const doubler2 = new Doubler2(this,"Doubler2");
     const f = (doubler2.makeFunc(new $Inflight3(this,"$Inflight3")));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:f(2) == 8",new $Inflight4(this,"$Inflight4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:f(2) == 8",new $Inflight4(this,"$Inflight4"));
   }
 }
 class $App extends $AppBase {

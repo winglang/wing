@@ -1020,7 +1020,7 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.cloud.Test",
+                      "fqn": "@winglang/sdk.std.Test",
                       "version": "0.0.0",
                     },
                     "display": {
@@ -1041,12 +1041,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "list",
-                              "resource": "root/Default/Default/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
                               "relationship": "dec",
                               "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
                             },
@@ -1055,6 +1049,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "implicit": false,
                               "relationship": "inc",
                               "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "list",
+                              "resource": "root/Default/Default/cloud.Bucket",
                             },
                             {
                               "direction": "outbound",
@@ -1169,7 +1169,7 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.cloud.Test",
+                      "fqn": "@winglang/sdk.std.Test",
                       "version": "0.0.0",
                     },
                     "display": {

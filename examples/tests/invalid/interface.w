@@ -19,8 +19,8 @@ interface ISomeInterface extends ISomeClass {
 
 // interface with multiple methods having the same name, different signature
 interface IWithSameName {
-    foo();
-    foo();
+    foo(): void;
+    foo(): void;
  // ^^^ Symbol "foo" already defined in this scope
     foo(): num;
  // ^^^ Symbol "foo" already defined in this scope

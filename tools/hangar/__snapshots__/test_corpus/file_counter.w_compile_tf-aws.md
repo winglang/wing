@@ -3,15 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ counter, bucket }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(body)  {
-      {
-        const next = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
-        const key = `myfile-${"hi"}.txt`;
-        (typeof bucket.put === "function" ? await bucket.put(key,body) : await bucket.put.handle(key,body));
-      }
+      const next = (await counter.inc());
+      const key = `myfile-${"hi"}.txt`;
+      (await bucket.put(key,body));
     }
   }
   return $Inflight1;
@@ -233,6 +234,7 @@ module.exports = function({ counter, bucket }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -269,6 +271,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(bucket, host, []);
+          $Inflight1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(bucket, host, ["put"]);

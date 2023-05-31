@@ -3,18 +3,19 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ q }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        (typeof q.push === "function" ? await q.push("foo") : await q.push.handle("foo"));
-        (typeof q.push === "function" ? await q.push("bar") : await q.push.handle("bar"));
-        (typeof q.push === "function" ? await q.push("baz") : await q.push.handle("baz"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 3)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 3))};
-        (typeof q.purge === "function" ? await q.purge() : await q.purge.handle());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0))};
-      }
+      (await q.push("foo"));
+      (await q.push("bar"));
+      (await q.push("baz"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 3)'`)})(((await q.approxSize()) === 3))};
+      (await q.purge());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
     }
   }
   return $Inflight1;
@@ -158,6 +159,7 @@ module.exports = function({ q }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -192,6 +194,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(q, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(q, host, ["approxSize", "purge", "push"]);
@@ -200,7 +203,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:purge",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:purge",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

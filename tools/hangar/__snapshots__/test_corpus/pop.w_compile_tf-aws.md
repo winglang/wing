@@ -3,22 +3,23 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ q, NIL }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const msgs = Object.freeze(["Foo", "Bar"]);
-        for (const msg of msgs) {
-          (typeof q.push === "function" ? await q.push(msg) : await q.push.handle(msg));
-        }
-        const first = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
-        const second = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
-        const third = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
+      const msgs = Object.freeze(["Foo", "Bar"]);
+      for (const msg of msgs) {
+        (await q.push(msg));
       }
+      const first = ((await q.pop()) ?? NIL);
+      const second = ((await q.pop()) ?? NIL);
+      const third = ((await q.pop()) ?? NIL);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
     }
   }
   return $Inflight1;
@@ -162,6 +163,7 @@ module.exports = function({ q, NIL }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -198,6 +200,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(NIL, host, []);
+          $Inflight1._registerBindObject(q, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(NIL, host, []);
@@ -208,7 +212,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const NIL = "<<NIL>>";
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:pop",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:pop",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

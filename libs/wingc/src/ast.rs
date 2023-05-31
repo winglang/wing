@@ -128,6 +128,7 @@ pub enum TypeAnnotationKind {
 	String,
 	Bool,
 	Duration,
+	Void,
 	Json,
 	MutJson,
 	Optional(Box<TypeAnnotation>),
@@ -146,7 +147,7 @@ pub enum TypeAnnotationKind {
 #[derive(Debug, Clone)]
 pub struct FunctionTypeAnnotation {
 	pub param_types: Vec<TypeAnnotation>,
-	pub return_type: Option<Box<TypeAnnotation>>,
+	pub return_type: Box<TypeAnnotation>,
 	pub phase: Phase,
 }
 
@@ -177,6 +178,7 @@ impl Display for TypeAnnotationKind {
 			TypeAnnotationKind::String => write!(f, "str"),
 			TypeAnnotationKind::Bool => write!(f, "bool"),
 			TypeAnnotationKind::Duration => write!(f, "duration"),
+			TypeAnnotationKind::Void => write!(f, "void"),
 			TypeAnnotationKind::Json => write!(f, "Json"),
 			TypeAnnotationKind::MutJson => write!(f, "MutJson"),
 			TypeAnnotationKind::Optional(t) => write!(f, "{}?", t),
@@ -211,11 +213,7 @@ impl Display for FunctionTypeAnnotation {
 			.map(|a| format!("{}", a))
 			.collect::<Vec<String>>()
 			.join(", ");
-		let ret_type_str = if let Some(ret_val) = &self.return_type {
-			format!("{}", ret_val)
-		} else {
-			"void".to_string()
-		};
+		let ret_type_str = format!("{}", &self.return_type);
 		write!(f, "{phase_str}({params_str}): {ret_type_str}")
 	}
 }
@@ -232,7 +230,13 @@ impl FunctionSignature {
 		TypeAnnotation {
 			kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
 				param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
-				return_type: self.return_type.clone(),
+				return_type: self.return_type.clone().map_or(
+					Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::Void,
+						span: Default::default(),
+					}),
+					|t| t.clone(),
+				),
 				phase: self.phase,
 			}),
 			// Function signatures may not necessarily have spans
@@ -652,7 +656,11 @@ pub enum Reference {
 	/// A simple identifier: `x`
 	Identifier(Symbol),
 	/// A reference to a member nested inside some object `expression.x`
-	InstanceMember { object: Box<Expr>, property: Symbol },
+	InstanceMember {
+		object: Box<Expr>,
+		property: Symbol,
+		optional_accessor: bool,
+	},
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember { type_: UserDefinedType, property: Symbol },
 }
@@ -661,7 +669,11 @@ impl Display for Reference {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self {
 			Reference::Identifier(symb) => write!(f, "{}", symb.name),
-			Reference::InstanceMember { object, property } => {
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _,
+			} => {
 				let obj_str = match &object.kind {
 					ExprKind::Reference(r) => format!("{}", r),
 					_ => "object".to_string(), // TODO!

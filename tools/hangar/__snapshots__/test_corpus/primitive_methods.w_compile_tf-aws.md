@@ -36,6 +36,7 @@
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
@@ -44,8 +45,6 @@ class $Root extends $stdlib.std.Resource {
     const dur = $stdlib.std.Duration.fromSeconds(60);
     const dur2 = $stdlib.std.Duration.fromSeconds(600);
     const f =  (d) =>  {
-      {
-      }
     }
     ;
     const stringy = `${dur.minutes}:${dur.seconds}`;
