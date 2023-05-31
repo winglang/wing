@@ -7,6 +7,7 @@ import { UnsupportedView } from "../components/resource-views/UnsupportedView.js
 
 import { ApiView } from "./api-view.js";
 import { CounterInteractionView } from "./counter-interaction-view.js";
+import { ScheduleInteractionView } from "./schedule-interaction-view.js";
 import { TableInteractionView } from "./table-interaction-view.js";
 
 export interface ResourceViewProps {
@@ -39,6 +40,9 @@ export const ResourceInteractionView = ({
       }
       case "wingsdk.cloud.Table": {
         return <TableInteractionView resourcePath={resourcePath} />;
+      }
+      case "wingsdk.cloud.Schedule": {
+        return <ScheduleInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.redis.Redis": {
         return <RedisView resourcePath={resourcePath} />;

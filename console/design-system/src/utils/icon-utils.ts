@@ -65,7 +65,7 @@ export const getResourceIconComponent = (
     case "wingsdk.cloud.Table": {
       return solid ? SolidTableCellsIcon : TableCellsIcon;
     }
-    case "cloud.Cron": {
+    case "wingsdk.cloud.Schedule": {
       return solid ? SolidClockIcon : ClockIcon;
     }
     case "wingsdk.redis.Redis": {
@@ -148,6 +148,14 @@ export const getResourceIconColors = (options: {
         options.darkenOnGroupHover &&
           "group-hover:text-cyan-600 dark:group-hover:text-cyan-300",
         options.forceDarken && "text-cyan-600 dark:text-cyan-300",
+      ];
+    }
+    case "wingsdk.cloud.Schedule": {
+      return [
+        "text-purple-500 dark:text-purple-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-purple-600 dark:group-hover:text-purple-300",
+        options.forceDarken && "text-purple-600 dark:text-purple-300",
       ];
     }
     case "wingsdk.redis.Redis": {

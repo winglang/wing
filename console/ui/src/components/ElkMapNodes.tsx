@@ -31,6 +31,9 @@ const getResourceBorderColor = (
     case "wingsdk.cloud.Table": {
       return "border-t-[3px] border-t-cyan-500 group-hover:border-t-cyan-500 group-focus:border-t-cyan-500 dark:border-t-cyan-500 dark:group-hover:border-t-cyan-500 dark:group-focus:border-t-cyan-500";
     }
+    case "wingsdk.cloud.Schedule": {
+      return "border-t-[3px] border-t-purple-500 group-hover:border-t-purple-500 group-focus:border-t-purple-500 dark:border-t-purple-500 dark:group-hover:border-t-purple-500 dark:group-focus:border-t-purple-500";
+    }
     case "wingsdk.redis.Redis": {
       return "border-t-[3px] border-t-red-700 group-hover:border-t-red-700 group-focus:border-t-red-700 dark:border-t-red-700 dark:group-hover:border-t-red-700 dark:group-focus:border-t-red-700";
     }

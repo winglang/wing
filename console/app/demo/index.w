@@ -66,6 +66,22 @@ let table = new cloud.Table(cloud.TableProps{
   },
 });
 
+let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
+  rate: 5m
+}) as "Rate Schedule";
+
+rateSchedule.onTick(inflight () => {
+  log("Rate schedule ticked!");
+});
+
+let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
+  cron: "* * * * *"
+}) as "Cron Schedule";
+
+cronSchedule.onTick(inflight () => {
+  log("Cron schedule ticked!");
+});
+
 test "Increment counter" {
   let previous = counter.inc();
   log("Assertion should fail: ${previous} === ${counter.peek()}");

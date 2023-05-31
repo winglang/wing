@@ -26,6 +26,7 @@ import { QueueMetadata } from "../components/resource-metadata/QueueMetadata.js"
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
 
 import { CounterMetadata } from "./counter-metadata.js";
+import { ScheduleMetadata } from "./schedule-metadata.js";
 
 interface AttributeGroup {
   groupName: string;
@@ -130,7 +131,7 @@ export const ResourceMetadata = ({
         case "wingsdk.cloud.Api": {
           resourceGroup = {
             groupName: "Api",
-            icon: getResourceIconComponent(node.type),
+            icon,
           };
 
           break;
@@ -138,7 +139,15 @@ export const ResourceMetadata = ({
         case "wingsdk.cloud.Table": {
           resourceGroup = {
             groupName: "Table",
-            icon: getResourceIconComponent(node.type),
+            icon,
+          };
+
+          break;
+        }
+        case "wingsdk.cloud.Schedule": {
+          resourceGroup = {
+            groupName: "Schedule",
+            icon,
           };
 
           break;
@@ -146,7 +155,7 @@ export const ResourceMetadata = ({
         case "wingsdk.redis.Redis": {
           resourceGroup = {
             groupName: "Redis",
-            icon: getResourceIconComponent(node.type),
+            icon,
           };
 
           break;
@@ -358,6 +367,9 @@ export const ResourceMetadata = ({
                       )}
                       {node.type === "wingsdk.cloud.Counter" && (
                         <CounterMetadata node={node} />
+                      )}
+                      {node.type === "wingsdk.cloud.Schedule" && (
+                        <ScheduleMetadata node={node} />
                       )}
                       {resourceGroup?.actionName && (
                         <InspectorSection
