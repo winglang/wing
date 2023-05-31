@@ -683,10 +683,10 @@ impl<'s> Parser<'s> {
 			}
 			match interface_element.kind() {
 				"method_signature" => {
-					self.build_interface_method(interface_element, &mut methods, Phase::Preflight);
+					methods.push(self.build_interface_method(interface_element, Phase::Preflight)?);
 				}
 				"inflight_method_signature" => {
-					self.build_interface_method(interface_element, &mut methods, Phase::Inflight);
+					methods.push(self.build_interface_method(interface_element, Phase::Inflight)?);
 				}
 				"ERROR" => {
 					self
@@ -728,21 +728,14 @@ impl<'s> Parser<'s> {
 	fn build_interface_method(
 		&self,
 		interface_element: Node,
-		methods: &mut Vec<(Symbol, FunctionSignature)>,
 		phase: Phase,
-	) {
+	) -> DiagnosticResult<(Symbol, FunctionSignature)> {
 		let name = interface_element.child_by_field_name("name").unwrap();
-		let method_name = self.node_symbol(&name);
-		let func_sig = self.build_function_signature(&interface_element, phase);
-		match (method_name, func_sig) {
-			(Ok(method_name), Ok(func_sig)) => {
-				// interface methods are not strictly function types so verify return type exists
-				match func_sig.return_type {
-					Some(_) => methods.push((method_name, func_sig)),
-					None => _ = self.add_error::<()>("Expected method return type".to_string(), &interface_element),
-				}
-			}
-			_ => {}
+		let method_name = self.node_symbol(&name)?;
+		let func_sig = self.build_function_signature(&interface_element, phase)?;
+		match func_sig.return_type {
+			Some(_) => Ok((method_name, func_sig)),
+			None => self.add_error::<(Symbol, FunctionSignature)>("Expected method return type".to_string(), &interface_element),
 		}
 	}
 
@@ -853,11 +846,11 @@ impl<'s> Parser<'s> {
 					.filter_map(|param_type| self.build_type_annotation(&param_type).ok())
 					.collect::<Vec<TypeAnnotation>>();
 				match type_node.child_by_field_name("return_type") {
-					Some(return_type) => match self.build_type_annotation(&return_type) {
-						Ok(return_type) => Ok(TypeAnnotation {
+					Some(return_type) => {
+						Ok(TypeAnnotation {
 							kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
 								param_types,
-								return_type: Box::new(return_type),
+								return_type: Box::new(self.build_type_annotation(&return_type)?),
 								phase: if type_node.child_by_field_name("inflight").is_some() {
 									Phase::Inflight
 								} else {
@@ -865,8 +858,7 @@ impl<'s> Parser<'s> {
 								},
 							}),
 							span,
-						}),
-						Err(error) => Err(error),
+						})
 					},
 					None => self.add_error("Expected function return type".to_string(), &type_node),
 				}
