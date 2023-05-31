@@ -3,13 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
-      {
-        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
-      }
+      (await counter.inc());
     }
   }
   return $Inflight1;
@@ -20,13 +21,14 @@ module.exports = function({ counter }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
-      {
-        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
-      }
+      (await counter.inc());
     }
   }
   return $Inflight2;
@@ -37,13 +39,14 @@ module.exports = function({ counter }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
-      {
-        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
-      }
+      (await counter.inc());
     }
   }
   return $Inflight3;
@@ -54,13 +57,14 @@ module.exports = function({ counter }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
-      {
-        (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
-      }
+      (await counter.inc());
     }
   }
   return $Inflight4;
@@ -71,46 +75,43 @@ module.exports = function({ counter }) {
 ## clients/$Inflight5.inflight.js
 ```js
 module.exports = function({ counter, b }) {
-  class  $Inflight5 {
+  class $Inflight5 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        class Predicate {
-          constructor(counterVal)  {
-            this.counterVal = counterVal;
-          }
-          counterVal;
-          static async sleep(ms)  {
-            return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
-          }
-          async assertion()  {
-            {
-              return ((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === this.counterVal);
-            }
-          }
-          async testAssertion()  {
-            {
-              let i = 0;
-              while ((i < 12)) {
-                i = (i + 1);
-                if ((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())) {
-                  {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
-                  return;
-                }
-                (typeof Predicate.sleep === "function" ? await Predicate.sleep((1000 * 10)) : await Predicate.sleep.handle((1000 * 10)));
-              }
-              {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle())'`)})((typeof this.assertion === "function" ? await this.assertion() : await this.assertion.handle()))};
-            }
-          }
+      class Predicate {
+        constructor(counterVal)  {
+          this.counterVal = counterVal;
         }
-        (typeof b.put === "function" ? await b.put("a","1") : await b.put.handle("a","1"));
-        (typeof b.put === "function" ? await b.put("b","1") : await b.put.handle("b","1"));
-        (typeof b.put === "function" ? await b.put("c","1") : await b.put.handle("c","1"));
-        (typeof b.put === "function" ? await b.put("b","100") : await b.put.handle("b","100"));
-        (typeof b.delete === "function" ? await b.delete("c") : await b.delete.handle("c"));
-        (typeof new Predicate(10).testAssertion === "function" ? await new Predicate(10).testAssertion() : await new Predicate(10).testAssertion.handle());
+        counterVal;
+        static async sleep(ms)  {
+          return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
+        }
+        async assertion()  {
+          return ((await counter.peek()) === this.counterVal);
+        }
+        async testAssertion()  {
+          let i = 0;
+          while ((i < 12)) {
+            i = (i + 1);
+            if ((await this.assertion())) {
+              {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+              return;
+            }
+            (await Predicate.sleep((1000 * 10)));
+          }
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+        }
       }
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("c","1"));
+      (await b.put("b","100"));
+      (await b.delete("c"));
+      (await new Predicate(10).testAssertion());
     }
   }
   return $Inflight5;
@@ -945,6 +946,7 @@ module.exports = function({ counter, b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -1141,7 +1143,7 @@ class $Root extends $stdlib.std.Resource {
     (b.onUpdate(new $Inflight2(this,"$Inflight2")));
     (b.onCreate(new $Inflight3(this,"$Inflight3")));
     (b.onEvent(new $Inflight4(this,"$Inflight4")));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"counter is incremented 10 times",new $Inflight5(this,"$Inflight5"),{
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"counter is incremented 10 times",new $Inflight5(this,"$Inflight5"),{
     "timeout": $stdlib.std.Duration.fromSeconds(180),}
     );
   }

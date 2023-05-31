@@ -3,19 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(request)  {
-      {
-        const count = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
-        const bodyResponse = Object.freeze({"count":count});
-        const resp = {
-        "body": bodyResponse,
-        "status": 200,}
-        ;
-        return resp;
-      }
+      const count = (await counter.inc());
+      const bodyResponse = Object.freeze({"count":count});
+      const resp = {
+      "body": bodyResponse,
+      "status": 200,}
+      ;
+      return resp;
     }
   }
   return $Inflight1;
@@ -26,14 +27,15 @@ module.exports = function({ counter }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ api }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const url = api.url;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
-      }
+      const url = api.url;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
     }
   }
   return $Inflight2;
@@ -44,17 +46,18 @@ module.exports = function({ api }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ __parent_this }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
-      {
-        const text = `${__parent_this.api.url}/endpoint2`;
-        return {
-        "status": 200,
-        "body": text,}
-        ;
-      }
+      const text = `${__parent_this.api.url}/endpoint2`;
+      return {
+      "status": 200,
+      "body": text,}
+      ;
     }
   }
   return $Inflight3;
@@ -65,7 +68,7 @@ module.exports = function({ __parent_this }) {
 ## clients/A.inflight.js
 ```js
 module.exports = function({  }) {
-  class  A {
+  class A {
     constructor({ api }) {
       this.api = api;
     }
@@ -469,6 +472,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -621,7 +625,7 @@ class $Root extends $stdlib.std.Resource {
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const handler = new $Inflight1(this,"$Inflight1");
     (api.get("/hello/world",handler));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:api url",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:api url",new $Inflight2(this,"$Inflight2"));
     new A(this,"A");
   }
 }

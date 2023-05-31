@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { IResource } from "../std";
+import { IResource } from "../std/resource";
 
 /**
  * Props for all `App` classes.

@@ -8,4 +8,5 @@ export * from "./range";
 export * from "./resource";
 export * from "./set";
 export * from "./string";
+export * from "./test";
 export * from "./util";

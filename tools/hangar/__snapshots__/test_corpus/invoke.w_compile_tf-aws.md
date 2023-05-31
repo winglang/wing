@@ -3,13 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ payload }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        return payload;
-      }
+      return payload;
     }
   }
   return $Inflight1;
@@ -20,14 +21,15 @@ module.exports = function({ payload }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ f, payload }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const x = (typeof f.invoke === "function" ? await f.invoke("") : await f.invoke.handle(""));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
-      }
+      const x = (await f.invoke(""));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
     }
   }
   return $Inflight2;
@@ -225,6 +227,7 @@ module.exports = function({ f, payload }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -309,7 +312,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const payload = "hello";
     const f = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:invoke",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:invoke",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

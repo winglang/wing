@@ -76,6 +76,13 @@ error: \\"cloud\\" is already defined
 4 | bring cloud;
   |       ^^^^^ \\"cloud\\" is already defined
 
+
+error: \\"fs\\" is not a built-in module
+  --> ../../../examples/tests/invalid/bring.w:6:1
+  |
+6 | bring fs;
+  | ^^^^^^^^^ \\"fs\\" is not a built-in module
+
 "
 `;
 
@@ -138,87 +145,122 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`class.w > stderr 1`] = `
-"error: Preflight field \\"x\\" is not initialized
+"error: Expected block
+   --> ../../../examples/tests/invalid/class.w:17:17
+   |
+17 |   init(foo: str)
+   |                 ^ Expected block
+
+
+error: Preflight field \\"x\\" is not initialized
   --> ../../../examples/tests/invalid/class.w:4:4
   |
 4 |    x:num;
   |    ^ Preflight field \\"x\\" is not initialized
 
 
-error: Expected 0 arguments but got 1 when instantiating \\"C2\\"
+error: Expected 0 argument(s) but got 1
   --> ../../../examples/tests/invalid/class.w:9:1
   |
 9 | new C2(1);
-  | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C2\\"
+  | ^^^^^^^^^ Expected 0 argument(s) but got 1
+
+
+error: Expected 0 named argument(s)
+   --> ../../../examples/tests/invalid/class.w:13:1
+   |
+13 | new C9(token: \\"1\\");
+   | ^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/class.w:19:1
+   |
+19 | new C10(); 
+   | ^^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/class.w:22:1
+   |
+22 | new C10(foo: \\"bar\\"); 
+   | ^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: class C10 does not expect any named argument
+   --> ../../../examples/tests/invalid/class.w:25:1
+   |
+25 | new C10(\\"hello\\", foo: \\"bar\\"); 
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ class C10 does not expect any named argument
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:21:16
+   --> ../../../examples/tests/invalid/class.w:37:16
    |
-21 |   inflight var x: num;
+37 |   inflight var x: num;
    |                ^ Inflight field \\"x\\" is not initialized
 
 
 error: Inflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:23:12
+   --> ../../../examples/tests/invalid/class.w:39:12
    |
-23 |   inflight y: str;
+39 |   inflight y: str;
    |            ^ Inflight field \\"y\\" is not initialized
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:28:12
+   --> ../../../examples/tests/invalid/class.w:44:12
    |
-28 |   inflight x: num;
+44 |   inflight x: num;
    |            ^ Inflight field \\"x\\" is not initialized
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:34:12
+   --> ../../../examples/tests/invalid/class.w:50:12
    |
-34 |   inflight x: num;
+50 |   inflight x: num;
    |            ^ Inflight field \\"x\\" is not initialized
 
 
 error: \\"y\\" cannot be initialized in the inflight initializer
-   --> ../../../examples/tests/invalid/class.w:45:10
+   --> ../../../examples/tests/invalid/class.w:61:10
    |
-45 |     this.y = 1;
+61 |     this.y = 1;
    |          ^ \\"y\\" cannot be initialized in the inflight initializer
 
 
 error: \\"x\\" cannot be initialized in the preflight initializer
-   --> ../../../examples/tests/invalid/class.w:40:10
+   --> ../../../examples/tests/invalid/class.w:56:10
    |
-40 |     this.x = 1;
+56 |     this.x = 1;
    |          ^ \\"x\\" cannot be initialized in the preflight initializer
 
 
 error: Preflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:36:3
+   --> ../../../examples/tests/invalid/class.w:52:3
    |
-36 |   y: num;
+52 |   y: num;
    |   ^ Preflight field \\"y\\" is not initialized
 
 
 error: Expected 'x' to be a type but it's a variable
-   --> ../../../examples/tests/invalid/class.w:52:18
+   --> ../../../examples/tests/invalid/class.w:68:18
    |
-52 | class C7 extends x {
+68 | class C7 extends x {
    |                  ^ Expected 'x' to be a type but it's a variable
 
 
 error: Preflight class C8's parent \\"S1\\" is not a class
-   --> ../../../examples/tests/invalid/class.w:58:18
+   --> ../../../examples/tests/invalid/class.w:74:18
    |
-58 | class C8 extends S1 {
+74 | class C8 extends S1 {
    |                  ^^ Preflight class C8's parent \\"S1\\" is not a class
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.w:15:14
+   --> ../../../examples/tests/invalid/class.w:31:14
    |
-15 |     this.x = \\"Hi\\";
+31 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 "
@@ -892,6 +934,20 @@ error: Expected type to be optional, but got \\"bool\\" instead
    |            ^^^^ Expected type to be optional, but got \\"bool\\" instead
 
 
+error: Property access on optional type \\"A?\\" requires optional accessor: \\"?.\\"
+   --> ../../../examples/tests/invalid/optionals.w:61:9
+   |
+61 | let c = b.a.val;
+   |         ^^^ Property access on optional type \\"A?\\" requires optional accessor: \\"?.\\"
+
+
+error: Expected type to be \\"str\\", but got \\"str?\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:84:16
+   |
+84 | let val: str = baz?.bar?.foo?.val;
+   |                ^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"str?\\" instead
+
+
 error: Variable hi is not reassignable 
    --> ../../../examples/tests/invalid/optionals.w:46:3
    |
@@ -1185,11 +1241,11 @@ error: \\"bublic\\" is not a field of \\"BucketProps\\"
   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \\"bublic\\" is not a field of \\"BucketProps\\"
 
 
-error: Expected between 0 and 1 arguments but got 2 when instantiating \\"Bucket\\"
+error: Expected between 0 and 1 arguments but got 2
   --> ../../../examples/tests/invalid/struct_expansion.w:7:15
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
-  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2 when instantiating \\"Bucket\\"
+  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2
 
 
 error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
@@ -1221,11 +1277,11 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
 
 
-error: Expected 2 arguments but got 1
+error: Expected 2 positional argument(s) but got 1
    --> ../../../examples/tests/invalid/struct_expansion.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 arguments but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
 
 "
 `;

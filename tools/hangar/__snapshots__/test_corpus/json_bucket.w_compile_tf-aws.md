@@ -3,14 +3,15 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b, fileName }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(msg)  {
-      {
-        const x = (typeof b.getJson === "function" ? await b.getJson(fileName) : await b.getJson.handle(fileName));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
-      }
+      const x = (await b.getJson(fileName));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
     }
   }
   return $Inflight1;
@@ -21,14 +22,15 @@ module.exports = function({ b, fileName }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ b, fileName, j, getJson }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        (typeof b.putJson === "function" ? await b.putJson(fileName,j) : await b.putJson.handle(fileName,j));
-        (typeof getJson.invoke === "function" ? await getJson.invoke("") : await getJson.invoke.handle(""));
-      }
+      (await b.putJson(fileName,j));
+      (await getJson.invoke(""));
     }
   }
   return $Inflight2;
@@ -273,6 +275,7 @@ module.exports = function({ b, fileName, j, getJson }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -371,7 +374,7 @@ class $Root extends $stdlib.std.Resource {
     const fileName = "file.json";
     const j = Object.freeze({"persons":[{"age":30,"name":"hasan","fears":["heights", "failure"]}]});
     const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:put",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:put",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {
