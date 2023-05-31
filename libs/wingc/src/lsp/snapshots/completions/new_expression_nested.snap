@@ -28,9 +28,6 @@ source: libs/wingc/src/lsp/completions.rs
 - label: Table
   kind: 7
   detail: preflight class
-- label: Test
-  kind: 7
-  detail: preflight class
 - label: TestRunner
   kind: 7
   detail: preflight class

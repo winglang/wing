@@ -3,26 +3,27 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ bucket1, bucket2, bucket3 }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(event)  {
-      {
-        (typeof bucket1.put === "function" ? await bucket1.put("file.txt","data") : await bucket1.put.handle("file.txt","data"));
-        (typeof bucket2.get === "function" ? await bucket2.get("file.txt") : await bucket2.get.handle("file.txt"));
-        (typeof bucket2.get === "function" ? await bucket2.get("file2.txt") : await bucket2.get.handle("file2.txt"));
-        (typeof bucket3.get === "function" ? await bucket3.get("file3.txt") : await bucket3.get.handle("file3.txt"));
-        for (const stuff of (typeof bucket1.list === "function" ? await bucket1.list() : await bucket1.list.handle())) {
-          {console.log(stuff)};
-        }
-        {console.log((typeof bucket2.publicUrl === "function" ? await bucket2.publicUrl("file.txt") : await bucket2.publicUrl.handle("file.txt")))};
-        try {
-          (typeof bucket1.publicUrl === "function" ? await bucket1.publicUrl("file.txt") : await bucket1.publicUrl.handle("file.txt"));
-        }
-        catch ($error_error) {
-          const error = $error_error.message;
-          {console.log(error)};
-        }
+      (await bucket1.put("file.txt","data"));
+      (await bucket2.get("file.txt"));
+      (await bucket2.get("file2.txt"));
+      (await bucket3.get("file3.txt"));
+      for (const stuff of (await bucket1.list())) {
+        {console.log(stuff)};
+      }
+      {console.log((await bucket2.publicUrl("file.txt")))};
+      try {
+        (await bucket1.publicUrl("file.txt"));
+      }
+      catch ($error_error) {
+        const error = $error_error.message;
+        {console.log(error)};
       }
     }
   }
@@ -460,6 +461,7 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;

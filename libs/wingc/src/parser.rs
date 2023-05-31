@@ -13,7 +13,7 @@ use crate::ast::{
 	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::WINGSDK_STD_MODULE;
+use crate::{WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -1444,8 +1444,8 @@ impl<'s> Parser<'s> {
 			kind: ExprKind::New {
 				class: TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-						root: Symbol::global("cloud"),
-						fields: vec![Symbol::global("Test")],
+						root: Symbol::global(WINGSDK_STD_MODULE),
+						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
 						span: WingSpan::default(),
 					}),
 					span: WingSpan::default(),

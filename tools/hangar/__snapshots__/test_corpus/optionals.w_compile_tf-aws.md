@@ -3,7 +3,7 @@
 ## clients/Node.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Node {
+  class Node {
     constructor({ left, right, value }) {
       this.left = left;
       this.right = right;
@@ -51,6 +51,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
@@ -131,7 +132,7 @@ class $Root extends $stdlib.std.Resource {
     ;
     {
       const $IF_LET_VALUE = name;
-      if (name != undefined) {
+      if ($IF_LET_VALUE != undefined) {
         const n = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(n.first === "John")'`)})((n.first === "John"))};
       }
@@ -139,7 +140,7 @@ class $Root extends $stdlib.std.Resource {
     name = undefined;
     {
       const $IF_LET_VALUE = name;
-      if (name != undefined) {
+      if ($IF_LET_VALUE != undefined) {
         const n = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
       }
@@ -148,26 +149,24 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const tryParseName =  (fullName) =>  {
-      {
-        const parts = (fullName.split(" "));
-        if ((parts.length < 1)) {
-          return undefined;
-        }
-        return {
-        "first": (parts.at(0)),
-        "last": (parts.at(1)),}
-        ;
+      const parts = (fullName.split(" "));
+      if ((parts.length < 1)) {
+        return undefined;
       }
+      return {
+      "first": (parts.at(0)),
+      "last": (parts.at(1)),}
+      ;
     }
     ;
     {
       const $IF_LET_VALUE = (tryParseName("Good Name"));
-      if ((tryParseName("Good Name")) != undefined) {
+      if ($IF_LET_VALUE != undefined) {
         const parsedName = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "Good")'`)})((parsedName.first === "Good"))};
         {
           const $IF_LET_VALUE = parsedName.last;
-          if (parsedName.last != undefined) {
+          if ($IF_LET_VALUE != undefined) {
             const lastName = $IF_LET_VALUE;
             {((cond) => {if (!cond) throw new Error(`assertion failed: '(lastName === "Name")'`)})((lastName === "Name"))};
           }
@@ -179,12 +178,12 @@ class $Root extends $stdlib.std.Resource {
     }
     {
       const $IF_LET_VALUE = (tryParseName("BadName"));
-      if ((tryParseName("BadName")) != undefined) {
+      if ($IF_LET_VALUE != undefined) {
         const parsedName = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "BadName")'`)})((parsedName.first === "BadName"))};
         {
           const $IF_LET_VALUE = parsedName.last;
-          if (parsedName.last != undefined) {
+          if ($IF_LET_VALUE != undefined) {
             const lastName = $IF_LET_VALUE;
             {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
           }
@@ -194,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
     const falsy = false;
     {
       const $IF_LET_VALUE = falsy;
-      if (falsy != undefined) {
+      if ($IF_LET_VALUE != undefined) {
         const f = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(f === false)'`)})((f === false))};
       }
@@ -205,13 +204,13 @@ class $Root extends $stdlib.std.Resource {
     const shadow = "root";
     {
       const $IF_LET_VALUE = shadow;
-      if (shadow != undefined) {
+      if ($IF_LET_VALUE != undefined) {
         const shadow = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(shadow === "root")'`)})((shadow === "root"))};
         const shadow1 = "nested";
         {
           const $IF_LET_VALUE = shadow1;
-          if (shadow1 != undefined) {
+          if ($IF_LET_VALUE != undefined) {
             const shadow1 = $IF_LET_VALUE;
             {((cond) => {if (!cond) throw new Error(`assertion failed: '(shadow1 === "nested")'`)})((shadow1 === "nested"))};
           }
@@ -223,15 +222,13 @@ class $Root extends $stdlib.std.Resource {
     }
     const fun =  (a) =>  {
       {
-        {
-          const $IF_LET_VALUE = a;
-          if (a != undefined) {
-            const y = $IF_LET_VALUE;
-            return y;
-          }
-          else {
-            return "default";
-          }
+        const $IF_LET_VALUE = a;
+        if ($IF_LET_VALUE != undefined) {
+          const y = $IF_LET_VALUE;
+          return y;
+        }
+        else {
+          return "default";
         }
       }
     }
@@ -245,7 +242,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(notThere === undefined)'`)})((notThere === undefined))};
     {
       const $IF_LET_VALUE = tree.left.left;
-      if (tree.left.left != undefined) {
+      if ($IF_LET_VALUE != undefined) {
         const o = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.value === 1)'`)})((o.value === 1))};
       }

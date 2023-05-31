@@ -3,21 +3,22 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof arr.at === "function" ? await arr.at(0) : await arr.at.handle(0)) === "hello")'`)})(((typeof arr.at === "function" ? await arr.at(0) : await arr.at.handle(0)) === "hello"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof arr.at === "function" ? await arr.at(1) : await arr.at.handle(1)) === "world")'`)})(((typeof arr.at === "function" ? await arr.at(1) : await arr.at.handle(1)) === "world"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 2)'`)})((arr.length === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof mySet.has === "function" ? await mySet.has("my") : await mySet.has.handle("my"))'`)})((typeof mySet.has === "function" ? await mySet.has("my") : await mySet.has.handle("my")))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySet.size === 2)'`)})((mySet.size === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (myMap))'`)})(("world" in (myMap)))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(myMap).length === 2)'`)})((Object.keys(myMap).length === 2))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((typeof arrOfMap.at === "function" ? await arrOfMap.at(0) : await arrOfMap.at.handle(0))))'`)})(("bang" in ((typeof arrOfMap.at === "function" ? await arrOfMap.at(0) : await arrOfMap.at.handle(0)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(0)) === "hello")'`)})(((await arr.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(1)) === "world")'`)})(((await arr.at(1)) === "world"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 2)'`)})((arr.length === 2))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await mySet.has("my"))'`)})((await mySet.has("my")))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySet.size === 2)'`)})((mySet.size === 2))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '("world" in (myMap))'`)})(("world" in (myMap)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(myMap).length === 2)'`)})((Object.keys(myMap).length === 2))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arrOfMap.at(0))))'`)})(("bang" in ((await arrOfMap.at(0)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
     }
   }
   return $Inflight1;
@@ -149,6 +150,7 @@ module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -212,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
     const myMap = Object.freeze({"hello":123,"world":999});
     const arrOfMap = Object.freeze([Object.freeze({"bang":123})]);
     const j = Object.freeze({"a":"hello","b":"world"});
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:capture_containers",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture_containers",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

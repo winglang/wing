@@ -36,6 +36,7 @@
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
@@ -86,61 +87,49 @@ class $Root extends $stdlib.std.Resource {
     }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch and no exception")'`)})((x === "finally with no catch and no exception"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-      {
-        try {
-        }
-        finally {
-          return 1;
-        }
+      try {
+      }
+      finally {
+        return 1;
       }
     }
     )()) === 1)'`)})(((( () =>  {
-      {
-        try {
-        }
-        finally {
-          return 1;
-        }
+      try {
+      }
+      finally {
+        return 1;
       }
     }
     )()) === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-      {
-        try {
-          {((msg) => {throw new Error(msg)})("")};
-        }
-        catch {
-          return 2;
-        }
+      try {
+        {((msg) => {throw new Error(msg)})("")};
+      }
+      catch {
+        return 2;
       }
     }
     )()) === 2)'`)})(((( () =>  {
-      {
-        try {
-          {((msg) => {throw new Error(msg)})("")};
-        }
-        catch {
-          return 2;
-        }
+      try {
+        {((msg) => {throw new Error(msg)})("")};
+      }
+      catch {
+        return 2;
       }
     }
     )()) === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-      {
-        try {
-          return 3;
-        }
-        finally {
-        }
+      try {
+        return 3;
+      }
+      finally {
       }
     }
     )()) === 3)'`)})(((( () =>  {
-      {
-        try {
-          return 3;
-        }
-        finally {
-        }
+      try {
+        return 3;
+      }
+      finally {
       }
     }
     )()) === 3))};
