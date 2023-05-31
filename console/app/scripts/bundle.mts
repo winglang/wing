@@ -71,6 +71,7 @@ try {
           buildResources: "electron/resources",
         },
         files: ["dist/vite"],
+        asar: false,
         mac:
           target === Platform.MAC
             ? {

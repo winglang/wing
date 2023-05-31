@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "compile": "turbo run compile",
-    "build": "turbo run tsc eslint vitest playwright compile",
+    "build": "turbo run tsc eslint vitest compile",
     "test": "turbo run tsc eslint vitest playwright",
     "test:update": "turbo run tsc eslint vitest:update playwright:update",
     "release": "conventional-release"
