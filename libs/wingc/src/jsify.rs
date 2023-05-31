@@ -122,6 +122,8 @@ impl<'a> JSifier<'a> {
 		if self.shim {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
+			// "std" is implicitly imported
+			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
@@ -251,19 +253,12 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_user_defined_type(&self, user_defined_type: &UserDefinedType) -> String {
-		// "std" is implicitly imported, so replace with "$stdlib.std".
-		let root = if user_defined_type.root == WINGSDK_STD_MODULE.into() {
-			format!("{STDLIB}.{WINGSDK_STD_MODULE}")
-		} else {
-			user_defined_type.root.to_string()
-		};
-
 		if user_defined_type.fields.is_empty() {
-			return root;
+			return user_defined_type.root.to_string();
 		} else {
 			format!(
 				"{}.{}",
-				root,
+				user_defined_type.root,
 				user_defined_type
 					.fields
 					.iter()
