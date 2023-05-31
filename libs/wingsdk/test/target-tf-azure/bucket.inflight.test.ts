@@ -149,7 +149,7 @@ test("getJson a non-existent object from the bucket", async () => {
     false,
     mockBlobServiceClient
   );
-  TEST_PATH = "sadJson";
+  TEST_PATH = "sad";
 
   // THEN
   await expect(() => client.getJson(KEY)).rejects.toThrowError(
@@ -310,12 +310,33 @@ test("tryGetJson a non-existent object from the bucket", async () => {
     false,
     mockBlobServiceClient
   );
-  TEST_PATH = "sadJson";
+  TEST_PATH = "sad";
 
   const response = await client.tryGetJson(KEY);
 
   // THEN
   expect(response).toEqual(undefined);
+});
+
+test("tryGetJson an existing non-Json object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sadJson";
+
+  // THEN
+  await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
+    /Unexpected token o in JSON at position 1/
+  );
 });
 
 test("tryDelete an existing object from the bucket", async () => {
@@ -376,6 +397,11 @@ class MockBlobClient extends BlobClient {
             JSON.stringify({ cool: "beans" })
           ),
         });
+      case "sadJson":
+        return Promise.resolve({
+          _response: null as any,
+          readableStreamBody: createMockStream("not a Json object"),
+        });
       default:
         return Promise.reject("some fake error");
     }
@@ -387,6 +413,8 @@ class MockBlobClient extends BlobClient {
       case "happy":
         return Promise.resolve(true);
       case "happyJson":
+        return Promise.resolve(true);
+      case "sadJson":
         return Promise.resolve(true);
       default:
         return Promise.resolve(false);

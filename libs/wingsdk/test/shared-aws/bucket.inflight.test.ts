@@ -354,6 +354,27 @@ test("tryGetJson a non-existent object from the bucket", async () => {
   expect(objectTryGetJson).toEqual(undefined);
 });
 
+test("tryGetJson an existing non-Json object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({ Body: createMockStream(VALUE) });
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{ Key: KEY }] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
+    /Unexpected token V in JSON at position 0/
+  );
+});
+
 test("tryDelete an existing object from the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";

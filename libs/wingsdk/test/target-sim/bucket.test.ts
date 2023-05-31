@@ -603,20 +603,33 @@ test("tryGetJson objects from bucket", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
-  const KEY = "file.json";
-  const VALUE = { msg: "Hello world!" };
+  const KEY = "KEY";
+  const VALUE = "VALUE";
 
   // WHEN
-  await client.putJson(KEY, VALUE as any);
-  const existingObjectTryGetJson = await client.tryGetJson(KEY);
-  const nonExistentObjectTryGetJson = await client.tryGetJson(
-    "NON_EXISTENT_KEY"
-  );
+  await client.put(KEY, VALUE);
+  const existingObjectTryGet = await client.tryGet(KEY);
+});
+
+test("tryGetJson an existing non-Json object from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  await client.put(KEY, VALUE);
 
   // THEN
+  await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
+    /Unexpected token V in JSON at position 0/
+  );
   await s.stop();
-  expect(existingObjectTryGetJson).toEqual(VALUE);
-  expect(nonExistentObjectTryGetJson).toEqual(undefined);
 });
 
 test("tryDelete objects from bucket", async () => {
