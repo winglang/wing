@@ -3,16 +3,17 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ data, res, queue }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
-        (typeof res.put === "function" ? await res.put("file.txt","world") : await res.put.handle("file.txt","world"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof res.get === "function" ? await res.get("file.txt") : await res.get.handle("file.txt")) === "world")'`)})(((typeof res.get === "function" ? await res.get("file.txt") : await res.get.handle("file.txt")) === "world"))};
-        (typeof queue.push === "function" ? await queue.push("spirulina") : await queue.push.handle("spirulina"));
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
+      (await res.put("file.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await res.get("file.txt")) === "world")'`)})(((await res.get("file.txt")) === "world"))};
+      (await queue.push("spirulina"));
     }
   }
   return $Inflight1;

@@ -3,27 +3,28 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(s)  {
-      {
-        {console.log(myStr)};
-        const n = myNum;
-        {console.log(`${n}`)};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
-        if (myBool) {
-          {console.log("bool=true")};
-        }
-        else {
-          {console.log("bool=false")};
-        }
-        const min = myDur.minutes;
-        const sec = myDur.seconds;
-        const hr = myDur.hours;
-        const split = (typeof `min=${min} sec=${sec} hr=${hr}`.split === "function" ? await `min=${min} sec=${sec} hr=${hr}`.split(" ") : await `min=${min} sec=${sec} hr=${hr}`.split.handle(" "));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+      {console.log(myStr)};
+      const n = myNum;
+      {console.log(`${n}`)};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
+      if (myBool) {
+        {console.log("bool=true")};
       }
+      else {
+        {console.log("bool=false")};
+      }
+      const min = myDur.minutes;
+      const sec = myDur.seconds;
+      const hr = myDur.hours;
+      const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
     }
   }
   return $Inflight1;
