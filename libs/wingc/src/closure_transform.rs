@@ -240,7 +240,7 @@ impl Fold for ClosureTransformer {
 								return_type: Some(Box::new(class_type_annotation.clone())),
 								phase: Phase::Preflight,
 							},
-							is_static: false,
+							is_static: true,
 							body: FunctionBody::Statements(Scope::new(class_init_body, expr.span.clone())),
 							span: expr.span.clone(),
 						},
