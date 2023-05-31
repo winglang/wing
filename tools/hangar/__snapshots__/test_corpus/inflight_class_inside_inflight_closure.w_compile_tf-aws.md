@@ -56,7 +56,7 @@ module.exports = function({  }) {
     }
     async handle()  {
       const x = 12;
-      const Foo = require("./Foo.inflight.js")({});
+      const Foo = require("./Foo.inflight.js")({x});
       const foo = new Foo();
       const y = (await foo.getX());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 12)'`)})((y === 12))};
@@ -69,7 +69,7 @@ module.exports = function({  }) {
 
 ## clients/Foo.inflight.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ x }) {
   class Foo {
      constructor()  {
     }

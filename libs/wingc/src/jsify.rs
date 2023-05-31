@@ -1,9 +1,8 @@
 mod codemaker;
-mod free_var_scanner;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
-use indexmap::{indexmap, IndexMap, IndexSet};
+use indexmap::{indexmap, indexset, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use std::{
@@ -33,7 +32,7 @@ use crate::{
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
 
-use self::{codemaker::CodeMaker, free_var_scanner::FreeVariableScanner};
+use self::codemaker::CodeMaker;
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -910,30 +909,23 @@ impl<'a> JSifier<'a> {
 		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
 
 		// Find all free variables in the class, and return a list of their symbols
-		let free_vars = self.find_free_vars(class);
+		let (captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
 
 		// Get all references between inflight methods and preflight values
-		let mut refs = self.find_inflight_references(class, &free_vars);
-
-		// After calling find_inflight_references, we don't really need the exact symbols anymore, only their names
-		let free_vars: IndexSet<String> = free_vars.iter().map(|s| s.name.clone()).into_iter().collect();
+		let mut refs = self.find_inflight_references(class, &captured_vars);
 
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_capturable_field_names(class_type);
 
 		// Add bindings for the inflight init
-		self.add_inflight_init_refs(&mut refs, &captured_fields, &free_vars);
-
-		let referenced_preflight_types = self.get_preflight_types_referenced_in_resource(class, &inflight_methods);
+		self.add_inflight_init_refs(&mut refs, &captured_fields, &captured_vars);
 
 		self.jsify_class_inflight(
 			env,
 			&class,
 			&captured_fields,
 			&inflight_methods,
-			free_vars
-				.iter()
-				.chain(referenced_preflight_types.iter().map(|(n, _)| n)),
+			captured_vars.iter().chain(captured_types.iter().map(|(n, _)| n)),
 			ctx,
 		);
 
@@ -969,7 +961,7 @@ impl<'a> JSifier<'a> {
 				code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
 			}
 
-			code.add_code(self.jsify_to_inflight_type_method(&class, &free_vars, &referenced_preflight_types));
+			code.add_code(self.jsify_to_inflight_type_method(&class, &captured_vars, &captured_types));
 			code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
 
 			// Generate the the class's host binding methods
@@ -981,8 +973,8 @@ impl<'a> JSifier<'a> {
 		} else {
 			let client_path = Self::js_resolve_path(&inflight_filename(class));
 
-			let mut captures = free_vars.iter().collect_vec();
-			captures.extend(referenced_preflight_types.iter().map(|f| f.0).collect_vec());
+			let mut captures = captured_vars.iter().collect_vec();
+			captures.extend(captured_types.iter().map(|f| f.0).collect_vec());
 			let captures = captures.iter().join(",");
 
 			let mut code = CodeMaker::default();
@@ -1137,23 +1129,28 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	/// Get preflight types that are referenced by the given resource
-	fn get_preflight_types_referenced_in_resource(
-		&self,
-		resource: &AstClass,
+	/// Scan all inflight methods in a class and extract the names of all the types and variables that
+	/// are defined outside of this method.
+	fn scan_captures(
+		&mut self,
+		class: &AstClass,
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
-	) -> IndexMap<String, TypeRef> {
-		let mut referenced_preflight_types = indexmap![];
+	) -> (IndexMap<String, TypeRef>, IndexSet<String>) {
+		let mut types = indexmap![];
+		let mut vars = indexset![];
+
 		for (_, m) in inflight_methods {
 			if let FunctionBody::Statements(scope) = &m.body {
-				let preflight_ref_visitor = PreflightTypeRefVisitor::new(scope);
-				let refs = preflight_ref_visitor.find_preflight_type_refs();
-				referenced_preflight_types.extend(refs);
+				let mut visitor = CaptureScanner::new(scope);
+				visitor.scan();
+
+				types.extend(visitor.captured_types);
+				vars.extend(visitor.captured_vars);
 			}
 		}
 		// Remove myself from the list of referenced preflight types because I don't need to import myself
-		referenced_preflight_types.remove(&resource.name.name);
-		referenced_preflight_types
+		types.remove(&class.name.name);
+		(types, vars)
 	}
 
 	// Write a class's inflight to a file
@@ -1274,7 +1271,7 @@ impl<'a> JSifier<'a> {
 	fn find_inflight_references(
 		&mut self,
 		resource_class: &AstClass,
-		free_vars: &IndexSet<Symbol>,
+		free_vars: &IndexSet<String>,
 	) -> BTreeMap<String, BTreeMap<String, BTreeSet<String>>> {
 		let inflight_methods = resource_class
 			.methods
@@ -1321,11 +1318,11 @@ impl<'a> JSifier<'a> {
 			.collect_vec()
 	}
 
-	fn find_free_vars(&self, class: &AstClass) -> IndexSet<Symbol> {
-		let mut scanner = FreeVariableScanner::new();
-		scanner.visit_class(class);
-		scanner.free_vars
-	}
+	// fn find_free_vars(&self, class: &AstClass) -> IndexSet<Symbol> {
+	// 	let mut scanner = FreeVariableScanner::new();
+	// 	scanner.visit_class(class);
+	// 	scanner.free_vars
+	// }
 
 	fn jsify_register_bind_method(
 		&self,
@@ -1416,7 +1413,7 @@ struct FieldReferenceVisitor<'a> {
 	/// A list of free variables preloaded into the visitor. Whenever the visitor encounters a
 	/// reference to a free variable, it will be added to list of references since the
 	/// resource needs to bind to it.
-	free_vars: &'a IndexSet<Symbol>,
+	free_vars: &'a IndexSet<String>,
 
 	/// The current symbol env, option just so we can initialize it to None
 	env: Option<SymbolEnvRef>,
@@ -1428,7 +1425,7 @@ struct FieldReferenceVisitor<'a> {
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(function_def: &'a FunctionDefinition, free_vars: &'a IndexSet<Symbol>) -> Self {
+	pub fn new(function_def: &'a FunctionDefinition, free_vars: &'a IndexSet<String>) -> Self {
 		Self {
 			references: BTreeMap::new(),
 			function_def,
@@ -1472,7 +1469,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			// TODO: chnge this "==" to make sure first.symbol is the same variable definition as something in free_vars
 			// todo this i'll need to have a "unique id" on the variable definition stored in the environment and then
 			// do a lookup for first.symbol and compare the id's
-			Some(first) => self.free_vars.iter().any(|v| v.name == first.text),
+			Some(first) => self.free_vars.iter().any(|v| *v == first.text),
 			None => false,
 		};
 
@@ -1767,53 +1764,83 @@ impl<'a> FieldReferenceVisitor<'a> {
 	}
 }
 
-/// Visitor that finds all the types defined in preflight that
-/// are referenced inside a scope (used on inflight methods)
-struct PreflightTypeRefVisitor<'a> {
+/// Visitor that finds all the types and variables used within an inflight method but defined in its
+/// parent environment
+struct CaptureScanner<'a> {
 	/// Set of user types referenced inside the method
-	references: IndexMap<String, TypeRef>,
+	captured_types: IndexMap<String, TypeRef>,
+
+	/// The set of free variables referenced by the method
+	captured_vars: IndexSet<String>,
 
 	/// The root scope of the function we're analyzing
 	function_scope: &'a Scope,
 
-	/// The current env, used to lookup the type
+	/// The current method env, used to lookup the type
 	env: SymbolEnvRef,
+
+	parent_env: SymbolEnvRef,
 }
 
-impl<'a> PreflightTypeRefVisitor<'a> {
+impl<'a> CaptureScanner<'a> {
 	pub fn new(function_scope: &'a Scope) -> Self {
+		let fn_env = function_scope.env.borrow().as_ref().unwrap().get_ref();
+
 		Self {
-			references: IndexMap::new(),
+			captured_types: IndexMap::new(),
+			captured_vars: IndexSet::new(),
 			function_scope,
-			env: function_scope.env.borrow().as_ref().unwrap().get_ref(),
+			parent_env: fn_env.parent.unwrap(),
+			env: fn_env,
 		}
 	}
 
-	pub fn find_preflight_type_refs(mut self) -> IndexMap<String, TypeRef> {
+	pub fn scan(&mut self) {
 		self.visit_scope(self.function_scope);
-		self.references
 	}
 
-	fn add_ref(&mut self, type_name: String) {
-		// Lookup the type in the current env and see where it was defined
-		if let LookupResult::Found(kind, _) = (*self.env).lookup_nested_str(&type_name, None) {
-			// This must be a type reference
-			if let SymbolKind::Type(t) = kind {
-				// If this class was defined preflight then store it
-				let decl_phase = t.as_class().map(|f| f.declaration_phase).unwrap_or(Phase::Preflight);
-				if decl_phase == Phase::Preflight {
-					self.references.insert(type_name, *t);
+	// fn add_type_ref(&mut self, type_name: String) {
+	// 	// Lookup the type in the current env and see where it was defined
+	// 	if let LookupResult::Found(kind, _) = (*self.env).lookup_nested_str(&type_name, None) {
+	// 		match kind {
+	// 			SymbolKind::Type(t) => {
+	// 				// If this class was defined preflight then store it
+	// 				let decl_phase = t.as_class().map(|f| f.declaration_phase).unwrap_or(Phase::Preflight);
+	// 				if decl_phase == Phase::Preflight {
+	// 					self.captured_types.insert(type_name, *t);
+	// 				}
+	// 			}
+	// 			_ => panic!("unexpected - add_type_ref() should always be called with a type"),
+	// 		}
+	// 	}
+	// }
+
+	fn add_ref(&mut self, var_name: String) {
+		// Lookup the reference in the *parent* of the current environment (since the current env is the
+		// method's env and we only want to collect references to variables defined outside the method)
+		// let parent_env = &*self.parent_env.unwrap();
+		if let LookupResult::Found(kind, ..) = self.parent_env.lookup_nested_str(&var_name, None) {
+			match kind {
+				SymbolKind::Type(t) => {
+					self.captured_types.insert(var_name, *t);
 				}
-			} else {
-				panic!("Expected {type_name} to be a type");
+				SymbolKind::Variable(var) => {
+					// skip macro functions (like "log" and "assert")
+					if let Type::Function(f) = &*var.type_ {
+						if f.js_override.is_some() {
+							return;
+						}
+					}
+
+					self.captured_vars.insert(var_name);
+				}
+				SymbolKind::Namespace(_) => todo!(),
 			}
-		} else {
-			panic!("Unknown symbol: {type_name}, should be covered by type checking");
 		}
 	}
 }
 
-impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
+impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 	fn visit_scope(&mut self, node: &'ast Scope) {
 		let backup_env = self.env;
 		self.env = node.env.borrow().as_ref().unwrap().get_ref();
@@ -1842,13 +1869,23 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 	}
 
 	fn visit_reference(&mut self, node: &'ast Reference) {
-		if let Reference::TypeMember { type_, .. } = node {
-			// Skip standard lib types, for now they are available through the macro outputs on call expressions
-			if type_.root.name == "std" {
-				return;
+		match node {
+			Reference::Identifier(symb) => {
+				// Skip "this" symbol since it's never a free var even though it refers to a preflight type
+				if symb.name == "this" {
+					return;
+				}
+
+				self.add_ref(symb.name.to_string());
 			}
-			let type_name = type_.to_string();
-			self.add_ref(type_name);
+			Reference::TypeMember { type_, .. } => {
+				self.add_ref(type_.to_string());
+			}
+
+			Reference::InstanceMember { .. } => {
+				// this is the case of "object.property", (we capture "object" as an identifier if needed)
+				// so we can ignore this case.
+			}
 		}
 
 		visit::visit_reference(self, node);

@@ -2,7 +2,7 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ jj }) {
+module.exports = function({ jj, ss }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -160,9 +160,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
         const jj_client = context._lift(jj);
+        const ss_client = context._lift(ss);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             jj: ${jj_client},
+            ss: ${ss_client},
           })
         `);
       }
@@ -180,6 +182,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           $Inflight1._registerBindObject(jj, host, []);
+          $Inflight1._registerBindObject(ss, host, []);
         }
         if (ops.includes("handle")) {
           $Inflight1._registerBindObject(jj, host, []);

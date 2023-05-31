@@ -2693,7 +2693,7 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		class_env: &SymbolEnv,
 		method_name: &Symbol,
-		env: &SymbolEnv,
+		parent_env: &SymbolEnv, // the environment in which the class is declared
 		statement_idx: usize,
 		method_def: &'a FunctionDefinition,
 		class_type: UnsafeRef<Type>,
@@ -2715,7 +2715,7 @@ impl<'a> TypeChecker<'a> {
 		// Create method environment and prime it with args
 		let is_init = method_name.name == CLASS_INIT_NAME || method_name.name == CLASS_INFLIGHT_INIT_NAME;
 		let mut method_env = SymbolEnv::new(
-			Some(env.get_ref()),
+			Some(parent_env.get_ref()),
 			method_sig.return_type,
 			is_init,
 			method_sig.phase,
@@ -3320,7 +3320,7 @@ impl<'a> TypeChecker<'a> {
 		instance_type: UnsafeRef<Type>,
 		property: &Symbol,
 		env: &SymbolEnv,
-		object: &Box<Expr>,
+		object: &Expr,
 	) -> VariableInfo {
 		match *instance_type {
 			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, object),
