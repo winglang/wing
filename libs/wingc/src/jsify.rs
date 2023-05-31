@@ -684,7 +684,9 @@ impl<'a> JSifier<'a> {
 			)),
 			StmtKind::Scope(scope) => {
 				let mut code = CodeMaker::default();
+				code.open("{");
 				code.add_code(self.jsify_scope_body(scope, ctx));
+				code.close("}");
 				code
 			}
 			StmtKind::Return(exp) => {
@@ -812,9 +814,7 @@ impl<'a> JSifier<'a> {
 		let body = match &func_def.body() {
 			FunctionBodyRef::Statements(scope) => {
 				let mut code = CodeMaker::default();
-				code.open("{");
 				code.add_code(self.jsify_scope_body(scope, ctx));
-				code.close("}");
 				code
 			}
 			FunctionBodyRef::External(external_spec) => {
@@ -1183,9 +1183,9 @@ impl<'a> JSifier<'a> {
 
 		let name = &resource.name.name;
 		class_code.open(format!(
-			"class {} {name} {{",
+			"class {name}{} {{",
 			if let Some(parent) = &resource.parent {
-				format!("extends {}", self.jsify_user_defined_type(parent))
+				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				"".to_string()
 			}
