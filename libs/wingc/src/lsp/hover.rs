@@ -1,8 +1,6 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{
-	Class, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-};
+use crate::ast::{Class, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol};
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::{LookupResult, SymbolLookupInfo};

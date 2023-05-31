@@ -8,9 +8,9 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString,
-	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-	TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString, InterpolatedStringPart,
+	Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
+	UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -181,7 +181,9 @@ impl<'s> Parser<'s> {
 			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase)?,
 			"variable_assignment_statement" => self.build_assignment_statement(statement_node, phase)?,
 
-			"expression_statement" => StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap(), phase)?),
+			"expression_statement" => {
+				StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap(), phase)?)
+			}
 			"block" => StmtKind::Scope(self.build_scope(statement_node, phase)),
 			"if_statement" => self.build_if_statement(statement_node, phase)?,
 			"if_let_statement" => self.build_if_let_statement(statement_node, phase)?,
@@ -191,7 +193,7 @@ impl<'s> Parser<'s> {
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
 			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
-			"resource_definition" => self.build_class_statement(statement_node, phase)?,        // `class` without a modifier inherits from scope
+			"resource_definition" => self.build_class_statement(statement_node, phase)?, // `class` without a modifier inherits from scope
 			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
@@ -506,8 +508,8 @@ impl<'s> Parser<'s> {
 					// currently "phase_modifier" can only be "inflight".
 					let phase = match class_element.child_by_field_name("phase_modifier") {
 						None => class_phase,
-        		Some(_) => Phase::Inflight,
-    			};
+						Some(_) => Phase::Inflight,
+					};
 
 					fields.push(ClassField {
 						name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
@@ -561,7 +563,9 @@ impl<'s> Parser<'s> {
 
 					if is_inflight {
 						inflight_initializer = Some(FunctionDefinition {
-							body: FunctionBody::Statements(self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Inflight)),
+							body: FunctionBody::Statements(
+								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Inflight),
+							),
 							signature: FunctionSignature {
 								parameters,
 								return_type,
@@ -572,7 +576,9 @@ impl<'s> Parser<'s> {
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
-							body: FunctionBody::Statements(self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Preflight)),
+							body: FunctionBody::Statements(
+								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Preflight),
+							),
 							is_static: false,
 							signature: FunctionSignature {
 								parameters,
@@ -602,7 +608,9 @@ impl<'s> Parser<'s> {
 					parameters: vec![],
 					return_type: Some(Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-							root: name.clone(), fields: vec![], span: WingSpan::default(),
+							root: name.clone(),
+							fields: vec![],
+							span: WingSpan::default(),
 						}),
 						span: WingSpan::default(),
 					})),
@@ -623,7 +631,9 @@ impl<'s> Parser<'s> {
 					parameters: vec![],
 					return_type: Some(Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-							root: name.clone(), fields: vec![], span: WingSpan::default(),
+							root: name.clone(),
+							fields: vec![],
+							span: WingSpan::default(),
 						}),
 						span: WingSpan::default(),
 					})),
@@ -814,7 +824,8 @@ impl<'s> Parser<'s> {
 
 			res.push(FunctionParameter {
 				name: self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				type_annotation: self.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap(), phase)?,
+				type_annotation: self
+					.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap(), phase)?,
 				reassignable: parameter_definition_node.child_by_field_name("reassignable").is_some(),
 			});
 		}
@@ -846,7 +857,9 @@ impl<'s> Parser<'s> {
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
-				let inner_type = self.build_type_annotation(&type_node.named_child(0).unwrap(), phase).unwrap();
+				let inner_type = self
+					.build_type_annotation(&type_node.named_child(0).unwrap(), phase)
+					.unwrap();
 				Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Optional(Box::new(inner_type)),
 					span,
@@ -1203,7 +1216,7 @@ impl<'s> Parser<'s> {
 								&expression_node
 									.child_by_field_name("start")
 									.expect("range expression should always include start"),
-								phase
+								phase,
 							)?,
 						),
 						inclusive: inclusive,
@@ -1212,7 +1225,7 @@ impl<'s> Parser<'s> {
 								&expression_node
 									.child_by_field_name("end")
 									.expect("range expression should always include end"),
-								phase
+								phase,
 							)?,
 						),
 					},

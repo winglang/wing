@@ -355,7 +355,13 @@ impl<'a> JsiiImporter<'a> {
 
 		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
 
-		self.add_members_to_class_env(jsii_interface, Phase::Inflight, iface_env.phase, &mut iface_env, wing_type);
+		self.add_members_to_class_env(
+			jsii_interface,
+			Phase::Inflight,
+			iface_env.phase,
+			&mut iface_env,
+			wing_type,
+		);
 
 		// Add properties from our parents to the new structs env
 		if is_struct {
@@ -387,7 +393,13 @@ impl<'a> JsiiImporter<'a> {
 
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
-				self.add_members_to_class_env(client_interface, Phase::Inflight, Phase::Inflight, &mut iface_env, wing_type);
+				self.add_members_to_class_env(
+					client_interface,
+					Phase::Inflight,
+					Phase::Inflight,
+					&mut iface_env,
+					wing_type,
+				);
 			} else {
 				debug!(
 					"Interface {} does not seem to have an inflight client",
@@ -705,7 +717,13 @@ impl<'a> JsiiImporter<'a> {
 
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
-				self.add_members_to_class_env(client_interface, Phase::Inflight, Phase::Inflight, &mut class_env, new_type);
+				self.add_members_to_class_env(
+					client_interface,
+					Phase::Inflight,
+					Phase::Inflight,
+					&mut class_env,
+					new_type,
+				);
 			} else {
 				debug!("Resource {} does not seem to have a client", type_name.green());
 			}

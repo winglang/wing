@@ -2,11 +2,11 @@ mod class_fields_init;
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
 
-use crate::ast::{self, ClassField, TypeAnnotationKind, FunctionDefinition};
+use crate::ast::{self, ClassField, FunctionDefinition, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
-	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt,
-	StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
+	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
 use crate::{
@@ -1317,7 +1317,10 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							self.spanned_error(
 								exp,
-								format!("Cannot create {} class \"{}\" in {} phase", class.phase, class.name, env.phase),
+								format!(
+									"Cannot create {} class \"{}\" in {} phase",
+									class.phase, class.name, env.phase
+								),
 							);
 							return self.types.error();
 						}
@@ -2285,8 +2288,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Verify parent is a known class and get their env
-				let (parent_class, parent_class_env) =
-					self.extract_parent_class(parent.as_ref(), *phase, name, env, stmt);
+				let (parent_class, parent_class_env) = self.extract_parent_class(parent.as_ref(), *phase, name, env, stmt);
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
 				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
@@ -2360,12 +2362,12 @@ impl<'a> TypeChecker<'a> {
 					name: CLASS_INIT_NAME.into(),
 					span: initializer.span.clone(),
 				};
-				
+
 				self.add_method_to_class_env(&initializer.signature, env, None, &mut class_env, &init_symb);
 
 				let inflight_init_symb = Symbol {
 					name: CLASS_INFLIGHT_INIT_NAME.into(),
-					span: inflight_initializer.span.clone()
+					span: inflight_initializer.span.clone(),
 				};
 
 				// Add the inflight initializer to the class env
@@ -2392,8 +2394,8 @@ impl<'a> TypeChecker<'a> {
 				let init_statements = match &initializer.body {
 					FunctionBody::Statements(s) => s,
 					FunctionBody::External(_) => panic!("init cannot be extern"),
-		    };
-					
+				};
+
 				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
 
 				// Type check the inflight initializer
@@ -3506,9 +3508,10 @@ impl<'a> TypeChecker<'a> {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
 				self.diagnostics.borrow_mut().push(Diagnostic {
-					message: format!("{} class {} cannot extend {} class \"{}\"", 
-						phase, name,
-						parent_class.phase, parent_class.name),
+					message: format!(
+						"{} class {} cannot extend {} class \"{}\"",
+						phase, name, parent_class.phase, parent_class.name
+					),
 					span: Some(parent_udt.span.clone()),
 				});
 				(None, None)

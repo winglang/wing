@@ -18,9 +18,9 @@ use std::{
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
-		StmtKind, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType, TypeAnnotation,
+		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+		TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	debug,
 	diagnostic::{Diagnostic, Diagnostics, WingSpan},
@@ -900,6 +900,15 @@ impl<'a> JSifier<'a> {
 		// Lookup the class type
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
+		// Jsify the inflight side of the class
+		let inflight_methods = class
+			.methods
+			.iter()
+			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
+			.collect_vec();
+
+		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
+
 		// Find all free variables in the class, and return a list of their symbols
 		let free_vars = self.find_free_vars(class);
 
@@ -914,19 +923,6 @@ impl<'a> JSifier<'a> {
 
 		// Add bindings for the inflight init
 		self.add_inflight_init_refs(&mut refs, &captured_fields, &free_vars);
-
-		// Jsify the inflight side of the class
-		let inflight_methods = class
-			.methods
-			.iter()
-			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
-			.collect_vec();
-
-		let inflight_fields = class
-			.fields
-			.iter()
-			.filter(|f| f.phase == Phase::Inflight)
-			.collect_vec();
 
 		let referenced_preflight_types = self.get_preflight_types_referenced_in_resource(class, &inflight_methods);
 
@@ -945,21 +941,21 @@ impl<'a> JSifier<'a> {
 
 		if ctx.phase == Phase::Preflight {
 			let mut code = CodeMaker::default();
-	
+
 			// Get all preflight methods to be jsified to the preflight class
 			let preflight_methods = class
 				.methods
 				.iter()
 				.filter(|(_, m)| m.signature.phase != Phase::Inflight)
 				.collect_vec();
-	
+
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			};
-	
+
 			code.open(format!("class {class_name}{extends} {{"));
 			code.add_code(self.jsify_constructor(
 				&class.initializer,
@@ -968,27 +964,27 @@ impl<'a> JSifier<'a> {
 				&inflight_fields,
 				ctx,
 			));
-	
+
 			for (n, m) in preflight_methods {
 				code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
 			}
-	
+
 			code.add_code(self.jsify_to_inflight_type_method(&class, &free_vars, &referenced_preflight_types));
 			code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
-	
+
 			// Generate the the class's host binding methods
 			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Instance));
 			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Type));
 			code.close("}");
-		
-			code	
+
+			code
 		} else {
 			let client_path = Self::js_resolve_path(&inflight_filename(class));
 
 			let mut captures = free_vars.iter().collect_vec();
-			captures.extend(referenced_preflight_types.iter().map(|f|f.0).collect_vec());
+			captures.extend(referenced_preflight_types.iter().map(|f| f.0).collect_vec());
 			let captures = captures.iter().join(",");
-			
+
 			let mut code = CodeMaker::default();
 			code.line(format!("const {class_name} = require({client_path})({{{captures}}});"));
 			code
@@ -1031,8 +1027,8 @@ impl<'a> JSifier<'a> {
 		}
 
 		let init_statements = match &constructor.body {
-    	FunctionBody::Statements(s) => s,
-    	FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
+			FunctionBody::Statements(s) => s,
+			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
 		};
 
 		code.add_code(self.jsify_scope_body(
@@ -1080,7 +1076,7 @@ impl<'a> JSifier<'a> {
 				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
 			}
 		}
-		
+
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
 		code.open("require(\"${self_client_path}\")({");
@@ -1205,27 +1201,27 @@ impl<'a> JSifier<'a> {
 					.collect_vec()
 					.join(", ")
 			));
-	
+
 			if class.parent.is_some() {
 				class_code.line(format!(
 					"super({});",
 					parent_captures.iter().map(|name| name.clone()).collect_vec().join(", ")
 				));
 			}
-	
+
 			for name in &my_captures {
 				class_code.line(format!("this.{} = {};", name, name));
 			}
-	
+
 			// if this class has a "handle" method, we are going to turn it into a callable function
 			// so that instances of this class can also be called like regular functions
-			if inflight_methods.iter().find(|(name, _)| name.name == HANDLE_METHOD_NAME).is_some() {
+			if inflight_methods.iter().any(|(name, _)| name.name == HANDLE_METHOD_NAME) {
 				class_code.line(format!("const $obj = (...args) => this.{HANDLE_METHOD_NAME}(...args);"));
 				class_code.line("Object.setPrototypeOf($obj, this);");
 				class_code.line("return $obj;");
 			}
 
-			class_code.close("}");				
+			class_code.close("}");
 		}
 
 		let inflight_init_name = if class.phase == Phase::Preflight {
@@ -1804,7 +1800,7 @@ impl<'a> PreflightTypeRefVisitor<'a> {
 			// This must be a type reference
 			if let SymbolKind::Type(t) = kind {
 				// If this class was defined preflight then store it
-				let decl_phase = t.as_class().and_then(|f| Some(f.declaration_phase)).unwrap_or(Phase::Preflight);
+				let decl_phase = t.as_class().map(|f| f.declaration_phase).unwrap_or(Phase::Preflight);
 				if decl_phase == Phase::Preflight {
 					self.references.insert(type_name, *t);
 				}
@@ -1813,7 +1809,7 @@ impl<'a> PreflightTypeRefVisitor<'a> {
 			}
 		} else {
 			panic!("Unknown symbol: {type_name}, should be covered by type checking");
-		}		
+		}
 	}
 }
 
@@ -1825,7 +1821,14 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 		self.env = backup_env;
 	}
 
-	fn visit_expr_new(&mut self, node: &'ast Expr, class: &'ast TypeAnnotation, obj_id: &'ast Option<String>, obj_scope: &'ast Option<Box<Expr>>, arg_list: &'ast ArgList) {
+	fn visit_expr_new(
+		&mut self,
+		node: &'ast Expr,
+		class: &'ast TypeAnnotation,
+		obj_id: &'ast Option<String>,
+		obj_scope: &'ast Option<Box<Expr>>,
+		arg_list: &'ast ArgList,
+	) {
 		if let TypeAnnotationKind::UserDefined(u) = &class.kind {
 			let root = u.root.name.as_str();
 			let mut arr = vec![root];

@@ -4,8 +4,8 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature,
-		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType, FunctionBody,
+		ArgList, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	fold::{self, Fold},
 	type_check::HANDLE_METHOD_NAME,
@@ -249,7 +249,11 @@ impl Fold for ClosureTransformer {
 						parent: None,
 						methods: vec![(handle_name.clone(), new_func_def)],
 						inflight_initializer: FunctionDefinition {
-							signature: FunctionSignature { parameters: vec![], return_type: None, phase: Phase::Inflight },
+							signature: FunctionSignature {
+								parameters: vec![],
+								return_type: None,
+								phase: Phase::Inflight,
+							},
 							is_static: false,
 							body: FunctionBody::Statements(Scope::new(vec![], expr.span.clone())),
 							span: expr.span.clone(),

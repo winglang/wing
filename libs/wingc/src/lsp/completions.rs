@@ -375,13 +375,11 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(
-				if let Some(c) = t.as_class() {
-					format!("{} class", c.phase).to_string()
-				} else {
-					String::default()
-				},
-			),
+			detail: Some(if let Some(c) = t.as_class() {
+				format!("{} class", c.phase).to_string()
+			} else {
+				String::default()
+			}),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
