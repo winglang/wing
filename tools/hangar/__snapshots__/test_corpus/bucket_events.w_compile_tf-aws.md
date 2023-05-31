@@ -63,9 +63,8 @@ module.exports = function({ other }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(key)  {
-      {console.log(`last key ${key}`)};
-      (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+    async handle(key, event)  {
+      (await other.put(`last_${event}_key`,key));
     }
   }
   return $Inflight4;

@@ -3,27 +3,24 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const iFn = async (s) =>  {
-          {
-            return async () =>  {
-              {
-                return (s === "wing");
-              }
-            }
-            ;
-          }
+      const iFn = async (s) =>  {
+        return async () =>  {
+          return (s === "wing");
         }
         ;
-        const wingInflightFn = (typeof iFn === "function" ? await iFn("wing") : await iFn.handle("wing"));
-        const dingInflightFn = (typeof iFn === "function" ? await iFn("ding") : await iFn.handle("ding"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wingInflightFn === "function" ? await wingInflightFn() : await wingInflightFn.handle())'`)})((typeof wingInflightFn === "function" ? await wingInflightFn() : await wingInflightFn.handle()))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(typeof dingInflightFn === "function" ? await dingInflightFn() : await dingInflightFn.handle()))'`)})((!(typeof dingInflightFn === "function" ? await dingInflightFn() : await dingInflightFn.handle())))};
       }
+      ;
+      const wingInflightFn = (await iFn("wing"));
+      const dingInflightFn = (await iFn("ding"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wingInflightFn())'`)})((await wingInflightFn()))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await dingInflightFn()))'`)})((!(await dingInflightFn())))};
     }
   }
   return $Inflight1;
@@ -194,14 +191,10 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const fn =  (s) =>  {
-      {
-        return  () =>  {
-          {
-            return (s === "wing");
-          }
-        }
-        ;
+      return  () =>  {
+        return (s === "wing");
       }
+      ;
     }
     ;
     const wingFn = (fn("wing"));
