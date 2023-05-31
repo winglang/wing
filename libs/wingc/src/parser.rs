@@ -683,10 +683,14 @@ impl<'s> Parser<'s> {
 			}
 			match interface_element.kind() {
 				"method_signature" => {
-					methods.push(self.build_interface_method(interface_element, Phase::Preflight)?);
+					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Preflight) {
+						methods.push((method_name, func_sig))
+					}
 				}
 				"inflight_method_signature" => {
-					methods.push(self.build_interface_method(interface_element, Phase::Inflight)?);
+					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Inflight) {
+						methods.push((method_name, func_sig))
+					}
 				}
 				"ERROR" => {
 					self
