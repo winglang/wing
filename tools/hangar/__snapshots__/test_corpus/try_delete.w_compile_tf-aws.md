@@ -3,23 +3,24 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const jsonObj2 = Object.freeze({"key2":"value2"});
-        (typeof b.put === "function" ? await b.put("file1.txt","Foo") : await b.put.handle("file1.txt","Foo"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryDelete === "function" ? await b.tryDelete("file1.txt") : await b.tryDelete.handle("file1.txt")) === true)'`)})(((typeof b.tryDelete === "function" ? await b.tryDelete("file1.txt") : await b.tryDelete.handle("file1.txt")) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryDelete === "function" ? await b.tryDelete("file1.txt") : await b.tryDelete.handle("file1.txt")) === false)'`)})(((typeof b.tryDelete === "function" ? await b.tryDelete("file1.txt") : await b.tryDelete.handle("file1.txt")) === false))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryDelete === "function" ? await b.tryDelete("random") : await b.tryDelete.handle("random")) === false)'`)})(((typeof b.tryDelete === "function" ? await b.tryDelete("random") : await b.tryDelete.handle("random")) === false))};
-        (typeof b.put === "function" ? await b.put("file2.txt","Bar") : await b.put.handle("file2.txt","Bar"));
-        (typeof b.putJson === "function" ? await b.putJson("file2.json",jsonObj2) : await b.putJson.handle("file2.json",jsonObj2));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryDelete === "function" ? await b.tryDelete("file2.txt") : await b.tryDelete.handle("file2.txt")) === true)'`)})(((typeof b.tryDelete === "function" ? await b.tryDelete("file2.txt") : await b.tryDelete.handle("file2.txt")) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryDelete === "function" ? await b.tryDelete("file2.json") : await b.tryDelete.handle("file2.json")) === true)'`)})(((typeof b.tryDelete === "function" ? await b.tryDelete("file2.json") : await b.tryDelete.handle("file2.json")) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryDelete === "function" ? await b.tryDelete("file2.txt") : await b.tryDelete.handle("file2.txt")) === false)'`)})(((typeof b.tryDelete === "function" ? await b.tryDelete("file2.txt") : await b.tryDelete.handle("file2.txt")) === false))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryDelete === "function" ? await b.tryDelete("file2.json") : await b.tryDelete.handle("file2.json")) === false)'`)})(((typeof b.tryDelete === "function" ? await b.tryDelete("file2.json") : await b.tryDelete.handle("file2.json")) === false))};
-      }
+      const jsonObj2 = Object.freeze({"key2":"value2"});
+      (await b.put("file1.txt","Foo"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file1.txt")) === true)'`)})(((await b.tryDelete("file1.txt")) === true))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file1.txt")) === false)'`)})(((await b.tryDelete("file1.txt")) === false))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("random")) === false)'`)})(((await b.tryDelete("random")) === false))};
+      (await b.put("file2.txt","Bar"));
+      (await b.putJson("file2.json",jsonObj2));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file2.txt")) === true)'`)})(((await b.tryDelete("file2.txt")) === true))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file2.json")) === true)'`)})(((await b.tryDelete("file2.json")) === true))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file2.txt")) === false)'`)})(((await b.tryDelete("file2.txt")) === false))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file2.json")) === false)'`)})(((await b.tryDelete("file2.json")) === false))};
     }
   }
   return $Inflight1;
@@ -196,6 +197,7 @@ module.exports = function({ b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -239,7 +241,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:tryDelete",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryDelete",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

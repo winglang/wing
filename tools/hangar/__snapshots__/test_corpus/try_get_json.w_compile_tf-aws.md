@@ -3,23 +3,24 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const jsonObj1 = Object.freeze({"key1":"value1"});
-        const jsonObj2 = Object.freeze({"key2":"value2"});
-        (typeof b.putJson === "function" ? await b.putJson("file1.json",jsonObj1) : await b.putJson.handle("file1.json",jsonObj1));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(typeof b.tryGetJson === "function" ? await b.tryGetJson("file1.json") : await b.tryGetJson.handle("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(typeof b.tryGetJson === "function" ? await b.tryGetJson("file1.json") : await b.tryGetJson.handle("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryGetJson === "function" ? await b.tryGetJson("file2.json") : await b.tryGetJson.handle("file2.json")) === undefined)'`)})(((typeof b.tryGetJson === "function" ? await b.tryGetJson("file2.json") : await b.tryGetJson.handle("file2.json")) === undefined))};
-        (typeof b.putJson === "function" ? await b.putJson("file2.json",jsonObj2) : await b.putJson.handle("file2.json",jsonObj2));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(typeof b.tryGetJson === "function" ? await b.tryGetJson("file2.json") : await b.tryGetJson.handle("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(typeof b.tryGetJson === "function" ? await b.tryGetJson("file2.json") : await b.tryGetJson.handle("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2])))};
-        (typeof b.delete === "function" ? await b.delete("file1.json") : await b.delete.handle("file1.json"));
-        (typeof b.delete === "function" ? await b.delete("file2.json") : await b.delete.handle("file2.json"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryGetJson === "function" ? await b.tryGetJson("file1.json") : await b.tryGetJson.handle("file1.json")) === undefined)'`)})(((typeof b.tryGetJson === "function" ? await b.tryGetJson("file1.json") : await b.tryGetJson.handle("file1.json")) === undefined))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryGetJson === "function" ? await b.tryGetJson("file2.json") : await b.tryGetJson.handle("file2.json")) === undefined)'`)})(((typeof b.tryGetJson === "function" ? await b.tryGetJson("file2.json") : await b.tryGetJson.handle("file2.json")) === undefined))};
-      }
+      const jsonObj1 = Object.freeze({"key1":"value1"});
+      const jsonObj2 = Object.freeze({"key2":"value2"});
+      (await b.putJson("file1.json",jsonObj1));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGetJson("file2.json")) === undefined)'`)})(((await b.tryGetJson("file2.json")) === undefined))};
+      (await b.putJson("file2.json",jsonObj2));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2])))};
+      (await b.delete("file1.json"));
+      (await b.delete("file2.json"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGetJson("file1.json")) === undefined)'`)})(((await b.tryGetJson("file1.json")) === undefined))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGetJson("file2.json")) === undefined)'`)})(((await b.tryGetJson("file2.json")) === undefined))};
     }
   }
   return $Inflight1;
@@ -196,6 +197,7 @@ module.exports = function({ b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -239,7 +241,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:tryGetJson",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryGetJson",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

@@ -3,19 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        (typeof b.put === "function" ? await b.put("test1.txt","Foo") : await b.put.handle("test1.txt","Foo"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryGet === "function" ? await b.tryGet("test1.txt") : await b.tryGet.handle("test1.txt")) === "Foo")'`)})(((typeof b.tryGet === "function" ? await b.tryGet("test1.txt") : await b.tryGet.handle("test1.txt")) === "Foo"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryGet === "function" ? await b.tryGet("test2.txt") : await b.tryGet.handle("test2.txt")) === undefined)'`)})(((typeof b.tryGet === "function" ? await b.tryGet("test2.txt") : await b.tryGet.handle("test2.txt")) === undefined))};
-        (typeof b.put === "function" ? await b.put("test2.txt","Bar") : await b.put.handle("test2.txt","Bar"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryGet === "function" ? await b.tryGet("test2.txt") : await b.tryGet.handle("test2.txt")) === "Bar")'`)})(((typeof b.tryGet === "function" ? await b.tryGet("test2.txt") : await b.tryGet.handle("test2.txt")) === "Bar"))};
-        (typeof b.delete === "function" ? await b.delete("test1.txt") : await b.delete.handle("test1.txt"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.tryGet === "function" ? await b.tryGet("test1.txt") : await b.tryGet.handle("test1.txt")) === undefined)'`)})(((typeof b.tryGet === "function" ? await b.tryGet("test1.txt") : await b.tryGet.handle("test1.txt")) === undefined))};
-      }
+      (await b.put("test1.txt","Foo"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGet("test1.txt")) === "Foo")'`)})(((await b.tryGet("test1.txt")) === "Foo"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGet("test2.txt")) === undefined)'`)})(((await b.tryGet("test2.txt")) === undefined))};
+      (await b.put("test2.txt","Bar"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGet("test2.txt")) === "Bar")'`)})(((await b.tryGet("test2.txt")) === "Bar"))};
+      (await b.delete("test1.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGet("test1.txt")) === undefined)'`)})(((await b.tryGet("test1.txt")) === undefined))};
     }
   }
   return $Inflight1;
@@ -192,6 +193,7 @@ module.exports = function({ b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -235,7 +237,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:tryGet",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryGet",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
