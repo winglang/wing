@@ -99,7 +99,7 @@ jobs:
 
       - name: Generate the fig spec
         # if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
-        run: cd apps/wing && npm run generate-fig-spec
+        run: cd apps/wing && node dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
 
       - name: Upload fig spec
         # if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
