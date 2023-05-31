@@ -1,0 +1,302 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can create sequential files in a bucket 1`] = `
+{
+  ".wing/queue-addconsumer-401ee792_c8a718bb.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(event) {
+          let next = await this.counter.inc();
+          let key = \\"file-\\" + next + \\".txt\\";
+          await this.bucket.put(key, event);
+        }
+};
+})())({
+counter: (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"COUNTER_HANDLE_4ecd8d46\\"),
+bucket: (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_5f2a41c8\\")
+}), args: {} })).handle(event);
+};",
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/HelloWorld/Counter",
+        "props": {
+          "initial": 1000,
+        },
+        "type": "wingsdk.cloud.Counter",
+      },
+      {
+        "attrs": {},
+        "path": "root/HelloWorld/Bucket",
+        "props": {
+          "initialObjects": {},
+          "public": false,
+          "topics": {},
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      {
+        "attrs": {},
+        "path": "root/HelloWorld/Queue-AddConsumer-401ee792",
+        "props": {
+          "environmentVariables": {
+            "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
+            "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
+          },
+          "sourceCodeFile": ".wing/queue-addconsumer-401ee792_c8a718bb.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/HelloWorld/Queue",
+        "props": {
+          "initialMessages": [],
+          "retentionPeriod": 3600,
+          "timeout": 10,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
+        "props": {
+          "publisher": "\${root/HelloWorld/Queue#attrs.handle}",
+          "subscriber": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "HelloWorld": {
+          "children": {
+            "Bucket": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "put",
+                    "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
+                  },
+                ],
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud object store",
+                "title": "Bucket",
+              },
+              "id": "Bucket",
+              "path": "root/HelloWorld/Bucket",
+            },
+            "Counter": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "inc",
+                    "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
+                  },
+                ],
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A distributed atomic counter",
+                "title": "Counter",
+              },
+              "id": "Counter",
+              "path": "root/HelloWorld/Counter",
+            },
+            "Processor": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
+                  },
+                ],
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "An inflight resource",
+                "hidden": true,
+                "title": "Inflight",
+              },
+              "id": "Processor",
+              "path": "root/HelloWorld/Processor",
+            },
+            "Queue": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "consumer",
+                    "resource": "root/HelloWorld/Queue-AddConsumer-401ee792",
+                  },
+                ],
+              },
+              "children": {
+                "Queue-QueueEventMapping-401ee792": {
+                  "attributes": {
+                    "wing:resource:connections": [],
+                  },
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.1.245",
+                  },
+                  "display": {
+                    "hidden": true,
+                  },
+                  "id": "Queue-QueueEventMapping-401ee792",
+                  "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
+                },
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A distributed message queue",
+                "title": "Queue",
+              },
+              "id": "Queue",
+              "path": "root/HelloWorld/Queue",
+            },
+            "Queue-AddConsumer-401ee792": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "inc",
+                    "resource": "root/HelloWorld/Counter",
+                  },
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "put",
+                    "resource": "root/HelloWorld/Bucket",
+                  },
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Processor",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "consumer",
+                    "resource": "root/HelloWorld/Queue",
+                  },
+                ],
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "Queue-AddConsumer-401ee792",
+              "path": "root/HelloWorld/Queue-AddConsumer-401ee792",
+            },
+            "Queue-AddConsumerHandler-401ee792": {
+              "attributes": {
+                "wing:resource:connections": [],
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "Queue-AddConsumerHandler-401ee792",
+              "path": "root/HelloWorld/Queue-AddConsumerHandler-401ee792",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "id": "HelloWorld",
+          "path": "root/HelloWorld",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
