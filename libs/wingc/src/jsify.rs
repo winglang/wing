@@ -27,7 +27,7 @@ use crate::{
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		ClassLike, SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
+		ClassLike, SymbolKind, Type, TypeRef, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
@@ -1215,7 +1215,10 @@ impl<'a> JSifier<'a> {
 
 		// if this class has a "handle" method, we are going to turn it into a callable function
 		// so that instances of this class can also be called like regular functions
-		if inflight_methods.iter().find(|(name, _)| name.name == HANDLE_METHOD_NAME).is_some() {
+		if inflight_methods
+			.iter()
+			.any(|(name, _)| name.name == HANDLE_METHOD_NAME)
+		{
 			class_code.line(format!("const $obj = (...args) => this.{HANDLE_METHOD_NAME}(...args);"));
 			class_code.line("Object.setPrototypeOf($obj, this);");
 			class_code.line("return $obj;");
@@ -1705,61 +1708,16 @@ impl<'a> FieldReferenceVisitor<'a> {
 				optional_accessor: _optional_chain,
 			} => {
 				let obj_type = object.evaluated_type.borrow().unwrap();
-				let component_kind = match &*obj_type {
-					Type::Void => unreachable!("cannot reference a member of void"),
-					Type::Function(_) => unreachable!("cannot reference a member of a function"),
-					Type::Optional(_) => unreachable!("cannot reference a member of an optional"),
-					// all fields / methods / values of these types are phase-independent so we can skip them
-					Type::Anything
-					| Type::Number
-					| Type::String
-					| Type::Duration
-					| Type::Boolean
-					| Type::Json
-					| Type::MutJson
-					| Type::Nil
-					| Type::Enum(_) => return vec![],
-					// TODO: collection types are unsupported for now
-					Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
-						ComponentKind::Unsupported
-					}
-					Type::Class(cls) => ComponentKind::Member(
-						cls
-							.env
-							.lookup(&property, None)
-							.expect("covered by type checking")
-							.as_variable()
-							.unwrap(),
-					),
-					Type::Resource(cls) => ComponentKind::Member(
-						cls
-							.env
-							.lookup(&property, None)
-							.expect("covered by type checking")
-							.as_variable()
-							.unwrap(),
-					),
-					Type::Interface(iface) => ComponentKind::Member(
-						iface
-							.env
-							.lookup(&property, None)
-							.expect("covered by type checking")
-							.as_variable()
-							.unwrap(),
-					),
-					Type::Struct(st) => ComponentKind::Member(
-						st.env
-							.lookup(&property, None)
-							.expect("covered by type checking")
-							.as_variable()
-							.unwrap(),
-					),
-				};
+				let component_kind = self.determine_component_kind_from_type(obj_type, property);
+
+				if let None = component_kind {
+					return vec![];
+				}
 
 				let prop = vec![Component {
 					text: property.name.clone(),
 					span: property.span.clone(),
-					kind: component_kind,
+					kind: component_kind.unwrap(),
 				}];
 
 				let obj = self.analyze_expr(&object);
@@ -1798,6 +1756,59 @@ impl<'a> FieldReferenceVisitor<'a> {
 					},
 				];
 			}
+		}
+	}
+
+	fn determine_component_kind_from_type(&self, obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
+		match &*obj_type {
+			Type::Void => unreachable!("cannot reference a member of void"),
+			Type::Function(_) => unreachable!("cannot reference a member of a function"),
+			Type::Optional(t) => self.determine_component_kind_from_type(*t, property),
+			// all fields / methods / values of these types are phase-independent so we can skip them
+			Type::Anything
+			| Type::Number
+			| Type::String
+			| Type::Duration
+			| Type::Boolean
+			| Type::Json
+			| Type::MutJson
+			| Type::Nil
+			| Type::Enum(_) => None,
+			// TODO: collection types are unsupported for now
+			Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
+				Some(ComponentKind::Unsupported)
+			}
+			Type::Class(cls) => Some(ComponentKind::Member(
+				cls
+					.env
+					.lookup(&property, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.unwrap(),
+			)),
+			Type::Resource(cls) => Some(ComponentKind::Member(
+				cls
+					.env
+					.lookup(&property, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.unwrap(),
+			)),
+			Type::Interface(iface) => Some(ComponentKind::Member(
+				iface
+					.env
+					.lookup(&property, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.unwrap(),
+			)),
+			Type::Struct(st) => Some(ComponentKind::Member(
+				st.env
+					.lookup(&property, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.unwrap(),
+			)),
 		}
 	}
 }

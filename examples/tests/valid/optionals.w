@@ -1,3 +1,5 @@
+bring cloud;
+
 let x: num? = 4;
 assert(x? == true);
 assert(!x? == false);
@@ -148,3 +150,34 @@ assert(notThere == nil);
 if let o = tree.left?.left {
   assert(o.value == 1);
 }
+
+struct Foo {
+  a: str;
+}
+
+struct Bar {
+  f: Foo?;
+}
+
+let bar: Bar? = Bar {
+  f: Foo {
+    a: "hello"
+  }
+};
+
+let j: Json? = Json {
+  a: {
+    b: "ss"
+  }
+};
+
+let bb: cloud.Bucket? = new cloud.Bucket();
+
+let f = inflight () => {
+  let x = j?.get("a").get("b");
+  assert(x == "ss");
+  let y = bar?.f?.a;
+  assert(y == "hello");
+
+  bb?.put("hello.txt", "world");
+};
