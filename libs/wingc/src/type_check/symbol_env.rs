@@ -94,6 +94,11 @@ pub struct SymbolLookupInfo {
 	pub phase: Phase,
 	/// Whether the symbol was defined in an `init`'s environment
 	pub init: bool,
+
+	/// How deep up the symbol environment tree did we look to find this symbol.
+	///
+	/// If this is 0 it means we found it in the entry environment, 1 means first parent 2 next, etc.
+	pub depth: usize,
 }
 
 impl SymbolEnv {
@@ -174,8 +179,12 @@ impl SymbolEnv {
 		self: reference([Self]),
 		symbol: &Symbol,
 		not_after_stmt_idx: Option<usize>,
+		depth: usize,
 	) -> Option<reference([SymbolKind])> {
-		self.lookup_ext(symbol, not_after_stmt_idx).ok().map(|(kind, _)| kind)
+		self
+			.lookup_ext(symbol, not_after_stmt_idx, depth)
+			.ok()
+			.map(|(kind, _)| kind)
 	}
 
 	#[allow(clippy::needless_arbitrary_self_type)]
@@ -187,7 +196,12 @@ impl SymbolEnv {
 	/// Lookup a symbol in the environment, returning a `LookupResult`. Note that the symbol name
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
-	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
+	pub fn lookup_ext(
+		self: reference([Self]),
+		symbol: &Symbol,
+		not_after_stmt_idx: Option<usize>,
+		depth: usize,
+	) -> LookupResult {
 		if let Some((definition_idx, kind)) = self.symbol_map.map_get(&symbol.name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
 				if let StatementIdx::Index(definition_idx) = definition_idx {
@@ -201,10 +215,11 @@ impl SymbolEnv {
 				SymbolLookupInfo {
 					phase: self.phase,
 					init: self.is_init,
+					depth: depth,
 				},
 			)
 		} else if let Some(ref_annotation([parent_env])) = self.parent {
-			parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx))
+			parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx), depth + 1)
 		} else {
 			LookupResult::NotFound(symbol.clone())
 		}
@@ -218,12 +233,17 @@ impl SymbolEnv {
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
 	/// nested symbol (e.g. `foo.bar`) if `nested_ver` is larger than 1.
-	pub fn lookup_nested(self: reference([Self]), nested_vec: &[&Symbol], statement_idx: Option<usize>) -> LookupResult {
+	pub fn lookup_nested(
+		self: reference([Self]),
+		nested_vec: &[&Symbol],
+		statement_idx: Option<usize>,
+		depth: usize,
+	) -> LookupResult {
 		let mut it = nested_vec.iter();
 
 		let symb = *it.next().unwrap();
 
-		let res = self.lookup_ext(symb, statement_idx);
+		let res = self.lookup_ext(symb, statement_idx, depth);
 		let mut res = if let LookupResult::Found(k, i) = res {
 			(k, i)
 		} else {
@@ -247,7 +267,7 @@ impl SymbolEnv {
 				return LookupResult::ExpectedNamespace(prev_symb.clone());
 			};
 
-			let lookup_result = ns.env.lookup_ext(next_symb, statement_idx);
+			let lookup_result = ns.env.lookup_ext(next_symb, statement_idx, depth);
 			prev_symb = *next_symb;
 
 			if let LookupResult::Found(k, i) = lookup_result {
@@ -268,12 +288,17 @@ impl SymbolEnv {
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
 	/// nested symbol (e.g. `foo.bar`).
-	pub fn lookup_nested_str(self: reference([Self]), nested_str: &str, statement_idx: Option<usize>) -> LookupResult {
+	pub fn lookup_nested_str(
+		self: reference([Self]),
+		nested_str: &str,
+		statement_idx: Option<usize>,
+		depth: usize,
+	) -> LookupResult {
 		let nested_vec = nested_str
 			.split('.')
 			.map(|s| Symbol::global(s))
 			.collect::<Vec<Symbol>>();
-		self.lookup_nested(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
+		self.lookup_nested(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx, depth)
 	}
 
 	pub fn iter(&self, with_ancestry: bool) -> SymbolEnvIter {
@@ -314,6 +339,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 					SymbolLookupInfo {
 						phase: self.curr_env.phase,
 						init: self.curr_env.is_init,
+						depth: 0,
 					},
 				))
 			}
@@ -400,61 +426,61 @@ mod tests {
 
 		// Lookup non-existent variable
 		assert!(matches!(
-			parent_env.lookup_nested_str("non_existent_var", None),
+			parent_env.lookup_nested_str("non_existent_var", None, 0),
 			LookupResult::NotFound(_)
 		));
 
 		// Lookup globally visible variable
 		assert!(matches!(
-			parent_env.lookup_nested_str("parent_global_var", None),
+			parent_env.lookup_nested_str("parent_global_var", None, 0),
 			LookupResult::Found(SymbolKind::Variable(_), _)
 		));
 
 		// Lookup globally visible variable using low statement index
 		assert!(matches!(
-			parent_env.lookup_nested_str("parent_global_var", Some(0)),
+			parent_env.lookup_nested_str("parent_global_var", Some(0), 0),
 			LookupResult::Found(SymbolKind::Variable(_), _)
 		));
 
 		// Lookup positionally visible variable using an index after it's defined
 		assert!(matches!(
-			parent_env.lookup_nested_str("parent_high_pos_var", Some(parent_high_pos_var_idx + 1)),
+			parent_env.lookup_nested_str("parent_high_pos_var", Some(parent_high_pos_var_idx + 1), 0),
 			LookupResult::Found(SymbolKind::Variable(_), _)
 		));
 
 		// Lookup positionally visible variable using an index before it's defined
 		assert!(matches!(
-			parent_env.lookup_nested_str("parent_high_pos_var", Some(parent_high_pos_var_idx - 1)),
+			parent_env.lookup_nested_str("parent_high_pos_var", Some(parent_high_pos_var_idx - 1), 0),
 			LookupResult::DefinedLater
 		));
 
 		// Lookup a globally visible parent var in the child env with a low statement index
 		assert!(matches!(
-			child_env.lookup_nested_str("parent_global_var", Some(0)),
+			child_env.lookup_nested_str("parent_global_var", Some(0), 0),
 			LookupResult::Found(SymbolKind::Variable(_), _)
 		));
 
 		// Lookup a globally visible parent var in the child env with a high statement index
 		assert!(matches!(
-			child_env.lookup_nested_str("parent_global_var", Some(1000)),
+			child_env.lookup_nested_str("parent_global_var", Some(1000), 0),
 			LookupResult::Found(SymbolKind::Variable(_), _)
 		));
 
 		// Lookup a positionally visible parent var defined after the child scope in the child env using a low statement index
 		assert!(matches!(
-			child_env.lookup_nested_str("parent_high_pos_var", Some(0)),
+			child_env.lookup_nested_str("parent_high_pos_var", Some(0), 0),
 			LookupResult::DefinedLater
 		));
 
 		// Lookup for a child var in the parent env
 		assert!(matches!(
-			parent_env.lookup_nested_str("child_global_var", None),
+			parent_env.lookup_nested_str("child_global_var", None, 0),
 			LookupResult::NotFound(_)
 		));
 
 		// Lookup for a var in the child env
 		assert!(matches!(
-			child_env.lookup_nested_str("child_global_var", None),
+			child_env.lookup_nested_str("child_global_var", None, 0),
 			LookupResult::Found(SymbolKind::Variable(_), _)
 		));
 	}
@@ -518,18 +544,18 @@ mod tests {
 
 		// Perform a nested lookup from the parent env
 		assert!(matches!(
-			parent_env.lookup_nested_str("ns1.ns2.ns2_var", None),
+			parent_env.lookup_nested_str("ns1.ns2.ns2_var", None, 0),
 			LookupResult::Found(SymbolKind::Variable(_), _)
 		));
 
 		// Perform a nested lookup from the child env
 		assert!(matches!(
-			child_env.lookup_nested_str("ns1.ns2.ns2_var", None),
+			child_env.lookup_nested_str("ns1.ns2.ns2_var", None, 0),
 			LookupResult::Found(SymbolKind::Variable(_), _)
 		));
 
 		// Perform a nested lookup through a existing variable name
-		let res = child_env.lookup_nested_str("ns1.ns1_var.ns2_var", None);
+		let res = child_env.lookup_nested_str("ns1.ns1_var.ns2_var", None, 0);
 		match res {
 			LookupResult::ExpectedNamespace(s) => {
 				assert!(s.name == "ns1_var")
@@ -538,7 +564,7 @@ mod tests {
 		}
 
 		// Perform a nested lookup for a non-existent var
-		let res = child_env.lookup_nested_str("ns1.ns2.non_existent", None);
+		let res = child_env.lookup_nested_str("ns1.ns2.non_existent", None, 0);
 		match res {
 			LookupResult::NotFound(s) => {
 				assert!(s.name == "non_existent")
@@ -547,7 +573,7 @@ mod tests {
 		}
 
 		// Perform a nested lookup through a non-existent namespace
-		let res = child_env.lookup_nested_str("ns1.non_existent.ns2_var", None);
+		let res = child_env.lookup_nested_str("ns1.non_existent.ns2_var", None, 0);
 		match res {
 			LookupResult::NotFound(s) => {
 				assert!(s.name == "non_existent")

@@ -62,7 +62,7 @@ module.exports = function({ s }) {
 
 ## clients/$Inflight4.inflight.js
 ```js
-module.exports = function({ s }) {
+module.exports = function({  }) {
   class $Inflight4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -533,10 +533,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight4.inflight.js";
-        const s_client = context._lift(s);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            s: ${s_client},
           })
         `);
       }
@@ -553,7 +551,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight4._registerBindObject(s, host, []);
         }
         if (ops.includes("handle")) {
         }

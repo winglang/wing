@@ -159,6 +159,14 @@ pub struct UserDefinedType {
 	pub span: WingSpan,
 }
 
+impl UserDefinedType {
+	pub fn full_path(&self) -> Vec<Symbol> {
+		let mut path = vec![self.root.clone()];
+		path.extend(self.fields.clone());
+		path
+	}
+}
+
 impl Display for UserDefinedType {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut name = self.root.name.clone();
