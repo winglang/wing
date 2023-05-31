@@ -29,59 +29,7 @@ function createMockStream(text: string): SdkStream<Readable> {
   return sdkStream;
 }
 
-test("get object from a bucket", async () => {
-  // GIVEN
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
-  const VALUE = "VALUE";
-  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
-    Body: createMockStream(VALUE),
-  });
-
-  // WHEN
-  const client = new BucketClient(BUCKET_NAME);
-  const response = await client.get(KEY);
-
-  // THEN
-  expect(response).toEqual(VALUE);
-});
-
-test("get invalid object from a bucket", async () => {
-  // GIVEN
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
-  const VALUE = "VALUE";
-  s3Mock
-    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new Error("fake error"));
-
-  // WHEN
-  const client = new BucketClient(BUCKET_NAME);
-
-  // THEN
-  await expect(() => client.get(KEY)).rejects.toThrowError(
-    /Object does not exist/
-  );
-});
-
-test("get Json object from a bucket", async () => {
-  // GIVEN
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
-  const VALUE = { msg: "Hello, World!" };
-  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
-    Body: createMockStream(JSON.stringify(VALUE)),
-  });
-
-  // WHEN
-  const client = new BucketClient(BUCKET_NAME);
-  const response = await client.getJson(KEY);
-
-  // THEN
-  expect(response).toEqual(VALUE);
-});
-
-test("put an object into a bucket", async () => {
+test("put an object into the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -98,7 +46,7 @@ test("put an object into a bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
-test("put a Json object into a bucket", async () => {
+test("putJson an object into the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -119,6 +67,58 @@ test("put a Json object into a bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
+test("get an object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    Body: createMockStream(VALUE),
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.get(KEY);
+
+  // THEN
+  expect(response).toEqual(VALUE);
+});
+
+test("get a non-existent object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(new Error("fake error"));
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.get(KEY)).rejects.toThrowError(
+    /Object does not exist/
+  );
+});
+
+test("getJson an object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = { msg: "Hello, World!" };
+  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    Body: createMockStream(JSON.stringify(VALUE)),
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.getJson(KEY);
+
+  // THEN
+  expect(response).toEqual(VALUE);
+});
+
 test("list bucket objects", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
@@ -133,7 +133,7 @@ test("list bucket objects", async () => {
   expect(response).toEqual([KEY1, KEY2]);
 });
 
-test("delete object from a bucket", async () => {
+test("delete object from the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -150,7 +150,7 @@ test("delete object from a bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
-test("delete object from a bucket with mustExist option", async () => {
+test("delete object from the bucket with mustExist option", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
