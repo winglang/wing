@@ -3,15 +3,13 @@
 ## clients/R.inflight.js
 ```js
 module.exports = function({  }) {
-  class  R {
+  class R {
     constructor({ s1 }) {
       this.s1 = s1;
     }
     async foo()  {
-      {
-        const __parent_this = this;
-        {console.log((await this.s1.concat(" world")))};
-      }
+      const __parent_this = this;
+      {console.log((await this.s1.concat(" world")))};
     }
   }
   return R;

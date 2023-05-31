@@ -3,7 +3,7 @@
 ## clients/Node.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Node {
+  class Node {
     constructor({ left, right, value }) {
       this.left = left;
       this.right = right;
@@ -148,16 +148,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const tryParseName =  (fullName) =>  {
-      {
-        const parts = (fullName.split(" "));
-        if ((parts.length < 1)) {
-          return undefined;
-        }
-        return {
-        "first": (parts.at(0)),
-        "last": (parts.at(1)),}
-        ;
+      const parts = (fullName.split(" "));
+      if ((parts.length < 1)) {
+        return undefined;
       }
+      return {
+      "first": (parts.at(0)),
+      "last": (parts.at(1)),}
+      ;
     }
     ;
     {
@@ -223,15 +221,13 @@ class $Root extends $stdlib.std.Resource {
     }
     const fun =  (a) =>  {
       {
-        {
-          const $IF_LET_VALUE = a;
-          if ($IF_LET_VALUE != undefined) {
-            const y = $IF_LET_VALUE;
-            return y;
-          }
-          else {
-            return "default";
-          }
+        const $IF_LET_VALUE = a;
+        if ($IF_LET_VALUE != undefined) {
+          const y = $IF_LET_VALUE;
+          return y;
+        }
+        else {
+          return "default";
         }
       }
     }

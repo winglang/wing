@@ -3,17 +3,15 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b, fileName }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(msg)  {
-      {
-        const x = (await b.getJson(fileName));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
-      }
+      const x = (await b.getJson(fileName));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
     }
   }
   return $Inflight1;
@@ -24,17 +22,15 @@ module.exports = function({ b, fileName }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ b, fileName, j, getJson }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await b.putJson(fileName,j));
-        (await getJson.invoke(""));
-      }
+      (await b.putJson(fileName,j));
+      (await getJson.invoke(""));
     }
   }
   return $Inflight2;

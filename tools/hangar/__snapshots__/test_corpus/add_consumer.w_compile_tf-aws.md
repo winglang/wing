@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ c }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(msg)  {
-      {
-        (await c.inc());
-      }
+      (await c.inc());
     }
   }
   return $Inflight1;
@@ -23,27 +21,25 @@ module.exports = function({ c }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ q, predicate, js }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await q.push("hello"));
-        (await q.push("world"));
-        let i = 0;
-        while ((i < 600)) {
-          i = (i + 1);
-          if ((await predicate.test())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
-            return;
-          }
-          (await js.sleep(100));
+      (await q.push("hello"));
+      (await q.push("world"));
+      let i = 0;
+      while ((i < 600)) {
+        i = (i + 1);
+        if ((await predicate.test())) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+          return;
         }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+        (await js.sleep(100));
       }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
     }
   }
   return $Inflight2;
@@ -54,15 +50,13 @@ module.exports = function({ q, predicate, js }) {
 ## clients/Predicate.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Predicate {
+  class Predicate {
     constructor({ c }) {
       this.c = c;
     }
     async test()  {
-      {
-        const __parent_this = this;
-        return ((await this.c.peek()) === 2);
-      }
+      const __parent_this = this;
+      return ((await this.c.peek()) === 2);
     }
   }
   return Predicate;
@@ -73,7 +67,7 @@ module.exports = function({  }) {
 ## clients/TestHelper.inflight.js
 ```js
 module.exports = function({  }) {
-  class  TestHelper {
+  class TestHelper {
     constructor({  }) {
     }
     async sleep(milli)  {

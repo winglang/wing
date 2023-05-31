@@ -3,20 +3,18 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ res, bucket }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        const s = (await res.myMethod());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
-        (await res.testTypeAccess());
-      }
+      const s = (await res.myMethod());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
+      (await res.testTypeAccess());
     }
   }
   return $Inflight1;
@@ -27,16 +25,14 @@ module.exports = function({ res, bucket }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ __parent_this }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await __parent_this.b.put("foo1.txt","bar"));
-      }
+      (await __parent_this.b.put("foo1.txt","bar"));
     }
   }
   return $Inflight2;
@@ -47,16 +43,14 @@ module.exports = function({ __parent_this }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ __parent_this }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await __parent_this.b.put("foo2.txt","bar"));
-      }
+      (await __parent_this.b.put("foo2.txt","bar"));
     }
   }
   return $Inflight3;
@@ -67,16 +61,14 @@ module.exports = function({ __parent_this }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ __parent_this }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await __parent_this.q.push("foo"));
-      }
+      (await __parent_this.q.push("foo"));
     }
   }
   return $Inflight4;
@@ -87,17 +79,15 @@ module.exports = function({ __parent_this }) {
 ## clients/$Inflight5.inflight.js
 ```js
 module.exports = function({ bigOlPublisher }) {
-  class  $Inflight5 {
+  class $Inflight5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await bigOlPublisher.publish("foo"));
-        const count = (await bigOlPublisher.getObjectCount());
-      }
+      (await bigOlPublisher.publish("foo"));
+      const count = (await bigOlPublisher.getObjectCount());
     }
   }
   return $Inflight5;
@@ -108,7 +98,7 @@ module.exports = function({ bigOlPublisher }) {
 ## clients/Bar.inflight.js
 ```js
 module.exports = function({ Foo, MyEnum }) {
-  class  Bar {
+  class Bar {
     constructor({ b, e, foo, name }) {
       this.b = b;
       this.e = e;
@@ -116,28 +106,22 @@ module.exports = function({ Foo, MyEnum }) {
       this.name = name;
     }
     static async barStatic()  {
-      {
-        return "bar static";
-      }
+      return "bar static";
     }
     async myMethod()  {
-      {
-        const __parent_this = this;
-        (await this.foo.fooInc());
-        const s = (await Foo.fooStatic());
-        (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
-        return (await this.b.get("foo"));
-      }
+      const __parent_this = this;
+      (await this.foo.fooInc());
+      const s = (await Foo.fooStatic());
+      (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
+      return (await this.b.get("foo"));
     }
     async testTypeAccess()  {
-      {
+      const __parent_this = this;
+      if (true) {
         const __parent_this = this;
-        if (true) {
-          const __parent_this = this;
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
-        }
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
       }
     }
   }
@@ -149,7 +133,7 @@ module.exports = function({ Foo, MyEnum }) {
 ## clients/BigPublisher.inflight.js
 ```js
 module.exports = function({  }) {
-  class  BigPublisher {
+  class BigPublisher {
     constructor({ b, b2, q, t }) {
       this.b = b;
       this.b2 = b2;
@@ -157,18 +141,14 @@ module.exports = function({  }) {
       this.t = t;
     }
     async publish(s)  {
-      {
-        const __parent_this = this;
-        (await this.t.publish(s));
-        (await this.q.push(s));
-        (await this.b2.put("foo",s));
-      }
+      const __parent_this = this;
+      (await this.t.publish(s));
+      (await this.q.push(s));
+      (await this.b2.put("foo",s));
     }
     async getObjectCount()  {
-      {
-        const __parent_this = this;
-        return (await this.b.list()).length;
-      }
+      const __parent_this = this;
+      return (await this.b.list()).length;
     }
   }
   return BigPublisher;
@@ -179,34 +159,26 @@ module.exports = function({  }) {
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({ c }) {
       this.c = c;
     }
     async $inflight_init()  {
-      {
-        const __parent_this = this;
-        this.inflightField = 123;
-        (await this.c.inc(110));
-        (await this.c.dec(10));
-      }
+      const __parent_this = this;
+      this.inflightField = 123;
+      (await this.c.inc(110));
+      (await this.c.dec(10));
     }
     async fooInc()  {
-      {
-        const __parent_this = this;
-        (await this.c.inc());
-      }
+      const __parent_this = this;
+      (await this.c.inc());
     }
     async fooGet()  {
-      {
-        const __parent_this = this;
-        return (await this.c.peek());
-      }
+      const __parent_this = this;
+      return (await this.c.peek());
     }
     static async fooStatic()  {
-      {
-        return "foo static";
-      }
+      return "foo static";
     }
   }
   return Foo;

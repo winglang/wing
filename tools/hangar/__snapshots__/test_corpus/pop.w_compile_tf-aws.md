@@ -3,25 +3,23 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ q, NIL }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        const msgs = Object.freeze(["Foo", "Bar"]);
-        for (const msg of msgs) {
-          (await q.push(msg));
-        }
-        const first = ((await q.pop()) ?? NIL);
-        const second = ((await q.pop()) ?? NIL);
-        const third = ((await q.pop()) ?? NIL);
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
+      const msgs = Object.freeze(["Foo", "Bar"]);
+      for (const msg of msgs) {
+        (await q.push(msg));
       }
+      const first = ((await q.pop()) ?? NIL);
+      const second = ((await q.pop()) ?? NIL);
+      const third = ((await q.pop()) ?? NIL);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
     }
   }
   return $Inflight1;

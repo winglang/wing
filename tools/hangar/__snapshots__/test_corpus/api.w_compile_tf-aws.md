@@ -3,22 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(request)  {
-      {
-        const count = (await counter.inc());
-        const bodyResponse = Object.freeze({"count":count});
-        const resp = {
-        "body": bodyResponse,
-        "status": 200,}
-        ;
-        return resp;
-      }
+      const count = (await counter.inc());
+      const bodyResponse = Object.freeze({"count":count});
+      const resp = {
+      "body": bodyResponse,
+      "status": 200,}
+      ;
+      return resp;
     }
   }
   return $Inflight1;
@@ -29,17 +27,15 @@ module.exports = function({ counter }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ api }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        const url = api.url;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
-      }
+      const url = api.url;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
     }
   }
   return $Inflight2;
@@ -50,20 +46,18 @@ module.exports = function({ api }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ __parent_this }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(req)  {
-      {
-        const text = `${__parent_this.api.url}/endpoint2`;
-        return {
-        "status": 200,
-        "body": text,}
-        ;
-      }
+      const text = `${__parent_this.api.url}/endpoint2`;
+      return {
+      "status": 200,
+      "body": text,}
+      ;
     }
   }
   return $Inflight3;
@@ -74,7 +68,7 @@ module.exports = function({ __parent_this }) {
 ## clients/A.inflight.js
 ```js
 module.exports = function({  }) {
-  class  A {
+  class A {
     constructor({ api }) {
       this.api = api;
     }

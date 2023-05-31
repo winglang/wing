@@ -3,28 +3,26 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await b.put("test1.txt","Foo"));
-        (await b.put("test2.txt","Bar"));
-        const first = (await b.get("test1.txt"));
-        const second = (await b.get("test2.txt"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(first === "Foo")'`)})((first === "Foo"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(second === "Bar")'`)})((second === "Bar"))};
-        (await b.delete("test1.txt"));
-        const files = (await b.list());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
-        (await b.put("test2.txt","Baz"));
-        const third = (await b.get("test2.txt"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === "Baz")'`)})((third === "Baz"))};
-      }
+      (await b.put("test1.txt","Foo"));
+      (await b.put("test2.txt","Bar"));
+      const first = (await b.get("test1.txt"));
+      const second = (await b.get("test2.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(first === "Foo")'`)})((first === "Foo"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(second === "Bar")'`)})((second === "Bar"))};
+      (await b.delete("test1.txt"));
+      const files = (await b.list());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
+      (await b.put("test2.txt","Baz"));
+      const third = (await b.get("test2.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === "Baz")'`)})((third === "Baz"))};
     }
   }
   return $Inflight1;

@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ s }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
     }
   }
   return $Inflight1;
@@ -23,16 +21,14 @@ module.exports = function({ s }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ s }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inResource")'`)})((s === "inResource"))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inResource")'`)})((s === "inResource"))};
     }
   }
   return $Inflight2;
@@ -43,16 +39,14 @@ module.exports = function({ s }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ s }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
     }
   }
   return $Inflight3;
@@ -63,17 +57,15 @@ module.exports = function({ s }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        const s = "insideInflight";
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "insideInflight")'`)})((s === "insideInflight"))};
-      }
+      const s = "insideInflight";
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "insideInflight")'`)})((s === "insideInflight"))};
     }
   }
   return $Inflight4;
@@ -84,7 +76,7 @@ module.exports = function({  }) {
 ## clients/A.inflight.js
 ```js
 module.exports = function({  }) {
-  class  A {
+  class A {
     constructor({  }) {
     }
   }

@@ -3,22 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ r, r2 }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        const connection = (await r.rawClient());
-        (await connection.set("wing","does redis"));
-        const value = (await connection.get("wing"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
-        (await r2.set("wing","does redis again"));
-        const value2 = (await r2.get("wing"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
-      }
+      const connection = (await r.rawClient());
+      (await connection.set("wing","does redis"));
+      const value = (await connection.get("wing"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
+      (await r2.set("wing","does redis again"));
+      const value2 = (await r2.get("wing"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
     }
   }
   return $Inflight1;

@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ c }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await c.inc());
-      }
+      (await c.inc());
     }
   }
   return $Inflight1;
@@ -23,16 +21,14 @@ module.exports = function({ c }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ c }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await c.inc());
-      }
+      (await c.inc());
     }
   }
   return $Inflight2;
@@ -43,28 +39,26 @@ module.exports = function({ c }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ t, predicate, TestHelper }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
-          (await t.publish("msg"));
-        }
-        let i = 0;
-        while ((i < 600)) {
-          i = (i + 1);
-          if ((await predicate.test())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
-            return;
-          }
-          (await TestHelper.sleep(100));
-        }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+      for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
+        (await t.publish("msg"));
       }
+      let i = 0;
+      while ((i < 600)) {
+        i = (i + 1);
+        if ((await predicate.test())) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+          return;
+        }
+        (await TestHelper.sleep(100));
+      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
     }
   }
   return $Inflight3;
@@ -75,15 +69,13 @@ module.exports = function({ t, predicate, TestHelper }) {
 ## clients/Predicate.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Predicate {
+  class Predicate {
     constructor({ c }) {
       this.c = c;
     }
     async test()  {
-      {
-        const __parent_this = this;
-        return ((await this.c.peek()) === 10);
-      }
+      const __parent_this = this;
+      return ((await this.c.peek()) === 10);
     }
   }
   return Predicate;
@@ -94,7 +86,7 @@ module.exports = function({  }) {
 ## clients/TestHelper.inflight.js
 ```js
 module.exports = function({  }) {
-  class  TestHelper {
+  class TestHelper {
     constructor({  }) {
     }
     static async sleep(milli)  {

@@ -3,21 +3,19 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ q }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await q.push("foo"));
-        (await q.push("bar"));
-        (await q.push("baz"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 3)'`)})(((await q.approxSize()) === 3))};
-        (await q.purge());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
-      }
+      (await q.push("foo"));
+      (await q.push("bar"));
+      (await q.push("baz"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 3)'`)})(((await q.approxSize()) === 3))};
+      (await q.purge());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
     }
   }
   return $Inflight1;

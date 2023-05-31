@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ bucket }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(message)  {
-      {
-        (await bucket.put("wing.txt",`Hello, ${message}`));
-      }
+      (await bucket.put("wing.txt",`Hello, ${message}`));
     }
   }
   return $Inflight1;

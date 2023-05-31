@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ globalBucket }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(event, file)  {
-      {
-        (await globalBucket.put(file,event));
-      }
+      (await globalBucket.put(file,event));
     }
   }
   return $Inflight1;
@@ -23,16 +21,14 @@ module.exports = function({ globalBucket }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ storeInBucket }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(event)  {
-      {
-        (await storeInBucket(event,"file1"));
-      }
+      (await storeInBucket(event,"file1"));
     }
   }
   return $Inflight2;
@@ -43,17 +39,15 @@ module.exports = function({ storeInBucket }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ func1, globalBucket }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await func1.invoke("hi1"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalBucket.get("file1")) === "hi1")'`)})(((await globalBucket.get("file1")) === "hi1"))};
-      }
+      (await func1.invoke("hi1"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalBucket.get("file1")) === "hi1")'`)})(((await globalBucket.get("file1")) === "hi1"))};
     }
   }
   return $Inflight3;
@@ -64,17 +58,15 @@ module.exports = function({ func1, globalBucket }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ globalBucket }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(s)  {
-      {
-        (await globalBucket.list());
-        return "hello";
-      }
+      (await globalBucket.list());
+      return "hello";
     }
   }
   return $Inflight4;
@@ -85,17 +77,15 @@ module.exports = function({ globalBucket }) {
 ## clients/$Inflight5.inflight.js
 ```js
 module.exports = function({ x }) {
-  class  $Inflight5 {
+  class $Inflight5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        const val = (await x.foo());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(val === "hello")'`)})((val === "hello"))};
-      }
+      const val = (await x.foo());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(val === "hello")'`)})((val === "hello"))};
     }
   }
   return $Inflight5;
@@ -106,15 +96,13 @@ module.exports = function({ x }) {
 ## clients/MyResource.inflight.js
 ```js
 module.exports = function({  }) {
-  class  MyResource {
+  class MyResource {
     constructor({ closure }) {
       this.closure = closure;
     }
     async foo()  {
-      {
-        const __parent_this = this;
-        return (await this.closure("anything"));
-      }
+      const __parent_this = this;
+      return (await this.closure("anything"));
     }
   }
   return MyResource;

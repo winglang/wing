@@ -3,18 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ counter, bucket }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(body)  {
-      {
-        const next = (await counter.inc());
-        const key = `myfile-${"hi"}.txt`;
-        (await bucket.put(key,body));
-      }
+      const next = (await counter.inc());
+      const key = `myfile-${"hi"}.txt`;
+      (await bucket.put(key,body));
     }
   }
   return $Inflight1;

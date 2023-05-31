@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        (await counter.inc());
-      }
+      (await counter.inc());
     }
   }
   return $Inflight1;
@@ -23,16 +21,14 @@ module.exports = function({ counter }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        (await counter.inc());
-      }
+      (await counter.inc());
     }
   }
   return $Inflight2;
@@ -43,16 +39,14 @@ module.exports = function({ counter }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        (await counter.inc());
-      }
+      (await counter.inc());
     }
   }
   return $Inflight3;
@@ -63,16 +57,14 @@ module.exports = function({ counter }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        (await counter.inc());
-      }
+      (await counter.inc());
     }
   }
   return $Inflight4;
@@ -83,49 +75,43 @@ module.exports = function({ counter }) {
 ## clients/$Inflight5.inflight.js
 ```js
 module.exports = function({ counter, b }) {
-  class  $Inflight5 {
+  class $Inflight5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        class Predicate {
-          constructor(counterVal)  {
-            this.counterVal = counterVal;
-          }
-          counterVal;
-          static async sleep(ms)  {
-            return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
-          }
-          async assertion()  {
-            {
-              return ((await counter.peek()) === this.counterVal);
-            }
-          }
-          async testAssertion()  {
-            {
-              let i = 0;
-              while ((i < 12)) {
-                i = (i + 1);
-                if ((await this.assertion())) {
-                  {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
-                  return;
-                }
-                (await Predicate.sleep((1000 * 10)));
-              }
-              {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
-            }
-          }
+      class Predicate {
+        constructor(counterVal)  {
+          this.counterVal = counterVal;
         }
-        (await b.put("a","1"));
-        (await b.put("b","1"));
-        (await b.put("c","1"));
-        (await b.put("b","100"));
-        (await b.delete("c"));
-        (await new Predicate(10).testAssertion());
+        counterVal;
+        static async sleep(ms)  {
+          return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
+        }
+        async assertion()  {
+          return ((await counter.peek()) === this.counterVal);
+        }
+        async testAssertion()  {
+          let i = 0;
+          while ((i < 12)) {
+            i = (i + 1);
+            if ((await this.assertion())) {
+              {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+              return;
+            }
+            (await Predicate.sleep((1000 * 10)));
+          }
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+        }
       }
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("c","1"));
+      (await b.put("b","100"));
+      (await b.delete("c"));
+      (await new Predicate(10).testAssertion());
     }
   }
   return $Inflight5;

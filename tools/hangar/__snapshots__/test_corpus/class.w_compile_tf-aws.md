@@ -3,19 +3,17 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ c5 }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.x === 123)'`)})((c5.x === 123))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 321)'`)})((c5.y === 321))};
-        (await c5.set(111));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 111)'`)})((c5.y === 111))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.x === 123)'`)})((c5.x === 123))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 321)'`)})((c5.y === 321))};
+      (await c5.set(111));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 111)'`)})((c5.y === 111))};
     }
   }
   return $Inflight1;
@@ -26,7 +24,7 @@ module.exports = function({ c5 }) {
 ## clients/C1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  C1 {
+  class C1 {
     constructor({  }) {
     }
   }
@@ -38,7 +36,7 @@ module.exports = function({  }) {
 ## clients/C2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  C2 {
+  class C2 {
     constructor({ x }) {
       this.x = x;
     }
@@ -51,7 +49,7 @@ module.exports = function({  }) {
 ## clients/C3.inflight.js
 ```js
 module.exports = function({  }) {
-  class  C3 {
+  class C3 {
     constructor({ x, y }) {
       this.x = x;
       this.y = y;
@@ -65,7 +63,7 @@ module.exports = function({  }) {
 ## clients/C4.inflight.js
 ```js
 module.exports = function({  }) {
-  class  C4 {
+  class C4 {
     constructor({  }) {
     }
   }
@@ -77,21 +75,17 @@ module.exports = function({  }) {
 ## clients/C5.inflight.js
 ```js
 module.exports = function({  }) {
-  class  C5 {
+  class C5 {
     constructor({  }) {
     }
     async $inflight_init()  {
-      {
-        const __parent_this = this;
-        this.x = 123;
-        this.y = 321;
-      }
+      const __parent_this = this;
+      this.x = 123;
+      this.y = 321;
     }
     async set(b)  {
-      {
-        const __parent_this = this;
-        this.y = b;
-      }
+      const __parent_this = this;
+      this.y = b;
     }
   }
   return C5;
@@ -337,9 +331,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static m()  {
-        {
-          return 1;
-        }
+        return 1;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/C4.inflight.js".replace(/\\/g, "/");

@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ res }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await res.myPut());
-      }
+      (await res.myPut());
     }
   }
   return $Inflight1;
@@ -23,16 +21,14 @@ module.exports = function({ res }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ Another }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) === 0)'`)})(((await Another.myStaticMethod()) === 0))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) === 0)'`)})(((await Another.myStaticMethod()) === 0))};
     }
   }
   return $Inflight2;
@@ -43,28 +39,22 @@ module.exports = function({ Another }) {
 ## clients/Another.inflight.js
 ```js
 module.exports = function({ globalCounter }) {
-  class  Another {
+  class Another {
     constructor({ first, myField }) {
       this.first = first;
       this.myField = myField;
     }
     async $inflight_init()  {
-      {
-        const __parent_this = this;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalCounter.peek()) === 0)'`)})(((await globalCounter.peek()) === 0))};
-      }
+      const __parent_this = this;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalCounter.peek()) === 0)'`)})(((await globalCounter.peek()) === 0))};
     }
     async myMethod()  {
-      {
-        const __parent_this = this;
-        (await globalCounter.inc());
-        return (await globalCounter.peek());
-      }
+      const __parent_this = this;
+      (await globalCounter.inc());
+      return (await globalCounter.peek());
     }
     static async myStaticMethod()  {
-      {
-        return (await globalCounter.peek());
-      }
+      return (await globalCounter.peek());
     }
   }
   return Another;
@@ -75,7 +65,7 @@ module.exports = function({ globalCounter }) {
 ## clients/First.inflight.js
 ```js
 module.exports = function({  }) {
-  class  First {
+  class First {
     constructor({ myResource }) {
       this.myResource = myResource;
     }
@@ -88,27 +78,25 @@ module.exports = function({  }) {
 ## clients/MyResource.inflight.js
 ```js
 module.exports = function({ globalBucket, globalStr, globalBool, globalNum, globalArrayOfStr, globalMapOfNum, globalSetOfStr, globalAnother, Another }) {
-  class  MyResource {
+  class MyResource {
     constructor({ localCounter, localTopic }) {
       this.localCounter = localCounter;
       this.localTopic = localTopic;
     }
     async myPut()  {
-      {
-        const __parent_this = this;
-        (await this.localTopic.publish("hello"));
-        (await globalBucket.put("key","value"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalStr === "hello")'`)})((globalStr === "hello"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalBool === true)'`)})((globalBool === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalNum === 42)'`)})((globalNum === 42))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalArrayOfStr.at(0)) === "hello")'`)})(((await globalArrayOfStr.at(0)) === "hello"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((globalMapOfNum)["a"] === (-5))'`)})(((globalMapOfNum)["a"] === (-5)))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await globalSetOfStr.has("a"))'`)})((await globalSetOfStr.has("a")))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalAnother.myField === "hello!")'`)})((globalAnother.myField === "hello!"))};
-        (await globalAnother.first.myResource.put("key","value"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalAnother.myMethod()) > 0)'`)})(((await globalAnother.myMethod()) > 0))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) > 0)'`)})(((await Another.myStaticMethod()) > 0))};
-      }
+      const __parent_this = this;
+      (await this.localTopic.publish("hello"));
+      (await globalBucket.put("key","value"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalStr === "hello")'`)})((globalStr === "hello"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalBool === true)'`)})((globalBool === true))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalNum === 42)'`)})((globalNum === 42))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalArrayOfStr.at(0)) === "hello")'`)})(((await globalArrayOfStr.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((globalMapOfNum)["a"] === (-5))'`)})(((globalMapOfNum)["a"] === (-5)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await globalSetOfStr.has("a"))'`)})((await globalSetOfStr.has("a")))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalAnother.myField === "hello!")'`)})((globalAnother.myField === "hello!"))};
+      (await globalAnother.first.myResource.put("key","value"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalAnother.myMethod()) > 0)'`)})(((await globalAnother.myMethod()) > 0))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) > 0)'`)})(((await Another.myStaticMethod()) > 0))};
     }
   }
   return MyResource;
@@ -119,18 +107,16 @@ module.exports = function({ globalBucket, globalStr, globalBool, globalNum, glob
 ## clients/R.inflight.js
 ```js
 module.exports = function({ globalCounter, $parentThis }) {
-  class  R {
+  class R {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        const __parent_this = this;
-        (await globalCounter.inc());
-        (await $parentThis.localCounter.inc());
-      }
+      const __parent_this = this;
+      (await globalCounter.inc());
+      (await $parentThis.localCounter.inc());
     }
   }
   return R;

@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        {console.log(`deleted ${key}`)};
-      }
+      {console.log(`deleted ${key}`)};
     }
   }
   return $Inflight1;
@@ -23,16 +21,14 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        {console.log(`updated ${key}`)};
-      }
+      {console.log(`updated ${key}`)};
     }
   }
   return $Inflight2;
@@ -43,16 +39,14 @@ module.exports = function({  }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        {console.log(`created ${key}`)};
-      }
+      {console.log(`created ${key}`)};
     }
   }
   return $Inflight3;
@@ -63,17 +57,15 @@ module.exports = function({  }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ other }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        {console.log(`last key ${key}`)};
-        (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
-      }
+      {console.log(`last key ${key}`)};
+      (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
     }
   }
   return $Inflight4;
@@ -84,16 +76,14 @@ module.exports = function({ other }) {
 ## clients/$Inflight5.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight5 {
+  class $Inflight5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(key)  {
-      {
-        {console.log("other bucket event called!")};
-      }
+      {console.log("other bucket event called!")};
     }
   }
   return $Inflight5;
@@ -104,20 +94,18 @@ module.exports = function({  }) {
 ## clients/$Inflight6.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight6 {
+  class $Inflight6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await b.put("a","1"));
-        (await b.put("b","1"));
-        (await b.put("b","100"));
-        (await b.put("c","1"));
-        (await b.delete("c"));
-      }
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("b","100"));
+      (await b.put("c","1"));
+      (await b.delete("c"));
     }
   }
   return $Inflight6;

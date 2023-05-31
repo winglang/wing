@@ -3,18 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ s1, s2 }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
-        {console.log((await (await s1.split(" ")).at(1)))};
-        {console.log((await s1.concat(s2)))};
-      }
+      {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
+      {console.log((await (await s1.split(" ")).at(1)))};
+      {console.log((await s1.concat(s2)))};
     }
   }
   return $Inflight1;

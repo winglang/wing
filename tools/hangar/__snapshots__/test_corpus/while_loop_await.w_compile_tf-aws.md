@@ -3,24 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(body)  {
-      {
-        const i = 0;
-        const iterator = async (j) =>  {
-          {
-            return (j + 1);
-          }
-        }
-        ;
-        while (((await iterator(i)) < 3)) {
-          {console.log(`${i}`)};
-        }
+      const i = 0;
+      const iterator = async (j) =>  {
+        return (j + 1);
+      }
+      ;
+      while (((await iterator(i)) < 3)) {
+        {console.log(`${i}`)};
       }
     }
   }

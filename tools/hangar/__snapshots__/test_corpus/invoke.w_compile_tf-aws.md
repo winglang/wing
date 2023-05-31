@@ -3,16 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ payload }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        return payload;
-      }
+      return payload;
     }
   }
   return $Inflight1;
@@ -23,17 +21,15 @@ module.exports = function({ payload }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ f, payload }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        const x = (await f.invoke(""));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
-      }
+      const x = (await f.invoke(""));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
     }
   }
   return $Inflight2;

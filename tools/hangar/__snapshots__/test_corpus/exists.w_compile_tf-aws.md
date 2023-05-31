@@ -3,22 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle()  {
-      {
-        (await b.put("test1.txt","Foo"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("test1.txt"))'`)})((await b.exists("test1.txt")))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("test2.txt")))'`)})((!(await b.exists("test2.txt"))))};
-        (await b.put("test2.txt","Bar"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("test2.txt"))'`)})((await b.exists("test2.txt")))};
-        (await b.delete("test1.txt"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("test1.txt")))'`)})((!(await b.exists("test1.txt"))))};
-      }
+      (await b.put("test1.txt","Foo"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("test1.txt"))'`)})((await b.exists("test1.txt")))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("test2.txt")))'`)})((!(await b.exists("test2.txt"))))};
+      (await b.put("test2.txt","Bar"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("test2.txt"))'`)})((await b.exists("test2.txt")))};
+      (await b.delete("test1.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("test1.txt")))'`)})((!(await b.exists("test1.txt"))))};
     }
   }
   return $Inflight1;
