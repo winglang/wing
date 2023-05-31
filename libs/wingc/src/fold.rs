@@ -434,6 +434,7 @@ where
 		TypeAnnotationKind::String => TypeAnnotationKind::String,
 		TypeAnnotationKind::Bool => TypeAnnotationKind::Bool,
 		TypeAnnotationKind::Duration => TypeAnnotationKind::Duration,
+		TypeAnnotationKind::Void => TypeAnnotationKind::Void,
 		TypeAnnotationKind::Json => TypeAnnotationKind::Json,
 		TypeAnnotationKind::MutJson => TypeAnnotationKind::MutJson,
 		TypeAnnotationKind::Optional(t) => TypeAnnotationKind::Optional(Box::new(f.fold_type_annotation(*t))),
@@ -445,7 +446,7 @@ where
 		TypeAnnotationKind::MutSet(t) => TypeAnnotationKind::MutSet(Box::new(f.fold_type_annotation(*t))),
 		TypeAnnotationKind::Function(t) => TypeAnnotationKind::Function(FunctionTypeAnnotation {
 			param_types: t.param_types.into_iter().map(|t| f.fold_type_annotation(t)).collect(),
-			return_type: t.return_type.map(|t| Box::new(f.fold_type_annotation(*t))),
+			return_type: Box::new(f.fold_type_annotation(*t.return_type)),
 			phase: t.phase,
 		}),
 		TypeAnnotationKind::UserDefined(t) => TypeAnnotationKind::UserDefined(f.fold_user_defined_type(t)),
