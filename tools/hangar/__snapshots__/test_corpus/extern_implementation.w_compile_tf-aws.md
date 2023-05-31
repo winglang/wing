@@ -256,6 +256,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -387,8 +388,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.getGreeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.getGreeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:call",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:console",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:call",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:console",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

@@ -32,7 +32,7 @@ test("unsupported resource in target", async ({ expect }) => {
   expect(sanitizeErrorMessage(result.stderr)).toMatchInlineSnapshot(`
     "ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
 
-    target/test.tfgcp.[REDACTED].tmp/.wing/preflight.js:8
+    target/test.tfgcp.[REDACTED].tmp/.wing/preflight.js:9
          constructor(scope, id) {
            super(scope, id);
     >>     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Schedule\\",this,\\"cloud.Schedule\\");

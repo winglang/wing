@@ -1,18 +1,19 @@
 import { Construct } from "constructs";
-import { Function, FUNCTION_FQN, FunctionProps } from "./function";
+import { IInflightHost, IResource, Resource } from "./resource";
+import { Function, FUNCTION_FQN, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
-import { App, Code } from "../core";
-import { IInflightHost, IResource, Resource } from "../std";
+import { App } from "../core/app";
+import { Code } from "../core/inflight";
 
 /**
  * Global identifier for `Test`.
  */
-export const TEST_FQN = fqnForType("cloud.Test");
+export const TEST_FQN = fqnForType("std.Test");
 
 /**
  * Properties for `Test`.
  *
- * This is the type users see when constructing a cloud.Test instance.
+ * This is the type users see when constructing a std.Test instance.
  */
 export interface TestProps extends FunctionProps {}
 
@@ -23,7 +24,7 @@ export interface TestProps extends FunctionProps {}
  */
 export class Test extends Resource implements IInflightHost {
   /**
-   * Creates a new cloud.Test instance through the app.
+   * Creates a new std.Test instance through the app.
    * @internal
    */
   public static _newTest(
@@ -66,9 +67,9 @@ export class Test extends Resource implements IInflightHost {
 
 /**
  * Interface with an inflight "handle" method that can be used to construct
- * a `cloud.Test`.
+ * a `std.Test`.
  *
- * @inflight `@winglang/sdk.cloud.ITestHandlerClient`
+ * @inflight `@winglang/sdk.std.ITestHandlerClient`
  */
 export interface ITestHandler extends IResource {}
 
