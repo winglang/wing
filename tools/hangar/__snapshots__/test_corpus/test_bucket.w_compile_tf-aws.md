@@ -3,15 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.list === "function" ? await b.list() : await b.list.handle()).length === 0)'`)})(((typeof b.list === "function" ? await b.list() : await b.list.handle()).length === 0))};
-        (typeof b.put === "function" ? await b.put("hello.txt","world") : await b.put.handle("hello.txt","world"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.list === "function" ? await b.list() : await b.list.handle()).length === 1)'`)})(((typeof b.list === "function" ? await b.list() : await b.list.handle()).length === 1))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
+      (await b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 1)'`)})(((await b.list()).length === 1))};
     }
   }
   return $Inflight1;
@@ -22,14 +23,15 @@ module.exports = function({ b }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        (typeof b.put === "function" ? await b.put("hello.txt","world") : await b.put.handle("hello.txt","world"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.get === "function" ? await b.get("hello.txt") : await b.get.handle("hello.txt")) === "world")'`)})(((typeof b.get === "function" ? await b.get("hello.txt") : await b.get.handle("hello.txt")) === "world"))};
-      }
+      (await b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("hello.txt")) === "world")'`)})(((await b.get("hello.txt")) === "world"))};
     }
   }
   return $Inflight2;

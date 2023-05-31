@@ -3,7 +3,7 @@
 ## clients/CdkDockerImageFunction.inflight.js
 ```js
 module.exports = function({  }) {
-  class  CdkDockerImageFunction {
+  class CdkDockerImageFunction {
     constructor({ function }) {
       this.function = function;
     }

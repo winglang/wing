@@ -3,13 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ x }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        (typeof x.handle === "function" ? await x.handle("hello world!") : await x.handle.handle("hello world!"));
-      }
+      (await x.handle("hello world!"));
     }
   }
   return $Inflight1;
@@ -20,14 +21,15 @@ module.exports = function({ x }) {
 ## clients/A.inflight.js
 ```js
 module.exports = function({  }) {
-  class  A {
+  class A {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(msg)  {
-      {
-        const __parent_this = this;
-        return;
-      }
+      const __parent_this = this;
+      return;
     }
   }
   return A;
@@ -38,14 +40,12 @@ module.exports = function({  }) {
 ## clients/Dog.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Dog {
+  class Dog {
     constructor({  }) {
     }
     async eat()  {
-      {
-        const __parent_this = this;
-        return;
-      }
+      const __parent_this = this;
+      return;
     }
   }
   return Dog;
@@ -56,14 +56,12 @@ module.exports = function({  }) {
 ## clients/r.inflight.js
 ```js
 module.exports = function({  }) {
-  class  r {
+  class r {
     constructor({  }) {
     }
     async method2(x)  {
-      {
-        const __parent_this = this;
-        return x;
-      }
+      const __parent_this = this;
+      return x;
     }
   }
   return r;
@@ -188,16 +186,12 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
        method1(x)  {
-        {
-          const __parent_this = this;
-          return x;
-        }
+        const __parent_this = this;
+        return x;
       }
        method3(x)  {
-        {
-          const __parent_this = this;
-          return x;
-        }
+        const __parent_this = this;
+        return x;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");

@@ -3,15 +3,13 @@
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({ data }) {
       this.data = data;
     }
     async getStuff()  {
-      {
-        const __parent_this = this;
-        return this.data.field0;
-      }
+      const __parent_this = this;
+      return this.data.field0;
     }
   }
   return Foo;

@@ -3,7 +3,7 @@
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({ SumStr }) {
       this.SumStr = SumStr;
     }
@@ -100,9 +100,7 @@ class $Root extends $stdlib.std.Resource {
     const jj1 = Object.freeze({"foo":someNumber});
     const jj2 = [someNumber, {"bar":someNumber}];
     const getStr =  () =>  {
-      {
-        return "hello";
-      }
+      return "hello";
     }
     ;
     const jj3 = (getStr());

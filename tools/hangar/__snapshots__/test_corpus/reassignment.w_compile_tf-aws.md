@@ -3,7 +3,7 @@
 ## clients/R.inflight.js
 ```js
 module.exports = function({  }) {
-  class  R {
+  class R {
     constructor({ f1 }) {
       this.f1 = f1;
     }
@@ -65,10 +65,8 @@ class $Root extends $stdlib.std.Resource {
         }
       }
        inc()  {
-        {
-          const __parent_this = this;
-          this.f = (this.f + 1);
-        }
+        const __parent_this = this;
+        this.f = (this.f + 1);
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
@@ -105,10 +103,8 @@ class $Root extends $stdlib.std.Resource {
     (r.inc());
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(r.f === 2)'`)})((r.f === 2))};
     const f =  (arg) =>  {
-      {
-        arg = 0;
-        return arg;
-      }
+      arg = 0;
+      return arg;
     }
     ;
     const y = 1;
