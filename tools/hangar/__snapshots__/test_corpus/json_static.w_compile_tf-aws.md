@@ -3,14 +3,15 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ jj }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")'`)})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
-      }
+      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")'`)})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
     }
   }
   return $Inflight1;

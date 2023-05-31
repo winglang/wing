@@ -3,18 +3,19 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ q }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        (typeof q.push === "function" ? await q.push("foo") : await q.push.handle("foo"));
-        (typeof q.push === "function" ? await q.push("bar") : await q.push.handle("bar"));
-        (typeof q.push === "function" ? await q.push("baz") : await q.push.handle("baz"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 3)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 3))};
-        (typeof q.purge === "function" ? await q.purge() : await q.purge.handle());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0))};
-      }
+      (await q.push("foo"));
+      (await q.push("bar"));
+      (await q.push("baz"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 3)'`)})(((await q.approxSize()) === 3))};
+      (await q.purge());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
     }
   }
   return $Inflight1;
