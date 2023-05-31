@@ -1,8 +1,7 @@
-import { useTheme } from "@wingconsole/design-system";
+import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { AttributeView } from "../AttributeView.js";
-import { MetadataNode } from "../MetadataPanel.js";
+import { MetadataNode } from "../../ui/resource-metadata.js";
 
 export interface FunctionMetadataProps {
   node: MetadataNode;
@@ -18,8 +17,8 @@ export const FunctionMetadata = ({ node }: FunctionMetadataProps) => {
         theme.text2,
       )}
     >
-      <AttributeView name="Entry" value={node.props?.sourceCodeFile} />
-      <AttributeView
+      <Attribute name="Entry" value={node.props?.sourceCodeFile} />
+      <Attribute
         name="Environment"
         value={JSON.stringify(node.props?.environmentVariables)}
       />

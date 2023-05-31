@@ -1,9 +1,7 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { ToolbarButton, useTheme } from "@wingconsole/design-system";
-import classNames from "classnames";
 import { useContext } from "react";
 
-import { Button } from "../design-system/Button.js";
 import { TestsContext } from "../utils/tests-context.js";
 
 export const MapToolbarMenu = () => {

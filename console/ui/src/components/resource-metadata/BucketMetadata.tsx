@@ -1,8 +1,7 @@
-import { useTheme } from "@wingconsole/design-system";
+import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { AttributeView } from "../AttributeView.js";
-import { MetadataNode } from "../MetadataPanel.js";
+import { MetadataNode } from "../../ui/resource-metadata.js";
 
 export interface BucketMetadataProps {
   node: MetadataNode;
@@ -18,7 +17,7 @@ export const BucketMetadata = ({ node }: BucketMetadataProps) => {
         theme.text2,
       )}
     >
-      <AttributeView name="Public" value={node.props?.public ? "Yes" : "No"} />
+      <Attribute name="Public" value={node.props?.public ? "Yes" : "No"} />
     </div>
   );
 };

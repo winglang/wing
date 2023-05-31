@@ -1,12 +1,14 @@
-import { useTheme } from "@wingconsole/design-system";
+import {
+  useTheme,
+  TextArea,
+  Button,
+  JsonResponseInput,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useContext, useId, useState } from "react";
 
 import { AppContext } from "../../AppContext.js";
-import { Button } from "../../design-system/Button.js";
-import { TextArea } from "../../design-system/TextArea.js";
 import { trpc } from "../../utils/trpc.js";
-import { JsonResponseInput } from "../JsonResponseInput.js";
 
 export interface FunctionViewProps {
   resourcePath: string;

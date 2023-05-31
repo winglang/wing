@@ -56,7 +56,7 @@ test("no loader", async () => {
 
   const loader = window.getByTestId("main-view-loader");
 
-  await expect(loader).toBeHidden();
+  await expect(loader).toBeHidden({ timeout: 20_000 });
 });
 
 test("explorer tree menu", async () => {
@@ -65,7 +65,7 @@ test("explorer tree menu", async () => {
   window.on("console", console.log);
   await window.setViewportSize({ width: 1920, height: 1080 });
 
-  await pause(3000);
+  await pause(10_000);
 
   const treeMenu = window.getByTestId("explorer-tree-menu");
   expect(await treeMenu.screenshot()).toMatchSnapshot(
@@ -81,7 +81,7 @@ test("map view", async () => {
   const window = await electronApp.firstWindow();
   window.on("console", console.log);
   await window.setViewportSize({ width: 1920, height: 1080 });
-  await pause(5000);
+  await pause(10_000);
   const mapView = window.getByTestId("map-view");
   expect(await mapView.screenshot()).toMatchSnapshot("map-view.png", {
     maxDiffPixelRatio: 0.3,

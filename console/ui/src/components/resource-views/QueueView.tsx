@@ -1,8 +1,7 @@
+import { TextArea, Button } from "@wingconsole/design-system";
 import { useCallback, useContext, useId, useState } from "react";
 
 import { AppContext } from "../../AppContext.js";
-import { Button } from "../../design-system/Button.js";
-import { TextArea } from "../../design-system/TextArea.js";
 import { trpc } from "../../utils/trpc.js";
 
 export interface QueueViewProps {

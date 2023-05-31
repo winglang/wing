@@ -1,8 +1,7 @@
-import { useTheme } from "@wingconsole/design-system";
+import { useTheme, ResourceIcon } from "@wingconsole/design-system";
 import classNames from "classnames";
 
 import { trpc } from "../../utils/trpc.js";
-import { ResourceIcon } from "../../utils/utils.js";
 import { ContainerNode } from "../ElkMapNodes.js";
 
 import { ElkMap } from "./elk-map/ElkMap.js";

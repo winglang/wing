@@ -1,9 +1,7 @@
-import { useTheme } from "@wingconsole/design-system";
+import { useTheme, IconComponent } from "@wingconsole/design-system";
 import { BaseResourceSchema } from "@wingconsole/server";
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
-
-import { IconComponent } from "../utils/utils.js";
 
 const getResourceBorderColor = (
   resourceType: BaseResourceSchema["type"] | undefined,

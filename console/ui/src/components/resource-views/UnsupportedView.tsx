@@ -1,8 +1,7 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
-import { useTheme } from "@wingconsole/design-system";
+import { useTheme, Button } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { Button } from "../../design-system/Button.js";
 import { trpc } from "../../utils/trpc.js";
 
 export interface UnsupportedViewProps {

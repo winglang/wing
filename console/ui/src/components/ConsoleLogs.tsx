@@ -3,13 +3,11 @@ import {
   ChevronRightIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
-import { useTheme } from "@wingconsole/design-system";
+import { useTheme, ResourceIcon } from "@wingconsole/design-system";
 import { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
 import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
-
-import { ResourceIcon } from "../utils/utils.js";
 
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",

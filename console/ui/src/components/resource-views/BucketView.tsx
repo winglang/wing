@@ -1,4 +1,10 @@
-import { useTheme } from "@wingconsole/design-system";
+import {
+  useTheme,
+  TreeEntry,
+  Tree,
+  Button,
+  JsonResponseInput,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
 import {
   FormEventHandler,
@@ -10,11 +16,8 @@ import {
 } from "react";
 
 import { AppContext } from "../../AppContext.js";
-import { Button } from "../../design-system/Button.js";
-import { TreeEntry, Tree } from "../../design-system/Tree.js";
 import { trpc } from "../../utils/trpc.js";
 import { useDownloadFile } from "../../utils/useDownloadFile.js";
-import { JsonResponseInput } from "../JsonResponseInput.js";
 
 export interface BucketViewProps {
   resourcePath: string;

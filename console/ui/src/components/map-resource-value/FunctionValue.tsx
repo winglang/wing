@@ -1,6 +1,7 @@
-import { Button } from "../../design-system/Button.js";
+import { Button } from "@wingconsole/design-system";
+
+import { ResourceNode } from "../../ui/detailed-node.js";
 import { trpc } from "../../utils/trpc.js";
-import { ResourceNode } from "../DetailedNode.js";
 
 export interface FunctionResourceDetailsProps {
   resource: ResourceNode;

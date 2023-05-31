@@ -1,4 +1,4 @@
-import { ResourceNode } from "../DetailedNode.js";
+import { ResourceNode } from "../../ui/detailed-node.js";
 
 import { BucketValue } from "./BucketValue.js";
 import { CounterValue } from "./CounterValue.js";

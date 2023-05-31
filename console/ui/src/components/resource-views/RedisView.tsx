@@ -1,9 +1,8 @@
-import { useTheme } from "@wingconsole/design-system";
+import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import { trpc } from "../../utils/trpc.js";
-import { AttributeView } from "../AttributeView.js";
 
 export interface RedisViewProps {
   resourcePath: string;
@@ -147,7 +146,7 @@ export const RedisView = ({ resourcePath }: RedisViewProps) => {
 
   return (
     <div className="h-full flex-1 flex flex-col text-sm gap-y-1">
-      <AttributeView name="URL" value={info.data?.url} noLeftPadding />
+      <Attribute name="URL" value={info.data?.url} noLeftPadding />
       <div>
         <label htmlFor={inputId} className={classNames("text-sm", theme.text2)}>
           Comand Line

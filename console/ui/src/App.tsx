@@ -1,6 +1,9 @@
-import { DefaultTheme, ThemeProvider } from "@wingconsole/design-system";
+import {
+  DefaultTheme,
+  ThemeProvider,
+  NotificationsProvider,
+} from "@wingconsole/design-system";
 
-import { NotificationsProvider } from "./design-system/Notification.js";
 import { LayoutProvider, LayoutType } from "./utils/layout-provider.js";
 import { TestsContextProvider } from "./utils/tests-context.js";
 import { trpc } from "./utils/trpc.js";

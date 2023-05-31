@@ -1,9 +1,9 @@
+import { Attribute } from "@wingconsole/design-system";
 import { useContext } from "react";
 
 import { AppContext } from "../../AppContext.js";
+import { MetadataNode } from "../../ui/resource-metadata.js";
 import { trpc } from "../../utils/trpc.js";
-import { AttributeView } from "../AttributeView.js";
-import { MetadataNode } from "../MetadataPanel.js";
 
 export interface ApiMetadataProps {
   node: MetadataNode;
@@ -18,7 +18,7 @@ export const ApiMetadata = ({ node }: ApiMetadataProps) => {
   return (
     <>
       {appMode !== "webapp" && (
-        <AttributeView name="URL" value={schema.data?.url} />
+        <Attribute name="URL" value={schema.data?.url} />
       )}
     </>
   );

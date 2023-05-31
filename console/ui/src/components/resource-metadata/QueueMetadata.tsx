@@ -1,12 +1,13 @@
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { useTheme } from "@wingconsole/design-system";
+import {
+  useTheme,
+  Button,
+  useNotifications,
+  Attribute,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { Button } from "../../design-system/Button.js";
-import { useNotifications } from "../../design-system/Notification.js";
+import { MetadataNode } from "../../ui/resource-metadata.js";
 import { trpc } from "../../utils/trpc.js";
-import { AttributeView } from "../AttributeView.js";
-import { MetadataNode } from "../MetadataPanel.js";
 
 export interface QueueMetadataProps {
   node: MetadataNode;
@@ -34,8 +35,8 @@ export const QueueMetadata = ({ node }: QueueMetadataProps) => {
         theme.text2,
       )}
     >
-      <AttributeView name="Timeout" value={`${node.props?.timeout}s`} />
-      <AttributeView name="Approx size">
+      <Attribute name="Timeout" value={`${node.props?.timeout}s`} />
+      <Attribute name="Approx size">
         <div className="flex gap-2">
           <label>{approxSize.data}</label>
           <Button
@@ -45,7 +46,7 @@ export const QueueMetadata = ({ node }: QueueMetadataProps) => {
             disabled={approxSize.data === 0}
           />
         </div>
-      </AttributeView>
+      </Attribute>
     </div>
   );
 };

@@ -56,7 +56,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-lottie-player": "^1.5.4",
-    "react-popper": "^2.3.0",
     "react-use": "^17.4.0",
     "require-from-string": "^2.0.2",
     "storybook": "^7.0.11",

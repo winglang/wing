@@ -1,11 +1,8 @@
 import { MagnifyingGlassIcon, NoSymbolIcon } from "@heroicons/react/24/outline";
+import { Button, Input, Listbox } from "@wingconsole/design-system";
 import { LogLevel } from "@wingconsole/server";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useState } from "react";
-
-import { Button } from "../design-system/Button.js";
-import { Input } from "../design-system/Input.js";
-import { Listbox } from "../design-system/Listbox.js";
 
 export interface ConsoleFiltersProps {
   selectedLogTypeFilters: LogLevel[];
