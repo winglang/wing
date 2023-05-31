@@ -23,7 +23,9 @@ const renderTreeItems = (items: TreeMenuItem[]) => {
         label={item.label}
         icon={item.icon}
       >
-        {item.children && renderTreeItems(item.children)}
+        {item.children &&
+          item.children.length > 0 &&
+          renderTreeItems(item.children)}
       </TreeItem>
     );
   });
