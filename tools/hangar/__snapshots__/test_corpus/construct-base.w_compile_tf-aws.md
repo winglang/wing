@@ -3,7 +3,7 @@
 ## clients/WingResource.inflight.js
 ```js
 module.exports = function({  }) {
-  class  WingResource {
+  class WingResource {
     constructor({  }) {
     }
   }
@@ -99,15 +99,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const getPath =  (c) =>  {
-      {
-        return c.node.path;
-      }
+      return c.node.path;
     }
     ;
     const getDisplayName =  (r) =>  {
-      {
-        return r.display.title;
-      }
+      return r.display.title;
     }
     ;
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");

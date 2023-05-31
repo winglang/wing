@@ -3,13 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ a }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
     }
   }
   return $Inflight1;
@@ -20,7 +21,7 @@ module.exports = function({ a }) {
 ## clients/A.inflight.js
 ```js
 module.exports = function({  }) {
-  class  A {
+  class A {
     constructor({ field }) {
       this.field = field;
     }

@@ -86,61 +86,49 @@ class $Root extends $stdlib.std.Resource {
     }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch and no exception")'`)})((x === "finally with no catch and no exception"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-      {
-        try {
-        }
-        finally {
-          return 1;
-        }
+      try {
+      }
+      finally {
+        return 1;
       }
     }
     )()) === 1)'`)})(((( () =>  {
-      {
-        try {
-        }
-        finally {
-          return 1;
-        }
+      try {
+      }
+      finally {
+        return 1;
       }
     }
     )()) === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-      {
-        try {
-          {((msg) => {throw new Error(msg)})("")};
-        }
-        catch {
-          return 2;
-        }
+      try {
+        {((msg) => {throw new Error(msg)})("")};
+      }
+      catch {
+        return 2;
       }
     }
     )()) === 2)'`)})(((( () =>  {
-      {
-        try {
-          {((msg) => {throw new Error(msg)})("")};
-        }
-        catch {
-          return 2;
-        }
+      try {
+        {((msg) => {throw new Error(msg)})("")};
+      }
+      catch {
+        return 2;
       }
     }
     )()) === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-      {
-        try {
-          return 3;
-        }
-        finally {
-        }
+      try {
+        return 3;
+      }
+      finally {
       }
     }
     )()) === 3)'`)})(((( () =>  {
-      {
-        try {
-          return 3;
-        }
-        finally {
-        }
+      try {
+        return 3;
+      }
+      finally {
       }
     }
     )()) === 3))};
