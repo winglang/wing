@@ -10,7 +10,7 @@ export interface ApiViewProps {
   resourcePath: string;
 }
 
-export const ApiView = ({ resourcePath }: ApiViewProps) => {
+export const ApiInteractionView = ({ resourcePath }: ApiViewProps) => {
   const { appMode } = useContext(AppContext);
   const [schemaData, setSchemaData] = useState<OpenApiSpec>();
   const [apiResponse, setApiResponse] = useState<ApiResponse>();

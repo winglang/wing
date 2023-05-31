@@ -1,12 +1,12 @@
 import { BucketView } from "../components/resource-views/BucketView.js";
-import { FunctionView } from "../components/resource-views/FunctionView.js";
 import { QueueView } from "../components/resource-views/QueueView.js";
 import { RedisView } from "../components/resource-views/RedisView.js";
 import { TopicView } from "../components/resource-views/TopicView.js";
 import { UnsupportedView } from "../components/resource-views/UnsupportedView.js";
 
-import { ApiView } from "./api-view.js";
+import { ApiInteractionView } from "./api-interaction-view.js";
 import { CounterInteractionView } from "./counter-interaction-view.js";
+import { FunctionInteractionView } from "./function-interaction-view.js";
 import { ScheduleInteractionView } from "./schedule-interaction-view.js";
 import { TableInteractionView } from "./table-interaction-view.js";
 
@@ -24,7 +24,7 @@ export const ResourceInteractionView = ({
         return <QueueView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Function": {
-        return <FunctionView resourcePath={resourcePath} />;
+        return <FunctionInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Bucket": {
         return <BucketView resourcePath={resourcePath} />;
@@ -33,7 +33,7 @@ export const ResourceInteractionView = ({
         return <CounterInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Api": {
-        return <ApiView resourcePath={resourcePath} />;
+        return <ApiInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Topic": {
         return <TopicView resourcePath={resourcePath} />;

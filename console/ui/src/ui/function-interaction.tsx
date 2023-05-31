@@ -1,64 +1,59 @@
 import {
-  useTheme,
-  TextArea,
   Button,
   JsonResponseInput,
+  TextArea,
+  useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useContext, useId, useState } from "react";
+import { useId, useState } from "react";
 
-import { AppContext } from "../../AppContext.js";
-import { trpc } from "../../utils/trpc.js";
+import { useFunction } from "../services/use-function.js";
 
-export interface FunctionViewProps {
-  resourcePath: string;
+export interface FunctionInteractionProps {
+  onInvokeClick: (payload: string) => void;
+  isLoading: boolean;
+  response: string;
 }
-
-export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
+export const FunctionInteraction = ({
+  onInvokeClick,
+  isLoading,
+  response,
+}: FunctionInteractionProps) => {
   const { theme } = useTheme();
 
-  const { appMode } = useContext(AppContext);
-
   const [payload, setPayload] = useState("");
-  const [response, setResponse] = useState("");
-  const payloadId = useId();
-  const responseId = useId();
-
-  const invoke = trpc["function.invoke"].useMutation({
-    onSuccess: (data) => {
-      setResponse(JSON.stringify(data, undefined, 2));
-    },
-  });
+  const payloadElementId = useId();
+  const responseElementId = useId();
 
   return (
     <>
       <div className="h-full flex-1 flex flex-col text-sm">
         <div className="flex flex-col gap-2">
           <TextArea
-            id={payloadId}
+            id={payloadElementId}
             placeholder="Payload"
             className="text-xs"
             value={payload}
             onInput={(event) => setPayload(event.currentTarget.value)}
-            disabled={invoke.isLoading}
+            disabled={isLoading}
           />
           <div className="flex gap-2 justify-end">
             <Button
-              label="Send"
-              onClick={() => invoke.mutate({ resourcePath, message: payload })}
-              disabled={invoke.isLoading}
+              label="Invoke"
+              onClick={() => onInvokeClick(payload)}
+              disabled={isLoading}
             />
           </div>
           <div>
             <label
-              htmlFor={responseId}
+              htmlFor={responseElementId}
               className={classNames("text-sm", theme.text2)}
             >
               Response
             </label>
             <JsonResponseInput
               value={response}
-              loading={invoke.isLoading}
+              loading={isLoading}
               placeholder="No response"
               className="max-h-[20rem]"
             />
