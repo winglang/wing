@@ -10,5 +10,5 @@ interface IFace {
   my_method(x: num);
 //^^^^^^^^^^^^^^^^^ Expected method return type
   inflight my_method2(x: num);
-//         ^^^^^^^^^^^^^^^^^^ Expected method function return type
+//         ^^^^^^^^^^^^^^^^^^ Expected method return type
 }
