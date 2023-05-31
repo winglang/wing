@@ -1,8 +1,8 @@
-# [capture_resource_with_no_inflight.w](../../../../examples/tests/valid/capture_resource_with_no_inflight.w) | compile | tf-aws
+# [inflight_class_capture_const.w](../../../../examples/tests/valid/inflight_class_capture_const.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ a }) {
+module.exports = function({ myConst, Foo }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,8 @@ module.exports = function({ a }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
+      const x = new Foo();
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await x.getValue()) === myConst)'`)})(((await x.getValue()) === myConst))};
     }
   }
   return $Inflight1;
@@ -20,18 +21,19 @@ module.exports = function({ a }) {
 
 ```
 
-## clients/A.inflight.js
+## clients/Foo.inflight.js
 ```js
-module.exports = function({  }) {
-  class A {
-    constructor({ field }) {
-      this.field = field;
-    }
-    async $inflight_init()  {
+module.exports = function({ myConst }) {
+  class Foo {
+     constructor()  {
       const __parent_this = this;
     }
+    async getValue()  {
+      const __parent_this = this;
+      return myConst;
+    }
   }
-  return A;
+  return Foo;
 }
 
 ```
@@ -57,7 +59,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight class captures const\",\"${aws_lambda_function.root_testinflightclasscapturesconst_Handler_E42B6854.arn}\"]]"
     }
   },
   "provider": {
@@ -67,60 +69,60 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_testinflightclasscapturesconst_Handler_IamRole_23E263B8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/test:inflight class captures const/Handler/IamRole",
+            "uniqueId": "root_testinflightclasscapturesconst_Handler_IamRole_23E263B8"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_testinflightclasscapturesconst_Handler_IamRolePolicy_627696DB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/test:inflight class captures const/Handler/IamRolePolicy",
+            "uniqueId": "root_testinflightclasscapturesconst_Handler_IamRolePolicy_627696DB"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testinflightclasscapturesconst_Handler_IamRole_23E263B8.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_35054A30": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/test:inflight class captures const/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_35054A30"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testinflightclasscapturesconst_Handler_IamRole_23E263B8.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testtest_Handler_046C3415": {
+      "root_testinflightclasscapturesconst_Handler_E42B6854": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/test:inflight class captures const/Handler/Default",
+            "uniqueId": "root_testinflightclasscapturesconst_Handler_E42B6854"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c8e53a58"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "Handler-c8e53a58",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_testinflightclasscapturesconst_Handler_IamRole_23E263B8.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_testinflightclasscapturesconst_Handler_S3Object_AF634718.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -140,11 +142,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_testinflightclasscapturesconst_Handler_S3Object_AF634718": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/test:inflight class captures const/Handler/S3Object",
+            "uniqueId": "root_testinflightclasscapturesconst_Handler_S3Object_AF634718"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -166,26 +168,26 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class A extends $stdlib.std.Resource {
+    class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("getValue");
         const __parent_this = this;
-        this.field = "hey";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/A.inflight.js";
+        const self_client_path = "./clients/Foo.inflight.js";
+        const myConst_client = context._lift(myConst);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
+            myConst: ${myConst_client},
           })
         `);
       }
       _toInflight() {
-        const field_client = this._lift(this.field);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const AClient = ${A._toInflightType(this).text};
-            const client = new AClient({
-              field: ${field_client},
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -194,7 +196,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this.field, host, []);
+          Foo._registerBindObject(myConst, host, []);
+        }
+        if (ops.includes("getValue")) {
+          Foo._registerBindObject(myConst, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -207,10 +212,12 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
-        const a_client = context._lift(a);
+        const myConst_client = context._lift(myConst);
+        const FooClient = Foo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            a: ${a_client},
+            myConst: ${myConst_client},
+            Foo: ${FooClient.text},
           })
         `);
       }
@@ -227,21 +234,21 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(a, host, []);
+          $Inflight1._registerBindObject(myConst, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(a.field, host, []);
+          $Inflight1._registerBindObject(myConst, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const a = new A(this,"A");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    const myConst = "bang bang";
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight class captures const",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "capture_resource_with_no_inflight", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "inflight_class_capture_const", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

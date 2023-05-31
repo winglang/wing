@@ -9,17 +9,10 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
-      class InflightClass {
-        constructor()  {
-        }
-        async inflightMethod()  {
-          return "Inflight method";
-        }
-        static async staticInflightMethod()  {
-          return "Static inflight method";
-        }
-      }
+      const InflightClass = require("./InflightClass.inflight.js")({});
       const inflightClass = new InflightClass();
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflightClass.inflightMethod()) === "Inflight method")'`)})(((await inflightClass.inflightMethod()) === "Inflight method"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.staticInflightMethod()) === "Static inflight method")'`)})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
@@ -37,6 +30,9 @@ module.exports = function({  }) {
     constructor({ instanceField }) {
       this.instanceField = instanceField;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     static async get123()  {
       return 123;
     }
@@ -49,20 +45,14 @@ module.exports = function({  }) {
 ## clients/InflightClass.inflight.js
 ```js
 module.exports = function({  }) {
-  class  InflightClass {
+  class InflightClass {
      constructor()  {
-      {
-      }
     }
     async inflightMethod()  {
-      {
-        return "Inflight method";
-      }
+      return "Inflight method";
     }
     static async staticInflightMethod()  {
-      {
-        return "Static inflight method";
-      }
+      return "Static inflight method";
     }
   }
   return InflightClass;
@@ -211,7 +201,7 @@ class $Root extends $stdlib.std.Resource {
         return 99;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -249,7 +239,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

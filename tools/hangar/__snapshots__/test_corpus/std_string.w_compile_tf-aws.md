@@ -9,6 +9,8 @@ module.exports = function({ s1, s2 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
       {console.log((await (await s1.split(" ")).at(1)))};
@@ -157,7 +159,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const s1_client = context._lift(s1);
         const s2_client = context._lift(s2);
         return $stdlib.core.NodeJsCode.fromInline(`

@@ -9,6 +9,8 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle(s)  {
       {console.log(myStr)};
       const n = myNum;
@@ -169,7 +171,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const myStr_client = context._lift(myStr);
         const myNum_client = context._lift(myNum);
         const mySecondBool_client = context._lift(mySecondBool);

@@ -9,6 +9,8 @@ module.exports = function({ jj }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")'`)})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
@@ -156,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const jj_client = context._lift(jj);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({

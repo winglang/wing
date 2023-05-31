@@ -9,6 +9,8 @@ module.exports = function({ usersTable }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle(req)  {
       return {
       "body": Object.freeze({"users":(await usersTable.list())}),
@@ -29,6 +31,8 @@ module.exports = function({ usersTable }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(req)  {
       const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
@@ -58,6 +62,8 @@ module.exports = function({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(req)  {
       return {
@@ -607,7 +613,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const usersTable_client = context._lift(usersTable);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -643,7 +649,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const usersTable_client = context._lift(usersTable);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -679,7 +685,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight3.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

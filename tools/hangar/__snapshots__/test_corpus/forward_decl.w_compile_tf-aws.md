@@ -7,6 +7,9 @@ module.exports = function({  }) {
     constructor({ f }) {
       this.f = f;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
   }
   return R;
 }
@@ -70,7 +73,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/R.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

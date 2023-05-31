@@ -7,6 +7,9 @@ module.exports = function({  }) {
     constructor({ SumStr }) {
       this.SumStr = SumStr;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
   }
   return Foo;
 }
@@ -61,7 +64,7 @@ class $Root extends $stdlib.std.Resource {
         this.SumStr = "wow!";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

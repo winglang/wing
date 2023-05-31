@@ -9,6 +9,8 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle(event)  {
       (await bucket1.put("file.txt","data"));
       (await bucket2.get("file.txt"));
@@ -474,7 +476,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const bucket1_client = context._lift(bucket1);
         const bucket2_client = context._lift(bucket2);
         const bucket3_client = context._lift(bucket3);

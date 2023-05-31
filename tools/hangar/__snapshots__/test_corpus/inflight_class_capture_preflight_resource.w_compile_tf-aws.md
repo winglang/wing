@@ -1,8 +1,8 @@
-# [exists.w](../../../../examples/tests/valid/exists.w) | compile | tf-aws
+# [inflight_class_capture_preflight_resource.w](../../../../examples/tests/valid/inflight_class_capture_preflight_resource.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ Foo }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,16 +12,52 @@ module.exports = function({ b }) {
     async $inflight_init()  {
     }
     async handle()  {
-      (await b.put("test1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("test1.txt"))'`)})((await b.exists("test1.txt")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("test2.txt")))'`)})((!(await b.exists("test2.txt"))))};
-      (await b.put("test2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("test2.txt"))'`)})((await b.exists("test2.txt")))};
-      (await b.delete("test1.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("test1.txt")))'`)})((!(await b.exists("test1.txt"))))};
+      const f = new Foo();
+      (await f.uploadToBucket("hello.txt","world"));
     }
   }
   return $Inflight1;
+}
+
+```
+
+## clients/Foo.inflight.js
+```js
+module.exports = function({ b }) {
+  class Foo {
+     constructor()  {
+      const __parent_this = this;
+    }
+    async uploadToBucket(k, value)  {
+      const __parent_this = this;
+      (await b.put(k,value));
+    }
+  }
+  return Foo;
+}
+
+```
+
+## clients/PreflightClass.inflight.js
+```js
+module.exports = function({ Foo }) {
+  class  PreflightClass {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+      {
+        const __parent_this = this;
+      }
+    }
+    async goo()  {
+      {
+        const __parent_this = this;
+        const foo = new Foo();
+        (typeof foo.uploadToBucket === "function" ? await foo.uploadToBucket("hello.txt","world") : await foo.uploadToBucket.handle("hello.txt","world"));
+      }
+    }
+  }
+  return PreflightClass;
 }
 
 ```
@@ -47,7 +83,7 @@ module.exports = function({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:exists\",\"${aws_lambda_function.root_testexists_Handler_D4B9F53C.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight class captures preflight resource\",\"${aws_lambda_function.root_testinflightclasscapturespreflightresource_Handler_32058266.arn}\"]]"
     }
   },
   "provider": {
@@ -57,62 +93,60 @@ module.exports = function({ b }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testexists_Handler_IamRole_EFE1EDFF": {
+      "root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:exists/Handler/IamRole",
-            "uniqueId": "root_testexists_Handler_IamRole_EFE1EDFF"
+            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/IamRole",
+            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testexists_Handler_IamRolePolicy_C3791F05": {
+      "root_testinflightclasscapturespreflightresource_Handler_IamRolePolicy_1DDF44CC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:exists/Handler/IamRolePolicy",
-            "uniqueId": "root_testexists_Handler_IamRolePolicy_C3791F05"
+            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/IamRolePolicy",
+            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_IamRolePolicy_1DDF44CC"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testexists_Handler_IamRole_EFE1EDFF.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testexists_Handler_IamRolePolicyAttachment_27BE8849": {
+      "root_testinflightclasscapturespreflightresource_Handler_IamRolePolicyAttachment_3787A52C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:exists/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testexists_Handler_IamRolePolicyAttachment_27BE8849"
+            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_IamRolePolicyAttachment_3787A52C"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testexists_Handler_IamRole_EFE1EDFF.name}"
+        "role": "${aws_iam_role.root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testexists_Handler_D4B9F53C": {
+      "root_testinflightclasscapturespreflightresource_Handler_32058266": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:exists/Handler/Default",
-            "uniqueId": "root_testexists_Handler_D4B9F53C"
+            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/Default",
+            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_32058266"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c823e891"
+            "WING_FUNCTION_NAME": "Handler-c890c3e1"
           }
         },
-        "function_name": "Handler-c823e891",
+        "function_name": "Handler-c890c3e1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testexists_Handler_IamRole_EFE1EDFF.arn}",
+        "role": "${aws_iam_role.root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testexists_Handler_S3Object_2DD29570.key}",
+        "s3_key": "${aws_s3_object.root_testinflightclasscapturespreflightresource_Handler_S3Object_676FC9EB.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -175,11 +209,11 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_object": {
-      "root_testexists_Handler_S3Object_2DD29570": {
+      "root_testinflightclasscapturespreflightresource_Handler_S3Object_676FC9EB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:exists/Handler/S3Object",
-            "uniqueId": "root_testexists_Handler_S3Object_2DD29570"
+            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/S3Object",
+            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_S3Object_676FC9EB"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -201,6 +235,42 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class Foo extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("uploadToBucket");
+        const __parent_this = this;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Foo.inflight.js";
+        const b_client = context._lift(b);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            b: ${b_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Foo._registerBindObject(b, host, []);
+        }
+        if (ops.includes("uploadToBucket")) {
+          Foo._registerBindObject(b, host, ["put"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class $Inflight1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -209,10 +279,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
-        const b_client = context._lift(b);
+        const FooClient = Foo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            b: ${b_client},
+            Foo: ${FooClient.text},
           })
         `);
       }
@@ -229,21 +299,20 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(b, host, ["delete", "exists", "put"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:exists",new $Inflight1(this,"$Inflight1"));
+    const myConst = "bang bang";
+    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight class captures preflight resource",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "exists", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "inflight_class_capture_preflight_resource", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

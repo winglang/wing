@@ -9,6 +9,8 @@ module.exports = function({ bucket }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle(message)  {
       (await bucket.put("wing.txt",`Hello, ${message}`));
     }
@@ -224,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const bucket_client = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({

@@ -7,6 +7,9 @@ module.exports = function({  }) {
     constructor({ function }) {
       this.function = function;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
   }
   return CdkDockerImageFunction;
 }
@@ -64,7 +67,7 @@ class $Root extends $stdlib.std.Resource {
         );
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/CdkDockerImageFunction.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/CdkDockerImageFunction.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

@@ -9,6 +9,8 @@ module.exports = function({ table }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       (await table.insert("eyal",Object.freeze({"gender":"male"})));
       (await table.insert("revital",Object.freeze({"gender":"female"})));
@@ -188,7 +190,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const table_client = context._lift(table);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({

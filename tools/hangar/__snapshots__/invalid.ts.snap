@@ -243,18 +243,18 @@ error: Preflight field \\"y\\" is not initialized
    |   ^ Preflight field \\"y\\" is not initialized
 
 
-error: Expected 'x' to be a type but it's a variable
+error: Expected \\"x\\" to be a type but it's a variable
    --> ../../../examples/tests/invalid/class.w:68:18
    |
 68 | class C7 extends x {
-   |                  ^ Expected 'x' to be a type but it's a variable
+   |                  ^ Expected \\"x\\" to be a type but it's a variable
 
 
-error: Preflight class C8's parent \\"S1\\" is not a class
+error: Base class \\"S1\\" is not a class
    --> ../../../examples/tests/invalid/class.w:74:18
    |
 74 | class C8 extends S1 {
-   |                  ^^ Preflight class C8's parent \\"S1\\" is not a class
+   |                  ^^ Base class \\"S1\\" is not a class
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -514,6 +514,30 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
    |
 30 | class r impl I3 {
    |       ^ Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\\"
+
+"
+`;
+
+exports[`inflight_class_created_in_preflight.w > stderr 1`] = `
+"error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:3:1
+  |
+3 | new Foo();
+  | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:7:5
+  |
+7 |     new Foo();
+  |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create inflight class \\"Foo\\" in preflight phase
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:12:5
+   |
+12 |     new Foo();
+   |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 "
 `;

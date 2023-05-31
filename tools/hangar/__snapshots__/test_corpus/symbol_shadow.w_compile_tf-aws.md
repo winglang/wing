@@ -9,6 +9,8 @@ module.exports = function({ s }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
     }
@@ -26,6 +28,8 @@ module.exports = function({ s }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inResource")'`)})((s === "inResource"))};
@@ -45,6 +49,8 @@ module.exports = function({ s }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
     }
@@ -63,6 +69,8 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       const s = "insideInflight";
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "insideInflight")'`)})((s === "insideInflight"))};
@@ -78,6 +86,9 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class A {
     constructor({  }) {
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return A;
@@ -423,7 +434,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+            const self_client_path = "./clients/$Inflight2.inflight.js";
             const s_client = context._lift(s);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -455,7 +466,7 @@ class $Root extends $stdlib.std.Resource {
         this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight in resource should capture the right scoped var",new $Inflight2(this,"$Inflight2"));
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/A.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -485,7 +496,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight3.inflight.js";
         const s_client = context._lift(s);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -521,7 +532,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight4.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -557,7 +568,7 @@ class $Root extends $stdlib.std.Resource {
           this.display.hidden = true;
         }
         static _toInflightType(context) {
-          const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+          const self_client_path = "./clients/$Inflight1.inflight.js";
           const s_client = context._lift(s);
           return $stdlib.core.NodeJsCode.fromInline(`
             require("${self_client_path}")({
