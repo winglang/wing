@@ -1442,7 +1442,7 @@ impl<'s> Parser<'s> {
 						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
 						span: WingSpan::default(),
 					}),
-					span: WingSpan::default()
+					span: WingSpan::default(),
 				},
 				obj_id: Some(test_id),
 				obj_scope: None,
