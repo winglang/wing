@@ -303,8 +303,6 @@ class MockBlobClient extends BlobClient {
       return Promise.resolve(false);
     }
   }
-
-  tryGetJson;
 }
 
 class MockBlockBlobClient extends BlockBlobClient {
