@@ -616,7 +616,7 @@ impl FunctionSignature {
 			.iter()
 			.rev()
 			// TODO - as a hack we treat `anything` arguments like optionals so that () => {} can be a subtype of (any) => {}
-			.take_while(|arg| arg.is_option() || arg.is_anything())
+			.take_while(|arg| arg.is_option() || arg.is_struct() || arg.is_anything())
 			.count();
 
 		self.parameters.len() - num_optionals
@@ -796,6 +796,10 @@ impl TypeRef {
 				.any(|(name, type_)| name == HANDLE_METHOD_NAME && type_.is_inflight_function());
 		}
 		false
+	}
+
+	pub fn is_struct(&self) -> bool {
+		matches!(**self, Type::Struct(_))
 	}
 
 	pub fn is_void(&self) -> bool {
@@ -1358,25 +1362,47 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
+				// Verify arity
+				let pos_args_count = arg_list.pos_args.len();
+				let min_args = constructor_sig.min_parameters();
+				if pos_args_count < min_args {
+					let err_text = format!(
+						"Expected {} positional argument(s) but got {}",
+						min_args, pos_args_count
+					);
+					self.spanned_error(exp, err_text);
+					return self.types.error();
+				}
+
 				if !arg_list.named_args.is_empty() {
-					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
+					let last_arg = match constructor_sig.parameters.last() {
+						Some(arg) => arg.maybe_unwrap_option(),
+						None => {
+							self.spanned_error(exp, "Expected 0 named argument(s)");
+							return self.types.error();
+						}
+					};
+
+					if !last_arg.is_struct() {
+						self.spanned_error(
+							exp,
+							format!("class {} does not expect any named argument", class_symbol.name),
+						);
+						return self.types.error();
+					}
+
 					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
-				// Verify arity
 				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = constructor_sig.min_parameters();
 				let max_args = constructor_sig.max_parameters();
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
-						format!(
-							"Expected {} arguments but got {} when instantiating \"{}\"",
-							min_args, arg_count, type_
-						)
+						format!("Expected {} argument(s) but got {}", min_args, arg_count)
 					} else {
 						format!(
-							"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
-							min_args, max_args, arg_count, type_
+							"Expected between {} and {} arguments but got {}",
+							min_args, max_args, arg_count
 						)
 					};
 					self.spanned_error(exp, err_text);
@@ -1461,8 +1487,35 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
+				// Verify arity
+				let pos_args_count = arg_list.pos_args.len();
+				let min_args = func_sig.min_parameters();
+				if pos_args_count < min_args {
+					let err_text = format!(
+						"Expected {} positional argument(s) but got {}",
+						min_args, pos_args_count
+					);
+					self.spanned_error(exp, err_text);
+					return self.types.error();
+				}
+
 				if !arg_list.named_args.is_empty() {
-					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
+					let last_arg = match func_sig.parameters.last() {
+						Some(arg) => arg.maybe_unwrap_option(),
+						None => {
+							self.spanned_error(
+								exp,
+								format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
+							);
+							return self.types.error();
+						}
+					};
+
+					if !last_arg.is_struct() {
+						self.spanned_error(exp, "No named arguments expected");
+						return self.types.error();
+					}
+
 					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
@@ -3051,7 +3104,11 @@ impl<'a> TypeChecker<'a> {
 						}
 						break;
 					}
-					Reference::InstanceMember { object, property } => {
+					Reference::InstanceMember {
+						object,
+						property,
+						optional_accessor: _,
+					} => {
 						path.push(property.clone());
 						curr_expr = &object;
 					}
@@ -3137,7 +3194,11 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 			}
-			Reference::InstanceMember { object, property } => {
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor,
+			} => {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.
 				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and transform this
 				// reference into a type reference.
@@ -3175,95 +3236,20 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				let instance_type = self.type_check_exp(object, env);
-				let res = match *instance_type {
-					Type::Class(ref class) => self.get_property_from_class_like(class, property),
-					Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
-					Type::Anything => VariableInfo {
-						type_: instance_type,
-						reassignable: false,
-						phase: env.phase,
-						is_static: false,
-					},
+				let res = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
-					// Lookup wingsdk std types, hydrating generics if necessary
-					Type::Array(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::MutArray(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::Set(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::MutSet(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::Map(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::MutMap(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
-						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
-					}
-					Type::Json => self.get_property_from_class_like(
-						env
-							.lookup_nested_str(WINGSDK_JSON, None)
-							.unwrap()
-							.0
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap(),
-						property,
-					),
-					Type::MutJson => self.get_property_from_class_like(
-						env
-							.lookup_nested_str(WINGSDK_MUT_JSON, None)
-							.unwrap()
-							.0
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap(),
-						property,
-					),
-					Type::String => self.get_property_from_class_like(
-						env
-							.lookup_nested_str(WINGSDK_STRING, None)
-							.unwrap()
-							.0
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap(),
-						property,
-					),
-					Type::Duration => self.get_property_from_class_like(
-						env
-							.lookup_nested_str(WINGSDK_DURATION, None)
-							.unwrap()
-							.0
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap(),
-						property,
-					),
-					Type::Struct(ref s) => self.get_property_from_class_like(s, property),
+				// Check if the object is an optional type. If it is ensure the use of optional chaining.
+				let ref_is_option = object.evaluated_type.borrow().unwrap().is_option();
 
-					_ => {
-						self.spanned_error(
-							object,
-							format!("Property access unsupported on type \"{}\"", instance_type),
-						);
-						self.make_error_variable_info(false)
-					}
-				};
+				if ref_is_option && !optional_accessor {
+					self.spanned_error(
+						object,
+						format!(
+							"Property access on optional type \"{}\" requires optional accessor: \"?.\"",
+							object.evaluated_type.borrow().unwrap()
+						),
+					);
+				}
 
 				if force_reassignable {
 					VariableInfo {
@@ -3323,6 +3309,104 @@ impl<'a> TypeChecker<'a> {
 						self.make_error_variable_info(true)
 					}
 				}
+			}
+		}
+	}
+
+	fn resolve_variable_from_instance_type(
+		&mut self,
+		instance_type: UnsafeRef<Type>,
+		property: &Symbol,
+		env: &SymbolEnv,
+		object: &Box<Expr>,
+	) -> VariableInfo {
+		match *instance_type {
+			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, object),
+			Type::Class(ref class) => self.get_property_from_class_like(class, property),
+			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
+			Type::Anything => VariableInfo {
+				type_: instance_type,
+				reassignable: false,
+				phase: env.phase,
+				is_static: false,
+			},
+
+			// Lookup wingsdk std types, hydrating generics if necessary
+			Type::Array(t) => {
+				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+			}
+			Type::MutArray(t) => {
+				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+			}
+			Type::Set(t) => {
+				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+			}
+			Type::MutSet(t) => {
+				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+			}
+			Type::Map(t) => {
+				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+			}
+			Type::MutMap(t) => {
+				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+			}
+			Type::Json => self.get_property_from_class_like(
+				env
+					.lookup_nested_str(WINGSDK_JSON, None)
+					.unwrap()
+					.0
+					.as_type()
+					.unwrap()
+					.as_class()
+					.unwrap(),
+				property,
+			),
+			Type::MutJson => self.get_property_from_class_like(
+				env
+					.lookup_nested_str(WINGSDK_MUT_JSON, None)
+					.unwrap()
+					.0
+					.as_type()
+					.unwrap()
+					.as_class()
+					.unwrap(),
+				property,
+			),
+			Type::String => self.get_property_from_class_like(
+				env
+					.lookup_nested_str(WINGSDK_STRING, None)
+					.unwrap()
+					.0
+					.as_type()
+					.unwrap()
+					.as_class()
+					.unwrap(),
+				property,
+			),
+			Type::Duration => self.get_property_from_class_like(
+				env
+					.lookup_nested_str(WINGSDK_DURATION, None)
+					.unwrap()
+					.0
+					.as_type()
+					.unwrap()
+					.as_class()
+					.unwrap(),
+				property,
+			),
+			Type::Struct(ref s) => self.get_property_from_class_like(s, property),
+			_ => {
+				self.spanned_error(
+					object,
+					format!("Property access unsupported on type \"{}\"", instance_type),
+				);
+				self.make_error_variable_info(false)
 			}
 		}
 	}

@@ -187,9 +187,11 @@ impl<'a> JSifier<'a> {
 	fn jsify_reference(&mut self, reference: &'a Reference, ctx: &JSifyContext) -> String {
 		match reference {
 			Reference::Identifier(identifier) => identifier.to_string(),
-			Reference::InstanceMember { object, property } => {
-				self.jsify_expression(object, ctx) + "." + &property.to_string()
-			}
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _,
+			} => self.jsify_expression(object, ctx) + "." + &property.to_string(),
 			Reference::TypeMember { type_, property } => {
 				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone())) + "." + &property.to_string()
 			}
@@ -619,7 +621,7 @@ impl<'a> JSifier<'a> {
 				// const x = "hello"
 				// {
 				//  const $IF_LET_VALUE = x; <== intermediate variable that expires at the end of the scope
-				//  if (x != undefined) {
+				//  if ($IF_LET_VALUE != undefined) {
 				//    const x = $IF_LET_VALUE;
 				//    log(x);
 				//  }
@@ -633,7 +635,7 @@ impl<'a> JSifier<'a> {
 					if_let_value,
 					self.jsify_expression(value, ctx)
 				));
-				code.open(format!("if ({} != undefined) {{", self.jsify_expression(value, ctx)));
+				code.open(format!("if ({if_let_value} != undefined) {{"));
 				code.line(format!("const {} = {};", var_name, if_let_value));
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
@@ -794,9 +796,7 @@ impl<'a> JSifier<'a> {
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => {
 				let mut code = CodeMaker::default();
-				code.open("{");
 				code.add_code(self.jsify_scope_body(scope, ctx));
-				code.close("}");
 				code
 			}
 			FunctionBody::External(external_spec) => {
@@ -1188,7 +1188,7 @@ impl<'a> JSifier<'a> {
 
 		let name = &class.name.name;
 		class_code.open(format!(
-			"class  {name}{} {{",
+			"class {name}{} {{",
 			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
@@ -1677,7 +1677,11 @@ impl<'a> FieldReferenceVisitor<'a> {
 					kind: ComponentKind::Member(var),
 				}];
 			}
-			Reference::InstanceMember { object, property } => {
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _optional_chain,
+			} => {
 				let obj_type = object.evaluated_type.borrow().unwrap();
 				let component_kind = match &*obj_type {
 					Type::Void => unreachable!("cannot reference a member of void"),

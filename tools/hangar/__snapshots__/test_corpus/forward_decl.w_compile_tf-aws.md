@@ -3,7 +3,7 @@
 ## clients/R.inflight.js
 ```js
 module.exports = function({  }) {
-  class  R {
+  class R {
     constructor({ f }) {
       this.f = f;
     }
@@ -61,17 +61,13 @@ class $Root extends $stdlib.std.Resource {
         this.f = "Hello World!!!";
       }
        method2()  {
-        {
-          const __parent_this = this;
-          (this.method1());
-          {console.log(`${this.f}`)};
-          (this.method2());
-        }
+        const __parent_this = this;
+        (this.method1());
+        {console.log(`${this.f}`)};
+        (this.method2());
       }
        method1()  {
-        {
-          const __parent_this = this;
-        }
+        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");

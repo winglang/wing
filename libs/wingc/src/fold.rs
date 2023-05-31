@@ -340,9 +340,14 @@ where
 {
 	match node {
 		Reference::Identifier(s) => Reference::Identifier(f.fold_symbol(s)),
-		Reference::InstanceMember { property, object } => Reference::InstanceMember {
+		Reference::InstanceMember {
+			property,
+			object,
+			optional_accessor,
+		} => Reference::InstanceMember {
 			object: Box::new(f.fold_expr(*object)),
 			property: f.fold_symbol(property),
+			optional_accessor,
 		},
 		Reference::TypeMember { type_, property } => Reference::TypeMember {
 			type_: f.fold_user_defined_type(type_),
