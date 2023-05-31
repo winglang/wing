@@ -16,7 +16,7 @@ Services are a common way to define long running code, such as web servers and c
 ```js
 bring cloud;
 
-// At minimum a service needs to have a onStart handler.
+// At minimum a service needs to have an onStart handler.
 let service = new cloud.Service(
   onStart: inflight() => {
     log("Service started...");
