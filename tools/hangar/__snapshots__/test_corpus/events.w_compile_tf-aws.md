@@ -119,6 +119,78 @@ module.exports = function({ counter, b }) {
 
 ```
 
+## clients/$Inflight6.inflight.js
+```js
+module.exports = function({ table, b, Util }) {
+  class $Inflight6 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle()  {
+      const wait = async (pred) =>  {
+        let i = 0;
+        while ((i < 12)) {
+          if ((await pred())) {
+            return true;
+          }
+          (await Util.sleep(10000));
+          i = (i + 1);
+        }
+        return false;
+      }
+      ;
+      const checkHitCount = async (key, operation, source, expectedVal) =>  {
+        return async () =>  {
+          let count = 0;
+          for (const u of (await table.list())) {
+            if (((((u)["key"] === key) && ((u)["operation"] === operation)) && (((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((u)["source"]) === source))) {
+              count = (count + 1);
+            }
+          }
+          return (count === expectedVal);
+        }
+        ;
+      }
+      ;
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("c","1"));
+      (await b.put("b","100"));
+      (await b.delete("c"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("a","CREATE",1,1))))'`)})((await wait((await checkHitCount("a","CREATE",1,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("b","CREATE",1,1))))'`)})((await wait((await checkHitCount("b","CREATE",1,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("c","CREATE",1,1))))'`)})((await wait((await checkHitCount("c","CREATE",1,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("a","CREATE",2,1))))'`)})((await wait((await checkHitCount("a","CREATE",2,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("b","CREATE",2,1))))'`)})((await wait((await checkHitCount("b","CREATE",2,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("c","CREATE",2,1))))'`)})((await wait((await checkHitCount("c","CREATE",2,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("b","UPDATE",1,1))))'`)})((await wait((await checkHitCount("b","UPDATE",1,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("c","DELETE",1,1))))'`)})((await wait((await checkHitCount("c","DELETE",1,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("b","UPDATE",2,1))))'`)})((await wait((await checkHitCount("b","UPDATE",2,1)))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount("c","DELETE",2,1))))'`)})((await wait((await checkHitCount("c","DELETE",2,1)))))};
+    }
+  }
+  return $Inflight6;
+}
+
+```
+
+## clients/Util.inflight.js
+```js
+module.exports = function({  }) {
+  class Util {
+    constructor({  }) {
+    }
+    static async sleep(milli)  {
+      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
+    }
+  }
+  return Util;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
