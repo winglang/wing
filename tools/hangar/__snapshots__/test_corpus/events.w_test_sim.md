@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ events.wsim » root/env0/counter is incremented 10 times
+pass ─ events.wsim » root/env0/hitCount is incremented according to the bucket event
 ```
 

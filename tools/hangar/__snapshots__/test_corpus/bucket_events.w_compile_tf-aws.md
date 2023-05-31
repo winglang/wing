@@ -57,10 +57,9 @@ module.exports = function({ other }) {
   class  $Inflight4 {
     constructor({  }) {
     }
-    async handle(key)  {
+    async handle(key, event)  {
       {
-        {console.log(`last key ${key}`)};
-        (typeof other.put === "function" ? await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])) : await other.put.handle("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+        (typeof other.put === "function" ? await other.put(`last_${event}_key`,key) : await other.put.handle(`last_${event}_key`,key));
       }
     }
   }
