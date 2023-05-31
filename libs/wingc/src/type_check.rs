@@ -3325,7 +3325,7 @@ impl<'a> TypeChecker<'a> {
 		instance_type: UnsafeRef<Type>,
 		property: &Symbol,
 		env: &SymbolEnv,
-		object: &Box<Expr>,
+		object: &Expr,
 	) -> VariableInfo {
 		match *instance_type {
 			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, object),
