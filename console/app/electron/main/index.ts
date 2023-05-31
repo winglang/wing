@@ -1,5 +1,6 @@
 import path from "node:path";
 
+import * as Sentry from "@sentry/electron";
 import { createConsoleServer } from "@wingconsole/server";
 import { config } from "dotenv";
 import { app, BrowserWindow, dialog, screen, nativeTheme } from "electron";
@@ -13,6 +14,12 @@ import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
 import { ThemeStore } from "./themStore.js";
 import { updater } from "./updater.js";
+
+if (process.env.SENTRY_DSN && !process.env.CI && !process.env.PLAYWRIGHT_TEST) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+  });
+}
 
 config();
 fixPath();

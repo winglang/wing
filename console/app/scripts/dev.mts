@@ -28,6 +28,7 @@ const createElectronPlugin = (): vite.Plugin => {
         "process.env.SEGMENT_WRITE_KEY": JSON.stringify(
           process.env.SEGMENT_WRITE_KEY || "",
         ),
+        "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN || ""),
       },
       plugins: [
         {

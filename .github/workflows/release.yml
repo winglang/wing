@@ -18,7 +18,8 @@ jobs:
     env:
       CI: "true"
       SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
-
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3

@@ -25,6 +25,7 @@
     "@cloudy-ts/eslint-plugin": "^0.0.260",
     "@electron/notarize": "^1.2.3",
     "@playwright/test": "^1.33.0",
+    "@sentry/electron": "^4.6.0",
     "@tailwindcss/forms": "^0.5.3",
     "@types/analytics-node": "^3.1.11",
     "@types/node": "^18.16.8",

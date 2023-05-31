@@ -20,6 +20,7 @@ const esbuild = await createEsbuildContext({
     "process.env.SEGMENT_WRITE_KEY": JSON.stringify(
       process.env.SEGMENT_WRITE_KEY || "",
     ),
+    "process.env.SENTRY_DSN": JSON.stringify(process.env.SENTRY_DSN || ""),
   },
 });
 await esbuild.rebuild();
