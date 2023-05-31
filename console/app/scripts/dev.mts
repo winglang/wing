@@ -4,7 +4,7 @@ import { AddressInfo } from "node:net";
 import { BuildContext } from "esbuild";
 import * as vite from "vite";
 
-import { copyVm2Files, createEsbuildContext } from "./helpers/index.mjs";
+import { createEsbuildContext } from "./helpers/index.mjs";
 
 const createElectronPlugin = (): vite.Plugin => {
   let esbuildProcess: Promise<BuildContext> | undefined;
@@ -72,7 +72,6 @@ const createElectronPlugin = (): vite.Plugin => {
     async configureServer(server) {
       server.httpServer!.on("listening", async () => {
         const address = server.httpServer!.address() as AddressInfo;
-        await copyVm2Files();
         await startEsbuildProcess(address.port);
         await startElectronProcess();
       });

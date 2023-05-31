@@ -17,6 +17,11 @@ import { updater } from "./updater.js";
 config();
 fixPath();
 
+// Usually, `process.argv[0]` points to the electron binary, but the @winglang/sdk package assumes that it's pointing to the node binary.
+// Revisit this hack once the issue moves forward.
+// @see https://github.com/winglang/wing/issues/2647
+process.argv[0] = "node";
+
 const appConfig = new AppConfig();
 const themeStore = new ThemeStore();
 // set initial theme mode

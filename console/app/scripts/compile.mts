@@ -1,6 +1,6 @@
 import * as vite from "vite";
 
-import { copyVm2Files, createEsbuildContext } from "./helpers/index.mjs";
+import { createEsbuildContext } from "./helpers/index.mjs";
 
 console.log("Compiling the renderer files...");
 await vite.build();
@@ -24,8 +24,5 @@ const esbuild = await createEsbuildContext({
 });
 await esbuild.rebuild();
 await esbuild.dispose();
-
-console.log("Copying vm2 files...");
-await copyVm2Files();
 
 console.log("Done");
