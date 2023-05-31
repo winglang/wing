@@ -287,7 +287,7 @@ fn compilation_phase() -> String {
 		if let Some(ref c) = COMPILATION_CONTEXT {
 			c.phase.clone()
 		} else {
-			"something".to_string()
+			"compiling".to_string()
 		}
 	}
 }
