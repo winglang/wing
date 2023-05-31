@@ -30,33 +30,34 @@ export const ApiResponseBodyPanel = ({
   const { theme } = useTheme();
   return (
     <div className="pt-2 relative">
+      <JsonResponseInput
+        value={response?.textResponse || ""}
+        loading={isLoading}
+        placeholder="No body"
+        json={true}
+      />
       {response && (
         <div
           className={classNames(
-            "gap-x-1 truncate items-center absolute -top-[12px] right-[2px] max-w-full z-10",
+            "flex justify-end",
+            "gap-x-1.5 truncate items-center mt-0.5",
           )}
         >
           <span
             className={classNames(
               getResponseColor(response.status),
-              "text-xs ml-1 truncate",
+              "text-xs truncate",
             )}
           >
             {response.status} {response.statusText}
           </span>
           {response.duration >= 0 && (
-            <span className={classNames(theme.text2, "text-xs ml-1 truncate")}>
+            <span className={classNames(theme.text2, "text-xs truncate")}>
               {response.duration}ms
             </span>
           )}
         </div>
       )}
-      <JsonResponseInput
-        value={response?.textResponse || ""}
-        loading={isLoading}
-        placeholder="No response"
-        json={true}
-      />
     </div>
   );
 };
