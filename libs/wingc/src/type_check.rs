@@ -1213,6 +1213,7 @@ impl<'a> TypeChecker<'a> {
 				Literal::Boolean(_) => self.types.bool(),
 			},
 			ExprKind::Binary { op, left, right } => {
+				panic!("TEST");
 				let ltype = self.type_check_exp(left, env);
 				let rtype = self.type_check_exp(right, env);
 
@@ -3321,7 +3322,7 @@ impl<'a> TypeChecker<'a> {
 		instance_type: UnsafeRef<Type>,
 		property: &Symbol,
 		env: &SymbolEnv,
-		object: &Box<Expr>,
+		object: &Expr,
 	) -> VariableInfo {
 		match *instance_type {
 			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, object),
