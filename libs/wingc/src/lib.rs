@@ -259,7 +259,7 @@ struct CompilationContext {
 	/// Description of current compilation phase
 	phase: String,
 
-	/// Location in sound we're currently processing
+	/// Location in source we're currently processing
 	span: WingSpan,
 }
 
