@@ -275,10 +275,10 @@ pub fn visit_expr_new<'ast, V>(
 	V: Visit<'ast> + ?Sized,
 {
 	v.visit_type_annotation(class);
+	v.visit_args(arg_list);
 	if let Some(scope) = obj_scope {
 		v.visit_expr(&scope);
 	}
-	v.visit_args(arg_list);
 }
 
 pub fn visit_expr<'ast, V>(v: &mut V, node: &'ast Expr)

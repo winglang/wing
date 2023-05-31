@@ -190,9 +190,6 @@ pub struct Class {
 	pub is_abstract: bool,
 	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
-
-	/// The phase in which this class was declared
-	pub declaration_phase: Phase,
 }
 
 #[derive(Derivative)]
@@ -2318,7 +2315,6 @@ impl<'a> TypeChecker<'a> {
 					is_abstract: false,
 					phase: *phase,
 					type_parameters: None, // TODO no way to have generic args in wing yet
-					declaration_phase: env.phase,
 				};
 				let mut class_type = self.types.add_type(Type::Class(class_spec));
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
@@ -2944,7 +2940,6 @@ impl<'a> TypeChecker<'a> {
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params),
 			phase: original_type_class.phase,
-			declaration_phase: original_type_class.declaration_phase,
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!

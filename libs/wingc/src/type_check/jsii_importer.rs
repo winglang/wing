@@ -655,7 +655,6 @@ impl<'a> JsiiImporter<'a> {
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
 			phase: class_phase,
-			declaration_phase: Phase::Preflight,
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);
