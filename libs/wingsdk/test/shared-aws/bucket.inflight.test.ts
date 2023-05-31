@@ -301,7 +301,7 @@ test("tryGet a non-existent object from the bucket", async () => {
   const VALUE = "VALUE";
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .resolves({ Body: createMockStream(VALUE) });
+    .rejects(new Error("fake error"));
   s3Mock
     .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
     .resolves({ Contents: [] });
@@ -318,7 +318,7 @@ test("tryGetJson an existing object from the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
-  const VALUE = "VALUE";
+  const VALUE = { msg: "Hello, World!" };
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .resolves({ Body: createMockStream(JSON.stringify(VALUE)) });
@@ -338,10 +338,10 @@ test("tryGetJson a non-existent object from the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
-  const VALUE = "VALUE";
+  const VALUE = { msg: "Hello, World!" };
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .resolves({ Body: createMockStream(JSON.stringify(VALUE)) });
+    .rejects(new Error("fake error"));
   s3Mock
     .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
     .resolves({ Contents: [] });

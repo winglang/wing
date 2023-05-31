@@ -303,7 +303,7 @@ exports[`objects can have keys that look like directories 1`] = `
 ]
 `;
 
-exports[`put and get json objects from bucket 1`] = `
+exports[`put and get Json object from bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Bucket created.",
@@ -314,7 +314,7 @@ exports[`put and get json objects from bucket 1`] = `
 ]
 `;
 
-exports[`put and get json objects from bucket 2`] = `
+exports[`put and get Json object from bucket 2`] = `
 {
   "simulator.json": {
     "resources": [

@@ -131,7 +131,7 @@ test("put and get objects from bucket", async () => {
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("put and get json objects from bucket", async () => {
+test("put and get Json object from bucket", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket");
@@ -604,7 +604,7 @@ test("tryGetJson objects from bucket", async () => {
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
   const KEY = "file.json";
-  const VALUE = JSON.stringify({ msg: "Hello world!" });
+  const VALUE = { msg: "Hello world!" };
 
   // WHEN
   await client.putJson(KEY, VALUE as any);
@@ -630,7 +630,7 @@ test("tryDelete objects from bucket", async () => {
   const KEY1 = "KEY";
   const VALUE1 = "VALUE";
   const KEY2 = "file.json";
-  const VALUE2 = JSON.stringify({ msg: "Hello world!" });
+  const VALUE2 = { msg: "Hello world!" };
 
   // WHEN
   await client.put(KEY1, VALUE1);
