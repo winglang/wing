@@ -329,7 +329,7 @@ pub fn compile(
 
 	std::panic::set_hook(Box::new(|pi| {
 		eprintln!(
-			"Compiler bug when performing {} on {} | {}",
+			"Compiler bug when {} {} | {}",
 			compilation_phase(),
 			compilation_span(),
 			pi.to_string().bold().white()
