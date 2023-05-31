@@ -3,7 +3,7 @@
 exports[`bool_from_json.w > stderr 1`] = `
 "ERROR: unable to parse number 123 as a boolean
 
-../../../examples/tests/error/target/test/bool_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:8
+../../../examples/tests/error/target/test/bool_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = Object.freeze({\\"a\\":123});
 >>     const a = ((args) => { if (typeof args !== \\"boolean\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a boolean\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
@@ -15,7 +15,7 @@ exports[`bool_from_json.w > stderr 1`] = `
 exports[`num_from_str.w > stderr 1`] = `
 "ERROR: unable to parse \\"123a\\" as a number
 
-../../../examples/tests/error/target/test/num_from_str.wsim.[REDACTED].tmp/.wing/preflight.js:7
+../../../examples/tests/error/target/test/num_from_str.wsim.[REDACTED].tmp/.wing/preflight.js:8
      constructor(scope, id) {
        super(scope, id);
 >>     const a = ((args) => { if (isNaN(args)) {throw new Error(\\"unable to parse /\\"\\" + args + \\"/\\" as a number\\")}; return parseInt(args) })(\\"123a\\");
@@ -27,7 +27,7 @@ exports[`num_from_str.w > stderr 1`] = `
 exports[`number_from_json.w > stderr 1`] = `
 "ERROR: unable to parse string apples as a number
 
-../../../examples/tests/error/target/test/number_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:8
+../../../examples/tests/error/target/test/number_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = Object.freeze({\\"a\\":\\"apples\\"});
 >>     const a = ((args) => { if (typeof args !== \\"number\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a number\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
@@ -39,7 +39,7 @@ exports[`number_from_json.w > stderr 1`] = `
 exports[`string_from_json.w > stderr 1`] = `
 "ERROR: unable to parse number 123 as a string
 
-../../../examples/tests/error/target/test/string_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:8
+../../../examples/tests/error/target/test/string_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = Object.freeze({\\"a\\":123});
 >>     const a = ((args) => { if (typeof args !== \\"string\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a string\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
@@ -51,7 +51,7 @@ exports[`string_from_json.w > stderr 1`] = `
 exports[`utilities.w > stderr 1`] = `
 "ERROR: assertion failed: 'false'
 
-../../../examples/tests/error/target/test/utilities.wsim.[REDACTED].tmp/.wing/preflight.js:7
+../../../examples/tests/error/target/test/utilities.wsim.[REDACTED].tmp/.wing/preflight.js:8
      constructor(scope, id) {
        super(scope, id);
 >>     {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
