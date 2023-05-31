@@ -3,13 +3,14 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        return 1;
-      }
+      return 1;
     }
   }
   return $Inflight1;
@@ -20,14 +21,15 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ foo }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.callFn === "function" ? await foo.callFn(true) : await foo.callFn.handle(true)) === 1)'`)})(((typeof foo.callFn === "function" ? await foo.callFn(true) : await foo.callFn.handle(true)) === 1))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.callFn === "function" ? await foo.callFn(false) : await foo.callFn.handle(false)) === 2)'`)})(((typeof foo.callFn === "function" ? await foo.callFn(false) : await foo.callFn.handle(false)) === 2))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.callFn(true)) === 1)'`)})(((await foo.callFn(true)) === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.callFn(false)) === 2)'`)})(((await foo.callFn(false)) === 2))};
     }
   }
   return $Inflight2;
@@ -38,40 +40,32 @@ module.exports = function({ foo }) {
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({ inflight1 }) {
       this.inflight1 = inflight1;
     }
     async $inflight_init()  {
-      {
-        const __parent_this = this;
-        this.inflight2 = async () =>  {
-          {
-            return 2;
-          }
-        }
-        ;
+      const __parent_this = this;
+      this.inflight2 = async () =>  {
+        return 2;
       }
+      ;
     }
     async makeFn(x)  {
-      {
+      const __parent_this = this;
+      if ((x === true)) {
         const __parent_this = this;
-        if ((x === true)) {
-          const __parent_this = this;
-          return this.inflight1;
-        }
-        else {
-          const __parent_this = this;
-          return this.inflight2;
-        }
+        return this.inflight1;
+      }
+      else {
+        const __parent_this = this;
+        return this.inflight2;
       }
     }
     async callFn(x)  {
-      {
-        const __parent_this = this;
-        const partialFn = (typeof this.makeFn === "function" ? await this.makeFn(x) : await this.makeFn.handle(x));
-        return (typeof partialFn === "function" ? await partialFn() : await partialFn.handle());
-      }
+      const __parent_this = this;
+      const partialFn = (await this.makeFn(x));
+      return (await partialFn());
     }
   }
   return Foo;

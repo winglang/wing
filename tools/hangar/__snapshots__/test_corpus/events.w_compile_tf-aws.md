@@ -2,14 +2,15 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ table, idsCounter }) {
-  class  $Inflight1 {
+module.exports = function({ counter }) {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
-    async handle(key, operation, source)  {
-      {
-        (typeof table.insert === "function" ? await table.insert(`${(typeof idsCounter.inc === "function" ? await idsCounter.inc() : await idsCounter.inc.handle())}`,Object.freeze({"key":key,"operation":operation,"source":source})) : await table.insert.handle(`${(typeof idsCounter.inc === "function" ? await idsCounter.inc() : await idsCounter.inc.handle())}`,Object.freeze({"key":key,"operation":operation,"source":source})));
-      }
+    async handle(key)  {
+      (await counter.inc());
     }
   }
   return $Inflight1;
@@ -19,14 +20,15 @@ module.exports = function({ table, idsCounter }) {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function({ logHistory }) {
-  class  $Inflight2 {
+module.exports = function({ counter }) {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
-      {
-        (typeof logHistory === "function" ? await logHistory(key,"DELETE",1) : await logHistory.handle(key,"DELETE",1));
-      }
+      (await counter.inc());
     }
   }
   return $Inflight2;
@@ -36,14 +38,15 @@ module.exports = function({ logHistory }) {
 
 ## clients/$Inflight3.inflight.js
 ```js
-module.exports = function({ logHistory }) {
-  class  $Inflight3 {
+module.exports = function({ counter }) {
+  class $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
-      {
-        (typeof logHistory === "function" ? await logHistory(key,"UPDATE",1) : await logHistory.handle(key,"UPDATE",1));
-      }
+      (await counter.inc());
     }
   }
   return $Inflight3;
@@ -53,14 +56,15 @@ module.exports = function({ logHistory }) {
 
 ## clients/$Inflight4.inflight.js
 ```js
-module.exports = function({ logHistory }) {
-  class  $Inflight4 {
+module.exports = function({ counter }) {
+  class $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key)  {
-      {
-        (typeof logHistory === "function" ? await logHistory(key,"CREATE",1) : await logHistory.handle(key,"CREATE",1));
-      }
+      (await counter.inc());
     }
   }
   return $Inflight4;
@@ -70,9 +74,12 @@ module.exports = function({ logHistory }) {
 
 ## clients/$Inflight5.inflight.js
 ```js
-module.exports = function({ logHistory }) {
-  class  $Inflight5 {
+module.exports = function({ counter, b }) {
+  class $Inflight5 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(key, event)  {
       {
@@ -92,54 +99,36 @@ module.exports = function({ table, b, Util }) {
     constructor({  }) {
     }
     async handle()  {
-      {
-        const wait = async (pred) =>  {
-          {
-            let i = 0;
-            while ((i < 12)) {
-              if ((typeof pred === "function" ? await pred() : await pred.handle())) {
-                return true;
-              }
-              (typeof Util.sleep === "function" ? await Util.sleep(10000) : await Util.sleep.handle(10000));
-              i = (i + 1);
-            }
-            return false;
-          }
+      class Predicate {
+        constructor(counterVal)  {
+          this.counterVal = counterVal;
         }
-        ;
-        const checkHitCount = async (key, operation, source, expectedVal) =>  {
-          {
-            return async () =>  {
-              {
-                let count = 0;
-                for (const u of (typeof table.list === "function" ? await table.list() : await table.list.handle())) {
-                  if (((((u)["key"] === key) && ((u)["operation"] === operation)) && (((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((u)["source"]) === source))) {
-                    count = (count + 1);
-                  }
-                }
-                return (count === expectedVal);
-              }
-            }
-            ;
-          }
+        counterVal;
+        static async sleep(ms)  {
+          return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
         }
-        ;
-        (typeof b.put === "function" ? await b.put("a","1") : await b.put.handle("a","1"));
-        (typeof b.put === "function" ? await b.put("b","1") : await b.put.handle("b","1"));
-        (typeof b.put === "function" ? await b.put("c","1") : await b.put.handle("c","1"));
-        (typeof b.put === "function" ? await b.put("b","100") : await b.put.handle("b","100"));
-        (typeof b.delete === "function" ? await b.delete("c") : await b.delete.handle("c"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("a","CREATE",1,1) : await checkHitCount.handle("a","CREATE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("a","CREATE",1,1) : await checkHitCount.handle("a","CREATE",1,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("a","CREATE",1,1) : await checkHitCount.handle("a","CREATE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("a","CREATE",1,1) : await checkHitCount.handle("a","CREATE",1,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("b","CREATE",1,1) : await checkHitCount.handle("b","CREATE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("b","CREATE",1,1) : await checkHitCount.handle("b","CREATE",1,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("b","CREATE",1,1) : await checkHitCount.handle("b","CREATE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("b","CREATE",1,1) : await checkHitCount.handle("b","CREATE",1,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("c","CREATE",1,1) : await checkHitCount.handle("c","CREATE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("c","CREATE",1,1) : await checkHitCount.handle("c","CREATE",1,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("c","CREATE",1,1) : await checkHitCount.handle("c","CREATE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("c","CREATE",1,1) : await checkHitCount.handle("c","CREATE",1,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("a","CREATE",2,1) : await checkHitCount.handle("a","CREATE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("a","CREATE",2,1) : await checkHitCount.handle("a","CREATE",2,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("a","CREATE",2,1) : await checkHitCount.handle("a","CREATE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("a","CREATE",2,1) : await checkHitCount.handle("a","CREATE",2,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("b","CREATE",2,1) : await checkHitCount.handle("b","CREATE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("b","CREATE",2,1) : await checkHitCount.handle("b","CREATE",2,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("b","CREATE",2,1) : await checkHitCount.handle("b","CREATE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("b","CREATE",2,1) : await checkHitCount.handle("b","CREATE",2,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("c","CREATE",2,1) : await checkHitCount.handle("c","CREATE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("c","CREATE",2,1) : await checkHitCount.handle("c","CREATE",2,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("c","CREATE",2,1) : await checkHitCount.handle("c","CREATE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("c","CREATE",2,1) : await checkHitCount.handle("c","CREATE",2,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("b","UPDATE",1,1) : await checkHitCount.handle("b","UPDATE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("b","UPDATE",1,1) : await checkHitCount.handle("b","UPDATE",1,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("b","UPDATE",1,1) : await checkHitCount.handle("b","UPDATE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("b","UPDATE",1,1) : await checkHitCount.handle("b","UPDATE",1,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("c","DELETE",1,1) : await checkHitCount.handle("c","DELETE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("c","DELETE",1,1) : await checkHitCount.handle("c","DELETE",1,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("c","DELETE",1,1) : await checkHitCount.handle("c","DELETE",1,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("c","DELETE",1,1) : await checkHitCount.handle("c","DELETE",1,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("b","UPDATE",2,1) : await checkHitCount.handle("b","UPDATE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("b","UPDATE",2,1) : await checkHitCount.handle("b","UPDATE",2,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("b","UPDATE",2,1) : await checkHitCount.handle("b","UPDATE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("b","UPDATE",2,1) : await checkHitCount.handle("b","UPDATE",2,1)))))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("c","DELETE",2,1) : await checkHitCount.handle("c","DELETE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("c","DELETE",2,1) : await checkHitCount.handle("c","DELETE",2,1))))'`)})((typeof wait === "function" ? await wait((typeof checkHitCount === "function" ? await checkHitCount("c","DELETE",2,1) : await checkHitCount.handle("c","DELETE",2,1))) : await wait.handle((typeof checkHitCount === "function" ? await checkHitCount("c","DELETE",2,1) : await checkHitCount.handle("c","DELETE",2,1)))))};
+        async assertion()  {
+          return ((await counter.peek()) === this.counterVal);
+        }
+        async testAssertion()  {
+          let i = 0;
+          while ((i < 12)) {
+            i = (i + 1);
+            if ((await this.assertion())) {
+              {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+              return;
+            }
+            (await Predicate.sleep((1000 * 10)));
+          }
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+        }
       }
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("c","1"));
+      (await b.put("b","100"));
+      (await b.delete("c"));
+      (await new Predicate(10).testAssertion());
     }
   }
   return $Inflight6;

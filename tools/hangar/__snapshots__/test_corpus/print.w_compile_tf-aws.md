@@ -3,14 +3,15 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        {console.log("inflight log 1.1")};
-        {console.log("inflight log 1.2")};
-      }
+      {console.log("inflight log 1.1")};
+      {console.log("inflight log 1.2")};
     }
   }
   return $Inflight1;
@@ -21,14 +22,15 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        {console.log("inflight log 2.1")};
-        {console.log("inflight log 2.2")};
-      }
+      {console.log("inflight log 2.1")};
+      {console.log("inflight log 2.2")};
     }
   }
   return $Inflight2;
