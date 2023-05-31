@@ -331,8 +331,9 @@ async function main() {
       const installExtension = await import("electron-devtools-installer");
       await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
     }
+    const demoWingFile = process.env.PLAYWRIGHT_TEST ? "sanity.w" : "index.w";
     // Open the demo Wing file (includes compiling).
-    await windowManager.open(`${__dirname}/../../../../demo/index.w`);
+    await windowManager.open(`${__dirname}/../../../../demo/${demoWingFile}`);
   } else {
     if (shouldShowGetStarted && BrowserWindow.getAllWindows().length === 0) {
       await windowManager.showOpenFileDialog();
