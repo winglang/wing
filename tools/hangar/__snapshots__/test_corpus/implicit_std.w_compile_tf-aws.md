@@ -1,4 +1,4 @@
-# [statements_variable_declarations.w](../../../../examples/tests/valid/statements_variable_declarations.w) | compile | tf-aws
+# [implicit_std.w](../../../../examples/tests/valid/implicit_std.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -42,13 +42,15 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const x = 2;
-    const y = x;
+    const d = (std.Duration.fromMinutes(5));
+    const n = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("12");
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(d.seconds === (5 * 60))'`)})((d.seconds === (5 * 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(n === 12)'`)})((n === 12))};
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "statements_variable_declarations", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "implicit_std", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
