@@ -9,7 +9,7 @@
       "id": "wingSource",
       "type": "promptString",
       "description": "Wing source path",
-      "default": "${workspaceFolder}/temp/tst.w"
+      "default": "${workspaceFolder}/examples/tests/valid/hello.w"
     }
   ],
   "configurations": [
