@@ -13,7 +13,7 @@ use crate::ast::{
 	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::{set_compilation_context, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{compiler_dbg_panic, set_compilation_context, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -1391,6 +1391,11 @@ impl<'s> Parser<'s> {
 					},
 					expression_span,
 				))
+			}
+			"compiler_dbg_panic" => {
+				// Handle the debug panic expression (during parsing)
+				compiler_dbg_panic();
+				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}

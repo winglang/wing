@@ -22,7 +22,7 @@ use crate::{
 		FunctionDefinition, Initializer, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt,
 		StmtKind, Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
-	debug,
+	compiler_dbg_panic, debug,
 	diagnostic::{Diagnostic, Diagnostics, WingSpan},
 	set_compilation_context,
 	type_check::{
@@ -533,6 +533,11 @@ impl<'a> JSifier<'a> {
 				},
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, false, ctx).to_string(),
+			},
+    	ExprKind::CompilerDebugPanic => {
+				// Handle the debug panic expression (during jsifying)
+				compiler_dbg_panic();
+				"".to_string()
 			},
 		}
 	}

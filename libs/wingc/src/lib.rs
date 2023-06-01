@@ -25,6 +25,7 @@ use std::alloc::{alloc, dealloc, Layout};
 use std::backtrace::{Backtrace, BacktraceStatus};
 use std::cell::RefCell;
 
+use std::env;
 use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
@@ -279,6 +280,17 @@ fn set_compilation_context(phase: &str, span: &WingSpan) {
 			phase: phase.to_string(),
 			span: span.clone(),
 		});
+	}
+}
+
+fn compiler_dbg_panic() {
+	// Get environment variable to see if we should panic or not
+	let Ok(dbg_panic) = env::var("WINGC_DEBUG_PANIC") else {
+		return;
+	};
+
+	if matches!(dbg_panic.as_str(), "1" | "true") || compilation_phase() == dbg_panic {
+		panic!("User invoked panic");
 	}
 }
 

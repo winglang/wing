@@ -1,8 +1,11 @@
-use crate::ast::{
-	ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
-	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-	TypeAnnotationKind, UserDefinedType,
+use crate::{
+	ast::{
+		ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
+		InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
+		TypeAnnotationKind, UserDefinedType,
+	},
+	compiler_dbg_panic,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -317,6 +320,10 @@ where
 			element: Box::new(f.fold_expr(*element)),
 		},
 		ExprKind::FunctionClosure(def) => ExprKind::FunctionClosure(f.fold_function_definition(def)),
+		ExprKind::CompilerDebugPanic => {
+			compiler_dbg_panic(); // Handle the debug panic expression (during folding)
+			ExprKind::CompilerDebugPanic
+		}
 	};
 	Expr {
 		kind,
