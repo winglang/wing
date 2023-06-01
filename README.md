@@ -28,7 +28,7 @@ Developing for the cloud today requires mastering various layers of cloud stack,
 We fulfill our mission by reducing cognitive load and increasing iteration speeds. How? by enabling you to work at a higher level of abstraction, letting you focus on business logic instead of cloud mechanics, and write much less code. We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
 <p align="center">
-  <img src="./logo/demo_v2.gif" alt="Wing Demo" height="300px">
+  <img src="./logo/demo_v2.gif" alt="Wing Demo" height="360px" width="640px">
 </p>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
