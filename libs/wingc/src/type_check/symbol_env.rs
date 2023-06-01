@@ -161,7 +161,7 @@ impl SymbolEnv {
 	}
 
 	pub fn is_same(&self, other: &SymbolEnv) -> bool {
-		std::ptr::eq(&*other, &*self)
+		std::ptr::eq(other, self)
 	}
 
 	pub fn define(&mut self, symbol: &Symbol, kind: SymbolKind, pos: StatementIdx) -> Result<(), TypeError> {
