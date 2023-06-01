@@ -225,39 +225,34 @@ impl SymbolEnv {
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
 	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		let mut result = LookupResult::NotFound(symbol.clone());
-
 		if let Some((definition_idx, kind)) = self.symbol_map.map_get(&symbol.name) {
 			// if found the symbol and it is defined before the statement index (or statement index is
 			// unspecified, which is likely not something we want to support), we found it
 			let lookup_index = not_after_stmt_idx.unwrap_or(usize::MAX);
-			let definition_index = match definition_idx {
+			let definition_idx = match definition_idx {
 				StatementIdx::Top => 0,
 				StatementIdx::Index(idx) => *idx,
 			};
 
-			// found it!
-			if lookup_index >= definition_index {
-				return LookupResult::Found(
-					kind,
-					SymbolLookupInfo {
-						phase: self.phase,
-						init: self.is_init,
-						env: get_ref,
-					},
-				);
+			if lookup_index < definition_idx {
+				return LookupResult::DefinedLater;
 			}
 
-			// its defined later in the current scope, but we still need to check if it might be captured
-			// from the parent.
-			result = LookupResult::DefinedLater;
+			return LookupResult::Found(
+				kind,
+				SymbolLookupInfo {
+					phase: self.phase,
+					init: self.is_init,
+					env: get_ref,
+				},
+			);
 		}
 
 		if let Some(ref_annotation([parent_env])) = self.parent {
-			parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx))
-		} else {
-			result
+			return parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx));
 		}
+
+		LookupResult::NotFound(symbol.clone())
 	}
 
 	#[allow(clippy::needless_arbitrary_self_type)]

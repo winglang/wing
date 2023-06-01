@@ -26,7 +26,7 @@ use crate::{
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		ClassLike, SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
+		ClassLike, SymbolKind, Type, TypeRef, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
@@ -1647,19 +1647,18 @@ impl<'a> FieldReferenceVisitor<'a> {
 			Reference::Identifier(x) => {
 				let env = self.env.unwrap();
 
-				// To obtain information about the variable we're referencing (like its type and
-				// whether it's reassignable), we look it up in the function's symbol environment.
-				let var = env
-					.lookup(&x, Some(self.statement_index))
-					.expect(
-						format!(
-							"unable to find symbol '{x}' in environment that contains: {}",
-							env.symbol_map.keys().join(", ")
-						)
-						.as_str(),
-					)
-					.as_variable()
-					.expect("reference to a non-variable");
+				let lookup = env.lookup_ext(&x, Some(self.statement_index));
+
+				// if the reference is already defined later in this scope, skip it
+				if let LookupResult::DefinedLater = lookup {
+					return vec![];
+				}
+
+				let LookupResult::Found(kind, _) = lookup else {
+					panic!("reference to undefined symbol");
+				};
+
+				let var = kind.as_variable().expect("reference to a non-variable");
 
 				// If the reference isn't a preflight (lifted) variable then skip it
 				if var.phase != Phase::Preflight {
@@ -1678,54 +1677,15 @@ impl<'a> FieldReferenceVisitor<'a> {
 				optional_accessor: _optional_chain,
 			} => {
 				let obj_type = object.evaluated_type.borrow().unwrap();
-				let component_kind = match &*obj_type {
-					Type::Void => unreachable!("cannot reference a member of void"),
-					Type::Function(_) => unreachable!("cannot reference a member of a function"),
-					Type::Optional(_) => unreachable!("cannot reference a member of an optional"),
-					// all fields / methods / values of these types are phase-independent so we can skip them
-					Type::Anything
-					| Type::Number
-					| Type::String
-					| Type::Duration
-					| Type::Boolean
-					| Type::Json
-					| Type::MutJson
-					| Type::Nil
-					| Type::Enum(_) => return vec![],
-					// TODO: collection types are unsupported for now
-					Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
-						ComponentKind::Unsupported
-					}
-					Type::Class(cls) => ComponentKind::Member(
-						cls
-							.env
-							.lookup(&property, None)
-							.expect("covered by type checking")
-							.as_variable()
-							.unwrap(),
-					),
-					Type::Interface(iface) => ComponentKind::Member(
-						iface
-							.env
-							.lookup(&property, None)
-							.expect("covered by type checking")
-							.as_variable()
-							.unwrap(),
-					),
-					Type::Struct(st) => ComponentKind::Member(
-						st.env
-							.lookup(&property, None)
-							.expect("covered by type checking")
-							.as_variable()
-							.unwrap(),
-					),
+				let prop = if let Some(component_kind) = self.determine_component_kind_from_type(obj_type, property) {
+					vec![Component {
+						text: property.name.clone(),
+						span: property.span.clone(),
+						kind: component_kind,
+					}]
+				} else {
+					vec![]
 				};
-
-				let prop = vec![Component {
-					text: property.name.clone(),
-					span: property.span.clone(),
-					kind: component_kind,
-				}];
 
 				let obj = self.analyze_expr(&object);
 				return [obj, prop].concat();
@@ -1765,6 +1725,51 @@ impl<'a> FieldReferenceVisitor<'a> {
 			}
 		}
 	}
+
+	fn determine_component_kind_from_type(&self, obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
+		match &*obj_type {
+			Type::Void => unreachable!("cannot reference a member of void"),
+			Type::Function(_) => unreachable!("cannot reference a member of a function"),
+			Type::Optional(t) => self.determine_component_kind_from_type(*t, property),
+			// all fields / methods / values of these types are phase-independent so we can skip them
+			Type::Anything
+			| Type::Number
+			| Type::String
+			| Type::Duration
+			| Type::Boolean
+			| Type::Json
+			| Type::MutJson
+			| Type::Nil
+			| Type::Enum(_) => return None,
+			// TODO: collection types are unsupported for now
+			Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
+				Some(ComponentKind::Unsupported)
+			}
+			Type::Class(cls) => Some(ComponentKind::Member(
+				cls
+					.env
+					.lookup(&property, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.unwrap(),
+			)),
+			Type::Interface(iface) => Some(ComponentKind::Member(
+				iface
+					.env
+					.lookup(&property, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.unwrap(),
+			)),
+			Type::Struct(st) => Some(ComponentKind::Member(
+				st.env
+					.lookup(&property, None)
+					.expect("covered by type checking")
+					.as_variable()
+					.unwrap(),
+			)),
+		}
+	}
 }
 
 /// Visitor that finds all the types and variables used within an inflight method but defined in its
@@ -1786,10 +1791,10 @@ struct CaptureScanner<'a> {
 	current_env: SymbolEnvRef,
 
 	/// The index of the last visited statement.
-	current_index: Option<usize>,
+	current_index: usize,
 
 	/// Compilation errors emitted by the visitor
-	pub diagnostics: Diagnostics,
+	diagnostics: Diagnostics,
 }
 
 impl<'a> CaptureScanner<'a> {
@@ -1801,7 +1806,7 @@ impl<'a> CaptureScanner<'a> {
 			function_scope,
 			method_env: env,
 			current_env: env,
-			current_index: None,
+			current_index: 0,
 			diagnostics: Diagnostics::new(),
 		}
 	}
@@ -1811,18 +1816,35 @@ impl<'a> CaptureScanner<'a> {
 	}
 
 	fn consider_reference(&mut self, path: &[&Symbol]) {
-		// look up the reference in the current environment
-		let LookupResult::Found(kind, symbol_info) = self.current_env.lookup_nested(path, self.current_index) else {
+		let fullname = path.iter().map(|s| s.name.clone()).collect_vec().join(".");
+
+		let lookup = self.current_env.lookup_nested(path, Some(self.current_index));
+
+		// if the symbol is defined later in the current environment, it means we can't capture a
+		// reference to a symbol with the same name from a parent so bail out.
+		if let LookupResult::DefinedLater = lookup {
+			let sym = path.first().unwrap();
+
+			self.diagnostics.push(Diagnostic {
+				span: Some(sym.span.clone()),
+				message: format!(
+					"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
+				),
+			});
+
+			return;
+		}
+
+		// any other lookup failure is likely a bug in the compiler
+		let LookupResult::Found(kind, symbol_info) = lookup else {
 			panic!("unable to find symbol in current environment");
 		};
 
 		// now, we need to determine if the environment this symbol is defined in is a parent of the
 		// method's environment. if it is, we need to capture it.
-		if !(symbol_info.env.is_parent_of(&self.method_env)) {
+		if !symbol_info.env.is_parent_of(&self.method_env) {
 			return;
 		}
-
-		let fullname = path.iter().map(|s| s.name.clone()).collect_vec().join(".");
 
 		match kind {
 			SymbolKind::Type(t) => {
@@ -1833,25 +1855,6 @@ impl<'a> CaptureScanner<'a> {
 				if let Type::Function(f) = &*var.type_ {
 					if f.js_override.is_some() {
 						return;
-					}
-				}
-
-				// if the symbol was found in another environment, make sure this scope doesn't have another
-				// variable defined with the same name. if it does, it's an error
-				if !self.current_env.is_same(&symbol_info.env) {
-					if let LookupResult::Found(_, i) = self.current_env.lookup_nested(path, None) {
-						if i.env.is_same(&self.current_env) {
-							let sym = path.first().unwrap();
-
-							self.diagnostics.push(Diagnostic {
-								span: Some(sym.span.clone()),
-								message: format!(
-									"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
-								),
-							});
-
-							return;
-						}
 					}
 				}
 
@@ -1910,7 +1913,7 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 	}
 
 	fn visit_stmt(&mut self, node: &'ast Stmt) {
-		self.current_index = Some(node.idx);
+		self.current_index = node.idx;
 		visit::visit_stmt(self, node);
 	}
 }

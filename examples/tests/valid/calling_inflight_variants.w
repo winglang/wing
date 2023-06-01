@@ -36,7 +36,7 @@ class Foo {
     return partialFn();
   }
 
-  inflight callFn2(): num {
+  inflight callFn2(): void {
     // now we call inflight1 and inflight2 directly which know they are handler classes
     let one = this.inflight1();
     let two = this.inflight2();
@@ -50,4 +50,5 @@ let foo = new Foo();
 test "calling different types of inflights" {
   assert(foo.callFn(true) == 1);
   assert(foo.callFn(false) == 2);
+  foo.callFn2();
 }

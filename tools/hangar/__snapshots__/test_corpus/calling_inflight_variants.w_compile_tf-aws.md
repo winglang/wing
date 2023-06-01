@@ -34,6 +34,7 @@ module.exports = function({ foo }) {
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.callFn(true)) === 1)'`)})(((await foo.callFn(true)) === 1))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.callFn(false)) === 2)'`)})(((await foo.callFn(false)) === 2))};
+      (await foo.callFn2());
     }
   }
   return $Inflight2;
@@ -322,7 +323,7 @@ class $Root extends $stdlib.std.Resource {
           $Inflight2._registerBindObject(foo, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight2._registerBindObject(foo, host, ["callFn"]);
+          $Inflight2._registerBindObject(foo, host, ["callFn", "callFn2"]);
         }
         super._registerBind(host, ops);
       }
