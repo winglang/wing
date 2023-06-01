@@ -439,6 +439,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -601,7 +602,7 @@ class $Root extends $stdlib.std.Resource {
     const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"c2");
     (from_cron.onTick(new $Inflight1(this,"$Inflight1")));
     (from_rate.onTick(new $Inflight2(this,"$Inflight2")));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"on tick is called both for rate and cron schedules",new $Inflight3(this,"$Inflight3"),{
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"on tick is called both for rate and cron schedules",new $Inflight3(this,"$Inflight3"),{
     "timeout": $stdlib.std.Duration.fromSeconds(120),}
     );
   }
