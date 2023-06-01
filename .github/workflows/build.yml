@@ -98,10 +98,18 @@ jobs:
           name: wingc
           path: target/wasm32-wasi/release/wingc.wasm
 
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v3
+        
+      - run: |
+          echo "BASE: ${{ steps.setSHAs.outputs.base }}"
+          echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
+
       - name: Check git diff of VSCode Extension
         id: git-diff-vscode-wing
         run: |
-          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- apps/vscode-wing; then
+          if git diff --quiet ${{ steps.setSHAs.outputs.base }} ${{ github.sha }} -- apps/vscode-wing; then
             echo "::set-output name=diff::false"
           else
             echo "::set-output name=diff::true"
