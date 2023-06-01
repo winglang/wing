@@ -28,7 +28,7 @@ export class FunctionClient implements IFunctionClient {
       return "";
     }
     const value = JSON.parse(toUtf8(response.Payload));
-    if (typeof value !== "string") {
+    if (value != undefined && typeof value !== "string") {
       throw new Error(
         `function returned value of type ${typeof value}, not string`
       );
