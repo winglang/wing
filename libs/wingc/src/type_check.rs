@@ -1876,7 +1876,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	pub fn type_check_scope(&mut self, scope: &'a Scope) {
+	pub fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
@@ -1975,7 +1975,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, stmt: &'a Stmt, env: &mut SymbolEnv) {
+	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
 		// Set the current statement index for symbol lookup checks. We can safely assume we're
 		// not overwriting the current statement index because `type_check_statement` is never
 		// recursively called (we use a breadth-first traversal of the AST statements).
@@ -2689,7 +2689,7 @@ impl<'a> TypeChecker<'a> {
 		method_name: &Symbol,
 		parent_env: &SymbolEnv, // the environment in which the class is declared
 		statement_idx: usize,
-		method_def: &'a FunctionDefinition,
+		method_def: &FunctionDefinition,
 		class_type: UnsafeRef<Type>,
 	) {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
