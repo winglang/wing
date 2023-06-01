@@ -3,26 +3,66 @@ import {
   InitializeParams,
   TextDocumentSyncKind,
   InitializeResult,
-  CompletionItem,
-  DocumentSymbol,
-  Hover,
-  LocationLink,
-  SignatureHelp,
+  DiagnosticSeverity,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
 
 export async function run_server() {
-  const wingc = await wingCompiler.load({
+  let wingc = await wingCompiler.load({
     imports: {
       env: {
         send_notification,
       },
     },
   });
+  let badState = false;
+
+  const callWing = (func: wingCompiler.WingCompilerFunction, args: any): any | null => {
+    if (badState) {
+      return null;
+    }
+
+    try {
+      const result = wingCompiler.invoke(wingc, func, JSON.stringify(args));
+      if (typeof result === "number") {
+        if (result === 0) {
+          return null;
+        } else {
+          return result;
+        }
+      } else {
+        return JSON.parse(result);
+      }
+    } catch (e) {
+      // set status in ide
+      connection.sendDiagnostics({
+        uri: args.textDocument.uri,
+        diagnostics: [
+          {
+            severity: DiagnosticSeverity.Error,
+            message: `Wing language server crashed and will resume when changes are made. See logs for details.`,
+            source: "Wing",
+            range: {
+              start: {
+                line: 0,
+                character: 0,
+              },
+              end: {
+                line: 0,
+                character: 0,
+              },
+            },
+          },
+        ],
+      });
+
+      badState = true;
+      return null;
+    }
+  };
 
   let connection = createConnection(process.stdin, process.stdout);
-
   connection.onInitialize((_params: InitializeParams) => {
     const result: InitializeResult = {
       capabilities: {
@@ -42,52 +82,47 @@ export async function run_server() {
   });
 
   connection.onDidOpenTextDocument(async (params) => {
-    const string = JSON.stringify(params);
-    wingCompiler.invoke(wingc, "wingc_on_did_open_text_document", string);
+    if (badState) {
+      wingc = await wingCompiler.load({
+        imports: {
+          env: {
+            send_notification,
+          },
+        },
+      });
+      badState = false;
+    }
+
+    callWing("wingc_on_did_open_text_document", params);
   });
   connection.onDidChangeTextDocument(async (params) => {
-    const string = JSON.stringify(params);
-    wingCompiler.invoke(wingc, "wingc_on_did_change_text_document", string);
+    if (badState) {
+      wingc = await wingCompiler.load({
+        imports: {
+          env: {
+            send_notification,
+          },
+        },
+      });
+      badState = false;
+    }
+
+    callWing("wingc_on_did_change_text_document", params);
   });
   connection.onCompletion(async (params) => {
-    const result = wingCompiler.invoke(
-      wingc,
-      "wingc_on_completion",
-      JSON.stringify(params)
-    ) as string;
-    return JSON.parse(result) as CompletionItem[];
+    return callWing("wingc_on_completion", params);
   });
   connection.onSignatureHelp(async (params) => {
-    const result = wingCompiler.invoke(
-      wingc,
-      "wingc_on_signature_help",
-      JSON.stringify(params)
-    ) as string;
-    return JSON.parse(result) as SignatureHelp;
+    return callWing("wingc_on_signature_help", params);
   });
   connection.onDefinition(async (params) => {
-    const result = wingCompiler.invoke(wingc, "wingc_on_goto_definition", JSON.stringify(params));
-    if (result == 0) {
-      return null;
-    } else {
-      return JSON.parse(result as string) as LocationLink[];
-    }
+    return callWing("wingc_on_goto_definition", params);
   });
   connection.onDocumentSymbol(async (params) => {
-    const result = wingCompiler.invoke(wingc, "wingc_on_document_symbol", JSON.stringify(params));
-    if (result == 0) {
-      return null;
-    } else {
-      return JSON.parse(result as string) as DocumentSymbol[];
-    }
+    return callWing("wingc_on_document_symbol", params);
   });
   connection.onHover(async (params) => {
-    const result = wingCompiler.invoke(wingc, "wingc_on_hover", JSON.stringify(params));
-    if (result == 0) {
-      return null;
-    } else {
-      return JSON.parse(result as string) as Hover;
-    }
+    return callWing("wingc_on_hover", params);
   });
 
   /**
