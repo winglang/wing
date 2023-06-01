@@ -1213,7 +1213,6 @@ impl<'a> TypeChecker<'a> {
 				Literal::Boolean(_) => self.types.bool(),
 			},
 			ExprKind::Binary { op, left, right } => {
-				panic!("TEST");
 				let ltype = self.type_check_exp(left, env);
 				let rtype = self.type_check_exp(right, env);
 
