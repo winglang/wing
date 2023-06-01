@@ -1,5 +1,3 @@
-bring cloud;
-
 let s1 = "some string";
 let s2 = "s are immutable";
 assert(s1.length == 11);

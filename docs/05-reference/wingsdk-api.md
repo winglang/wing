@@ -1172,7 +1172,7 @@ Table primary key name.
 ---
 
 
-### Test <a name="Test" id="@winglang/sdk.cloud.Test"></a>
+### Test <a name="Test" id="@winglang/sdk.std.Test"></a>
 
 - *Implements:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
 
@@ -1180,30 +1180,30 @@ Table primary key name.
 
 Represents a unit test.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Test.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Test.Initializer"></a>
 
 ```wing
-bring cloud;
+bring std;
 
-new cloud.Test(inflight: ITestHandler, props?: TestProps)
+new std.Test(inflight: ITestHandler, props?: TestProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Test.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.cloud.ITestHandler">ITestHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.cloud.Test.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TestProps">TestProps</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.std.Test.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.std.Test.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.std.TestProps">TestProps</a></code> | *No description.* |
 
 ---
 
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Test.Initializer.parameter.inflight"></a>
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.std.Test.Initializer.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ITestHandler">ITestHandler</a>
+- *Type:* <a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a>
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Test.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.std.Test.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.TestProps">TestProps</a>
+- *Type:* <a href="#@winglang/sdk.std.TestProps">TestProps</a>
 
 ---
 
@@ -1213,12 +1213,12 @@ new cloud.Test(inflight: ITestHandler, props?: TestProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Test.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Test.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.std.Test.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.std.Test.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Test.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.Test.property.node"></a>
 
 ```wing
 node: Node;
@@ -1230,7 +1230,7 @@ The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Test.property.display"></a>
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.std.Test.property.display"></a>
 
 ```wing
 display: Display;
@@ -2782,31 +2782,31 @@ primary key.
 
 ---
 
-### TestProps <a name="TestProps" id="@winglang/sdk.cloud.TestProps"></a>
+### TestProps <a name="TestProps" id="@winglang/sdk.std.TestProps"></a>
 
 Properties for `Test`.
 
-This is the type users see when constructing a cloud.Test instance.
+This is the type users see when constructing a std.Test instance.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TestProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.TestProps.Initializer"></a>
 
 ```wing
-bring cloud;
+bring std;
 
-let TestProps = cloud.TestProps{ ... }
+let TestProps = std.TestProps{ ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TestProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.TestProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.TestProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.std.TestProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.std.TestProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.std.TestProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.TestProps.property.env"></a>
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.std.TestProps.property.env"></a>
 
 ```wing
 env: MutMap<str>;
@@ -2819,7 +2819,7 @@ Environment variables to pass to the function.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.TestProps.property.memory"></a>
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.std.TestProps.property.memory"></a>
 
 ```wing
 memory: num;
@@ -2832,7 +2832,7 @@ The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TestProps.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.std.TestProps.property.timeout"></a>
 
 ```wing
 timeout: Duration;
@@ -4975,6 +4975,9 @@ Inflight interface for `Bucket`.
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
 
 ---
 
@@ -5141,6 +5144,60 @@ Key of the object.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 Json object that we want to store into the bucket.
+
+---
+
+##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
+
+```wing
+tryDelete(key: str): bool
+```
+
+**Inflight client:** [true](#true)
+
+Delete an object from the bucket if it exists.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryDelete.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
+
+```wing
+tryGet(key: str): str
+```
+
+**Inflight client:** [true](#true)
+
+Get an object from the bucket if it exists.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
+
+```wing
+tryGetJson(key: str): Json
+```
+
+**Inflight client:** [true](#true)
+
+Gets an object from the bucket if it exists, parsing it as Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGetJson.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
 
 ---
 
@@ -5421,7 +5478,7 @@ Entrypoint function that will be called when the cloud function is invoked.
 
 - *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Test">Test</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.std.Test">Test</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
 
 A resource that can run inflight code.
 
@@ -5604,7 +5661,7 @@ Payload to send to the queue.
 
 - *Extends:* <a href="#@winglang/sdk.core.IInspectable">IInspectable</a>, constructs.IConstruct
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Service">Service</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.Test">Test</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>, <a href="#@winglang/sdk.cloud.ITestHandler">ITestHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Service">Service</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.std.Test">Test</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>, <a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a>
 
 Abstract interface for `Resource`.
 
@@ -5989,27 +6046,27 @@ data to be updated.
 ---
 
 
-### ITestHandler <a name="ITestHandler" id="@winglang/sdk.cloud.ITestHandler"></a>
+### ITestHandler <a name="ITestHandler" id="@winglang/sdk.std.ITestHandler"></a>
 
 - *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.ITestHandler">ITestHandler</a>
+- *Implemented By:* <a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a>
 
-**Inflight client:** [@winglang/sdk.cloud.ITestHandlerClient](#@winglang/sdk.cloud.ITestHandlerClient)
+**Inflight client:** [@winglang/sdk.std.ITestHandlerClient](#@winglang/sdk.std.ITestHandlerClient)
 
-Interface with an inflight "handle" method that can be used to construct a `cloud.Test`.
+Interface with an inflight "handle" method that can be used to construct a `std.Test`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITestHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.ITestHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.std.ITestHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.std.ITestHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.ITestHandler.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.ITestHandler.property.node"></a>
 
 ```wing
 node: Node;
@@ -6021,7 +6078,7 @@ The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.ITestHandler.property.display"></a>
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.std.ITestHandler.property.display"></a>
 
 ```wing
 display: Display;
@@ -6033,9 +6090,9 @@ Information on how to display a resource in the UI.
 
 ---
 
-### ITestHandlerClient <a name="ITestHandlerClient" id="@winglang/sdk.cloud.ITestHandlerClient"></a>
+### ITestHandlerClient <a name="ITestHandlerClient" id="@winglang/sdk.std.ITestHandlerClient"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.ITestHandlerClient">ITestHandlerClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.std.ITestHandlerClient">ITestHandlerClient</a>
 
 Inflight client for `ITestHandler`.
 
@@ -6043,11 +6100,11 @@ Inflight client for `ITestHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITestHandlerClient.handle">handle</a></code> | Inflight function that will be called when the test is run. |
+| <code><a href="#@winglang/sdk.std.ITestHandlerClient.handle">handle</a></code> | Inflight function that will be called when the test is run. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.ITestHandlerClient.handle"></a>
+##### `handle` <a name="handle" id="@winglang/sdk.std.ITestHandlerClient.handle"></a>
 
 ```wing
 handle(): void

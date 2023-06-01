@@ -13,7 +13,7 @@ use crate::ast::{
 	UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::WINGSDK_STD_MODULE;
+use crate::{WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -28,7 +28,6 @@ pub struct Parser<'a> {
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
-	"void" => "see https://github.com/winglang/wing/issues/432",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
 	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
 	"pure_closure" => "see https://github.com/winglang/wing/issues/474",
@@ -724,11 +723,8 @@ impl<'s> Parser<'s> {
 					}
 				}
 				"inflight_method_signature" => {
-					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
-					let func_sig = self.build_function_signature(&interface_element, Phase::Inflight);
-					match (method_name, func_sig) {
-						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
-						_ => {}
+					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Inflight) {
+						methods.push((method_name, func_sig))
 					}
 				}
 				"ERROR" => {
@@ -766,6 +762,22 @@ impl<'s> Parser<'s> {
 		}
 
 		Ok(StmtKind::Interface(Interface { name, methods, extends }))
+	}
+
+	fn build_interface_method(
+		&self,
+		interface_element: Node,
+		phase: Phase,
+	) -> DiagnosticResult<(Symbol, FunctionSignature)> {
+		let name = interface_element.child_by_field_name("name").unwrap();
+		let method_name = self.node_symbol(&name)?;
+		let func_sig = self.build_function_signature(&interface_element, phase)?;
+		match func_sig.return_type {
+			Some(_) => Ok((method_name, func_sig)),
+			None => {
+				self.add_error::<(Symbol, FunctionSignature)>("Expected method return type".to_string(), &interface_element)
+			}
+		}
 	}
 
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
@@ -851,6 +863,10 @@ impl<'s> Parser<'s> {
 				}),
 				"duration" => Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Duration,
+					span,
+				}),
+				"void" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Void,
 					span,
 				}),
 				"ERROR" => self.add_error("Expected builtin type", type_node),
@@ -1481,8 +1497,8 @@ impl<'s> Parser<'s> {
 			kind: ExprKind::New {
 				class: TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-						root: Symbol::global("cloud"),
-						fields: vec![Symbol::global("Test")],
+						root: Symbol::global(WINGSDK_STD_MODULE),
+						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
 						span: WingSpan::default(),
 					}),
 					span: WingSpan::default(),

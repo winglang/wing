@@ -128,14 +128,14 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   try {
     compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
   } catch (e) {
-    // This is a bug in Wing, not the user's code.
-    console.error(e);
-    console.log(
-      "\n\n" +
-        chalk.bold.red("Internal error:") +
-        " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
-    );
-    process.exit(1);
+    const message = [];
+    message.push(e);
+    message.push();
+    message.push();
+    message.push(chalk.bold.red("Internal error:") +
+    " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.");
+    
+    throw new Error(message.join("\n"));
   }
   if (compileResult !== 0) {
     // This is a bug in the user's code. Print the compiler diagnostics.
@@ -148,7 +148,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       let files: File[] = [];
       let labels: Label[] = [];
 
-      if (span !== null) {
+      // file_id might be "" if the span is synthetic (see #2521)
+      if (span !== null && span.file_id) {
         // `span` should only be null if source file couldn't be read etc.
         const source = await fsPromise.readFile(span.file_id, "utf8");
         const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);

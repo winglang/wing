@@ -473,6 +473,44 @@ exports[`for_loop.w > stderr 1`] = `
 "
 `;
 
+exports[`function_type.w > stderr 1`] = `
+"error: Expected function return type
+  --> ../../../examples/tests/invalid/function_type.w:2:26
+  |
+2 | let my_func = (callback: (num)) => {  };
+  |                          ^^^^^ Expected function return type
+
+
+error: Expected function return type
+  --> ../../../examples/tests/invalid/function_type.w:4:28
+  |
+4 | let my_func2 = (callback: ((num)): (str)) => {  };
+  |                            ^^^^^ Expected function return type
+
+
+error: Expected function return type
+  --> ../../../examples/tests/invalid/function_type.w:4:36
+  |
+4 | let my_func2 = (callback: ((num)): (str)) => {  };
+  |                                    ^^^^^ Expected function return type
+
+
+error: Expected method return type
+   --> ../../../examples/tests/invalid/function_type.w:10:3
+   |
+10 |   my_method(x: num);
+   |   ^^^^^^^^^^^^^^^^^^ Expected method return type
+
+
+error: Expected method return type
+   --> ../../../examples/tests/invalid/function_type.w:12:3
+   |
+12 |   inflight my_method2(x: num);
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected method return type
+
+"
+`;
+
 exports[`immutable_container_types.w > stderr 1`] = `
 "error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.w:3:4
@@ -665,7 +703,7 @@ error: Expected an interface, instead found type \\"ISomeClass\\"
 error: Symbol \\"foo\\" already defined in this scope
    --> ../../../examples/tests/invalid/interface.w:23:5
    |
-23 |     foo();
+23 |     foo(): void;
    |     ^^^ Symbol \\"foo\\" already defined in this scope
 
 
@@ -1410,38 +1448,31 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 `;
 
 exports[`unimplemented_grammar.w > stderr 1`] = `
-"error: builtin \\"void\\" is not supported yet see https://github.com/winglang/wing/issues/432
+"error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:1:8
   |
-1 | let a: void = nil;
-  |        ^^^^ builtin \\"void\\" is not supported yet see https://github.com/winglang/wing/issues/432
-
-
-error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
-  --> ../../../examples/tests/invalid/unimplemented_grammar.w:2:8
-  |
-2 | let b: any = 0;
+1 | let b: any = 0;
   |        ^^^ builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
 
 
 error: builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
-  --> ../../../examples/tests/invalid/unimplemented_grammar.w:3:19
+  --> ../../../examples/tests/invalid/unimplemented_grammar.w:2:19
   |
-3 | let somePromise = Promise<str>{};
+2 | let somePromise = Promise<str>{};
   |                   ^^^^^^^^^^^^ builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
 
 
 error: expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
-  --> ../../../examples/tests/invalid/unimplemented_grammar.w:4:9
+  --> ../../../examples/tests/invalid/unimplemented_grammar.w:3:9
   |
-4 | let c = defer somePromise();
+3 | let c = defer somePromise();
   |         ^^^^^^^^^^^^^^^^^^^ expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
 
 
 error: expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
-  --> ../../../examples/tests/invalid/unimplemented_grammar.w:5:9
+  --> ../../../examples/tests/invalid/unimplemented_grammar.w:4:9
   |
-5 | let d = await c;
+4 | let d = await c;
   |         ^^^^^^^ expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
 
 "

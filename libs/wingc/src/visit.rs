@@ -454,6 +454,7 @@ where
 		TypeAnnotationKind::String => {}
 		TypeAnnotationKind::Bool => {}
 		TypeAnnotationKind::Duration => {}
+		TypeAnnotationKind::Void => {}
 		TypeAnnotationKind::Json => {}
 		TypeAnnotationKind::MutJson => {}
 		TypeAnnotationKind::Optional(t) => v.visit_type_annotation(t),
@@ -467,9 +468,7 @@ where
 			for param in &f.param_types {
 				v.visit_type_annotation(&param);
 			}
-			if let Some(return_type) = &f.return_type {
-				v.visit_type_annotation(return_type);
-			}
+			v.visit_type_annotation(&f.return_type);
 		}
 		TypeAnnotationKind::UserDefined(t) => {
 			v.visit_symbol(&t.root);

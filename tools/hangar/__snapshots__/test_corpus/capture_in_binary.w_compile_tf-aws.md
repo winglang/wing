@@ -191,6 +191,7 @@ module.exports = function({ b, x }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -239,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const x = 12;
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:binary expressions",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:binary expressions",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

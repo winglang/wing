@@ -310,6 +310,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -525,7 +526,7 @@ class $Root extends $stdlib.std.Resource {
     const fn = new Doubler(this,"Doubler",new $Inflight1(this,"$Inflight1"));
     const doubler2 = new Doubler2(this,"Doubler2");
     const f = (doubler2.makeFunc(new $Inflight3(this,"$Inflight3")));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:f(2) == 8",new $Inflight4(this,"$Inflight4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:f(2) == 8",new $Inflight4(this,"$Inflight4"));
   }
 }
 class $App extends $AppBase {

@@ -20,8 +20,8 @@ b.onEvent(inflight (key: str) => {
     counter.inc();
 });
 
-
-new cloud.Test(inflight () => {
+// "std" is implicitly imported
+new std.Test(inflight () => {
 
     inflight class Predicate {
         counterVal: num;
@@ -57,4 +57,4 @@ new cloud.Test(inflight () => {
     b.delete("c");
     new Predicate(10).testAssertion();
 
-}, cloud.TestProps {timeout: 3m}) as "counter is incremented 10 times";
+}, std.TestProps {timeout: 3m}) as "counter is incremented 10 times";

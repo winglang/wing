@@ -415,6 +415,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -463,7 +464,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
-        this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight in resource should capture the right scoped var",new $Inflight2(this,"$Inflight2"));
+        this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight in resource should capture the right scoped var",new $Inflight2(this,"$Inflight2"));
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/A.inflight.js";
@@ -597,12 +598,12 @@ class $Root extends $stdlib.std.Resource {
           super._registerBind(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight nested should not capture the shadowed var",new $Inflight1(this,"$Inflight1"));
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight nested should not capture the shadowed var",new $Inflight1(this,"$Inflight1"));
     }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
     new A(this,"A");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight on top should capture top",new $Inflight3(this,"$Inflight3"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:insideInflight should capture the right scope",new $Inflight4(this,"$Inflight4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight on top should capture top",new $Inflight3(this,"$Inflight3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:insideInflight should capture the right scope",new $Inflight4(this,"$Inflight4"));
   }
 }
 class $App extends $AppBase {
