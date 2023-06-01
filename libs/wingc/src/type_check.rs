@@ -3496,7 +3496,7 @@ impl<'a> TypeChecker<'a> {
 		let parent_udt = parent_udt.unwrap();
 
 		if &parent_udt.root == name && parent_udt.fields.is_empty() {
-			self.spanned_error(parent_udt, format!("Class cannot extend itself"));
+			self.spanned_error(parent_udt, "Class cannot extend itself".to_string());
 			return (None, None);
 		}
 
