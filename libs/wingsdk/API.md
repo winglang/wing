@@ -4968,6 +4968,9 @@ Inflight interface for `Bucket`.
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
 
 ---
 
@@ -5134,6 +5137,60 @@ Key of the object.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 Json object that we want to store into the bucket.
+
+---
+
+##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
+
+```wing
+tryDelete(key: str): bool
+```
+
+**Inflight client:** [true](#true)
+
+Delete an object from the bucket if it exists.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryDelete.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
+
+```wing
+tryGet(key: str): str
+```
+
+**Inflight client:** [true](#true)
+
+Get an object from the bucket if it exists.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
+
+```wing
+tryGetJson(key: str): Json
+```
+
+**Inflight client:** [true](#true)
+
+Gets an object from the bucket if it exists, parsing it as Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGetJson.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
 
 ---
 
