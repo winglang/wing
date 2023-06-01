@@ -116,7 +116,6 @@ jobs:
           fi
 
       - name: Upload Extension
-        if: ${{ steps.git-diff-vscode-wing.outputs.diff == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: vscode-wing
