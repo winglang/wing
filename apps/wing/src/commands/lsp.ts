@@ -7,6 +7,7 @@ import {
   DocumentSymbol,
   Hover,
   LocationLink,
+  SignatureHelp,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
@@ -28,6 +29,9 @@ export async function run_server() {
         textDocumentSync: TextDocumentSyncKind.Full,
         completionProvider: {
           triggerCharacters: ["."],
+        },
+        signatureHelpProvider: {
+          triggerCharacters: ["(", ",", ")"],
         },
         hoverProvider: true,
         documentSymbolProvider: true,
@@ -52,6 +56,14 @@ export async function run_server() {
       JSON.stringify(params)
     ) as string;
     return JSON.parse(result) as CompletionItem[];
+  });
+  connection.onSignatureHelp(async (params) => {
+    const result = wingCompiler.invoke(
+      wingc,
+      "wingc_on_signature_help",
+      JSON.stringify(params)
+    ) as string;
+    return JSON.parse(result) as SignatureHelp;
   });
   connection.onDefinition(async (params) => {
     const result = wingCompiler.invoke(wingc, "wingc_on_goto_definition", JSON.stringify(params));

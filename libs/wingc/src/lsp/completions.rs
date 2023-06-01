@@ -1,6 +1,6 @@
 use std::cmp::max;
 
-use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
+use lsp_types::{Command, CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
@@ -330,18 +330,27 @@ fn get_completions_from_class(
 			} else {
 				Some(CompletionItemKind::FIELD)
 			};
-			let insert_text = if kind == Some(CompletionItemKind::METHOD) {
-				Some(format!("{}($0)", symbol_data.0))
-			} else {
-				Some(symbol_data.0.to_string())
-			};
+			let is_method = kind == Some(CompletionItemKind::METHOD);
 
 			Some(CompletionItem {
-				insert_text,
+				insert_text: if is_method {
+					Some(format!("{}($0)", symbol_data.0))
+				} else {
+					Some(symbol_data.0.to_string())
+				},
 				label: symbol_data.0,
 				detail: Some(variable.type_.to_string()),
 				kind,
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
+				command: if is_method {
+					Some(Command {
+						title: "triggerParameterHints".to_string(),
+						command: "editor.action.triggerParameterHints".to_string(),
+						arguments: None,
+					})
+				} else {
+					None
+				},
 				..Default::default()
 			})
 		})
@@ -393,17 +402,27 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 			} else {
 				Some(CompletionItemKind::VARIABLE)
 			};
-			let insert_text = if kind == Some(CompletionItemKind::FUNCTION) {
-				Some(format!("{}($0)", name))
-			} else {
-				Some(name.to_string())
-			};
+			let is_method = kind == Some(CompletionItemKind::FUNCTION);
+
 			CompletionItem {
 				label: name.to_string(),
-				insert_text,
+				insert_text: if is_method {
+					Some(format!("{}($0)", name))
+				} else {
+					Some(name.to_string())
+				},
 				detail: Some(v.type_.to_string()),
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
+				command: if is_method {
+					Some(Command {
+						title: "triggerParameterHints".to_string(),
+						command: "editor.action.triggerParameterHints".to_string(),
+						arguments: None,
+					})
+				} else {
+					None
+				},
 				..Default::default()
 			}
 		}

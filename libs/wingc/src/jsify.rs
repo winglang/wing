@@ -1215,7 +1215,7 @@ impl<'a> JSifier<'a> {
 
 		// if this class has a "handle" method, we are going to turn it into a callable function
 		// so that instances of this class can also be called like regular functions
-		if inflight_methods.iter().find(|(name, _)| name.name == HANDLE_METHOD_NAME).is_some() {
+		if inflight_methods.iter().any(|(name, _)| name.name == HANDLE_METHOD_NAME) {
 			class_code.line(format!("const $obj = (...args) => this.{HANDLE_METHOD_NAME}(...args);"));
 			class_code.line("Object.setPrototypeOf($obj, this);");
 			class_code.line("return $obj;");
