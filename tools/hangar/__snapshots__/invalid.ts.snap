@@ -639,7 +639,14 @@ error: Unable to qualify which operations are performed on 'globalB' of type 'Bu
 `;
 
 exports[`interface.w > stderr 1`] = `
-"error: Unknown symbol \\"IB\\"
+"error: Properties are not supported in interfaces
+   --> ../../../examples/tests/invalid/interface.w:30:3
+   |
+30 |   bar: str;
+   |   ^^^^^^^^^ Properties are not supported in interfaces
+
+
+error: Unknown symbol \\"IB\\"
   --> ../../../examples/tests/invalid/interface.w:2:22
   |
 2 | interface IA extends IB {
