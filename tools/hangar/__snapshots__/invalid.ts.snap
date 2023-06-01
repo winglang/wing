@@ -257,6 +257,13 @@ error: Preflight class C8's parent \\"S1\\" is not a class
    |                  ^^ Preflight class C8's parent \\"S1\\" is not a class
 
 
+error: Class cannot extend itself
+   --> ../../../examples/tests/invalid/class.w:78:19
+   |
+78 | class C11 extends C11 {
+   |                   ^^^ Class cannot extend itself
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/class.w:31:14
    |
