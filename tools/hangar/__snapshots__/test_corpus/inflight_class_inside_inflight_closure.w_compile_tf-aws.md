@@ -565,8 +565,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const p = new PreflightClass(this,"PreflightClass");
     const f = (p.preflight_method());
-    this.node.root.new("@winglang/sdk.std.Test",cloud.Test,this,"test:it works",new $Inflight2(this,"$Inflight2"));
-    this.node.root.new("@winglang/sdk.std.Test",cloud.Test,this,"test:inflight class inside closure captures from closure",new $Inflight3(this,"$Inflight3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:it works",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class inside closure captures from closure",new $Inflight3(this,"$Inflight3"));
   }
 }
 class $App extends $AppBase {

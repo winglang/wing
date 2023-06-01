@@ -496,13 +496,6 @@ error: Expected function return type
 
 
 error: Expected method return type
-   --> ../../../examples/tests/invalid/function_type.w:10:3
-   |
-10 |   my_method(x: num);
-   |   ^^^^^^^^^^^^^^^^^^ Expected method return type
-
-
-error: Expected method return type
    --> ../../../examples/tests/invalid/function_type.w:12:3
    |
 12 |   inflight my_method2(x: num);
