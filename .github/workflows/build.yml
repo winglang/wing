@@ -91,7 +91,6 @@ jobs:
           fi
 
       - name: Upload Wing CLI
-        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: wing
