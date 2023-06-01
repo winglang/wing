@@ -897,7 +897,7 @@ impl<'a> JSifier<'a> {
 	/// ```
 	fn jsify_class(&mut self, env: &SymbolEnv, class: &'a AstClass, ctx: &JSifyContext) -> CodeMaker {
 		// Lookup the class type
-		let class_type = env.lookup(&class.name, None, 0).unwrap().as_type().unwrap();
+		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// Jsify the inflight side of the class
 		let inflight_methods = class
@@ -1146,6 +1146,7 @@ impl<'a> JSifier<'a> {
 
 				types.extend(visitor.captured_types);
 				vars.extend(visitor.captured_vars);
+				self.diagnostics.extend(visitor.diagnostics);
 			}
 		}
 		// Remove myself from the list of referenced preflight types because I don't need to import myself
@@ -1317,12 +1318,6 @@ impl<'a> JSifier<'a> {
 			.map(|(name, ..)| name)
 			.collect_vec()
 	}
-
-	// fn find_free_vars(&self, class: &AstClass) -> IndexSet<Symbol> {
-	// 	let mut scanner = FreeVariableScanner::new();
-	// 	scanner.visit_class(class);
-	// 	scanner.free_vars
-	// }
 
 	fn jsify_register_bind_method(
 		&self,
@@ -1653,8 +1648,14 @@ impl<'a> FieldReferenceVisitor<'a> {
 				// To obtain information about the variable we're referencing (like its type and
 				// whether it's reassignable), we look it up in the function's symbol environment.
 				let var = env
-					.lookup(&x, Some(self.statement_index), 0)
-					.expect("covered by type checking")
+					.lookup(&x, Some(self.statement_index))
+					.expect(
+						format!(
+							"unable to find symbol '{x}' in environment that contains: {}",
+							env.symbol_map.keys().join(", ")
+						)
+						.as_str(),
+					)
 					.as_variable()
 					.expect("reference to a non-variable");
 
@@ -1696,7 +1697,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					Type::Class(cls) => ComponentKind::Member(
 						cls
 							.env
-							.lookup(&property, None, 0)
+							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
@@ -1704,14 +1705,14 @@ impl<'a> FieldReferenceVisitor<'a> {
 					Type::Interface(iface) => ComponentKind::Member(
 						iface
 							.env
-							.lookup(&property, None, 0)
+							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
 					),
 					Type::Struct(st) => ComponentKind::Member(
 						st.env
-							.lookup(&property, None, 0)
+							.lookup(&property, None)
 							.expect("covered by type checking")
 							.as_variable()
 							.unwrap(),
@@ -1742,7 +1743,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				// whether it's reassignable), we look it up in the class's env.
 				let var = class
 					.env
-					.lookup(&property, None, 0)
+					.lookup(&property, None)
 					.expect("covered by type checking")
 					.as_variable()
 					.expect("reference to a non-variable");
@@ -1776,21 +1777,30 @@ struct CaptureScanner<'a> {
 	/// The root scope of the function we're analyzing
 	function_scope: &'a Scope,
 
-	/// The current method env, used to lookup the type
+	/// The method env, used to lookup the type
 	method_env: SymbolEnvRef,
 
-	/// Tracks the statement index
-	statement_index: usize,
+	/// The current environment (tracked via the visitor)
+	current_env: SymbolEnvRef,
+
+	/// The index of the last visited statement.
+	current_index: Option<usize>,
+
+	/// Compilation errors emitted by the visitor
+	pub diagnostics: Diagnostics,
 }
 
 impl<'a> CaptureScanner<'a> {
 	pub fn new(function_scope: &'a Scope) -> Self {
+		let env = function_scope.env.borrow().as_ref().unwrap().get_ref();
 		Self {
 			captured_types: IndexMap::new(),
 			captured_vars: IndexSet::new(),
 			function_scope,
-			method_env: function_scope.env.borrow().as_ref().unwrap().get_ref(),
-			statement_index: 0,
+			method_env: env,
+			current_env: env,
+			current_index: None,
+			diagnostics: Diagnostics::new(),
 		}
 	}
 
@@ -1799,31 +1809,53 @@ impl<'a> CaptureScanner<'a> {
 	}
 
 	fn consider_reference(&mut self, path: &[&Symbol]) {
-		if let LookupResult::Found(kind, info) = self.method_env.lookup_nested(path, Some(self.statement_index), 0) {
-			// if the symbol was found in our current enviroment, we move on. that's the essence of capturing:
-			// you reference something that defined in a parent environment.
-			if info.depth == 0 {
-				return;
+		// look up the reference in the current environment
+		let LookupResult::Found(kind, symbol_info) = self.current_env.lookup_nested(path, self.current_index) else {
+			panic!("unable to find symbol in current environment");
+		};
+
+		// now, we need to determine if the environment this symbol is defined in is a parent of the
+		// method's environment. if it is, we need to capture it.
+		if !(symbol_info.env.is_parent_of(&self.method_env)) {
+			return;
+		}
+
+		let fullname = path.iter().map(|s| s.name.clone()).collect_vec().join(".");
+
+		match kind {
+			SymbolKind::Type(t) => {
+				self.captured_types.insert(fullname, *t);
 			}
-
-			let fullname = path.iter().map(|s| s.name.clone()).collect_vec().join(".");
-
-			match kind {
-				SymbolKind::Type(t) => {
-					self.captured_types.insert(fullname, *t);
+			SymbolKind::Variable(var) => {
+				// skip macro functions (like "log" and "assert")
+				if let Type::Function(f) = &*var.type_ {
+					if f.js_override.is_some() {
+						return;
+					}
 				}
-				SymbolKind::Variable(var) => {
-					// skip macro functions (like "log" and "assert")
-					if let Type::Function(f) = &*var.type_ {
-						if f.js_override.is_some() {
+
+				// if the symbol was found in another environment, make sure this scope doesn't have another
+				// variable defined with the same name. if it does, it's an error
+				if !self.current_env.is_same(&symbol_info.env) {
+					if let LookupResult::Found(_, i) = self.current_env.lookup_nested(path, None) {
+						if i.env.is_same(&self.current_env) {
+							let sym = path.first().unwrap();
+
+							self.diagnostics.push(Diagnostic {
+								span: Some(sym.span.clone()),
+								message: format!(
+									"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
+								),
+							});
+
 							return;
 						}
 					}
-
-					self.captured_vars.insert(fullname);
 				}
-				SymbolKind::Namespace(_) => todo!(),
+
+				self.captured_vars.insert(fullname);
 			}
+			SymbolKind::Namespace(_) => todo!(),
 		}
 	}
 }
@@ -1856,7 +1888,9 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 
 				self.consider_reference(&[symb]);
 			}
-			Reference::TypeMember { type_, .. } => self.consider_reference(&type_.full_path().iter().collect_vec()),
+			Reference::TypeMember { type_, .. } => {
+				self.consider_reference(&type_.full_path().iter().collect_vec());
+			}
 
 			// this is the case of "object.property". if we need to capture "object", it will be captured
 			// as an identifier, so we can skip it here.
@@ -1866,9 +1900,15 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 		visit::visit_reference(self, node);
 	}
 
-	/// Track statement index
+	fn visit_scope(&mut self, node: &'ast Scope) {
+		let backup_env = self.current_env;
+		self.current_env = node.env.borrow().as_ref().unwrap().get_ref();
+		visit::visit_scope(self, node);
+		self.current_env = backup_env;
+	}
+
 	fn visit_stmt(&mut self, node: &'ast Stmt) {
-		self.statement_index = node.idx;
+		self.current_index = Some(node.idx);
 		visit::visit_stmt(self, node);
 	}
 }

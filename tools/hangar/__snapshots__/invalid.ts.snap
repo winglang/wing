@@ -144,6 +144,16 @@ exports[`capture_reassignable.w > stderr 1`] = `
 "
 `;
 
+exports[`capture_redefinition.w > stderr 1`] = `
+"error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+  --> ../../../examples/tests/invalid/capture_redefinition.w:4:7
+  |
+4 |   log(y);
+  |       ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+
+"
+`;
+
 exports[`class.w > stderr 1`] = `
 "error: Expected block
    --> ../../../examples/tests/invalid/class.w:17:17
@@ -514,6 +524,16 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
    |
 30 | class r impl I3 {
    |       ^ Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\\"
+
+"
+`;
+
+exports[`inflight_class_capture_mutable.w > stderr 1`] = `
+"error: Cannot capture field 'x' with non-capturable type 'MutArray<str>'
+  --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:7:9
+  |
+7 |     log(x.at(0));
+  |         ^ Cannot capture field 'x' with non-capturable type 'MutArray<str>'
 
 "
 `;

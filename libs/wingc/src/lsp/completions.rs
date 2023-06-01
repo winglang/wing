@@ -112,7 +112,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							let found_env = found_env.env.borrow();
 							let found_env = found_env.as_ref().unwrap();
 							let lookup_thing = found_env
-								.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index, 0)
+								.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
 								.ok();
 
 							if let Some((lookup_thing, _)) = lookup_thing {
@@ -150,7 +150,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							// this is probably a namespace
 							// `resolve_user_defined_type` will fail for namespaces, let's just look it up instead
 							let namespace = root_env
-								.lookup_nested_str(&udt.root.name, scope_visitor.found_stmt_index, 0)
+								.lookup_nested_str(&udt.root.name, scope_visitor.found_stmt_index)
 								.ok();
 							if let Some((namespace, _)) = namespace {
 								if let SymbolKind::Namespace(namespace) = namespace {
@@ -273,10 +273,9 @@ fn get_completions_from_type(
 				"MutArray" => "MutableArray",
 				s => s,
 			};
-			if let LookupResult::Found(std_type, _) =
-				types
-					.libraries
-					.lookup_nested_str(format!("@winglang/sdk.std.{}", type_name).as_str(), None, 0)
+			if let LookupResult::Found(std_type, _) = types
+				.libraries
+				.lookup_nested_str(format!("@winglang/sdk.std.{}", type_name).as_str(), None)
 			{
 				return get_completions_from_type(&std_type.as_type().expect("is type"), types, current_phase, is_instance);
 			} else {
