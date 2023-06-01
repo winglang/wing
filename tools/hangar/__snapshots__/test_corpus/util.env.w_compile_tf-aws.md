@@ -46,6 +46,7 @@ class $Root extends $stdlib.std.Resource {
     const RANDOM = "RANDOM123412121212kjhkjskdjkj";
     const NIL = "<<NIL>>";
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((util.Util.env("PATH")).length > 0)'`)})(((util.Util.env("PATH")).length > 0))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((util.Util.env("MY_VAR")) === "my value")'`)})(((util.Util.env("MY_VAR")) === "my value"))};
     let failed = false;
     try {
       (util.Util.env(RANDOM));

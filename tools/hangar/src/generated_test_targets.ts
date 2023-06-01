@@ -7,7 +7,7 @@ import {
   sanitize_json_paths,
 } from "./utils";
 
-export async function compileTest(sourceDir: string, wingFile: string) {
+export async function compileTest(sourceDir: string, wingFile: string, env?: Record<string, string>) {
   const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
   const args = ["compile", "--target", "tf-aws"];
@@ -23,6 +23,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     wingFile: join(sourceDir, wingBasename),
     args,
     shouldSucceed: true,
+    env,
   });
 
   const npx_tfJson = sanitize_json_paths(tf_json);
@@ -52,7 +53,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
   await createMarkdownSnapshot(fileMap, wingFile, "compile", "tf-aws");
 }
 
-export async function testTest(sourceDir: string, wingFile: string) {
+export async function testTest(sourceDir: string, wingFile: string, env?: Record<string, string>) {
   const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
@@ -63,6 +64,7 @@ export async function testTest(sourceDir: string, wingFile: string) {
     wingFile: join(sourceDir, wingFile),
     args,
     shouldSucceed: true,
+    env,
   });
 
   fileMap["stdout.log"] = out.stdout;
