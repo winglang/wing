@@ -150,6 +150,7 @@ module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -213,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
     const myMap = Object.freeze({"hello":123,"world":999});
     const arrOfMap = Object.freeze([Object.freeze({"bang":123})]);
     const j = Object.freeze({"a":"hello","b":"world"});
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:capture_containers",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture_containers",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

@@ -295,6 +295,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -413,7 +414,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const p = new PreflightClass(this,"PreflightClass");
     const f = (p.preflight_method());
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:it works",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:it works",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

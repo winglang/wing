@@ -1892,6 +1892,7 @@ impl<'a> TypeChecker<'a> {
 			TypeAnnotationKind::String => self.types.string(),
 			TypeAnnotationKind::Bool => self.types.bool(),
 			TypeAnnotationKind::Duration => self.types.duration(),
+			TypeAnnotationKind::Void => self.types.void(),
 			TypeAnnotationKind::Json => self.types.json(),
 			TypeAnnotationKind::MutJson => self.types.mut_json(),
 			TypeAnnotationKind::Optional(v) => {
@@ -1906,10 +1907,7 @@ impl<'a> TypeChecker<'a> {
 				let sig = FunctionSignature {
 					this_type: None,
 					parameters: args,
-					return_type: ast_sig
-						.return_type
-						.as_ref()
-						.map_or(self.types.void(), |t| self.resolve_type_annotation(t, env)),
+					return_type: self.resolve_type_annotation(ast_sig.return_type.as_ref(), env),
 					phase: ast_sig.phase,
 					js_override: None,
 				};
