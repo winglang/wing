@@ -256,15 +256,20 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.expect("Failed to add builtin");
 }
 
-struct CompilationContext {
+pub struct CompilationContext {
 	/// Description of current compilation phase
-	phase: String,
+	pub phase: String,
 
 	/// Location in source we're currently processing
-	span: WingSpan,
+	pub span: WingSpan,
 }
 
-static mut COMPILATION_CONTEXT: Option<CompilationContext> = None;
+thread_local! {
+	pub static COMPILATION_CONTEXT: RefCell<CompilationContext> = RefCell::new(CompilationContext {
+		phase: "compiling".to_string(),
+		span: WingSpan::default(),
+	});
+}
 
 /// Set global information about the current compilation phase.
 /// This is used for diagnostics, specifically for custom panic messages.
@@ -274,13 +279,12 @@ static mut COMPILATION_CONTEXT: Option<CompilationContext> = None;
 /// * `phase` - Description of current compilation phase, should end with 'ing' (building, parsing, etc.)
 /// * `span` - Location in source we're currently processing.
 fn set_compilation_context(phase: &str, span: &WingSpan) {
-	// Mutable statics are unsafe across threads, as long as we're accessing this form our single (main) thread, we're fine
-	unsafe {
-		COMPILATION_CONTEXT = Some(CompilationContext {
+	COMPILATION_CONTEXT.with(|c| {
+		c.replace_with(|_| CompilationContext {
 			phase: phase.to_string(),
 			span: span.clone(),
 		});
-	}
+	});
 }
 
 fn compiler_dbg_panic() {
@@ -295,23 +299,11 @@ fn compiler_dbg_panic() {
 }
 
 fn compilation_phase() -> String {
-	unsafe {
-		if let Some(ref c) = COMPILATION_CONTEXT {
-			c.phase.clone()
-		} else {
-			"compiling".to_string()
-		}
-	}
+	COMPILATION_CONTEXT.with(|c| c.borrow().phase.clone())
 }
 
 fn compilation_span() -> WingSpan {
-	unsafe {
-		if let Some(ref c) = COMPILATION_CONTEXT {
-			c.span.clone()
-		} else {
-			WingSpan::default()
-		}
-	}
+	COMPILATION_CONTEXT.with(|c| c.borrow().span.clone())
 }
 
 pub fn compile(
