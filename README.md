@@ -128,7 +128,7 @@ Want to help Wing take flight?
 Check out our [contribution guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) to learn how to set up a development environment and contribute to the project.
 You can also get started by opening the project in GitHub Codespaces.
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing/tree/hasan%2Fdev-container)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
 
 We are incredibly grateful to our entire community for contributing bug fixes and improvements:
 
