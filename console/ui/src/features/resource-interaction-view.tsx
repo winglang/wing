@@ -1,14 +1,14 @@
 import { BucketView } from "../components/resource-views/BucketView.js";
-import { RedisView } from "../components/resource-views/RedisView.js";
-import { TopicView } from "../components/resource-views/TopicView.js";
-import { UnsupportedView } from "../components/resource-views/UnsupportedView.js";
 
 import { ApiInteractionView } from "./api-interaction-view.js";
 import { CounterInteractionView } from "./counter-interaction-view.js";
 import { FunctionInteractionView } from "./function-interaction-view.js";
 import { QueueInteractionView } from "./queue-interaction-view.js";
+import { RedisInteractionView } from "./redis-interaction-view.js";
 import { ScheduleInteractionView } from "./schedule-interaction-view.js";
 import { TableInteractionView } from "./table-interaction-view.js";
+import { TopicInteractionView } from "./topic-interaction-view.js";
+import { UnsupportedInteractionView } from "./unsupported-interaction-view.js";
 
 export interface ResourceViewProps {
   resourceType: string;
@@ -36,7 +36,7 @@ export const ResourceInteractionView = ({
         return <ApiInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Topic": {
-        return <TopicView resourcePath={resourcePath} />;
+        return <TopicInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Table": {
         return <TableInteractionView resourcePath={resourcePath} />;
@@ -45,15 +45,10 @@ export const ResourceInteractionView = ({
         return <ScheduleInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.redis.Redis": {
-        return <RedisView resourcePath={resourcePath} />;
+        return <RedisInteractionView resourcePath={resourcePath} />;
       }
       default: {
-        return (
-          <UnsupportedView
-            resourcePath={resourcePath}
-            resourceType={resourceType}
-          />
-        );
+        return <UnsupportedInteractionView resourceType={resourceType} />;
       }
     }
   };

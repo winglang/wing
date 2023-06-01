@@ -1,19 +1,18 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
-import { useTheme, Button } from "@wingconsole/design-system";
+import { Button, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { trpc } from "../../utils/trpc.js";
-
-export interface UnsupportedViewProps {
+export interface UnsupportedInteractionProps {
   resourceType: string;
-  resourcePath: string;
+  onOpenIssueClick: (url: string) => void;
 }
-export const UnsupportedView = ({ resourceType }: UnsupportedViewProps) => {
+const newIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
+
+export const UnsupportedInteraction = ({
+  resourceType,
+  onOpenIssueClick,
+}: UnsupportedInteractionProps) => {
   const { theme } = useTheme();
-
-  const newIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
-
-  const openExternal = trpc["app.openExternal"].useMutation();
 
   return (
     <div className="flex flex-col gap-y-1 gap-x-4">
@@ -38,7 +37,7 @@ export const UnsupportedView = ({ resourceType }: UnsupportedViewProps) => {
             </h3>
             <div className="mt-2">
               <Button
-                onClick={() => openExternal.mutate({ url: newIssueUrl })}
+                onClick={() => onOpenIssueClick(newIssueUrl)}
                 label="Open an issue"
               />
             </div>
