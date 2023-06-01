@@ -90,7 +90,7 @@ impl<'a> JSifier<'a> {
 		format!("\"./{}\"", path_name.replace("\\", "/"))
 	}
 
-	pub fn jsify(&mut self, scope: &'a Scope) -> String {
+	pub fn jsify(&mut self, scope: &Scope) -> String {
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
@@ -174,7 +174,7 @@ impl<'a> JSifier<'a> {
 		output.to_string()
 	}
 
-	fn jsify_scope_body(&mut self, scope: &'a Scope, ctx: &JSifyContext) -> CodeMaker {
+	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		for statement in scope.statements.iter() {
@@ -185,7 +185,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_reference(&mut self, reference: &'a Reference, ctx: &JSifyContext) -> String {
+	fn jsify_reference(&mut self, reference: &Reference, ctx: &JSifyContext) -> String {
 		match reference {
 			Reference::Identifier(identifier) => identifier.to_string(),
 			Reference::InstanceMember {
@@ -201,7 +201,7 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_arg_list(
 		&mut self,
-		arg_list: &'a ArgList,
+		arg_list: &ArgList,
 		scope: Option<&str>,
 		id: Option<&str>,
 		ctx: &JSifyContext,
@@ -271,7 +271,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_expression(&mut self, expression: &'a Expr, ctx: &JSifyContext) -> String {
+	fn jsify_expression(&mut self, expression: &Expr, ctx: &JSifyContext) -> String {
 		let auto_await = match ctx.phase {
 			Phase::Inflight => "await ",
 			_ => "",
@@ -534,7 +534,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &'a Stmt, ctx: &JSifyContext) -> CodeMaker {
+	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
 		match &statement.kind {
 			StmtKind::Bring {
 				module_name,
@@ -777,7 +777,7 @@ impl<'a> JSifier<'a> {
 	fn jsify_function(
 		&mut self,
 		name: Option<&str>,
-		func_def: &'a FunctionDefinition,
+		func_def: &FunctionDefinition,
 		is_class_member: bool,
 		ctx: &JSifyContext,
 	) -> CodeMaker {
@@ -897,7 +897,7 @@ impl<'a> JSifier<'a> {
 	///   }
 	/// }
 	/// ```
-	fn jsify_class(&mut self, env: &SymbolEnv, class: &'a AstClass, ctx: &JSifyContext) -> CodeMaker {
+	fn jsify_class(&mut self, env: &SymbolEnv, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
 		// Lookup the class type
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
@@ -987,7 +987,7 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_constructor(
 		&mut self,
-		constructor: &'a FunctionDefinition,
+		constructor: &FunctionDefinition,
 		no_parent: bool,
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		inflight_fields: &[&ClassField],
@@ -1160,9 +1160,9 @@ impl<'a> JSifier<'a> {
 	fn jsify_class_inflight(
 		&mut self,
 		env: &SymbolEnv,
-		class: &'a AstClass,
+		class: &AstClass,
 		captured_fields: &[String],
-		inflight_methods: &[&'a (Symbol, FunctionDefinition)],
+		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		input_symbols: impl Iterator<Item = impl Display>,
 		ctx: &JSifyContext,
 	) {
