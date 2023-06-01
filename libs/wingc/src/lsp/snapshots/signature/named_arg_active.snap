@@ -1,0 +1,13 @@
+---
+source: libs/wingc/src/lsp/signature.rs
+---
+signatures:
+  - label: "(0: str, 1: BucketDeleteOptions?): void"
+    parameters:
+      - label: "0: str"
+      - label: "1: BucketDeleteOptions?"
+        documentation:
+          kind: markdown
+          value: "```wing\nstruct BucketDeleteOptions { \n  mustExist: bool?\n}\n```"
+    activeParameter: 1
+
