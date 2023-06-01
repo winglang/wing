@@ -5,24 +5,6 @@ import { z } from "zod";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { IBucketClient } from "../wingsdk.js";
 
-// TODO - once mime-types is added to the sdk, use it to determine the encoding
-export const getFileEncoding = (file: string): "base64" | "utf8" => {
-  const type = file.split(".").pop();
-  switch (type) {
-    case "txt":
-    case "json":
-    case "js":
-    case "html":
-    case "css":
-    case "md": {
-      return "utf8";
-    }
-    default: {
-      return "base64";
-    }
-  }
-};
-
 export const createBucketRouter = () => {
   return createRouter({
     "bucket.put": createProcedure
@@ -30,7 +12,7 @@ export const createBucketRouter = () => {
         z.object({
           resourcePath: z.string(),
           fileName: z.string(),
-          filePath: z.string(),
+          fileContent: z.string(),
         }),
       )
       .mutation(async ({ input, ctx }) => {
@@ -38,11 +20,7 @@ export const createBucketRouter = () => {
         const client = simulator.getResource(
           input.resourcePath,
         ) as IBucketClient;
-        const fileContent = await fs.promises.readFile(
-          input.filePath,
-          getFileEncoding(input.filePath),
-        );
-        const response = await client.put(input.fileName, fileContent);
+        const response = await client.put(input.fileName, input.fileContent);
         return response;
       }),
     "bucket.get": createProcedure

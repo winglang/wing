@@ -8,7 +8,7 @@ import { trpc } from "./utils/trpc.js";
 
 export const Console = ({
   port,
-  layout,
+  layout = LayoutType.Vscode,
   title,
 }: {
   port?: number;
@@ -49,7 +49,7 @@ export const Console = ({
 
   let windowTitle = title ?? "Wing Console";
 
-  const appMode = layout === LayoutType.Playground ? "webapp" : "electron";
+  const appMode = layout === LayoutType.Vscode ? "electron" : "webapp";
 
   return (
     <AppContext.Provider value={{ appMode, title: windowTitle }}>

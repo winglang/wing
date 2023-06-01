@@ -1,23 +1,22 @@
 import {
   useTheme,
-  TreeEntry,
-  Tree,
   Button,
   JsonResponseInput,
+  TreeEntry,
+  Tree,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
 import {
   FormEventHandler,
   useCallback,
-  useContext,
   useEffect,
   useRef,
   useState,
 } from "react";
 
-import { AppContext } from "../../AppContext.js";
 import { trpc } from "../../utils/trpc.js";
 import { useDownloadFile } from "../../utils/useDownloadFile.js";
+import { useUploadFile } from "../../utils/useUploadFile.js";
 
 export interface BucketViewProps {
   resourcePath: string;
@@ -38,7 +37,6 @@ const canBePreviewed = (fileName: string) => {
 
 export const BucketView = ({ resourcePath }: BucketViewProps) => {
   const { theme } = useTheme();
-  const { appMode } = useContext(AppContext);
 
   const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
   const putFile = trpc["bucket.put"].useMutation();
@@ -63,17 +61,17 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
   const [fileInputId, setFileInputId] = useState(new Date().toString());
 
   const { download, downloadFiles } = useDownloadFile();
+  const { readBlob } = useUploadFile();
 
   const uploadSelectedEntries: FormEventHandler<HTMLInputElement> = async (
     event,
   ) => {
     for (const file of event.currentTarget.files ?? []) {
+      const fileContent = await readBlob(file.name, file);
       putFile.mutateAsync({
         resourcePath,
         fileName: file.name,
-        // TODO: Fix the missing `file.path` declaration. Seems to come from electron.d.ts...
-        // @ts-ignore
-        filePath: file.path,
+        fileContent,
       });
     }
     // force re-render to avoid problems uploading the same file twice
@@ -160,14 +158,12 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
             onInput={uploadSelectedEntries}
             multiple
           />
-          {appMode !== "webapp" && (
-            <Button
-              label="Upload"
-              onClick={() => {
-                fileInputRef.current?.click();
-              }}
-            />
-          )}
+          <Button
+            label="Upload"
+            onClick={() => {
+              fileInputRef.current?.click();
+            }}
+          />
         </div>
       </div>
 
