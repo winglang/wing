@@ -996,7 +996,7 @@ error: Variable hi is not reassignable
 `;
 
 exports[`panic.w > stderr 1`] = `
-"Compiler bug when type checking ../../../examples/tests/invalid/panic.w:6:1 | panicked at 'User invoked panic', libs/wingc/src/lib.rs:293:9
+"Compiler bug when type checking ../../../examples/tests/invalid/panic.w:6:1 | panicked at 'User invoked panic', libs/wingc/src/lib.rs:297:9
 RuntimeError: unreachable
 Internal error: An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
 `;
