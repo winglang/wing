@@ -4,6 +4,14 @@
 // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 {
   "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "wingSource",
+      "type": "promptString",
+      "description": "Wing source path",
+      "default": "${workspaceFolder}/examples/tests/valid/hello.w"
+    }
+  ],
   "configurations": [
     {
       "command": "npx nx wing -- compile -t tf-aws ..${pathSeparator}..${pathSeparator}${relativeFile}",
@@ -44,7 +52,29 @@
         "WING_BIN": "${workspaceFolder}/apps/wing/bin/wing",
         "RUST_BACKTRACE": "1"
       },
-      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-wing"]
-    }
+      "args": [
+        "--disable-extensions",
+        "--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-wing"
+      ]
+    },
+    {
+      "name": "Debug Wing Compiler",
+      "type": "lldb",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/libs/wingc",
+      "cargo": {
+        "args": [
+          "build",
+          "--example",
+          "compile"
+        ]
+      },
+      "args": [
+        "${input:wingSource}"
+      ],
+      "sourceLanguages": [
+        "rust"
+      ],
+    },
   ]
 }
