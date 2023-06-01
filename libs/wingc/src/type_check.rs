@@ -1717,7 +1717,10 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during type-checking)
 				compiler_dbg_panic();
-				self.types.error()
+				self.type_error(TypeError {
+					message: "Panic expression".to_string(),
+					span: exp.span.clone(),
+				})
 			}
 		}
 	}
