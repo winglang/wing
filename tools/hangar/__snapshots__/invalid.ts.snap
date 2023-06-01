@@ -583,8 +583,10 @@ Duration <DURATION>
 "
 `;
 
-exports[`function_type.w > stderr 1`] = `
-"error: Expected function return type
+exports[`function_type.w 1`] = `
+"- Compiling invalid/function_type.w to sim...
+✖ Compiling invalid/function_type.w to sim...
+error: Expected function return type
   --> ../../../examples/tests/invalid/function_type.w:2:26
   |
 2 | let my_func = (callback: (num)) => {  };
@@ -618,11 +620,21 @@ error: Expected method return type
 12 |   inflight my_method2(x: num);
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected method return type
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`immutable_container_types.w > stderr 1`] = `
-"error: Unknown symbol \\"set\\"
+exports[`immutable_container_types.w 1`] = `
+"- Compiling invalid/immutable_container_types.w to sim...
+✖ Compiling invalid/immutable_container_types.w to sim...
+error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
@@ -1820,8 +1832,10 @@ Duration <DURATION>
 "
 `;
 
-exports[`unimplemented_grammar.w > stderr 1`] = `
-"error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
+exports[`unimplemented_grammar.w 1`] = `
+"- Compiling invalid/unimplemented_grammar.w to sim...
+✖ Compiling invalid/unimplemented_grammar.w to sim...
+error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:1:8
   |
 1 | let b: any = 0;

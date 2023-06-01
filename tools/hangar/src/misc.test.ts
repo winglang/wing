@@ -39,7 +39,7 @@ test("unsupported resource in target", async ({ expect }) => {
          }
        }
 
-        at compile (/Users/tsuf/Documents/wing/apps/wing/dist/commands/compile.js:235:15)"
+        at compile <PATH>"
   `);
 });
 
@@ -51,7 +51,8 @@ function sanitizeErrorMessage(inputString: string): string {
     .replaceAll("\r\n", "\n")
     // Remove random numbers from generated test artifact folder
     // e.g. "{...}.tfgcp.927822.tmp/{...}" => "{...}.tfgcp.[REDACTED].tmp/{...}"
-    .replaceAll(/\.tfgcp\.\d+\.tmp/g, ".tfgcp.[REDACTED].tmp");
+    .replaceAll(/\.tfgcp\.\d+\.tmp/g, ".tfgcp.[REDACTED].tmp")
+    .replaceAll(/\([\/\\A-Za-z.:0-9\-\_]+\)/g, "<PATH>");
 
   return sanitizedString;
 }
