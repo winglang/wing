@@ -82,8 +82,8 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 									let fields = structy
 										.env
 										.iter(true)
-										.map(|f| format!("  {}: {}", f.0, f.1.as_variable().unwrap().type_))
-										.join(",\n");
+										.map(|f| format!("  {}: {};", f.0, f.1.as_variable().unwrap().type_))
+										.join("\n");
 									Some(lsp_types::Documentation::MarkupContent(lsp_types::MarkupContent {
 										kind: lsp_types::MarkupKind::Markdown,
 										value: format!("```wing\nstruct {} {{ \n{}\n}}\n```", structy.name.name, fields),
