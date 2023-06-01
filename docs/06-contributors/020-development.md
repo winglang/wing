@@ -8,6 +8,11 @@ This topic includes a description of common development workflows for the Wing p
 
 ## Environment Setup
 
+:::info
+You can open up this repo just using the badge below. It is recommended to select a 4-core minimum machine.
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
+:::
+
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 

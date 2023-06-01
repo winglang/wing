@@ -13,7 +13,7 @@ use crate::ast::{
 	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::WINGSDK_STD_MODULE;
+use crate::{WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -28,7 +28,6 @@ pub struct Parser<'a> {
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
-	"void" => "see https://github.com/winglang/wing/issues/432",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
 	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
 	"pure_closure" => "see https://github.com/winglang/wing/issues/474",
@@ -684,19 +683,13 @@ impl<'s> Parser<'s> {
 			}
 			match interface_element.kind() {
 				"method_signature" => {
-					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
-					let func_sig = self.build_function_signature(&interface_element, Phase::Preflight);
-					match (method_name, func_sig) {
-						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
-						_ => {}
+					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Preflight) {
+						methods.push((method_name, func_sig))
 					}
 				}
 				"inflight_method_signature" => {
-					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
-					let func_sig = self.build_function_signature(&interface_element, Phase::Inflight);
-					match (method_name, func_sig) {
-						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
-						_ => {}
+					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Inflight) {
+						methods.push((method_name, func_sig))
 					}
 				}
 				"ERROR" => {
@@ -734,6 +727,22 @@ impl<'s> Parser<'s> {
 		}
 
 		Ok(StmtKind::Interface(Interface { name, methods, extends }))
+	}
+
+	fn build_interface_method(
+		&self,
+		interface_element: Node,
+		phase: Phase,
+	) -> DiagnosticResult<(Symbol, FunctionSignature)> {
+		let name = interface_element.child_by_field_name("name").unwrap();
+		let method_name = self.node_symbol(&name)?;
+		let func_sig = self.build_function_signature(&interface_element, phase)?;
+		match func_sig.return_type {
+			Some(_) => Ok((method_name, func_sig)),
+			None => {
+				self.add_error::<(Symbol, FunctionSignature)>("Expected method return type".to_string(), &interface_element)
+			}
+		}
 	}
 
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
@@ -820,6 +829,10 @@ impl<'s> Parser<'s> {
 					kind: TypeAnnotationKind::Duration,
 					span,
 				}),
+				"void" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Void,
+					span,
+				}),
 				"ERROR" => self.add_error("Expected builtin type", type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
@@ -838,19 +851,21 @@ impl<'s> Parser<'s> {
 					.named_children(&mut cursor)
 					.filter_map(|param_type| self.build_type_annotation(&param_type).ok())
 					.collect::<Vec<TypeAnnotation>>();
-				let return_type = type_node
-					.child_by_field_name("return_type")
-					.map(|n| Box::new(self.build_type_annotation(&n).unwrap()));
-				let kind = TypeAnnotationKind::Function(FunctionTypeAnnotation {
-					param_types,
-					return_type,
-					phase: if type_node.child_by_field_name("inflight").is_some() {
-						Phase::Inflight
-					} else {
-						Phase::Preflight
-					},
-				});
-				Ok(TypeAnnotation { kind, span })
+				match type_node.child_by_field_name("return_type") {
+					Some(return_type) => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
+							param_types,
+							return_type: Box::new(self.build_type_annotation(&return_type)?),
+							phase: if type_node.child_by_field_name("inflight").is_some() {
+								Phase::Inflight
+							} else {
+								Phase::Preflight
+							},
+						}),
+						span,
+					}),
+					None => self.add_error("Expected function return type".to_string(), &type_node),
+				}
 			}
 			"json_container_type" => {
 				let container_type = self.node_text(&type_node);
@@ -930,10 +945,16 @@ impl<'s> Parser<'s> {
 			} else {
 				self.build_expression(&object_expr)?
 			};
+			let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
+			let optional_accessor = match accessor_sym.name.as_str() {
+				"?." => true,
+				_ => false,
+			};
 			Ok(Expr {
 				kind: ExprKind::Reference(Reference::InstanceMember {
 					object: Box::new(object_expr),
 					property: self.node_symbol(&property)?,
+					optional_accessor,
 				}),
 				span: self.node_span(&nested_node),
 				evaluated_type: RefCell::new(None),
@@ -1438,8 +1459,8 @@ impl<'s> Parser<'s> {
 			kind: ExprKind::New {
 				class: TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-						root: Symbol::global("cloud"),
-						fields: vec![Symbol::global("Test")],
+						root: Symbol::global(WINGSDK_STD_MODULE),
+						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
 						span: WingSpan::default(),
 					}),
 					span: WingSpan::default(),

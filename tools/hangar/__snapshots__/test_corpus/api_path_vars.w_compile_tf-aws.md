@@ -3,16 +3,17 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle(req)  {
-      {
-        return {
-        "body": Object.freeze({"user":(req.vars)["name"]}),
-        "status": 200,}
-        ;
-      }
+      return {
+      "body": Object.freeze({"user":(req.vars)["name"]}),
+      "status": 200,}
+      ;
     }
   }
   return $Inflight1;
@@ -23,16 +24,17 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ f, api }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
     async handle()  {
-      {
-        const username = "tsuf";
-        const res = (typeof f.get === "function" ? await f.get(`${api.url}/users/${username}`) : await f.get.handle(`${api.url}/users/${username}`));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
-      }
+      const username = "tsuf";
+      const res = (await f.get(`${api.url}/users/${username}`));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
     }
   }
   return $Inflight2;
@@ -43,7 +45,7 @@ module.exports = function({ f, api }) {
 ## clients/Fetch.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Fetch {
+  class Fetch {
     constructor({  }) {
     }
     async get(url)  {
@@ -314,6 +316,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -428,7 +431,7 @@ class $Root extends $stdlib.std.Resource {
     const handler = new $Inflight1(this,"$Inflight1");
     (api.get("/users/{name}",handler));
     const f = new Fetch(this,"Fetch");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

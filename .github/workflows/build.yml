@@ -32,6 +32,8 @@ jobs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
+      vscode-wing-changed: ${{ steps.git-diff-vscode-wing.outputs.diff }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -96,7 +98,17 @@ jobs:
           name: wingc
           path: target/wasm32-wasi/release/wingc.wasm
 
+      - name: Check git diff of VSCode Extension
+        id: git-diff-vscode-wing
+        run: |
+          if git diff --quiet ${{ github.event.before }} ${{ github.sha }} -- apps/vscode-wing; then
+            echo "::set-output name=diff::false"
+          else
+            echo "::set-output name=diff::true"
+          fi
+
       - name: Upload Extension
+        if: ${{ steps.git-diff-vscode-wing.outputs.diff == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: vscode-wing
@@ -253,12 +265,8 @@ jobs:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.build.outputs.version }}"
 
-      - name: Check published VSCode Version
-        id: vscode-version
-        run: echo "version=$(npx -y vsce show Monada.vscode-wing --json | jq '.versions[0].version' -r)" >> $GITHUB_OUTPUT
-
       - name: Publish Extension to Visual Studio Marketplace
-        if: ${{ steps.vscode-version.outputs.version != needs.build.outputs.version }}
+        if: needs.build.outputs.vscode-wing-changed == 'true'
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
