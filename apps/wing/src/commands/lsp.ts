@@ -3,6 +3,7 @@ import {
   InitializeParams,
   TextDocumentSyncKind,
   InitializeResult,
+  DiagnosticSeverity,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
@@ -34,9 +35,27 @@ export async function run_server() {
         return JSON.parse(result);
       }
     } catch (e) {
-      connection.window.showErrorMessage(
-        `Wing language server crashed and will resume when changes are made. See logs for details.`
-      );
+      // set status in ide
+      connection.sendDiagnostics({
+        uri: args.textDocument.uri,
+        diagnostics: [
+          {
+            severity: DiagnosticSeverity.Error,
+            message: `Wing language server crashed and will resume when changes are made. See logs for details.`,
+            source: "Wing",
+            range: {
+              start: {
+                line: 0,
+                character: 0,
+              },
+              end: {
+                line: 0,
+                character: 0,
+              },
+            },
+          },
+        ],
+      });
 
       badState = true;
       return null;
