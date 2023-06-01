@@ -272,7 +272,12 @@ fn get_completions_from_type(
 				"MutSet" => "MutableSet",
 				"MutMap" => "MutableMap",
 				"MutArray" => "MutableArray",
-				s => s,
+				"str" => "String",
+				"duration" => "Duration",
+				"json" => "Json",
+				"bool" => "Boolean",
+				"num" => "Number",
+				_ => type_name,
 			};
 			if let LookupResult::Found(std_type, _) = types
 				.libraries
