@@ -889,19 +889,21 @@ impl<'s> Parser<'s> {
 					.named_children(&mut cursor)
 					.filter_map(|param_type| self.build_type_annotation(&param_type, phase).ok())
 					.collect::<Vec<TypeAnnotation>>();
-				let return_type = type_node
-					.child_by_field_name("return_type")
-					.map(|n| Box::new(self.build_type_annotation(&n, phase).unwrap()));
-				let kind = TypeAnnotationKind::Function(FunctionTypeAnnotation {
-					param_types,
-					return_type,
-					phase: if type_node.child_by_field_name("inflight").is_some() {
-						Phase::Inflight
-					} else {
-						phase // inherit from scope
-					},
-				});
-				Ok(TypeAnnotation { kind, span })
+				match type_node.child_by_field_name("return_type") {
+					Some(return_type) => Ok(TypeAnnotation {
+						kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
+							param_types,
+							return_type: Box::new(self.build_type_annotation(&return_type, phase)?),
+							phase: if type_node.child_by_field_name("inflight").is_some() {
+								Phase::Inflight
+							} else {
+								phase // inherit from scope
+							},
+						}),
+						span,
+					}),
+					None => self.add_error("Expected function return type".to_string(), &type_node),
+				}
 			}
 			"json_container_type" => {
 				let container_type = self.node_text(&type_node);
