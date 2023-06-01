@@ -164,24 +164,6 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		});
 	}
 
-	// fn visit_constructor(&mut self, node: &'a FunctionDefinition) {
-	// 	if self.is_found() {
-	// 		return;
-	// 	}
-
-	// 	if let Some(return_type) = &node.signature.return_type {
-	// 		self.visit_type_annotation(return_type);
-	// 	}
-
-	// 	self.with_scope(&node.statements, |v| {
-	// 		for param in &node.signature.parameters {
-	// 			v.visit_function_parameter(&param);
-	// 		}
-	// 	});
-
-	// 	self.visit_scope(&node.statements);
-	// }
-
 	fn visit_symbol(&mut self, node: &'a Symbol) {
 		if self.is_found() || !self.should_check_span(&node.span) {
 			return;

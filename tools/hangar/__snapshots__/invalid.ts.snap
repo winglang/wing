@@ -561,10 +561,17 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
 
 exports[`inflight_class_capture_mutable.w > stderr 1`] = `
 "error: Cannot capture field 'x' with non-capturable type 'MutArray<str>'
-  --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:7:9
+  --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:5:9
   |
-7 |     log(x.at(0));
+5 |     log(x.at(0));
   |         ^ Cannot capture field 'x' with non-capturable type 'MutArray<str>'
+
+
+error: Cannot capture reassignable field 'foo'
+   --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:14:12
+   |
+14 |     return foo;
+   |            ^^^ Cannot capture reassignable field 'foo'
 
 "
 `;
@@ -599,16 +606,6 @@ exports[`inflight_class_in_preflight.w > stderr 1`] = `
   |
 5 | new Foo();
   | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
-
-"
-`;
-
-exports[`inflight_in_class.w > stderr 1`] = `
-"error: Inflight field \\"field\\" is not initialized
-  --> ../../../examples/tests/invalid/inflight_in_class.w:2:12
-  |
-2 |   inflight field: num; // No inflight fields in classes (only in resources)
-  |            ^^^^^ Inflight field \\"field\\" is not initialized
 
 "
 `;
