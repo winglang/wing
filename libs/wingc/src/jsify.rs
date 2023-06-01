@@ -30,7 +30,7 @@ use crate::{
 		ClassLike, SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
 use self::{codemaker::CodeMaker, free_var_scanner::FreeVariableScanner};
@@ -122,6 +122,8 @@ impl<'a> JSifier<'a> {
 		if self.shim {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
+			// "std" is implicitly imported
+			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
@@ -1213,7 +1215,7 @@ impl<'a> JSifier<'a> {
 
 		// if this class has a "handle" method, we are going to turn it into a callable function
 		// so that instances of this class can also be called like regular functions
-		if inflight_methods.iter().find(|(name, _)| name.name == HANDLE_METHOD_NAME).is_some() {
+		if inflight_methods.iter().any(|(name, _)| name.name == HANDLE_METHOD_NAME) {
 			class_code.line(format!("const $obj = (...args) => this.{HANDLE_METHOD_NAME}(...args);"));
 			class_code.line("Object.setPrototypeOf($obj, this);");
 			class_code.line("return $obj;");
