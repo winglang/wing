@@ -143,6 +143,7 @@ module.exports = function({ jj }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -213,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]) === "hello")'`)})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["c"])'`)})(((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["c"]))};
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:Access Json static inflight",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Access Json static inflight",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

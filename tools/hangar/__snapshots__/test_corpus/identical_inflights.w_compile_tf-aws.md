@@ -70,6 +70,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
