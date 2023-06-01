@@ -195,10 +195,23 @@ mod tests {
 	test_signature!(empty, "", assert!(false));
 
 	test_signature!(
-		single_arg_builtin,
+		second_arg_active,
 		r#"
-let arr1 = MutArray<str>["a", "b", "c"];
-arr1.join()
-	     //^"#,
+bring cloud;
+let bucket = new cloud.Bucket();
+bucket.addObject("key", )
+                     //^
+		"#,
+	);
+
+	test_signature!(
+		named_arg_active,
+		r#"
+bring cloud;
+let bucket = new cloud.Bucket();
+bucket.onEvent(inflight () => {
+	bucket.delete("", );
+                 //^
+});"#,
 	);
 }
