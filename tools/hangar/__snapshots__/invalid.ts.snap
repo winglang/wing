@@ -144,6 +144,16 @@ exports[`capture_reassignable.w > stderr 1`] = `
 "
 `;
 
+exports[`capture_redefinition.w > stderr 1`] = `
+"error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+  --> ../../../examples/tests/invalid/capture_redefinition.w:4:7
+  |
+4 |   log(y);
+  |       ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+
+"
+`;
+
 exports[`class.w > stderr 1`] = `
 "error: Expected block
    --> ../../../examples/tests/invalid/class.w:17:17
@@ -243,18 +253,18 @@ error: Preflight field \\"y\\" is not initialized
    |   ^ Preflight field \\"y\\" is not initialized
 
 
-error: Expected 'x' to be a type but it's a variable
+error: Expected \\"x\\" to be a type but it's a variable
    --> ../../../examples/tests/invalid/class.w:68:18
    |
 68 | class C7 extends x {
-   |                  ^ Expected 'x' to be a type but it's a variable
+   |                  ^ Expected \\"x\\" to be a type but it's a variable
 
 
-error: Preflight class C8's parent \\"S1\\" is not a class
+error: Base class \\"S1\\" is not a class
    --> ../../../examples/tests/invalid/class.w:74:18
    |
 74 | class C8 extends S1 {
-   |                  ^^ Preflight class C8's parent \\"S1\\" is not a class
+   |                  ^^ Base class \\"S1\\" is not a class
 
 
 error: Class cannot extend itself
@@ -493,13 +503,6 @@ error: Expected function return type
 
 
 error: Expected method return type
-   --> ../../../examples/tests/invalid/function_type.w:10:3
-   |
-10 |   my_method(x: num);
-   |   ^^^^^^^^^^^^^^^^^^ Expected method return type
-
-
-error: Expected method return type
    --> ../../../examples/tests/invalid/function_type.w:12:3
    |
 12 |   inflight my_method2(x: num);
@@ -563,19 +566,82 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
 "
 `;
 
-exports[`inflight_in_class.w > stderr 1`] = `
-"error: Class cannot have inflight fields
-  --> ../../../examples/tests/invalid/inflight_in_class.w:2:3
+exports[`inflight_class_capture_mutable.w > stderr 1`] = `
+"error: Cannot capture field 'x' with non-capturable type 'MutArray<str>'
+  --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:5:9
   |
-2 |   inflight field: num; // No inflight fields in classes (only in resources)
-  |   ^^^^^^^^ Class cannot have inflight fields
+5 |     log(x.at(0));
+  |         ^ Cannot capture field 'x' with non-capturable type 'MutArray<str>'
 
 
-error: Inflight field \\"field\\" is not initialized
-  --> ../../../examples/tests/invalid/inflight_in_class.w:2:12
+error: Cannot capture reassignable field 'foo'
+   --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:14:12
+   |
+14 |     return foo;
+   |            ^^^ Cannot capture reassignable field 'foo'
+
+"
+`;
+
+exports[`inflight_class_created_in_preflight.w > stderr 1`] = `
+"error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:3:1
   |
-2 |   inflight field: num; // No inflight fields in classes (only in resources)
-  |            ^^^^^ Inflight field \\"field\\" is not initialized
+3 | new Foo();
+  | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:8:5
+  |
+8 |     new Foo();
+  |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create inflight class \\"Foo\\" in preflight phase
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:13:5
+   |
+13 |     new Foo();
+   |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:3
+   |
+19 |   new PreflightClass();
+   |   ^^^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"PreflightClass\\" in inflight phase
+
+"
+`;
+
+exports[`inflight_class_dup_init.w > stderr 1`] = `
+"error: Multiple inflight initializers defined in class Foo
+  --> ../../../examples/tests/invalid/inflight_class_dup_init.w:6:3
+  |  
+6 | /   inflight init() {
+7 | | 
+8 | |   }
+  | \\\\---^ Multiple inflight initializers defined in class Foo
+
+"
+`;
+
+exports[`inflight_class_in_preflight.w > stderr 1`] = `
+"error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_in_preflight.w:5:1
+  |
+5 | new Foo();
+  | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+"
+`;
+
+exports[`inflight_class_interface_structural_typing.w > stderr 1`] = `
+"error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
+   --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.w:26:17
+   |
+26 |   let x: IGoo = new NotGoo();
+   |                 ^^^^^^^^^^^^ Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
 
 "
 `;
@@ -595,11 +661,11 @@ error: Unable to qualify which operations are performed on 'this.b' of type 'Buc
    |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
 
 
-error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+error: Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:47:18
    |
 47 |     let b = this.array.at(1);
-   |                  ^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   |                  ^^^^^ Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
 
 "
 `;
@@ -1009,18 +1075,6 @@ error: Variable hi is not reassignable
 "
 `;
 
-exports[`preflight_class_inflight.w > stderr 1`] = `
-"error: Cannot define a preflight class in inflight scope
-  --> ../../../examples/tests/invalid/preflight_class_inflight.w:4:3
-  |  
-4 | /   class R {
-5 | |     init() {}
-6 | |   }
-  | \\\\---^ Cannot define a preflight class in inflight scope
-
-"
-`;
-
 exports[`preflight_from_inflight.w > stderr 1`] = `
 "error: Cannot call into preflight phase while inflight
    --> ../../../examples/tests/invalid/preflight_from_inflight.w:15:5
@@ -1132,11 +1186,11 @@ error: Unable to qualify which operations are performed on 'this.bucket' of type
    |             ^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
 
 
-error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+error: Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
    --> ../../../examples/tests/invalid/resource_captures.w:27:10
    |
 27 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
-   |          ^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   |          ^^^^^^^^^^^^^^^^^^^^^ Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
 
 "
 `;
@@ -1190,11 +1244,11 @@ exports[`sorted_errors_no_span.w > stderr 1`] = `
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected 'b' to be a type but it's a variable
+error: Expected \\"b\\" to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
 3 | inflight class c extends b {}
-  |                          ^ Expected 'b' to be a type but it's a variable
+  |                          ^ Expected \\"b\\" to be a type but it's a variable
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1204,11 +1258,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected 'b' to be a type but it's a variable
+error: Expected \\"b\\" to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:5:26
   |
 5 | inflight class e extends b {}
-  |                          ^ Expected 'b' to be a type but it's a variable
+  |                          ^ Expected \\"b\\" to be a type but it's a variable
 
 "
 `;

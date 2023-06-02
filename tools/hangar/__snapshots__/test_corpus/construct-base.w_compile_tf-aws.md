@@ -6,6 +6,9 @@ module.exports = function({  }) {
   class WingResource {
     constructor({  }) {
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
   }
   return WingResource;
 }
@@ -76,7 +79,7 @@ class $Root extends $stdlib.std.Resource {
         {console.log(`my id is ${this.node.id}`)};
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/WingResource.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/WingResource.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

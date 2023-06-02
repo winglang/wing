@@ -9,6 +9,8 @@ module.exports = function({ data, res, queue }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
       (await res.put("file.txt","world"));
@@ -216,7 +218,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const data_client = context._lift(data);
         const res_client = context._lift(res);
         const queue_client = context._lift(queue);

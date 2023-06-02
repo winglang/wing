@@ -9,14 +9,14 @@ assert(x ?? 5 == 4);
 let y: num = x ?? 5;
 assert(y == 4);
 
-inflight class Super {
+class Super {
   name: str;
   init() { this.name = "Super"; }
 }
-inflight class Sub extends Super {
+class Sub extends Super {
   init() { this.name = "Sub"; }
 }
-inflight class Sub1 extends Super {
+class Sub1 extends Super {
   init() { this.name = "Sub"; }
 }
 

@@ -9,6 +9,8 @@ module.exports = function({ r, r2 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       const connection = (await r.rawClient());
       (await connection.set("wing","does redis"));
@@ -486,7 +488,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const r_client = context._lift(r);
         const r2_client = context._lift(r2);
         return $stdlib.core.NodeJsCode.fromInline(`

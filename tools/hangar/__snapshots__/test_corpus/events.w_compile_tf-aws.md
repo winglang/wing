@@ -9,6 +9,8 @@ module.exports = function({ counter }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle(key)  {
       (await counter.inc());
     }
@@ -26,6 +28,8 @@ module.exports = function({ counter }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
       (await counter.inc());
@@ -45,6 +49,8 @@ module.exports = function({ counter }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle(key)  {
       (await counter.inc());
     }
@@ -62,6 +68,8 @@ module.exports = function({ counter }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
       (await counter.inc());
@@ -81,31 +89,10 @@ module.exports = function({ counter, b }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
-      class Predicate {
-        constructor(counterVal)  {
-          this.counterVal = counterVal;
-        }
-        counterVal;
-        static async sleep(ms)  {
-          return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
-        }
-        async assertion()  {
-          return ((await counter.peek()) === this.counterVal);
-        }
-        async testAssertion()  {
-          let i = 0;
-          while ((i < 12)) {
-            i = (i + 1);
-            if ((await this.assertion())) {
-              {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
-              return;
-            }
-            (await Predicate.sleep((1000 * 10)));
-          }
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
-        }
-      }
+      const Predicate = require("./Predicate.inflight.js")({counter});
       (await b.put("a","1"));
       (await b.put("b","1"));
       (await b.put("c","1"));
@@ -115,6 +102,37 @@ module.exports = function({ counter, b }) {
     }
   }
   return $Inflight5;
+}
+
+```
+
+## clients/Predicate.inflight.js
+```js
+module.exports = function({ counter }) {
+  class Predicate {
+     constructor(counterVal)  {
+      this.counterVal = counterVal;
+    }
+    static async sleep(ms)  {
+      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(ms)
+    }
+    async assertion()  {
+      return ((await counter.peek()) === this.counterVal);
+    }
+    async testAssertion()  {
+      let i = 0;
+      while ((i < 12)) {
+        i = (i + 1);
+        if ((await this.assertion())) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+          return;
+        }
+        (await Predicate.sleep((1000 * 10)));
+      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.assertion())'`)})((await this.assertion()))};
+    }
+  }
+  return Predicate;
 }
 
 ```
@@ -960,7 +978,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -996,7 +1014,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1032,7 +1050,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight3.inflight.js";
         const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1068,7 +1086,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight4.inflight.js";
         const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1104,7 +1122,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight5.inflight.js";
         const counter_client = context._lift(counter);
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
