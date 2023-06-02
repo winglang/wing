@@ -3484,8 +3484,13 @@ impl<'a> TypeChecker<'a> {
 				return (None, None);
 			}
 		}
-		// Safety: we return early if parent_udt is None
+		// Safety: we return from the function above so parent_udt cannot be None
 		let parent_udt = parent_udt.unwrap();
+
+		if &parent_udt.root == name && parent_udt.fields.is_empty() {
+			self.spanned_error(parent_udt, "Class cannot extend itself".to_string());
+			return (None, None);
+		}
 
 		let parent_type = self.resolve_user_defined_type(parent_udt, env, stmt.idx);
 		let parent_type = match parent_type {

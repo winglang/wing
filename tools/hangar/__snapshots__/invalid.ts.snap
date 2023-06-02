@@ -267,6 +267,13 @@ error: Base class \\"S1\\" is not a class
    |                  ^^ Base class \\"S1\\" is not a class
 
 
+error: Class cannot extend itself
+   --> ../../../examples/tests/invalid/class.w:78:19
+   |
+78 | class C11 extends C11 {
+   |                   ^^^ Class cannot extend itself
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/class.w:31:14
    |
@@ -698,7 +705,14 @@ error: Unable to qualify which operations are performed on 'globalB' of type 'Bu
 `;
 
 exports[`interface.w > stderr 1`] = `
-"error: Unknown symbol \\"IB\\"
+"error: Properties are not supported in interfaces
+   --> ../../../examples/tests/invalid/interface.w:30:3
+   |
+30 |   bar: str;
+   |   ^^^^^^^^^ Properties are not supported in interfaces
+
+
+error: Unknown symbol \\"IB\\"
   --> ../../../examples/tests/invalid/interface.w:2:22
   |
 2 | interface IA extends IB {
