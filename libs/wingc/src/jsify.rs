@@ -314,17 +314,7 @@ impl<'a> JSifier<'a> {
 
 				let args = self.jsify_arg_list(&arg_list, scope, id, ctx);
 
-				let fqn = if is_preflight_class {
-					expression_type
-						.expect("expected expression")
-						.as_class_preflight()
-						.expect("expected resource")
-						.fqn
-						.clone()
-				} else {
-					None
-				};
-
+				let fqn = expression_type.expect("expression").as_class().expect("class").fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
 					if is_abstract {
 						format!("this.node.root.newAbstract(\"{}\",{})", fqn, args)
@@ -922,6 +912,7 @@ impl<'a> JSifier<'a> {
 		// Add bindings for the inflight init
 		self.add_inflight_init_refs(&mut refs, &captured_fields, &captured_vars);
 
+		// emit the inflight side of the class into a separate file
 		self.jsify_class_inflight(
 			env,
 			&class,
@@ -931,17 +922,9 @@ impl<'a> JSifier<'a> {
 			ctx,
 		);
 
-		let class_name = class.name.to_string();
-
+		// if our class is declared within a preflight scope, then we emit the preflight class
 		if ctx.phase == Phase::Preflight {
 			let mut code = CodeMaker::default();
-
-			// Get all preflight methods to be jsified to the preflight class
-			let preflight_methods = class
-				.methods
-				.iter()
-				.filter(|(_, m)| m.signature.phase != Phase::Inflight)
-				.collect_vec();
 
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
@@ -950,7 +933,9 @@ impl<'a> JSifier<'a> {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			};
 
-			code.open(format!("class {class_name}{extends} {{"));
+			code.open(format!("class {}{extends} {{", class.name.name));
+
+			// emit the preflight constructor
 			code.add_code(self.jsify_constructor(
 				&class.initializer,
 				class.parent.is_none(),
@@ -959,28 +944,48 @@ impl<'a> JSifier<'a> {
 				ctx,
 			));
 
+			// emit preflight methods
+			let preflight_methods = class
+				.methods
+				.iter()
+				.filter(|(_, m)| m.signature.phase != Phase::Inflight)
+				.collect_vec();
+
 			for (n, m) in preflight_methods {
 				code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
 			}
 
+			// emit the `_toInflightType` static method
 			code.add_code(self.jsify_to_inflight_type_method(&class, &captured_vars, &captured_types));
+
+			// emit the `_toInflight` instance method
 			code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
 
-			// Generate the the class's host binding methods
+			// call `_registerBindObject` to register the class's host binding methods (for type & instance binds).
 			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Instance));
 			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Type));
+
 			code.close("}");
 
 			code
 		} else {
-			let client_path = Self::js_resolve_path(&inflight_filename(class));
+			// this is the case where a class was declared within an inflight scope in this case we just
+			// emit a const with the same name that `require`s the inflight client code.
+			let mut code = CodeMaker::default();
 
+			let client = Self::js_resolve_path(&inflight_filename(class));
+
+			// capture list is basically the union of type and var capture names
 			let mut captures = captured_vars.iter().collect_vec();
 			captures.extend(captured_types.iter().map(|f| f.0).collect_vec());
+
 			let captures = captures.iter().join(",");
 
-			let mut code = CodeMaker::default();
-			code.line(format!("const {class_name} = require({client_path})({{{captures}}});"));
+			code.line(format!(
+				"const {} = require({client})({{{captures}}});",
+				class.name.name
+			));
+
 			code
 		}
 	}
@@ -1658,7 +1663,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					panic!("reference to undefined symbol");
 				};
 
-				let var = kind.as_variable().expect("reference to a non-variable");
+				let var = kind.as_variable().expect("variable");
 
 				// If the reference isn't a preflight (lifted) variable then skip it
 				if var.phase != Phase::Preflight {
@@ -1697,7 +1702,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let t = resolve_user_defined_type(type_, &env, self.statement_index).expect("covered by type checking");
 
 				// If the type we're referencing isn't a preflight class then skip it
-				let Some(class) = t.as_class_preflight() else {
+				let Some(class) = t.as_preflight_class() else {
 					return vec![];
 				};
 
@@ -1706,9 +1711,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let var = class
 					.env
 					.lookup(&property, None)
-					.expect("covered by type checking")
+					.expect("lookup")
 					.as_variable()
-					.expect("reference to a non-variable");
+					.expect("variable");
 
 				return vec![
 					Component {

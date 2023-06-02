@@ -439,9 +439,9 @@ impl Subtype for Type {
 					parent_type.is_subtype_of(other)
 				})
 			}
-			(Self::Class(res), Self::Interface(iface)) => {
+			(Self::Class(class), Self::Interface(iface)) => {
 				// If a resource implements the interface then it's a subtype of it (nominal typing)
-				let implements_iface = res.implements.iter().any(|parent| {
+				let implements_iface = class.implements.iter().any(|parent| {
 					let parent_type: &Type = parent;
 					parent_type.is_subtype_of(other)
 				});
@@ -450,9 +450,9 @@ impl Subtype for Type {
 					return true;
 				}
 
-				// To support flexible inflight closures, we say that any
-				// preflight class with an inflight method named "handle" is a subtype of
-				// any single-method interface with a matching "handle" method type.
+				// To support flexible inflight closures, we say that any class with an inflight method
+				// named "handle" is a subtype of any single-method interface with a matching "handle"
+				// method type.
 
 				// First, check if there is exactly one inflight method in the interface
 				let mut inflight_methods = iface
@@ -470,7 +470,7 @@ impl Subtype for Type {
 				}
 
 				// Then get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = res.get_method(&HANDLE_METHOD_NAME.into()) {
+				let res_handle_type = if let Some(method) = class.get_method(&HANDLE_METHOD_NAME.into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
@@ -701,7 +701,7 @@ impl Display for FunctionSignature {
 unsafe impl Send for TypeRef {}
 
 impl TypeRef {
-	pub fn as_class_preflight(&self) -> Option<&Class> {
+	pub fn as_preflight_class(&self) -> Option<&Class> {
 		if let Type::Class(ref class) = **self {
 			if class.phase == Phase::Preflight {
 				return Some(class);
@@ -787,7 +787,7 @@ impl TypeRef {
 
 	/// Returns whether the type is a preflight class with an inflight method named "handle"
 	pub fn is_handler_preflight_class(&self) -> bool {
-		if let Some(ref class) = self.as_class_preflight() {
+		if let Some(ref class) = self.as_preflight_class() {
 			return class
 				.methods(true)
 				.any(|(name, type_)| name == HANDLE_METHOD_NAME && type_.is_inflight_function());
@@ -1460,7 +1460,7 @@ impl<'a> TypeChecker<'a> {
 				// Make sure this is a function signature type
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig.clone()
-				} else if let Some(class) = func_type.as_class_preflight() {
+				} else if let Some(class) = func_type.as_preflight_class() {
 					// return the signature of the "handle" method
 					let lookup_res = class.get_method(&HANDLE_METHOD_NAME.into());
 					let handle_type = if let Some(method) = lookup_res {
@@ -3478,7 +3478,7 @@ impl<'a> TypeChecker<'a> {
 			if phase == Phase::Preflight {
 				// if this is a preflight and we don't have a parent, then we implicitly set it to `std.Resource`
 				let t = self.types.resource_base_type();
-				let env = t.as_class_preflight().unwrap().env.get_ref();
+				let env = t.as_preflight_class().unwrap().env.get_ref();
 				return (Some(t), Some(env));
 			} else {
 				return (None, None);

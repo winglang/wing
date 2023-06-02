@@ -538,11 +538,6 @@ impl<'s> Parser<'s> {
 							)
 							.err();
 					}
-					if class_phase == Phase::Independent && is_inflight {
-						self
-							.add_error::<Node>("Inflight classes cannot have a separate inflight initializers (the default initializer is already an inflight initializer)", &class_element)
-							.err();
-					}
 					let parameters_node = class_element.child_by_field_name("parameter_list").unwrap();
 					let parameters = self.build_parameter_list(&parameters_node, class_phase)?;
 					if !parameters.is_empty() && is_inflight && class_phase == Phase::Preflight {
