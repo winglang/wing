@@ -4,6 +4,6 @@
 ```log
 - Compiling to sim...
 ✔ Compiling to sim...
-pass ─ shadowing.wsim » root/env0/test:do not capture shadowed variable
+pass ─ shadowing.wsim » root/env0/test:capture shadow interaction
 ```
 

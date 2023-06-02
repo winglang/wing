@@ -1,8 +1,8 @@
-# [shadowing.w](../../../../examples/tests/valid/shadowing.w) | compile | tf-aws
+# [inflight_class_structural_interace_handler.w](../../../../examples/tests/valid/inflight_class_structural_interace_handler.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ bar }) {
+module.exports = function({ NotGoo }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,15 +12,11 @@ module.exports = function({ bar }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const result = [];
-      (await result.push(bar));
-      if (true) {
-        const bar = "world";
-        (await result.push(bar));
-      }
-      const foo = "bang";
-      (await result.push(foo));
-      return Object.freeze([...(result)]);
+      const YesGoo = require("./YesGoo.inflight.js")({});
+      const y = new YesGoo();
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await y.handle()) === 456)'`)})(((await y.handle()) === 456))};
+      const x = new NotGoo();
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await x.handle()) === 123)'`)})(((await x.handle()) === 123))};
     }
   }
   return $Inflight1;
@@ -28,26 +24,37 @@ module.exports = function({ bar }) {
 
 ```
 
-## clients/$Inflight2.inflight.js
+## clients/NotGoo.inflight.js
 ```js
-module.exports = function({ fn }) {
-  class $Inflight2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
+module.exports = function({  }) {
+  class NotGoo {
+     constructor()  {
+      const __parent_this = this;
     }
     async handle()  {
-      const result = (await fn());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(result.length === 3)'`)})((result.length === 3))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(0)) === "hola!")'`)})(((await result.at(0)) === "hola!"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(1)) === "world")'`)})(((await result.at(1)) === "world"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(2)) === "bang")'`)})(((await result.at(2)) === "bang"))};
+      const __parent_this = this;
+      return 123;
     }
   }
-  return $Inflight2;
+  return NotGoo;
+}
+
+```
+
+## clients/YesGoo.inflight.js
+```js
+module.exports = function({  }) {
+  class YesGoo {
+     constructor()  {
+    }
+    async handle()  {
+      return 456;
+    }
+    async anotherMethod()  {
+      {console.log("also fine")};
+    }
+  }
+  return YesGoo;
 }
 
 ```
@@ -73,7 +80,7 @@ module.exports = function({ fn }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:capture shadow interaction\",\"${aws_lambda_function.root_testcaptureshadowinteraction_Handler_E8667920.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:structure interface types for 'handle'\",\"${aws_lambda_function.root_teststructureinterfacetypesforhandle_Handler_D0AD9EBB.arn}\"]]"
     }
   },
   "provider": {
@@ -83,60 +90,60 @@ module.exports = function({ fn }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testcaptureshadowinteraction_Handler_IamRole_C25A6808": {
+      "root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRole",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_IamRole_C25A6808"
+            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRole",
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testcaptureshadowinteraction_Handler_IamRolePolicy_9EF406F6": {
+      "root_teststructureinterfacetypesforhandle_Handler_IamRolePolicy_726FC11F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRolePolicy",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_IamRolePolicy_9EF406F6"
+            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRolePolicy",
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_IamRolePolicy_726FC11F"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testcaptureshadowinteraction_Handler_IamRole_C25A6808.name}"
+        "role": "${aws_iam_role.root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_3D2035F3": {
+      "root_teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_31DB7A71": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_3D2035F3"
+            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_31DB7A71"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcaptureshadowinteraction_Handler_IamRole_C25A6808.name}"
+        "role": "${aws_iam_role.root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testcaptureshadowinteraction_Handler_E8667920": {
+      "root_teststructureinterfacetypesforhandle_Handler_D0AD9EBB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/Default",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_E8667920"
+            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/Default",
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_D0AD9EBB"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8807c1f"
+            "WING_FUNCTION_NAME": "Handler-c83718d0"
           }
         },
-        "function_name": "Handler-c8807c1f",
+        "function_name": "Handler-c83718d0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcaptureshadowinteraction_Handler_IamRole_C25A6808.arn}",
+        "role": "${aws_iam_role.root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcaptureshadowinteraction_Handler_S3Object_9107BDD6.key}",
+        "s3_key": "${aws_s3_object.root_teststructureinterfacetypesforhandle_Handler_S3Object_9DFAC484.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -156,11 +163,11 @@ module.exports = function({ fn }) {
       }
     },
     "aws_s3_object": {
-      "root_testcaptureshadowinteraction_Handler_S3Object_9107BDD6": {
+      "root_teststructureinterfacetypesforhandle_Handler_S3Object_9DFAC484": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/S3Object",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_S3Object_9107BDD6"
+            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/S3Object",
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_S3Object_9DFAC484"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -183,6 +190,38 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class NotGoo extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        const __parent_this = this;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/NotGoo.inflight.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const NotGooClient = ${NotGoo._toInflightType(this).text};
+            const client = new NotGooClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class $Inflight1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -191,10 +230,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
-        const bar_client = context._lift(bar);
+        const NotGooClient = NotGoo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            bar: ${bar_client},
+            NotGoo: ${NotGooClient.text},
           })
         `);
       }
@@ -211,59 +250,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(bar, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(bar, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this._addInflightOps("handle");
-        this.display.hidden = true;
-      }
-      static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js";
-        const fn_client = context._lift(fn);
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            fn: ${fn_client},
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-            const client = new $Inflight2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Inflight2._registerBindObject(fn, host, []);
-        }
-        if (ops.includes("handle")) {
-          $Inflight2._registerBindObject(fn, host, ["handle"]);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    const bar = "hola!";
-    const foo = "not captured";
-    const fn = new $Inflight1(this,"$Inflight1");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture shadow interaction",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:structure interface types for 'handle'",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "shadowing", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "inflight_class_structural_interace_handler", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

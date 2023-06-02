@@ -1,8 +1,8 @@
-# [shadowing.w](../../../../examples/tests/valid/shadowing.w) | compile | tf-aws
+# [inflight_class_as_struct_members.w](../../../../examples/tests/valid/inflight_class_as_struct_members.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ bar }) {
+module.exports = function({ Foo }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,15 +12,9 @@ module.exports = function({ bar }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const result = [];
-      (await result.push(bar));
-      if (true) {
-        const bar = "world";
-        (await result.push(bar));
-      }
-      const foo = "bang";
-      (await result.push(foo));
-      return Object.freeze([...(result)]);
+      return {
+      "foo": new Foo(),}
+      ;
     }
   }
   return $Inflight1;
@@ -30,7 +24,7 @@ module.exports = function({ bar }) {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function({ fn }) {
+module.exports = function({ getBar }) {
   class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -40,14 +34,28 @@ module.exports = function({ fn }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const result = (await fn());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(result.length === 3)'`)})((result.length === 3))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(0)) === "hola!")'`)})(((await result.at(0)) === "hola!"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(1)) === "world")'`)})(((await result.at(1)) === "world"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(2)) === "bang")'`)})(((await result.at(2)) === "bang"))};
+      const bar = (await getBar());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bar.foo.get()) === 42)'`)})(((await bar.foo.get()) === 42))};
     }
   }
   return $Inflight2;
+}
+
+```
+
+## clients/Foo.inflight.js
+```js
+module.exports = function({  }) {
+  class Foo {
+     constructor()  {
+      const __parent_this = this;
+    }
+    async get()  {
+      const __parent_this = this;
+      return 42;
+    }
+  }
+  return Foo;
 }
 
 ```
@@ -73,7 +81,7 @@ module.exports = function({ fn }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:capture shadow interaction\",\"${aws_lambda_function.root_testcaptureshadowinteraction_Handler_E8667920.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
     }
   },
   "provider": {
@@ -83,60 +91,60 @@ module.exports = function({ fn }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testcaptureshadowinteraction_Handler_IamRole_C25A6808": {
+      "root_testtest_Handler_IamRole_6C1728D1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRole",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_IamRole_C25A6808"
+            "path": "root/Default/Default/test:test/Handler/IamRole",
+            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testcaptureshadowinteraction_Handler_IamRolePolicy_9EF406F6": {
+      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRolePolicy",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_IamRolePolicy_9EF406F6"
+            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
+            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testcaptureshadowinteraction_Handler_IamRole_C25A6808.name}"
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_3D2035F3": {
+      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_3D2035F3"
+            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcaptureshadowinteraction_Handler_IamRole_C25A6808.name}"
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testcaptureshadowinteraction_Handler_E8667920": {
+      "root_testtest_Handler_046C3415": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/Default",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_E8667920"
+            "path": "root/Default/Default/test:test/Handler/Default",
+            "uniqueId": "root_testtest_Handler_046C3415"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8807c1f"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
           }
         },
-        "function_name": "Handler-c8807c1f",
+        "function_name": "Handler-c8f4f2a1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcaptureshadowinteraction_Handler_IamRole_C25A6808.arn}",
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcaptureshadowinteraction_Handler_S3Object_9107BDD6.key}",
+        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -156,11 +164,11 @@ module.exports = function({ fn }) {
       }
     },
     "aws_s3_object": {
-      "root_testcaptureshadowinteraction_Handler_S3Object_9107BDD6": {
+      "root_testtest_Handler_S3Object_71CD07AC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture shadow interaction/Handler/S3Object",
-            "uniqueId": "root_testcaptureshadowinteraction_Handler_S3Object_9107BDD6"
+            "path": "root/Default/Default/test:test/Handler/S3Object",
+            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -179,10 +187,41 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class Foo extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("get");
+        const __parent_this = this;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/Foo.inflight.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("get")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class $Inflight1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -191,10 +230,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
-        const bar_client = context._lift(bar);
+        const FooClient = Foo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            bar: ${bar_client},
+            Foo: ${FooClient.text},
           })
         `);
       }
@@ -211,10 +250,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(bar, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(bar, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -227,10 +264,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight2.inflight.js";
-        const fn_client = context._lift(fn);
+        const getBar_client = context._lift(getBar);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            fn: ${fn_client},
+            getBar: ${getBar_client},
           })
         `);
       }
@@ -247,23 +284,21 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight2._registerBindObject(fn, host, []);
+          $Inflight2._registerBindObject(getBar, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight2._registerBindObject(fn, host, ["handle"]);
+          $Inflight2._registerBindObject(getBar, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const bar = "hola!";
-    const foo = "not captured";
-    const fn = new $Inflight1(this,"$Inflight1");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture shadow interaction",new $Inflight2(this,"$Inflight2"));
+    const getBar = new $Inflight1(this,"$Inflight1");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "shadowing", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "inflight_class_as_struct_members", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

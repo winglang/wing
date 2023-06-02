@@ -585,17 +585,36 @@ exports[`inflight_class_created_in_preflight.w > stderr 1`] = `
 
 
 error: Cannot create inflight class \\"Foo\\" in preflight phase
-  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:7:5
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:8:5
   |
-7 |     new Foo();
+8 |     new Foo();
   |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
 error: Cannot create inflight class \\"Foo\\" in preflight phase
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:12:5
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:13:5
    |
-12 |     new Foo();
+13 |     new Foo();
    |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:3
+   |
+19 |   new PreflightClass();
+   |   ^^^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"PreflightClass\\" in inflight phase
+
+"
+`;
+
+exports[`inflight_class_dup_init.w > stderr 1`] = `
+"error: Multiple inflight initializers defined in class Foo
+  --> ../../../examples/tests/invalid/inflight_class_dup_init.w:6:3
+  |  
+6 | /   inflight init() {
+7 | | 
+8 | |   }
+  | \\\\---^ Multiple inflight initializers defined in class Foo
 
 "
 `;
@@ -606,6 +625,16 @@ exports[`inflight_class_in_preflight.w > stderr 1`] = `
   |
 5 | new Foo();
   | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+"
+`;
+
+exports[`inflight_class_interface_structural_typing.w > stderr 1`] = `
+"error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
+   --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.w:26:17
+   |
+26 |   let x: IGoo = new NotGoo();
+   |                 ^^^^^^^^^^^^ Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
 
 "
 `;

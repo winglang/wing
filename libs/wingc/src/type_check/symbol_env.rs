@@ -172,24 +172,6 @@ impl SymbolEnv {
 			});
 		}
 
-		// if this is a variable, verify that it adheres to the phase rules (notice that "this" is bound
-		// to the phase of the class).
-		if let SymbolKind::Variable(v) = &kind {
-			if self.phase == Phase::Inflight
-				&& v.phase == Phase::Preflight
-				&& symbol.name != "this"
-				&& symbol.name != CLASS_INIT_NAME
-			{
-				return Err(TypeError {
-					span: symbol.span.clone(),
-					message: format!(
-						"Unable to define the preflight member \"{}\" within an inflight scope",
-						symbol.name
-					),
-				});
-			}
-		}
-
 		self.symbol_map.insert(symbol.name.clone(), (pos, kind));
 
 		Ok(())
