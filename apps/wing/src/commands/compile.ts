@@ -132,9 +132,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     message.push(e);
     message.push();
     message.push();
-    message.push(chalk.bold.red("Internal error:") +
-    " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.");
-    
+    message.push(
+      chalk.bold.red("Internal error:") +
+        " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
+    );
+
     throw new Error(message.join("\n"));
   }
   if (compileResult !== 0) {
@@ -223,7 +225,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   try {
     vm.runInContext(artifact, context);
-  } catch (e: any) {
+  } catch (err: any) {
+    const e = annotatePreflightError(err);
+
     const output = new Array<string>();
 
     output.push(chalk.red(`ERROR: ${e.message}`));
@@ -278,6 +282,28 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   }
 
   return synthDir;
+}
+
+function annotatePreflightError(e: any): any {
+  if (!(e instanceof Error)) {
+    return e;
+  }
+
+  if (e.message.startsWith("There is already a Construct with name")) {
+    const newMessage = [];
+    newMessage.push(e.message);
+    newMessage.push(
+      "hint: Every preflight class needs a unique id within its scope. You can assign an id to a class as shown:"
+    );
+    newMessage.push('> new cloud.Bucket() as "MyBucket";');
+    newMessage.push("For more information, see https://docs.winglang.io/concepts/resources");
+
+    const newError = new Error(newMessage.join("\n\n"), { cause: e });
+    newError.stack = e.stack;
+    return newError;
+  }
+
+  return e;
 }
 
 /**
