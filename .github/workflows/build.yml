@@ -101,6 +101,8 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: 'chore/workflows_publish_vscode_extension_when_changed_v2'
         
       - run: |
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
