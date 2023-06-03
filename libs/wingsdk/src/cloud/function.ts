@@ -37,7 +37,7 @@ export interface FunctionProps {
   readonly memory?: number;
 
   /**
-   * The time limit of the function "remembers" the results corresponding to a specific set of inputs.
+   * Time limit in which the function remembers the corresponding result for a specific input.
    * @default undefined
    */
   readonly memoization?: Duration;
@@ -169,7 +169,7 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IResource {}
+export interface IFunctionHandler extends IResource { }
 
 /**
  * Inflight client for `IFunctionHandler`.
