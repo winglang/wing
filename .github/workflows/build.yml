@@ -102,7 +102,7 @@ jobs:
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
         with:
-          main-branch-name: 'chore/workflows_publish_vscode_extension_when_changed_v2'
+          main-branch-name: 'the-wing-trinity'
         
       - run: |
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
