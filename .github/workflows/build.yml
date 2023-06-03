@@ -101,12 +101,6 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
-        with:
-          main-branch-name: 'the-wing-trinity'
-        
-      - run: |
-          echo "BASE: ${{ steps.setSHAs.outputs.base }}"
-          echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
 
       - name: Check git diff of VSCode Extension
         id: git-diff-vscode-wing
