@@ -35,6 +35,12 @@ export interface FunctionProps {
    * @default 128
    */
   readonly memory?: number;
+
+  /**
+   * The time limit of the function "remembers" the results corresponding to a specific set of inputs.
+   * @default undefined
+   */
+  readonly memoization?: Duration;
 }
 
 /**
@@ -87,9 +93,29 @@ export abstract class Function extends Resource implements IInflightHost {
     const inflightClient = inflight._toInflight();
     const lines = new Array<string>();
 
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient.text}).handle(event);`);
-    lines.push("};");
+    if (props.memoization) {
+      lines.push("exports.handler = async function(event) {");
+      lines.push("  let item = await getIdempotencyItem(event);");
+      lines.push("  if (item) {");
+      lines.push("    return item.output;");
+      lines.push("  }");
+      lines.push("  await putIdempotencyItem(event);");
+      lines.push(`  let result = undefined;`);
+      lines.push("  try {");
+      lines.push(`    result = await (${inflightClient.text}).handle(event);`);
+      lines.push("    await updateIdempotencyItem(event, result);");
+      lines.push("    return result;");
+      lines.push("  } catch (e) {");
+      lines.push("    await deleteIdempotencyItem(event);");
+      lines.push("    throw e;");
+      lines.push("  }");
+      lines.push("  return result;");
+      lines.push("};");
+    } else {
+      lines.push("exports.handler = async function(event) {");
+      lines.push(`  return await (${inflightClient.text}).handle(event);`);
+      lines.push("};");
+    }
 
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues

@@ -1,5 +1,6 @@
 import { resolve } from "path";
-import { Duration } from "aws-cdk-lib";
+import { Duration, RemovalPolicy } from "aws-cdk-lib";
+import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
   Function as CdkFunction,
@@ -10,8 +11,8 @@ import {
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { createBundle } from "../shared/bundling";
 import { PolicyStatement } from "../shared-aws";
+import { createAwsBundle } from "../shared-aws/bundling";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -32,7 +33,7 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createAwsBundle(this.entrypoint, props.memoization);
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
@@ -42,6 +43,21 @@ export class Function extends cloud.Function {
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
     });
+
+    if (props.memoization) {
+      const table = new Table(this, "DefaultMemoization", {
+        partitionKey: {
+          name: "id",
+          type: AttributeType.STRING,
+        },
+        timeToLiveAttribute: "expiration",
+        removalPolicy: RemovalPolicy.DESTROY,
+        billingMode: BillingMode.PAY_PER_REQUEST,
+      });
+
+      table.grantReadWriteData(this.function);
+      this.function.addEnvironment("MEMOIZATION_TABLE", table.tableName);
+    }
 
     if (props.env) {
       for (const [key, val] of Object.entries(props.env)) {

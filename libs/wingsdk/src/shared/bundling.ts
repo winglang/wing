@@ -16,7 +16,11 @@ export interface Bundle {
  * @param outputDir Defaults to `${entrypoint}.bundle`
  * @returns Bundle information
  */
-export function createBundle(entrypoint: string, outputDir?: string): Bundle {
+export function createBundle(
+  entrypoint: string,
+  outputDir?: string,
+  externalLibs?: string[]
+): Bundle {
   const outdir = resolve(outputDir ?? entrypoint + ".bundle");
   mkdirSync(outdir, { recursive: true });
   const outfile = join(outdir, "index.js");
@@ -36,7 +40,11 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
       resolve(entrypoint)
     )}"], outfile: "${normalPath(outfile)}", ${nodePathString}
-    minify: false, platform: "node", target: "node16", external: ["aws-sdk"],
+    minify: false, platform: "node", target: "node16", external: ${
+      externalLibs
+        ? JSON.stringify(["aws-sdk", ...externalLibs])
+        : '["aws-sdk"]'
+    },
    });`,
   ].join("\n");
   let result = spawnSync(process.argv[0], ["-e", esbuildScript], {

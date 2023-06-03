@@ -2223,6 +2223,7 @@ let FunctionProps = cloud.FunctionProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memoization">memoization</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The time limit of the function "remembers" the results corresponding to a specific set of inputs. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
@@ -2238,6 +2239,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memoization`<sup>Optional</sup> <a name="memoization" id="@winglang/sdk.cloud.FunctionProps.property.memoization"></a>
+
+```wing
+memoization: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+The time limit of the function "remembers" the results corresponding to a specific set of inputs.
 
 ---
 
@@ -2317,6 +2331,7 @@ let QueueAddConsumerProps = cloud.QueueAddConsumerProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.memoization">memoization</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The time limit of the function "remembers" the results corresponding to a specific set of inputs. |
 | <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
@@ -2333,6 +2348,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memoization`<sup>Optional</sup> <a name="memoization" id="@winglang/sdk.cloud.QueueAddConsumerProps.property.memoization"></a>
+
+```wing
+memoization: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+The time limit of the function "remembers" the results corresponding to a specific set of inputs.
 
 ---
 
@@ -2453,6 +2481,7 @@ let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memoization">memoization</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The time limit of the function "remembers" the results corresponding to a specific set of inputs. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
@@ -2468,6 +2497,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memoization`<sup>Optional</sup> <a name="memoization" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.memoization"></a>
+
+```wing
+memoization: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+The time limit of the function "remembers" the results corresponding to a specific set of inputs.
 
 ---
 
@@ -2614,6 +2656,7 @@ let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.memoization">memoization</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The time limit of the function "remembers" the results corresponding to a specific set of inputs. |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
@@ -2629,6 +2672,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memoization`<sup>Optional</sup> <a name="memoization" id="@winglang/sdk.cloud.ServiceOnStartProps.property.memoization"></a>
+
+```wing
+memoization: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+The time limit of the function "remembers" the results corresponding to a specific set of inputs.
 
 ---
 
@@ -2801,6 +2857,7 @@ let TestProps = std.TestProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.std.TestProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.std.TestProps.property.memoization">memoization</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The time limit of the function "remembers" the results corresponding to a specific set of inputs. |
 | <code><a href="#@winglang/sdk.std.TestProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.std.TestProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
@@ -2816,6 +2873,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memoization`<sup>Optional</sup> <a name="memoization" id="@winglang/sdk.std.TestProps.property.memoization"></a>
+
+```wing
+memoization: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+The time limit of the function "remembers" the results corresponding to a specific set of inputs.
 
 ---
 
@@ -2946,6 +3016,7 @@ let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memoization">memoization</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The time limit of the function "remembers" the results corresponding to a specific set of inputs. |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
@@ -2961,6 +3032,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memoization`<sup>Optional</sup> <a name="memoization" id="@winglang/sdk.cloud.TopicOnMessageProps.property.memoization"></a>
+
+```wing
+memoization: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+The time limit of the function "remembers" the results corresponding to a specific set of inputs.
 
 ---
 

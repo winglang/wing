@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import { IamRole } from "../.gen/providers/aws/iam-role";
 import { IamRolePolicy } from "../.gen/providers/aws/iam-role-policy";
 import { IamRolePolicyAttachment } from "../.gen/providers/aws/iam-role-policy-attachment";
@@ -10,9 +11,9 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { createBundle } from "../shared/bundling";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { PolicyStatement } from "../shared-aws";
+import { createAwsBundle } from "../shared-aws/bundling";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -23,6 +24,16 @@ import { Duration } from "../std/duration";
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 64,
   disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
+};
+
+/**
+ * Memoization (Table) names must be between 3 and 255 characters.
+ * You can use alphanumeric characters, dot (.), dash (-), and underscores (_).
+ */
+const MEMOIZATION_NAME_OPTS: NameOptions = {
+  maxLen: 255,
+  disallowedRegex: /[^a-zA-Z0-9\_\.\-]+/g,
+  prefix: "wing-memoization-",
 };
 
 /**
@@ -59,6 +70,8 @@ export class Function extends cloud.Function {
   private subnets?: Set<string>;
   private securityGroups?: Set<string>;
 
+  private readonly table?: DynamodbTable;
+
   /**
    * Unqualified Function ARN
    * @returns Unqualified ARN of the function
@@ -83,7 +96,7 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createAwsBundle(this.entrypoint, props.memoization);
 
     // Create Lambda executable
     const asset = new TerraformAsset(this, "Asset", {
@@ -216,6 +229,27 @@ export class Function extends cloud.Function {
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
+
+    if (props.memoization) {
+      this.table = new DynamodbTable(this, "DefaultMemoization", {
+        name: ResourceNames.generateName(this, MEMOIZATION_NAME_OPTS),
+        attribute: [{ name: "id", type: "S" }],
+        hashKey: "id",
+        billingMode: "PAY_PER_REQUEST",
+      });
+
+      this.addEnvironment("MEMOIZATION_TABLE", this.table.name);
+
+      this.addPolicyStatements({
+        actions: [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+        ],
+        resources: [this.table.arn],
+      });
+    }
   }
 
   /** @internal */
