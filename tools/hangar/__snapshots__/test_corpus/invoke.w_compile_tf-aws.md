@@ -9,6 +9,8 @@ module.exports = function({ payload }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       return payload;
     }
@@ -26,6 +28,8 @@ module.exports = function({ f, payload }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
       const x = (await f.invoke(""));
@@ -241,7 +245,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const payload_client = context._lift(payload);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -277,7 +281,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const f_client = context._lift(f);
         const payload_client = context._lift(payload);
         return $stdlib.core.NodeJsCode.fromInline(`

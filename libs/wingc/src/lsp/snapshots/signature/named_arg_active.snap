@@ -8,6 +8,6 @@ signatures:
       - label: "1: BucketDeleteOptions?"
         documentation:
           kind: markdown
-          value: "```wing\nstruct BucketDeleteOptions { \n  mustExist: bool?\n}\n```"
+          value: "```wing\nstruct BucketDeleteOptions { \n  mustExist: bool?;\n}\n```"
     activeParameter: 1
 

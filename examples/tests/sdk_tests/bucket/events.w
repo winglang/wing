@@ -39,12 +39,12 @@ new std.Test(inflight () => {
             let var i = 0;
             // waiting for up to 2 minutess, checking every 10 seconds
             while i < 12 {
-            i = i + 1;
-            if this.assertion() {
-                assert(this.assertion());
-                return;
-            } 
-            Predicate.sleep(1000 * 10);
+                i = i + 1;
+                if this.assertion() {
+                    assert(this.assertion());
+                    return;
+                } 
+                Predicate.sleep(1000 * 10);
             }
             assert(this.assertion());
         }

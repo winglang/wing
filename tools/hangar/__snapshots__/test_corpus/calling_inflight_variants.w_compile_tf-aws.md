@@ -9,6 +9,8 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       return 1;
     }
@@ -27,9 +29,12 @@ module.exports = function({ foo }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.callFn(true)) === 1)'`)})(((await foo.callFn(true)) === 1))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.callFn(false)) === 2)'`)})(((await foo.callFn(false)) === 2))};
+      (await foo.callFn2());
     }
   }
   return $Inflight2;
@@ -50,6 +55,8 @@ module.exports = function({  }) {
         return 2;
       }
       ;
+      const ret = (await this.inflight2());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(ret === 2)'`)})((ret === 2))};
     }
     async makeFn(x)  {
       const __parent_this = this;
@@ -66,6 +73,13 @@ module.exports = function({  }) {
       const __parent_this = this;
       const partialFn = (await this.makeFn(x));
       return (await partialFn());
+    }
+    async callFn2()  {
+      const __parent_this = this;
+      const one = (await this.inflight1());
+      const two = (await this.inflight2());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(one === 1)'`)})((one === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(two === 2)'`)})((two === 2))};
     }
   }
   return Foo;
@@ -207,7 +221,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("makeFn", "callFn", "inflight2");
+        this._addInflightOps("makeFn", "callFn", "callFn2", "inflight2");
         const __parent_this = this;
         class $Inflight1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
@@ -216,7 +230,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+            const self_client_path = "./clients/$Inflight1.inflight.js";
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
               })
@@ -244,7 +258,7 @@ class $Root extends $stdlib.std.Resource {
         this.inflight1 = new $Inflight1(this,"$Inflight1");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -269,6 +283,9 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("callFn")) {
         }
+        if (ops.includes("callFn2")) {
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
+        }
         if (ops.includes("makeFn")) {
           Foo._registerBindObject(this.inflight1, host, ["handle"]);
         }
@@ -282,7 +299,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -306,7 +323,7 @@ class $Root extends $stdlib.std.Resource {
           $Inflight2._registerBindObject(foo, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight2._registerBindObject(foo, host, ["callFn"]);
+          $Inflight2._registerBindObject(foo, host, ["callFn", "callFn2"]);
         }
         super._registerBind(host, ops);
       }

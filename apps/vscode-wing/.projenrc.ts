@@ -17,7 +17,16 @@ const project = new TypeScriptAppProject({
   bugsUrl: "https://github.com/winglang/wing/issues",
   homepage: "https://winglang.io",
   description: "Wing language support for VSCode",
-  keywords: ["wing", "language", "cloud", "cdk", "infrastructure"],
+  keywords: [
+    "cdk",
+    "cdktf",
+    "cloud",
+    "infrastructure",
+    "language",
+    "terraform",
+    "wing",
+    "winglang",
+  ],
   license: "MIT",
 
   packageManager: NodePackageManager.NPM,
