@@ -37,9 +37,6 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   public async init(): Promise<FunctionAttributes> {
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-
-    this.bundle = createBundle(this.filename, workdir);
     return {};
   }
 
@@ -48,6 +45,11 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   public async invoke(payload: string): Promise<string> {
+    if (!this.bundle) {
+      const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
+      this.bundle = createBundle(this.filename, workdir);
+    }
+
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
