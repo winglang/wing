@@ -371,7 +371,7 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
 
   // THEN
   await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
-    /Unexpected token V in JSON at position 0/
+    "Unexpected token 'V', \"VALUE\" is not valid JSON"
   );
 });
 
