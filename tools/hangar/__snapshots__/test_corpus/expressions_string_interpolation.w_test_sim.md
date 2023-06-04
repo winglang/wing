@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/expressions_string_interpolation.w to sim...
+✔ Compiling valid/expressions_string_interpolation.w to sim...
 pass ─ expressions_string_interpolation.wsim (no tests)
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 
