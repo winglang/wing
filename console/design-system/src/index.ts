@@ -37,6 +37,7 @@ export * from "./top-resizable-widget.js";
 export * from "./tabs.js";
 export * from "./response-input.js";
 export * from "./json-response-input.js";
+export * from "./file-preview.js";
 
 export * from "./icons/redis-icon.js";
 export * from "./icons/spinner-icon.js";

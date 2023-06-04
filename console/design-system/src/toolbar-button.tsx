@@ -21,6 +21,7 @@ export const ToolbarButton = ({
       className={classNames(
         theme.bg2Hover,
         theme.text1,
+        theme.focusInput,
         "text-xs",
         "py-0.5 px-1 rounded group flex items-center gap-1",
         {

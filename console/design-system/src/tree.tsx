@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { uniq } from "lodash";
-import { useState, KeyboardEvent, useEffect } from "react";
+import { useState, KeyboardEvent, useEffect, Ref, useCallback } from "react";
 
 import { useTheme } from "./theme-provider.js";
 
@@ -10,9 +10,11 @@ export interface TreeEntry {
 }
 
 export interface TreeProps {
+  currentRef?: Ref<HTMLButtonElement>;
   entries: TreeEntry[];
   onSelectionChange: (entries: string[]) => void;
   onCurrentChange?: (index: string | undefined) => void;
+  onOpenEntry?: () => void;
   className?: string;
   selectedEntries: string[];
 }
@@ -97,7 +99,7 @@ const useSelectionRange = ({
       setCurrent(-1);
     } else {
       onSelectionChange([...selectedEntries, entry.id]);
-      // setCurrent(index);
+      setCurrent(index);
     }
   };
 
@@ -142,13 +144,25 @@ const useSelectionRange = ({
 };
 
 export const Tree = ({
+  currentRef,
   entries,
   selectedEntries,
   onSelectionChange,
   onCurrentChange,
+  onOpenEntry,
   className,
 }: TreeProps) => {
   const { theme } = useTheme();
+
+  const [active, setActive] = useState(false);
+  const [current, setCurrent] = useState<string | undefined>();
+  const currentChange = useCallback(
+    (index: string | undefined) => {
+      setCurrent(index);
+      onCurrentChange?.(index);
+    },
+    [setCurrent, onCurrentChange],
+  );
 
   const {
     selectTo,
@@ -161,7 +175,7 @@ export const Tree = ({
     entries,
     selectedEntries,
     onSelectionChange,
-    onCurrentChange,
+    onCurrentChange: currentChange,
   });
 
   const onKeyDown = (event: KeyboardEvent<HTMLTableElement>) => {
@@ -178,6 +192,11 @@ export const Tree = ({
       case "ArrowUp": {
         event.preventDefault();
         selectPrevious({ additive: event.shiftKey });
+        break;
+      }
+      case " ": {
+        event.preventDefault();
+        onOpenEntry?.();
         break;
       }
       case "a": {
@@ -197,7 +216,7 @@ export const Tree = ({
       className={classNames(
         theme.bgInput,
         theme.textInput,
-        theme.focusInput,
+        theme.focusWithin,
         theme.borderInput,
         "outline-none rounded border",
         "transition ease-in-out group",
@@ -211,6 +230,12 @@ export const Tree = ({
       onClick={() => {
         unselectAll();
       }}
+      onFocus={() => {
+        setActive(true);
+      }}
+      onBlur={() => {
+        setActive(false);
+      }}
     >
       {entries.map((entry, index) => {
         const selected = selectedEntries.includes(entry.id);
@@ -219,13 +244,15 @@ export const Tree = ({
         return (
           // TODO: Fix a11y
           // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-          <div
+          <button
+            ref={entry.id === current ? currentRef : undefined}
             key={entry.name}
             className={classNames(
-              "px-2 group w-full truncate py-0.5",
+              "px-2 w-full truncate py-0.5",
+              "text-left text-sm cursor-default focus:outline-none",
               selected && [
-                "bg-slate-200 dark:bg-slate-750",
-                "group-focus:bg-sky-500 group-focus:text-white",
+                !active && "bg-slate-200 dark:bg-slate-750",
+                active && "bg-sky-500 text-white",
                 !(previous && selectedEntries.includes(previous.id)) &&
                   "rounded-t",
                 !(next && selectedEntries.includes(next.id)) && "rounded-b",
@@ -245,7 +272,7 @@ export const Tree = ({
             }}
           >
             {entry.name}
-          </div>
+          </button>
         );
       })}
     </div>

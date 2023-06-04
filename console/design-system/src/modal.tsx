@@ -7,10 +7,16 @@ import { useTheme } from "./theme-provider.js";
 export interface ModalProps {
   visible: boolean;
   setVisible: (visible: boolean) => void;
+  className?: string;
   children?: ReactNode;
 }
 
-export function Modal({ visible, setVisible, children }: ModalProps) {
+export function Modal({
+  visible,
+  setVisible,
+  className,
+  children,
+}: ModalProps) {
   const { theme } = useTheme();
 
   return (
@@ -51,11 +57,11 @@ export function Modal({ visible, setVisible, children }: ModalProps) {
               <Dialog.Panel
                 className={classNames(
                   "relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all",
-                  "w-full my-8 p-6",
-                  "max-w-lg",
+                  "my-8 p-6",
                   theme.bg3,
                   "border",
                   theme.border3,
+                  className,
                 )}
               >
                 {children}

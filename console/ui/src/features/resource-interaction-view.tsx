@@ -1,6 +1,5 @@
-import { BucketView } from "../components/resource-views/BucketView.js";
-
 import { ApiInteractionView } from "./api-interaction-view.js";
+import { BucketInteractionView } from "./bucket-interaction-view.js";
 import { CounterInteractionView } from "./counter-interaction-view.js";
 import { FunctionInteractionView } from "./function-interaction-view.js";
 import { QueueInteractionView } from "./queue-interaction-view.js";
@@ -27,7 +26,7 @@ export const ResourceInteractionView = ({
         return <FunctionInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Bucket": {
-        return <BucketView resourcePath={resourcePath} />;
+        return <BucketInteractionView resourcePath={resourcePath} />;
       }
       case "wingsdk.cloud.Counter": {
         return <CounterInteractionView resourcePath={resourcePath} />;
