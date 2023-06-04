@@ -7,3 +7,5 @@ assert(12m.seconds == 12 * 60);
 // test "d" {
 //   let d = 12m;
 // }
+
+// TODO: https://github.com/winglang/wing/issues/2785
