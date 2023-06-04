@@ -80,7 +80,7 @@ store.onCreate(inflight (key: str) => {
 
 store.onDelete(inflight (key: str) => {
   copies.delete(key);
-  log("Deleted {key}");
+  log("Deleted ${key}");
 });
 ```
 
