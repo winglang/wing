@@ -3,29 +3,19 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        class InflightClass {
-          constructor()  {
-          }
-          async inflightMethod()  {
-            {
-              return "Inflight method";
-            }
-          }
-          static async staticInflightMethod()  {
-            {
-              return "Static inflight method";
-            }
-          }
-        }
-        const inflightClass = new InflightClass();
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method")'`)})(((typeof inflightClass.inflightMethod === "function" ? await inflightClass.inflightMethod() : await inflightClass.inflightMethod.handle()) === "Inflight method"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method")'`)})(((typeof InflightClass.staticInflightMethod === "function" ? await InflightClass.staticInflightMethod() : await InflightClass.staticInflightMethod.handle()) === "Static inflight method"))};
-      }
+      const InflightClass = require("./InflightClass.inflight.js")({});
+      const inflightClass = new InflightClass();
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflightClass.inflightMethod()) === "Inflight method")'`)})(((await inflightClass.inflightMethod()) === "Inflight method"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.staticInflightMethod()) === "Static inflight method")'`)})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
     }
   }
   return $Inflight1;
@@ -36,17 +26,36 @@ module.exports = function({  }) {
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({ instanceField }) {
       this.instanceField = instanceField;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     static async get123()  {
-      {
-        return 123;
-      }
+      return 123;
     }
   }
   return Foo;
+}
+
+```
+
+## clients/InflightClass.inflight.js
+```js
+module.exports = function({  }) {
+  class InflightClass {
+     constructor()  {
+    }
+    async inflightMethod()  {
+      return "Inflight method";
+    }
+    static async staticInflightMethod()  {
+      return "Static inflight method";
+    }
+  }
+  return InflightClass;
 }
 
 ```
@@ -175,6 +184,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -189,12 +199,10 @@ class $Root extends $stdlib.std.Resource {
         this.instanceField = 100;
       }
       static m()  {
-        {
-          return 99;
-        }
+        return 99;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -232,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -260,7 +268,7 @@ class $Root extends $stdlib.std.Resource {
     const foo = new Foo(this,"Foo");
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instanceField === 100)'`)})((foo.instanceField === 100))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.m()) === 99)'`)})(((Foo.m()) === 99))};
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

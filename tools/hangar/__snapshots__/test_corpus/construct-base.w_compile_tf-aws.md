@@ -3,8 +3,11 @@
 ## clients/WingResource.inflight.js
 ```js
 module.exports = function({  }) {
-  class  WingResource {
+  class WingResource {
     constructor({  }) {
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return WingResource;
@@ -60,6 +63,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -75,7 +79,7 @@ class $Root extends $stdlib.std.Resource {
         {console.log(`my id is ${this.node.id}`)};
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/WingResource.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/WingResource.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -99,15 +103,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const getPath =  (c) =>  {
-      {
-        return c.node.path;
-      }
+      return c.node.path;
     }
     ;
     const getDisplayName =  (r) =>  {
-      {
-        return r.display.title;
-      }
+      return r.display.title;
     }
     ;
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");

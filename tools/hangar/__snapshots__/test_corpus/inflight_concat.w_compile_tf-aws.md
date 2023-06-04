@@ -3,15 +3,16 @@
 ## clients/R.inflight.js
 ```js
 module.exports = function({  }) {
-  class  R {
+  class R {
     constructor({ s1 }) {
       this.s1 = s1;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async foo()  {
-      {
-        const __parent_this = this;
-        {console.log((typeof this.s1.concat === "function" ? await this.s1.concat(" world") : await this.s1.concat.handle(" world")))};
-      }
+      const __parent_this = this;
+      {console.log((await this.s1.concat(" world")))};
     }
   }
   return R;
@@ -55,6 +56,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -69,7 +71,7 @@ class $Root extends $stdlib.std.Resource {
         this.s1 = "hello";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/R.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

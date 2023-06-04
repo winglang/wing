@@ -3,13 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ a }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
     }
   }
   return $Inflight1;
@@ -20,9 +23,12 @@ module.exports = function({ a }) {
 ## clients/A.inflight.js
 ```js
 module.exports = function({  }) {
-  class  A {
+  class A {
     constructor({ field }) {
       this.field = field;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return A;
@@ -154,6 +160,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -167,7 +174,7 @@ class $Root extends $stdlib.std.Resource {
         this.field = "hey";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/A.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -200,7 +207,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const a_client = context._lift(a);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -230,7 +237,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const a = new A(this,"A");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

@@ -3,14 +3,17 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        {console.log("inflight log 1.1")};
-        {console.log("inflight log 1.2")};
-      }
+      {console.log("inflight log 1.1")};
+      {console.log("inflight log 1.2")};
     }
   }
   return $Inflight1;
@@ -21,14 +24,17 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        {console.log("inflight log 2.1")};
-        {console.log("inflight log 2.2")};
-      }
+      {console.log("inflight log 2.1")};
+      {console.log("inflight log 2.2")};
     }
   }
   return $Inflight2;
@@ -225,6 +231,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -238,7 +245,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -270,7 +277,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -296,8 +303,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {console.log("preflight log")};
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:log1",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:log2",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:log1",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:log2",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

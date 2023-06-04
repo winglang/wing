@@ -3,14 +3,17 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ jj }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")'`)})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
-      }
+      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")'`)})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
     }
   }
   return $Inflight1;
@@ -142,6 +145,7 @@ module.exports = function({ jj }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -155,7 +159,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const jj_client = context._lift(jj);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -212,7 +216,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]) === "hello")'`)})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["c"])'`)})(((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["c"]))};
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:Access Json static inflight",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Access Json static inflight",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

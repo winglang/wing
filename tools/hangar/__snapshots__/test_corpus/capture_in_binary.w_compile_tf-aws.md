@@ -3,15 +3,18 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b, x }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (typeof b.put === "function" ? await b.put("file","foo") : await b.put.handle("file","foo"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof b.get === "function" ? await b.get("file") : await b.get.handle("file")) === "foo")'`)})(((typeof b.get === "function" ? await b.get("file") : await b.get.handle("file")) === "foo"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(12 === x)'`)})((12 === x))};
-      }
+      (await b.put("file","foo"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file")) === "foo")'`)})(((await b.get("file")) === "foo"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(12 === x)'`)})((12 === x))};
     }
   }
   return $Inflight1;
@@ -188,6 +191,7 @@ module.exports = function({ b, x }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -201,7 +205,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const b_client = context._lift(b);
         const x_client = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -236,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const x = 12;
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:binary expressions",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:binary expressions",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

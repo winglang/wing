@@ -3,16 +3,19 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ data, res, queue }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
-        (typeof res.put === "function" ? await res.put("file.txt","world") : await res.put.handle("file.txt","world"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof res.get === "function" ? await res.get("file.txt") : await res.get.handle("file.txt")) === "world")'`)})(((typeof res.get === "function" ? await res.get("file.txt") : await res.get.handle("file.txt")) === "world"))};
-        (typeof queue.push === "function" ? await queue.push("spirulina") : await queue.push.handle("spirulina"));
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
+      (await res.put("file.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await res.get("file.txt")) === "world")'`)})(((await res.get("file.txt")) === "world"))};
+      (await queue.push("spirulina"));
     }
   }
   return $Inflight1;
@@ -201,6 +204,7 @@ module.exports = function({ data, res, queue }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -214,7 +218,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const data_client = context._lift(data);
         const res_client = context._lift(res);
         const queue_client = context._lift(queue);
@@ -254,7 +258,7 @@ class $Root extends $stdlib.std.Resource {
     const data = Object.freeze(new Set([1, 2, 3]));
     const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:resource and data",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:resource and data",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

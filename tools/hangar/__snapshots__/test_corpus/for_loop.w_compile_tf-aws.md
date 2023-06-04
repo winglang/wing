@@ -3,16 +3,19 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(event)  {
-      {
-        for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(x <= 0)'`)})((x <= 0))};
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(x > 10)'`)})((x > 10))};
-          {console.log(`${x}`)};
-        }
+      for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(x <= 0)'`)})((x <= 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(x > 10)'`)})((x > 10))};
+        {console.log(`${x}`)};
       }
     }
   }
@@ -24,16 +27,17 @@ module.exports = function({  }) {
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({  }) {
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async hello()  {
-      {
+      const __parent_this = this;
+      for (const p of Object.freeze(["hello"])) {
         const __parent_this = this;
-        for (const p of Object.freeze(["hello"])) {
-          const __parent_this = this;
-          {console.log(p)};
-        }
+        {console.log(p)};
       }
     }
   }
@@ -166,6 +170,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -179,7 +184,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -211,7 +216,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

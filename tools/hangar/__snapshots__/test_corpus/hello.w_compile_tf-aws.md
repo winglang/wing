@@ -3,13 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ bucket }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(message)  {
-      {
-        (typeof bucket.put === "function" ? await bucket.put("wing.txt",`Hello, ${message}`) : await bucket.put.handle("wing.txt",`Hello, ${message}`));
-      }
+      (await bucket.put("wing.txt",`Hello, ${message}`));
     }
   }
   return $Inflight1;
@@ -210,6 +213,7 @@ module.exports = function({ bucket }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -223,7 +227,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const bucket_client = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({

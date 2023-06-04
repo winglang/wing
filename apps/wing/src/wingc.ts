@@ -13,6 +13,7 @@ export type WingCompilerFunction =
   | "wingc_on_did_open_text_document"
   | "wingc_on_did_change_text_document"
   | "wingc_on_completion"
+  | "wingc_on_signature_help"
   | "wingc_on_goto_definition"
   | "wingc_on_document_symbol"
   | "wingc_on_semantic_tokens"

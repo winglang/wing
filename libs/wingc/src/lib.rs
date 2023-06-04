@@ -63,6 +63,7 @@ const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
+const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 
@@ -174,6 +175,7 @@ pub fn type_check(
 	source_path: &Path,
 	jsii_types: &mut TypeSystem,
 ) -> Diagnostics {
+	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
