@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/inflight-subscribers.w to sim...
+✔ Compiling valid/inflight-subscribers.w to sim...
 pass ─ inflight-subscribers.wsim (no tests)
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

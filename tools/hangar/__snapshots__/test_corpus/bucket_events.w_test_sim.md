@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/bucket_events.w to sim...
+✔ Compiling valid/bucket_events.w to sim...
 pass ┌ bucket_events.wsim » root/env0/test:test
      │ created a
      │ last key a
@@ -20,5 +20,13 @@ pass ┌ bucket_events.wsim » root/env0/test:test
      │ deleted c
      │ last key c
      └ other bucket event called!
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling bucket/put.w to sim...
+✔ Compiling bucket/put.w to sim...
 pass ─ put.wsim » root/env0/test:put
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

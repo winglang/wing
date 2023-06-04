@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/api.w to sim...
+✔ Compiling valid/api.w to sim...
 pass ─ api.wsim » root/env0/test:api url
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 
