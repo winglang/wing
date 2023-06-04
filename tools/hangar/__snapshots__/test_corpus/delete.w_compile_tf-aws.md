@@ -13,13 +13,19 @@ module.exports = function({ b }) {
       const jsonObj1 = Object.freeze({"key1":"value1"});
       (await b.putJson("file1.json",jsonObj1));
       (await b.delete("file1.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 1)'`)})(((await b.list()).length === 1))};
-      (await b.delete("file1.json"));
-      (await b.delete("file1.json"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
-      (await b.put("file2.txt","Foo"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file1.json"))'`)})((await b.exists("file1.json")))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file2.txt"))'`)})((await b.exists("file2.txt")))};
+      (await b.delete("file1.json",Object.freeze({"mustExist":true})));
+      try {
+        (await b.delete("file1.json",Object.freeze({"mustExist":true})));
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(e === "Object does not exist (key=file1.json).")'`)})((e === "Object does not exist (key=file1.json)."))};
+      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file2.txt"))'`)})((await b.exists("file2.txt")))};
       (await b.delete("file2.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("file2.txt")))'`)})((!(await b.exists("file2.txt"))))};
     }
   }
   return $Inflight1;
@@ -76,7 +82,7 @@ module.exports = function({ b }) {
             "uniqueId": "root_testdelete_Handler_IamRolePolicy_A650187C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testdelete_Handler_IamRole_0F45E7FD.name}"
       }
     },
@@ -176,6 +182,17 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_object": {
+      "root_cloudBucket_S3Objectfile2txt_2A0B5D22": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/S3Object-file2.txt",
+            "uniqueId": "root_cloudBucket_S3Objectfile2txt_2A0B5D22"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "content": "Bar",
+        "key": "file2.txt"
+      },
       "root_testdelete_Handler_S3Object_B655C36A": {
         "//": {
           "metadata": {
@@ -234,12 +251,13 @@ class $Root extends $stdlib.std.Resource {
           $Inflight1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(b, host, ["delete", "list", "put", "putJson"]);
+          $Inflight1._registerBindObject(b, host, ["delete", "exists", "putJson"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    (b.addObject("file2.txt","Bar"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:delete",new $Inflight1(this,"$Inflight1"));
   }
 }

@@ -1,8 +1,8 @@
-# [list.w](../../../../examples/tests/valid/list.w) | compile | tf-aws
+# [bucket_list.w](../../../../examples/tests/valid/bucket_list.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ table }) {
+module.exports = function({ b }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,18 +10,20 @@ module.exports = function({ table }) {
       return $obj;
     }
     async handle()  {
-      (await table.insert("eyal",Object.freeze({"gender":"male"})));
-      (await table.insert("revital",Object.freeze({"gender":"female"})));
-      const unorderded = {};
-      for (const u of (await table.list())) {
-        ((obj, args) => { obj[args[0]] = args[1]; })(unorderded, [((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((u)["name"]),u]);
-      }
-      const revital = (unorderded)["revital"];
-      const eyal = (unorderded)["eyal"];
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("eyal" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["name"]))'`)})(("eyal" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["name"])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("male" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["gender"]))'`)})(("male" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["gender"])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("revital" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["name"]))'`)})(("revital" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["name"])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("female" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["gender"]))'`)})(("female" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["gender"])))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
+      (await b.put("file1.txt","Foo"));
+      (await b.put("file2.txt","Bar"));
+      (await b.put("random","Buz"));
+      const objs = (await b.list());
+      const objs2 = (await b.list("file"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file1.txt")'`)})(objs.includes("file1.txt"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file2.txt")'`)})(objs.includes("file2.txt"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("random")'`)})(objs.includes("random"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file1.txt")'`)})(objs2.includes("file1.txt"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file2.txt")'`)})(objs2.includes("file2.txt"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!objs2.includes("random"))'`)})((!objs2.includes("random")))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs.length === 3)'`)})((objs.length === 3))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs2.length === 2)'`)})((objs2.length === 2))};
     }
   }
   return $Inflight1;
@@ -59,25 +61,6 @@ module.exports = function({ table }) {
     ]
   },
   "resource": {
-    "aws_dynamodb_table": {
-      "root_cloudTable_323D7643": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Table/Default",
-            "uniqueId": "root_cloudTable_323D7643"
-          }
-        },
-        "attribute": [
-          {
-            "name": "name",
-            "type": "S"
-          }
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "hash_key": "name",
-        "name": "userscloud.Table-c83b78a7"
-      }
-    },
     "aws_iam_role": {
       "root_testlist_Handler_IamRole_4D7098F9": {
         "//": {
@@ -97,7 +80,7 @@ module.exports = function({ table }) {
             "uniqueId": "root_testlist_Handler_IamRolePolicy_039D0595"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testlist_Handler_IamRole_4D7098F9.name}"
       }
     },
@@ -123,9 +106,8 @@ module.exports = function({ table }) {
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"gender\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "name",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8867143"
           }
         },
@@ -152,6 +134,49 @@ module.exports = function({ table }) {
           }
         },
         "bucket_prefix": "code-c84a50b1-"
+      },
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53"
+          }
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": false
+      }
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+          }
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
+      }
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256"
+            }
+          }
+        ]
       }
     },
     "aws_s3_object": {
@@ -190,10 +215,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
-        const table_client = context._lift(table);
+        const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            table: ${table_client},
+            b: ${b_client},
           })
         `);
       }
@@ -210,21 +235,21 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(table, host, []);
+          $Inflight1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(table, host, ["insert", "list"]);
+          $Inflight1._registerBindObject(b, host, ["list", "put"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":cloud.ColumnType.STRING}) });
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:list",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "list", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "bucket_list", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
