@@ -2,7 +2,8 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
-import { T1 } from "./util";
+import { Code, InflightClient } from "../core";
+import { T1 } from "./generics";
 
 /**
  * Immutable Set
@@ -37,6 +38,13 @@ export class ImmutableSet {
    */
   public copyMut(): MutableSet {
     throw new Error("Macro");
+  }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "ImmutableSet");
   }
 }
 
@@ -100,5 +108,12 @@ export class MutableSet {
   public has(value: T1): boolean {
     value;
     throw new Error("Abstract");
+  }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "MutableSet");
   }
 }

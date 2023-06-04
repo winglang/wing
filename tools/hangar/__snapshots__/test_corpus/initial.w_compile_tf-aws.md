@@ -247,7 +247,8 @@ module.exports = function({ counterC }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_220d28dd": "${aws_dynamodb_table.root_counterA_FE83A0AC.name}",
-            "WING_FUNCTION_NAME": "Handler-c88a038b"
+            "WING_FUNCTION_NAME": "Handler-c88a038b",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c88a038b",
@@ -273,7 +274,8 @@ module.exports = function({ counterC }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_4795370d": "${aws_dynamodb_table.root_counterC_5BAA0CEC.name}",
-            "WING_FUNCTION_NAME": "Handler-c88178b6"
+            "WING_FUNCTION_NAME": "Handler-c88178b6",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c88178b6",
@@ -299,7 +301,8 @@ module.exports = function({ counterC }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_96df6c3c": "${aws_dynamodb_table.root_counterB_3EAEEDE1.name}",
-            "WING_FUNCTION_NAME": "Handler-c835d39a"
+            "WING_FUNCTION_NAME": "Handler-c835d39a",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c835d39a",

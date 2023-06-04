@@ -154,6 +154,7 @@ impl Fold for ClosureTransformer {
 				self.inflight_counter += 1;
 
 				let new_class_name = Symbol {
+					// TODO: change $Inflight to $Closure (https://github.com/winglang/wing/issues/2782)
 					name: format!("$Inflight{}", self.inflight_counter),
 					span: expr.span.clone(),
 				};

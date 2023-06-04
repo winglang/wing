@@ -264,7 +264,8 @@ module.exports = function({  }) {
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
             "QUEUE_URL_ea9f63d6": "${aws_sqs_queue.root_MyResource_cloudQueue_156CFA11.url}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8f4f2a1",

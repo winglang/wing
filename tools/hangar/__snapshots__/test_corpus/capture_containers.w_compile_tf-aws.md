@@ -103,7 +103,8 @@ module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c876b763"
+            "WING_FUNCTION_NAME": "Handler-c876b763",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c876b763",

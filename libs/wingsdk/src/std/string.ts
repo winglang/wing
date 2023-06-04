@@ -2,6 +2,7 @@
 // They should not be consumed directly by users.
 // TODO: This should be an interface, currently Wing does not support interface JSII imports
 
+import { Code, InflightClient } from "../core";
 import { Json } from "./json";
 
 /**
@@ -155,5 +156,12 @@ export class String {
    */
   public uppercase(): string {
     throw new Error("Macro");
+  }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "String");
   }
 }

@@ -330,7 +330,8 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "CLOUD_API_C8B1D888": "${aws_api_gateway_stage.root_A_cloudApi_api_stage_EEF6B12C.invoke_url}",
-            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-155b3888-c85af51e"
+            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-155b3888-c85af51e",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-155b3888-c85af51e",
@@ -356,7 +357,8 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-e46e5cb7-c8fd44c0"
+            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-e46e5cb7-c8fd44c0",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-e46e5cb7-c8fd44c0",
@@ -382,7 +384,8 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
-            "WING_FUNCTION_NAME": "Handler-c8315524"
+            "WING_FUNCTION_NAME": "Handler-c8315524",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8315524",

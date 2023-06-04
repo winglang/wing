@@ -146,7 +146,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c82c13b7"
+            "WING_FUNCTION_NAME": "Handler-c82c13b7",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c82c13b7",
@@ -171,7 +172,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c87c0241"
+            "WING_FUNCTION_NAME": "Handler-c87c0241",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c87c0241",

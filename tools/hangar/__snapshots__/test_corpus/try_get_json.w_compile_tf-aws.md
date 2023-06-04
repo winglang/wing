@@ -2,7 +2,7 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ b, std_Json }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -107,7 +107,8 @@ module.exports = function({ b }) {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c8858898"
+            "WING_FUNCTION_NAME": "Handler-c8858898",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8858898",
@@ -215,9 +216,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
         const b_client = context._lift(b);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             b: ${b_client},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }

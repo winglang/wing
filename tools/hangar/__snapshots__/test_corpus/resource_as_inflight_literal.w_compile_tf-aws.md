@@ -146,7 +146,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1"
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8d2eca1",
@@ -172,7 +173,8 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "FUNCTION_NAME_5bb84dfa": "${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8f4f2a1",

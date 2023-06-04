@@ -115,7 +115,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-e46e5cb7-c85740a2"
+            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-e46e5cb7-c85740a2",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Queue-AddConsumer-e46e5cb7-c85740a2",

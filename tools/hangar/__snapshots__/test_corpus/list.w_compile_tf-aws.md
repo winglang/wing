@@ -2,7 +2,7 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ table }) {
+module.exports = function({ table, std_String }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -128,7 +128,8 @@ module.exports = function({ table }) {
             "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"gender\":0}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "name",
-            "WING_FUNCTION_NAME": "Handler-c8867143"
+            "WING_FUNCTION_NAME": "Handler-c8867143",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8867143",
@@ -193,9 +194,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
         const table_client = context._lift(table);
+        const std_StringClient = std.String._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             table: ${table_client},
+            std_String: ${std_StringClient.text},
           })
         `);
       }

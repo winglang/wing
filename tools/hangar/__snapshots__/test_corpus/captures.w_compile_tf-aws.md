@@ -186,7 +186,8 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
             "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "AnotherFunction-c88d2a81"
+            "WING_FUNCTION_NAME": "AnotherFunction-c88d2a81",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "AnotherFunction-c88d2a81",
@@ -217,7 +218,8 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
             "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1"
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8d2eca1",
@@ -248,7 +250,8 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
             "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-e46e5cb7-c85740a2"
+            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-e46e5cb7-c85740a2",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Queue-AddConsumer-e46e5cb7-c85740a2",

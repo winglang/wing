@@ -193,7 +193,8 @@ module.exports = function({ r, r2 }) {
           "variables": {
             "REDIS_CLUSTER_ID_30c8c4ae": "${aws_elasticache_cluster.root_r2_RedisCluster_EB1F5CD1.cluster_id}",
             "REDIS_CLUSTER_ID_5c75c5cf": "${aws_elasticache_cluster.root_redisRedis_RedisCluster_2049056C.cluster_id}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8f4f2a1",

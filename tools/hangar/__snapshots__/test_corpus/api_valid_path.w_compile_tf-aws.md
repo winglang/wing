@@ -152,7 +152,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-e46e5cb7-c8fd44c0"
+            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-e46e5cb7-c8fd44c0",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-e46e5cb7-c8fd44c0",

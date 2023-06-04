@@ -406,7 +406,8 @@ module.exports = function({ counter }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "b-on_create-OnMessage-8588493f-c8391419"
+            "WING_FUNCTION_NAME": "b-on_create-OnMessage-8588493f-c8391419",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_create-OnMessage-8588493f-c8391419",
@@ -432,7 +433,8 @@ module.exports = function({ counter }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "b-on_create-OnMessage-88f6f7aa-c8cbe4b6"
+            "WING_FUNCTION_NAME": "b-on_create-OnMessage-88f6f7aa-c8cbe4b6",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_create-OnMessage-88f6f7aa-c8cbe4b6",
@@ -458,7 +460,8 @@ module.exports = function({ counter }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "b-on_delete-OnMessage-6e8b2f6c-c876a85f"
+            "WING_FUNCTION_NAME": "b-on_delete-OnMessage-6e8b2f6c-c876a85f",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_delete-OnMessage-6e8b2f6c-c876a85f",
@@ -484,7 +487,8 @@ module.exports = function({ counter }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "b-on_delete-OnMessage-dece1815-c8cd8f35"
+            "WING_FUNCTION_NAME": "b-on_delete-OnMessage-dece1815-c8cd8f35",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_delete-OnMessage-dece1815-c8cd8f35",
@@ -510,7 +514,8 @@ module.exports = function({ counter }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "b-on_update-OnMessage-8b441417-c8f09598"
+            "WING_FUNCTION_NAME": "b-on_update-OnMessage-8b441417-c8f09598",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_update-OnMessage-8b441417-c8f09598",
@@ -536,7 +541,8 @@ module.exports = function({ counter }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "b-on_update-OnMessage-c7d8cc3e-c8d485f7"
+            "WING_FUNCTION_NAME": "b-on_update-OnMessage-c7d8cc3e-c8d485f7",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_update-OnMessage-c7d8cc3e-c8d485f7",
@@ -564,7 +570,8 @@ module.exports = function({ counter }) {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.root_b_6D0D1E6D.bucket}",
             "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "Handler-c81a387c"
+            "WING_FUNCTION_NAME": "Handler-c81a387c",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c81a387c",

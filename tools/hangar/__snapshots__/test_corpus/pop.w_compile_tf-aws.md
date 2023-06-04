@@ -105,7 +105,8 @@ module.exports = function({ q, NIL }) {
         "environment": {
           "variables": {
             "QUEUE_URL_31e95cbd": "${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
-            "WING_FUNCTION_NAME": "Handler-c888e5ca"
+            "WING_FUNCTION_NAME": "Handler-c888e5ca",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c888e5ca",

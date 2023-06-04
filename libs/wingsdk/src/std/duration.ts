@@ -1,3 +1,5 @@
+import { Code, InflightClient } from "../core";
+
 /**
  * Represents a length of time.
  */
@@ -59,5 +61,12 @@ export class Duration {
    */
   public get hours() {
     return this.minutes / 60;
+  }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "Duration");
   }
 }

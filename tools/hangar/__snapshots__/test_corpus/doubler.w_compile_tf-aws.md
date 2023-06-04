@@ -22,7 +22,7 @@ module.exports = function({  }) {
 
 ## clients/$Inflight2.inflight.js
 ```js
-module.exports = function({ handler }) {
+module.exports = function({ handler, std_Number, std_Json }) {
   class $Inflight2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -224,7 +224,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Function-c8d4b6f0"
+            "WING_FUNCTION_NAME": "cloud-Function-c8d4b6f0",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8d4b6f0",
@@ -250,7 +251,8 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "FUNCTION_NAME_f7db7b1d": "${aws_lambda_function.root_Doubler2_cloudFunction_37D1882D.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8914de5"
+            "WING_FUNCTION_NAME": "Handler-c8914de5",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8914de5",
@@ -402,9 +404,13 @@ class $Root extends $stdlib.std.Resource {
           static _toInflightType(context) {
             const self_client_path = "./clients/$Inflight2.inflight.js";
             const handler_client = context._lift(handler);
+            const std_NumberClient = std.Number._toInflightType(context);
+            const std_JsonClient = std.Json._toInflightType(context);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
                 handler: ${handler_client},
+                std_Number: ${std_NumberClient.text},
+                std_Json: ${std_JsonClient.text},
               })
             `);
           }

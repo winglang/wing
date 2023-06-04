@@ -103,7 +103,8 @@ module.exports = function({ b }) {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c85da482"
+            "WING_FUNCTION_NAME": "Handler-c85da482",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c85da482",

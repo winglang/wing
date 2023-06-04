@@ -6,7 +6,7 @@ exports[`bool_from_json.w > stderr 1`] = `
 ../../../examples/tests/error/target/test/bool_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = Object.freeze({\\"a\\":123});
->>     const a = ((args) => { if (typeof args !== \\"boolean\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a boolean\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
+>>     const a = (std.Boolean.fromJson((j)[\\"a\\"]));
      }
    }
 "

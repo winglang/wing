@@ -1,3 +1,4 @@
+import { Code, InflightClient } from "../core";
 import { Json } from "./json";
 
 /**
@@ -7,13 +8,20 @@ export class Boolean {
   /**
    * Parse a boolean from Json.
    *
-   * @macro ((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })($args$)
-   *
    * @param json to parse boolean from.
    * @returns a boolean.
    */
   public static fromJson(json: Json): boolean {
-    json;
-    throw new Error("Macro");
+    if (typeof json !== "boolean") {
+      throw new Error("unable to parse " + typeof json + " " + json + " as a boolean");
+    }
+    return JSON.parse(JSON.stringify(json));
+  }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "Boolean");
   }
 }

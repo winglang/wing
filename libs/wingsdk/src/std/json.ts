@@ -1,3 +1,5 @@
+import { Code, InflightClient } from "../core";
+
 /**
  * Immutable Json
  */
@@ -135,6 +137,13 @@ export class Json {
     index;
     throw new Error("Macro");
   }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "Json");
+  }
 }
 
 /**
@@ -192,5 +201,12 @@ export class MutJson {
     index;
     value;
     throw new Error("Macro");
+  }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "MutJson");
   }
 }
