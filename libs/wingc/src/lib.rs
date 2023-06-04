@@ -13,6 +13,7 @@ use colored::Colorize;
 use diagnostic::{Diagnostic, Diagnostics, WingSpan};
 use fold::Fold;
 use jsify::JSifier;
+use strum::{Display, EnumString};
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
@@ -25,7 +26,6 @@ use std::alloc::{alloc, dealloc, Layout};
 use std::backtrace::{Backtrace, BacktraceStatus};
 use std::cell::RefCell;
 
-use std::env;
 use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
@@ -257,9 +257,29 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.expect("Failed to add builtin");
 }
 
+/// The different phases of compilation, used for tracking compilation context
+/// for diagnostic purposes. Feel free to add new phases as needed.
+/// Try to make these end with 'ing' (building, parsing, etc.) so they'll fit in
+/// in the context of a diagnostic message.
+/// See `CompilationContext::set` for more information.
+#[derive(EnumString, Display, PartialEq, Clone, Copy)]
+#[strum(serialize_all = "kebab-case")]
+pub enum CompilationPhase {
+	Compiling,
+	Parsing,
+	TypeChecking,
+	Jsifying,
+}
+
+impl Default for CompilationPhase {
+	fn default() -> Self {
+		CompilationPhase::Compiling
+	}
+}
+
 pub struct CompilationContext {
 	/// Description of current compilation phase
-	pub phase: String,
+	pub phase: CompilationPhase,
 
 	/// Location in source we're currently processing
 	pub span: WingSpan,
@@ -267,44 +287,59 @@ pub struct CompilationContext {
 
 thread_local! {
 	pub static COMPILATION_CONTEXT: RefCell<CompilationContext> = RefCell::new(CompilationContext {
-		phase: "compiling".to_string(),
+		phase: CompilationPhase::default(),
 		span: WingSpan::default(),
 	});
 }
 
-/// Set global information about the current compilation phase.
-/// This is used for diagnostics, specifically for custom panic messages.
-///
-/// # Arguments
-///
-/// * `phase` - Description of current compilation phase, should end with 'ing' (building, parsing, etc.)
-/// * `span` - Location in source we're currently processing.
-fn set_compilation_context(phase: &str, span: &WingSpan) {
-	COMPILATION_CONTEXT.with(|c| {
-		c.replace_with(|_| CompilationContext {
-			phase: phase.to_string(),
-			span: span.clone(),
+impl CompilationContext {
+	/// Set global information about the current compilation phase.
+	/// This is used for diagnostics, specifically for custom panic messages.
+	///
+	/// # Arguments
+	///
+	/// * `phase` - Description of current compilation phase.
+	/// * `span` - Location in source we're currently processing.
+	fn set(phase: CompilationPhase, span: &WingSpan) {
+		COMPILATION_CONTEXT.with(|c| {
+			c.replace_with(|_| CompilationContext {
+				phase,
+				span: span.clone(),
+			});
 		});
-	});
-}
+	}
 
-fn compiler_dbg_panic() {
-	// Get environment variable to see if we should panic or not
-	let Ok(dbg_panic) = env::var("WINGC_DEBUG_PANIC") else {
-		return;
-	};
+	fn get_phase() -> CompilationPhase {
+		COMPILATION_CONTEXT.with(|c| c.borrow().phase)
+	}
 
-	if matches!(dbg_panic.as_str(), "1" | "true") || compilation_phase() == dbg_panic {
-		panic!("User invoked panic");
+	fn get_span() -> WingSpan {
+		COMPILATION_CONTEXT.with(|c| c.borrow().span.clone())
 	}
 }
 
-fn compilation_phase() -> String {
-	COMPILATION_CONTEXT.with(|c| c.borrow().phase.clone())
-}
+/// Macro used for explicit panics if the environment variable `WINGC_DEBUG_PANIC` is set.
+/// This can be used if we want to conditionally panic in certain situations.
+/// This is a macro and not a function so we can get the location if the caller
+/// in the panic message.
+#[macro_export]
+macro_rules! dbg_panic {
+	() => {{
+		|| -> () {
+			// Get environment variable to see if we should panic or not
+			let Ok(dbg_panic) = std::env::var("WINGC_DEBUG_PANIC") else { return; };
 
-fn compilation_span() -> WingSpan {
-	COMPILATION_CONTEXT.with(|c| c.borrow().span.clone())
+			if dbg_panic == "1"
+				|| dbg_panic == "true"
+				|| (dbg_panic
+					.parse::<$crate::CompilationPhase>()
+					.map(|p| p == $crate::CompilationContext::get_phase())
+					.unwrap_or(false))
+			{
+				panic!("User invoked panic");
+			}
+		}();
+	}};
 }
 
 pub fn compile(
@@ -335,9 +370,9 @@ pub fn compile(
 
 	std::panic::set_hook(Box::new(|pi| {
 		eprintln!(
-			"Compiler bug when {} {} | {}",
-			compilation_phase(),
-			compilation_span(),
+			"Compiler bug when {} {} | {}\nPlease report this bug at https://docs.winglang.io/contributors/bugs",
+			CompilationContext::get_phase(),
+			CompilationContext::get_span(),
 			pi.to_string().bold().white()
 		);
 

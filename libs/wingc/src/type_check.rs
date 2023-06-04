@@ -10,7 +10,7 @@ use crate::ast::{
 };
 use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
 use crate::{
-	compiler_dbg_panic, debug, set_compilation_context, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE,
+	dbg_panic, debug, CompilationContext, CompilationPhase, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE,
 	WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
 	WINGSDK_REDIS_MODULE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
 };
@@ -1178,7 +1178,7 @@ impl<'a> TypeChecker<'a> {
 
 	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &SymbolEnv) -> TypeRef {
-		set_compilation_context("type checking", &exp.span);
+		CompilationContext::set(CompilationPhase::TypeChecking, &exp.span);
 		let t = self.type_check_exp_helper(&exp, env);
 		exp.evaluated_type.replace(Some(t));
 		t
@@ -1717,7 +1717,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during type-checking)
-				compiler_dbg_panic();
+				dbg_panic!();
 				self.type_error(TypeError {
 					message: "Panic expression".to_string(),
 					span: exp.span.clone(),
@@ -1886,7 +1886,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn type_check_scope(&mut self, scope: &Scope) {
-		set_compilation_context("type checking", &scope.span);
+		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		assert!(self.inner_scopes.is_empty());
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
@@ -1986,7 +1986,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
-		set_compilation_context("type checking", &stmt.span);
+		CompilationContext::set(CompilationPhase::TypeChecking, &stmt.span);
 
 		// Set the current statement index for symbol lookup checks. We can safely assume we're
 		// not overwriting the current statement index because `type_check_statement` is never

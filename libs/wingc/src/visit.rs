@@ -1,8 +1,11 @@
-use crate::{ast::{
-	ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UserDefinedType,
-}, compiler_dbg_panic};
+use crate::{
+	ast::{
+		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
+		InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
+		UserDefinedType,
+	},
+	dbg_panic,
+};
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
 ///
@@ -358,7 +361,7 @@ where
 		}
 		ExprKind::CompilerDebugPanic => {
 			// Handle the debug panic expression (during visiting)
-			compiler_dbg_panic();
+			dbg_panic!();
 		}
 	}
 }

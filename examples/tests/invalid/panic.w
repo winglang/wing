@@ -1,8 +1,8 @@
 /*\
 env:
-  WINGC_DEBUG_PANIC: type checking
+  WINGC_DEBUG_PANIC: type-checking
 \*/
 "I'm fine";
 😱;
-//^ panic during type checking
+//^ Compiler bug when type-checking
 "Are you sure?";

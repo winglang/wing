@@ -13,7 +13,7 @@ use crate::ast::{
 	UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::{compiler_dbg_panic, set_compilation_context, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{dbg_panic, CompilationContext, CompilationPhase, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -160,7 +160,7 @@ impl<'s> Parser<'s> {
 
 	fn build_scope(&self, scope_node: &Node, phase: Phase) -> Scope {
 		let span = self.node_span(scope_node);
-		set_compilation_context("parsing", &span);
+		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let mut cursor = scope_node.walk();
 
 		Scope {
@@ -177,7 +177,7 @@ impl<'s> Parser<'s> {
 
 	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<Stmt> {
 		let span = self.node_span(statement_node);
-		set_compilation_context("parsing", &span);
+		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
 			"short_import_statement" => self.build_bring_statement(statement_node)?,
 
@@ -1098,7 +1098,7 @@ impl<'s> Parser<'s> {
 
 	fn build_expression(&self, exp_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
 		let expression_span = self.node_span(exp_node);
-		set_compilation_context("parsing", &expression_span);
+		CompilationContext::set(CompilationPhase::Parsing, &expression_span);
 		let expression_node = &self.check_error(*exp_node, "expression")?;
 		match expression_node.kind() {
 			"new_expression" => {
@@ -1434,7 +1434,7 @@ impl<'s> Parser<'s> {
 			}
 			"compiler_dbg_panic" => {
 				// Handle the debug panic expression (during parsing)
-				compiler_dbg_panic();
+				dbg_panic!();
 				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
