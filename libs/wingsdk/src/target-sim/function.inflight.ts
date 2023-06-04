@@ -37,9 +37,6 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   public async init(): Promise<FunctionAttributes> {
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-
-    this.bundle = createBundle(this.filename, workdir);
     return {};
   }
 
@@ -52,7 +49,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
         if (!this.bundle) {
-          throw new Error("unable to find bundle (function not initialized?)");
+          const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
+          this.bundle = createBundle(this.filename, workdir);
         }
 
         const sandboxProcess = {
