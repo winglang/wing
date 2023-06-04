@@ -48,7 +48,7 @@ const defaultOptions: RequestOptions = {
 export class Http {
   static async fetch(url: string, options?: RequestOptions): Promise<Response> {
     const res = await fetch(url, { ...defaultOptions, ...options });
-    return await this._formatResponse(res);
+    return this._formatResponse(res);
   }
   /**
    *
@@ -57,8 +57,8 @@ export class Http {
    * @returns Response
    * @inflight
    */
-  get(url: string, options?: RequestOptions): Promise<Response> {
-    return Http.fetch(url, {
+  static async get(url: string, options?: RequestOptions): Promise<Response> {
+    return this.fetch(url, {
       ...defaultOptions,
       ...options,
       method: HttpMethods.GET,
@@ -71,7 +71,7 @@ export class Http {
    * @returns Response
    * @inflight
    */
-  static post(url: string, options?: RequestOptions): Promise<Response> {
+  static async post(url: string, options?: RequestOptions): Promise<Response> {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
@@ -85,7 +85,7 @@ export class Http {
    * @returns Response
    * @inflight
    */
-  static put(url: string, options?: RequestOptions): Promise<Response> {
+  static async put(url: string, options?: RequestOptions): Promise<Response> {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
@@ -99,7 +99,7 @@ export class Http {
    * @returns Response
    * @inflight
    */
-  static patch(url: string, options?: RequestOptions): Promise<Response> {
+  static async patch(url: string, options?: RequestOptions): Promise<Response> {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
