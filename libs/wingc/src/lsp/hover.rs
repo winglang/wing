@@ -1,8 +1,6 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{
-	Class, Expr, FunctionBody, FunctionDefinition, Initializer, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-};
+use crate::ast::{Class, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol};
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::{LookupResult, SymbolLookupInfo};
@@ -145,9 +143,15 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 		self.visit_symbol(&node.name);
 
-		self.visit_constructor(&node.initializer);
+		self.visit_function_definition(&node.initializer);
 
-		self.with_scope(&node.initializer.statements, |v| {
+		let scope = if let FunctionBody::Statements(statements) = &node.initializer.body {
+			statements
+		} else {
+			panic!("Initializer cannot be 'extern'");
+		};
+
+		self.with_scope(&scope, |v| {
 			for field in &node.fields {
 				v.visit_symbol(&field.name);
 				v.visit_type_annotation(&field.member_type);
@@ -158,24 +162,6 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				v.visit_function_definition(&method.1);
 			}
 		});
-	}
-
-	fn visit_constructor(&mut self, node: &'a Initializer) {
-		if self.is_found() {
-			return;
-		}
-
-		if let Some(return_type) = &node.signature.return_type {
-			self.visit_type_annotation(return_type);
-		}
-
-		self.with_scope(&node.statements, |v| {
-			for param in &node.signature.parameters {
-				v.visit_function_parameter(&param);
-			}
-		});
-
-		self.visit_scope(&node.statements);
 	}
 
 	fn visit_symbol(&mut self, node: &'a Symbol) {
@@ -307,4 +293,84 @@ fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover
 		// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
 		range: Some((&expr.span).into()),
 	});
+}
+
+#[cfg(test)]
+mod tests {
+	use crate::lsp::hover::*;
+	use crate::lsp::sync::test_utils::*;
+	use lsp_types::*;
+
+	/// Creates a snapshot test for a given wing program's hover at a given position
+	/// In the wing program, place a comment "//^" into the text where the "^" is pointing to the desired character position
+	///
+	/// First parameter will be the name of the tests, as well as the identifier to use for the list of completion in the asserts (see last parameter)
+	/// Second parameter is the wing code block as a string literal
+	/// After the first two parameters, any additional are optional statements that should be used for asserting on the given hover data.
+	///
+	/// Result is a [Hover] object
+	macro_rules! test_hover_list {
+		($name:ident, $code:literal, $($assertion:stmt)*) => {
+			#[test]
+			fn $name() {
+				let text_document_position_params = load_file_with_contents($code);
+				let hover = on_hover(HoverParams {
+					text_document_position_params,
+					work_done_progress_params: Default::default(),
+				});
+
+				if let Some($name) = hover {
+					insta::with_settings!(
+						{
+							prepend_module_to_snapshot => false,
+							omit_expression => true,
+							snapshot_path => "./snapshots/hovers",
+						}, {
+							insta::assert_yaml_snapshot!($name);
+						}
+					);
+					$($assertion)*
+				} else {
+					panic!("Expected hover data");
+				}
+			}
+		};
+	}
+
+	test_hover_list!(
+		new_expression_nested,
+		r#"
+bring cloud;
+
+new cloud. 
+   //^"#,
+	);
+
+	test_hover_list!(
+		class_symbol,
+		r#"
+bring cloud;
+
+let bucket = new cloud.Bucket();
+   //^"#,
+	);
+
+	test_hover_list!(
+		class_symbol_in_closure,
+		r#"
+bring cloud;
+
+let bucket = new cloud.Bucket();
+   //^"#,
+	);
+
+	test_hover_list!(
+		class_property,
+		r#"
+bring cloud;
+
+let bucket = new cloud.Bucket();
+bucket.addObject
+      //^"#,
+	);
 }

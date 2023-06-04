@@ -3,15 +3,18 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
-        (await b.put("hello.txt","world"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 1)'`)})(((await b.list()).length === 1))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
+      (await b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 1)'`)})(((await b.list()).length === 1))};
     }
   }
   return $Inflight1;
@@ -22,14 +25,17 @@ module.exports = function({ b }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await b.put("hello.txt","world"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("hello.txt")) === "world")'`)})(((await b.get("hello.txt")) === "world"))};
-      }
+      (await b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("hello.txt")) === "world")'`)})(((await b.get("hello.txt")) === "world"))};
     }
   }
   return $Inflight2;
@@ -273,6 +279,7 @@ module.exports = function({ b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -283,9 +290,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -306,9 +314,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["list", "put"]);
+          $Inflight1._registerBindObject(b, host, ["list", "put"]);
         }
         super._registerBind(host, ops);
       }
@@ -317,9 +326,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -340,16 +350,17 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["get", "put"]);
+          $Inflight2._registerBindObject(b, host, ["get", "put"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:put",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:get",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:put",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:get",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

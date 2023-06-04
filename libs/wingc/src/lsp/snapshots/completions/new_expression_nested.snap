@@ -1,0 +1,40 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: Api
+  kind: 7
+  detail: preflight class
+- label: Bucket
+  kind: 7
+  detail: preflight class
+- label: Counter
+  kind: 7
+  detail: preflight class
+- label: Function
+  kind: 7
+  detail: preflight class
+- label: Queue
+  kind: 7
+  detail: preflight class
+- label: Schedule
+  kind: 7
+  detail: preflight class
+- label: Secret
+  kind: 7
+  detail: preflight class
+- label: Service
+  kind: 7
+  detail: preflight class
+- label: Table
+  kind: 7
+  detail: preflight class
+- label: TestRunner
+  kind: 7
+  detail: preflight class
+- label: Topic
+  kind: 7
+  detail: preflight class
+- label: Website
+  kind: 7
+  detail: preflight class
+

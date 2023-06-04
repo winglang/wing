@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { IResource } from "../std";
+import { IResource } from "../std/resource";
 
 /**
  * Props for all `App` classes.
@@ -69,7 +69,7 @@ export abstract class App extends Construct {
       if (e.code === "MODULE_NOT_FOUND") {
         const cannotFindModule = e.message.split("\n")[0];
         throw new Error(
-          `${cannotFindModule}. The target "${target}" requires this module to be installed.`
+          `${cannotFindModule}. The target "${target}" requires this module to be installed globally (using "npm i -g").`
         );
       }
 

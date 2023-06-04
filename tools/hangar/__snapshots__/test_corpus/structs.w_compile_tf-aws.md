@@ -3,15 +3,16 @@
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({ data }) {
       this.data = data;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async getStuff()  {
-      {
-        const __parent_this = this;
-        return this.data.field0;
-      }
+      const __parent_this = this;
+      return this.data.field0;
     }
   }
   return Foo;
@@ -55,6 +56,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
@@ -68,7 +70,7 @@ class $Root extends $stdlib.std.Resource {
         this.data = b;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -89,10 +91,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.data, host, []);
+          Foo._registerBindObject(this.data, host, []);
         }
         if (ops.includes("getStuff")) {
-          this._registerBindObject(this.data.field0, host, []);
+          Foo._registerBindObject(this.data.field0, host, []);
         }
         super._registerBind(host, ops);
       }

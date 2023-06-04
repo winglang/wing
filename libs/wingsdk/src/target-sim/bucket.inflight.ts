@@ -60,11 +60,13 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return topicClient.publish(key);
   }
 
-  private async fileExists(key: string): Promise<boolean> {
-    return fs.promises
-      .access(join(this.fileDir, key))
-      .then(() => true)
-      .catch(() => false);
+  public async exists(key: string): Promise<boolean> {
+    return this.context.withTrace({
+      message: `Exists (key=${key}).`,
+      activity: async () => {
+        return this.objectKeys.has(key);
+      },
+    });
   }
 
   public async put(key: string, value: string): Promise<void> {
@@ -80,7 +82,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put Json (key=${key}).`,
       activity: async () => {
-        const actionType: BucketEventType = (await this.fileExists(key))
+        const actionType: BucketEventType = this.objectKeys.has(key)
           ? BucketEventType.UPDATE
           : BucketEventType.CREATE;
 
@@ -107,6 +109,14 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
+  public async tryGet(key: string): Promise<string | undefined> {
+    if (await this.exists(key)) {
+      return this.get(key);
+    }
+
+    return undefined;
+  }
+
   public async getJson(key: string): Promise<Json> {
     return this.context.withTrace({
       message: `Get Json (key=${key}).`,
@@ -116,6 +126,46 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         return JSON.parse(await fs.promises.readFile(filename, "utf8"));
       },
     });
+  }
+
+  public async tryGetJson(key: string): Promise<Json | undefined> {
+    if (await this.exists(key)) {
+      return this.getJson(key);
+    }
+
+    return undefined;
+  }
+
+  public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
+    return this.context.withTrace({
+      message: `Delete (key=${key}).`,
+      activity: async () => {
+        const mustExist = opts?.mustExist ?? false;
+
+        if (!this.objectKeys.has(key) && mustExist) {
+          throw new Error(`Object does not exist (key=${key}).`);
+        }
+
+        if (!this.objectKeys.has(key)) {
+          return;
+        }
+
+        const hash = this.hashKey(key);
+        const filename = join(this.fileDir, hash);
+        await fs.promises.unlink(filename);
+        this.objectKeys.delete(key);
+        await this.notifyListeners(BucketEventType.DELETE, key);
+      },
+    });
+  }
+
+  public async tryDelete(key: string): Promise<boolean> {
+    if (await this.exists(key)) {
+      await this.delete(key);
+      return true;
+    }
+
+    return false;
   }
 
   public async list(prefix?: string): Promise<string[]> {
@@ -149,29 +199,6 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         }
 
         return filePath;
-      },
-    });
-  }
-
-  public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
-    return this.context.withTrace({
-      message: `Delete (key=${key}).`,
-      activity: async () => {
-        const mustExist = opts?.mustExist ?? false;
-
-        if (!this.objectKeys.has(key) && mustExist) {
-          throw new Error(`Object does not exist (key=${key}).`);
-        }
-
-        if (!this.objectKeys.has(key)) {
-          return;
-        }
-
-        const hash = this.hashKey(key);
-        const filename = join(this.fileDir, hash);
-        await fs.promises.unlink(filename);
-        this.objectKeys.delete(key);
-        await this.notifyListeners(BucketEventType.DELETE, key);
       },
     });
   }

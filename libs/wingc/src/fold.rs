@@ -1,8 +1,7 @@
 use crate::ast::{
 	ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
-	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-	TypeAnnotationKind, UserDefinedType,
+	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString, InterpolatedStringPart,
+	Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -26,9 +25,6 @@ pub trait Fold {
 	}
 	fn fold_interface(&mut self, node: Interface) -> Interface {
 		fold_interface(self, node)
-	}
-	fn fold_initializer(&mut self, node: Initializer) -> Initializer {
-		fold_initializer(self, node)
 	}
 	fn fold_expr(&mut self, node: Expr) -> Expr {
 		fold_expr(self, node)
@@ -85,12 +81,12 @@ where
 			module_name: f.fold_symbol(module_name),
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},
-		StmtKind::VariableDef {
+		StmtKind::Let {
 			reassignable,
 			var_name,
 			initial_value,
 			type_,
-		} => StmtKind::VariableDef {
+		} => StmtKind::Let {
 			reassignable,
 			var_name: f.fold_symbol(var_name),
 			initial_value: f.fold_expr(initial_value),
@@ -108,6 +104,17 @@ where
 		StmtKind::While { condition, statements } => StmtKind::While {
 			condition: f.fold_expr(condition),
 			statements: f.fold_scope(statements),
+		},
+		StmtKind::IfLet {
+			value,
+			statements,
+			var_name,
+			else_statements,
+		} => StmtKind::IfLet {
+			value: f.fold_expr(value),
+			statements: f.fold_scope(statements),
+			var_name: f.fold_symbol(var_name),
+			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
 		},
 		StmtKind::If {
 			condition,
@@ -178,15 +185,15 @@ where
 			.into_iter()
 			.map(|(name, def)| (f.fold_symbol(name), f.fold_function_definition(def)))
 			.collect(),
-		initializer: f.fold_initializer(node.initializer),
+		initializer: f.fold_function_definition(node.initializer),
 		parent: node.parent.map(|parent| f.fold_user_defined_type(parent)),
 		implements: node
 			.implements
 			.into_iter()
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
-		is_resource: node.is_resource,
-		inflight_initializer: node.inflight_initializer.map(|init| f.fold_function_definition(init)),
+		phase: node.phase,
+		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
 	}
 }
 
@@ -232,17 +239,6 @@ where
 	}
 }
 
-pub fn fold_initializer<F>(f: &mut F, node: Initializer) -> Initializer
-where
-	F: Fold + ?Sized,
-{
-	Initializer {
-		signature: f.fold_function_signature(node.signature),
-		statements: f.fold_scope(node.statements),
-		span: node.span,
-	}
-}
-
 pub fn fold_expr<F>(f: &mut F, node: Expr) -> Expr
 where
 	F: Fold + ?Sized,
@@ -266,8 +262,8 @@ where
 			end: Box::new(f.fold_expr(*end)),
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
-		ExprKind::Call { function, arg_list } => ExprKind::Call {
-			function: Box::new(f.fold_expr(*function)),
+		ExprKind::Call { callee, arg_list } => ExprKind::Call {
+			callee: Box::new(f.fold_expr(*callee)),
 			arg_list: f.fold_args(arg_list),
 		},
 		ExprKind::Unary { op, exp } => ExprKind::Unary {
@@ -333,6 +329,7 @@ where
 		Literal::Number(x) => Literal::Number(x),
 		Literal::Duration(x) => Literal::Duration(x),
 		Literal::String(x) => Literal::String(x),
+		Literal::Nil => Literal::Nil,
 	}
 }
 
@@ -342,9 +339,14 @@ where
 {
 	match node {
 		Reference::Identifier(s) => Reference::Identifier(f.fold_symbol(s)),
-		Reference::InstanceMember { property, object } => Reference::InstanceMember {
+		Reference::InstanceMember {
+			property,
+			object,
+			optional_accessor,
+		} => Reference::InstanceMember {
 			object: Box::new(f.fold_expr(*object)),
 			property: f.fold_symbol(property),
+			optional_accessor,
 		},
 		Reference::TypeMember { type_, property } => Reference::TypeMember {
 			type_: f.fold_user_defined_type(type_),
@@ -417,6 +419,7 @@ where
 		TypeAnnotationKind::String => TypeAnnotationKind::String,
 		TypeAnnotationKind::Bool => TypeAnnotationKind::Bool,
 		TypeAnnotationKind::Duration => TypeAnnotationKind::Duration,
+		TypeAnnotationKind::Void => TypeAnnotationKind::Void,
 		TypeAnnotationKind::Json => TypeAnnotationKind::Json,
 		TypeAnnotationKind::MutJson => TypeAnnotationKind::MutJson,
 		TypeAnnotationKind::Optional(t) => TypeAnnotationKind::Optional(Box::new(f.fold_type_annotation(*t))),
@@ -428,7 +431,7 @@ where
 		TypeAnnotationKind::MutSet(t) => TypeAnnotationKind::MutSet(Box::new(f.fold_type_annotation(*t))),
 		TypeAnnotationKind::Function(t) => TypeAnnotationKind::Function(FunctionTypeAnnotation {
 			param_types: t.param_types.into_iter().map(|t| f.fold_type_annotation(t)).collect(),
-			return_type: t.return_type.map(|t| Box::new(f.fold_type_annotation(*t))),
+			return_type: Box::new(f.fold_type_annotation(*t.return_type)),
 			phase: t.phase,
 		}),
 		TypeAnnotationKind::UserDefined(t) => TypeAnnotationKind::UserDefined(f.fold_user_defined_type(t)),

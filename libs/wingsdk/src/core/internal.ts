@@ -1,11 +1,13 @@
-import { Duration } from "../std";
+import { Duration } from "../std/duration";
 import { IResource } from "../std/resource";
 
 export function serializeImmutableData(obj: any): string {
-  switch (typeof obj) {
-    case "undefined":
-      return "undefined";
+  // since typeof(null) is "object", we cover all nullity cases (undefined and null) apriori.
+  if (obj == null) {
+    return JSON.stringify(obj);
+  }
 
+  switch (typeof obj) {
     case "string":
     case "boolean":
     case "number":

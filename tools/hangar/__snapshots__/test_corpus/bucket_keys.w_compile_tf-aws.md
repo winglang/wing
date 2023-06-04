@@ -3,23 +3,26 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await b.put("foo","text"));
-        (await b.put("foo/","text"));
-        (await b.put("foo/bar","text"));
-        (await b.put("foo/bar/","text"));
-        (await b.put("foo/bar/baz","text"));
-        const objs = (await b.list());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(0)) === "foo")'`)})(((await objs.at(0)) === "foo"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(1)) === "foo/")'`)})(((await objs.at(1)) === "foo/"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(2)) === "foo/bar")'`)})(((await objs.at(2)) === "foo/bar"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(3)) === "foo/bar/")'`)})(((await objs.at(3)) === "foo/bar/"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(4)) === "foo/bar/baz")'`)})(((await objs.at(4)) === "foo/bar/baz"))};
-      }
+      (await b.put("foo","text"));
+      (await b.put("foo/","text"));
+      (await b.put("foo/bar","text"));
+      (await b.put("foo/bar/","text"));
+      (await b.put("foo/bar/baz","text"));
+      const objs = (await b.list());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(0)) === "foo")'`)})(((await objs.at(0)) === "foo"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(1)) === "foo/")'`)})(((await objs.at(1)) === "foo/"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(2)) === "foo/bar")'`)})(((await objs.at(2)) === "foo/bar"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(3)) === "foo/bar/")'`)})(((await objs.at(3)) === "foo/bar/"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(4)) === "foo/bar/baz")'`)})(((await objs.at(4)) === "foo/bar/baz"))};
     }
   }
   return $Inflight1;
@@ -196,6 +199,7 @@ module.exports = function({ b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -206,9 +210,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -229,15 +234,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["list", "put"]);
+          $Inflight1._registerBindObject(b, host, ["list", "put"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

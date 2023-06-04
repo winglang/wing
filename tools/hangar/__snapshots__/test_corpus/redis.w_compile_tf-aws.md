@@ -3,19 +3,22 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ r, r2 }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        const connection = (await r.rawClient());
-        (await connection.set("wing","does redis"));
-        const value = (await connection.get("wing"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
-        (await r2.set("wing","does redis again"));
-        const value2 = (await r2.get("wing"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
-      }
+      const connection = (await r.rawClient());
+      (await connection.set("wing","does redis"));
+      const value = (await connection.get("wing"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
+      (await r2.set("wing","does redis again"));
+      const value2 = (await r2.get("wing"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
     }
   }
   return $Inflight1;
@@ -470,6 +473,7 @@ module.exports = function({ r, r2 }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -481,9 +485,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const r_client = context._lift(r);
         const r2_client = context._lift(r2);
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -506,17 +511,19 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(r, host, []);
+          $Inflight1._registerBindObject(r2, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(r, host, ["rawClient"]);
-          this._registerBindObject(r2, host, ["get", "set"]);
+          $Inflight1._registerBindObject(r, host, ["rawClient"]);
+          $Inflight1._registerBindObject(r2, host, ["get", "set"]);
         }
         super._registerBind(host, ops);
       }
     }
     const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");
     const r2 = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"r2");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

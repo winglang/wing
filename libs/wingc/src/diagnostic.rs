@@ -6,8 +6,6 @@ use lsp_types::{Position, Range};
 
 use serde::Serialize;
 
-use crate::debug;
-
 pub type FileId = String;
 pub type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
@@ -147,35 +145,17 @@ impl PartialOrd for WingSpan {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
-pub enum DiagnosticLevel {
-	Error,
-	Warning,
-	Note,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,
-	pub level: DiagnosticLevel,
-}
-
-impl Display for DiagnosticLevel {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match self {
-			DiagnosticLevel::Error => write!(f, "{}", "Error".bold().red()),
-			DiagnosticLevel::Warning => write!(f, "{}", "Warning".bold().yellow()),
-			DiagnosticLevel::Note => write!(f, "{}", "Note".bold().blue()),
-		}
-	}
 }
 
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		if let Some(span) = &self.span {
-			write!(f, "{} at {} | {}", self.level, span, self.message.bold().white())
+			write!(f, "Error at {} | {}", span, self.message.bold().white())
 		} else {
-			write!(f, "{} | {}", self.level, self.message.bold().white())
+			write!(f, "Error | {}", self.message.bold().white())
 		}
 	}
 }
@@ -189,12 +169,6 @@ impl Ord for Diagnostic {
 impl PartialOrd for Diagnostic {
 	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
 		self.span.partial_cmp(&other.span)
-	}
-}
-
-pub fn print_diagnostics(diagnostics: &Diagnostics) {
-	for diagnostic in diagnostics {
-		debug!("{}", diagnostic);
 	}
 }
 

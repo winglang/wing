@@ -3,27 +3,30 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(s)  {
-      {
-        {console.log(myStr)};
-        const n = myNum;
-        {console.log(`${n}`)};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
-        if (myBool) {
-          {console.log("bool=true")};
-        }
-        else {
-          {console.log("bool=false")};
-        }
-        const min = myDur.minutes;
-        const sec = myDur.seconds;
-        const hr = myDur.hours;
-        const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+      {console.log(myStr)};
+      const n = myNum;
+      {console.log(`${n}`)};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
+      if (myBool) {
+        {console.log("bool=true")};
       }
+      else {
+        {console.log("bool=false")};
+      }
+      const min = myDur.minutes;
+      const sec = myDur.seconds;
+      const hr = myDur.hours;
+      const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
     }
   }
   return $Inflight1;
@@ -155,6 +158,7 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -165,9 +169,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const myStr_client = context._lift(myStr);
         const myNum_client = context._lift(myNum);
         const mySecondBool_client = context._lift(mySecondBool);
@@ -196,13 +201,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(myBool, host, []);
+          $Inflight1._registerBindObject(myDur, host, []);
+          $Inflight1._registerBindObject(myNum, host, []);
+          $Inflight1._registerBindObject(mySecondBool, host, []);
+          $Inflight1._registerBindObject(myStr, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(myBool, host, []);
-          this._registerBindObject(myDur, host, []);
-          this._registerBindObject(myNum, host, []);
-          this._registerBindObject(mySecondBool, host, []);
-          this._registerBindObject(myStr, host, []);
+          $Inflight1._registerBindObject(myBool, host, []);
+          $Inflight1._registerBindObject(myDur, host, []);
+          $Inflight1._registerBindObject(myNum, host, []);
+          $Inflight1._registerBindObject(mySecondBool, host, []);
+          $Inflight1._registerBindObject(myStr, host, []);
         }
         super._registerBind(host, ops);
       }

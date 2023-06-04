@@ -3,17 +3,20 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ res, bucket }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        const s = (await res.myMethod());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
-        (await res.testTypeAccess());
-      }
+      const s = (await res.myMethod());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
+      (await res.testTypeAccess());
     }
   }
   return $Inflight1;
@@ -24,13 +27,16 @@ module.exports = function({ res, bucket }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ __parent_this }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await __parent_this.b.put("foo1.txt","bar"));
-      }
+      (await __parent_this.b.put("foo1.txt","bar"));
     }
   }
   return $Inflight2;
@@ -41,13 +47,16 @@ module.exports = function({ __parent_this }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({ __parent_this }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await __parent_this.b.put("foo2.txt","bar"));
-      }
+      (await __parent_this.b.put("foo2.txt","bar"));
     }
   }
   return $Inflight3;
@@ -58,13 +67,16 @@ module.exports = function({ __parent_this }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ __parent_this }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await __parent_this.q.push("foo"));
-      }
+      (await __parent_this.q.push("foo"));
     }
   }
   return $Inflight4;
@@ -75,14 +87,17 @@ module.exports = function({ __parent_this }) {
 ## clients/$Inflight5.inflight.js
 ```js
 module.exports = function({ bigOlPublisher }) {
-  class  $Inflight5 {
+  class $Inflight5 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await bigOlPublisher.publish("foo"));
-        const count = (await bigOlPublisher.getObjectCount());
-      }
+      (await bigOlPublisher.publish("foo"));
+      const count = (await bigOlPublisher.getObjectCount());
     }
   }
   return $Inflight5;
@@ -93,36 +108,33 @@ module.exports = function({ bigOlPublisher }) {
 ## clients/Bar.inflight.js
 ```js
 module.exports = function({ Foo, MyEnum }) {
-  class  Bar {
+  class Bar {
     constructor({ b, e, foo, name }) {
       this.b = b;
       this.e = e;
       this.foo = foo;
       this.name = name;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     static async barStatic()  {
-      {
-        return "bar static";
-      }
+      return "bar static";
     }
     async myMethod()  {
-      {
-        const __parent_this = this;
-        (await this.foo.fooInc());
-        const s = (await Foo.fooStatic());
-        (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
-        return (await this.b.get("foo"));
-      }
+      const __parent_this = this;
+      (await this.foo.fooInc());
+      const s = (await Foo.fooStatic());
+      (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
+      return (await this.b.get("foo"));
     }
     async testTypeAccess()  {
-      {
+      const __parent_this = this;
+      if (true) {
         const __parent_this = this;
-        if (true) {
-          const __parent_this = this;
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
-        }
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
       }
     }
   }
@@ -134,26 +146,25 @@ module.exports = function({ Foo, MyEnum }) {
 ## clients/BigPublisher.inflight.js
 ```js
 module.exports = function({  }) {
-  class  BigPublisher {
+  class BigPublisher {
     constructor({ b, b2, q, t }) {
       this.b = b;
       this.b2 = b2;
       this.q = q;
       this.t = t;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async publish(s)  {
-      {
-        const __parent_this = this;
-        (await this.t.publish(s));
-        (await this.q.push(s));
-        (await this.b2.put("foo",s));
-      }
+      const __parent_this = this;
+      (await this.t.publish(s));
+      (await this.q.push(s));
+      (await this.b2.put("foo",s));
     }
     async getObjectCount()  {
-      {
-        const __parent_this = this;
-        return (await this.b.list()).length;
-      }
+      const __parent_this = this;
+      return (await this.b.list()).length;
     }
   }
   return BigPublisher;
@@ -164,34 +175,26 @@ module.exports = function({  }) {
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({ c }) {
       this.c = c;
     }
     async $inflight_init()  {
-      {
-        const __parent_this = this;
-        this.inflightField = 123;
-        (await this.c.inc(110));
-        (await this.c.dec(10));
-      }
+      const __parent_this = this;
+      this.inflightField = 123;
+      (await this.c.inc(110));
+      (await this.c.dec(10));
     }
     async fooInc()  {
-      {
-        const __parent_this = this;
-        (await this.c.inc());
-      }
+      const __parent_this = this;
+      (await this.c.inc());
     }
     async fooGet()  {
-      {
-        const __parent_this = this;
-        return (await this.c.peek());
-      }
+      const __parent_this = this;
+      return (await this.c.peek());
     }
     static async fooStatic()  {
-      {
-        return "foo static";
-      }
+      return "foo static";
     }
   }
   return Foo;
@@ -422,7 +425,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
+            "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
+            "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "b2-on_create-OnMessage-d05c64b5-c85f4411"
           }
         },
@@ -448,8 +456,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
+            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-fe215853-c89a66f3"
           }
         },
@@ -475,8 +487,12 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
+            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
+            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
+            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-c351460f-c82610b4"
           }
         },
@@ -621,11 +637,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_notification": {
-      "root_BigPublisher_b2_S3Objectoncreatenotifier_C4BA755A": {
+      "root_BigPublisher_b2_S3BucketNotification_70B757E2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/S3Object_on_create_notifier",
-            "uniqueId": "root_BigPublisher_b2_S3Objectoncreatenotifier_C4BA755A"
+            "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
+            "uniqueId": "root_BigPublisher_b2_S3BucketNotification_70B757E2"
           }
         },
         "bucket": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.id}",
@@ -637,6 +653,7 @@ module.exports = function({  }) {
             "events": [
               "s3:ObjectCreated:Put"
             ],
+            "id": "on-create-notification",
             "topic_arn": "${aws_sns_topic.root_BigPublisher_b2_b2oncreate_DFA80519.arn}"
           }
         ]
@@ -865,6 +882,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -879,7 +897,7 @@ class $Root extends $stdlib.std.Resource {
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -900,17 +918,20 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.c, host, ["dec", "inc"]);
+          Foo._registerBindObject(this.c, host, ["dec", "inc"]);
         }
         if (ops.includes("fooGet")) {
-          this._registerBindObject(this.c, host, ["peek"]);
+          Foo._registerBindObject(this.c, host, ["peek"]);
         }
         if (ops.includes("fooInc")) {
-          this._registerBindObject(this.c, host, ["inc"]);
-        }
-        if (ops.includes("fooStatic")) {
+          Foo._registerBindObject(this.c, host, ["inc"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("fooStatic")) {
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -924,7 +945,7 @@ class $Root extends $stdlib.std.Resource {
         this.e = e;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Bar.inflight.js";
         const FooClient = Foo._toInflightType(context);
         const MyEnumClient = $stdlib.core.NodeJsCode.fromInline(`
           Object.freeze((function (tmp) {
@@ -962,30 +983,37 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.b, host, []);
-          this._registerBindObject(this.e, host, []);
-          this._registerBindObject(this.foo, host, []);
-          this._registerBindObject(this.name, host, []);
-        }
-        if (ops.includes("barStatic")) {
+          Bar._registerBindObject(this.b, host, []);
+          Bar._registerBindObject(this.e, host, []);
+          Bar._registerBindObject(this.foo, host, []);
+          Bar._registerBindObject(this.name, host, []);
         }
         if (ops.includes("myMethod")) {
-          this._registerBindObject(this.b, host, ["get", "put"]);
-          this._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
+          Bar._registerBindObject(Foo, host, ["fooStatic"]);
+          Bar._registerBindObject(this.b, host, ["get", "put"]);
+          Bar._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
         }
         if (ops.includes("testTypeAccess")) {
-          this._registerBindObject(this.e, host, []);
+          Bar._registerBindObject(Bar, host, ["barStatic"]);
+          Bar._registerBindObject(Foo, host, ["fooStatic"]);
+          Bar._registerBindObject(this.e, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("barStatic")) {
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class $Inflight1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const res_client = context._lift(res);
         const bucket_client = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -1008,11 +1036,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(bucket, host, []);
+          $Inflight1._registerBindObject(res, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket, host, ["list"]);
-          this._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
-          this._registerBindObject(res.foo, host, ["inflightField"]);
+          $Inflight1._registerBindObject(bucket, host, ["list"]);
+          $Inflight1._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
+          $Inflight1._registerBindObject(res.foo, host, ["inflightField"]);
         }
         super._registerBind(host, ops);
       }
@@ -1030,9 +1060,10 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
+            this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+            const self_client_path = "./clients/$Inflight2.inflight.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1053,9 +1084,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight2._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.b, host, ["put"]);
+              $Inflight2._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
@@ -1065,9 +1097,10 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
+            this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+            const self_client_path = "./clients/$Inflight3.inflight.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1088,9 +1121,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight3._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.b, host, ["put"]);
+              $Inflight3._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
@@ -1100,9 +1134,10 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
+            this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+            const self_client_path = "./clients/$Inflight4.inflight.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1123,9 +1158,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
+              $Inflight4._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              this._registerBindObject(__parent_this.q, host, ["push"]);
+              $Inflight4._registerBindObject(__parent_this.q, host, ["push"]);
             }
             super._registerBind(host, ops);
           }
@@ -1133,7 +1169,7 @@ class $Root extends $stdlib.std.Resource {
         (this.b2.onCreate(new $Inflight4(this,"$Inflight4")));
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/BigPublisher.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1160,18 +1196,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.b, host, []);
-          this._registerBindObject(this.b2, host, []);
-          this._registerBindObject(this.q, host, []);
-          this._registerBindObject(this.t, host, []);
+          BigPublisher._registerBindObject(this.b, host, []);
+          BigPublisher._registerBindObject(this.b2, host, []);
+          BigPublisher._registerBindObject(this.q, host, []);
+          BigPublisher._registerBindObject(this.t, host, []);
         }
         if (ops.includes("getObjectCount")) {
-          this._registerBindObject(this.b, host, ["list"]);
+          BigPublisher._registerBindObject(this.b, host, ["list"]);
         }
         if (ops.includes("publish")) {
-          this._registerBindObject(this.b2, host, ["put"]);
-          this._registerBindObject(this.q, host, ["push"]);
-          this._registerBindObject(this.t, host, ["publish"]);
+          BigPublisher._registerBindObject(this.b2, host, ["put"]);
+          BigPublisher._registerBindObject(this.q, host, ["push"]);
+          BigPublisher._registerBindObject(this.t, host, ["publish"]);
         }
         super._registerBind(host, ops);
       }
@@ -1180,9 +1216,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight5.inflight.js";
         const bigOlPublisher_client = context._lift(bigOlPublisher);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1203,9 +1240,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight5._registerBindObject(bigOlPublisher, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
+          $Inflight5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
         }
         super._registerBind(host, ops);
       }
@@ -1220,9 +1258,9 @@ class $Root extends $stdlib.std.Resource {
     ;
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket,MyEnum.B);
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
     const bigOlPublisher = new BigPublisher(this,"BigPublisher");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:dependency cycles",new $Inflight5(this,"$Inflight5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:dependency cycles",new $Inflight5(this,"$Inflight5"));
   }
 }
 class $App extends $AppBase {

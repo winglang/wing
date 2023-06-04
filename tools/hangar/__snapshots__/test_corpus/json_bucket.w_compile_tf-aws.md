@@ -3,14 +3,17 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ b, fileName }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(msg)  {
-      {
-        const x = (await b.getJson(fileName));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
-      }
+      const x = (await b.getJson(fileName));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
     }
   }
   return $Inflight1;
@@ -21,14 +24,17 @@ module.exports = function({ b, fileName }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ b, fileName, j, getJson }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await b.putJson(fileName,j));
-        (await getJson.invoke(""));
-      }
+      (await b.putJson(fileName,j));
+      (await getJson.invoke(""));
     }
   }
   return $Inflight2;
@@ -273,6 +279,7 @@ module.exports = function({ b, fileName, j, getJson }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -283,9 +290,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const b_client = context._lift(b);
         const fileName_client = context._lift(fileName);
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -308,10 +316,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(b, host, []);
+          $Inflight1._registerBindObject(fileName, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["getJson"]);
-          this._registerBindObject(fileName, host, []);
+          $Inflight1._registerBindObject(b, host, ["getJson"]);
+          $Inflight1._registerBindObject(fileName, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -320,9 +330,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const b_client = context._lift(b);
         const fileName_client = context._lift(fileName);
         const j_client = context._lift(j);
@@ -349,12 +360,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(b, host, []);
+          $Inflight2._registerBindObject(fileName, host, []);
+          $Inflight2._registerBindObject(getJson, host, []);
+          $Inflight2._registerBindObject(j, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["putJson"]);
-          this._registerBindObject(fileName, host, []);
-          this._registerBindObject(getJson, host, ["invoke"]);
-          this._registerBindObject(j, host, []);
+          $Inflight2._registerBindObject(b, host, ["putJson"]);
+          $Inflight2._registerBindObject(fileName, host, []);
+          $Inflight2._registerBindObject(getJson, host, ["invoke"]);
+          $Inflight2._registerBindObject(j, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -363,7 +378,7 @@ class $Root extends $stdlib.std.Resource {
     const fileName = "file.json";
     const j = Object.freeze({"persons":[{"age":30,"name":"hasan","fears":["heights", "failure"]}]});
     const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:put",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:put",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

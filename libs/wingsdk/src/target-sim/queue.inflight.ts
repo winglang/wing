@@ -85,6 +85,16 @@ export class Queue
     });
   }
 
+  public async pop(): Promise<string | undefined> {
+    return this.context.withTrace({
+      message: `Pop ().`,
+      activity: async () => {
+        const message = this.messages.shift();
+        return message?.payload;
+      },
+    });
+  }
+
   private processMessages() {
     let processedMessages = false;
     do {

@@ -1,6 +1,6 @@
 use std::cmp::max;
 
-use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
+use lsp_types::{Command, CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
@@ -186,9 +186,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let found_scope = scope_visitor.found_scope.unwrap_or(root_scope);
 		let found_env = found_scope.env.borrow();
 		let found_env = found_env.as_ref().expect("Scope should have an env");
-		let found_stmt_index = scope_visitor
-			.found_stmt_index
-			.expect("Found scope should have a statement index");
+		let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
 
 		let mut completions = vec![];
 
@@ -224,7 +222,6 @@ fn get_completions_from_type(
 ) -> Vec<CompletionItem> {
 	match &**type_ {
 		Type::Class(c) => get_completions_from_class(c, current_phase, is_instance),
-		Type::Resource(c) => get_completions_from_class(c, current_phase, is_instance),
 		Type::Interface(i) => get_completions_from_class(i, current_phase, is_instance),
 		Type::Struct(s) => get_completions_from_class(s, current_phase, is_instance),
 		Type::Enum(enum_) => {
@@ -247,6 +244,7 @@ fn get_completions_from_type(
 		| Type::Boolean
 		| Type::Json
 		| Type::MutJson
+		| Type::Nil
 		| Type::Array(_)
 		| Type::MutArray(_)
 		| Type::Map(_)
@@ -273,7 +271,12 @@ fn get_completions_from_type(
 				"MutSet" => "MutableSet",
 				"MutMap" => "MutableMap",
 				"MutArray" => "MutableArray",
-				s => s,
+				"str" => "String",
+				"duration" => "Duration",
+				"json" => "Json",
+				"bool" => "Boolean",
+				"num" => "Number",
+				_ => type_name,
 			};
 			if let LookupResult::Found(std_type, _) = types
 				.libraries
@@ -331,18 +334,27 @@ fn get_completions_from_class(
 			} else {
 				Some(CompletionItemKind::FIELD)
 			};
-			let insert_text = if kind == Some(CompletionItemKind::METHOD) {
-				Some(format!("{}($0)", symbol_data.0))
-			} else {
-				Some(symbol_data.0.to_string())
-			};
+			let is_method = kind == Some(CompletionItemKind::METHOD);
 
 			Some(CompletionItem {
-				insert_text,
+				insert_text: if is_method {
+					Some(format!("{}($0)", symbol_data.0))
+				} else {
+					Some(symbol_data.0.to_string())
+				},
 				label: symbol_data.0,
 				detail: Some(variable.type_.to_string()),
 				kind,
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
+				command: if is_method {
+					Some(Command {
+						title: "triggerParameterHints".to_string(),
+						command: "editor.action.triggerParameterHints".to_string(),
+						arguments: None,
+					})
+				} else {
+					None
+				},
 				..Default::default()
 			})
 		})
@@ -361,8 +373,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				| Type::MutMap(_)
 				| Type::Set(_)
 				| Type::MutSet(_)
-				| Type::Class(_)
-				| Type::Resource(_) => CompletionItemKind::CLASS,
+				| Type::Class(_) => CompletionItemKind::CLASS,
 				Type::Anything
 				| Type::Number
 				| Type::String
@@ -371,20 +382,18 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				| Type::Void
 				| Type::Json
 				| Type::MutJson
+				| Type::Nil
 				| Type::Optional(_) => CompletionItemKind::CONSTANT,
 				Type::Function(_) => CompletionItemKind::FUNCTION,
 				Type::Struct(_) => CompletionItemKind::STRUCT,
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(
-				if t.as_resource().is_some() {
-					"preflight class"
-				} else {
-					"inflight class"
-				}
-				.to_string(),
-			),
+			detail: Some(if let Some(c) = t.as_class() {
+				format!("{} class", c.phase).to_string()
+			} else {
+				String::default()
+			}),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
@@ -393,17 +402,27 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 			} else {
 				Some(CompletionItemKind::VARIABLE)
 			};
-			let insert_text = if kind == Some(CompletionItemKind::FUNCTION) {
-				Some(format!("{}($0)", name))
-			} else {
-				Some(name.to_string())
-			};
+			let is_method = kind == Some(CompletionItemKind::FUNCTION);
+
 			CompletionItem {
 				label: name.to_string(),
-				insert_text,
+				insert_text: if is_method {
+					Some(format!("{}($0)", name))
+				} else {
+					Some(name.to_string())
+				},
 				detail: Some(v.type_.to_string()),
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
+				command: if is_method {
+					Some(Command {
+						title: "triggerParameterHints".to_string(),
+						command: "editor.action.triggerParameterHints".to_string(),
+						arguments: None,
+					})
+				} else {
+					None
+				},
 				..Default::default()
 			}
 		}
@@ -485,4 +504,109 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 
 		visit_type_annotation(self, node);
 	}
+}
+
+#[cfg(test)]
+mod tests {
+	use crate::lsp::completions::*;
+	use crate::lsp::sync::test_utils::*;
+	use lsp_types::*;
+
+	/// Creates a snapshot test for a given wing program's completions at a given position
+	/// In the wing program, place a comment "//^" into the text where the "^" is pointing to the desired character position
+	///
+	/// First parameter will be the name of the tests, as well as the identifier to use for the list of completion in the asserts (see last parameter)
+	/// Second parameter is the wing code block as a string literal
+	/// After the first two parameters, any additional are optional statements that should be used for asserting on the given completions.
+	///
+	/// Result is a list of [CompletionItem]s
+	macro_rules! test_completion_list {
+		($name:ident, $code:literal, $($assertion:stmt)*) => {
+			#[test]
+			fn $name() {
+				let text_document_position = load_file_with_contents($code);
+				let completion = on_completion(CompletionParams {
+					context: None,
+					text_document_position,
+					work_done_progress_params: Default::default(),
+					partial_result_params: Default::default(),
+				});
+
+				if let CompletionResponse::Array($name) = completion {
+					insta::with_settings!(
+						{
+							prepend_module_to_snapshot => false,
+							omit_expression => true,
+							snapshot_path => "./snapshots/completions",
+						}, {
+							insta::assert_yaml_snapshot!($name);
+						}
+					);
+					$($assertion)*
+				} else {
+					panic!("Expected array of completions");
+				}
+			}
+		};
+	}
+
+	test_completion_list!(empty, "", assert!(empty.len() > 0));
+
+	test_completion_list!(
+		new_expression_nested,
+		r#"
+bring cloud;
+
+new cloud. 
+        //^"#,
+		assert!(new_expression_nested.len() > 0)
+
+		// all items are classes
+		assert!(new_expression_nested.iter().all(|item| item.kind == Some(CompletionItemKind::CLASS)))
+
+		// all items are preflight
+		// TODO https://github.com/winglang/wing/issues/2512
+		// assert!(new_expression_nested.iter().all(|item| item.detail.as_ref().unwrap().starts_with("preflight")))
+	);
+
+	test_completion_list!(
+		static_method_call,
+		r#"
+class Resource {
+	static hello() {}
+}
+
+Resource. 
+       //^"#,
+		assert!(static_method_call.len() > 0)
+
+		assert!(static_method_call.iter().filter(|c| c.label == "hello").count() == 1)
+	);
+
+	test_completion_list!(
+		only_show_symbols_in_scope,
+		r#"
+let a = 1;
+
+if a == 1 {
+	let x = "";
+}
+	
+let b =  
+			//^
+			
+let c = 3;"#,
+		assert!(only_show_symbols_in_scope.len() > 0)
+
+		assert!(only_show_symbols_in_scope.iter().all(|c| c.label != "c"))
+	);
+
+	test_completion_list!(
+		incomplete_if_statement,
+		r#"
+let a = MutMap<str> {};
+if a. 
+   //^"#,
+		assert!(incomplete_if_statement.len() > 0)
+	);
 }

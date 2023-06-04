@@ -18,16 +18,39 @@ test("unsupported resource in target", async ({ expect }) => {
   `
   );
 
-  await expect(
-    runWingCommand({
-      cwd: workdir,
-      wingFile: entrypoint,
-      args: ["compile", "--target", "tf-gcp"],
-      shouldSucceed: true,
-      env: {
-        GOOGLE_PROJECT_ID: "test-project",
-        GOOGLE_STORAGE_LOCATION: "us-central1",
-      }
-    })
-  ).rejects.toThrowErrorMatchingInlineSnapshot('"Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target"');
+  const result = await runWingCommand({
+    cwd: workdir,
+    wingFile: entrypoint,
+    args: ["compile", "--target", "tf-gcp"],
+    shouldSucceed: false,
+    env: {
+      GOOGLE_PROJECT_ID: "test-project",
+      GOOGLE_STORAGE_LOCATION: "us-central1",
+    },
+  });
+
+  expect(sanitizeErrorMessage(result.stderr)).toMatchInlineSnapshot(`
+    "ERROR: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target
+
+    target/test.tfgcp.[REDACTED].tmp/.wing/preflight.js:9
+         constructor(scope, id) {
+           super(scope, id);
+    >>     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Schedule\\",this,\\"cloud.Schedule\\");
+         }
+       }
+    "
+  `);
 });
+
+function sanitizeErrorMessage(inputString: string): string {
+  let sanitizedString = inputString
+    // Normalize paths
+    .replaceAll("\\", "/")
+    // Normalize line endings
+    .replaceAll("\r\n", "\n")
+    // Remove random numbers from generated test artifact folder
+    // e.g. "{...}.tfgcp.927822.tmp/{...}" => "{...}.tfgcp.[REDACTED].tmp/{...}"
+    .replaceAll(/\.tfgcp\.\d+\.tmp/g, ".tfgcp.[REDACTED].tmp");
+
+  return sanitizedString;
+}

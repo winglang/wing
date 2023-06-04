@@ -3,13 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log(`deleted ${key}`)};
-      }
+      {console.log(`deleted ${key}`)};
     }
   }
   return $Inflight1;
@@ -20,13 +23,16 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log(`updated ${key}`)};
-      }
+      {console.log(`updated ${key}`)};
     }
   }
   return $Inflight2;
@@ -37,13 +43,16 @@ module.exports = function({  }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log(`created ${key}`)};
-      }
+      {console.log(`created ${key}`)};
     }
   }
   return $Inflight3;
@@ -54,14 +63,17 @@ module.exports = function({  }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ other }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log(`last key ${key}`)};
-        (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
-      }
+      {console.log(`last key ${key}`)};
+      (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
     }
   }
   return $Inflight4;
@@ -72,13 +84,16 @@ module.exports = function({ other }) {
 ## clients/$Inflight5.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight5 {
+  class $Inflight5 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log("other bucket event called!")};
-      }
+      {console.log("other bucket event called!")};
     }
   }
   return $Inflight5;
@@ -89,17 +104,20 @@ module.exports = function({  }) {
 ## clients/$Inflight6.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight6 {
+  class $Inflight6 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await b.put("a","1"));
-        (await b.put("b","1"));
-        (await b.put("b","100"));
-        (await b.put("c","1"));
-        (await b.delete("c"));
-      }
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("b","100"));
+      (await b.put("c","1"));
+      (await b.delete("c"));
     }
   }
   return $Inflight6;
@@ -835,123 +853,77 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_bucket_notification": {
-      "root_b_S3Objectoncreatenotifier_37FBDD2C": {
+      "root_b_S3BucketNotification_DA757190": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_create_notifier",
-            "uniqueId": "root_b_S3Objectoncreatenotifier_37FBDD2C"
+            "path": "root/Default/Default/b/S3BucketNotification",
+            "uniqueId": "root_b_S3BucketNotification_DA757190"
           }
         },
         "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
         "depends_on": [
+          "aws_sns_topic_policy.root_b_bondelete_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_5700B364",
+          "aws_sns_topic_policy.root_b_bonupdate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_53C55984",
           "aws_sns_topic_policy.root_b_boncreate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_C218A49E"
         ],
         "topic": [
           {
             "events": [
-              "s3:ObjectCreated:Put"
-            ],
-            "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
-          }
-        ]
-      },
-      "root_b_S3Objectondeletenotifier_2BF59546": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_delete_notifier",
-            "uniqueId": "root_b_S3Objectondeletenotifier_2BF59546"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_b_bondelete_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_5700B364"
-        ],
-        "topic": [
-          {
-            "events": [
               "s3:ObjectRemoved:*"
             ],
+            "id": "on-delete-notification",
             "topic_arn": "${aws_sns_topic.root_b_bondelete_357A37C8.arn}"
-          }
-        ]
-      },
-      "root_b_S3Objectonupdatenotifier_BF419C65": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/b/S3Object_on_update_notifier",
-            "uniqueId": "root_b_S3Objectonupdatenotifier_BF419C65"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_b_6D0D1E6D.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_b_bonupdate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_53C55984"
-        ],
-        "topic": [
+          },
           {
             "events": [
               "s3:ObjectCreated:Post"
             ],
+            "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.root_b_bonupdate_F11B4439.arn}"
-          }
-        ]
-      },
-      "root_other_S3Objectoncreatenotifier_245EEBFA": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_create_notifier",
-            "uniqueId": "root_other_S3Objectoncreatenotifier_245EEBFA"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_other_otheroncreate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_432AF88B"
-        ],
-        "topic": [
+          },
           {
             "events": [
               "s3:ObjectCreated:Put"
             ],
-            "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
+            "id": "on-create-notification",
+            "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
           }
         ]
       },
-      "root_other_S3Objectondeletenotifier_723A6B77": {
+      "root_other_S3BucketNotification_C16CA005": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_delete_notifier",
-            "uniqueId": "root_other_S3Objectondeletenotifier_723A6B77"
+            "path": "root/Default/Default/other/S3BucketNotification",
+            "uniqueId": "root_other_S3BucketNotification_C16CA005"
           }
         },
         "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
         "depends_on": [
+          "aws_sns_topic_policy.root_other_otheroncreate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_432AF88B",
+          "aws_sns_topic_policy.root_other_otheronupdate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_18B527D9",
           "aws_sns_topic_policy.root_other_otherondelete_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_029C6FE9"
         ],
         "topic": [
           {
             "events": [
-              "s3:ObjectRemoved:*"
+              "s3:ObjectCreated:Put"
             ],
-            "topic_arn": "${aws_sns_topic.root_other_otherondelete_7CCB8682.arn}"
-          }
-        ]
-      },
-      "root_other_S3Objectonupdatenotifier_10BD12E1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/other/S3Object_on_update_notifier",
-            "uniqueId": "root_other_S3Objectonupdatenotifier_10BD12E1"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_other_26932ECB.id}",
-        "depends_on": [
-          "aws_sns_topic_policy.root_other_otheronupdate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_18B527D9"
-        ],
-        "topic": [
+            "id": "on-create-notification",
+            "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
+          },
           {
             "events": [
               "s3:ObjectCreated:Post"
             ],
+            "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.root_other_otheronupdate_3B763057.arn}"
+          },
+          {
+            "events": [
+              "s3:ObjectRemoved:*"
+            ],
+            "id": "on-delete-notification",
+            "topic_arn": "${aws_sns_topic.root_other_otherondelete_7CCB8682.arn}"
           }
         ]
       }
@@ -1357,6 +1329,7 @@ module.exports = function({ b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -1367,9 +1340,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1398,9 +1372,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1429,9 +1404,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight3.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1460,9 +1436,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight4.inflight.js";
         const other_client = context._lift(other);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1483,9 +1460,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight4._registerBindObject(other, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(other, host, ["put"]);
+          $Inflight4._registerBindObject(other, host, ["put"]);
         }
         super._registerBind(host, ops);
       }
@@ -1494,9 +1472,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight5.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1525,9 +1504,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight6.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight6.inflight.js";
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1548,9 +1528,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight6._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(b, host, ["delete", "put"]);
+          $Inflight6._registerBindObject(b, host, ["delete", "put"]);
         }
         super._registerBind(host, ops);
       }
@@ -1562,7 +1543,7 @@ class $Root extends $stdlib.std.Resource {
     (b.onCreate(new $Inflight3(this,"$Inflight3")));
     (b.onEvent(new $Inflight4(this,"$Inflight4")));
     (other.onEvent(new $Inflight5(this,"$Inflight5")));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight6(this,"$Inflight6"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight6(this,"$Inflight6"));
   }
 }
 class $App extends $AppBase {

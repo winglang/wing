@@ -29,59 +29,7 @@ function createMockStream(text: string): SdkStream<Readable> {
   return sdkStream;
 }
 
-test("get object from a bucket", async () => {
-  // GIVEN
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
-  const VALUE = "VALUE";
-  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
-    Body: createMockStream(VALUE),
-  });
-
-  // WHEN
-  const client = new BucketClient(BUCKET_NAME);
-  const response = await client.get(KEY);
-
-  // THEN
-  expect(response).toEqual(VALUE);
-});
-
-test("get invalid object from a bucket", async () => {
-  // GIVEN
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
-  const VALUE = "VALUE";
-  s3Mock
-    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new Error("fake error"));
-
-  // WHEN
-  const client = new BucketClient(BUCKET_NAME);
-
-  // THEN
-  await expect(() => client.get(KEY)).rejects.toThrowError(
-    /Object does not exist/
-  );
-});
-
-test("get Json object from a bucket", async () => {
-  // GIVEN
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
-  const VALUE = { msg: "Hello, World!" };
-  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
-    Body: createMockStream(JSON.stringify(VALUE)),
-  });
-
-  // WHEN
-  const client = new BucketClient(BUCKET_NAME);
-  const response = await client.getJson(KEY);
-
-  // THEN
-  expect(response).toEqual(VALUE);
-});
-
-test("put an object into a bucket", async () => {
+test("put an object into the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -98,7 +46,7 @@ test("put an object into a bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
-test("put a Json object into a bucket", async () => {
+test("putJson an object into the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -119,6 +67,58 @@ test("put a Json object into a bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
+test("get an object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    Body: createMockStream(VALUE),
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.get(KEY);
+
+  // THEN
+  expect(response).toEqual(VALUE);
+});
+
+test("get a non-existent object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(new Error("fake error"));
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.get(KEY)).rejects.toThrowError(
+    /Object does not exist/
+  );
+});
+
+test("getJson an object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = { msg: "Hello, World!" };
+  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    Body: createMockStream(JSON.stringify(VALUE)),
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.getJson(KEY);
+
+  // THEN
+  expect(response).toEqual(VALUE);
+});
+
 test("list bucket objects", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
@@ -133,7 +133,7 @@ test("list bucket objects", async () => {
   expect(response).toEqual([KEY1, KEY2]);
 });
 
-test("delete object from a bucket", async () => {
+test("delete object from the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -150,7 +150,7 @@ test("delete object from a bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
-test("delete object from a bucket with mustExist option", async () => {
+test("delete object from the bucket with mustExist option", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -238,4 +238,177 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
   expect(response).toEqual(
     `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${KEY}`
   );
+});
+
+test("check that an object exists in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{ Key: KEY }] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectExists = await client.exists(KEY);
+
+  // THEN
+  expect(objectExists).toBe(true);
+});
+
+test("check that an object doesn't exist in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectExists = await client.exists(KEY);
+
+  // THEN
+  expect(objectExists).toBe(false);
+});
+
+test("tryGet an existing object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({ Body: createMockStream(VALUE) });
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{ Key: KEY }] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectTryGet = await client.tryGet(KEY);
+
+  // THEN
+  expect(objectTryGet).toEqual(VALUE);
+});
+
+test("tryGet a non-existent object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(new Error("fake error"));
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectTryGet = await client.tryGet(KEY);
+
+  // THEN
+  expect(objectTryGet).toEqual(undefined);
+});
+
+test("tryGetJson an existing object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = { msg: "Hello, World!" };
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({ Body: createMockStream(JSON.stringify(VALUE)) });
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{ Key: KEY }] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectTryGetJson = await client.tryGetJson(KEY);
+
+  // THEN
+  expect(objectTryGetJson).toEqual(VALUE);
+});
+
+test("tryGetJson a non-existent object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = { msg: "Hello, World!" };
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(new Error("fake error"));
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectTryGetJson = await client.tryGetJson(KEY);
+
+  // THEN
+  expect(objectTryGetJson).toEqual(undefined);
+});
+
+test("tryGetJson an existing non-Json object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({ Body: createMockStream(VALUE) });
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{ Key: KEY }] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
+    /Unexpected token V in JSON at position 0/
+  );
+});
+
+test("tryDelete an existing object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  s3Mock
+    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({});
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{ Key: KEY }] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectTryDelete = await client.tryDelete(KEY);
+
+  // THEN
+  expect(objectTryDelete).toEqual(true);
+});
+
+test("tryDelete a non-existent object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  s3Mock
+    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({});
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const objectTryDelete = await client.tryDelete(KEY);
+
+  // THEN
+  expect(objectTryDelete).toEqual(false);
 });

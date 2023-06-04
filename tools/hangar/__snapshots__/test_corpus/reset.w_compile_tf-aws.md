@@ -3,23 +3,26 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ counter }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-        (await counter.inc());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
-        (await counter.inc());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 2)'`)})(((await counter.peek()) === 2))};
-        (await counter.inc(10));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
-        (await counter.reset());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-        (await counter.reset(88));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 88)'`)})(((await counter.peek()) === 88))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
+      (await counter.inc());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
+      (await counter.inc());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 2)'`)})(((await counter.peek()) === 2))};
+      (await counter.inc(10));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
+      (await counter.reset());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
+      (await counter.reset(88));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 88)'`)})(((await counter.peek()) === 88))};
     }
   }
   return $Inflight1;
@@ -171,6 +174,7 @@ module.exports = function({ counter }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -181,9 +185,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -204,15 +209,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(counter, host, ["inc", "peek", "reset"]);
+          $Inflight1._registerBindObject(counter, host, ["inc", "peek", "reset"]);
         }
         super._registerBind(host, ops);
       }
     }
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 0 });
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:reset",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:reset",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {

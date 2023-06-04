@@ -35,6 +35,16 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
+   * Check if an object exists in the bucket
+   *
+   * @param key Key of the object
+   */
+  public async exists(key: string): Promise<boolean> {
+    const blobClient = this.containerClient.getBlobClient(key);
+    return blobClient.exists();
+  }
+
+  /**
    * Put object into bucket with given body contents
    *
    * @param key Key of the object
@@ -57,7 +67,7 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Get object content from bucket
+   * Get an object from the bucket
    *
    * @param key Key of the object
    * @returns string content of the object as string
@@ -91,13 +101,82 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Get object content from bucket as Json
+   * Get an object from the bucket if it exists
+   *
+   * @param key Key of the object
+   * @returns string content of the object as string
+   */
+  public async tryGet(key: string): Promise<string | undefined> {
+    if (await this.exists(key)) {
+      return this.get(key);
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Get a Json object from the bucket
    *
    * @param key Key of the object
    * @returns Json content of the object
    */
   public async getJson(key: string): Promise<Json> {
     return JSON.parse(await this.get(key));
+  }
+
+  /**
+   * Get a Json object from the bucket if it exists
+   *
+   * @param key Key of the object
+   * @returns Json content of the object
+   */
+  public async tryGetJson(key: string): Promise<Json | undefined> {
+    if (await this.exists(key)) {
+      return this.getJson(key);
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Delete an object from the bucket
+   *
+   * @param key Key of the object
+   * @param opts Option object supporting additional strategies to delete item from a bucket
+   */
+  public async delete(
+    key: string,
+    opts: BucketDeleteOptions = {}
+  ): Promise<void> {
+    const mustExist = opts.mustExist ?? false;
+
+    const blockBlobClient = this.containerClient.getBlockBlobClient(key);
+
+    try {
+      await blockBlobClient.delete();
+    } catch (err) {
+      const error = err as any;
+      if (!mustExist && error.details.errorCode === "BlobNotFound") {
+        return;
+      }
+
+      throw Error(`unable to delete "${key}": ${error.details.message}`);
+    }
+  }
+
+  /**
+   * Delete an object from the bucket if it exists
+   *
+   * @param key Key of the object
+   * @param opts Option object supporting additional strategies to delete item from a bucket
+   */
+  public async tryDelete(key: string): Promise<boolean> {
+    if (await this.exists(key)) {
+      await this.delete(key);
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -122,31 +201,6 @@ export class BucketClient implements IBucketClient {
   public async publicUrl(key: string): Promise<string> {
     this._public; // a little help for implementing public_url later on
     throw new Error(`publicUrl is not supported yet. (key=${key})`);
-  }
-  /**
-   * Delete an existing object using a key from the bucket
-   *
-   * @param key Key of the object
-   * @param opts Option object supporting additional strategies to delete item from a bucket
-   */
-  public async delete(
-    key: string,
-    opts: BucketDeleteOptions = {}
-  ): Promise<void> {
-    const mustExist = opts.mustExist ?? false;
-
-    const blockBlobClient = this.containerClient.getBlockBlobClient(key);
-
-    try {
-      await blockBlobClient.delete();
-    } catch (err) {
-      const error = err as any;
-      if (!mustExist && error.details.errorCode === "BlobNotFound") {
-        return;
-      }
-
-      throw Error(`unable to delete "${key}": ${error.details.message}`);
-    }
   }
 
   /**

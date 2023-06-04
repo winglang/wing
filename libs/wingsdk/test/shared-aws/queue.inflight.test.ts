@@ -3,6 +3,7 @@ import {
   PurgeQueueCommand,
   GetQueueAttributesCommand,
   SQSClient,
+  ReceiveMessageCommand,
 } from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
@@ -67,4 +68,32 @@ test("approxSize - happy path", async () => {
 
   // THEN
   expect(response).toEqual(QUEUE_SIZE);
+});
+
+test("pop - happy path", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGE = "MESSAGE";
+  const ONE_MSG_RESPONSE = {
+    Messages: [
+      {
+        Body: MESSAGE,
+      },
+    ],
+  };
+  const NO_MSG_RESPONSE = {};
+
+  sqsMock
+    .on(ReceiveMessageCommand, { QueueUrl: QUEUE_URL })
+    .resolvesOnce(ONE_MSG_RESPONSE)
+    .resolves(NO_MSG_RESPONSE);
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+  const firstPopResponse = await client.pop();
+  const secondPopResponse = await client.pop();
+
+  // THEN
+  expect(firstPopResponse).toEqual(MESSAGE);
+  expect(secondPopResponse).toBeUndefined();
 });

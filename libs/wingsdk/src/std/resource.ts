@@ -1,10 +1,10 @@
 import { Construct, IConstruct } from "constructs";
-import { Duration } from ".";
+import { Duration } from "./duration";
 import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
 import { serializeImmutableData } from "../core/internal";
 import { IInspectable, TreeInspector } from "../core/tree";
-import { log } from "../utils/log";
+import { log } from "../shared/log";
 
 /**
  * A resource that can run inflight code.
@@ -117,6 +117,110 @@ export abstract class Resource extends Construct implements IResource {
     }
   }
 
+  /**
+   * Register that the resource type needs to be bound to the host for the given
+   * operations. A type being bound to a host means that that type's static members
+   * will be bound to the host.
+   *
+   * @internal
+   */
+  static _registerTypeBind(host: IInflightHost, ops: string[]): void {
+    // Do nothing by default
+    host;
+    ops;
+  }
+
+  /**
+   * Register a binding between an object (either data or resource) and a host.
+   *
+   * - Primitives and Duration objects are ignored.
+   * - Arrays, sets and maps and structs (Objects) are recursively bound.
+   * - Resources are bound to the host by calling their _bind() method.
+   *
+   * @param obj The object to bind.
+   * @param host The host to bind to
+   * @param ops The set of operations that may access the object (use "?" to indicate that we don't
+   * know the operation)
+   *
+   * @internal
+   */
+  protected static _registerBindObject(
+    obj: any,
+    host: IResource,
+    ops: string[] = []
+  ): void {
+    switch (typeof obj) {
+      case "string":
+      case "boolean":
+      case "number":
+        return;
+
+      case "object":
+        if (Array.isArray(obj)) {
+          obj.forEach((item) => this._registerBindObject(item, host));
+          return;
+        }
+
+        if (obj instanceof Duration) {
+          return;
+        }
+
+        if (obj instanceof Set) {
+          return Array.from(obj).forEach((item) =>
+            this._registerBindObject(item, host)
+          );
+        }
+
+        if (obj instanceof Map) {
+          Array.from(obj.values()).forEach((item) =>
+            this._registerBindObject(item, host)
+          );
+          return;
+        }
+
+        // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
+        if (isResource(obj)) {
+          // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
+          // the host can instantiate a client for this resource.
+          obj._registerBind(host, ["$inflight_init"]);
+
+          obj._registerBind(host, ops);
+
+          // add connection metadata
+          for (const op of ops) {
+            Resource.addConnection({
+              from: host,
+              to: obj,
+              relationship: op,
+            });
+          }
+
+          return;
+        }
+
+        // structs are just plain objects
+        if (obj.constructor.name === "Object") {
+          Object.values(obj).forEach((item) =>
+            this._registerBindObject(item, host, ops)
+          );
+          return;
+        }
+        break;
+
+      case "function":
+        // If the object is actually a resource type, call the type's _registerTypeBind static method
+        if (isResourceType(obj)) {
+          obj._registerTypeBind(host, ops);
+          return;
+        }
+        break;
+    }
+
+    throw new Error(
+      `unable to serialize immutable data object of type ${obj.constructor?.name}`
+    );
+  }
+
   private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
 
   /** @internal */
@@ -189,88 +293,6 @@ export abstract class Resource extends Construct implements IResource {
     for (const op of ops) {
       this.bindMap.get(host)!.add(op);
     }
-  }
-
-  /**
-   * Register a binding between an object (either data or resource) and a host.
-   *
-   * - Primitives and Duration objects are ignored.
-   * - Arrays, sets and maps and structs (Objects) are recursively bound.
-   * - Resources are bound to the host by calling their _bind() method.
-   *
-   * @param obj The object to bind.
-   * @param host The host to bind to
-   * @param ops The set of operations that may access the object (use "?" to indicate that we don't
-   * know the operation)
-   *
-   * @internal
-   */
-  protected _registerBindObject(
-    obj: any,
-    host: IResource,
-    ops: string[] = []
-  ): void {
-    switch (typeof obj) {
-      case "string":
-      case "boolean":
-      case "number":
-        return;
-
-      case "object":
-        if (Array.isArray(obj)) {
-          obj.forEach((item) => this._registerBindObject(item, host));
-          return;
-        }
-
-        if (obj instanceof Duration) {
-          return;
-        }
-
-        if (obj instanceof Set) {
-          return Array.from(obj).forEach((item) =>
-            this._registerBindObject(item, host)
-          );
-        }
-
-        if (obj instanceof Map) {
-          Array.from(obj.values()).forEach((item) =>
-            this._registerBindObject(item, host)
-          );
-          return;
-        }
-
-        // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
-        if (isResource(obj)) {
-          // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
-          // the host can instantiate a client for this resource.
-          obj._registerBind(host, ["$inflight_init"]);
-
-          obj._registerBind(host, ops);
-
-          // add connection metadata
-          for (const op of ops) {
-            Resource.addConnection({
-              from: host,
-              to: obj,
-              relationship: op,
-            });
-          }
-
-          return;
-        }
-
-        // structs are just plain objects
-        if (obj.constructor.name === "Object") {
-          Object.values(obj).forEach((item) =>
-            this._registerBindObject(item, host, ops)
-          );
-          return;
-        }
-    }
-
-    throw new Error(
-      `unable to serialize immutable data object of type ${obj.constructor?.name}`
-    );
   }
 
   /**
@@ -469,8 +491,18 @@ export class Display {
 }
 
 function isResource(obj: any): obj is IResource {
+  return isIResourceType(obj.constructor);
+}
+
+function isIResourceType(t: any): t is new (...args: any[]) => IResource {
   return (
-    typeof (obj as IResource)._bind === "function" &&
-    typeof (obj as IResource)._registerBind === "function"
+    t instanceof Function &&
+    "prototype" in t &&
+    typeof t.prototype._bind === "function" &&
+    typeof t.prototype._registerBind === "function"
   );
+}
+
+function isResourceType(t: any): t is typeof Resource {
+  return typeof t._registerTypeBind === "function" && isIResourceType(t);
 }

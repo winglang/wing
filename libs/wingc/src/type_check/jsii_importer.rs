@@ -332,7 +332,6 @@ impl<'a> JsiiImporter<'a> {
 			true => self.wing_types.add_type(Type::Struct(Struct {
 				name: new_type_symbol.clone(),
 				extends: extends.clone(),
-				should_case_convert_jsii: true,
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
@@ -356,7 +355,13 @@ impl<'a> JsiiImporter<'a> {
 
 		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
 
-		self.add_members_to_class_env(jsii_interface, false, iface_env.phase, &mut iface_env, wing_type);
+		self.add_members_to_class_env(
+			jsii_interface,
+			Phase::Inflight,
+			iface_env.phase,
+			&mut iface_env,
+			wing_type,
+		);
 
 		// Add properties from our parents to the new structs env
 		if is_struct {
@@ -388,7 +393,13 @@ impl<'a> JsiiImporter<'a> {
 
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
-				self.add_members_to_class_env(client_interface, false, Phase::Inflight, &mut iface_env, wing_type);
+				self.add_members_to_class_env(
+					client_interface,
+					Phase::Inflight,
+					Phase::Inflight,
+					&mut iface_env,
+					wing_type,
+				);
 			} else {
 				debug!(
 					"Interface {} does not seem to have an inflight client",
@@ -407,18 +418,18 @@ impl<'a> JsiiImporter<'a> {
 	fn add_members_to_class_env<T: JsiiInterface>(
 		&mut self,
 		jsii_interface: &T,
-		is_resource: bool,
-		phase: Phase,
+		class_phase: Phase,
+		member_phase: Phase,
 		class_env: &mut SymbolEnv,
 		wing_type: TypeRef,
 	) {
-		assert!(!is_resource || phase == Phase::Preflight);
+		assert!(!(class_phase == Phase::Preflight) || member_phase == Phase::Preflight);
 
 		// Add methods to the class environment
 		if let Some(methods) = &jsii_interface.methods() {
 			for m in methods {
 				// TODO: skip internal methods (for now we skip `capture` until we mark it as internal)
-				if is_resource && m.name == "capture" {
+				if class_phase == Phase::Preflight && m.name == "capture" {
 					debug!("Skipping capture method on resource");
 					continue;
 				}
@@ -455,7 +466,7 @@ impl<'a> JsiiImporter<'a> {
 					this_type,
 					parameters: param_types,
 					return_type,
-					phase,
+					phase: member_phase,
 					js_override: m
 						.docs
 						.as_ref()
@@ -465,7 +476,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&m.name, &m.location_in_module),
-						SymbolKind::make_variable(method_sig, false, is_static, phase),
+						SymbolKind::make_variable(method_sig, false, is_static, member_phase),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -478,7 +489,7 @@ impl<'a> JsiiImporter<'a> {
 		if let Some(properties) = jsii_interface.properties() {
 			for p in properties {
 				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
-				if phase == Phase::Inflight {
+				if member_phase == Phase::Inflight {
 					todo!("No support for inflight properties yet");
 				}
 				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
@@ -495,7 +506,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
-						SymbolKind::make_variable(wing_type, !matches!(p.immutable, Some(true)), is_static, phase),
+						SymbolKind::make_variable(wing_type, !matches!(p.immutable, Some(true)), is_static, member_phase),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -529,7 +540,11 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn import_class(&mut self, jsii_class: &'a wingii::jsii::ClassType) {
-		let mut is_resource = is_construct_base(&FQN::from(jsii_class.fqn.as_str()));
+		let mut class_phase = if is_construct_base(&FQN::from(jsii_class.fqn.as_str())) {
+			Phase::Preflight
+		} else {
+			Phase::Independent
+		};
 
 		let jsii_class_fqn = FQN::from(jsii_class.fqn.as_str());
 		debug!("Importing class {}", jsii_class_fqn.as_str().green());
@@ -564,7 +579,7 @@ impl<'a> JsiiImporter<'a> {
 			};
 
 			// Validate the base class is either a class or a resource
-			if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
+			if base_class_type.as_class().is_none() {
 				panic!("Base class {} of {} is not a resource", base_class_name, type_name);
 			}
 			Some(base_class_type)
@@ -574,24 +589,24 @@ impl<'a> JsiiImporter<'a> {
 
 		// Get env of base class/resource
 		let base_class_env = if let Some(base_class_type) = base_class_type {
-			let base_class = base_class_type.as_class_or_resource().expect(&format!(
-				"Base class {} of {} is not a class or resource",
+			let base_class = base_class_type.as_class().expect(&format!(
+				"Base class {} of {} is not a class",
 				base_class_type, type_name
 			));
-			is_resource = base_class_type.as_resource().is_some();
+			class_phase = base_class.phase;
 			Some(base_class.env.get_ref())
 		} else {
 			None
 		};
 
-		let phase = if is_resource {
+		let member_phase = if class_phase == Phase::Preflight {
 			Phase::Preflight
 		} else {
 			Phase::Independent
 		};
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), false, phase, 0);
+		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), false, class_phase, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -628,7 +643,6 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		let class_spec = Class {
-			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
 			fqn: Some(jsii_class_fqn.to_string()),
@@ -636,16 +650,13 @@ impl<'a> JsiiImporter<'a> {
 			implements,
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
+			phase: class_phase,
 		};
-		let mut new_type = self.wing_types.add_type(if is_resource {
-			Type::Resource(class_spec)
-		} else {
-			Type::Class(class_spec)
-		});
+		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);
 
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), false, phase, 0);
+		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), false, class_phase, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
@@ -657,7 +668,7 @@ impl<'a> JsiiImporter<'a> {
 					// If this is a resource then skip scope and id arguments
 					// TODO hack - skip this check if the resource's name is "App"
 					// https://github.com/winglang/wing/issues/1485
-					if is_resource && type_name != "App" {
+					if class_phase == Phase::Preflight && type_name != "App" {
 						if i == 0 {
 							assert!(param.name == "scope");
 							continue;
@@ -673,12 +684,12 @@ impl<'a> JsiiImporter<'a> {
 				this_type: None, // Initializers are considered static so they have no `this_type`
 				parameters: arg_types,
 				return_type: new_type,
-				phase,
+				phase: member_phase,
 				js_override: None,
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module),
-				SymbolKind::make_variable(method_sig, false, true, phase),
+				SymbolKind::make_variable(method_sig, false, true, member_phase),
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)
@@ -686,8 +697,8 @@ impl<'a> JsiiImporter<'a> {
 		}
 
 		// Add methods and properties to the class environment
-		self.add_members_to_class_env(jsii_class, is_resource, phase, &mut class_env, new_type);
-		if is_resource {
+		self.add_members_to_class_env(jsii_class, class_phase, member_phase, &mut class_env, new_type);
+		if class_phase == Phase::Preflight {
 			// Look for a client interface for this resource
 			let inflight_tag: Option<&str> = extract_docstring_tag(&jsii_class.docs, "inflight");
 
@@ -705,14 +716,20 @@ impl<'a> JsiiImporter<'a> {
 
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
-				self.add_members_to_class_env(client_interface, false, Phase::Inflight, &mut class_env, new_type);
+				self.add_members_to_class_env(
+					client_interface,
+					Phase::Inflight,
+					Phase::Inflight,
+					&mut class_env,
+					new_type,
+				);
 			} else {
 				debug!("Resource {} does not seem to have a client", type_name.green());
 			}
 		}
 		// Replace the dummy class environment with the real one before type checking the methods
 		match *new_type {
-			Type::Class(ref mut class) | Type::Resource(ref mut class) => {
+			Type::Class(ref mut class) => {
 				class.env = class_env;
 			}
 			_ => panic!("Expected {} to be a class or resource ", type_name),

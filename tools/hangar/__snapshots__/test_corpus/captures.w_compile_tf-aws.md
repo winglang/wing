@@ -3,26 +3,29 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ bucket1, bucket2, bucket3 }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(event)  {
-      {
-        (await bucket1.put("file.txt","data"));
-        (await bucket2.get("file.txt"));
-        (await bucket2.get("file2.txt"));
-        (await bucket3.get("file3.txt"));
-        for (const stuff of (await bucket1.list())) {
-          {console.log(stuff)};
-        }
-        {console.log((await bucket2.publicUrl("file.txt")))};
-        try {
-          (await bucket1.publicUrl("file.txt"));
-        }
-        catch ($error_error) {
-          const error = $error_error.message;
-          {console.log(error)};
-        }
+      (await bucket1.put("file.txt","data"));
+      (await bucket2.get("file.txt"));
+      (await bucket2.get("file2.txt"));
+      (await bucket3.get("file3.txt"));
+      for (const stuff of (await bucket1.list())) {
+        {console.log(stuff)};
+      }
+      {console.log((await bucket2.publicUrl("file.txt")))};
+      try {
+        (await bucket1.publicUrl("file.txt"));
+      }
+      catch ($error_error) {
+        const error = $error_error.message;
+        {console.log(error)};
       }
     }
   }
@@ -460,6 +463,7 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -470,9 +474,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const bucket1_client = context._lift(bucket1);
         const bucket2_client = context._lift(bucket2);
         const bucket3_client = context._lift(bucket3);
@@ -497,11 +502,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(bucket1, host, []);
+          $Inflight1._registerBindObject(bucket2, host, []);
+          $Inflight1._registerBindObject(bucket3, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
-          this._registerBindObject(bucket2, host, ["get", "publicUrl"]);
-          this._registerBindObject(bucket3, host, ["get"]);
+          $Inflight1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
+          $Inflight1._registerBindObject(bucket2, host, ["get", "publicUrl"]);
+          $Inflight1._registerBindObject(bucket3, host, ["get"]);
         }
         super._registerBind(host, ops);
       }

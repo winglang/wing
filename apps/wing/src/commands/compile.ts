@@ -1,14 +1,14 @@
 import * as vm from "vm";
 
 import { rmSync, mkdirSync, promises as fsPromise } from "fs";
-import { basename, dirname, join, resolve } from "path";
+import { basename, dirname, join, resolve, relative } from "path";
 import * as os from "os";
 
 import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { copyDir, normalPath } from "../util";
-import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
+import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import { existsSync } from "fs";
 import { Target } from "./constants";
 
@@ -128,14 +128,14 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   try {
     compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
   } catch (e) {
-    // This is a bug in Wing, not the user's code.
-    console.error(e);
-    console.log(
-      "\n\n" +
-        chalk.bold.red("Internal error:") +
-        " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
-    );
-    process.exit(1);
+    const message = [];
+    message.push(e);
+    message.push();
+    message.push();
+    message.push(chalk.bold.red("Internal error:") +
+    " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.");
+    
+    throw new Error(message.join("\n"));
   }
   if (compileResult !== 0) {
     // This is a bug in the user's code. Print the compiler diagnostics.
@@ -144,11 +144,12 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
     for (const error of errors) {
-      const { message, span, level } = error;
+      const { message, span } = error;
       let files: File[] = [];
       let labels: Label[] = [];
 
-      if (span !== null) {
+      // file_id might be "" if the span is synthetic (see #2521)
+      if (span !== null && span.file_id) {
         // `span` should only be null if source file couldn't be read etc.
         const source = await fsPromise.readFile(span.file_id, "utf8");
         const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
@@ -167,7 +168,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         files,
         {
           message,
-          severity: level.toLowerCase() as Severity,
+          severity: "error",
           labels,
         },
         {
@@ -223,40 +224,43 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   try {
     vm.runInContext(artifact, context);
   } catch (e: any) {
-    console.error(e.message);
+    const output = new Array<string>();
 
-    if (process.env.DEBUG) {
-      if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
-        console.log();
-        console.log(
-          "  " +
-            chalk.bold.white("note:") +
-            " " +
-            chalk.white(`intermediate javascript code (${artifactPath}):`)
-        );
-        const lineNumber =
-          Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
-        const lines = artifact.split("\n");
-        let startLine = Math.max(lineNumber - 2, 0);
-        let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+    output.push(chalk.red(`ERROR: ${e.message}`));
 
-        // print line and its surrounding lines
-        for (let i = startLine; i <= finishLine; i++) {
-          if (i === lineNumber) {
-            console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
-          } else {
-            console.log("   " + chalk.dim(lines[i]));
-          }
+    if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
+      const lineNumber =
+        Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
+      const relativeArtifactPath = relative(process.cwd(), artifactPath);
+      log("relative artifact path: %s", relativeArtifactPath);
+
+      output.push("");
+      output.push(chalk.underline(chalk.dim(`${relativeArtifactPath}:${lineNumber}`)));
+
+      const lines = artifact.split("\n");
+      let startLine = Math.max(lineNumber - 2, 0);
+      let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+
+      // print line and its surrounding lines
+      for (let i = startLine; i <= finishLine; i++) {
+        if (i === lineNumber) {
+          output.push(chalk.bold.red(">> ") + chalk.red(lines[i]));
+        } else {
+          output.push("   " + chalk.dim(lines[i]));
         }
       }
 
-      console.error(
-        "--------------------------------- STACK TRACE ---------------------------------"
-      );
-      console.error((e as any).stack);
+      output.push("");
     }
 
-    return process.exit(1);
+    if (process.env.DEBUG) {
+      output.push(
+        "--------------------------------- STACK TRACE ---------------------------------"
+      );
+      output.push((e as any).stack);
+    }
+
+    throw new Error(output.join("\n"));
   }
 
   if (os.platform() === "win32") {

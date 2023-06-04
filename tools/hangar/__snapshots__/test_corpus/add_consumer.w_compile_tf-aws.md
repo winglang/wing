@@ -3,13 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ c }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(msg)  {
-      {
-        (await c.inc());
-      }
+      (await c.inc());
     }
   }
   return $Inflight1;
@@ -20,24 +23,27 @@ module.exports = function({ c }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ q, predicate, js }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (await q.push("hello"));
-        (await q.push("world"));
-        let i = 0;
-        while ((i < 600)) {
-          i = (i + 1);
-          if ((await predicate.test())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
-            return;
-          }
-          (await js.sleep(100));
+      (await q.push("hello"));
+      (await q.push("world"));
+      let i = 0;
+      while ((i < 600)) {
+        i = (i + 1);
+        if ((await predicate.test())) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+          return;
         }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+        (await js.sleep(100));
       }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
     }
   }
   return $Inflight2;
@@ -48,15 +54,16 @@ module.exports = function({ q, predicate, js }) {
 ## clients/Predicate.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Predicate {
+  class Predicate {
     constructor({ c }) {
       this.c = c;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async test()  {
-      {
-        const __parent_this = this;
-        return ((await this.c.peek()) === 2);
-      }
+      const __parent_this = this;
+      return ((await this.c.peek()) === 2);
     }
   }
   return Predicate;
@@ -67,8 +74,11 @@ module.exports = function({  }) {
 ## clients/TestHelper.inflight.js
 ```js
 module.exports = function({  }) {
-  class  TestHelper {
+  class TestHelper {
     constructor({  }) {
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
     async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
@@ -314,6 +324,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -328,7 +339,7 @@ class $Root extends $stdlib.std.Resource {
         this.c = c;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Predicate.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Predicate.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -349,10 +360,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          this._registerBindObject(this.c, host, []);
+          Predicate._registerBindObject(this.c, host, []);
         }
         if (ops.includes("test")) {
-          this._registerBindObject(this.c, host, ["peek"]);
+          Predicate._registerBindObject(this.c, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -364,7 +375,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/TestHelper.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/TestHelper.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -393,9 +404,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const c_client = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -416,9 +428,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(c, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(c, host, ["inc"]);
+          $Inflight1._registerBindObject(c, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
@@ -427,9 +440,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const q_client = context._lift(q);
         const predicate_client = context._lift(predicate);
         const js_client = context._lift(js);
@@ -454,11 +468,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight2._registerBindObject(js, host, []);
+          $Inflight2._registerBindObject(predicate, host, []);
+          $Inflight2._registerBindObject(q, host, []);
         }
         if (ops.includes("handle")) {
-          this._registerBindObject(js, host, ["sleep"]);
-          this._registerBindObject(predicate, host, ["test"]);
-          this._registerBindObject(q, host, ["push"]);
+          $Inflight2._registerBindObject(js, host, ["sleep"]);
+          $Inflight2._registerBindObject(predicate, host, ["test"]);
+          $Inflight2._registerBindObject(q, host, ["push"]);
         }
         super._registerBind(host, ops);
       }
@@ -468,7 +485,7 @@ class $Root extends $stdlib.std.Resource {
     (q.addConsumer(new $Inflight1(this,"$Inflight1")));
     const js = new TestHelper(this,"TestHelper");
     const predicate = new Predicate(this,"Predicate",c);
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:addConsumer",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addConsumer",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

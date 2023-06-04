@@ -9,6 +9,7 @@ import {
   tfResourcesOfCount,
   tfSanitize,
   treeJsonOf,
+  getTfResource,
 } from "../util";
 
 test("create a bucket", () => {
@@ -158,6 +159,13 @@ test("bucket with onCreate method", () => {
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  const bucketNotification = getTfResource(
+    output,
+    "aws_s3_bucket_notification"
+  );
+  expect(bucketNotification.depends_on.length).toEqual(1);
+  expect(bucketNotification.topic.length).toEqual(1);
+  expect(bucketNotification.topic.every((item) => !!item.id)).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -190,6 +198,13 @@ test("bucket with onDelete method", () => {
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  const bucketNotification = getTfResource(
+    output,
+    "aws_s3_bucket_notification"
+  );
+  expect(bucketNotification.depends_on.length).toEqual(1);
+  expect(bucketNotification.topic.length).toEqual(1);
+  expect(bucketNotification.topic.every((item) => !!item.id)).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -222,6 +237,13 @@ test("bucket with onUpdate method", () => {
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  const bucketNotification = getTfResource(
+    output,
+    "aws_s3_bucket_notification"
+  );
+  expect(bucketNotification.depends_on.length).toEqual(1);
+  expect(bucketNotification.topic.length).toEqual(1);
+  expect(bucketNotification.topic.every((item) => !!item.id)).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -252,7 +274,14 @@ test("bucket with onEvent method", () => {
     "aws_sns_topic_subscription", // subscription to events
   ]);
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(3); // 3 topics will be created- one per event
-  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(3);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  const bucketNotification = getTfResource(
+    output,
+    "aws_s3_bucket_notification"
+  );
+  expect(bucketNotification.depends_on.length).toEqual(3);
+  expect(bucketNotification.topic.length).toEqual(3);
+  expect(bucketNotification.topic.every((item) => !!item.id)).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
