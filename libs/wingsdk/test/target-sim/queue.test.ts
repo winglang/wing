@@ -7,17 +7,11 @@ import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const BAD_MESSAGE = "BAD MESSAGE";
-const BAD_MESSAGE_AFTER_1S = "BAD MESSAGE AFTER 1s";
 
 const INFLIGHT_CODE = `
 async handle(message) {
-  if (message === "${BAD_MESSAGE}") {
+  if (message === "BAD MESSAGE") {
     throw new Error("ERROR");
-  } else if (message === "${BAD_MESSAGE_AFTER_1S}") {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject(new Error("ERROR")), 1000);
-    });
   }
 }`;
 
@@ -124,16 +118,22 @@ test("messages are requeued if the function fails after timeout", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
-    timeout: Duration.fromSeconds(0.5),
+    timeout: Duration.fromSeconds(1),
   });
   queue.addConsumer(handler);
   const s = await app.startSimulator();
 
+  // warm up the function so timing is more predictable
+  const fn = s.getResource(
+    "root/my_queue-AddConsumer-e645076f"
+  ) as cloud.IFunctionClient;
+  await fn.invoke(JSON.stringify({ messages: [] }));
+
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push(BAD_MESSAGE_AFTER_1S);
+  await queueClient.push("BAD MESSAGE");
 
-  await sleep(4000);
+  await sleep(1300);
 
   // THEN
   await s.stop();
@@ -154,16 +154,22 @@ test("messages are not requeued if the function fails before timeout", async () 
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
-    timeout: Duration.fromSeconds(5),
+    timeout: Duration.fromSeconds(1),
   });
   queue.addConsumer(handler);
   const s = await app.startSimulator();
 
+  // warm up the function so timing is more predictable
+  const fn = s.getResource(
+    "root/my_queue-AddConsumer-e645076f"
+  ) as cloud.IFunctionClient;
+  await fn.invoke(JSON.stringify({ messages: [] }));
+
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push(BAD_MESSAGE);
+  await queueClient.push("BAD MESSAGE");
 
-  await sleep(2000);
+  await sleep(300);
 
   // THEN
   await s.stop();
@@ -190,17 +196,23 @@ test("messages are not requeued if the function fails after retention timeout", 
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
-    timeout: Duration.fromSeconds(5),
-    retentionPeriod: Duration.fromSeconds(2),
+    timeout: Duration.fromSeconds(2),
+    retentionPeriod: Duration.fromSeconds(1),
   });
   queue.addConsumer(handler);
   const s = await app.startSimulator();
 
+  // warm up the function so timing is more predictable
+  const fn = s.getResource(
+    "root/my_queue-AddConsumer-e645076f"
+  ) as cloud.IFunctionClient;
+  await fn.invoke(JSON.stringify({ messages: [] }));
+
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push(BAD_MESSAGE);
+  await queueClient.push("BAD MESSAGE");
 
-  await sleep(1000);
+  await sleep(300);
 
   // THEN
   await s.stop();

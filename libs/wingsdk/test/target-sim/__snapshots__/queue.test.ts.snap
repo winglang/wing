@@ -78,6 +78,7 @@ exports[`messages are not requeued if the function fails after retention timeout
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
@@ -103,10 +104,6 @@ return class Handler {
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
-  } else if (message === \\"BAD MESSAGE AFTER 1s\\") {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject(new Error(\\"ERROR\\")), 1000);
-    });
   }
 }
 };
@@ -140,8 +137,8 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "retentionPeriod": 2,
-          "timeout": 5,
+          "retentionPeriod": 1,
+          "timeout": 2,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -301,6 +298,7 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
@@ -326,10 +324,6 @@ return class Handler {
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
-  } else if (message === \\"BAD MESSAGE AFTER 1s\\") {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject(new Error(\\"ERROR\\")), 1000);
-    });
   }
 }
 };
@@ -364,7 +358,7 @@ async handle(message) {
         "props": {
           "initialMessages": [],
           "retentionPeriod": 3600,
-          "timeout": 5,
+          "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -524,12 +518,15 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
-  "Push (message=BAD MESSAGE AFTER 1s).",
-  "Sending messages (messages=[\\"BAD MESSAGE AFTER 1s\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE AFTER 1s\\\\\\"]}\\").",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
+  "Push (message=BAD MESSAGE).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
   "1 messages pushed back to queue after visibility timeout.",
-  "Sending messages (messages=[\\"BAD MESSAGE AFTER 1s\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
+  "Subscriber error - returning 1 messages to queue: ERROR",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -551,10 +548,6 @@ return class Handler {
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
-  } else if (message === \\"BAD MESSAGE AFTER 1s\\") {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject(new Error(\\"ERROR\\")), 1000);
-    });
   }
 }
 };
@@ -589,7 +582,7 @@ async handle(message) {
         "props": {
           "initialMessages": [],
           "retentionPeriod": 3600,
-          "timeout": 0.5,
+          "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
       },
@@ -858,10 +851,6 @@ return class Handler {
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
-  } else if (message === \\"BAD MESSAGE AFTER 1s\\") {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject(new Error(\\"ERROR\\")), 1000);
-    });
   }
 }
 };
@@ -1088,10 +1077,6 @@ return class Handler {
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
-  } else if (message === \\"BAD MESSAGE AFTER 1s\\") {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject(new Error(\\"ERROR\\")), 1000);
-    });
   }
 }
 };

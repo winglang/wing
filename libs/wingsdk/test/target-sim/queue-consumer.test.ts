@@ -46,6 +46,12 @@ test("pushing messages through a queue", async () => {
   const s = await app.startSimulator();
 
   const pusher = s.getResource("/HelloWorld/Function") as cloud.IFunctionClient;
+  const consumer = s.getResource(
+    "root/HelloWorld/Queue-AddConsumer-13c4eaf1"
+  ) as cloud.IFunctionClient;
+
+  // warm up the consumer so timing is more predictable
+  await consumer.invoke(JSON.stringify({ messages: [] }));
 
   // WHEN
   await pusher.invoke("foo");
