@@ -4,7 +4,7 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
+		ArgList, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
 		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	fold::{self, Fold},
@@ -133,14 +133,6 @@ impl Fold for ClosureTransformer {
 		new_node
 	}
 
-	fn fold_initializer(&mut self, node: Initializer) -> Initializer {
-		let prev_inside_scope_with_this = self.inside_scope_with_this;
-		self.inside_scope_with_this = true;
-		let new_node = fold::fold_initializer(self, node);
-		self.inside_scope_with_this = prev_inside_scope_with_this;
-		new_node
-	}
-
 	fn fold_expr(&mut self, expr: Expr) -> Expr {
 		// Inflight closures that are themselves defined inflight do not need
 		// to be transformed, since they are not created in preflight.
@@ -241,21 +233,31 @@ impl Fold for ClosureTransformer {
 				let class_def = Stmt {
 					kind: StmtKind::Class(Class {
 						name: new_class_name.clone(),
-						is_resource: true,
-						initializer: Initializer {
+						phase: Phase::Preflight,
+						initializer: FunctionDefinition {
 							signature: FunctionSignature {
 								parameters: class_init_params,
 								return_type: Some(Box::new(class_type_annotation.clone())),
 								phase: Phase::Preflight,
 							},
-							statements: Scope::new(class_init_body, expr.span.clone()),
+							is_static: true,
+							body: FunctionBody::Statements(Scope::new(class_init_body, expr.span.clone())),
 							span: expr.span.clone(),
 						},
 						fields: class_fields,
 						implements: vec![],
 						parent: None,
 						methods: vec![(handle_name.clone(), new_func_def)],
-						inflight_initializer: None,
+						inflight_initializer: FunctionDefinition {
+							signature: FunctionSignature {
+								parameters: vec![],
+								return_type: None,
+								phase: Phase::Inflight,
+							},
+							is_static: false,
+							body: FunctionBody::Statements(Scope::new(vec![], expr.span.clone())),
+							span: expr.span.clone(),
+						},
 					}),
 					idx: self.nearest_stmt_idx,
 					span: expr.span.clone(),

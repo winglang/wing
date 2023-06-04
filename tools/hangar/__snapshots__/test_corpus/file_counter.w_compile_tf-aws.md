@@ -9,6 +9,8 @@ module.exports = function({ counter, bucket }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle(body)  {
       const next = (await counter.inc());
       const key = `myfile-${"hi"}.txt`;
@@ -248,7 +250,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const counter_client = context._lift(counter);
         const bucket_client = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`

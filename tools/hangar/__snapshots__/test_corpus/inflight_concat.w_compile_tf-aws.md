@@ -7,6 +7,9 @@ module.exports = function({  }) {
     constructor({ s1 }) {
       this.s1 = s1;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async foo()  {
       const __parent_this = this;
       {console.log((await this.s1.concat(" world")))};
@@ -68,7 +71,7 @@ class $Root extends $stdlib.std.Resource {
         this.s1 = "hello";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/R.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
