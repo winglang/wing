@@ -16,7 +16,7 @@ if (!SUPPORTED_NODE_VERSION) {
 function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
   return (...args: any[]) =>
     fn(...args).catch((err: Error) => {
-      console.error(err.message);
+      console.error(err);
       process.exit(1);
     });
 }

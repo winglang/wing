@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/inflight_class_definitions.w to sim...
+✔ Compiling valid/inflight_class_definitions.w to sim...
 pass ─ inflight_class_definitions.wsim » root/env0/test:test
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

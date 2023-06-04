@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/capture_containers.w to sim...
+✔ Compiling valid/capture_containers.w to sim...
 pass ─ capture_containers.wsim » root/env0/test:capture_containers
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 
