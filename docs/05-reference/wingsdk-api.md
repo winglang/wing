@@ -4418,7 +4418,6 @@ new std.MutJson()
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
-| <code><a href="#@winglang/sdk.std.MutJson.copy">setAt</a></code> | Creates an immutable deep copy of the Json. |
 
 ---
 
@@ -4500,6 +4499,31 @@ The value of the element to set.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutJson.copy">copy</a></code> | Creates an immutable deep copy of the Json. |
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutJson.copy"></a>
+
+```wing
+bring std;
+
+std.MutJson.copy(json: Json)
+```
+
+Creates an immutable deep copy of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.copy.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to copy.
+
+---
 
 
 

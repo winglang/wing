@@ -140,7 +140,7 @@ export class MutJson {
     json;
     throw new Error("Macro");
   }
-  
+
   /**
    * Returns a specified element from the Json.
    *
