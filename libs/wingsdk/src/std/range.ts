@@ -1,9 +1,8 @@
+import { Code, InflightClient } from "../core";
+
 /**
  * Range
  */
-
-import { Code, InflightClient } from "../core";
-
 export class Range {
   /**
    * Generate a range of numbers.
