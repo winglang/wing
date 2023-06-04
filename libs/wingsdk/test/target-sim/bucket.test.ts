@@ -626,9 +626,8 @@ test("tryGetJson an existing non-Json object from bucket", async () => {
   await client.put(KEY, VALUE);
 
   // THEN
-  await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
-    "Unexpected token 'V', \"VALUE\" is not valid JSON"
-  );
+  // it seems to throw a different error per OS/ node version
+  await expect(() => client.tryGetJson(KEY)).rejects.toThrowError();
   await s.stop();
 });
 
