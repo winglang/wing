@@ -5,6 +5,13 @@ import { Code, InflightClient } from "../core";
  */
 export class Json {
   /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "MutJson");
+  }
+
+  /**
    * Returns the keys from the Json object.
    *
    * @macro (Object.keys($args$))
@@ -137,19 +144,19 @@ export class Json {
     index;
     throw new Error("Macro");
   }
-
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "Json");
-  }
 }
 
 /**
  * Mutable Json
  */
 export class MutJson {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "Json");
+  }
+
   /**
    * Returns a specified element from the Json.
    *
@@ -201,12 +208,5 @@ export class MutJson {
     index;
     value;
     throw new Error("Macro");
-  }
-
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "MutJson");
   }
 }

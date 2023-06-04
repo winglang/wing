@@ -2,9 +2,9 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
-import { Code, InflightClient } from "../core";
 import { ImmutableArray } from "./array";
 import { T1 } from "./generics";
+import { Code, InflightClient } from "../core";
 
 /**
  * Immutable Map
@@ -12,6 +12,13 @@ import { T1 } from "./generics";
  * @typeparam T1
  */
 export class ImmutableMap {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "ImmutableMap");
+  }
+
   /**
    * Returns the number of elements in the map.
    *
@@ -85,13 +92,6 @@ export class ImmutableMap {
   public values(): ImmutableArray {
     throw new Error("Macro");
   }
-
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "ImmutableMap");
-  }
 }
 
 /**
@@ -100,6 +100,13 @@ export class ImmutableMap {
  * @typeparam T1
  */
 export class MutableMap {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "MutableMap");
+  }
+
   /**
    * Returns the number of elements in the map.
    *
@@ -209,12 +216,5 @@ export class MutableMap {
    */
   public values(): ImmutableArray {
     throw new Error("Macro");
-  }
-
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "MutableMap");
   }
 }

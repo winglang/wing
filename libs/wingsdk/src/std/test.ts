@@ -15,7 +15,7 @@ export const TEST_FQN = fqnForType("std.Test");
  *
  * This is the type users see when constructing a std.Test instance.
  */
-export interface TestProps extends FunctionProps { }
+export interface TestProps extends FunctionProps {}
 
 /**
  * Represents a unit test.
@@ -63,13 +63,6 @@ export class Test extends Resource implements IInflightHost {
   public _toInflight(): Code {
     throw new Error("unimplemented");
   }
-
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    throw new Error("unimplemented");
-  }
 }
 
 /**
@@ -78,7 +71,7 @@ export class Test extends Resource implements IInflightHost {
  *
  * @inflight `@winglang/sdk.std.ITestHandlerClient`
  */
-export interface ITestHandler extends IResource { }
+export interface ITestHandler extends IResource {}
 
 /**
  * Inflight client for `ITestHandler`.

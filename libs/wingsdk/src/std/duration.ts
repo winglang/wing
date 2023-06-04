@@ -5,6 +5,13 @@ import { Code, InflightClient } from "../core";
  */
 export class Duration {
   /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, "Duration");
+  }
+
+  /**
    * Create a Duration representing an amount of minutes
    *
    * @param amount the amount of Minutes the `Duration` will represent.
@@ -61,12 +68,5 @@ export class Duration {
    */
   public get hours() {
     return this.minutes / 60;
-  }
-
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "Duration");
   }
 }

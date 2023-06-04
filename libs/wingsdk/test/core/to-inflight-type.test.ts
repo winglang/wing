@@ -1,7 +1,7 @@
+import * as vm from "vm";
 import { test, assert } from "vitest";
 import * as std from "../../src/std";
 import * as util from "../../src/util";
-import * as vm from "vm";
 
 const skip = [
   "std.Direction",
@@ -21,16 +21,24 @@ function makeTest(module: any, moduleName: string, className: string) {
   }
 
   test(`${p}._toInflightType()`, () => {
-    assert.isFunction(module[className]._toInflightType, `${p} is missing _toInflightType()`);
+    assert.isFunction(
+      module[className]._toInflightType,
+      `${p} is missing _toInflightType()`
+    );
 
     const code = module[className]._toInflightType().text;
     let v = vm.runInNewContext(code, {
       require: (name: string) => {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         return require(name);
       },
     });
 
-    assert.equal(v, module[className], "toInflightType() should return the same class");
+    assert.equal(
+      v,
+      module[className],
+      "toInflightType() should return the same class"
+    );
   });
 }
 

@@ -1,5 +1,5 @@
-import { Code, InflightClient } from "../core";
 import { Json } from "./json";
+import { Code, InflightClient } from "../core";
 
 /**
  * Number

@@ -1,5 +1,5 @@
-import { Code, InflightClient } from "../core";
 import { Json } from "./json";
+import { Code, InflightClient } from "../core";
 
 /**
  * Boolean
@@ -13,7 +13,9 @@ export class Boolean {
    */
   public static fromJson(json: Json): boolean {
     if (typeof json !== "boolean") {
-      throw new Error("unable to parse " + typeof json + " " + json + " as a boolean");
+      throw new Error(
+        "unable to parse " + typeof json + " " + json + " as a boolean"
+      );
     }
     return JSON.parse(JSON.stringify(json));
   }
