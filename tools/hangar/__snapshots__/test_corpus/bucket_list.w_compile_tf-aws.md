@@ -10,16 +10,17 @@ module.exports = function({ b }) {
       return $obj;
     }
     async handle()  {
+      const jsonObj1 = Object.freeze({"key1":"value1"});
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
-      (await b.put("file1.txt","Foo"));
+      (await b.putJson("file1.json",jsonObj1));
       (await b.put("file2.txt","Bar"));
       (await b.put("random","Buz"));
       const objs = (await b.list());
       const objs2 = (await b.list("file"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file1.txt")'`)})(objs.includes("file1.txt"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file1.json")'`)})(objs.includes("file1.json"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file2.txt")'`)})(objs.includes("file2.txt"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("random")'`)})(objs.includes("random"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file1.txt")'`)})(objs2.includes("file1.txt"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file1.json")'`)})(objs2.includes("file1.json"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file2.txt")'`)})(objs2.includes("file2.txt"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(!objs2.includes("random"))'`)})((!objs2.includes("random")))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs.length === 3)'`)})((objs.length === 3))};
@@ -238,7 +239,7 @@ class $Root extends $stdlib.std.Resource {
           $Inflight1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(b, host, ["list", "put"]);
+          $Inflight1._registerBindObject(b, host, ["list", "put", "putJson"]);
         }
         super._registerBind(host, ops);
       }
