@@ -2,10 +2,9 @@
 
 ## stdout.log
 ```log
-- Compiling valid/website.w to sim...
-website is up and running on ${root/env0/cloud.Website#attrs.url}!
-✔ Compiling valid/website.w to sim...
-pass ─ website.wsim (no tests)
+- Compiling website/website.w to sim...
+✔ Compiling website/website.w to sim...
+pass ─ website.wsim » root/env0/test:test
  
 
 
