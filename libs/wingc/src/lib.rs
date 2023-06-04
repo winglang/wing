@@ -178,6 +178,7 @@ pub fn type_check(
 	source_path: &Path,
 	jsii_types: &mut TypeSystem,
 ) -> Diagnostics {
+	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 

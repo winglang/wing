@@ -9,6 +9,8 @@ module.exports = function({ q, NIL }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       const msgs = Object.freeze(["Foo", "Bar"]);
       for (const msg of msgs) {
@@ -177,7 +179,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const q_client = context._lift(q);
         const NIL_client = context._lift(NIL);
         return $stdlib.core.NodeJsCode.fromInline(`
