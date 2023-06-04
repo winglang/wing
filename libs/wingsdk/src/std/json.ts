@@ -29,6 +29,19 @@ export class Json {
   }
 
   /**
+   * Creates an immutable deep copy of the Json.
+   *
+   * @macro (JSON.parse(JSON.stringify($args$)))
+   *
+   * @param json to copy
+   * @returns the immutable copy of the Json
+   */
+  public static copy(json: Json): Json {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
    * Creates a mutable deep copy of the Json.
    *
    * @macro (JSON.parse(JSON.stringify($args$)))

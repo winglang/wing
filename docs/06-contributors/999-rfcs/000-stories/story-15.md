@@ -112,13 +112,13 @@ resource TaskList impl ITaskList {
   }
       
   inflight set_status(id: str, status: Status): str {
-    let j = Json.clone_mut(this.get(id));
+    let j = Json.copyMut(this.get(id));
     if status == Status.COMPLETED {
       j.set("status", "completed");
     } else {
       j.set("status", "uncompleted");
     }
-    this._add(id, Json.clone(j));
+    this._add(id, Json.copy(j));
     return id;
   }
         

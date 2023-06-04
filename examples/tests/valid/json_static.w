@@ -9,8 +9,8 @@ assert(k.length == 2);
 let v = Json.values(x);
 assert(v.at(0) == 123);
 
-// Mutable Clone
-let m = Json.cloneMut(x);
+// Mutable Copy
+let m = Json.copyMut(x);
 m.set("a", 321);
 assert(m.get("a") == 321);
 

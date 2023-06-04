@@ -442,11 +442,11 @@ let foo = MutJson "hello";
 // ok what now?
 ```
 
-Use the `Json.clone()` and `Json.cloneMut()` methods to get a *deep clone* of the object:
+Use the `Json.copy()` and `Json.copyMut()` methods to get a *deep copy* of the object:
 
 ```js
 let mutJson = MutJson { hello: 123 };
-let immut = Json.clone(mutJson);
+let immut = Json.copy(mutJson);
 mutJson.hello = 999;
 assert(immut.hello == 123);
 ```
