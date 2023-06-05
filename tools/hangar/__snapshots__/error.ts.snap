@@ -71,7 +71,7 @@ exports[`repeat_construct_id.w 1`] = `
 ✖ Compiling error/repeat_construct_id.w to sim...
 ERROR: There is already a Construct with name 'cloud.Bucket' in $Root [env0]
 
-hint: Every preflight class needs a unique id within its scope. You can assign an id to a class as shown:
+hint: Every preflight class needs a unique id within its scope. You can assign an id to a class instance as shown:
 
 > new cloud.Bucket() as \\"MyBucket\\";
 
@@ -99,7 +99,7 @@ exports[`repeat_construct_id2.w 1`] = `
 ✖ Compiling error/repeat_construct_id2.w to sim...
 ERROR: There is already a Construct with name '\${make_name()}' in $Root [env0]
 
-hint: Every preflight class needs a unique id within its scope. You can assign an id to a class as shown:
+hint: Every preflight class needs a unique id within its scope. You can assign an id to a class instance as shown:
 
 > new cloud.Bucket() as \\"MyBucket\\";
 

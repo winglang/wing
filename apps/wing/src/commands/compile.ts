@@ -293,7 +293,7 @@ function annotatePreflightError(e: any): any {
     const newMessage = [];
     newMessage.push(e.message);
     newMessage.push(
-      "hint: Every preflight class needs a unique id within its scope. You can assign an id to a class as shown:"
+      "hint: Every preflight class needs a unique id within its scope. You can assign an id to a class instance as shown:"
     );
     newMessage.push('> new cloud.Bucket() as "MyBucket";');
     newMessage.push("For more information, see https://docs.winglang.io/concepts/resources");
