@@ -4,7 +4,7 @@ import { TableSchema, TABLE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IInflightHost } from "../std";
+import { Json, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -13,9 +13,15 @@ import { BaseResourceSchema } from "../testing/simulator";
  * @inflight `@winglang/sdk.cloud.ITableClient`
  */
 export class Table extends cloud.Table implements ISimulatorResource {
+  private readonly initialRows: Record<string, Json> = {};
   constructor(scope: Construct, id: string, props: cloud.TableProps = {}) {
     super(scope, id, props);
   }
+
+  public addRow(key: string, row: Json): void {
+    this.initialRows[key] = row;
+  }
+
   public toSimulator(): BaseResourceSchema {
     const schema: TableSchema = {
       type: TABLE_TYPE,
