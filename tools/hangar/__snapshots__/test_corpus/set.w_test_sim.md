@@ -2,8 +2,14 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
 pass ─ set.wsim (no tests)
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

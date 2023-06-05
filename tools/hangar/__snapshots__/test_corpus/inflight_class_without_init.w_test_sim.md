@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/inflight_class_without_init.w to sim...
-✔ Compiling valid/inflight_class_without_init.w to sim...
 pass ─ inflight_class_without_init.wsim » root/env0/test:inflight class without init
  
 

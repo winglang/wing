@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/for_loop.w to sim...
 wing: 1
 wing: 2
 wing: 3
@@ -101,7 +100,6 @@ for x in (z*2)..0 { ... } <=> x = 2
 3
 2
 1
-✔ Compiling valid/for_loop.w to sim...
 pass ─ for_loop.wsim (no tests)
  
 

@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/mut_container_types.w to sim...
-✔ Compiling valid/mut_container_types.w to sim...
 pass ─ mut_container_types.wsim (no tests)
  
 

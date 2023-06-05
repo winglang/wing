@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/container_types.w to sim...
-✔ Compiling valid/container_types.w to sim...
 pass ─ container_types.wsim (no tests)
  
 

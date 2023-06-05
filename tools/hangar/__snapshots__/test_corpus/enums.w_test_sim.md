@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/enums.w to sim...
-✔ Compiling valid/enums.w to sim...
 pass ─ enums.wsim (no tests)
  
 

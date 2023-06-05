@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/asynchronous_model_implicit_await_in_functions.w to sim...
-✔ Compiling valid/asynchronous_model_implicit_await_in_functions.w to sim...
 pass ─ asynchronous_model_implicit_await_in_functions.wsim (no tests)
  
 

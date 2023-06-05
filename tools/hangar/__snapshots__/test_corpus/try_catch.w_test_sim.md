@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/try_catch.w to sim...
-✔ Compiling valid/try_catch.w to sim...
 pass ─ try_catch.wsim (no tests)
  
 

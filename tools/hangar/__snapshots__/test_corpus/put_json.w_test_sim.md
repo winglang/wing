@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling bucket/put_json.w to sim...
-✔ Compiling bucket/put_json.w to sim...
 pass ─ put_json.wsim » root/env0/test:putJson
  
 

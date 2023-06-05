@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/json.w to sim...
-✔ Compiling valid/json.w to sim...
 pass ─ json.wsim (no tests)
  
 

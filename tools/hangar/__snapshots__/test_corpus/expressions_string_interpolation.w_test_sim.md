@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/expressions_string_interpolation.w to sim...
-✔ Compiling valid/expressions_string_interpolation.w to sim...
 pass ─ expressions_string_interpolation.wsim (no tests)
  
 

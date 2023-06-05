@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/shadowing.w to sim...
-✔ Compiling valid/shadowing.w to sim...
 pass ─ shadowing.wsim » root/env0/test:capture shadow interaction
  
 

@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling counter/dec.w to sim...
-✔ Compiling counter/dec.w to sim...
 pass ─ dec.wsim » root/env0/test:dec
  
 

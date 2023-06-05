@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling bucket/exists.w to sim...
-✔ Compiling bucket/exists.w to sim...
 pass ─ exists.wsim » root/env0/test:exists
  
 

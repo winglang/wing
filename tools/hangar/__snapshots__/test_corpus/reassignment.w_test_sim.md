@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/reassignment.w to sim...
-✔ Compiling valid/reassignment.w to sim...
 pass ─ reassignment.wsim (no tests)
  
 

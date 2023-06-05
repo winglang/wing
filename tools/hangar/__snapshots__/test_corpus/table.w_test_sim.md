@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/table.w to sim...
-✔ Compiling valid/table.w to sim...
 pass ─ table.wsim (no tests)
  
 

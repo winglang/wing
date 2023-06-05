@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/calling_inflight_variants.w to sim...
-✔ Compiling valid/calling_inflight_variants.w to sim...
 pass ─ calling_inflight_variants.wsim » root/env0/test:calling different types of inflights
  
 

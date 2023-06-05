@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/structs.w to sim...
-✔ Compiling valid/structs.w to sim...
 pass ─ structs.wsim (no tests)
  
 

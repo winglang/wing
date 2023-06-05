@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling counter/reset.w to sim...
-✔ Compiling counter/reset.w to sim...
 pass ─ reset.wsim » root/env0/test:reset
  
 

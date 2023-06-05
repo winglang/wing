@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/extern_implementation.w to sim...
-✔ Compiling valid/extern_implementation.w to sim...
 pass ─ extern_implementation.wsim » root/env0/test:call   
 pass ┌ extern_implementation.wsim » root/env1/test:console
      └ printing hey there

@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/json_static.w to sim...
-✔ Compiling valid/json_static.w to sim...
 pass ─ json_static.wsim » root/env0/test:Access Json static inflight
  
 

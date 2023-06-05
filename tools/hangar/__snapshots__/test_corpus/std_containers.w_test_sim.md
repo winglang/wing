@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/std_containers.w to sim...
-✔ Compiling valid/std_containers.w to sim...
 pass ─ std_containers.wsim (no tests)
  
 

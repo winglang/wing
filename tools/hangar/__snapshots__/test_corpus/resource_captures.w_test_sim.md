@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/resource_captures.w to sim...
-✔ Compiling valid/resource_captures.w to sim...
 pass ┌ resource_captures.wsim » root/env0/test:test
      │ array.len=3
      │ field=hello!

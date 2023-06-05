@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/inflight_class_as_struct_members.w to sim...
-✔ Compiling valid/inflight_class_as_struct_members.w to sim...
 pass ─ inflight_class_as_struct_members.wsim » root/env0/test:test
  
 

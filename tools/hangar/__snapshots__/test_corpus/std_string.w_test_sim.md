@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/std_string.w to sim...
-✔ Compiling valid/std_string.w to sim...
 pass ┌ std_string.wsim » root/env0/test:string
      │ index of "s" in s1 is 0
      │ string
