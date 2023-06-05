@@ -6,16 +6,25 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(bool): void"
   insertText: assert($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: log
   kind: 3
   detail: "(str): void"
   insertText: log($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: panic
   kind: 3
   detail: "(str): void"
   insertText: panic($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: std
   kind: 9
   detail: bring std
@@ -24,4 +33,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(str): void"
   insertText: throw($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 

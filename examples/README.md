@@ -1,6 +1,6 @@
 # Wing Examples
 
-This directory contains a collection of Wing examples of the kinds of apps you can build in Wing! Check out the [Wing Contributor's Handbook](../docs/06-contributors/docs#%EF%B8%8F-how-do-i-add-an-example) for a guide on on how to add your own example.
+This directory contains a collection of Wing examples of the kinds of apps you can build in Wing! Check out the [Wing Contributor's Handbook](https://docs.winglang.io/contributors/docs#%EF%B8%8F-how-do-i-add-an-example) for a guide on on how to add your own example.
 
 The examples in the `tests` directory are examples specifically used for testing the compiler. `tests/valid` are examples that should compile successfully, and `tests/invalid` are examples that should fail.
 
