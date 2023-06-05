@@ -56,7 +56,7 @@ export class Function extends cloud.Function {
   /** @internal */
   public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
-      throw new Error("functions can only be bound by tfaws.Function for now");
+      throw new Error("functions can only be bound by awscdk.Function for now");
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
