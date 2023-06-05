@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import * as path from "path";
-import fs from "fs-extra";
+import fs from "fs";
 import { pluginsDir, tmpDir } from "./paths";
 import {
   runWingCommand,
@@ -106,7 +106,7 @@ describe("Plugin examples", () => {
   
         const tfPath = path.join(targetDir, "main.tf.json");
         const terraformOutput = sanitize_json_paths(tfPath);
-        const unsanitizedTerraformOutput = fs.readJsonSync(tfPath);
+        const unsanitizedTerraformOutput = JSON.parse(fs.readFileSync(tfPath, "utf-8"));
   
         expect(terraformOutput).toMatchSnapshot();
         expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
@@ -137,7 +137,7 @@ describe("Plugin examples", () => {
   
         const tfPath = path.join(targetDir, "main.tf.json");
         const terraformOutput = sanitize_json_paths(tfPath);
-        const unsanitizedTerraformOutput = fs.readJsonSync(tfPath);
+        const unsanitizedTerraformOutput = JSON.parse(fs.readFileSync(tfPath, "utf-8"));
   
         expect(terraformOutput).toMatchSnapshot();
         expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
@@ -173,7 +173,7 @@ describe("Plugin examples", () => {
   
         const tfPath = path.join(targetDir, "main.tf.json");
         const terraformOutput = sanitize_json_paths(tfPath);
-        const unsanitizedTerraformOutput = fs.readJsonSync(tfPath);
+        const unsanitizedTerraformOutput = JSON.parse(fs.readFileSync(tfPath, "utf-8"));
   
         expect(terraformOutput).toMatchSnapshot();
         expect(unsanitizedTerraformOutput.terraform.backend).toEqual({

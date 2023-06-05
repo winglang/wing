@@ -1,7 +1,6 @@
 import assert from "assert";
 import { execa } from "execa";
-import fs from "fs-extra";
-import path from "path";
+import fs from "fs/promises";
 import {
   npmBin,
   npmCacheDir,
@@ -29,10 +28,8 @@ export default async function () {
   delete process.env.FORCE_COLOR;
 
   // reset tmpDir
-  fs.removeSync(tmpDir);
-  fs.mkdirpSync(tmpDir);
-
-
+  await fs.rm(tmpDir, { recursive: true, force: true });
+  await fs.mkdir(tmpDir, { recursive: true });
   await execa(npmBin, ["init", "-y"], {
     cwd: tmpDir,
   });

@@ -1,5 +1,5 @@
 import { execa } from "execa";
-import * as fs from "fs-extra";
+import * as fs from "fs";
 import { expect } from "vitest";
 import { snapshotDir, wingBin } from "./paths";
 import { join, extname, relative, resolve, dirname, basename } from "path";
@@ -46,7 +46,7 @@ export function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+?"/g;
   const assetSourceRegex = /"assets\/.+?"/g;
   const sourceRegex = /(?<=\"source\"\:)\"([A-Z]:|\/|\\)[\/\\\-\w\.]+\"/g;
-  const json = fs.readJsonSync(path);
+  const json = JSON.parse(fs.readFileSync(path, "utf-8"));
 
   const jsonText = JSON.stringify(json);
   const sanitizedJsonText = jsonText
