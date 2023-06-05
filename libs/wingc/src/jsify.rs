@@ -38,8 +38,6 @@ const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
-const INFLIGHT_CLIENTS_DIR: &str = "clients";
-
 const TARGET_CODE: &str = "const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);";
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
@@ -1048,7 +1046,7 @@ impl<'a> JSifier<'a> {
 		free_inflight_variables: &IndexSet<String>,
 		referenced_preflight_types: &IndexMap<String, TypeRef>,
 	) -> CodeMaker {
-		let client_path = Self::js_resolve_path(&format!("{INFLIGHT_CLIENTS_DIR}/{}", inflight_filename(class)));
+		let client_path = Self::js_resolve_path(&format!("./{}", inflight_filename(class)));
 
 		let mut code = CodeMaker::default();
 
@@ -1267,7 +1265,7 @@ impl<'a> JSifier<'a> {
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		let clients_dir = format!("{}/{INFLIGHT_CLIENTS_DIR}", self.out_dir.to_string_lossy());
+		let clients_dir = format!("{}", self.out_dir.to_string_lossy());
 		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
 		let client_file_name = inflight_filename(class);
 		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
@@ -1924,5 +1922,5 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 }
 
 fn inflight_filename(class: &AstClass) -> String {
-	format!("{}.inflight.js", class.name.name)
+	format!("inflight.{}.js", class.name.name)
 }

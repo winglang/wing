@@ -376,7 +376,7 @@ error: Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but go
   | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
 
 
-error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Inflight1\\" instead
+error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
    --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
    |  
  9 |   q.addConsumer(inflight (x: num) => {
@@ -384,7 +384,7 @@ error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\"
 10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
 11 | |   return;
 12 | | });
-   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Inflight1\\" instead
+   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
 
 
  
