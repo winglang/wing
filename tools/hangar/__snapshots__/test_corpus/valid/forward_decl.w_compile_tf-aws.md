@@ -1,6 +1,6 @@
 # [forward_decl.w](../../../../../examples/tests/valid/forward_decl.w) | compile | tf-aws
 
-## clients/R.inflight.js
+## inflight.R.js
 ```js
 module.exports = function({  }) {
   class R {
@@ -74,7 +74,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/R.inflight.js";
+        const self_client_path = "././inflight.R.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

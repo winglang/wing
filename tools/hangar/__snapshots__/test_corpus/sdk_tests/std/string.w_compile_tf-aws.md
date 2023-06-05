@@ -1,9 +1,9 @@
 # [string.w](../../../../../../examples/tests/sdk_tests/std/string.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ PARSE_ERROR, std_String }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -22,15 +22,15 @@ module.exports = function({ PARSE_ERROR, std_String }) {
       }
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
 
-## clients/$Inflight2.inflight.js
+## inflight.$Closure2.js
 ```js
 module.exports = function({  }) {
-  class $Inflight2 {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -43,15 +43,15 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("".length === 0)'`)})(("".length === 0))};
     }
   }
-  return $Inflight2;
+  return $Closure2;
 }
 
 ```
 
-## clients/$Inflight3.inflight.js
+## inflight.$Closure3.js
 ```js
 module.exports = function({  }) {
-  class $Inflight3 {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -63,7 +63,7 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await "boom".at(0)) === "b")'`)})(((await "boom".at(0)) === "b"))};
     }
   }
-  return $Inflight3;
+  return $Closure3;
 }
 
 ```
@@ -331,14 +331,14 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const PARSE_ERROR_client = context._lift(PARSE_ERROR);
         const std_StringClient = std.String._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -351,8 +351,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -361,22 +361,22 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(PARSE_ERROR, host, []);
+          $Closure1._registerBindObject(PARSE_ERROR, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(PARSE_ERROR, host, []);
+          $Closure1._registerBindObject(PARSE_ERROR, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js";
+        const self_client_path = "././inflight.$Closure2.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -385,8 +385,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-            const client = new $Inflight2Client({
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -401,14 +401,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class $Inflight3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js";
+        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -417,8 +417,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
-            const client = new $Inflight3Client({
+            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -452,12 +452,12 @@ class $Root extends $stdlib.std.Resource {
       ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })(123);
     }
     ));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:fromJson",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:fromJson",new $Closure1(this,"$Closure1"));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '("hello".length === 5)'`)})(("hello".length === 5))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '("".length === 0)'`)})(("".length === 0))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Closure2(this,"$Closure2"));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(("boom".at(2)) === "o")'`)})((("boom".at(2)) === "o"))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:at()",new $Inflight3(this,"$Inflight3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:at()",new $Closure3(this,"$Closure3"));
   }
 }
 class $App extends $AppBase {

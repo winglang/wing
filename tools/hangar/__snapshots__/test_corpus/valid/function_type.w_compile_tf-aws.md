@@ -1,9 +1,9 @@
 # [function_type.w](../../../../../examples/tests/valid/function_type.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({  }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -14,15 +14,15 @@ module.exports = function({  }) {
     async handle(x)  {
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
 
-## clients/$Inflight2.inflight.js
+## inflight.$Closure2.js
 ```js
 module.exports = function({  }) {
-  class $Inflight2 {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -33,12 +33,12 @@ module.exports = function({  }) {
     async handle(x)  {
     }
   }
-  return $Inflight2;
+  return $Closure2;
 }
 
 ```
 
-## clients/C.inflight.js
+## inflight.C.js
 ```js
 module.exports = function({  }) {
   class C {
@@ -101,14 +101,14 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -117,8 +117,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -133,14 +133,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class $Inflight2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js";
+        const self_client_path = "././inflight.$Closure2.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -149,8 +149,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-            const client = new $Inflight2Client({
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -178,7 +178,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/C.inflight.js";
+        const self_client_path = "././inflight.C.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -217,8 +217,8 @@ class $Root extends $stdlib.std.Resource {
     const my_func4 =  (x) =>  {
     }
     ;
-    const my_func5 = new $Inflight1(this,"$Inflight1");
-    const my_func6 = new $Inflight2(this,"$Inflight2");
+    const my_func5 = new $Closure1(this,"$Closure1");
+    const my_func6 = new $Closure2(this,"$Closure2");
   }
 }
 class $App extends $AppBase {

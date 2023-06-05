@@ -1,9 +1,9 @@
 # [put_json.w](../../../../../../examples/tests/sdk_tests/bucket/put_json.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ b }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -28,6 +28,38 @@ module.exports = function({ b }) {
       const files = (await b.list());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
+    }
+  }
+  return $Closure1;
+}
+
+```
+
+## inflight.$Inflight1.js
+```js
+module.exports = function({ b }) {
+  class $Inflight1 {
+    constructor({  }) {
+    }
+    async handle() {
+      {
+        const jsonObj1 = Object.freeze({"test":"test1"});
+        const jsonObj2 = Object.freeze({"test":"test2"});
+        (typeof b.putJson === "function" ? await b.putJson("test1.txt",jsonObj1) : await b.putJson.handle("test1.txt",jsonObj1));
+        (typeof b.putJson === "function" ? await b.putJson("test2.txt",jsonObj2) : await b.putJson.handle("test2.txt",jsonObj2));
+        const testJson1 = (typeof b.getJson === "function" ? await b.getJson("test1.txt") : await b.getJson.handle("test1.txt"));
+        const testJson2 = (typeof b.getJson === "function" ? await b.getJson("test2.txt") : await b.getJson.handle("test2.txt"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson1)["test"] === (jsonObj1)["test"])'`)})(((testJson1)["test"] === (jsonObj1)["test"]))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson2)["test"] === (jsonObj2)["test"])'`)})(((testJson2)["test"] === (jsonObj2)["test"]))};
+        const jsonObj3 = Object.freeze({"test":"test3"});
+        (typeof b.putJson === "function" ? await b.putJson("test3.txt",jsonObj3) : await b.putJson.handle("test3.txt",jsonObj3));
+        const testJson3 = (typeof b.getJson === "function" ? await b.getJson("test3.txt") : await b.getJson.handle("test3.txt"));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson3)["test"] === (jsonObj3)["test"])'`)})(((testJson3)["test"] === (jsonObj3)["test"]))};
+        (typeof b.delete === "function" ? await b.delete("test1.txt") : await b.delete.handle("test1.txt"));
+        const files = (typeof b.list === "function" ? await b.list() : await b.list.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
+      }
     }
   }
   return $Inflight1;
@@ -212,14 +244,14 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -230,8 +262,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -240,16 +272,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(b, host, []);
+          $Closure1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(b, host, ["delete", "getJson", "list", "putJson"]);
+          $Closure1._registerBindObject(b, host, ["delete", "getJson", "list", "putJson"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:putJson",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:putJson",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {

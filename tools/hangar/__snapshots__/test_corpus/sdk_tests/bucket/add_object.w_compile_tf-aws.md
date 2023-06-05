@@ -1,9 +1,9 @@
 # [add_object.w](../../../../../../examples/tests/sdk_tests/bucket/add_object.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ b, jsonObj1, std_Json }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -17,7 +17,7 @@ module.exports = function({ b, jsonObj1, std_Json }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file2.txt")) === "Bar")'`)})(((await b.get("file2.txt")) === "Bar"))};
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
@@ -221,14 +221,14 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const b_client = context._lift(b);
         const jsonObj1_client = context._lift(jsonObj1);
         const std_JsonClient = std.Json._toInflightType(context);
@@ -243,8 +243,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -253,12 +253,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(b, host, []);
-          $Inflight1._registerBindObject(jsonObj1, host, []);
+          $Closure1._registerBindObject(b, host, []);
+          $Closure1._registerBindObject(jsonObj1, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(b, host, ["get", "getJson", "list"]);
-          $Inflight1._registerBindObject(jsonObj1, host, []);
+          $Closure1._registerBindObject(b, host, ["get", "getJson", "list"]);
+          $Closure1._registerBindObject(jsonObj1, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -267,7 +267,7 @@ class $Root extends $stdlib.std.Resource {
     const jsonObj1 = Object.freeze({"key1":"value1"});
     (b.addObject("file1.json",((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])));
     (b.addObject("file2.txt","Bar"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addObject",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addObject",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {

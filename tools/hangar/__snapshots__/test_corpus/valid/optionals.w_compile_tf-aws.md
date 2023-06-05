@@ -1,6 +1,6 @@
 # [optionals.w](../../../../../examples/tests/valid/optionals.w) | compile | tf-aws
 
-## clients/Node.inflight.js
+## inflight.Node.js
 ```js
 module.exports = function({  }) {
   class Node {
@@ -18,7 +18,7 @@ module.exports = function({  }) {
 
 ```
 
-## clients/Sub.inflight.js
+## inflight.Sub.js
 ```js
 module.exports = function({  }) {
   class Sub extends Super {
@@ -34,7 +34,7 @@ module.exports = function({  }) {
 
 ```
 
-## clients/Sub1.inflight.js
+## inflight.Sub1.js
 ```js
 module.exports = function({  }) {
   class Sub1 extends Super {
@@ -50,7 +50,7 @@ module.exports = function({  }) {
 
 ```
 
-## clients/Super.inflight.js
+## inflight.Super.js
 ```js
 module.exports = function({  }) {
   class Super {
@@ -115,7 +115,7 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Super";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Super.inflight.js";
+        const self_client_path = "././inflight.Super.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -147,7 +147,7 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Sub";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Sub.inflight.js";
+        const self_client_path = "././inflight.Sub.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -179,7 +179,7 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Sub";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Sub1.inflight.js";
+        const self_client_path = "././inflight.Sub1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -214,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
         this.right = right;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Node.inflight.js";
+        const self_client_path = "././inflight.Node.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

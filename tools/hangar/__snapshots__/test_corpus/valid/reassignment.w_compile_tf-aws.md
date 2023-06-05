@@ -1,6 +1,6 @@
 # [reassignment.w](../../../../../examples/tests/valid/reassignment.w) | compile | tf-aws
 
-## clients/R.inflight.js
+## inflight.R.js
 ```js
 module.exports = function({  }) {
   class R {
@@ -73,7 +73,7 @@ class $Root extends $stdlib.std.Resource {
         this.f = (this.f + 1);
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/R.inflight.js";
+        const self_client_path = "././inflight.R.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

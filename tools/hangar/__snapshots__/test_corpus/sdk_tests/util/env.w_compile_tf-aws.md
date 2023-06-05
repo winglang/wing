@@ -1,9 +1,9 @@
 # [env.w](../../../../../../examples/tests/sdk_tests/util/env.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ RANDOM, NIL, util_Util }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -17,7 +17,7 @@ module.exports = function({ RANDOM, NIL, util_Util }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(noValue === NIL)'`)})((noValue === NIL))};
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
@@ -154,14 +154,14 @@ const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const RANDOM_client = context._lift(RANDOM);
         const NIL_client = context._lift(NIL);
         const util_UtilClient = util.Util._toInflightType(context);
@@ -176,8 +176,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -186,12 +186,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(NIL, host, []);
-          $Inflight1._registerBindObject(RANDOM, host, []);
+          $Closure1._registerBindObject(NIL, host, []);
+          $Closure1._registerBindObject(RANDOM, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(NIL, host, []);
-          $Inflight1._registerBindObject(RANDOM, host, []);
+          $Closure1._registerBindObject(NIL, host, []);
+          $Closure1._registerBindObject(RANDOM, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -209,7 +209,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: 'failed'`)})(failed)};
     const no_value = ((util.Util.tryEnv(RANDOM)) ?? NIL);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(no_value === NIL)'`)})((no_value === NIL))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:use util from inflight",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:use util from inflight",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {

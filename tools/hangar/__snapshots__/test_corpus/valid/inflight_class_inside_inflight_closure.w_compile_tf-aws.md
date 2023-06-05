@@ -1,9 +1,9 @@
 # [inflight_class_inside_inflight_closure.w](../../../../../examples/tests/valid/inflight_class_inside_inflight_closure.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ __parent_this }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -13,20 +13,20 @@ module.exports = function({ __parent_this }) {
     }
     async handle(payload)  {
       (await __parent_this.b.put("k","v"));
-      const InflightClass = require("./InflightClass.inflight.js")({});
+      const InflightClass = require("./inflight.InflightClass.js")({});
       const c = new InflightClass();
       (await c.method());
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
 
-## clients/$Inflight2.inflight.js
+## inflight.$Closure2.js
 ```js
 module.exports = function({ f }) {
-  class $Inflight2 {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -38,15 +38,15 @@ module.exports = function({ f }) {
       (await f.invoke("text"));
     }
   }
-  return $Inflight2;
+  return $Closure2;
 }
 
 ```
 
-## clients/$Inflight3.inflight.js
+## inflight.$Closure3.js
 ```js
 module.exports = function({  }) {
-  class $Inflight3 {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -56,18 +56,18 @@ module.exports = function({  }) {
     }
     async handle()  {
       const x = 12;
-      const Foo = require("./Foo.inflight.js")({x});
+      const Foo = require("./inflight.Foo.js")({x});
       const foo = new Foo();
       const y = (await foo.getX());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 12)'`)})((y === 12))};
     }
   }
-  return $Inflight3;
+  return $Closure3;
 }
 
 ```
 
-## clients/Foo.inflight.js
+## inflight.Foo.js
 ```js
 module.exports = function({ x }) {
   class Foo {
@@ -82,7 +82,7 @@ module.exports = function({ x }) {
 
 ```
 
-## clients/InflightClass.inflight.js
+## inflight.InflightClass.js
 ```js
 module.exports = function({  }) {
   class InflightClass {
@@ -98,7 +98,7 @@ module.exports = function({  }) {
 
 ```
 
-## clients/PreflightClass.inflight.js
+## inflight.PreflightClass.js
 ```js
 module.exports = function({  }) {
   class PreflightClass {
@@ -432,14 +432,14 @@ class $Root extends $stdlib.std.Resource {
       }
        preflight_method()  {
         const __parent_this = this;
-        class $Inflight1 extends $stdlib.std.Resource {
+        class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight1.inflight.js";
+            const self_client_path = "././inflight.$Closure1.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -450,8 +450,8 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return $stdlib.core.NodeJsCode.fromInline(`
               (await (async () => {
-                const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-                const client = new $Inflight1Client({
+                const $Closure1Client = ${$Closure1._toInflightType(this).text};
+                const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
@@ -460,19 +460,19 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Inflight1._registerBindObject(__parent_this, host, []);
+              $Closure1._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              $Inflight1._registerBindObject(__parent_this.b, host, ["put"]);
+              $Closure1._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
         }
-        const inflight_closure = new $Inflight1(this,"$Inflight1");
+        const inflight_closure = new $Closure1(this,"$Closure1");
         return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",inflight_closure);
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/PreflightClass.inflight.js";
+        const self_client_path = "././inflight.PreflightClass.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -498,14 +498,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class $Inflight2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js";
+        const self_client_path = "././inflight.$Closure2.js";
         const f_client = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -516,8 +516,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-            const client = new $Inflight2Client({
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -526,22 +526,22 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight2._registerBindObject(f, host, []);
+          $Closure2._registerBindObject(f, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight2._registerBindObject(f, host, ["invoke"]);
+          $Closure2._registerBindObject(f, host, ["invoke"]);
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js";
+        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -550,8 +550,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
-            const client = new $Inflight3Client({
+            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -568,8 +568,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const p = new PreflightClass(this,"PreflightClass");
     const f = (p.preflight_method());
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:it works",new $Inflight2(this,"$Inflight2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class inside closure captures from closure",new $Inflight3(this,"$Inflight3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:it works",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class inside closure captures from closure",new $Closure3(this,"$Closure3"));
   }
 }
 class $App extends $AppBase {

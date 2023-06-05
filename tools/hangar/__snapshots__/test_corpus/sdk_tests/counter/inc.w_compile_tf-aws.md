@@ -1,9 +1,9 @@
 # [inc.w](../../../../../../examples/tests/sdk_tests/counter/inc.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ counter }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -24,6 +24,34 @@ module.exports = function({ counter }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
       const r3 = (await counter.inc());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(r3 === 12)'`)})((r3 === 12))};
+    }
+  }
+  return $Closure1;
+}
+
+```
+
+## inflight.$Inflight1.js
+```js
+module.exports = function({ counter }) {
+  class $Inflight1 {
+    constructor({  }) {
+    }
+    async handle() {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 0)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 0))};
+        const r0 = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(r0 === 0)'`)})((r0 === 0))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 1)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 1))};
+        const r1 = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(r1 === 1)'`)})((r1 === 1))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 2)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 2))};
+        const r2 = (typeof counter.inc === "function" ? await counter.inc(10) : await counter.inc.handle(10));
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(r2 === 2)'`)})((r2 === 2))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 12)'`)})(((typeof counter.peek === "function" ? await counter.peek() : await counter.peek.handle()) === 12))};
+        const r3 = (typeof counter.inc === "function" ? await counter.inc() : await counter.inc.handle());
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(r3 === 12)'`)})((r3 === 12))};
+      }
     }
   }
   return $Inflight1;
@@ -183,14 +211,14 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -201,8 +229,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -211,16 +239,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(counter, host, []);
+          $Closure1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(counter, host, ["inc", "peek"]);
+          $Closure1._registerBindObject(counter, host, ["inc", "peek"]);
         }
         super._registerBind(host, ops);
       }
     }
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 0 });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inc",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inc",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {

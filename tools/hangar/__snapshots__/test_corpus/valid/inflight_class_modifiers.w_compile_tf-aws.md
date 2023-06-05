@@ -1,6 +1,6 @@
 # [inflight_class_modifiers.w](../../../../../examples/tests/valid/inflight_class_modifiers.w) | compile | tf-aws
 
-## clients/C.inflight.js
+## inflight.C.js
 ```js
 module.exports = function({  }) {
   class C {
@@ -66,7 +66,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/C.inflight.js";
+        const self_client_path = "././inflight.C.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

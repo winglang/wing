@@ -1,9 +1,9 @@
 # [resource.w](../../../../../examples/tests/valid/resource.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ res, bucket }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -19,15 +19,15 @@ module.exports = function({ res, bucket }) {
       (await res.testTypeAccess());
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
 
-## clients/$Inflight2.inflight.js
+## inflight.$Closure2.js
 ```js
 module.exports = function({ __parent_this }) {
-  class $Inflight2 {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -39,15 +39,15 @@ module.exports = function({ __parent_this }) {
       (await __parent_this.b.put("foo1.txt","bar"));
     }
   }
-  return $Inflight2;
+  return $Closure2;
 }
 
 ```
 
-## clients/$Inflight3.inflight.js
+## inflight.$Closure3.js
 ```js
 module.exports = function({ __parent_this }) {
-  class $Inflight3 {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -59,15 +59,15 @@ module.exports = function({ __parent_this }) {
       (await __parent_this.b.put("foo2.txt","bar"));
     }
   }
-  return $Inflight3;
+  return $Closure3;
 }
 
 ```
 
-## clients/$Inflight4.inflight.js
+## inflight.$Closure4.js
 ```js
 module.exports = function({ __parent_this }) {
-  class $Inflight4 {
+  class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -79,15 +79,15 @@ module.exports = function({ __parent_this }) {
       (await __parent_this.q.push("foo"));
     }
   }
-  return $Inflight4;
+  return $Closure4;
 }
 
 ```
 
-## clients/$Inflight5.inflight.js
+## inflight.$Closure5.js
 ```js
 module.exports = function({ bigOlPublisher }) {
-  class $Inflight5 {
+  class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -100,12 +100,12 @@ module.exports = function({ bigOlPublisher }) {
       const count = (await bigOlPublisher.getObjectCount());
     }
   }
-  return $Inflight5;
+  return $Closure5;
 }
 
 ```
 
-## clients/Bar.inflight.js
+## inflight.Bar.js
 ```js
 module.exports = function({ Foo, MyEnum }) {
   class Bar {
@@ -143,7 +143,7 @@ module.exports = function({ Foo, MyEnum }) {
 
 ```
 
-## clients/BigPublisher.inflight.js
+## inflight.BigPublisher.js
 ```js
 module.exports = function({  }) {
   class BigPublisher {
@@ -172,7 +172,7 @@ module.exports = function({  }) {
 
 ```
 
-## clients/Foo.inflight.js
+## inflight.Foo.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -252,29 +252,29 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRole_1DE51FA5": {
+      "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRole_D1453FEC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-d05c64b5/IamRole",
-            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRole_1DE51FA5"
+            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRole",
+            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRole_D1453FEC"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_BigPublisher_cloudQueueAddConsumerfe215853_IamRole_F9917903": {
+      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-fe215853/IamRole",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerfe215853_IamRole_F9917903"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRole",
+            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_BigPublisher_cloudTopicOnMessagec351460f_IamRole_9428F8F8": {
+      "root_BigPublisher_cloudTopicOnMessage113c9059_IamRole_883C1765": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-c351460f/IamRole",
-            "uniqueId": "root_BigPublisher_cloudTopicOnMessagec351460f_IamRole_9428F8F8"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRole",
+            "uniqueId": "root_BigPublisher_cloudTopicOnMessage113c9059_IamRole_883C1765"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -299,35 +299,35 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy": {
-      "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRolePolicy_C1D44E2C": {
+      "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRolePolicy_391AED39": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-d05c64b5/IamRolePolicy",
-            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRolePolicy_C1D44E2C"
+            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRolePolicy",
+            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRolePolicy_391AED39"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRole_1DE51FA5.name}"
+        "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRole_D1453FEC.name}"
       },
-      "root_BigPublisher_cloudQueueAddConsumerfe215853_IamRolePolicy_99D0112F": {
+      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRolePolicy_EC261835": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-fe215853/IamRolePolicy",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerfe215853_IamRolePolicy_99D0112F"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRolePolicy",
+            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRolePolicy_EC261835"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}\",\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerfe215853_IamRole_F9917903.name}"
+        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56.name}"
       },
-      "root_BigPublisher_cloudTopicOnMessagec351460f_IamRolePolicy_50D645F4": {
+      "root_BigPublisher_cloudTopicOnMessage113c9059_IamRolePolicy_285181B8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-c351460f/IamRolePolicy",
-            "uniqueId": "root_BigPublisher_cloudTopicOnMessagec351460f_IamRolePolicy_50D645F4"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRolePolicy",
+            "uniqueId": "root_BigPublisher_cloudTopicOnMessage113c9059_IamRolePolicy_285181B8"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}\",\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessagec351460f_IamRole_9428F8F8.name}"
+        "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessage113c9059_IamRole_883C1765.name}"
       },
       "root_testdependencycycles_Handler_IamRolePolicy_380CBE3B": {
         "//": {
@@ -351,35 +351,35 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRolePolicyAttachment_31A7F581": {
+      "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRolePolicyAttachment_EDB0A74E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-d05c64b5/IamRolePolicyAttachment",
-            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRolePolicyAttachment_31A7F581"
+            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/IamRolePolicyAttachment",
+            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRolePolicyAttachment_EDB0A74E"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRole_1DE51FA5.name}"
+        "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRole_D1453FEC.name}"
       },
-      "root_BigPublisher_cloudQueueAddConsumerfe215853_IamRolePolicyAttachment_98CD6FE7": {
+      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRolePolicyAttachment_14959DA8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-fe215853/IamRolePolicyAttachment",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerfe215853_IamRolePolicyAttachment_98CD6FE7"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRolePolicyAttachment",
+            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRolePolicyAttachment_14959DA8"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerfe215853_IamRole_F9917903.name}"
+        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56.name}"
       },
-      "root_BigPublisher_cloudTopicOnMessagec351460f_IamRolePolicyAttachment_2A63A7A9": {
+      "root_BigPublisher_cloudTopicOnMessage113c9059_IamRolePolicyAttachment_B3218D47": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-c351460f/IamRolePolicyAttachment",
-            "uniqueId": "root_BigPublisher_cloudTopicOnMessagec351460f_IamRolePolicyAttachment_2A63A7A9"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRolePolicyAttachment",
+            "uniqueId": "root_BigPublisher_cloudTopicOnMessage113c9059_IamRolePolicyAttachment_B3218D47"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessagec351460f_IamRole_9428F8F8.name}"
+        "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessage113c9059_IamRole_883C1765.name}"
       },
       "root_testdependencycycles_Handler_IamRolePolicyAttachment_44606D07": {
         "//": {
@@ -412,15 +412,15 @@ module.exports = function({  }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.arn}",
-        "function_name": "${aws_lambda_function.root_BigPublisher_cloudQueueAddConsumerfe215853_FBF145F6.function_name}"
+        "function_name": "${aws_lambda_function.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_A77F3D9C.function_name}"
       }
     },
     "aws_lambda_function": {
-      "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_53A8D2D3": {
+      "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_4C4416F1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-d05c64b5/Default",
-            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_53A8D2D3"
+            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/Default",
+            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_4C4416F1"
           }
         },
         "environment": {
@@ -431,28 +431,28 @@ module.exports = function({  }) {
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
             "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
-            "WING_FUNCTION_NAME": "b2-on_create-OnMessage-d05c64b5-c85f4411",
+            "WING_FUNCTION_NAME": "b2-on_create-OnMessage-a6a70fca-c87e0778",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "b2-on_create-OnMessage-d05c64b5-c85f4411",
+        "function_name": "b2-on_create-OnMessage-a6a70fca-c87e0778",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_IamRole_1DE51FA5.arn}",
+        "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRole_D1453FEC.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_S3Object_7CA981B7.key}",
+        "s3_key": "${aws_s3_object.root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_S3Object_F1E01D48.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_BigPublisher_cloudQueueAddConsumerfe215853_FBF145F6": {
+      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_A77F3D9C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-fe215853/Default",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerfe215853_FBF145F6"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/Default",
+            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_A77F3D9C"
           }
         },
         "environment": {
@@ -463,28 +463,28 @@ module.exports = function({  }) {
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
             "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
-            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-fe215853-c89a66f3",
+            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-c50bc9ef-c82c3ecc",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Queue-AddConsumer-fe215853-c89a66f3",
+        "function_name": "cloud-Queue-AddConsumer-c50bc9ef-c82c3ecc",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerfe215853_IamRole_F9917903.arn}",
+        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_BigPublisher_cloudQueueAddConsumerfe215853_S3Object_562CA4E9.key}",
+        "s3_key": "${aws_s3_object.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_S3Object_AFB69B73.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_BigPublisher_cloudTopicOnMessagec351460f_A2F4E9D0": {
+      "root_BigPublisher_cloudTopicOnMessage113c9059_C2F5552D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-c351460f/Default",
-            "uniqueId": "root_BigPublisher_cloudTopicOnMessagec351460f_A2F4E9D0"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/Default",
+            "uniqueId": "root_BigPublisher_cloudTopicOnMessage113c9059_C2F5552D"
           }
         },
         "environment": {
@@ -495,17 +495,17 @@ module.exports = function({  }) {
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
             "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-c351460f-c82610b4",
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-113c9059-c81d1d09",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Topic-OnMessage-c351460f-c82610b4",
+        "function_name": "cloud-Topic-OnMessage-113c9059-c81d1d09",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessagec351460f_IamRole_9428F8F8.arn}",
+        "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessage113c9059_IamRole_883C1765.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_BigPublisher_cloudTopicOnMessagec351460f_S3Object_740D6172.key}",
+        "s3_key": "${aws_s3_object.root_BigPublisher_cloudTopicOnMessage113c9059_S3Object_A03FD2BA.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -575,27 +575,27 @@ module.exports = function({  }) {
       }
     },
     "aws_lambda_permission": {
-      "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_InvokePermissionc8c6cd46b3f874f3b457086bc49850e7b4b9316bc8_653F30BC": {
+      "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_InvokePermissionc8c6cd46b3f874f3b457086bc49850e7b4b9316bc8_2BA45817": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-d05c64b5/InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
-            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_InvokePermissionc8c6cd46b3f874f3b457086bc49850e7b4b9316bc8_653F30BC"
+            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/InvokePermission-c8c6cd46b3f874f3b457086bc49850e7b4b9316bc8",
+            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_InvokePermissionc8c6cd46b3f874f3b457086bc49850e7b4b9316bc8_2BA45817"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_53A8D2D3.function_name}",
+        "function_name": "${aws_lambda_function.root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_4C4416F1.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "${aws_sns_topic.root_BigPublisher_b2_b2oncreate_DFA80519.arn}"
       },
-      "root_BigPublisher_cloudTopicOnMessagec351460f_InvokePermissionc86b6469dec0edbe23d2827b4ea7006182eb0072ec_AA02223D": {
+      "root_BigPublisher_cloudTopicOnMessage113c9059_InvokePermissionc86b6469dec0edbe23d2827b4ea7006182eb0072ec_69ECE901": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-c351460f/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
-            "uniqueId": "root_BigPublisher_cloudTopicOnMessagec351460f_InvokePermissionc86b6469dec0edbe23d2827b4ea7006182eb0072ec_AA02223D"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
+            "uniqueId": "root_BigPublisher_cloudTopicOnMessage113c9059_InvokePermissionc86b6469dec0edbe23d2827b4ea7006182eb0072ec_69ECE901"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.root_BigPublisher_cloudTopicOnMessagec351460f_A2F4E9D0.function_name}",
+        "function_name": "${aws_lambda_function.root_BigPublisher_cloudTopicOnMessage113c9059_C2F5552D.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}"
       }
@@ -756,33 +756,33 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_S3Object_7CA981B7": {
+      "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_S3Object_F1E01D48": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-d05c64b5/S3Object",
-            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_S3Object_7CA981B7"
+            "path": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca/S3Object",
+            "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_S3Object_F1E01D48"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_BigPublisher_cloudQueueAddConsumerfe215853_S3Object_562CA4E9": {
+      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_S3Object_AFB69B73": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-fe215853/S3Object",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerfe215853_S3Object_562CA4E9"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/S3Object",
+            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_S3Object_AFB69B73"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_BigPublisher_cloudTopicOnMessagec351460f_S3Object_740D6172": {
+      "root_BigPublisher_cloudTopicOnMessage113c9059_S3Object_A03FD2BA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-c351460f/S3Object",
-            "uniqueId": "root_BigPublisher_cloudTopicOnMessagec351460f_S3Object_740D6172"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/S3Object",
+            "uniqueId": "root_BigPublisher_cloudTopicOnMessage113c9059_S3Object_A03FD2BA"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -845,25 +845,25 @@ module.exports = function({  }) {
       }
     },
     "aws_sns_topic_subscription": {
-      "root_BigPublisher_b2_b2oncreate_b2oncreateTopicSubscriptiond05c64b5_00EEC958": {
+      "root_BigPublisher_b2_b2oncreate_b2oncreateTopicSubscriptiona6a70fca_6B699663": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-on_create/b2-on_create-TopicSubscription-d05c64b5",
-            "uniqueId": "root_BigPublisher_b2_b2oncreate_b2oncreateTopicSubscriptiond05c64b5_00EEC958"
+            "path": "root/Default/Default/BigPublisher/b2/b2-on_create/b2-on_create-TopicSubscription-a6a70fca",
+            "uniqueId": "root_BigPublisher_b2_b2oncreate_b2oncreateTopicSubscriptiona6a70fca_6B699663"
           }
         },
-        "endpoint": "${aws_lambda_function.root_BigPublisher_b2_b2oncreateOnMessaged05c64b5_53A8D2D3.arn}",
+        "endpoint": "${aws_lambda_function.root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_4C4416F1.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.root_BigPublisher_b2_b2oncreate_DFA80519.arn}"
       },
-      "root_BigPublisher_cloudTopic_cloudTopicTopicSubscriptionc351460f_E1B9B50D": {
+      "root_BigPublisher_cloudTopic_cloudTopicTopicSubscription113c9059_F0773DB7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-TopicSubscription-c351460f",
-            "uniqueId": "root_BigPublisher_cloudTopic_cloudTopicTopicSubscriptionc351460f_E1B9B50D"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-TopicSubscription-113c9059",
+            "uniqueId": "root_BigPublisher_cloudTopic_cloudTopicTopicSubscription113c9059_F0773DB7"
           }
         },
-        "endpoint": "${aws_lambda_function.root_BigPublisher_cloudTopicOnMessagec351460f_A2F4E9D0.arn}",
+        "endpoint": "${aws_lambda_function.root_BigPublisher_cloudTopicOnMessage113c9059_C2F5552D.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}"
       }
@@ -902,7 +902,7 @@ class $Root extends $stdlib.std.Resource {
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js";
+        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -950,7 +950,7 @@ class $Root extends $stdlib.std.Resource {
         this.e = e;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Bar.inflight.js";
+        const self_client_path = "././inflight.Bar.js";
         const FooClient = Foo._toInflightType(context);
         const MyEnumClient = $stdlib.core.NodeJsCode.fromInline(`
           Object.freeze((function (tmp) {
@@ -1011,14 +1011,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerTypeBind(host, ops);
       }
     }
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const res_client = context._lift(res);
         const bucket_client = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -1031,8 +1031,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1041,13 +1041,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(bucket, host, []);
-          $Inflight1._registerBindObject(res, host, []);
+          $Closure1._registerBindObject(bucket, host, []);
+          $Closure1._registerBindObject(res, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(bucket, host, ["list"]);
-          $Inflight1._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
-          $Inflight1._registerBindObject(res.foo, host, ["inflightField"]);
+          $Closure1._registerBindObject(bucket, host, ["list"]);
+          $Closure1._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
+          $Closure1._registerBindObject(res.foo, host, ["inflightField"]);
         }
         super._registerBind(host, ops);
       }
@@ -1061,14 +1061,14 @@ class $Root extends $stdlib.std.Resource {
         this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b2");
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
         this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
-        class $Inflight2 extends $stdlib.std.Resource {
+        class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight2.inflight.js";
+            const self_client_path = "././inflight.$Closure2.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1079,8 +1079,8 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return $stdlib.core.NodeJsCode.fromInline(`
               (await (async () => {
-                const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-                const client = new $Inflight2Client({
+                const $Closure2Client = ${$Closure2._toInflightType(this).text};
+                const client = new $Closure2Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
@@ -1089,23 +1089,23 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Inflight2._registerBindObject(__parent_this, host, []);
+              $Closure2._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              $Inflight2._registerBindObject(__parent_this.b, host, ["put"]);
+              $Closure2._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
         }
-        (this.t.onMessage(new $Inflight2(this,"$Inflight2")));
-        class $Inflight3 extends $stdlib.std.Resource {
+        (this.t.onMessage(new $Closure2(this,"$Closure2")));
+        class $Closure3 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight3.inflight.js";
+            const self_client_path = "././inflight.$Closure3.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1116,8 +1116,8 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return $stdlib.core.NodeJsCode.fromInline(`
               (await (async () => {
-                const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
-                const client = new $Inflight3Client({
+                const $Closure3Client = ${$Closure3._toInflightType(this).text};
+                const client = new $Closure3Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
@@ -1126,23 +1126,23 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Inflight3._registerBindObject(__parent_this, host, []);
+              $Closure3._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              $Inflight3._registerBindObject(__parent_this.b, host, ["put"]);
+              $Closure3._registerBindObject(__parent_this.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
         }
-        (this.q.addConsumer(new $Inflight3(this,"$Inflight3")));
-        class $Inflight4 extends $stdlib.std.Resource {
+        (this.q.addConsumer(new $Closure3(this,"$Closure3")));
+        class $Closure4 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight4.inflight.js";
+            const self_client_path = "././inflight.$Closure4.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1153,8 +1153,8 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return $stdlib.core.NodeJsCode.fromInline(`
               (await (async () => {
-                const $Inflight4Client = ${$Inflight4._toInflightType(this).text};
-                const client = new $Inflight4Client({
+                const $Closure4Client = ${$Closure4._toInflightType(this).text};
+                const client = new $Closure4Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
@@ -1163,18 +1163,18 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Inflight4._registerBindObject(__parent_this, host, []);
+              $Closure4._registerBindObject(__parent_this, host, []);
             }
             if (ops.includes("handle")) {
-              $Inflight4._registerBindObject(__parent_this.q, host, ["push"]);
+              $Closure4._registerBindObject(__parent_this.q, host, ["push"]);
             }
             super._registerBind(host, ops);
           }
         }
-        (this.b2.onCreate(new $Inflight4(this,"$Inflight4")));
+        (this.b2.onCreate(new $Closure4(this,"$Closure4")));
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/BigPublisher.inflight.js";
+        const self_client_path = "././inflight.BigPublisher.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1217,14 +1217,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class $Inflight5 extends $stdlib.std.Resource {
+    class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight5.inflight.js";
+        const self_client_path = "././inflight.$Closure5.js";
         const bigOlPublisher_client = context._lift(bigOlPublisher);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1235,8 +1235,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight5Client = ${$Inflight5._toInflightType(this).text};
-            const client = new $Inflight5Client({
+            const $Closure5Client = ${$Closure5._toInflightType(this).text};
+            const client = new $Closure5Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1245,10 +1245,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight5._registerBindObject(bigOlPublisher, host, []);
+          $Closure5._registerBindObject(bigOlPublisher, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
+          $Closure5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
         }
         super._registerBind(host, ops);
       }
@@ -1263,9 +1263,9 @@ class $Root extends $stdlib.std.Resource {
     ;
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket,MyEnum.B);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
     const bigOlPublisher = new BigPublisher(this,"BigPublisher");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:dependency cycles",new $Inflight5(this,"$Inflight5"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:dependency cycles",new $Closure5(this,"$Closure5"));
   }
 }
 class $App extends $AppBase {

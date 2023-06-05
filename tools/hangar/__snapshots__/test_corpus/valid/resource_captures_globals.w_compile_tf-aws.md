@@ -1,9 +1,9 @@
 # [resource_captures_globals.w](../../../../../examples/tests/valid/resource_captures_globals.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ res }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -15,15 +15,15 @@ module.exports = function({ res }) {
       (await res.myPut());
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
 
-## clients/$Inflight2.inflight.js
+## inflight.$Closure2.js
 ```js
 module.exports = function({ Another }) {
-  class $Inflight2 {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -35,12 +35,12 @@ module.exports = function({ Another }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) === 0)'`)})(((await Another.myStaticMethod()) === 0))};
     }
   }
-  return $Inflight2;
+  return $Closure2;
 }
 
 ```
 
-## clients/Another.inflight.js
+## inflight.Another.js
 ```js
 module.exports = function({ globalCounter }) {
   class Another {
@@ -66,7 +66,7 @@ module.exports = function({ globalCounter }) {
 
 ```
 
-## clients/First.inflight.js
+## inflight.First.js
 ```js
 module.exports = function({  }) {
   class First {
@@ -82,7 +82,7 @@ module.exports = function({  }) {
 
 ```
 
-## clients/MyResource.inflight.js
+## inflight.MyResource.js
 ```js
 module.exports = function({ globalBucket, globalStr, globalBool, globalNum, globalArrayOfStr, globalMapOfNum, globalSetOfStr, globalAnother, Another }) {
   class MyResource {
@@ -114,7 +114,7 @@ module.exports = function({ globalBucket, globalStr, globalBool, globalNum, glob
 
 ```
 
-## clients/R.inflight.js
+## inflight.R.js
 ```js
 module.exports = function({ globalCounter, $parentThis }) {
   class R {
@@ -579,7 +579,7 @@ class $Root extends $stdlib.std.Resource {
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/First.inflight.js";
+        const self_client_path = "././inflight.First.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -614,7 +614,7 @@ class $Root extends $stdlib.std.Resource {
         this.first = new First(this,"First");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Another.inflight.js";
+        const self_client_path = "././inflight.Another.js";
         const globalCounter_client = context._lift(globalCounter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -670,7 +670,7 @@ class $Root extends $stdlib.std.Resource {
             const __parent_this = this;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/R.inflight.js";
+            const self_client_path = "././inflight.R.js";
             const globalCounter_client = context._lift(globalCounter);
             const $parentThis_client = context._lift($parentThis);
             return $stdlib.core.NodeJsCode.fromInline(`
@@ -706,7 +706,7 @@ class $Root extends $stdlib.std.Resource {
         (this.localTopic.onMessage(new R(this,"R")));
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/MyResource.inflight.js";
+        const self_client_path = "././inflight.MyResource.js";
         const globalBucket_client = context._lift(globalBucket);
         const globalStr_client = context._lift(globalStr);
         const globalBool_client = context._lift(globalBool);
@@ -775,14 +775,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const res_client = context._lift(res);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -793,8 +793,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -803,22 +803,22 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(res, host, []);
+          $Closure1._registerBindObject(res, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(res, host, ["myPut"]);
+          $Closure1._registerBindObject(res, host, ["myPut"]);
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js";
+        const self_client_path = "././inflight.$Closure2.js";
         const AnotherClient = Another._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -829,8 +829,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-            const client = new $Inflight2Client({
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -841,7 +841,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
         }
         if (ops.includes("handle")) {
-          $Inflight2._registerBindObject(Another, host, ["myStaticMethod"]);
+          $Closure2._registerBindObject(Another, host, ["myStaticMethod"]);
         }
         super._registerBind(host, ops);
       }
@@ -856,8 +856,8 @@ class $Root extends $stdlib.std.Resource {
     const globalSetOfStr = Object.freeze(new Set(["a", "b"]));
     const globalAnother = new Another(this,"Another");
     const res = new MyResource(this,"MyResource");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access cloud resource through static methods only",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access cloud resource through static methods only",new $Closure2(this,"$Closure2"));
   }
 }
 class $App extends $AppBase {

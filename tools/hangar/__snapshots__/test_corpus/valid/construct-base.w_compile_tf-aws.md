@@ -1,6 +1,6 @@
 # [construct-base.w](../../../../../examples/tests/valid/construct-base.w) | compile | tf-aws
 
-## clients/WingResource.inflight.js
+## inflight.WingResource.js
 ```js
 module.exports = function({  }) {
   class WingResource {
@@ -79,7 +79,7 @@ class $Root extends $stdlib.std.Resource {
         {console.log(`my id is ${this.node.id}`)};
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/WingResource.inflight.js";
+        const self_client_path = "././inflight.WingResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

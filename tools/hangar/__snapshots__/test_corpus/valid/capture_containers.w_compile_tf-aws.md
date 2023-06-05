@@ -1,9 +1,9 @@
 # [capture_containers.w](../../../../../examples/tests/valid/capture_containers.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -23,7 +23,7 @@ module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
@@ -160,14 +160,14 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const arr_client = context._lift(arr);
         const mySet_client = context._lift(mySet);
         const myMap_client = context._lift(myMap);
@@ -186,8 +186,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -196,18 +196,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(arr, host, []);
-          $Inflight1._registerBindObject(arrOfMap, host, []);
-          $Inflight1._registerBindObject(j, host, []);
-          $Inflight1._registerBindObject(myMap, host, []);
-          $Inflight1._registerBindObject(mySet, host, []);
+          $Closure1._registerBindObject(arr, host, []);
+          $Closure1._registerBindObject(arrOfMap, host, []);
+          $Closure1._registerBindObject(j, host, []);
+          $Closure1._registerBindObject(myMap, host, []);
+          $Closure1._registerBindObject(mySet, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(arr, host, ["at", "length"]);
-          $Inflight1._registerBindObject(arrOfMap, host, ["at"]);
-          $Inflight1._registerBindObject(j, host, []);
-          $Inflight1._registerBindObject(myMap, host, ["has", "size"]);
-          $Inflight1._registerBindObject(mySet, host, ["has", "size"]);
+          $Closure1._registerBindObject(arr, host, ["at", "length"]);
+          $Closure1._registerBindObject(arrOfMap, host, ["at"]);
+          $Closure1._registerBindObject(j, host, []);
+          $Closure1._registerBindObject(myMap, host, ["has", "size"]);
+          $Closure1._registerBindObject(mySet, host, ["has", "size"]);
         }
         super._registerBind(host, ops);
       }
@@ -217,7 +217,7 @@ class $Root extends $stdlib.std.Resource {
     const myMap = Object.freeze({"hello":123,"world":999});
     const arrOfMap = Object.freeze([Object.freeze({"bang":123})]);
     const j = Object.freeze({"a":"hello","b":"world"});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture_containers",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture_containers",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {

@@ -1,6 +1,6 @@
 # [json.w](../../../../../examples/tests/valid/json.w) | compile | tf-aws
 
-## clients/Foo.inflight.js
+## inflight.Foo.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -65,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
         this.SumStr = "wow!";
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js";
+        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

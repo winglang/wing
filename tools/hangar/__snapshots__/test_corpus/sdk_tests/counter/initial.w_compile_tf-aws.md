@@ -1,9 +1,9 @@
 # [initial.w](../../../../../../examples/tests/sdk_tests/counter/initial.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ counterA }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -15,15 +15,15 @@ module.exports = function({ counterA }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterA.peek()) === 0)'`)})(((await counterA.peek()) === 0))};
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
 
-## clients/$Inflight2.inflight.js
+## inflight.$Closure2.js
 ```js
 module.exports = function({ counterB }) {
-  class $Inflight2 {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -35,15 +35,15 @@ module.exports = function({ counterB }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterB.peek()) === 500)'`)})(((await counterB.peek()) === 500))};
     }
   }
-  return $Inflight2;
+  return $Closure2;
 }
 
 ```
 
-## clients/$Inflight3.inflight.js
+## inflight.$Closure3.js
 ```js
 module.exports = function({ counterC }) {
-  class $Inflight3 {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -53,6 +53,57 @@ module.exports = function({ counterC }) {
     }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counterC.peek()) === (-198))'`)})(((await counterC.peek()) === (-198)))};
+    }
+  }
+  return $Closure3;
+}
+
+```
+
+## inflight.$Inflight1.js
+```js
+module.exports = function({ counterA }) {
+  class $Inflight1 {
+    constructor({  }) {
+    }
+    async handle() {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterA.peek === "function" ? await counterA.peek() : await counterA.peek.handle()) === 0)'`)})(((typeof counterA.peek === "function" ? await counterA.peek() : await counterA.peek.handle()) === 0))};
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## inflight.$Inflight2.js
+```js
+module.exports = function({ counterB }) {
+  class $Inflight2 {
+    constructor({  }) {
+    }
+    async handle() {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterB.peek === "function" ? await counterB.peek() : await counterB.peek.handle()) === 500)'`)})(((typeof counterB.peek === "function" ? await counterB.peek() : await counterB.peek.handle()) === 500))};
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
+## inflight.$Inflight3.js
+```js
+module.exports = function({ counterC }) {
+  class $Inflight3 {
+    constructor({  }) {
+    }
+    async handle() {
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterC.peek === "function" ? await counterC.peek() : await counterC.peek.handle()) === (-198))'`)})(((typeof counterC.peek === "function" ? await counterC.peek() : await counterC.peek.handle()) === (-198)))};
+      }
     }
   }
   return $Inflight3;
@@ -380,14 +431,14 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const counterA_client = context._lift(counterA);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -398,8 +449,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -408,22 +459,22 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(counterA, host, []);
+          $Closure1._registerBindObject(counterA, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(counterA, host, ["peek"]);
+          $Closure1._registerBindObject(counterA, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js";
+        const self_client_path = "././inflight.$Closure2.js";
         const counterB_client = context._lift(counterB);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -434,8 +485,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-            const client = new $Inflight2Client({
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -444,22 +495,22 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight2._registerBindObject(counterB, host, []);
+          $Closure2._registerBindObject(counterB, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight2._registerBindObject(counterB, host, ["peek"]);
+          $Closure2._registerBindObject(counterB, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js";
+        const self_client_path = "././inflight.$Closure3.js";
         const counterC_client = context._lift(counterC);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -470,8 +521,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
-            const client = new $Inflight3Client({
+            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -480,10 +531,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight3._registerBindObject(counterC, host, []);
+          $Closure3._registerBindObject(counterC, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight3._registerBindObject(counterC, host, ["peek"]);
+          $Closure3._registerBindObject(counterC, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -491,9 +542,9 @@ class $Root extends $stdlib.std.Resource {
     const counterA = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterA");
     const counterB = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterB",{ initial: 500 });
     const counterC = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"counterC",{ initial: (-198) });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:default",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:positive-value",new $Inflight2(this,"$Inflight2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:negative-value",new $Inflight3(this,"$Inflight3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:default",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:positive-value",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:initial:negative-value",new $Closure3(this,"$Closure3"));
   }
 }
 class $App extends $AppBase {

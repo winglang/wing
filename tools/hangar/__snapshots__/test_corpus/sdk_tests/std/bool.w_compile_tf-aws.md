@@ -43,6 +43,7 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const t = (std.Boolean.fromJson((JSON.parse("true"))));
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(t === true)'`)})((t === true))};
   }
 }
 class $App extends $AppBase {

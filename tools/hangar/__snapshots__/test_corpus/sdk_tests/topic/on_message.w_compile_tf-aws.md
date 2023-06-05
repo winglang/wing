@@ -1,9 +1,9 @@
 # [on_message.w](../../../../../../examples/tests/sdk_tests/topic/on_message.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
 module.exports = function({ c }) {
-  class $Inflight1 {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -15,15 +15,15 @@ module.exports = function({ c }) {
       (await c.inc());
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
 
-## clients/$Inflight2.inflight.js
+## inflight.$Closure2.js
 ```js
 module.exports = function({ c }) {
-  class $Inflight2 {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -35,15 +35,15 @@ module.exports = function({ c }) {
       (await c.inc());
     }
   }
-  return $Inflight2;
+  return $Closure2;
 }
 
 ```
 
-## clients/$Inflight3.inflight.js
+## inflight.$Closure3.js
 ```js
 module.exports = function({ t, predicate, TestHelper }) {
-  class $Inflight3 {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -67,12 +67,75 @@ module.exports = function({ t, predicate, TestHelper }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
     }
   }
+  return $Closure3;
+}
+
+```
+
+## inflight.$Inflight1.js
+```js
+module.exports = function({ c }) {
+  class $Inflight1 {
+    constructor({  }) {
+    }
+    async handle() {
+      {
+        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
+      }
+    }
+  }
+  return $Inflight1;
+}
+
+```
+
+## inflight.$Inflight2.js
+```js
+module.exports = function({ c }) {
+  class $Inflight2 {
+    constructor({  }) {
+    }
+    async handle() {
+      {
+        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
+      }
+    }
+  }
+  return $Inflight2;
+}
+
+```
+
+## inflight.$Inflight3.js
+```js
+module.exports = function({ t, predicate, TestHelper }) {
+  class $Inflight3 {
+    constructor({  }) {
+    }
+    async handle() {
+      {
+        for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
+          (typeof t.publish === "function" ? await t.publish("msg") : await t.publish.handle("msg"));
+        }
+        let i = 0;
+        while ((i < 600)) {
+          i = (i + 1);
+          if ((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())) {
+            {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
+            return;
+          }
+          (typeof TestHelper.sleep === "function" ? await TestHelper.sleep(100) : await TestHelper.sleep.handle(100));
+        }
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
+      }
+    }
+  }
   return $Inflight3;
 }
 
 ```
 
-## clients/Predicate.inflight.js
+## inflight.Predicate.js
 ```js
 module.exports = function({  }) {
   class Predicate {
@@ -92,7 +155,7 @@ module.exports = function({  }) {
 
 ```
 
-## clients/TestHelper.inflight.js
+## inflight.TestHelper.js
 ```js
 module.exports = function({  }) {
   class TestHelper {
@@ -160,20 +223,20 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "root_cloudTopicOnMessageb3f3d188_IamRole_CA102757": {
+      "root_cloudTopicOnMessage86898773_IamRole_19074818": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-b3f3d188/IamRole",
-            "uniqueId": "root_cloudTopicOnMessageb3f3d188_IamRole_CA102757"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-86898773/IamRole",
+            "uniqueId": "root_cloudTopicOnMessage86898773_IamRole_19074818"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_cloudTopicOnMessagee46e5cb7_IamRole_8BCE5BC1": {
+      "root_cloudTopicOnMessagecdafee6e_IamRole_029E78CB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-e46e5cb7/IamRole",
-            "uniqueId": "root_cloudTopicOnMessagee46e5cb7_IamRole_8BCE5BC1"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-cdafee6e/IamRole",
+            "uniqueId": "root_cloudTopicOnMessagecdafee6e_IamRole_029E78CB"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -189,25 +252,25 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy": {
-      "root_cloudTopicOnMessageb3f3d188_IamRolePolicy_6E4D31FA": {
+      "root_cloudTopicOnMessage86898773_IamRolePolicy_64F83BDD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-b3f3d188/IamRolePolicy",
-            "uniqueId": "root_cloudTopicOnMessageb3f3d188_IamRolePolicy_6E4D31FA"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-86898773/IamRolePolicy",
+            "uniqueId": "root_cloudTopicOnMessage86898773_IamRolePolicy_64F83BDD"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_cloudTopicOnMessageb3f3d188_IamRole_CA102757.name}"
+        "role": "${aws_iam_role.root_cloudTopicOnMessage86898773_IamRole_19074818.name}"
       },
-      "root_cloudTopicOnMessagee46e5cb7_IamRolePolicy_597056C9": {
+      "root_cloudTopicOnMessagecdafee6e_IamRolePolicy_CA04DBA9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-e46e5cb7/IamRolePolicy",
-            "uniqueId": "root_cloudTopicOnMessagee46e5cb7_IamRolePolicy_597056C9"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-cdafee6e/IamRolePolicy",
+            "uniqueId": "root_cloudTopicOnMessagecdafee6e_IamRolePolicy_CA04DBA9"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_cloudTopicOnMessagee46e5cb7_IamRole_8BCE5BC1.name}"
+        "role": "${aws_iam_role.root_cloudTopicOnMessagecdafee6e_IamRole_029E78CB.name}"
       },
       "root_testonMessage_Handler_IamRolePolicy_F81E9097": {
         "//": {
@@ -221,25 +284,25 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudTopicOnMessageb3f3d188_IamRolePolicyAttachment_B8874A7A": {
+      "root_cloudTopicOnMessage86898773_IamRolePolicyAttachment_FE0E371D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-b3f3d188/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudTopicOnMessageb3f3d188_IamRolePolicyAttachment_B8874A7A"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-86898773/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudTopicOnMessage86898773_IamRolePolicyAttachment_FE0E371D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudTopicOnMessageb3f3d188_IamRole_CA102757.name}"
+        "role": "${aws_iam_role.root_cloudTopicOnMessage86898773_IamRole_19074818.name}"
       },
-      "root_cloudTopicOnMessagee46e5cb7_IamRolePolicyAttachment_9B4616FE": {
+      "root_cloudTopicOnMessagecdafee6e_IamRolePolicyAttachment_1F650C7D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-e46e5cb7/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudTopicOnMessagee46e5cb7_IamRolePolicyAttachment_9B4616FE"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-cdafee6e/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudTopicOnMessagecdafee6e_IamRolePolicyAttachment_1F650C7D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudTopicOnMessagee46e5cb7_IamRole_8BCE5BC1.name}"
+        "role": "${aws_iam_role.root_cloudTopicOnMessagecdafee6e_IamRole_029E78CB.name}"
       },
       "root_testonMessage_Handler_IamRolePolicyAttachment_C53622D7": {
         "//": {
@@ -253,54 +316,54 @@ module.exports = function({  }) {
       }
     },
     "aws_lambda_function": {
-      "root_cloudTopicOnMessageb3f3d188_F44FFAD4": {
+      "root_cloudTopicOnMessage86898773_9844E87A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-b3f3d188/Default",
-            "uniqueId": "root_cloudTopicOnMessageb3f3d188_F44FFAD4"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-86898773/Default",
+            "uniqueId": "root_cloudTopicOnMessage86898773_9844E87A"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-b3f3d188-c8719dfc",
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-86898773-c82dc92d",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Topic-OnMessage-b3f3d188-c8719dfc",
+        "function_name": "cloud-Topic-OnMessage-86898773-c82dc92d",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudTopicOnMessageb3f3d188_IamRole_CA102757.arn}",
+        "role": "${aws_iam_role.root_cloudTopicOnMessage86898773_IamRole_19074818.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudTopicOnMessageb3f3d188_S3Object_5D1E3D33.key}",
+        "s3_key": "${aws_s3_object.root_cloudTopicOnMessage86898773_S3Object_D776BD83.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_cloudTopicOnMessagee46e5cb7_05516E5B": {
+      "root_cloudTopicOnMessagecdafee6e_370CBD55": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-e46e5cb7/Default",
-            "uniqueId": "root_cloudTopicOnMessagee46e5cb7_05516E5B"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-cdafee6e/Default",
+            "uniqueId": "root_cloudTopicOnMessagecdafee6e_370CBD55"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-e46e5cb7-c8313663",
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Topic-OnMessage-e46e5cb7-c8313663",
+        "function_name": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudTopicOnMessagee46e5cb7_IamRole_8BCE5BC1.arn}",
+        "role": "${aws_iam_role.root_cloudTopicOnMessagecdafee6e_IamRole_029E78CB.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudTopicOnMessagee46e5cb7_S3Object_330DFBE0.key}",
+        "s3_key": "${aws_s3_object.root_cloudTopicOnMessagecdafee6e_S3Object_9CFEA94C.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -337,27 +400,27 @@ module.exports = function({  }) {
       }
     },
     "aws_lambda_permission": {
-      "root_cloudTopicOnMessageb3f3d188_InvokePermissionc82b57aa3e58b626b884e8374e59ec192cf61df91b_FBCCA465": {
+      "root_cloudTopicOnMessage86898773_InvokePermissionc82b57aa3e58b626b884e8374e59ec192cf61df91b_6FEE6CB0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-b3f3d188/InvokePermission-c82b57aa3e58b626b884e8374e59ec192cf61df91b",
-            "uniqueId": "root_cloudTopicOnMessageb3f3d188_InvokePermissionc82b57aa3e58b626b884e8374e59ec192cf61df91b_FBCCA465"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-86898773/InvokePermission-c82b57aa3e58b626b884e8374e59ec192cf61df91b",
+            "uniqueId": "root_cloudTopicOnMessage86898773_InvokePermissionc82b57aa3e58b626b884e8374e59ec192cf61df91b_6FEE6CB0"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.root_cloudTopicOnMessageb3f3d188_F44FFAD4.function_name}",
+        "function_name": "${aws_lambda_function.root_cloudTopicOnMessage86898773_9844E87A.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "${aws_sns_topic.root_cloudTopic_6057BD0C.arn}"
       },
-      "root_cloudTopicOnMessagee46e5cb7_InvokePermissionc82b57aa3e58b626b884e8374e59ec192cf61df91b_BDB6940A": {
+      "root_cloudTopicOnMessagecdafee6e_InvokePermissionc82b57aa3e58b626b884e8374e59ec192cf61df91b_52D09BDF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-e46e5cb7/InvokePermission-c82b57aa3e58b626b884e8374e59ec192cf61df91b",
-            "uniqueId": "root_cloudTopicOnMessagee46e5cb7_InvokePermissionc82b57aa3e58b626b884e8374e59ec192cf61df91b_BDB6940A"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-cdafee6e/InvokePermission-c82b57aa3e58b626b884e8374e59ec192cf61df91b",
+            "uniqueId": "root_cloudTopicOnMessagecdafee6e_InvokePermissionc82b57aa3e58b626b884e8374e59ec192cf61df91b_52D09BDF"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.root_cloudTopicOnMessagee46e5cb7_05516E5B.function_name}",
+        "function_name": "${aws_lambda_function.root_cloudTopicOnMessagecdafee6e_370CBD55.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "${aws_sns_topic.root_cloudTopic_6057BD0C.arn}"
       }
@@ -374,22 +437,22 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_cloudTopicOnMessageb3f3d188_S3Object_5D1E3D33": {
+      "root_cloudTopicOnMessage86898773_S3Object_D776BD83": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-b3f3d188/S3Object",
-            "uniqueId": "root_cloudTopicOnMessageb3f3d188_S3Object_5D1E3D33"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-86898773/S3Object",
+            "uniqueId": "root_cloudTopicOnMessage86898773_S3Object_D776BD83"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_cloudTopicOnMessagee46e5cb7_S3Object_330DFBE0": {
+      "root_cloudTopicOnMessagecdafee6e_S3Object_9CFEA94C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic-OnMessage-e46e5cb7/S3Object",
-            "uniqueId": "root_cloudTopicOnMessagee46e5cb7_S3Object_330DFBE0"
+            "path": "root/Default/Default/cloud.Topic-OnMessage-cdafee6e/S3Object",
+            "uniqueId": "root_cloudTopicOnMessagecdafee6e_S3Object_9CFEA94C"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -420,25 +483,25 @@ module.exports = function({  }) {
       }
     },
     "aws_sns_topic_subscription": {
-      "root_cloudTopic_cloudTopicTopicSubscriptionb3f3d188_45BCCDC7": {
+      "root_cloudTopic_cloudTopicTopicSubscription86898773_CFDA9A1F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic/cloud.Topic-TopicSubscription-b3f3d188",
-            "uniqueId": "root_cloudTopic_cloudTopicTopicSubscriptionb3f3d188_45BCCDC7"
+            "path": "root/Default/Default/cloud.Topic/cloud.Topic-TopicSubscription-86898773",
+            "uniqueId": "root_cloudTopic_cloudTopicTopicSubscription86898773_CFDA9A1F"
           }
         },
-        "endpoint": "${aws_lambda_function.root_cloudTopicOnMessageb3f3d188_F44FFAD4.arn}",
+        "endpoint": "${aws_lambda_function.root_cloudTopicOnMessage86898773_9844E87A.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.root_cloudTopic_6057BD0C.arn}"
       },
-      "root_cloudTopic_cloudTopicTopicSubscriptione46e5cb7_A6169835": {
+      "root_cloudTopic_cloudTopicTopicSubscriptioncdafee6e_B9CB1B70": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Topic/cloud.Topic-TopicSubscription-e46e5cb7",
-            "uniqueId": "root_cloudTopic_cloudTopicTopicSubscriptione46e5cb7_A6169835"
+            "path": "root/Default/Default/cloud.Topic/cloud.Topic-TopicSubscription-cdafee6e",
+            "uniqueId": "root_cloudTopic_cloudTopicTopicSubscriptioncdafee6e_B9CB1B70"
           }
         },
-        "endpoint": "${aws_lambda_function.root_cloudTopicOnMessagee46e5cb7_05516E5B.arn}",
+        "endpoint": "${aws_lambda_function.root_cloudTopicOnMessagecdafee6e_370CBD55.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.root_cloudTopic_6057BD0C.arn}"
       }
@@ -466,7 +529,7 @@ class $Root extends $stdlib.std.Resource {
         this.c = c;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Predicate.inflight.js";
+        const self_client_path = "././inflight.Predicate.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -502,7 +565,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/TestHelper.inflight.js";
+        const self_client_path = "././inflight.TestHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -530,14 +593,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerTypeBind(host, ops);
       }
     }
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const c_client = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -548,8 +611,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -558,22 +621,22 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(c, host, []);
+          $Closure1._registerBindObject(c, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(c, host, ["inc"]);
+          $Closure1._registerBindObject(c, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js";
+        const self_client_path = "././inflight.$Closure2.js";
         const c_client = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -584,8 +647,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight2Client = ${$Inflight2._toInflightType(this).text};
-            const client = new $Inflight2Client({
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -594,22 +657,22 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight2._registerBindObject(c, host, []);
+          $Closure2._registerBindObject(c, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight2._registerBindObject(c, host, ["inc"]);
+          $Closure2._registerBindObject(c, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }
     }
-    class $Inflight3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js";
+        const self_client_path = "././inflight.$Closure3.js";
         const t_client = context._lift(t);
         const predicate_client = context._lift(predicate);
         const TestHelperClient = TestHelper._toInflightType(context);
@@ -624,8 +687,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight3Client = ${$Inflight3._toInflightType(this).text};
-            const client = new $Inflight3Client({
+            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -634,24 +697,24 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight3._registerBindObject(predicate, host, []);
-          $Inflight3._registerBindObject(t, host, []);
+          $Closure3._registerBindObject(predicate, host, []);
+          $Closure3._registerBindObject(t, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight3._registerBindObject(TestHelper, host, ["sleep"]);
-          $Inflight3._registerBindObject(predicate, host, ["test"]);
-          $Inflight3._registerBindObject(t, host, ["publish"]);
+          $Closure3._registerBindObject(TestHelper, host, ["sleep"]);
+          $Closure3._registerBindObject(predicate, host, ["test"]);
+          $Closure3._registerBindObject(t, host, ["publish"]);
         }
         super._registerBind(host, ops);
       }
     }
     const t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
     const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    (t.onMessage(new $Inflight1(this,"$Inflight1")));
-    (t.onMessage(new $Inflight2(this,"$Inflight2")));
+    (t.onMessage(new $Closure1(this,"$Closure1")));
+    (t.onMessage(new $Closure2(this,"$Closure2")));
     const js = new TestHelper(this,"TestHelper");
     const predicate = new Predicate(this,"Predicate",c);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:onMessage",new $Inflight3(this,"$Inflight3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:onMessage",new $Closure3(this,"$Closure3"));
   }
 }
 class $App extends $AppBase {
