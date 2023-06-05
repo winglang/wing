@@ -1,25 +1,5 @@
 # [duration.w](../../../../examples/tests/valid/duration.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
-```js
-module.exports = function({  }) {
-  class $Inflight1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(720).seconds === (12 * 60))'`)})(($stdlib.std.Duration.fromSeconds(720).seconds === (12 * 60)))};
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
