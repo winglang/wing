@@ -71,9 +71,23 @@
       "aws-cdk": {"implemented": true}
     },
     "try_get": {
-      "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
-      "tf-azure": {"implemented": false},
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
+      "tf-azure": {"implemented": true},
+      "tf-gcp": {"implemented": false},
+      "aws-cdk": {"implemented": false}
+    },
+    "get_json": {
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
+      "tf-azure": {"implemented": true},
+      "tf-gcp": {"implemented": false},
+      "aws-cdk": {"implemented": false}
+    },
+    "try_get_json": {
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
+      "tf-azure": {"implemented": true},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
     },
@@ -85,16 +99,16 @@
       "aws-cdk": {"implemented": true}
     },
     "try_delete": {
-      "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
-      "tf-azure": {"implemented": false},
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
+      "tf-azure": {"implemented": true},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
     },
     "exists": {
-      "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
-      "tf-azure": {"implemented": false},
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
+      "tf-azure": {"implemented": true},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
     },

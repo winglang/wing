@@ -25,3 +25,8 @@ interface IWithSameName {
     foo(): num;
  // ^^^ Symbol "foo" already defined in this scope
 }
+
+interface INoProps {
+  bar: str;
+//^^^^^^^^ interfaces can't have properties 
+}

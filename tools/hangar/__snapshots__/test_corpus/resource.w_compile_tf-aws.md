@@ -9,6 +9,8 @@ module.exports = function({ res, bucket }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       const s = (await res.myMethod());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
@@ -31,6 +33,8 @@ module.exports = function({ __parent_this }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       (await __parent_this.b.put("foo1.txt","bar"));
     }
@@ -48,6 +52,8 @@ module.exports = function({ __parent_this }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
       (await __parent_this.b.put("foo2.txt","bar"));
@@ -67,6 +73,8 @@ module.exports = function({ __parent_this }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       (await __parent_this.q.push("foo"));
     }
@@ -84,6 +92,8 @@ module.exports = function({ bigOlPublisher }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
       (await bigOlPublisher.publish("foo"));
@@ -104,6 +114,9 @@ module.exports = function({ Foo, MyEnum }) {
       this.e = e;
       this.foo = foo;
       this.name = name;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
     static async barStatic()  {
       return "bar static";
@@ -139,6 +152,9 @@ module.exports = function({  }) {
       this.b2 = b2;
       this.q = q;
       this.t = t;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
     async publish(s)  {
       const __parent_this = this;
@@ -881,7 +897,7 @@ class $Root extends $stdlib.std.Resource {
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -929,7 +945,7 @@ class $Root extends $stdlib.std.Resource {
         this.e = e;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Bar.inflight.js";
         const FooClient = Foo._toInflightType(context);
         const MyEnumClient = $stdlib.core.NodeJsCode.fromInline(`
           Object.freeze((function (tmp) {
@@ -997,7 +1013,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const res_client = context._lift(res);
         const bucket_client = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -1047,7 +1063,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+            const self_client_path = "./clients/$Inflight2.inflight.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1084,7 +1100,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+            const self_client_path = "./clients/$Inflight3.inflight.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1121,7 +1137,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+            const self_client_path = "./clients/$Inflight4.inflight.js";
             const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
@@ -1153,7 +1169,7 @@ class $Root extends $stdlib.std.Resource {
         (this.b2.onCreate(new $Inflight4(this,"$Inflight4")));
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/BigPublisher.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1203,7 +1219,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight5.inflight.js";
         const bigOlPublisher_client = context._lift(bigOlPublisher);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({

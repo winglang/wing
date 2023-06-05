@@ -9,6 +9,8 @@ module.exports = function({ r }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       (await r.testNoCapture());
       (await r.testCaptureCollectionsOfData());
@@ -36,6 +38,9 @@ module.exports = function({  }) {
       this.first = first;
       this.myField = myField;
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async meaningOfLife()  {
       const __parent_this = this;
       return 42;
@@ -56,6 +61,9 @@ module.exports = function({  }) {
   class First {
     constructor({ myResource }) {
       this.myResource = myResource;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return First;
@@ -451,7 +459,7 @@ class $Root extends $stdlib.std.Resource {
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/First.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -486,7 +494,7 @@ class $Root extends $stdlib.std.Resource {
         this.first = new First(this,"First");
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Another.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -543,7 +551,7 @@ class $Root extends $stdlib.std.Resource {
         return this.another;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/MyResource.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -650,7 +658,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const r_client = context._lift(r);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({

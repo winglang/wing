@@ -9,6 +9,8 @@ module.exports = function({ fn }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
     }
@@ -26,6 +28,9 @@ module.exports = function({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
     async handle(message)  {
       const __parent_this = this;
@@ -241,7 +246,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -273,7 +278,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const fn_client = context._lift(fn);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
