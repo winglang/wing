@@ -3,13 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ f }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (typeof f.call === "function" ? await f.call() : await f.call.handle());
-      }
+      (await f.call());
     }
   }
   return $Inflight1;
@@ -20,13 +23,16 @@ module.exports = function({ f }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ f }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (typeof f.print === "function" ? await f.print("hey there") : await f.print.handle("hey there"));
-      }
+      (await f.print("hey there"));
     }
   }
   return $Inflight2;
@@ -37,8 +43,11 @@ module.exports = function({ f }) {
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({  }) {
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
     static async regexInflight(pattern, text)  {
       return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
@@ -53,13 +62,11 @@ module.exports = function({  }) {
       return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
     }
     async call()  {
-      {
-        const __parent_this = this;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof Foo.regexInflight === "function" ? await Foo.regexInflight("[a-z]+-\\d+","abc-123") : await Foo.regexInflight.handle("[a-z]+-\\d+","abc-123"))'`)})((typeof Foo.regexInflight === "function" ? await Foo.regexInflight("[a-z]+-\\d+","abc-123") : await Foo.regexInflight.handle("[a-z]+-\\d+","abc-123")))};
-        const uuid = (typeof Foo.getUuid === "function" ? await Foo.getUuid() : await Foo.getUuid.handle());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof Foo.getData === "function" ? await Foo.getData() : await Foo.getData.handle()) === "Cool data!")'`)})(((typeof Foo.getData === "function" ? await Foo.getData() : await Foo.getData.handle()) === "Cool data!"))};
-      }
+      const __parent_this = this;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regexInflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regexInflight("[a-z]+-\\d+","abc-123")))};
+      const uuid = (await Foo.getUuid());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.getData()) === "Cool data!")'`)})(((await Foo.getData()) === "Cool data!"))};
     }
   }
   return Foo;
@@ -256,6 +263,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -275,7 +283,7 @@ class $Root extends $stdlib.std.Resource {
         return (require("<ABSOLUTE_PATH>/index.js")["v4"])()
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -319,7 +327,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const f_client = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -355,7 +363,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const f_client = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -387,8 +395,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.getGreeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.getGreeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:call",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:console",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:call",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:console",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

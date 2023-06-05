@@ -3,13 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log(`deleted ${key}`)};
-      }
+      {console.log(`deleted ${key}`)};
     }
   }
   return $Inflight1;
@@ -20,13 +23,16 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log(`updated ${key}`)};
-      }
+      {console.log(`updated ${key}`)};
     }
   }
   return $Inflight2;
@@ -37,13 +43,16 @@ module.exports = function({  }) {
 ## clients/$Inflight3.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight3 {
+  class $Inflight3 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log(`created ${key}`)};
-      }
+      {console.log(`created ${key}`)};
     }
   }
   return $Inflight3;
@@ -54,14 +63,17 @@ module.exports = function({  }) {
 ## clients/$Inflight4.inflight.js
 ```js
 module.exports = function({ other }) {
-  class  $Inflight4 {
+  class $Inflight4 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log(`last key ${key}`)};
-        (typeof other.put === "function" ? await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])) : await other.put.handle("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
-      }
+      {console.log(`last key ${key}`)};
+      (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
     }
   }
   return $Inflight4;
@@ -72,13 +84,16 @@ module.exports = function({ other }) {
 ## clients/$Inflight5.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight5 {
+  class $Inflight5 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(key)  {
-      {
-        {console.log("other bucket event called!")};
-      }
+      {console.log("other bucket event called!")};
     }
   }
   return $Inflight5;
@@ -89,17 +104,20 @@ module.exports = function({  }) {
 ## clients/$Inflight6.inflight.js
 ```js
 module.exports = function({ b }) {
-  class  $Inflight6 {
+  class $Inflight6 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (typeof b.put === "function" ? await b.put("a","1") : await b.put.handle("a","1"));
-        (typeof b.put === "function" ? await b.put("b","1") : await b.put.handle("b","1"));
-        (typeof b.put === "function" ? await b.put("b","100") : await b.put.handle("b","100"));
-        (typeof b.put === "function" ? await b.put("c","1") : await b.put.handle("c","1"));
-        (typeof b.delete === "function" ? await b.delete("c") : await b.delete.handle("c"));
-      }
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("b","100"));
+      (await b.put("c","1"));
+      (await b.delete("c"));
     }
   }
   return $Inflight6;
@@ -1311,6 +1329,7 @@ module.exports = function({ b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -1324,7 +1343,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1356,7 +1375,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1388,7 +1407,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight3.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight3.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1420,7 +1439,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight4.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight4.inflight.js";
         const other_client = context._lift(other);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1456,7 +1475,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight5.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight5.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -1488,7 +1507,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight6.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight6.inflight.js";
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -1524,7 +1543,7 @@ class $Root extends $stdlib.std.Resource {
     (b.onCreate(new $Inflight3(this,"$Inflight3")));
     (b.onEvent(new $Inflight4(this,"$Inflight4")));
     (other.onEvent(new $Inflight5(this,"$Inflight5")));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:test",new $Inflight6(this,"$Inflight6"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight6(this,"$Inflight6"));
   }
 }
 class $App extends $AppBase {

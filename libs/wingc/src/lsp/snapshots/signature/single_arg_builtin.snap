@@ -1,0 +1,9 @@
+---
+source: libs/wingc/src/lsp/signature.rs
+---
+signatures:
+  - label: "(0: str?): str"
+    parameters:
+      - label: "0: str?"
+    activeParameter: 0
+

@@ -3,14 +3,17 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ foo }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.returnNil === "function" ? await foo.returnNil(true) : await foo.returnNil.handle(true))) != null) === true)'`)})(((((typeof foo.returnNil === "function" ? await foo.returnNil(true) : await foo.returnNil.handle(true))) != null) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.returnNil === "function" ? await foo.returnNil(false) : await foo.returnNil.handle(false))) != null) === false)'`)})(((((typeof foo.returnNil === "function" ? await foo.returnNil(false) : await foo.returnNil.handle(false))) != null) === false))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.returnNil(true))) != null) === true)'`)})(((((await foo.returnNil(true))) != null) === true))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.returnNil(false))) != null) === false)'`)})(((((await foo.returnNil(false))) != null) === false))};
     }
   }
   return $Inflight1;
@@ -21,19 +24,22 @@ module.exports = function({ foo }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ foo }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
-        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue("hello") : await foo.setOptionalValue.handle("hello"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === true))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== undefined)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) !== undefined))};
-        (typeof foo.setOptionalValue === "function" ? await foo.setOptionalValue(undefined) : await foo.setOptionalValue.handle(undefined));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false)'`)})(((((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle())) != null) === false))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === undefined)'`)})(((typeof foo.getOptionalValue === "function" ? await foo.getOptionalValue() : await foo.getOptionalValue.handle()) === undefined))};
-      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === false)'`)})(((((await foo.getOptionalValue())) != null) === false))};
+      (await foo.setOptionalValue("hello"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === true)'`)})(((((await foo.getOptionalValue())) != null) === true))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.getOptionalValue()) !== undefined)'`)})(((await foo.getOptionalValue()) !== undefined))};
+      (await foo.setOptionalValue(undefined));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === false)'`)})(((((await foo.getOptionalValue())) != null) === false))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.getOptionalValue()) === undefined)'`)})(((await foo.getOptionalValue()) === undefined))};
     }
   }
   return $Inflight2;
@@ -44,36 +50,28 @@ module.exports = function({ foo }) {
 ## clients/Foo.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Foo {
+  class Foo {
     constructor({  }) {
     }
     async $inflight_init()  {
-      {
-        const __parent_this = this;
-        this.optionalVar = undefined;
-      }
+      const __parent_this = this;
+      this.optionalVar = undefined;
     }
     async returnNil(t)  {
-      {
+      const __parent_this = this;
+      if (t) {
         const __parent_this = this;
-        if (t) {
-          const __parent_this = this;
-          return "hello";
-        }
-        return undefined;
+        return "hello";
       }
+      return undefined;
     }
     async setOptionalValue(msg)  {
-      {
-        const __parent_this = this;
-        this.optionalVar = msg;
-      }
+      const __parent_this = this;
+      this.optionalVar = msg;
     }
     async getOptionalValue()  {
-      {
-        const __parent_this = this;
-        return this.optionalVar;
-      }
+      const __parent_this = this;
+      return this.optionalVar;
     }
   }
   return Foo;
@@ -270,6 +268,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -283,7 +282,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Foo.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -319,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -355,7 +354,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -385,8 +384,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const foo = new Foo(this,"Foo");
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:nil return",new $Inflight1(this,"$Inflight1"));
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:optional instance variable",new $Inflight2(this,"$Inflight2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:nil return",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:optional instance variable",new $Inflight2(this,"$Inflight2"));
   }
 }
 class $App extends $AppBase {

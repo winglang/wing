@@ -3,12 +3,15 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({  }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(s)  {
-      {
-      }
     }
   }
   return $Inflight1;
@@ -19,14 +22,17 @@ module.exports = function({  }) {
 ## clients/$Inflight2.inflight.js
 ```js
 module.exports = function({ strToStr }) {
-  class  $Inflight2 {
+  class $Inflight2 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle(s)  {
-      {
-        (typeof strToStr.invoke === "function" ? await strToStr.invoke("one") : await strToStr.invoke.handle("one"));
-        {console.log((typeof strToStr.invoke === "function" ? await strToStr.invoke("two") : await strToStr.invoke.handle("two")))};
-      }
+      (await strToStr.invoke("one"));
+      {console.log((await strToStr.invoke("two")))};
     }
   }
   return $Inflight2;
@@ -235,6 +241,7 @@ module.exports = function({ strToStr }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -248,7 +255,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -280,7 +287,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight2.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight2.inflight.js";
         const strToStr_client = context._lift(strToStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({

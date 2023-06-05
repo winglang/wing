@@ -1,3 +1,6 @@
+/*\
+skip: true
+\*/
 bring cloud;
 
 let b = new cloud.Bucket() as "b";
@@ -20,8 +23,8 @@ b.onEvent(inflight (key: str) => {
     counter.inc();
 });
 
-
-new cloud.Test(inflight () => {
+// "std" is implicitly imported
+new std.Test(inflight () => {
 
     inflight class Predicate {
         counterVal: num;
@@ -39,12 +42,12 @@ new cloud.Test(inflight () => {
             let var i = 0;
             // waiting for up to 2 minutess, checking every 10 seconds
             while i < 12 {
-            i = i + 1;
-            if this.assertion() {
-                assert(this.assertion());
-                return;
-            } 
-            Predicate.sleep(1000 * 10);
+                i = i + 1;
+                if this.assertion() {
+                    assert(this.assertion());
+                    return;
+                } 
+                Predicate.sleep(1000 * 10);
             }
             assert(this.assertion());
         }
@@ -57,4 +60,4 @@ new cloud.Test(inflight () => {
     b.delete("c");
     new Predicate(10).testAssertion();
 
-}, cloud.TestProps {timeout: 3m}) as "counter is incremented 10 times";
+}, std.TestProps {timeout: 3m}) as "counter is incremented 10 times";

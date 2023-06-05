@@ -7,7 +7,23 @@ class C1 {
 
 class C2 {}
 new C2(1);
-//^^^^^^^ Expected 0 arguments but got 1 when instantiating "C2"
+//^^^^^^^ Expected 0 argument(s) but got 1
+
+class C9 {}
+new C9(token: "1");
+//^^^^^^^ Expected 0 named argument(s)"
+
+class C10 {
+  init(foo: str)
+}
+new C10(); 
+//^^^^^^^ Expected 1 required positional arguments but got 0 when instantiating "C5"
+
+new C10(foo: "bar"); 
+//^^^^^^^ Expected 1 positional argument(s) but got 0
+
+new C10("hello", foo: "bar"); 
+//^^^^^^^ class C10 does not expect any named argument
 
 class C3 {
   x: num;
@@ -57,4 +73,8 @@ struct S1 {}
 
 class C8 extends S1 {
                //^^ Preflight class C8's parent is not a class
+}
+
+class C11 extends C11 {
+                //^^^ Class cannot extend itself
 }

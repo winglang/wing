@@ -3,13 +3,16 @@
 ## clients/$Inflight1.inflight.js
 ```js
 module.exports = function({ x }) {
-  class  $Inflight1 {
+  class $Inflight1 {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
     }
     async handle()  {
-      {
-        (typeof x.handle === "function" ? await x.handle("hello world!") : await x.handle.handle("hello world!"));
-      }
+      (await x.handle("hello world!"));
     }
   }
   return $Inflight1;
@@ -20,14 +23,18 @@ module.exports = function({ x }) {
 ## clients/A.inflight.js
 ```js
 module.exports = function({  }) {
-  class  A {
+  class A {
     constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
     async handle(msg)  {
-      {
-        const __parent_this = this;
-        return;
-      }
+      const __parent_this = this;
+      return;
     }
   }
   return A;
@@ -38,14 +45,15 @@ module.exports = function({  }) {
 ## clients/Dog.inflight.js
 ```js
 module.exports = function({  }) {
-  class  Dog {
+  class Dog {
     constructor({  }) {
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async eat()  {
-      {
-        const __parent_this = this;
-        return;
-      }
+      const __parent_this = this;
+      return;
     }
   }
   return Dog;
@@ -56,14 +64,15 @@ module.exports = function({  }) {
 ## clients/r.inflight.js
 ```js
 module.exports = function({  }) {
-  class  r {
+  class r {
     constructor({  }) {
     }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
     async method2(x)  {
-      {
-        const __parent_this = this;
-        return x;
-      }
+      const __parent_this = this;
+      return x;
     }
   }
   return r;
@@ -107,6 +116,7 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
@@ -120,7 +130,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/A.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -152,7 +162,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const x_client = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -188,19 +198,15 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
        method1(x)  {
-        {
-          const __parent_this = this;
-          return x;
-        }
+        const __parent_this = this;
+        return x;
       }
        method3(x)  {
-        {
-          const __parent_this = this;
-          return x;
-        }
+        const __parent_this = this;
+        return x;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/r.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -232,7 +238,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/Dog.inflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })

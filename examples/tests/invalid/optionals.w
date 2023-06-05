@@ -21,11 +21,11 @@ let w: str = x ?? 3;
 x ?? "hello";
 //  default type (str) must be same as wrapped type (num)
 
-inflight class Super {
+class Super {
 }
-inflight class Sub1 extends Super {
+class Sub1 extends Super {
 }
-inflight class Sub2 extends Super {
+class Sub2 extends Super {
 }
 
 let optionalSub1: Sub1? = new Sub1();
@@ -46,3 +46,40 @@ if let hi = hi {
   hi = "bye";
 //^^^^^^^^^^^ Variable hi is not reassignable 
 }
+
+struct A {
+  val: num?;
+}
+
+struct B {
+  a: A?;
+}
+
+let a: A = A { val: 1 };
+let b: B = B { a: a };
+
+let c = b.a.val;
+//      ^^^ Property access on optional type "A?" requires optional accessor: "?."
+struct Foo {
+  val: str?;
+}
+
+struct Bar {
+  foo: Foo?;
+}
+
+struct Baz {
+  bar: Bar?;
+}
+
+let baz: Baz = Baz {
+  bar: Bar {
+    foo: Foo {
+      val: "hello"
+    }
+  }
+};
+
+// Ensure that ?. returns T? rather than T
+let val: str = baz?.bar?.foo?.val;
+//             ^^^^^^^^^^^^^^^^^^ Expected type to be "str", but got "str?" instead
