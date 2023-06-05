@@ -58,11 +58,7 @@ class UrlShortener {
   // Get the url for the given id. Returns nil if the url does not have a
   // corresponding id.
   inflight getUrl(id: str): str? {
-    if this.idLookup.exists(id) {
-      return this.idLookup.get(id);
-    } else {
-      return nil;
-    }
+    return this.idLookup.tryGet(id);
   }
 }
 
