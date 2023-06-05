@@ -1097,6 +1097,33 @@ new cloud.Table(props: TableProps)
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Table.addRow">addRow</a></code> | Add a row to the table that is created when the app is deployed. |
+
+---
+
+##### `addRow` <a name="addRow" id="@winglang/sdk.cloud.Table.addRow"></a>
+
+```wing
+addRow(key: str, row: Json): void
+```
+
+Add a row to the table that is created when the app is deployed.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Table.addRow.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.Table.addRow.parameter.row"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
