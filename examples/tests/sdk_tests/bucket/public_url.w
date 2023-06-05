@@ -5,6 +5,7 @@ let publicBucket = new cloud.Bucket(bucketProps) as "publicBucket";
 let privateBucket = new cloud.Bucket() as "privateBucket";
 
 test "publicUrl" {
+  let var error = "";
   publicBucket.put("file1.txt", "Foo");
   privateBucket.put("file2.txt", "Bar");
 
@@ -13,6 +14,8 @@ test "publicUrl" {
   try {
     privateBucket.publicUrl("file2.txt");
   } catch e {
-    assert(e == "Cannot provide public url for a non-public bucket");
+    error = e;
   }
+
+  assert(error == "Cannot provide public url for a non-public bucket");
 }
