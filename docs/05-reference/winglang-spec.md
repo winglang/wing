@@ -1220,7 +1220,7 @@ expected from a call and it is not being caught.
 
 > ```TS
 > try {
->   let x? = 1;
+>   let x: num? = 1;
 >   throw("hello exception");
 > } catch e {
 >   log(e);
@@ -2625,7 +2625,7 @@ using a `bool?` type in this short-circuit is a compile error due to ambiguity.
 Using a `nil?` type is also ambiguous and results in a compile error.
 
 ```TS
-let x? = 1;
+let x: num? = 1;
 if x {
   // ...
 }
@@ -2634,7 +2634,7 @@ if x {
 Which is equivalent to:
 
 ```TS
-let x? = 1;
+let x: num? = 1;
 if x != nil {
   // ...
 }
