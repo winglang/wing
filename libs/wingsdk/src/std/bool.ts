@@ -24,6 +24,6 @@ export class Boolean {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "Boolean");
+    return InflightClient.forType(__filename, this.name);
   }
 }

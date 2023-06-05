@@ -35,6 +35,6 @@ export class Number {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "Number");
+    return InflightClient.forType(__filename, this.name);
   }
 }

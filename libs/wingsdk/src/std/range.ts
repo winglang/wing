@@ -31,6 +31,6 @@ export class Range {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "Range");
+    return InflightClient.forType(__filename, this.name);
   }
 }

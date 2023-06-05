@@ -15,7 +15,7 @@ export class ImmutableSet {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "ImmutableSet");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**
@@ -58,7 +58,7 @@ export class MutableSet {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "MutableSet");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**

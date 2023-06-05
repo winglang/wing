@@ -8,7 +8,7 @@ export class Json {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "Json");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**
@@ -154,7 +154,7 @@ export class MutJson {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "MutJson");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**

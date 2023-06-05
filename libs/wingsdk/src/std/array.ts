@@ -15,7 +15,7 @@ export class ImmutableArray {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "ImmutableArray");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**
@@ -121,7 +121,7 @@ export class MutableArray {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "MutableArray");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**

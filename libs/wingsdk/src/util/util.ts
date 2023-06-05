@@ -29,6 +29,6 @@ export class Util {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "Util");
+    return InflightClient.forType(__filename, this.name);
   }
 }

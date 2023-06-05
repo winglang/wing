@@ -16,7 +16,7 @@ export class ImmutableMap {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "ImmutableMap");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**
@@ -104,7 +104,7 @@ export class MutableMap {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "MutableMap");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**

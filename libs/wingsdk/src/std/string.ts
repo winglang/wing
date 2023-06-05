@@ -13,7 +13,7 @@ export class String {
    * @internal
    */
   public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, "String");
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**
