@@ -158,12 +158,6 @@ async function testSimulator(synthDir: string) {
 }
 
 async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
-  const stackName = process.env.CDK_STACK_NAME
-  if (!stackName) {
-    throw new Error(
-      "In order to successfully deploy using AWS-CDK, it is essential to define the environment variable CDK_STACK_NAME."
-    );
-  }
 
   if (!isAwsCdkInstalled(synthDir)) {
     throw new Error(
