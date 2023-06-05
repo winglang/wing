@@ -43,41 +43,6 @@ module.exports = function({ f }) {
 
 ```
 
-## inflight.$Inflight1.js
-```js
-module.exports = function({ payload }) {
-  class $Inflight1 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        return payload;
-      }
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
-## inflight.$Inflight2.js
-```js
-module.exports = function({ f, payload }) {
-  class $Inflight2 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        const x = (typeof f.invoke === "function" ? await f.invoke("") : await f.invoke.handle(""));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
-      }
-    }
-  }
-  return $Inflight2;
-}
-
-```
-
 ## main.tf.json
 ```json
 {

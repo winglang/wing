@@ -60,57 +60,6 @@ module.exports = function({ counterC }) {
 
 ```
 
-## inflight.$Inflight1.js
-```js
-module.exports = function({ counterA }) {
-  class $Inflight1 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterA.peek === "function" ? await counterA.peek() : await counterA.peek.handle()) === 0)'`)})(((typeof counterA.peek === "function" ? await counterA.peek() : await counterA.peek.handle()) === 0))};
-      }
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
-## inflight.$Inflight2.js
-```js
-module.exports = function({ counterB }) {
-  class $Inflight2 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterB.peek === "function" ? await counterB.peek() : await counterB.peek.handle()) === 500)'`)})(((typeof counterB.peek === "function" ? await counterB.peek() : await counterB.peek.handle()) === 500))};
-      }
-    }
-  }
-  return $Inflight2;
-}
-
-```
-
-## inflight.$Inflight3.js
-```js
-module.exports = function({ counterC }) {
-  class $Inflight3 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof counterC.peek === "function" ? await counterC.peek() : await counterC.peek.handle()) === (-198))'`)})(((typeof counterC.peek === "function" ? await counterC.peek() : await counterC.peek.handle()) === (-198)))};
-      }
-    }
-  }
-  return $Inflight3;
-}
-
-```
-
 ## main.tf.json
 ```json
 {

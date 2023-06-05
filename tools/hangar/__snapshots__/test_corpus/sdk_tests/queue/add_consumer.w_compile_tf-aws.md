@@ -51,51 +51,6 @@ module.exports = function({ q, predicate, js }) {
 
 ```
 
-## inflight.$Inflight1.js
-```js
-module.exports = function({ c }) {
-  class $Inflight1 {
-    constructor({  }) {
-    }
-    async handle(msg) {
-      {
-        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
-      }
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
-## inflight.$Inflight2.js
-```js
-module.exports = function({ q, predicate, js }) {
-  class $Inflight2 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        (typeof q.push === "function" ? await q.push("hello") : await q.push.handle("hello"));
-        (typeof q.push === "function" ? await q.push("world") : await q.push.handle("world"));
-        let i = 0;
-        while ((i < 600)) {
-          i = (i + 1);
-          if ((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
-            return;
-          }
-          (typeof js.sleep === "function" ? await js.sleep(100) : await js.sleep.handle(100));
-        }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
-      }
-    }
-  }
-  return $Inflight2;
-}
-
-```
-
 ## inflight.Predicate.js
 ```js
 module.exports = function({  }) {

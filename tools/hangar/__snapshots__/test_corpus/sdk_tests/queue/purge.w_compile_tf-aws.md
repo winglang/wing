@@ -49,28 +49,6 @@ module.exports = function({ q, js }) {
 
 ```
 
-## inflight.$Inflight1.js
-```js
-module.exports = function({ q }) {
-  class $Inflight1 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        (typeof q.push === "function" ? await q.push("foo") : await q.push.handle("foo"));
-        (typeof q.push === "function" ? await q.push("bar") : await q.push.handle("bar"));
-        (typeof q.push === "function" ? await q.push("baz") : await q.push.handle("baz"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 3)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 3))};
-        (typeof q.purge === "function" ? await q.purge() : await q.purge.handle());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0)'`)})(((typeof q.approxSize === "function" ? await q.approxSize() : await q.approxSize.handle()) === 0))};
-      }
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
 ## inflight.TestHelper.js
 ```js
 module.exports = function({  }) {

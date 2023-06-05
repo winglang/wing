@@ -23,26 +23,6 @@ module.exports = function({ c }) {
 
 ```
 
-## inflight.$Inflight1.js
-```js
-module.exports = function({ c }) {
-  class $Inflight1 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 0))};
-        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 1)'`)})(((typeof c.peek === "function" ? await c.peek() : await c.peek.handle()) === 1))};
-      }
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
 ## main.tf.json
 ```json
 {

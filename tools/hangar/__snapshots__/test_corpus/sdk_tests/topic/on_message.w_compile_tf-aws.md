@@ -72,69 +72,6 @@ module.exports = function({ t, predicate, TestHelper }) {
 
 ```
 
-## inflight.$Inflight1.js
-```js
-module.exports = function({ c }) {
-  class $Inflight1 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
-      }
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
-## inflight.$Inflight2.js
-```js
-module.exports = function({ c }) {
-  class $Inflight2 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        (typeof c.inc === "function" ? await c.inc() : await c.inc.handle());
-      }
-    }
-  }
-  return $Inflight2;
-}
-
-```
-
-## inflight.$Inflight3.js
-```js
-module.exports = function({ t, predicate, TestHelper }) {
-  class $Inflight3 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
-          (typeof t.publish === "function" ? await t.publish("msg") : await t.publish.handle("msg"));
-        }
-        let i = 0;
-        while ((i < 600)) {
-          i = (i + 1);
-          if ((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
-            return;
-          }
-          (typeof TestHelper.sleep === "function" ? await TestHelper.sleep(100) : await TestHelper.sleep.handle(100));
-        }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle())'`)})((typeof predicate.test === "function" ? await predicate.test() : await predicate.test.handle()))};
-      }
-    }
-  }
-  return $Inflight3;
-}
-
-```
-
 ## inflight.Predicate.js
 ```js
 module.exports = function({  }) {

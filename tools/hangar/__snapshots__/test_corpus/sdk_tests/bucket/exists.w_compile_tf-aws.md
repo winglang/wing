@@ -26,29 +26,6 @@ module.exports = function({ b }) {
 
 ```
 
-## inflight.$Inflight1.js
-```js
-module.exports = function({ b }) {
-  class $Inflight1 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        (typeof b.put === "function" ? await b.put("test1.txt","Foo") : await b.put.handle("test1.txt","Foo"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof b.exists === "function" ? await b.exists("test1.txt") : await b.exists.handle("test1.txt"))'`)})((typeof b.exists === "function" ? await b.exists("test1.txt") : await b.exists.handle("test1.txt")))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(typeof b.exists === "function" ? await b.exists("test2.txt") : await b.exists.handle("test2.txt")))'`)})((!(typeof b.exists === "function" ? await b.exists("test2.txt") : await b.exists.handle("test2.txt"))))};
-        (typeof b.put === "function" ? await b.put("test2.txt","Bar") : await b.put.handle("test2.txt","Bar"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(typeof b.exists === "function" ? await b.exists("test2.txt") : await b.exists.handle("test2.txt"))'`)})((typeof b.exists === "function" ? await b.exists("test2.txt") : await b.exists.handle("test2.txt")))};
-        (typeof b.delete === "function" ? await b.delete("test1.txt") : await b.delete.handle("test1.txt"));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(typeof b.exists === "function" ? await b.exists("test1.txt") : await b.exists.handle("test1.txt")))'`)})((!(typeof b.exists === "function" ? await b.exists("test1.txt") : await b.exists.handle("test1.txt"))))};
-      }
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
 ## main.tf.json
 ```json
 {

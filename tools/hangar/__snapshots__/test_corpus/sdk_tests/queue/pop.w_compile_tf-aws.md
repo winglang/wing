@@ -29,32 +29,6 @@ module.exports = function({ q, NIL }) {
 
 ```
 
-## inflight.$Inflight1.js
-```js
-module.exports = function({ q, NIL }) {
-  class $Inflight1 {
-    constructor({  }) {
-    }
-    async handle() {
-      {
-        const msgs = Object.freeze(["Foo", "Bar"]);
-        for (const msg of msgs) {
-          (typeof q.push === "function" ? await q.push(msg) : await q.push.handle(msg));
-        }
-        const first = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
-        const second = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
-        const third = ((typeof q.pop === "function" ? await q.pop() : await q.pop.handle()) ?? NIL);
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
-      }
-    }
-  }
-  return $Inflight1;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
