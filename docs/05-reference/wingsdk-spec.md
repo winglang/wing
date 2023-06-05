@@ -1317,6 +1317,11 @@ resource Table {
   primaryKey: str;
 
   /**
+   * Add a row to the table that is created when the app is deployed.
+   */
+  addRow(key: str, row: Json): void;
+
+  /**
    * Insert a row into the table.
    */
   inflight insert(key: str, row: Json): void;
