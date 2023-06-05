@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling bucket/try_get.w to sim...
+✔ Compiling bucket/try_get.w to sim...
 pass ─ try_get.wsim » root/env0/test:tryGet
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

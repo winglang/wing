@@ -2,7 +2,7 @@
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ q }) {
+module.exports = function({ q, js }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -15,12 +15,54 @@ module.exports = function({ q }) {
       (await q.push("foo"));
       (await q.push("bar"));
       (await q.push("baz"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 3)'`)})(((await q.approxSize()) === 3))};
+      const wait = async (pred) =>  {
+        let i = 0;
+        while ((i < 60)) {
+          if ((await pred())) {
+            return true;
+          }
+          (await js.sleep(100));
+          i = (i + 1);
+        }
+        return false;
+      }
+      ;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
+        return ((await q.approxSize()) === 3);
+      }
+      ))'`)})((await wait(async () =>  {
+        return ((await q.approxSize()) === 3);
+      }
+      )))};
       (await q.purge());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.approxSize()) === 0)'`)})(((await q.approxSize()) === 0))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
+        return ((await q.approxSize()) === 0);
+      }
+      ))'`)})((await wait(async () =>  {
+        return ((await q.approxSize()) === 0);
+      }
+      )))};
     }
   }
   return $Inflight1;
+}
+
+```
+
+## clients/TestHelper.inflight.js
+```js
+module.exports = function({  }) {
+  class TestHelper {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+    async sleep(milli)  {
+      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
+    }
+  }
+  return TestHelper;
 }
 
 ```
@@ -168,6 +210,38 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class TestHelper extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("sleep");
+        const __parent_this = this;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "./clients/TestHelper.inflight.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const TestHelperClient = ${TestHelper._toInflightType(this).text};
+            const client = new TestHelperClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("sleep")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class $Inflight1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -177,9 +251,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
         const q_client = context._lift(q);
+        const js_client = context._lift(js);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             q: ${q_client},
+            js: ${js_client},
           })
         `);
       }
@@ -196,15 +272,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(js, host, []);
           $Inflight1._registerBindObject(q, host, []);
         }
         if (ops.includes("handle")) {
+          $Inflight1._registerBindObject(js, host, ["sleep"]);
           $Inflight1._registerBindObject(q, host, ["approxSize", "purge", "push"]);
         }
         super._registerBind(host, ops);
       }
     }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    const js = new TestHelper(this,"TestHelper");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:purge",new $Inflight1(this,"$Inflight1"));
   }
 }
