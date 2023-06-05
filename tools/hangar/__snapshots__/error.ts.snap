@@ -66,6 +66,62 @@ Duration <DURATION>
 "
 `;
 
+exports[`repeat_construct_id.w 1`] = `
+"- Compiling error/repeat_construct_id.w to sim...
+✖ Compiling error/repeat_construct_id.w to sim...
+ERROR: There is already a Construct with name 'cloud.Bucket' in $Root [env0]
+
+hint: Every preflight class needs a unique id within its scope. You can assign an id to a class as shown:
+
+> new cloud.Bucket() as \\"MyBucket\\";
+
+For more information, see https://docs.winglang.io/concepts/resources
+
+../../../examples/tests/error/target/test/repeat_construct_id.wsim.[REDACTED].tmp/.wing/preflight.js:10
+       super(scope, id);
+       const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+>>     const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+     }
+   }
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`repeat_construct_id2.w 1`] = `
+"- Compiling error/repeat_construct_id2.w to sim...
+✖ Compiling error/repeat_construct_id2.w to sim...
+ERROR: There is already a Construct with name '\${make_name()}' in $Root [env0]
+
+hint: Every preflight class needs a unique id within its scope. You can assign an id to a class as shown:
+
+> new cloud.Bucket() as \\"MyBucket\\";
+
+For more information, see https://docs.winglang.io/concepts/resources
+
+../../../examples/tests/error/target/test/repeat_construct_id2.wsim.[REDACTED].tmp/.wing/preflight.js:14
+       ;
+       const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"\${make_name()}\\");
+>>     const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"\${make_name()}\\");
+     }
+   }
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`string_from_json.w 1`] = `
 "- Compiling error/string_from_json.w to sim...
 ✖ Compiling error/string_from_json.w to sim...
