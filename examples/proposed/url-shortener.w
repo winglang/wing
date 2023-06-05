@@ -23,14 +23,15 @@ class UrlShortener {
   // Returns an id for the given long url. Creates a new id if one does not
   // already exist.
   inflight getId(url: str): str {
-    if this.urlLookup.exists(url) {
-      return this.urlLookup.get(url);
+    let id = this.urlLookup.tryGet(url);
+    if let id = id {
+      return id;
     }
   
-    let id = utils.makeId();
-    this.idLookup.put(id, url);
-    this.urlLookup.put(url, id);
-    return id;
+    let newId = utils.makeId();
+    this.idLookup.put(newId, url);
+    this.urlLookup.put(url, newId);
+    return newId;
   }
 
   // Get the url for the given id. Returns nil if the url does not have a
