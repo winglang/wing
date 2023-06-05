@@ -1,10 +1,11 @@
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
+import { DynamodbTableItem } from "../.gen/providers/aws/dynamodb-table-item";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { IInflightHost } from "../std";
+import { Json, IInflightHost } from "../std";
 
 /**
  * Table names must be between 3 and 255 characters.
@@ -34,6 +35,14 @@ export class Table extends cloud.Table {
       attribute: [{ name: this.primaryKey, type: "S" }],
       hashKey: this.primaryKey,
       billingMode: "PAY_PER_REQUEST",
+    });
+  }
+
+  public addRow(key: string, row: Json): void {
+    new DynamodbTableItem(this, `DynamodbTableItem-${key}`, {
+      tableName: this.table.name,
+      hashKey: key,
+      item: Json.stringify(row),
     });
   }
 
