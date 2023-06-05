@@ -1,6 +1,7 @@
-import { copyFileSync, promises as fsPromise } from "fs";
+import { mkdtemp, copyFileSync, promises as fsPromise, readFileSync, cpSync } from "fs-extra";
 import ora from "ora";
-import path from "path";
+import { basename, join, resolve } from "path";
+import { tmpdir } from "os";
 
 /**
  * Normalize windows paths to be posix-like.
@@ -37,9 +38,33 @@ export async function copyDir(src: string, dest: string) {
   let entries = await fsPromise.readdir(src, { withFileTypes: true });
 
   for (let entry of entries) {
-    let srcPath = path.join(src, entry.name);
-    let destPath = path.join(dest, entry.name);
+    let srcPath = join(src, entry.name);
+    let destPath = join(dest, entry.name);
 
     entry.isDirectory() ? await copyDir(srcPath, destPath) : copyFileSync(srcPath, destPath);
   }
+}
+
+/**
+ * Creates a clean environment for each test by copying the example file to a temporary directory.
+ */
+export async function generateTmpDir(sourcePath: string, ...additionalFiles: string[]) {
+  const sourceFile = basename(sourcePath);
+  const file = readFileSync(sourcePath, "utf-8");
+  const externs = file.match(/(?<=extern ")[.\\\/A-Za-z0-9_-]+/g) ?? [];
+  const sourceDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+  const tempWingFile = join(sourceDir, sourceFile);
+
+  cpSync(sourcePath, tempWingFile);
+
+  for (const filePath of additionalFiles) {
+    const file = basename(filePath);
+    cpSync(filePath, join(sourceDir, file));
+  }
+
+  for (const path of externs) {
+    cpSync(join(resolve(sourcePath), `../${path}`), join(sourceDir, path));
+  }
+
+  return tempWingFile;
 }

@@ -33,7 +33,13 @@ export async function runWingCommand(options: RunWingCommandOptions) {
     expect(out.exitCode).not.toBe(0);
     expect(out.stderr).not.toBe("");
   }
+  out.stderr = sanitizeOutput(out.stderr);
+  out.stdout = sanitizeOutput(out.stdout);
   return out;
+}
+
+function sanitizeOutput(output: string) {
+  return output.replace(/\d+m[\d.]+s/g, "<DURATION>");
 }
 
 export function sanitize_json_paths(path: string) {

@@ -9,7 +9,7 @@ use crate::{
 use std::collections::{btree_map, BTreeMap, HashSet};
 use std::fmt::Debug;
 
-use super::{UnsafeRef, VariableInfo, CLASS_INIT_NAME};
+use super::{UnsafeRef, VariableInfo};
 
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
