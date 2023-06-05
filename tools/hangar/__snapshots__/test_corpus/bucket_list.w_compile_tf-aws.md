@@ -9,9 +9,11 @@ module.exports = function({ b }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
       const jsonObj1 = Object.freeze({"key1":"value1"});
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 1)'`)})(((await b.list()).length === 1))};
       (await b.putJson("file1.json",jsonObj1));
       (await b.put("file2.txt","Bar"));
       (await b.put("random","Buz"));
@@ -19,12 +21,14 @@ module.exports = function({ b }) {
       const objs2 = (await b.list("file"));
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file1.json")'`)})(objs.includes("file1.json"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file2.txt")'`)})(objs.includes("file2.txt"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file3.txt")'`)})(objs.includes("file3.txt"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("random")'`)})(objs.includes("random"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file1.json")'`)})(objs2.includes("file1.json"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file2.txt")'`)})(objs2.includes("file2.txt"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file3.txt")'`)})(objs2.includes("file3.txt"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(!objs2.includes("random"))'`)})((!objs2.includes("random")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs.length === 3)'`)})((objs.length === 3))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs2.length === 2)'`)})((objs2.length === 2))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs.length === 4)'`)})((objs.length === 4))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs2.length === 3)'`)})((objs2.length === 3))};
     }
   }
   return $Inflight1;
@@ -181,6 +185,17 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_object": {
+      "root_cloudBucket_S3Objectfile3txt_7A4012BD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/S3Object-file3.txt",
+            "uniqueId": "root_cloudBucket_S3Objectfile3txt_7A4012BD"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "content": "Baz",
+        "key": "file3.txt"
+      },
       "root_testlist_Handler_S3Object_68237BDC": {
         "//": {
           "metadata": {
@@ -215,7 +230,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -245,6 +260,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    (b.addObject("file3.txt","Baz"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:list",new $Inflight1(this,"$Inflight1"));
   }
 }

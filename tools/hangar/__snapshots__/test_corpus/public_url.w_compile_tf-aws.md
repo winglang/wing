@@ -9,7 +9,10 @@ module.exports = function({ publicBucket, privateBucket }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
+      let error = "";
       (await publicBucket.put("file1.txt","Foo"));
       (await privateBucket.put("file2.txt","Bar"));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await publicBucket.publicUrl("file1.txt")) !== "")'`)})(((await publicBucket.publicUrl("file1.txt")) !== ""))};
@@ -18,8 +21,9 @@ module.exports = function({ publicBucket, privateBucket }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(e === "Cannot provide public url for a non-public bucket")'`)})((e === "Cannot provide public url for a non-public bucket"))};
+        error = e;
       }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Cannot provide public url for a non-public bucket")'`)})((error === "Cannot provide public url for a non-public bucket"))};
     }
   }
   return $Inflight1;
@@ -263,7 +267,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const publicBucket_client = context._lift(publicBucket);
         const privateBucket_client = context._lift(privateBucket);
         return $stdlib.core.NodeJsCode.fromInline(`

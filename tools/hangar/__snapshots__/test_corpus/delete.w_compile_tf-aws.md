@@ -9,7 +9,10 @@ module.exports = function({ b }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
     async handle()  {
+      let error = "";
       const jsonObj1 = Object.freeze({"key1":"value1"});
       (await b.putJson("file1.json",jsonObj1));
       (await b.delete("file1.txt"));
@@ -21,8 +24,9 @@ module.exports = function({ b }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(e === "Object does not exist (key=file1.json).")'`)})((e === "Object does not exist (key=file1.json)."))};
+        error = e;
       }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Object does not exist (key=file1.json).")'`)})((error === "Object does not exist (key=file1.json)."))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file2.txt"))'`)})((await b.exists("file2.txt")))};
       (await b.delete("file2.txt"));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("file2.txt")))'`)})((!(await b.exists("file2.txt"))))};
@@ -227,7 +231,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js".replace(/\\/g, "/");
+        const self_client_path = "./clients/$Inflight1.inflight.js";
         const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
