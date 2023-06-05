@@ -2,9 +2,17 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
+- Compiling valid/primitive_methods.w to sim...
 1:60
-✔ Compiling to sim...
+✔ Compiling valid/primitive_methods.w to sim...
 pass ─ primitive_methods.wsim (no tests)
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

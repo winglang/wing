@@ -1,8 +1,8 @@
-# [inflight_class_capture_preflight_resource.w](../../../../examples/tests/valid/inflight_class_capture_preflight_resource.w) | compile | tf-aws
+# [delete.w](../../../../examples/tests/valid/delete.w) | compile | tf-aws
 
 ## clients/$Inflight1.inflight.js
 ```js
-module.exports = function({ Foo }) {
+module.exports = function({ b }) {
   class $Inflight1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,52 +12,27 @@ module.exports = function({ Foo }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const f = new Foo();
-      (await f.uploadToBucket("hello.txt","world"));
+      let error = "";
+      const jsonObj1 = Object.freeze({"key1":"value1"});
+      (await b.putJson("file1.json",jsonObj1));
+      (await b.delete("file1.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file1.json"))'`)})((await b.exists("file1.json")))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file2.txt"))'`)})((await b.exists("file2.txt")))};
+      (await b.delete("file1.json",Object.freeze({"mustExist":true})));
+      try {
+        (await b.delete("file1.json",Object.freeze({"mustExist":true})));
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        error = e;
+      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Object does not exist (key=file1.json).")'`)})((error === "Object does not exist (key=file1.json)."))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file2.txt"))'`)})((await b.exists("file2.txt")))};
+      (await b.delete("file2.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("file2.txt")))'`)})((!(await b.exists("file2.txt"))))};
     }
   }
   return $Inflight1;
-}
-
-```
-
-## clients/Foo.inflight.js
-```js
-module.exports = function({ b }) {
-  class Foo {
-     constructor()  {
-      const __parent_this = this;
-    }
-    async uploadToBucket(k, value)  {
-      const __parent_this = this;
-      (await b.put(k,value));
-    }
-  }
-  return Foo;
-}
-
-```
-
-## clients/PreflightClass.inflight.js
-```js
-module.exports = function({ Foo }) {
-  class  PreflightClass {
-    constructor({  }) {
-    }
-    async $inflight_init()  {
-      {
-        const __parent_this = this;
-      }
-    }
-    async goo()  {
-      {
-        const __parent_this = this;
-        const foo = new Foo();
-        (typeof foo.uploadToBucket === "function" ? await foo.uploadToBucket("hello.txt","world") : await foo.uploadToBucket.handle("hello.txt","world"));
-      }
-    }
-  }
-  return PreflightClass;
 }
 
 ```
@@ -83,7 +58,7 @@ module.exports = function({ Foo }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight class captures preflight resource\",\"${aws_lambda_function.root_testinflightclasscapturespreflightresource_Handler_32058266.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:delete\",\"${aws_lambda_function.root_testdelete_Handler_398401C7.arn}\"]]"
     }
   },
   "provider": {
@@ -93,60 +68,62 @@ module.exports = function({ Foo }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3": {
+      "root_testdelete_Handler_IamRole_0F45E7FD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/IamRole",
-            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3"
+            "path": "root/Default/Default/test:delete/Handler/IamRole",
+            "uniqueId": "root_testdelete_Handler_IamRole_0F45E7FD"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightclasscapturespreflightresource_Handler_IamRolePolicy_1DDF44CC": {
+      "root_testdelete_Handler_IamRolePolicy_A650187C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_IamRolePolicy_1DDF44CC"
+            "path": "root/Default/Default/test:delete/Handler/IamRolePolicy",
+            "uniqueId": "root_testdelete_Handler_IamRolePolicy_A650187C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testdelete_Handler_IamRole_0F45E7FD.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightclasscapturespreflightresource_Handler_IamRolePolicyAttachment_3787A52C": {
+      "root_testdelete_Handler_IamRolePolicyAttachment_B2FC94EF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_IamRolePolicyAttachment_3787A52C"
+            "path": "root/Default/Default/test:delete/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testdelete_Handler_IamRolePolicyAttachment_B2FC94EF"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3.name}"
+        "role": "${aws_iam_role.root_testdelete_Handler_IamRole_0F45E7FD.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightclasscapturespreflightresource_Handler_32058266": {
+      "root_testdelete_Handler_398401C7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/Default",
-            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_32058266"
+            "path": "root/Default/Default/test:delete/Handler/Default",
+            "uniqueId": "root_testdelete_Handler_398401C7"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c890c3e1"
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
+            "WING_FUNCTION_NAME": "Handler-c8edf1bd"
           }
         },
-        "function_name": "Handler-c890c3e1",
+        "function_name": "Handler-c8edf1bd",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightclasscapturespreflightresource_Handler_IamRole_706075D3.arn}",
+        "role": "${aws_iam_role.root_testdelete_Handler_IamRole_0F45E7FD.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightclasscapturespreflightresource_Handler_S3Object_676FC9EB.key}",
+        "s3_key": "${aws_s3_object.root_testdelete_Handler_S3Object_B655C36A.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -209,11 +186,22 @@ module.exports = function({ Foo }) {
       }
     },
     "aws_s3_object": {
-      "root_testinflightclasscapturespreflightresource_Handler_S3Object_676FC9EB": {
+      "root_cloudBucket_S3Objectfile2txt_2A0B5D22": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures preflight resource/Handler/S3Object",
-            "uniqueId": "root_testinflightclasscapturespreflightresource_Handler_S3Object_676FC9EB"
+            "path": "root/Default/Default/cloud.Bucket/S3Object-file2.txt",
+            "uniqueId": "root_cloudBucket_S3Objectfile2txt_2A0B5D22"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "content": "Bar",
+        "key": "file2.txt"
+      },
+      "root_testdelete_Handler_S3Object_B655C36A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:delete/Handler/S3Object",
+            "uniqueId": "root_testdelete_Handler_S3Object_B655C36A"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -229,48 +217,13 @@ module.exports = function({ Foo }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this._addInflightOps("uploadToBucket");
-        const __parent_this = this;
-      }
-      static _toInflightType(context) {
-        const self_client_path = "./clients/Foo.inflight.js";
-        const b_client = context._lift(b);
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
-            const client = new FooClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(b, host, []);
-        }
-        if (ops.includes("uploadToBucket")) {
-          Foo._registerBindObject(b, host, ["put"]);
-        }
-        super._registerBind(host, ops);
-      }
-    }
     class $Inflight1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -279,10 +232,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "./clients/$Inflight1.inflight.js";
-        const FooClient = Foo._toInflightType(context);
+        const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            Foo: ${FooClient.text},
+            b: ${b_client},
           })
         `);
       }
@@ -299,20 +252,22 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Inflight1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
+          $Inflight1._registerBindObject(b, host, ["delete", "exists", "putJson"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const myConst = "bang bang";
-    this.node.root.new("@winglang/sdk.cloud.Test",cloud.Test,this,"test:inflight class captures preflight resource",new $Inflight1(this,"$Inflight1"));
+    (b.addObject("file2.txt","Bar"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:delete",new $Inflight1(this,"$Inflight1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "inflight_class_capture_preflight_resource", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "delete", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

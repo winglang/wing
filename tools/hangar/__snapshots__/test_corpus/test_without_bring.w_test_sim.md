@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/test_without_bring.w to sim...
+✔ Compiling valid/test_without_bring.w to sim...
 pass ─ test_without_bring.wsim » root/env0/test:hello test
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 
