@@ -9,7 +9,7 @@ import debug from "debug";
 import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "./constants";
-import { rmSync } from "fs-extra";
+import { rmSync } from "fs";
 
 const log = debug("wing:test");
 
