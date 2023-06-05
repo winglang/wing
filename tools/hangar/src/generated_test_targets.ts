@@ -18,9 +18,10 @@ export async function compileTest(sourceDir: string, wingFile: string) {
   );
   const tf_json = join(targetDir, "main.tf.json");
 
+  const filePath = join(sourceDir, wingBasename);
   await runWingCommand({
     cwd: sourceDir,
-    wingFile: join(sourceDir, wingBasename),
+    wingFile: filePath,
     args,
     shouldSucceed: true,
   });
@@ -49,7 +50,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     fileMap[subpath] = fileContents;
   }
 
-  await createMarkdownSnapshot(fileMap, wingFile, "compile", "tf-aws");
+  await createMarkdownSnapshot(fileMap, filePath, "compile", "tf-aws");
 }
 
 export async function testTest(sourceDir: string, wingFile: string) {
@@ -58,14 +59,15 @@ export async function testTest(sourceDir: string, wingFile: string) {
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await mkdir(testDir, { recursive: true });
 
+  const filePath = join(sourceDir, wingFile);
   const out = await runWingCommand({
     cwd: testDir,
-    wingFile: join(sourceDir, wingFile),
+    wingFile: filePath,
     args,
     shouldSucceed: true,
   });
 
   fileMap["stdout.log"] = out.stdout;
 
-  await createMarkdownSnapshot(fileMap, wingFile, "test", "sim");
+  await createMarkdownSnapshot(fileMap, filePath, "test", "sim");
 }
