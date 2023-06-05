@@ -167,7 +167,7 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
 
   if (!isAwsCdkInstalled(synthDir)) {
     throw new Error(
-      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud."
+      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i aws-cdk)."
     );
   }
 
