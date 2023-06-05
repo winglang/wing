@@ -11,7 +11,6 @@ use crate::{
 	type_check::HANDLE_METHOD_NAME,
 };
 
-const CLOSURE_CLASS_PREFIX: &str = "$Closure";
 const PARENT_THIS_NAME: &str = "__parent_this";
 
 /// Transforms inflight closures defined in preflight scopes into preflight classes.
@@ -33,13 +32,13 @@ const PARENT_THIS_NAME: &str = "__parent_this";
 ///
 /// ```wing
 /// let b = new cloud.Bucket();
-/// class $Closure1 {
+/// class $Inflight1 {
 ///   init() {}
 ///   inflight handle(message: str) {
 ///     b.put("file.txt", message);
 ///   }
 /// }
-/// let f = new $Closure1();
+/// let f = new $Inflight1();
 /// ```
 pub struct ClosureTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
@@ -48,7 +47,7 @@ pub struct ClosureTransformer {
 	// Whether the transformer is inside a scope where "this" is valid.
 	inside_scope_with_this: bool,
 	// Helper state for generating unique class names
-	closure_counter: usize,
+	inflight_counter: usize,
 	// Stores the list of class definitions that need to be added to the nearest scope
 	class_statements: Vec<Stmt>,
 	// Track the statement index of the nearest statement we're inside so that
@@ -61,7 +60,7 @@ impl ClosureTransformer {
 		Self {
 			phase: Phase::Preflight,
 			inside_scope_with_this: false,
-			closure_counter: 0,
+			inflight_counter: 0,
 			class_statements: vec![],
 			nearest_stmt_idx: 0,
 		}
@@ -152,10 +151,10 @@ impl Fold for ClosureTransformer {
 
 		match expr.kind {
 			ExprKind::FunctionClosure(func_def) => {
-				self.closure_counter += 1;
+				self.inflight_counter += 1;
 
 				let new_class_name = Symbol {
-					name: format!("{}{}", CLOSURE_CLASS_PREFIX, self.closure_counter),
+					name: format!("$Inflight{}", self.inflight_counter),
 					span: expr.span.clone(),
 				};
 				let handle_name = Symbol {

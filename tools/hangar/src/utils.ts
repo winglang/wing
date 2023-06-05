@@ -2,7 +2,7 @@ import { execa } from "execa";
 import * as fs from "fs-extra";
 import { expect } from "vitest";
 import { snapshotDir, wingBin } from "./paths";
-import { join, extname, relative, resolve, dirname, basename } from "path";
+import { join, extname } from "path";
 
 export interface RunWingCommandOptions {
   cwd: string;
@@ -70,27 +70,19 @@ export function tfResourcesOfCount(
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
-const testsRoot = join(__dirname, "..", "..", "..", "examples", "tests");
-
 export async function createMarkdownSnapshot(
   fileMap: Record<string, string>,
-  filePath: string,
+  wingFile: string,
   testCase: string,
   target: string
 ) {
-  const relativePath = relative(resolve(testsRoot), filePath);
-  const wingFile = basename(filePath);
-
   const snapPath = join(
     snapshotDir,
     "test_corpus",
-    dirname(relativePath),
     `${wingFile}_${testCase}_${target}.md`
   );
 
-  const testDirRelativeToSnapshot = relative(dirname(snapPath), testsRoot)
-
-  let md = `# [${wingFile}](${testDirRelativeToSnapshot}/${dirname(relativePath)}/${wingFile}) | ${testCase} | ${target}\n\n`;
+  let md = `# [${wingFile}](../../../../examples/tests/valid/${wingFile}) | ${testCase} | ${target}\n\n`;
 
   const files = Object.keys(fileMap);
   files.sort();

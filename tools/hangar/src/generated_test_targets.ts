@@ -18,10 +18,9 @@ export async function compileTest(sourceDir: string, wingFile: string) {
   );
   const tf_json = join(targetDir, "main.tf.json");
 
-  const filePath = join(sourceDir, wingBasename);
   await runWingCommand({
     cwd: sourceDir,
-    wingFile: filePath,
+    wingFile: join(sourceDir, wingBasename),
     args,
     shouldSucceed: true,
   });
@@ -32,7 +31,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
-  const include = ["preflight.js", "inflight.", "extern/", "proc"];
+  const include = ["preflight.js", "clients/", "extern/", "proc"];
 
   for await (const dotFile of walkdir(dotWing)) {
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
@@ -50,7 +49,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     fileMap[subpath] = fileContents;
   }
 
-  await createMarkdownSnapshot(fileMap, filePath, "compile", "tf-aws");
+  await createMarkdownSnapshot(fileMap, wingFile, "compile", "tf-aws");
 }
 
 export async function testTest(sourceDir: string, wingFile: string) {
@@ -59,15 +58,14 @@ export async function testTest(sourceDir: string, wingFile: string) {
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await mkdir(testDir, { recursive: true });
 
-  const filePath = join(sourceDir, wingFile);
   const out = await runWingCommand({
     cwd: testDir,
-    wingFile: filePath,
+    wingFile: join(sourceDir, wingFile),
     args,
     shouldSucceed: true,
   });
 
   fileMap["stdout.log"] = out.stdout;
 
-  await createMarkdownSnapshot(fileMap, filePath, "test", "sim");
+  await createMarkdownSnapshot(fileMap, wingFile, "test", "sim");
 }
