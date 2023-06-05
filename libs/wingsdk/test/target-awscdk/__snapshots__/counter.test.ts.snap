@@ -3,7 +3,7 @@
 exports[`counter with initial value 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -87,7 +87,7 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 exports[`dec() policy statement 2`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -241,7 +241,7 @@ exports[`dec() policy statement 2`] = `
 exports[`default counter behavior 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -325,7 +325,7 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 exports[`function with a counter binding 2`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -497,7 +497,7 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 exports[`inc() policy statement 2`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -669,7 +669,7 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 exports[`peek() policy statement 2`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -841,7 +841,7 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 exports[`reset() policy statement 2`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },

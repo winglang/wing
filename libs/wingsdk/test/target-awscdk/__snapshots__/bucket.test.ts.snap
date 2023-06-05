@@ -3,7 +3,7 @@
 exports[`bucket is public 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -99,7 +99,7 @@ exports[`bucket is public 1`] = `
 exports[`bucket with two preflight objects 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -439,7 +439,7 @@ exports[`bucket with two preflight objects 1`] = `
 exports[`create a bucket 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },

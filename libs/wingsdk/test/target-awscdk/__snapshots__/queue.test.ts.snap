@@ -3,7 +3,7 @@
 exports[`default queue behavior 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -56,7 +56,7 @@ exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wings
 exports[`queue with a consumer function 2`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -212,7 +212,7 @@ exports[`queue with a consumer function 2`] = `
 exports[`queue with custom retention 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -266,7 +266,7 @@ exports[`queue with custom retention 1`] = `
 exports[`queue with custom timeout 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },

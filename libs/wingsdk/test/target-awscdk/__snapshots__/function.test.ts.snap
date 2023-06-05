@@ -3,7 +3,7 @@
 exports[`basic function 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -103,7 +103,7 @@ exports[`basic function 1`] = `
 exports[`basic function with environment variables 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
@@ -209,7 +209,7 @@ exports[`basic function with environment variables 1`] = `
 exports[`basic function with timeout explicitly set 1`] = `
 {
   "Outputs": {
-    "WINGTESTRUNNERFUNCTIONARNS": {
+    "WingTestRunnerFunctionArns": {
       "Value": "[]",
     },
   },
