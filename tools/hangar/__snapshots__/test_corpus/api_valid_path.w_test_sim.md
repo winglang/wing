@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling valid/api_valid_path.w to sim...
+✔ Compiling valid/api_valid_path.w to sim...
 pass ─ api_valid_path.wsim (no tests)
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling counter/inc.w to sim...
+✔ Compiling counter/inc.w to sim...
 pass ─ inc.wsim » root/env0/test:inc
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 

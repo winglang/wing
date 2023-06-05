@@ -78,6 +78,7 @@ exports[`messages are not requeued if the function fails after retention timeout
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
@@ -101,9 +102,9 @@ return class Handler {
   }
   
 async handle(message) {
-    if (message === \\"BAD MESSAGE\\") {
-        throw new Error(\\"ERROR\\");
-    }
+  if (message === \\"BAD MESSAGE\\") {
+    throw new Error(\\"ERROR\\");
+  }
 }
 };
 })())({
@@ -297,6 +298,7 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
@@ -320,9 +322,9 @@ return class Handler {
   }
   
 async handle(message) {
-    if (message === \\"BAD MESSAGE\\") {
-        throw new Error(\\"ERROR\\");
-    }
+  if (message === \\"BAD MESSAGE\\") {
+    throw new Error(\\"ERROR\\");
+  }
 }
 };
 })())({
@@ -516,6 +518,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
@@ -543,9 +546,9 @@ return class Handler {
   }
   
 async handle(message) {
-    if (message === \\"BAD MESSAGE\\") {
-        throw new Error(\\"ERROR\\");
-    }
+  if (message === \\"BAD MESSAGE\\") {
+    throw new Error(\\"ERROR\\");
+  }
 }
 };
 })())({
@@ -827,8 +830,6 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
   "wingsdk.sim.EventMapping created.",
   "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\").",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\").",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -848,9 +849,9 @@ return class Handler {
   }
   
 async handle(message) {
-    if (message === \\"BAD MESSAGE\\") {
-        throw new Error(\\"ERROR\\");
-    }
+  if (message === \\"BAD MESSAGE\\") {
+    throw new Error(\\"ERROR\\");
+  }
 }
 };
 })())({
@@ -1055,8 +1056,6 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
   "Push (message=B).",
   "Sending messages (messages=[\\"A\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"B\\\\\\"]}\\").",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\"]}\\").",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -1076,9 +1075,9 @@ return class Handler {
   }
   
 async handle(message) {
-    if (message === \\"BAD MESSAGE\\") {
-        throw new Error(\\"ERROR\\");
-    }
+  if (message === \\"BAD MESSAGE\\") {
+    throw new Error(\\"ERROR\\");
+  }
 }
 };
 })())({
