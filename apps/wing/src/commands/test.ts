@@ -14,6 +14,7 @@ import * as fs from "fs";
 const log = debug("wing:test");
 
 const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
+const ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK = "WingTestRunnerFunctionArns";
 
 /**
  * Options for the `test` command.
@@ -168,7 +169,7 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
   await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
   const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-    const testArns = await awsCdkOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS.replace(/_/g, ""), stackName);
+    const testArns = await awsCdkOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK, process.env.CDK_STACK_NAME!);
     const testRunner = new TestRunnerClient(testArns);
 
     const tests = await testRunner.listTests();
