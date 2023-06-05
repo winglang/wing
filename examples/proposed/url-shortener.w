@@ -20,17 +20,38 @@ class UrlShortener {
     this.idLookup = new cloud.Bucket() as "IdLookup";
   }
 
-  // Returns an id for the given long url. Creates a new id if one does not
+  // Returns a short id for the given url. Creates a new id if one does not
   // already exist.
+  //
+  // In the current implementation, when a new URL is shortened, two
+  // transactions are performed:
+  //
+  // 1. The url is added to the urlLookup bucket.
+  // 2. The id is added to the idLookup bucket.
+  //
+  // If the second transaction fails, the first transaction is not rolled
+  // back. This means that the urlLookup bucket may contain urls that do
+  // not have a corresponding id in the idLookup bucket. This is not a
+  // problem, since `getId` will only return a shortened ID once both
+  // transactions have completed successfully.
   inflight getId(url: str): str {
     let id = this.urlLookup.tryGet(url);
     if let id = id {
+      // ensure that the id exists in idLookup
+      if !this.idLookup.exists(id) {
+        this.idLookup.put(id, url);
+      }
       return id;
     }
   
     let newId = utils.makeId();
-    this.idLookup.put(newId, url);
+
+    // (transaction 1)
     this.urlLookup.put(url, newId);
+
+    // (transaction 2)
+    this.idLookup.put(newId, url);
+
     return newId;
   }
 
