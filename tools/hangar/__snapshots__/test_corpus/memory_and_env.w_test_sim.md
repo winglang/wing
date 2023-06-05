@@ -2,8 +2,16 @@
 
 ## stdout.log
 ```log
-- Compiling to sim...
-✔ Compiling to sim...
+- Compiling function/memory_and_env.w to sim...
+✔ Compiling function/memory_and_env.w to sim...
 pass ─ memory_and_env.wsim » root/env0/test:test
+ 
+
+
+
+
+Tests 1 passed (1) 
+Duration <DURATION>
+
 ```
 
