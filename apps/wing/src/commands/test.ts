@@ -112,10 +112,8 @@ async function testOne(entrypoint: string, options: TestOptions) {
   switch (options.target) {
     case Target.SIM:
       return await testSimulator(synthDir);
-      break;
     case Target.TF_AWS:
       return await testTfAws(synthDir);
-      break;
     default:
       throw new Error(`unsupported target ${options.target}`);
   }

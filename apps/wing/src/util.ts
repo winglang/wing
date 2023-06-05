@@ -19,6 +19,11 @@ export function normalPath(path: string) {
 }
 
 export async function withSpinner<T>(message: string, fn: () => Promise<T>): Promise<T> {
+  // if progress is disabled, just run the function
+  if (!process.env.PROGRESS) {
+    return fn();
+  }
+
   const spinner = ora({
     stream: process.stdout, // hangar tests currently expect stderr to be empty or else they fail
     text: message,
