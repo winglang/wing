@@ -1,6 +1,6 @@
 ---
-title: Language Spec
-id: spec
+title: Language
+id: language-spec
 description: The Wing Language Specification
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---

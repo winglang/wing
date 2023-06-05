@@ -1,9 +1,15 @@
 ---
 id: inflights
-title: Inflights
-description: Inflight functions are code blocks that are executed on the cloud
-keywords: [Inflights, Inflight functions]
+title: Preflight and Inflight 
+description: Wing two execution phases preflight and inflight
+keywords: [Inflights, Inflight functions, Preflight, Preflight code]
 ---
+
+## Preflight
+
+MISSING
+
+## Inflight 
 
 Inflights (or "inflight functions") are Wing's distributed computing primitive.
 They are isolated code blocks which can be packaged and executed on compute
@@ -142,4 +148,50 @@ let handler = inflight (e: str): str => {
   // on air (apologies, the puns are unavoidable, really)
 };
 ```
+
+## Preflight Classes
+
+MISSING
+
+Resources are cloud services that are part of the application. Wing uses preflight classes to
+represent these resources and expose both a *preflight API* used to define their deployment
+configuration and an *inflight API* used to interact with them at runtime. Resources are an
+extension of the [Construct Programming Model] and as such any [AWS Constructs] can be natively used
+in Wing applications.
+
+The following code defines a bucket resource:
+
+```js
+new cloud.Bucket();
+```
+
+:::caution Conceptual Example
+The following code block is meant to serve as an example of what is possible 
+based on the wing language specifications. Additional feature implementations
+will need to be completed to make the example possible.
+:::
+
+The following code declares a new resource called `SafeQueue` which contains
+a queue with a dead-letter-queue associated with it:
+
+```js
+class SafeQueue extends cloud.Queue {
+  init() {
+    let dlq = new cloud.Queue();
+
+    dlq.addConsumer(inflight (m: str) => {
+      log.error("dead-letter: ${m}");
+    });
+
+    this.addDeadLetterQueue(dlq);
+  }
+}
+```
+
+[Construct Programming Model]: https://docs.aws.amazon.com/cdk/v2/guide/constructs.html
+[AWS Constructs]: https://github.com/aws/constructs
+
+## Inflight Classes
+
+MISSING
 

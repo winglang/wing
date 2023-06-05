@@ -1,5 +1,5 @@
 ---
-title: CLI User Manual
+title: CLI
 id: cli
 description: Wing CLI Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, cli]

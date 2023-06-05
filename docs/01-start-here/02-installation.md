@@ -4,6 +4,19 @@ title: Installation
 keywords: [Wing installation, installation, Wing toolchain]
 ---
 
+:::info We are out there
+
+New experiences are always better with friends and support, [join](https://t.winglang.io/slack) 
+the **Wing Community Slack** and jump right into the [#getting-started](https://winglang.slack.com/archives/C04BBDQUWQP) 
+channel. Say :wave: and feel free to ask questions, post rants and 
+offer advice to your fellow Wingnuts.
+
+If you run into issues, please submit a [new
+issue](https://github.com/winglang/wing/issues/new/choose) on GitHub and let us
+know as soon as possible.
+
+::: 
+
 In this section you will install the Wing toolchain on your system.
 
 The toolchain includes three tools:
@@ -11,8 +24,6 @@ The toolchain includes three tools:
 1. **Wing CLI** - the compiler toolchain
 2. **Wing VSCode Extension** - IDE support for Wing
 3. **Wing Console** - a desktop app for interacting with your Wing programs.
-
-## Prerequisites
 
 To install Wing, you will need the following setup:
 

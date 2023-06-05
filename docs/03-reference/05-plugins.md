@@ -1,6 +1,6 @@
 ---
-title: Compiler Plugins
-id: compiler-plugins
+title: Plugins
+id: plugins
 description: Wing Compiler Plugins Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, compiler plugins]
 ---

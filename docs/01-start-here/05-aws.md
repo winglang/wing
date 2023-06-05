@@ -1,5 +1,5 @@
 ---
-title: Deploying to AWS using Terraform
+title: Deploy to AWS
 id: aws
 keywords: [Wing deploy, Wing deployment, deploy to AWS, deploy using Terraform]
 ---
