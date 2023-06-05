@@ -25,6 +25,24 @@ module.exports = function({ q }) {
 
 ```
 
+## clients/TestHelper.inflight.js
+```js
+module.exports = function({  }) {
+  class TestHelper {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+    async sleep(milli)  {
+      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
+    }
+  }
+  return TestHelper;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
