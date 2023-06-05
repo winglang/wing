@@ -1,5 +1,5 @@
 ---
-title: SDK API docs
+title: SDK
 id: sdk
 description: Wing SDK API Reference
 keywords: [Wing sdk, sdk, Wing API Reference]
