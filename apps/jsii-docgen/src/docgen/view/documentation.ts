@@ -1,11 +1,10 @@
 import * as os from "os";
 import * as path from "path";
-import { loadAssemblyFromFile, SPEC_FILE_NAME } from "@jsii/spec";
+import { SPEC_FILE_NAME } from "@jsii/spec";
 import * as fs from "fs-extra";
 import * as glob from "glob-promise";
 import * as reflect from "jsii-reflect";
-import { TargetLanguage, UnknownSnippetMode } from "jsii-rosetta";
-import { transliterateAssembly } from "jsii-rosetta/lib/commands/transliterate";
+import { TargetLanguage } from "jsii-rosetta";
 import { CorruptedAssemblyError, LanguageNotSupportedError } from "../..";
 import { Json } from "../render/json";
 import { MarkdownDocument } from "../render/markdown-doc";
@@ -366,37 +365,13 @@ export class Documentation {
       return cached;
     }
 
-    const created = await withTempDir(async (workdir: string) => {
-      // always better not to pollute an externally provided directory
-      await fs.copy(this.assembliesDir, workdir);
-
-      const ts = new reflect.TypeSystem();
-      for (let dotJsii of await glob.promise(
-        `${workdir}/**/${SPEC_FILE_NAME}`
-      )) {
-        // we only transliterate the top level assembly and not the entire type-system.
-        // note that the only reason to translate dependant assemblies is to show code examples
-        // for expanded python arguments - which we don't to right now anyway.
-        // we don't want to make any assumption of the directory structure, so this is the most
-        // robuse way to detect the root assembly.
-        const spec = loadAssemblyFromFile(dotJsii);
-        if (language && spec.name === this.assemblyName) {
-          const packageDir = path.dirname(dotJsii);
-          try {
-            await transliterateAssembly([packageDir], [language], {
-              loose: options.loose,
-              unknownSnippets: UnknownSnippetMode.FAIL,
-            });
-            dotJsii = path.join(packageDir, `${SPEC_FILE_NAME}.${language}`);
-          } catch (e: any) {
-            dotJsii = path.join(packageDir, SPEC_FILE_NAME);
-            // throw new LanguageNotSupportedError(`Laguage ${language} is not supported for package ${this.assemblyFqn} (cause: ${e.message})`);
-          }
-        }
-        await ts.load(dotJsii, { validate: options.validate });
-      }
-      return ts.findAssembly(this.assemblyName);
-    });
+    const ts = new reflect.TypeSystem();
+    for (let dotJsii of await glob.promise(
+      `${this.assembliesDir}/**/${SPEC_FILE_NAME}`
+    )) {
+      await ts.load(dotJsii, { validate: options.validate });
+    }
+    const created = ts.findAssembly(this.assemblyName);
 
     this.assembliesCache.set(cacheKey, created);
     return created;
@@ -430,22 +405,6 @@ export const LANGUAGE_SPECIFIC = {
     rosettaTarget: "wing" as TargetLanguage,
   },
 };
-
-async function withTempDir<T>(
-  work: (workdir: string) => Promise<T>
-): Promise<T> {
-  const workdir = await fs.mkdtemp(path.join(os.tmpdir(), path.sep));
-  const cwd = process.cwd();
-  try {
-    process.chdir(workdir);
-    // wait for the work to be completed before
-    // we cleanup the work environment.
-    return await work(workdir);
-  } finally {
-    process.chdir(cwd);
-    await fs.remove(workdir);
-  }
-}
 
 export function extractPackageName(spec: string) {
   const firstAt = spec.indexOf("@");

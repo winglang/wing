@@ -986,7 +986,7 @@ This is a list of features we will consider for wing as it evolves:-
   workflow engines such as [AWS Step
   Functions](http://aws.amazon.com/step-functions) or [Apache
   Airflow](https://airflow.apache.org/). The
-  [functionless](https://functionless.org) project is exploring this direction
+  [functionless](https://github.com/functionless/functionless) project is exploring this direction
   with TypeScript. This can also be used to generate things like CI/CD workflows
   such as GitHub Workflow.
 
