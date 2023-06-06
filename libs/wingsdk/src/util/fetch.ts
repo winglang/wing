@@ -109,11 +109,29 @@ export class Http {
     });
   }
 
+  /**
+   *
+   * @param url
+   * @param options
+   * @returns Response
+   * @inflight
+   */
+  static async delete(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
+    return this.fetch(url, {
+      ...defaultOptions,
+      ...options,
+      method: HttpMethods.DELETE,
+    });
+  }
+
   private static async _formatResponse(
     response: globalThis.Response
   ): Promise<Response> {
     const headers: Record<string, string> = {};
-    response.headers.forEach((val: string, key: string) => {
+    response.headers?.forEach((val: string, key: string) => {
       headers[key] = val;
     });
 
