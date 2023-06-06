@@ -135,8 +135,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 									}
 								}
 							} else {
-								// This is probably a JSII type that has not been imported yet
-								// TODO Need to map a custom_type to a JSII FQN
+								// No lookup found, let's not provide any completions
+								// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
+
+								return vec![];
 							}
 						}
 					}
@@ -175,6 +177,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 						if let Ok(type_lookup) = type_lookup {
 							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
+						} else {
+							// No lookup found, let's not provide any completions
+							// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
+
+							return vec![];
 						}
 					}
 				}
@@ -608,5 +615,14 @@ let a = MutMap<str> {};
 if a. 
    //^"#,
 		assert!(incomplete_if_statement.len() > 0)
+	);
+
+	test_completion_list!(
+		undeclared_var,
+		r#"
+let x = 2;
+notDefined.
+         //^"#,
+		assert!(undeclared_var.is_empty())
 	);
 }
