@@ -78,7 +78,7 @@ export async function createMarkdownSnapshot(
   testCase: string,
   target: string
 ) {
-  const relativePath = relative(resolve(testsRoot), filePath);
+  const relativePath = relative(resolve(testsRoot), filePath).replace(/\\/g, "/");
   const wingFile = basename(filePath);
 
   const snapPath = join(
@@ -88,7 +88,7 @@ export async function createMarkdownSnapshot(
     `${wingFile}_${testCase}_${target}.md`
   );
 
-  const testDirRelativeToSnapshot = relative(dirname(snapPath), testsRoot)
+  const testDirRelativeToSnapshot = relative(dirname(snapPath), testsRoot).replace(/\\/g, "/");
 
   let md = `# [${wingFile}](${testDirRelativeToSnapshot}/${dirname(relativePath)}/${wingFile}) | ${testCase} | ${target}\n\n`;
 
