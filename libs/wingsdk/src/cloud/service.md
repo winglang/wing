@@ -97,15 +97,15 @@ Within the context of the simulator, services are just spawned processes ran wit
 
 ### AWS (`tf-aws` and `awscdk`)
 
-Tracking issue: [#1306](https://github.com/winglang/wing/issues/1306)
+🚧 Not supported yet (tracking issue: [#1306](https://github.com/winglang/wing/issues/1306))
 
 ### Azure (`tf-azure`)
 
-Tracking issue: [#1307](https://github.com/winglang/wing/issues/1307)
+🚧 Not supported yet (tracking issue: [#1307](https://github.com/winglang/wing/issues/1307))
 
 ### GCP (`tf-gcp`)
 
-Tracking issue: [#1308](https://github.com/winglang/wing/issues/1308)
+🚧 Not supported yet (tracking issue: [#1308](https://github.com/winglang/wing/issues/1308))
 
 ## API Reference
 

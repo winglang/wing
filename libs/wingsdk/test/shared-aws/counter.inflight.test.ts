@@ -55,11 +55,11 @@ test("inc(5)", async () => {
   expect(response).toEqual(prevValue); // returns previous value
 });
 
-test("reset(0)", async () => {
+test("set(0)", async () => {
   // GIVEN
-  setupResetMock({
+  setupSetMock({
     expectedTableName: MOCK_TABLE_NAME,
-    resetValue: 0,
+    setValue: 0,
   });
   setupPeekMock({
     expectedTableName: MOCK_TABLE_NAME,
@@ -68,7 +68,7 @@ test("reset(0)", async () => {
 
   // WHEN
   const client = new CounterClient(MOCK_TABLE_NAME);
-  await client.reset(0);
+  await client.set(0);
   const response = await client.peek();
 
   // THEN
@@ -105,7 +105,7 @@ interface MockOptions {
   readonly expectedAmount?: number;
   readonly initial?: number;
   readonly responseValue?: number;
-  readonly resetValue?: number;
+  readonly setValue?: number;
 }
 
 function setupIncMock(opts: MockOptions) {
@@ -150,23 +150,23 @@ function setupPeekMock(opts: MockOptions) {
   dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
 }
 
-function setupResetMock(opts: MockOptions) {
+function setupSetMock(opts: MockOptions) {
   const expectedRequest: UpdateItemCommandInput = {
     TableName: opts.expectedTableName,
     Key: { id: { S: "counter" } },
-    UpdateExpression: `SET counter_value = :reset_value`,
+    UpdateExpression: `SET counter_value = :set_value`,
     ExpressionAttributeValues: {
-      ":reset_value": { N: `${opts.resetValue}` },
+      ":set_value": { N: `${opts.setValue}` },
     },
     ReturnValues: "UPDATED_NEW",
   };
   const mockResponse: UpdateItemCommandOutput = {
     $metadata: {},
     Attributes:
-      opts.resetValue === undefined
+      opts.setValue === undefined
         ? undefined
         : {
-            counter_value: { N: `${opts.resetValue}` },
+            counter_value: { N: `${opts.setValue}` },
           },
   };
 
