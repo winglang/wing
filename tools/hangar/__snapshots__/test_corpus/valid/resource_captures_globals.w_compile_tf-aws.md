@@ -313,7 +313,8 @@ module.exports = function({ globalCounter, $parentThis }) {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
             "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86"
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
@@ -339,7 +340,8 @@ module.exports = function({ globalCounter, $parentThis }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "Handler-c8de1ef1"
+            "WING_FUNCTION_NAME": "Handler-c8de1ef1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8de1ef1",
@@ -371,7 +373,8 @@ module.exports = function({ globalCounter, $parentThis }) {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
             "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8f4f2a1",

@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling bucket/bucket_list.w to sim...
-✔ Compiling bucket/bucket_list.w to sim...
 pass ─ bucket_list.wsim » root/env0/test:list
  
 

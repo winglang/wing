@@ -16,14 +16,11 @@ assert(no_value == NIL);
 
 //-----------------------------------------------------
 
-// TODO: this is not supported yet (P1)
-/*
-new cloud.Function(inflight () => {
+test "use util from inflight" {
   // --inflight env--
-  assert(util.Util.env("PATH").length > 0);
+  assert(util.env("WING_TARGET").length > 0);
   
   // --inflight tryEnv--
   let noValue = util.Util.tryEnv(RANDOM) ?? NIL;
   assert(noValue == NIL);
-}) as "test";
-*/
+}

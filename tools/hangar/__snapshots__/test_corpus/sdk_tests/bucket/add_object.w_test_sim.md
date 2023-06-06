@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling bucket/add_object.w to sim...
-✔ Compiling bucket/add_object.w to sim...
 pass ─ add_object.wsim » root/env0/test:addObject
  
 

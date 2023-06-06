@@ -1,7 +1,16 @@
+import { Code, InflightClient } from "../core";
+
 /**
  * Immutable Json
  */
 export class Json {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Returns the keys from the Json object.
    *
@@ -141,6 +150,13 @@ export class Json {
  * Mutable Json
  */
 export class MutJson {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Returns a specified element from the Json.
    *

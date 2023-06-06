@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/bring_jsii.w to sim...
-✔ Compiling valid/bring_jsii.w to sim...
 pass ─ bring_jsii.wsim » root/env0/test:sayHello
  
 

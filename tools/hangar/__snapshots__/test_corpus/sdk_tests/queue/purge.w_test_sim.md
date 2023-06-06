@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling queue/purge.w to sim...
-✔ Compiling queue/purge.w to sim...
 pass ─ purge.wsim » root/env0/test:purge
  
 

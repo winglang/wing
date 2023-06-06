@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b, jsonObj1 }) {
+module.exports = function({ b, jsonObj1, std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -99,7 +99,8 @@ module.exports = function({ b, jsonObj1 }) {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c89ea41b"
+            "WING_FUNCTION_NAME": "Handler-c89ea41b",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c89ea41b",
@@ -230,10 +231,12 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "././inflight.$Closure1.js";
         const b_client = context._lift(b);
         const jsonObj1_client = context._lift(jsonObj1);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             b: ${b_client},
             jsonObj1: ${jsonObj1_client},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }
