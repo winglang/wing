@@ -2762,6 +2762,7 @@ let TableProps = cloud.TableProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TableProps.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
+| <code><a href="#@winglang/sdk.cloud.TableProps.property.initialRows">initialRows</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | The table's initial rows. |
 | <code><a href="#@winglang/sdk.cloud.TableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
 | <code><a href="#@winglang/sdk.cloud.TableProps.property.primaryKey">primaryKey</a></code> | <code>str</code> | The table's primary key. |
 
@@ -2777,6 +2778,19 @@ columns: MutMap<ColumnType>;
 - *Default:* undefined
 
 The table's columns.
+
+---
+
+##### `initialRows`<sup>Optional</sup> <a name="initialRows" id="@winglang/sdk.cloud.TableProps.property.initialRows"></a>
+
+```wing
+initialRows: MutMap<Json>;
+```
+
+- *Type:* MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
+- *Default:* undefined
+
+The table's initial rows.
 
 ---
 
