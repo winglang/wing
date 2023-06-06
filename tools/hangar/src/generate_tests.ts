@@ -1,10 +1,9 @@
 import {
   mkdirSync,
-  mkdirpSync,
   readdirSync,
   rmSync,
   writeFileSync,
-} from "fs-extra";
+} from "fs";
 import { sdkTests, validTestDir } from "./paths";
 import { join, extname } from "path";
 import { parseMetaCommentFromPath } from "./meta_comment";
@@ -23,6 +22,11 @@ function generateTests(
 ) {
   for (const fileInfo of readdirSync(sourceDir, { withFileTypes: true })) {
     if (fileInfo.isDirectory() && isRecursive) {
+      // skip "target" and "node_modules" directories
+      if (fileInfo.name === "target" || fileInfo.name === "node_modules") {
+        continue;
+      }
+
       generateTests(
         join(sourceDir, fileInfo.name),
         join(destination, fileInfo.name),
@@ -71,7 +75,7 @@ function generateTests(
     await testTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(metaComment?.env)});
   });`;
 
-    mkdirpSync(destination);
+    mkdirSync(destination, { recursive: true });
     writeFileSync(join(destination, `${filename}.test.ts`), fileContents);
   }
 }

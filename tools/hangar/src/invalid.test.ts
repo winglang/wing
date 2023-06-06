@@ -13,24 +13,26 @@ invalidWingFiles.forEach((wingFile) => {
       path.join(invalidTestDir, wingFile)
     );
 
-    const metaComment = parseMetaCommentFromPath(path.join(invalidTestDir, wingFile));
+    const metaComment = parseMetaCommentFromPath(
+      path.join(invalidTestDir, wingFile)
+    );
 
     const out = await runWingCommand({
       cwd: tmpDir,
       wingFile: relativeWingFile,
       args,
-      shouldSucceed: false,
+      shouldSucceed: true,
       env: metaComment?.env,
     });
 
-    const stderr = out.stderr;
+    const stdout = out.stdout;
 
-    const stderrSanitized = stderr
+    const stdoutSanitized = stdout
       // Remove absolute paths
       .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
       // Normalize line endings
       .replaceAll("\r\n", "\n");
 
-    expect(stderrSanitized).toMatchSnapshot("stderr");
+    expect(stdoutSanitized).toMatchSnapshot();
   });
 });
