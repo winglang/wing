@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/hello.w to sim...
-✔ Compiling valid/hello.w to sim...
 pass ─ hello.wsim (no tests)
  
 

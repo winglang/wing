@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/static_members.w to sim...
-✔ Compiling valid/static_members.w to sim...
 pass ─ static_members.wsim » root/env0/test:test
  
 

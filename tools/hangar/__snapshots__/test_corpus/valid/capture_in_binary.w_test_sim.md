@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/capture_in_binary.w to sim...
-✔ Compiling valid/capture_in_binary.w to sim...
 pass ─ capture_in_binary.wsim » root/env0/test:binary expressions
  
 

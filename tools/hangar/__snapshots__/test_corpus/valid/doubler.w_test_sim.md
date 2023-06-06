@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/doubler.w to sim...
-✔ Compiling valid/doubler.w to sim...
 pass ─ doubler.wsim » root/env0/test:f(2) == 8
  
 

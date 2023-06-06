@@ -113,7 +113,8 @@ module.exports = function({ myConst }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8e53a58"
+            "WING_FUNCTION_NAME": "Handler-c8e53a58",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8e53a58",

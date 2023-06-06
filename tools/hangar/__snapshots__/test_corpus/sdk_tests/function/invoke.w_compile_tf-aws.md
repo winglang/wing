@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ payload }) {
+module.exports = function({ util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,8 +11,10 @@ module.exports = function({ payload }) {
     }
     async $inflight_init()  {
     }
-    async handle()  {
-      return payload;
+    async handle(input)  {
+      const target = (await util_Util.tryEnv("WING_TARGET"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((target) != null)'`)})(((target) != null))};
+      return `${input}-response`;
     }
   }
   return $Closure1;
@@ -22,7 +24,7 @@ module.exports = function({ payload }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ f, payload }) {
+module.exports = function({ f }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -32,8 +34,8 @@ module.exports = function({ f, payload }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const x = (await f.invoke(""));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === payload)'`)})((x === payload))};
+      const x = (await f.invoke("hello"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "hello-response")'`)})((x === "hello-response"))};
     }
   }
   return $Closure2;
@@ -145,7 +147,8 @@ module.exports = function({ f, payload }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1"
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8d2eca1",
@@ -171,7 +174,8 @@ module.exports = function({ f, payload }) {
         "environment": {
           "variables": {
             "FUNCTION_NAME_5bb84dfa": "${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8031175"
+            "WING_FUNCTION_NAME": "Handler-c8031175",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8031175",
@@ -235,6 +239,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -246,10 +251,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
-        const payload_client = context._lift(payload);
+        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            payload: ${payload_client},
+            util_Util: ${util_UtilClient.text},
           })
         `);
       }
@@ -266,10 +271,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(payload, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(payload, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -283,11 +286,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
         const f_client = context._lift(f);
-        const payload_client = context._lift(payload);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             f: ${f_client},
-            payload: ${payload_client},
           })
         `);
       }
@@ -305,11 +306,9 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           $Closure2._registerBindObject(f, host, []);
-          $Closure2._registerBindObject(payload, host, []);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(f, host, ["invoke"]);
-          $Closure2._registerBindObject(payload, host, []);
         }
         super._registerBind(host, ops);
       }

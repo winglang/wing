@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling counter/set.w to sim...
-✔ Compiling counter/set.w to sim...
 pass ─ set.wsim » root/env0/test:set
  
 

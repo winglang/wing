@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ jj }) {
+module.exports = function({ jj, std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -96,7 +96,8 @@ module.exports = function({ jj }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8867497"
+            "WING_FUNCTION_NAME": "Handler-c8867497",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8867497",
@@ -161,9 +162,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
         const jj_client = context._lift(jj);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             jj: ${jj_client},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }
@@ -215,7 +218,7 @@ class $Root extends $stdlib.std.Resource {
     const jsonOfMany = Object.freeze({"a":123,"b":"hello","c":true});
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]) === "hello")'`)})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["b"]) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["c"])'`)})(((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["c"]))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(std.Boolean.fromJson((jsonOfMany)["c"]))'`)})((std.Boolean.fromJson((jsonOfMany)["c"])))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Access Json static inflight",new $Closure1(this,"$Closure1"));
   }
 }

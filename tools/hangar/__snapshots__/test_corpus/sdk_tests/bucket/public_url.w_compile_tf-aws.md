@@ -110,7 +110,8 @@ module.exports = function({ publicBucket, privateBucket }) {
             "BUCKET_NAME_7c320eda_IS_PUBLIC": "true",
             "BUCKET_NAME_e82f6088": "${aws_s3_bucket.root_privateBucket_9063F4A1.bucket}",
             "BUCKET_NAME_e82f6088_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c849898f"
+            "WING_FUNCTION_NAME": "Handler-c849898f",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c849898f",

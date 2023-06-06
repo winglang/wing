@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/website_with_api.w to sim...
-✔ Compiling valid/website_with_api.w to sim...
 pass ─ website_with_api.wsim (no tests)
  
 

@@ -157,7 +157,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-86898773-c85c04ee"
+            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-86898773-c85c04ee",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Queue-AddConsumer-86898773-c85c04ee",
@@ -182,7 +183,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f"
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Topic-OnMessage-cdafee6e-c814de3f",

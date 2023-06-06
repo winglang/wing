@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/optionals.w to sim...
-✔ Compiling valid/optionals.w to sim...
 pass ─ optionals.wsim (no tests)
  
 

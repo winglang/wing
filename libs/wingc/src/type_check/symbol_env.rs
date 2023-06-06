@@ -160,6 +160,14 @@ impl SymbolEnv {
 		self.is_parent_of(&parent)
 	}
 
+	/**
+	 * Determines if this environment is a child of another environment (i.e. the other
+	 * environment is one of its parents).
+	 */
+	pub fn is_child_of(&self, other: &SymbolEnv) -> bool {
+		other.is_parent_of(self)
+	}
+
 	pub fn is_same(&self, other: &SymbolEnv) -> bool {
 		std::ptr::eq(other, self)
 	}

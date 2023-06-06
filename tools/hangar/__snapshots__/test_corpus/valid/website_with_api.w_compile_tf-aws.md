@@ -25,7 +25,7 @@ module.exports = function({ usersTable }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ usersTable }) {
+module.exports = function({ usersTable, std_Json }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -333,7 +333,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-3fc9280c-c8d3ecf9"
+            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-3fc9280c-c8d3ecf9",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-3fc9280c-c8d3ecf9",
@@ -361,7 +362,8 @@ module.exports = function({  }) {
             "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "id",
-            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547"
+            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-86898773-c8ed6547",
@@ -389,7 +391,8 @@ module.exports = function({  }) {
             "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "id",
-            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384"
+            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",
@@ -652,9 +655,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
         const usersTable_client = context._lift(usersTable);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             usersTable: ${usersTable_client},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }

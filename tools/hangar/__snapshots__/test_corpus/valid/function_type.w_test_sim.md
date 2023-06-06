@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/function_type.w to sim...
-✔ Compiling valid/function_type.w to sim...
 pass ─ function_type.wsim (no tests)
  
 

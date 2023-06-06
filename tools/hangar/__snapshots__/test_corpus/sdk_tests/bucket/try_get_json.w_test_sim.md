@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling bucket/try_get_json.w to sim...
-✔ Compiling bucket/try_get_json.w to sim...
 pass ─ try_get_json.wsim » root/env0/test:tryGetJson
  
 
