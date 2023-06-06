@@ -29,6 +29,7 @@ test("create a table", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -65,6 +66,7 @@ test("insert row", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -104,6 +106,7 @@ test("get row", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -146,6 +149,7 @@ test("update row", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -187,6 +191,7 @@ test("list table", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -276,7 +281,7 @@ test("can add row in preflight", async () => {
   const client = s.getResource("/my_table") as ITableClient;
 
   const joe = await client.get("joe-id");
-  expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
+  expect(joe).toEqual({ name: "Joe Doe", age: 50 });
 
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
@@ -290,7 +295,9 @@ test("can add row in preflight", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
-      initialRows: {},
+      initialRows: {
+        "joe-id": { name: "Joe Doe", age: 50 },
+      },
     },
     type: "wingsdk.cloud.Table",
   });

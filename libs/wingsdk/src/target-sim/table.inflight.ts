@@ -13,6 +13,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
   private primaryKey: string;
   private table: Map<string, any>;
   private readonly context: ISimulatorContext;
+  private readonly initialRows: Record<string, Json>;
 
   public constructor(props: TableSchema["props"], context: ISimulatorContext) {
     this.name = props.name;
@@ -20,9 +21,18 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     this.primaryKey = props.primaryKey;
     this.table = new Map<string, any>();
     this.context = context;
+    this.initialRows = props.initialRows ?? {};
   }
 
   public async init(): Promise<TableAttributes> {
+    for (const [key, row] of Object.entries(this.initialRows)) {
+      await this.context.withTrace({
+        message: `Adding row from preflight (key=${key}).`,
+        activity: async () => {
+          return this.table.set(key, row);
+        },
+      });
+    }
     return {};
   }
 
