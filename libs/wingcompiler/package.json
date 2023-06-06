@@ -27,13 +27,9 @@
   "dependencies": {
     "@winglang/sdk": "file:../../libs/wingsdk"
   },
-  "bundleDependencies": [
-    "wasi-js"
-  ],
   "devDependencies": {
     "@types/node": "^18.11.18",
     "esbuild": "^0.17.19",
-    "patch-package": "^6.5.1",
     "tsup": "^6.7.0",
     "typescript": "^4.9.4",
     "vitest": "^0.30.1",
