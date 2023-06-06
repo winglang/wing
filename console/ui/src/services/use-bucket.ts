@@ -79,10 +79,12 @@ export const useBucket = ({
         return;
       }
       if (files.length === 1 && files[0]) {
-        const content = await downloadMutation.mutateAsync({
-          resourcePath,
-          fileName: files[0],
-        });
+        const content =
+          currentFileContent ||
+          (await downloadMutation.mutateAsync({
+            resourcePath,
+            fileName: files[0],
+          }));
         void downloadFileLocally(files[0], content);
       }
       if (files.length > 1) {
@@ -98,7 +100,13 @@ export const useBucket = ({
         void downloadFilesLocally(result);
       }
     },
-    [downloadMutation, downloadFileLocally, downloadFilesLocally, resourcePath],
+    [
+      downloadMutation,
+      downloadFileLocally,
+      downloadFilesLocally,
+      resourcePath,
+      currentFileContent,
+    ],
   );
 
   const deleteFile = useCallback(

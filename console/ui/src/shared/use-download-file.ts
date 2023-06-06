@@ -23,15 +23,16 @@ export const getFileEncoding = (file: string): "base64" | "utf8" => {
   }
 };
 
-const getEncodingPrefix = (file: string, content: string) => {
+const getEncodedUrl = (file: string, content: string) => {
   const encoding = getFileEncoding(file);
+  const encodedContent = encodeURIComponent(content);
   return encoding === "utf8"
-    ? "data:text/plain;charset=utf-8," + content
-    : "data:application/octet-stream;base64," + content;
+    ? "data:text/plain;charset=utf-8," + encodedContent
+    : "data:application/octet-stream;base64," + encodedContent;
 };
 
 const saveAs = async (file: string, content: string) => {
-  await fetch(getEncodingPrefix(file, content))
+  await fetch(getEncodedUrl(file, content))
     .then((response) => response.blob())
     .then((blob) => {
       const url = window.URL.createObjectURL(blob);
