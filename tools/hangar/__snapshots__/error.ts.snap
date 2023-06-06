@@ -1,18 +1,26 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`bool_from_json.w > stderr 1`] = `
+exports[`bool_from_json.w 1`] = `
 "ERROR: unable to parse number 123 as a boolean
 
 ../../../examples/tests/error/target/test/bool_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
        super(scope, id);
        const j = Object.freeze({\\"a\\":123});
->>     const a = ((args) => { if (typeof args !== \\"boolean\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a boolean\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
+>>     const a = (std.Boolean.fromJson((j)[\\"a\\"]));
      }
    }
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`num_from_str.w > stderr 1`] = `
+exports[`num_from_str.w 1`] = `
 "ERROR: unable to parse \\"123a\\" as a number
 
 ../../../examples/tests/error/target/test/num_from_str.wsim.[REDACTED].tmp/.wing/preflight.js:8
@@ -21,10 +29,18 @@ exports[`num_from_str.w > stderr 1`] = `
 >>     const a = ((args) => { if (isNaN(args)) {throw new Error(\\"unable to parse /\\"\\" + args + \\"/\\" as a number\\")}; return parseInt(args) })(\\"123a\\");
      }
    }
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`number_from_json.w > stderr 1`] = `
+exports[`number_from_json.w 1`] = `
 "ERROR: unable to parse string apples as a number
 
 ../../../examples/tests/error/target/test/number_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
@@ -33,10 +49,18 @@ exports[`number_from_json.w > stderr 1`] = `
 >>     const a = ((args) => { if (typeof args !== \\"number\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a number\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
      }
    }
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`string_from_json.w > stderr 1`] = `
+exports[`string_from_json.w 1`] = `
 "ERROR: unable to parse number 123 as a string
 
 ../../../examples/tests/error/target/test/string_from_json.wsim.[REDACTED].tmp/.wing/preflight.js:9
@@ -45,10 +69,18 @@ exports[`string_from_json.w > stderr 1`] = `
 >>     const a = ((args) => { if (typeof args !== \\"string\\") {throw new Error(\\"unable to parse \\" + typeof args + \\" \\" + args + \\" as a string\\")}; return JSON.parse(JSON.stringify(args)) })((j)[\\"a\\"]);
      }
    }
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`utilities.w > stderr 1`] = `
+exports[`utilities.w 1`] = `
 "ERROR: assertion failed: 'false'
 
 ../../../examples/tests/error/target/test/utilities.wsim.[REDACTED].tmp/.wing/preflight.js:8
@@ -57,5 +89,13 @@ exports[`utilities.w > stderr 1`] = `
 >>     {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
        {console.log(\\"W\\")};
        {((msg) => {throw new Error(msg)})(\\"me\\")};
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;

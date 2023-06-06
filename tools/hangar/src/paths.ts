@@ -1,5 +1,5 @@
 import * as path from "path";
-import * as fs from "fs-extra";
+import * as fs from "fs";
 
 export const repoRoot = path.resolve(__dirname, "../../..");
 export const testDir = path.join(repoRoot, "examples/tests");
