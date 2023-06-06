@@ -118,7 +118,7 @@ bucket: (function(env) {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "description": "A cloud object store",
@@ -140,7 +140,7 @@ bucket: (function(env) {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "description": "A distributed atomic counter",
@@ -162,7 +162,7 @@ bucket: (function(env) {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "description": "An inflight resource",
@@ -190,7 +190,7 @@ bucket: (function(env) {
                   },
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.1.245",
+                    "version": "10.1.314",
                   },
                   "display": {
                     "hidden": true,
@@ -201,7 +201,7 @@ bucket: (function(env) {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "description": "A distributed message queue",
@@ -241,7 +241,7 @@ bucket: (function(env) {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -256,7 +256,7 @@ bucket: (function(env) {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "hidden": true,
@@ -267,7 +267,7 @@ bucket: (function(env) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "id": "HelloWorld",
           "path": "root/HelloWorld",
@@ -278,7 +278,7 @@ bucket: (function(env) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -291,7 +291,7 @@ bucket: (function(env) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
