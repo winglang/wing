@@ -320,7 +320,7 @@ impl CompilationContext {
 
 /// Macro used for explicit panics if the environment variable `WINGC_DEBUG_PANIC` is set.
 /// This can be used if we want to conditionally panic in certain situations.
-/// This is a macro and not a function so we can get the location if the caller
+/// This is a macro and not a function so we can get the location of the caller
 /// in the panic message.
 #[macro_export]
 macro_rules! dbg_panic {
