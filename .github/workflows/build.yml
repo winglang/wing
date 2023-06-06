@@ -21,7 +21,7 @@ concurrency:
 jobs:
   build:
     name: "Build"
-    timeout-minutes: 30
+    timeout-minutes: 45
     runs-on: ubuntu-latest
     env:
       # Testing runs out of memory without this
