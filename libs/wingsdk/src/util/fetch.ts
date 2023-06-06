@@ -1,3 +1,5 @@
+import { Code, InflightClient } from "../core";
+
 export enum RequestCache {
   DEFAULT = "default",
   NO_STORE = "no-store",
@@ -123,31 +125,11 @@ export class Http {
       body: await response.text(),
     };
   }
-}
 
-// export interface IHttp {
-//   fetch(url: string, options?: RequestOptions): Promise<Response>;
-//   /**
-//    *
-//    * @param url
-//    * @param options
-//    * @returns Response
-//    * @inflight
-//    */
-//   get(url: string, options?: RequestOptions): Promise<Response>;
-//   /**
-//    *
-//    * @param url
-//    * @param options
-//    * @returns
-//    */
-//   post(url: string, options?: RequestOptions): Promise<Response>;
-//   /**
-//    *
-//    * @param url
-//    * @param options
-//    * @returns
-//    */
-//   put(url: string, options?: RequestOptions): Promise<Response>;
-//   patch(url: string, options?: RequestOptions): Promise<Response>;
-// }
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+}

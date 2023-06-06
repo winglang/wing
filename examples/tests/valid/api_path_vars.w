@@ -1,33 +1,25 @@
-/*\
-skip: true
-\*/
-// TODO: failing due to https://github.com/winglang/wing/issues/2522
-
-
 bring cloud;
 bring util;
 
-// let api = new cloud.Api();
+let api = new cloud.Api();
 
 
-// let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-//   return cloud.ApiResponse {
-//     body: {user:  req.vars.get("name")},
-//     status: 200
-//   };
-// };
+let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+  return cloud.ApiResponse {
+    body: {user:  req.vars.get("name")},
+    status: 200
+  };
+};
 
-// api.get("/users/{name}", handler);
+api.get("/users/{name}", handler);
+
 
 test "test" {
   let username = "tsuf";
-
-  let http = new util.Http();
-  // let res: util.Response = http.get("${api.url}/users/${username}");
-  let res = http.get("www.google.com");
-  log(res.body);
+  let res: util.Response = util.Http.get("${api.url}/users/${username}");
 
 
-  // assert(res.status == 200);
-  // assert(res.get("user") == username);
+
+  assert(res.status == 200);
+  assert(Json.parse(res.body).get("user") == username);
 }
