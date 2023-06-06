@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import { ElkMap } from "./ElkMap.js";
+import { ElkMap } from "./elk-map.js";
 
 const meta = {
   title: "UI/MapView/ElkMap",

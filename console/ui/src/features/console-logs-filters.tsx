@@ -4,20 +4,20 @@ import { LogLevel } from "@wingconsole/server";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useState } from "react";
 
-export interface ConsoleFiltersProps {
+export interface ConsoleLogsFiltersProps {
   selectedLogTypeFilters: LogLevel[];
   setSelectedLogTypeFilters: (types: LogLevel[]) => void;
   clearLogs: () => void;
   isLoading: boolean;
   onSearch: (search: string) => void;
 }
-export const ConsoleFilters = ({
+export const ConsoleLogsFilters = ({
   selectedLogTypeFilters,
   setSelectedLogTypeFilters,
   clearLogs,
   isLoading,
   onSearch,
-}: ConsoleFiltersProps) => {
+}: ConsoleLogsFiltersProps) => {
   const [searchText, setSearchText] = useState("");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

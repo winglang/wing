@@ -4,9 +4,9 @@ import {
   NotificationsProvider,
 } from "@wingconsole/design-system";
 
-import { LayoutProvider, LayoutType } from "./utils/layout-provider.js";
-import { TestsContextProvider } from "./utils/tests-context.js";
-import { trpc } from "./utils/trpc.js";
+import { LayoutProvider, LayoutType } from "./layout/layout-provider.js";
+import { trpc } from "./services/trpc.js";
+import { TestsContextProvider } from "./tests-context.js";
 
 export interface AppProps {
   layout?: LayoutType;

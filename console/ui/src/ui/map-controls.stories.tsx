@@ -1,8 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { ZoomPaneProvider } from "../map-view/zoom-pane.js";
-
 import { MapControls } from "./map-controls.js";
+import { ZoomPaneProvider } from "./zoom-pane.js";
 
 export default {
   title: "UI/MapView/MapControls",

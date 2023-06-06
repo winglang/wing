@@ -20,12 +20,12 @@ import {
 import classNames from "classnames";
 import { useMemo, useState } from "react";
 
-import { BucketMetadata } from "../components/resource-metadata/BucketMetadata.js";
-import { FunctionMetadata } from "../components/resource-metadata/FunctionMetadata.js";
-import { QueueMetadata } from "../components/resource-metadata/QueueMetadata.js";
+import { QueueMetadataView } from "../features/queue-metadata-view.js";
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
 
+import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
+import { FunctionMetadata } from "./function-metadata.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
 
 interface AttributeGroup {
@@ -360,7 +360,7 @@ export const ResourceMetadata = ({
                         <FunctionMetadata node={node} />
                       )}
                       {node.type === "wingsdk.cloud.Queue" && (
-                        <QueueMetadata node={node} />
+                        <QueueMetadataView node={node} />
                       )}
                       {node.type === "wingsdk.cloud.Bucket" && (
                         <BucketMetadata node={node} />

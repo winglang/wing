@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { trpc } from "../utils/trpc.js";
+import { trpc } from "./trpc.js";
 
 export interface UseQueueOptions {
   resourcePath: string;
@@ -8,6 +8,14 @@ export interface UseQueueOptions {
 
 export const useQueue = ({ resourcePath }: UseQueueOptions) => {
   const push = trpc["queue.push"].useMutation();
+  const approxSize = trpc["queue.approxSize"].useQuery({ resourcePath });
+  const purge = trpc["queue.purge"].useMutation();
+
+  const [approxSizeValue, setApproxSizeValue] = useState(0);
+
+  useEffect(() => {
+    setApproxSizeValue(approxSize.data ?? 0);
+  }, [approxSize.data]);
 
   const pushMessage = (message: string) => {
     push.mutate({
@@ -15,6 +23,13 @@ export const useQueue = ({ resourcePath }: UseQueueOptions) => {
       message: message,
     });
   };
+
+  const purgeQueue = useCallback(
+    (onSuccess: () => void) => {
+      purge.mutateAsync({ resourcePath }).then(onSuccess);
+    },
+    [purge, resourcePath],
+  );
 
   const isLoading = useMemo(() => {
     return push.isLoading;
@@ -28,5 +43,7 @@ export const useQueue = ({ resourcePath }: UseQueueOptions) => {
     isError,
     isLoading,
     pushMessage,
+    purgeQueue,
+    approxSize: approxSizeValue,
   };
 };

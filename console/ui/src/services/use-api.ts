@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from "react";
 
 import { ApiRequest } from "../shared/api.js";
-import { trpc } from "../utils/trpc.js";
+
+import { trpc } from "./trpc.js";
 
 export interface UseApiOptions {
   resourcePath: string;

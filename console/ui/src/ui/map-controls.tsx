@@ -9,9 +9,9 @@ import { Toolbar, ToolbarButton, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useContext } from "react";
 
-import { TestsContext } from "../../utils/tests-context.js";
+import { TestsContext } from "../tests-context.js";
 
-import { useZoomPaneContext, Selection } from "./zoom-pane.js";
+import { useZoomPaneContext } from "./zoom-pane.js";
 
 export interface MapControlsProps {}
 

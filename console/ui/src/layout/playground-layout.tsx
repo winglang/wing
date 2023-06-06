@@ -7,14 +7,14 @@ import {
 } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { ConsoleFilters } from "../components/ConsoleFilters.js";
-import { ConsoleLogs } from "../components/ConsoleLogs.js";
-import { MapView } from "../components/map-view/map-view.js";
-import { StatusBar } from "../components/StatusBar.js";
+import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
+import { ConsoleLogs } from "../features/console-logs.js";
+import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
+import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
 import { LayoutProps } from "./vscode-layout.js";
 
@@ -139,7 +139,7 @@ export const PlaygroundLayout = ({
                   )}
                 />
               )}
-              <ConsoleFilters
+              <ConsoleLogsFilters
                 selectedLogTypeFilters={selectedLogTypeFilters}
                 setSelectedLogTypeFilters={setSelectedLogTypeFilters}
                 clearLogs={() => setLogsTimeFilter(Date.now())}

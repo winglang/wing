@@ -7,7 +7,7 @@ import {
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 
-import { trpc } from "../utils/trpc.js";
+import { trpc } from "../services/trpc.js";
 
 export const AutoUpdater = () => {
   const { theme } = useTheme();

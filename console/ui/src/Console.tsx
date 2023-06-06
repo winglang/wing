@@ -3,8 +3,8 @@ import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
-import { LayoutType } from "./utils/layout-provider.js";
-import { trpc } from "./utils/trpc.js";
+import { LayoutType } from "./layout/layout-provider.js";
+import { trpc } from "./services/trpc.js";
 
 export const Console = ({
   port,

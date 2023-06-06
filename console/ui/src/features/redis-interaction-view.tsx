@@ -2,9 +2,8 @@ import { useCallback, useState } from "react";
 
 import { useOpenExternal } from "../services/use-open-external.js";
 import { useRedis } from "../services/use-redis.js";
+import { useTerminalHistory } from "../shared/use-terminal-history.js";
 import { RedisInteraction } from "../ui/redis-interaction.js";
-
-import { useRedisHistory } from "./use-redis-history.js";
 
 export interface RedisViewProps {
   resourcePath: string;
@@ -22,7 +21,7 @@ export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
     updateTerminalHistory,
     updateCommandHistory,
     clearTerminalHistory,
-  } = useRedisHistory();
+  } = useTerminalHistory();
 
   const { open } = useOpenExternal();
   const { isLoading, redisUrl, execCommand } = useRedis({ resourcePath });

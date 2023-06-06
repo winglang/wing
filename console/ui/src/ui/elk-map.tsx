@@ -3,12 +3,12 @@ import ELK, { ElkNode, LayoutOptions } from "elkjs/lib/elk.bundled.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
 
-import { ZoomPane, useZoomPaneContext } from "../zoom-pane.js";
+import { Edge } from "../shared/Edge.js";
+import { Node } from "../shared/Node.js";
 
-import { Edge } from "./Edge.js";
-import { EdgeItem } from "./EdgeItem.js";
-import { Node } from "./Node.js";
-import { useNodeStaticData } from "./useNodeStaticData.js";
+import { EdgeItem } from "./edge-item.js";
+import { useNodeStaticData } from "./use-node-static-data.js";
+import { ZoomPane, useZoomPaneContext } from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 

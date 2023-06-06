@@ -3,7 +3,8 @@ import { ExplorerItem } from "@wingconsole/server";
 import { useEffect } from "react";
 
 import { TreeMenuItem, useTreeMenuItems } from "../ui/use-tree-menu-items.js";
-import { trpc } from "../utils/trpc.js";
+
+import { trpc } from "./trpc.js";
 
 const createTreeMenuItemFromExplorerTreeItem = (
   item: ExplorerItem,

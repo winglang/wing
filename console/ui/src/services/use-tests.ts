@@ -3,7 +3,8 @@ import { Router } from "@wingconsole/server";
 import { useEffect, useState } from "react";
 
 import { TestItem, TestStatus } from "../shared/test-item.js";
-import { trpc } from "../utils/trpc.js";
+
+import { trpc } from "./trpc.js";
 
 type RouterOutput = inferRouterOutputs<Router>;
 

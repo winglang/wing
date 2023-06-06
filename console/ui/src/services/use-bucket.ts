@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { trpc } from "../utils/trpc.js";
-import { useDownloadFile } from "../utils/useDownloadFile.js";
-import { useUploadFile } from "../utils/useUploadFile.js";
+import { useDownloadFile } from "../shared/use-download-file.js";
+import { useUploadFile } from "../shared/use-upload-file.js";
+
+import { trpc } from "./trpc.js";
 
 export interface UseBucketOptions {
   resourcePath: string;

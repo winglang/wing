@@ -1,12 +1,11 @@
 import { useTheme, ResourceIcon } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { trpc } from "../../utils/trpc.js";
-import { ContainerNode } from "../ElkMapNodes.js";
-
-import { ElkMap } from "./elk-map/ElkMap.js";
-import { MapControls } from "./map-controls.js";
-import { ZoomPaneProvider } from "./zoom-pane.js";
+import { useMap } from "../services/use-map.js";
+import { ContainerNode } from "../ui/elk-map-nodes.js";
+import { ElkMap } from "../ui/elk-map.js";
+import { MapControls } from "../ui/map-controls.js";
+import { ZoomPaneProvider } from "../ui/zoom-pane.js";
 
 export interface MapViewProps {
   selectedNodeId?: string;
@@ -15,10 +14,14 @@ export interface MapViewProps {
   onSelectedNodeIdChange?: (id: string | undefined) => void;
 }
 
-export const MapView = ({ showMapControls = true, ...props }: MapViewProps) => {
-  const map = trpc["app.map"].useQuery({
-    showTests: props.showTests,
-  });
+export const MapView = ({
+  showMapControls = true,
+  showTests,
+  selectedNodeId,
+  onSelectedNodeIdChange,
+}: MapViewProps) => {
+  const { mapData } = useMap({ showTests: showTests ?? false });
+
   const { theme } = useTheme();
   return (
     <ZoomPaneProvider>
@@ -34,16 +37,16 @@ export const MapView = ({ showMapControls = true, ...props }: MapViewProps) => {
         >
           <div className="absolute inset-0">
             <ElkMap
-              nodes={map.data?.nodes ?? []}
-              edges={map.data?.edges ?? []}
-              selectedNodeId={props.selectedNodeId}
-              onSelectedNodeIdChange={props.onSelectedNodeIdChange}
+              nodes={mapData?.nodes ?? []}
+              edges={mapData?.edges ?? []}
+              selectedNodeId={selectedNodeId}
+              onSelectedNodeIdChange={onSelectedNodeIdChange}
               node={({ node, depth }) => (
                 <div className="h-full flex flex-col relative">
                   <ContainerNode
                     name={node.data?.label}
                     open={node.children && node.children?.length > 0}
-                    selected={node.id === props.selectedNodeId}
+                    selected={node.id === selectedNodeId}
                     resourceType={node.data?.type}
                     icon={(props) => (
                       <ResourceIcon

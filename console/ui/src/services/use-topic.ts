@@ -1,4 +1,4 @@
-import { trpc } from "../utils/trpc.js";
+import { trpc } from "./trpc.js";
 
 export interface UseTopicOptions {
   resourcePath: string;

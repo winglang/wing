@@ -10,15 +10,15 @@ import classNames from "classnames";
 import { useContext } from "react";
 
 import { AppContext } from "../AppContext.js";
-import { ConsoleFilters } from "../components/ConsoleFilters.js";
-import { ConsoleLogs } from "../components/ConsoleLogs.js";
-import { MapView } from "../components/map-view/map-view.js";
-import { StatusBar } from "../components/StatusBar.js";
+import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
+import { ConsoleLogs } from "../features/console-logs.js";
+import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
+import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
 
 export interface LayoutProps {
@@ -171,7 +171,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                 )}
               />
             )}
-            <ConsoleFilters
+            <ConsoleLogsFilters
               selectedLogTypeFilters={selectedLogTypeFilters}
               setSelectedLogTypeFilters={setSelectedLogTypeFilters}
               clearLogs={() => setLogsTimeFilter(Date.now())}

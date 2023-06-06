@@ -2,7 +2,7 @@ import { useTheme, Loader } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
 
-import { AutoUpdater } from "./auto-updater.js";
+import { AutoUpdater } from "../features/auto-updater.js";
 
 export interface StatusBarProps {
   wingVersion?: string;

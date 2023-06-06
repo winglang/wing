@@ -2,9 +2,9 @@ import { useTheme } from "@wingconsole/design-system";
 import { LogEntry, LogLevel, State } from "@wingconsole/server";
 import { useEffect, useState, useContext, useRef, useMemo } from "react";
 
+import { trpc } from "../services/trpc.js";
 import { useExplorer } from "../services/use-explorer.js";
-import { TestsContext } from "../utils/tests-context.js";
-import { trpc } from "../utils/trpc.js";
+import { TestsContext } from "../tests-context.js";
 
 export interface UseLayoutProps {
   cloudAppState: State;

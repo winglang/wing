@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
-import { PlaygroundLayout } from "../layout/playground-layout.js";
-import { TutorialLayout } from "../layout/tutorial-layout.js";
-import { LayoutProps, VscodeLayout } from "../layout/vscode-layout.js";
+import { PlaygroundLayout } from "./playground-layout.js";
+import { TutorialLayout } from "./tutorial-layout.js";
+import { LayoutProps, VscodeLayout } from "./vscode-layout.js";
 
 export enum LayoutType {
   Vscode = 1,

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { trpc } from "../utils/trpc.js";
+import { trpc } from "./trpc.js";
 
 export const useOpenExternal = () => {
   const openExternal = trpc["app.openExternal"].useMutation();

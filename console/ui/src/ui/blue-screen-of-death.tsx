@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useEffect, useRef } from "react";
 
-import { formatAbsolutePaths } from "../components/ConsoleLogs.js";
+import { formatAbsolutePaths } from "../features/console-logs.js";
 
 export const BlueScreenOfDeath = ({
   title,

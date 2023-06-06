@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import { trpc } from "../utils/trpc.js";
+import { trpc } from "./trpc.js";
 export interface UseFunctionOptions {
   resourcePath: string;
 }

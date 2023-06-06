@@ -1,4 +1,4 @@
-import { getFileEncoding } from "./useDownloadFile.js";
+import { getFileEncoding } from "./use-download-file.js";
 
 interface Reader {
   read(file: Blob, fileReader: FileReader): void;
