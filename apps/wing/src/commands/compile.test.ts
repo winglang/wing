@@ -2,7 +2,7 @@ import { compile } from "./compile";
 import { readdir, stat, writeFile } from "fs/promises";
 import { describe, test, expect } from "vitest";
 import { join, resolve } from "path";
-import { Target } from "./constants";
+import { Target } from "@winglang/compiler";
 import { generateTmpDir } from "src/util";
 
 const exampleDir = resolve("../../examples/tests/valid");
