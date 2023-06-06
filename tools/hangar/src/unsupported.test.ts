@@ -22,7 +22,7 @@ test("unsupported resource in target", async ({ expect }) => {
     cwd: workdir,
     wingFile: entrypoint,
     args: ["compile", "--target", "tf-gcp"],
-    shouldSucceed: false,
+    expectStdErr: true,
     env: {
       GOOGLE_PROJECT_ID: "test-project",
       GOOGLE_STORAGE_LOCATION: "us-central1",

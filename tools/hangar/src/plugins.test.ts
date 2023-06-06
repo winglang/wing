@@ -27,7 +27,7 @@ describe("Plugin examples", () => {
         cwd: tmpDir,
         wingFile: appFile,
         args,
-        shouldSucceed: true,
+        expectStdErr: false,
         plugins: [plugin],
       });
 
@@ -59,7 +59,7 @@ describe("Plugin examples", () => {
         cwd: tmpDir,
         wingFile: appFile,
         args,
-        shouldSucceed: true,
+        expectStdErr: false,
         plugins: [plugin],
       });
 
@@ -95,19 +95,21 @@ describe("Plugin examples", () => {
         process.env.TF_BACKEND_BUCKET = tfBackendBucket;
         process.env.TF_BACKEND_BUCKET_REGION = tfBackendBucketRegion;
         process.env.STATE_FILE = stateFile;
-  
+
         await runWingCommand({
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          shouldSucceed: true,
+          expectStdErr: false,
           plugins: [plugin],
         });
-  
+
         const tfPath = path.join(targetDir, "main.tf.json");
         const terraformOutput = sanitize_json_paths(tfPath);
-        const unsanitizedTerraformOutput = JSON.parse(fs.readFileSync(tfPath, "utf-8"));
-  
+        const unsanitizedTerraformOutput = JSON.parse(
+          fs.readFileSync(tfPath, "utf-8")
+        );
+
         expect(terraformOutput).toMatchSnapshot();
         expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
           s3: {
@@ -126,19 +128,21 @@ describe("Plugin examples", () => {
         process.env.TF_BACKEND = tfBackend;
         process.env.TF_BACKEND_BUCKET = tfBackendBucket;
         process.env.STATE_FILE = stateFile;
-  
+
         await runWingCommand({
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          shouldSucceed: true,
+          expectStdErr: false,
           plugins: [plugin],
         });
-  
+
         const tfPath = path.join(targetDir, "main.tf.json");
         const terraformOutput = sanitize_json_paths(tfPath);
-        const unsanitizedTerraformOutput = JSON.parse(fs.readFileSync(tfPath, "utf-8"));
-  
+        const unsanitizedTerraformOutput = JSON.parse(
+          fs.readFileSync(tfPath, "utf-8")
+        );
+
         expect(terraformOutput).toMatchSnapshot();
         expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
           gcs: {
@@ -158,23 +162,26 @@ describe("Plugin examples", () => {
         const stateFile = "some-state-file.tfstate";
         process.env.TF_BACKEND = tfBackend;
         process.env.TF_BACKEND_BUCKET = tfBackendBucket;
-        process.env.TF_BACKEND_STORAGE_ACCOUNT_NAME = tfBackendStorageAccountName;
+        process.env.TF_BACKEND_STORAGE_ACCOUNT_NAME =
+          tfBackendStorageAccountName;
         process.env.TF_BACKEND_CONTAINER_NAME = tfBackendContainerName;
         process.env.TF_BACKEND_RESOURCE_GROUP_NAME = tfBackendResourceGroupName;
         process.env.STATE_FILE = stateFile;
-  
+
         await runWingCommand({
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          shouldSucceed: true,
+          expectStdErr: false,
           plugins: [plugin],
         });
-  
+
         const tfPath = path.join(targetDir, "main.tf.json");
         const terraformOutput = sanitize_json_paths(tfPath);
-        const unsanitizedTerraformOutput = JSON.parse(fs.readFileSync(tfPath, "utf-8"));
-  
+        const unsanitizedTerraformOutput = JSON.parse(
+          fs.readFileSync(tfPath, "utf-8")
+        );
+
         expect(terraformOutput).toMatchSnapshot();
         expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
           azurerm: {

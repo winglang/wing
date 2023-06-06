@@ -21,18 +21,21 @@ invalidWingFiles.forEach((wingFile) => {
       cwd: tmpDir,
       wingFile: relativeWingFile,
       args,
-      shouldSucceed: true,
+      expectStdErr: false,
       env: metaComment?.env,
     });
 
-    const stdout = out.stdout;
+    const sanitize = (output: string) =>
+      output
+        // Remove absolute paths
+        .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
+        // Normalize line endings
+        .replaceAll("\r\n", "\n");
 
-    const stdoutSanitized = stdout
-      // Remove absolute paths
-      .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
-      // Normalize line endings
-      .replaceAll("\r\n", "\n");
-
-    expect(stdoutSanitized).toMatchSnapshot();
+    expect(sanitize(out.stdout)).toMatchSnapshot();
+    // when this env var is on, we allow the on-demand-panic-char (😱), right now panic writes to stderr (will be changed in the future)
+    if (metaComment?.env?.WINGC_DEBUG_PANIC === "type-checking") {
+      expect(sanitize(out.stderr)).toMatchSnapshot();
+    }
   });
 });
