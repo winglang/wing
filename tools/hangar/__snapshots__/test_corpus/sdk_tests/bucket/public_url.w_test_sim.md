@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling bucket/public_url.w to sim...
-✔ Compiling bucket/public_url.w to sim...
 pass ─ public_url.wsim » root/env0/test:publicUrl
  
 

@@ -1,4 +1,4 @@
-import { mkdir, readFile } from "fs-extra";
+import * as fs from "fs/promises";
 import { tmpDir, walkdir } from "./paths";
 import { basename, join, relative } from "path";
 import {
@@ -16,6 +16,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     "target",
     `${wingBasename.replace(".w", "")}.tfaws`
   );
+  await fs.rm(targetDir, { recursive: true, force: true });
   const tf_json = join(targetDir, "main.tf.json");
 
   const filePath = join(sourceDir, wingBasename);
@@ -39,7 +40,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     if (!include.find((f) => subpath.startsWith(f))) {
       continue;
     }
-    let fileContents = await readFile(dotFile, "utf8");
+    let fileContents = await fs.readFile(dotFile, "utf8");
 
     // remove requires with absolute paths
     fileContents = fileContents.replace(
@@ -57,7 +58,7 @@ export async function testTest(sourceDir: string, wingFile: string) {
   const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
-  await mkdir(testDir, { recursive: true });
+  await fs.mkdir(testDir, { recursive: true });
 
   const filePath = join(sourceDir, wingFile);
   const out = await runWingCommand({

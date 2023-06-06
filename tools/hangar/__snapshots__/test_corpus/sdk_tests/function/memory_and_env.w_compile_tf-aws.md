@@ -218,6 +218,7 @@ module.exports = function({ c, f1, f2 }) {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "WING_FUNCTION_NAME": "env-fn-c8a226dd",
+            "WING_TARGET": "tf-aws",
             "catAge": "2",
             "catName": "Tion"
           }
@@ -245,7 +246,8 @@ module.exports = function({ c, f1, f2 }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "memory-fn-c844bdf7"
+            "WING_FUNCTION_NAME": "memory-fn-c844bdf7",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "memory-fn-c844bdf7",
@@ -274,7 +276,8 @@ module.exports = function({ c, f1, f2 }) {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "FUNCTION_NAME_2d5b932f": "${aws_lambda_function.root_memoryfn_812AB0A5.arn}",
             "FUNCTION_NAME_d7a1b8c8": "${aws_lambda_function.root_envfn_7540B24D.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8f4f2a1",

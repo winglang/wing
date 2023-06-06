@@ -125,7 +125,8 @@ module.exports = function({ counter }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "Handler-c81a3369"
+            "WING_FUNCTION_NAME": "Handler-c81a3369",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c81a3369",

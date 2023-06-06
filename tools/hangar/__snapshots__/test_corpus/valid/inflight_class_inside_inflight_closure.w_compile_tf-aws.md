@@ -249,7 +249,8 @@ module.exports = function({  }) {
           "variables": {
             "BUCKET_NAME_70ca4fed": "${aws_s3_bucket.root_PreflightClass_cloudBucket_DABE9D2A.bucket}",
             "BUCKET_NAME_70ca4fed_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "cloud-Function-c8db99e3"
+            "WING_FUNCTION_NAME": "cloud-Function-c8db99e3",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8db99e3",
@@ -274,7 +275,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c866c5da"
+            "WING_FUNCTION_NAME": "Handler-c866c5da",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c866c5da",
@@ -300,7 +302,8 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "FUNCTION_NAME_31bff872": "${aws_lambda_function.root_PreflightClass_cloudFunction_4B293CC7.arn}",
-            "WING_FUNCTION_NAME": "Handler-c834f611"
+            "WING_FUNCTION_NAME": "Handler-c834f611",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c834f611",

@@ -62,7 +62,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ other }) {
+module.exports = function({ other, std_Json }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -461,7 +461,8 @@ module.exports = function({ b }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "b-on_create-OnMessage-5f62bd7c-c881be6f"
+            "WING_FUNCTION_NAME": "b-on_create-OnMessage-5f62bd7c-c881be6f",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_create-OnMessage-5f62bd7c-c881be6f",
@@ -488,7 +489,8 @@ module.exports = function({ b }) {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
             "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "b-on_create-OnMessage-aef3f85d-c8d1e844"
+            "WING_FUNCTION_NAME": "b-on_create-OnMessage-aef3f85d-c8d1e844",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_create-OnMessage-aef3f85d-c8d1e844",
@@ -515,7 +517,8 @@ module.exports = function({ b }) {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
             "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "b-on_delete-OnMessage-1c41a2ad-c87344ee"
+            "WING_FUNCTION_NAME": "b-on_delete-OnMessage-1c41a2ad-c87344ee",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_delete-OnMessage-1c41a2ad-c87344ee",
@@ -540,7 +543,8 @@ module.exports = function({ b }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "b-on_delete-OnMessage-85baa474-c8dee1ac"
+            "WING_FUNCTION_NAME": "b-on_delete-OnMessage-85baa474-c8dee1ac",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_delete-OnMessage-85baa474-c8dee1ac",
@@ -567,7 +571,8 @@ module.exports = function({ b }) {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
             "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "b-on_update-OnMessage-3ed6033f-c8b563a2"
+            "WING_FUNCTION_NAME": "b-on_update-OnMessage-3ed6033f-c8b563a2",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_update-OnMessage-3ed6033f-c8b563a2",
@@ -592,7 +597,8 @@ module.exports = function({ b }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "b-on_update-OnMessage-d39e959f-c86e3f27"
+            "WING_FUNCTION_NAME": "b-on_update-OnMessage-d39e959f-c86e3f27",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "b-on_update-OnMessage-d39e959f-c86e3f27",
@@ -617,7 +623,8 @@ module.exports = function({ b }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "other-on_create-OnMessage-0af389c6-c8b7358b"
+            "WING_FUNCTION_NAME": "other-on_create-OnMessage-0af389c6-c8b7358b",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "other-on_create-OnMessage-0af389c6-c8b7358b",
@@ -642,7 +649,8 @@ module.exports = function({ b }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "other-on_delete-OnMessage-5e9bc889-c86905e5"
+            "WING_FUNCTION_NAME": "other-on_delete-OnMessage-5e9bc889-c86905e5",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "other-on_delete-OnMessage-5e9bc889-c86905e5",
@@ -667,7 +675,8 @@ module.exports = function({ b }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "other-on_update-OnMessage-5290616b-c8d3d672"
+            "WING_FUNCTION_NAME": "other-on_update-OnMessage-5290616b-c8d3d672",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "other-on_update-OnMessage-5290616b-c8d3d672",
@@ -694,7 +703,8 @@ module.exports = function({ b }) {
           "variables": {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.root_b_6D0D1E6D.bucket}",
             "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8f4f2a1",
@@ -1441,9 +1451,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure4.js";
         const other_client = context._lift(other);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             other: ${other_client},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }

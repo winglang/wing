@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/service.w to sim...
-✔ Compiling valid/service.w to sim...
 pass ─ service.wsim (no tests)
  
 

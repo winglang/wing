@@ -1,4 +1,4 @@
-# [util.env.w](../../../../../examples/tests/valid/util.env.w) | compile | tf-aws
+# [bool.w](../../../../../../examples/tests/sdk_tests/std/bool.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -39,28 +39,16 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const RANDOM = "RANDOM123412121212kjhkjskdjkj";
-    const NIL = "<<NIL>>";
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((util.Util.env("PATH")).length > 0)'`)})(((util.Util.env("PATH")).length > 0))};
-    let failed = false;
-    try {
-      (util.Util.env(RANDOM));
-    }
-    catch {
-      failed = true;
-    }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 'failed'`)})(failed)};
-    const no_value = ((util.Util.tryEnv(RANDOM)) ?? NIL);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(no_value === NIL)'`)})((no_value === NIL))};
+    const t = (std.Boolean.fromJson((JSON.parse("true"))));
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(t === true)'`)})((t === true))};
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "util.env", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "bool", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

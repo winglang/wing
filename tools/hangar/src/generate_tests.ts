@@ -1,10 +1,9 @@
 import {
   mkdirSync,
-  mkdirpSync,
   readdirSync,
   rmSync,
   writeFileSync,
-} from "fs-extra";
+} from "fs";
 import { sdkTests, validTestDir } from "./paths";
 import { join, extname } from "path";
 import { parseMetaCommentFromPath } from "./meta_comment";
@@ -76,7 +75,7 @@ function generateTests(
     await testTest("${escapedSourceDir}", "${filename}");
   });`;
 
-    mkdirpSync(destination);
+    mkdirSync(destination, { recursive: true });
     writeFileSync(join(destination, `${filename}.test.ts`), fileContents);
   }
 }

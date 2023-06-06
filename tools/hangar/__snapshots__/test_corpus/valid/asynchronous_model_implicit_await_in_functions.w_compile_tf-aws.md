@@ -145,7 +145,8 @@ module.exports = function({ strToStr }) {
         "environment": {
           "variables": {
             "FUNCTION_NAME_bc9a3a6d": "${aws_lambda_function.root_strToStr_D5CC2EE4.arn}",
-            "WING_FUNCTION_NAME": "func-c8cf78f6"
+            "WING_FUNCTION_NAME": "func-c8cf78f6",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "func-c8cf78f6",
@@ -170,7 +171,8 @@ module.exports = function({ strToStr }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "strToStr-c8d5081f"
+            "WING_FUNCTION_NAME": "strToStr-c8d5081f",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "strToStr-c8d5081f",

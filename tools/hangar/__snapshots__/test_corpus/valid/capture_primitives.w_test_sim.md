@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/capture_primitives.w to sim...
-✔ Compiling valid/capture_primitives.w to sim...
 pass ─ capture_primitives.wsim (no tests)
  
 

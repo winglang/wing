@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling bucket/try_delete.w to sim...
-✔ Compiling bucket/try_delete.w to sim...
 pass ─ try_delete.wsim » root/env0/test:tryDelete
  
 

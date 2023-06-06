@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/inflight_class_definitions.w to sim...
-✔ Compiling valid/inflight_class_definitions.w to sim...
 pass ─ inflight_class_definitions.wsim » root/env0/test:test
  
 
