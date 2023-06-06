@@ -18,7 +18,7 @@ User-facing projects and their supporting contributor pieces:
 - Wing CLI
   - https://github.com/winglang/wing
 - Wing Console
-  - https://github.com/winglang/console
+  - https://docs.winglang.io/getting-started/console
 - [Playground](https://play.winglang.io)
 - [NPM Packages](https://www.npmjs.com/~monabot) (https://www.npmjs.com/package/winglang and https://www.npmjs.com/package/@winglang/sdk)
 - [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing)
