@@ -268,6 +268,7 @@ test("can add row in preflight", async () => {
       age: cloud.ColumnType.NUMBER,
     },
     primaryKey: "id",
+    initialRows: {},
   });
   table.addRow(KEY, ROW as any);
 
@@ -289,6 +290,7 @@ test("can add row in preflight", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });

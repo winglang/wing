@@ -44,6 +44,11 @@ export interface TableProps {
    * @default undefined
    */
   readonly primaryKey?: string;
+  /**
+   * The table's initial rows.
+   * @default undefined
+   */
+  readonly initialRows?: { [key: string]: Json };
 }
 
 /**

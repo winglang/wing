@@ -30,6 +30,7 @@ export class Table extends cloud.Table implements ISimulatorResource {
         name: this.name,
         columns: this.columns,
         primaryKey: this.primaryKey,
+        initialRows: this.initialRows,
       },
       attrs: {} as any,
     };
