@@ -5,7 +5,7 @@ description: A built-in resource for representing an container for numbers in th
 keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, Counter]
 ---
 
-The `cloud.Counter` resource represents a container for one or more counters in the cloud. The number can be increased or decreased atomically by any number of clients.
+The `cloud.Counter` resource represents a stateful container for one or more numbers in the cloud.
 
 ## Usage
 
@@ -32,81 +32,39 @@ inflight () => {
   counter.dec(); // decrement by 1
   counter.dec(2);
 
-  assert(counter.peek() == 3);
+  assert(counter.peek() == 3); // check the current value
+
+  counter.set(100); // set to a specific value
 };
 ```
 
-### Using a bucket inflight
+### Using keys to manage multiple counter values
 
-```js
-bring cloud;
-
-let bucket = new cloud.Bucket();
-
-inflight () => {
-  bucket.put("file.txt", "Hello, world!");
-  bucket.putJson("person.json", Json { name: "Alice" });
-
-  let fileData = bucket.get("file.txt");
-  assert(fileData == "Hello, world!");
-
-  let jsonData = bucket.getJson("person.json");
-  assert(jsonData.get("name") == "Alice");
-
-  let keys = bucket.list();
-  assert(keys.at(0) == "file.txt");
-  assert(keys.at(1) == "person.json");
-
-  bucket.delete("file.txt");
-};
-```
-
-### Run code on bucket events
-
-You can use the preflight methods `onCreate`, `onUpdate`, and `onDelete` to define code that should run when an object is uploaded, updated, or removed from the bucket.
-
-Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
-
-```js
-let store = new cloud.Bucket();
-let copies = new cloud.Bucket() as "Backup";
-
-store.onCreate(inflight (key: str) => {
-  let data = store.get(key);
-  if !key.endsWith(".log") {
-    copies.put(key, data);
-  }
-});
-
-store.onDelete(inflight (key: str) => {
-  copies.delete(key);
-  log("Deleted ${key}");
-});
-```
+🚧 Not implemented yet (tracking issue: [#1375](https://github.com/winglang/wing/issues/1375))
 
 ## Target-specific details
 
 ### Simulator (`sim`)
 
-Under the hood, the simulator uses a temporary local directory to store bucket data.
+Under the hood, the simulator stores the counter value in memory.
 
-Note that bucket data is not persisted between simulator runs.
+Note that counter data is not persisted between simulator runs.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-The AWS implementation of `cloud.Bucket` uses [Amazon S3](https://aws.amazon.com/s3/).
+The AWS implementation of `cloud.Counter` uses [Amazon DynamoDB](https://aws.amazon.com/dynamodb/).
 
 ### Azure (`tf-azure`)
 
-The Azure implementation of `cloud.Bucket` uses [Azure Blob Storage](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview).
+🚧 Not supported yet (tracking issue: [#629](https://github.com/winglang/wing/issues/629))
 
 ### GCP (`tf-gcp`)
 
-The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](https://cloud.google.com/storage).
+🚧 Not supported yet (tracking issue: [#628](https://github.com/winglang/wing/issues/628))
 
 ## API Reference
 
-The full list of APIs for `cloud.Bucket` is available in the [API Reference](../05-reference/wingsdk-api.md).
+The full list of APIs for `cloud.Counter` is available in the [API Reference](../05-reference/wingsdk-api.md).
 
 
 
