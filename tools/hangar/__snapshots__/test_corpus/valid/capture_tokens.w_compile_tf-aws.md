@@ -31,9 +31,12 @@ module.exports = function({  }) {
     async $inflight_init()  {
       const __parent_this = this;
     }
+    static async isValidUrl(url)  {
+      return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
+    }
     async foo()  {
       const __parent_this = this;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'this.url.startsWith("http://127.0.0.1")'`)})(this.url.startsWith("http://127.0.0.1"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.url))'`)})((await MyResource.isValidUrl(this.url)))};
     }
   }
   return MyResource;
@@ -232,7 +235,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo");
+        this._addInflightOps("isValidUrl", "foo");
         const __parent_this = this;
         this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
         this.url = this.api.url;
@@ -265,9 +268,15 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.url, host, []);
         }
         if (ops.includes("foo")) {
+          MyResource._registerBindObject(MyResource, host, ["isValidUrl"]);
           MyResource._registerBindObject(this.url, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        if (ops.includes("isValidUrl")) {
+        }
+        super._registerTypeBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
