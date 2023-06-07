@@ -43,10 +43,10 @@ export class Function extends cloud.Function {
         : Duration.minutes(0.5),
     });
 
-    if (props.env) {
-      for (const [key, val] of Object.entries(props.env)) {
-        this.function.addEnvironment(key, val);
-      }
+    for (const [key, val] of Object.entries(
+      Object.assign({}, this.env, props.env)
+    )) {
+      this.function.addEnvironment(key, val);
     }
 
     this.arn = this.function.functionArn;
@@ -68,6 +68,9 @@ export class Function extends cloud.Function {
   public addEnvironment(name: string, value: string) {
     if (this.function) {
       this.function.addEnvironment(name, value);
+    } else {
+      // Those env vars will be added once the function is initialized
+      super.addEnvironment(name, value);
     }
   }
 

@@ -1,0 +1,137 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`captures tokens 1`] = `
+"new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(event) {
+    console.log(this.str, this.num, this.list);
+  }
+};
+})())({
+str: JSON.parse(process.env[\\"WING_TOKEN__TFTOKEN_TOKEN_7_\\"]),
+num: JSON.parse(process.env[\\"WING_TOKEN__8_109562212591386E_298\\"]),
+list: JSON.parse(process.env[\\"WING_TOKEN__TFTOKEN_TOKEN_9_\\"])
+})"
+`;
+
+exports[`captures tokens 2`] = `
+"{
+  \\"data\\": {
+    \\"aws_region\\": {
+      \\"root_Region_A2D17352\\": {}
+    }
+  },
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
+  \\"resource\\": {
+    \\"aws_api_gateway_deployment\\": {
+      \\"root_Api_api_deployment_AA827467\\": {
+        \\"lifecycle\\": {
+          \\"create_before_destroy\\": true
+        },
+        \\"rest_api_id\\": \\"\${aws_api_gateway_rest_api.root_Api_api_0637EF1E.id}\\",
+        \\"triggers\\": {
+          \\"redeployment\\": \\"5c0f11f0478884e3d7859fa987b8b7ecf8f2f6bc\\"
+        }
+      }
+    },
+    \\"aws_api_gateway_rest_api\\": {
+      \\"root_Api_api_0637EF1E\\": {
+        \\"body\\": \\"{\\\\\\"openapi\\\\\\":\\\\\\"3.0.3\\\\\\",\\\\\\"paths\\\\\\":{\\\\\\"/\\\\\\":{\\\\\\"get\\\\\\":{\\\\\\"operationId\\\\\\":\\\\\\"get\\\\\\",\\\\\\"responses\\\\\\":{\\\\\\"200\\\\\\":{\\\\\\"description\\\\\\":\\\\\\"200 response\\\\\\",\\\\\\"content\\\\\\":{}}},\\\\\\"parameters\\\\\\":[],\\\\\\"x-amazon-apigateway-integration\\\\\\":{\\\\\\"uri\\\\\\":\\\\\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations\\\\\\",\\\\\\"type\\\\\\":\\\\\\"aws_proxy\\\\\\",\\\\\\"httpMethod\\\\\\":\\\\\\"POST\\\\\\",\\\\\\"responses\\\\\\":{\\\\\\"default\\\\\\":{\\\\\\"statusCode\\\\\\":\\\\\\"200\\\\\\"}},\\\\\\"passthroughBehavior\\\\\\":\\\\\\"when_no_match\\\\\\",\\\\\\"contentHandling\\\\\\":\\\\\\"CONVERT_TO_TEXT\\\\\\"}}}}}\\",
+        \\"name\\": \\"api-c8f613f0\\"
+      }
+    },
+    \\"aws_api_gateway_stage\\": {
+      \\"root_Api_api_stage_3E2E462A\\": {
+        \\"deployment_id\\": \\"\${aws_api_gateway_deployment.root_Api_api_deployment_AA827467.id}\\",
+        \\"rest_api_id\\": \\"\${aws_api_gateway_rest_api.root_Api_api_0637EF1E.id}\\",
+        \\"stage_name\\": \\"prod\\"
+      }
+    },
+    \\"aws_iam_role\\": {
+      \\"root_Api_ApiOnRequestc5395e41_IamRole_81A26E79\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Api_ApiOnRequestc5395e41_IamRolePolicy_BB47A35C\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Api_ApiOnRequestc5395e41_IamRole_81A26E79.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Api_ApiOnRequestc5395e41_IamRolePolicyAttachment_B6C58E02\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Api_ApiOnRequestc5395e41_IamRole_81A26E79.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Api_ApiOnRequestc5395e41_C98C3415\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Api-OnRequest-c5395e41-c8f26cae\\",
+            \\"WING_TOKEN__8_109562212591386E_298\\": \\"\${jsonencode(var.root_Number_F3C25933)}\\",
+            \\"WING_TOKEN__TFTOKEN_TOKEN_7_\\": \\"\${jsonencode(aws_api_gateway_stage.root_Api_api_stage_3E2E462A.invoke_url)}\\",
+            \\"WING_TOKEN__TFTOKEN_TOKEN_9_\\": \\"\${jsonencode(var.root_List_6887BE0A)}\\"
+          }
+        },
+        \\"function_name\\": \\"Api-OnRequest-c5395e41-c8f26cae\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
+        \\"role\\": \\"\${aws_iam_role.root_Api_ApiOnRequestc5395e41_IamRole_81A26E79.arn}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Api_ApiOnRequestc5395e41_S3Object_BC49C8EE.key}\\",
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
+      }
+    },
+    \\"aws_lambda_permission\\": {
+      \\"root_Api_api_permissionGETc2e3ffa8_29652446\\": {
+        \\"action\\": \\"lambda:InvokeFunction\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.function_name}\\",
+        \\"principal\\": \\"apigateway.amazonaws.com\\",
+        \\"source_arn\\": \\"\${aws_api_gateway_rest_api.root_Api_api_0637EF1E.execution_arn}/*/GET/\\",
+        \\"statement_id\\": \\"AllowExecutionFromAPIGateway-GET-c2e3ffa8\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Code_02F3C603\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Api_ApiOnRequestc5395e41_S3Object_BC49C8EE\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  },
+  \\"variable\\": {
+    \\"root_List_6887BE0A\\": {
+      \\"default\\": [
+        1,
+        2,
+        3
+      ],
+      \\"type\\": \\"List<Number>\\"
+    },
+    \\"root_Number_F3C25933\\": {
+      \\"default\\": 123,
+      \\"type\\": \\"Number\\"
+    }
+  }
+}"
+`;

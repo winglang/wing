@@ -1,3 +1,5 @@
+import { Function } from "../cloud";
+import { Tokens } from "../core/tokens";
 import { IResource } from "../std";
 
 /**
@@ -18,4 +20,57 @@ export function simulatorAttrToken(
   attrName: string
 ): string {
   return `\${${resource.node.path}#attrs.${attrName}}`;
+}
+
+/**
+ * Returns true is the given value is a Simulator token.
+ */
+export function isToken(value: string) {
+  return /^\$\{.*\#(props\.|attrs\.).*\}/.test(value);
+}
+
+/**
+ * Represents values that can only be resolved after the app is synthesized.
+ * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
+ */
+export class SimTokens extends Tokens {
+  /**
+   * Returns true is the given value is a Simulator token.
+   */
+  public isToken(value: any): boolean {
+    const str: string = value.toString();
+    return isToken(str);
+  }
+
+  /**
+   * "Lifts" a value into an inflight context.
+   */
+  public lift(value: any): string {
+    switch (typeof value) {
+      case "string":
+        return `process.env[${JSON.stringify(this.envName(value))}]`;
+      default:
+        throw new Error(`Unsupported token type`);
+    }
+  }
+
+  /**
+   * Binds the given token to the host.
+   */
+  public bindValue(host: IResource, value: any) {
+    if (!(host instanceof Function)) {
+      throw new Error(`Tokens can only be bound by a Function for now`);
+    }
+
+    switch (typeof value) {
+      case "string":
+        const envName = this.envName(value);
+        if (typeof host.env[envName] === "undefined") {
+          host.addEnvironment(envName, value);
+        }
+        break;
+      default:
+        throw new Error(`Unable to bind token ${value}`);
+    }
+  }
 }

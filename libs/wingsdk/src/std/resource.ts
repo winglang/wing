@@ -1,5 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
+import { App } from "../core";
 import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
 import { serializeImmutableData } from "../core/internal";
@@ -149,6 +150,11 @@ export abstract class Resource extends Construct implements IResource {
     host: IResource,
     ops: string[] = []
   ): void {
+    const tokens = App.of(host)._tokens;
+    if (tokens.isToken(obj)) {
+      return tokens.bindValue(host, obj);
+    }
+
     switch (typeof obj) {
       case "string":
       case "boolean":
@@ -347,7 +353,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   protected _lift(value: any): string {
-    return serializeImmutableData(value);
+    return serializeImmutableData(this, value);
   }
 }
 
