@@ -21,7 +21,8 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 		TypeAnnotationKind, UnaryOperator,
 	},
-	debug,
+	comp_ctx::{CompilationContext, CompilationPhase},
+	dbg_panic, debug,
 	diagnostic::{Diagnostic, Diagnostics, WingSpan},
 	type_check::{
 		resolve_user_defined_type,
@@ -89,6 +90,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	pub fn jsify(&mut self, scope: &Scope) -> String {
+		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
@@ -173,6 +175,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
+		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut code = CodeMaker::default();
 
 		for statement in scope.statements.iter() {
@@ -253,6 +256,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_expression(&mut self, expression: &Expr, ctx: &JSifyContext) -> String {
+		CompilationContext::set(CompilationPhase::Jsifying, &expression.span);
 		let auto_await = match ctx.phase {
 			Phase::Inflight => "await ",
 			_ => "",
@@ -502,10 +506,16 @@ impl<'a> JSifier<'a> {
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, false, ctx).to_string(),
 			},
+    	ExprKind::CompilerDebugPanic => {
+				// Handle the debug panic expression (during jsifying)
+				dbg_panic!();
+				"".to_string()
+			},
 		}
 	}
 
 	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
+		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
 			StmtKind::Bring {
 				module_name,

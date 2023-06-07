@@ -8,11 +8,12 @@ use crate::ast::{
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
+use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
 use crate::{
-	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP,
-	WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE, WINGSDK_RESOURCE,
-	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
+	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
+	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -1178,6 +1179,7 @@ impl<'a> TypeChecker<'a> {
 
 	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &SymbolEnv) -> TypeRef {
+		CompilationContext::set(CompilationPhase::TypeChecking, &exp.span);
 		let t = self.type_check_exp_helper(&exp, env);
 		exp.evaluated_type.replace(Some(t));
 		t
@@ -1714,6 +1716,14 @@ impl<'a> TypeChecker<'a> {
 				container_type
 			}
 			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
+			ExprKind::CompilerDebugPanic => {
+				// Handle the debug panic expression (during type-checking)
+				dbg_panic!();
+				self.type_error(TypeError {
+					message: "Panic expression".to_string(),
+					span: exp.span.clone(),
+				})
+			}
 		}
 	}
 
@@ -1877,6 +1887,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn type_check_scope(&mut self, scope: &Scope) {
+		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		assert!(self.inner_scopes.is_empty());
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
@@ -1976,6 +1987,8 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
+		CompilationContext::set(CompilationPhase::TypeChecking, &stmt.span);
+
 		// Set the current statement index for symbol lookup checks. We can safely assume we're
 		// not overwriting the current statement index because `type_check_statement` is never
 		// recursively called (we use a breadth-first traversal of the AST statements).
