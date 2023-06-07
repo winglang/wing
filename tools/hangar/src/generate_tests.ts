@@ -1,10 +1,9 @@
 import {
   mkdirSync,
-  mkdirpSync,
   readdirSync,
   rmSync,
   writeFileSync,
-} from "fs-extra";
+} from "fs";
 import { sdkTests, validTestDir } from "./paths";
 import { join, extname } from "path";
 import { parseMetaCommentFromPath } from "./meta_comment";
@@ -65,18 +64,18 @@ function generateTests(
   
   import { test } from "vitest";
   import { compileTest, testTest } from "${Array(level)
-    .fill("../")
-    .join("")}../../generated_test_targets";
+        .fill("../")
+        .join("")}../../generated_test_targets";
   
   test${skipText}("wing compile -t tf-aws", async () => {
-    await compileTest("${escapedSourceDir}", "${filename}");
+    await compileTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(metaComment?.env)});
   });
   
   test${skipText}("wing test -t sim", async () => {
-    await testTest("${escapedSourceDir}", "${filename}");
+    await testTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(metaComment?.env)});
   });`;
 
-    mkdirpSync(destination);
+    mkdirSync(destination, { recursive: true });
     writeFileSync(join(destination, `${filename}.test.ts`), fileContents);
   }
 }

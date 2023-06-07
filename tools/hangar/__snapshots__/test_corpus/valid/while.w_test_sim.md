@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/while.w to sim...
-✔ Compiling valid/while.w to sim...
 pass ─ while.wsim (no tests)
  
 

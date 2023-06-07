@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/capture_tokens.w to sim...
-✔ Compiling valid/capture_tokens.w to sim...
 pass ─ capture_tokens.wsim » root/env0/test:urlPrint
  
 

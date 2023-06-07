@@ -258,7 +258,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c83cf74f"
+            "WING_FUNCTION_NAME": "Handler-c83cf74f",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c83cf74f",
@@ -283,7 +284,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c85de384"
+            "WING_FUNCTION_NAME": "Handler-c85de384",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c85de384",
@@ -308,7 +310,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c859340a"
+            "WING_FUNCTION_NAME": "Handler-c859340a",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c859340a",
@@ -333,7 +336,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c83ad462"
+            "WING_FUNCTION_NAME": "Handler-c83ad462",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c83ad462",

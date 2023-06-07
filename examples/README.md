@@ -46,6 +46,12 @@ _Add yours here!_
 * **Description:** A task manager that lets you create background tasks asynchronously, and check their status at any point in time.
 * **Author:** [@Chriscbr](https://github.com/Chriscbr)
 
+### URL Shortener
+
+* **Source code:** [./proposed/url-shortener.w](./proposed/url-shortener.w)
+* **Description:** A URL shortener consisting of two API endpoints, `/create` and `/u/:id`. IDs are managed using buckets, but could be swapped with a table or other stateful storage mechanism. Requires installing `node-fetch@2` from npm.
+* **Author:** [@Chriscbr](https://github.com/Chriscbr)
+
 <!--
 
 ### Tweet queue

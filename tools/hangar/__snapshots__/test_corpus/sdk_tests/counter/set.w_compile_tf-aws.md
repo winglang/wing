@@ -1,4 +1,4 @@
-# [reset.w](../../../../../../examples/tests/sdk_tests/counter/reset.w) | compile | tf-aws
+# [set.w](../../../../../../examples/tests/sdk_tests/counter/set.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
 ```js
@@ -19,9 +19,7 @@ module.exports = function({ counter }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 2)'`)})(((await counter.peek()) === 2))};
       (await counter.inc(10));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
-      (await counter.reset());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-      (await counter.reset(88));
+      (await counter.set(88));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 88)'`)})(((await counter.peek()) === 88))};
     }
   }
@@ -51,7 +49,7 @@ module.exports = function({ counter }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:reset\",\"${aws_lambda_function.root_testreset_Handler_6C29318E.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:set\",\"${aws_lambda_function.root_testset_Handler_9EAD6DA1.arn}\"]]"
     }
   },
   "provider": {
@@ -80,61 +78,62 @@ module.exports = function({ counter }) {
       }
     },
     "aws_iam_role": {
-      "root_testreset_Handler_IamRole_3FFC708F": {
+      "root_testset_Handler_IamRole_5149788C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/Handler/IamRole",
-            "uniqueId": "root_testreset_Handler_IamRole_3FFC708F"
+            "path": "root/Default/Default/test:set/Handler/IamRole",
+            "uniqueId": "root_testset_Handler_IamRole_5149788C"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testreset_Handler_IamRolePolicy_902A4BAC": {
+      "root_testset_Handler_IamRolePolicy_D78C23B7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/Handler/IamRolePolicy",
-            "uniqueId": "root_testreset_Handler_IamRolePolicy_902A4BAC"
+            "path": "root/Default/Default/test:set/Handler/IamRolePolicy",
+            "uniqueId": "root_testset_Handler_IamRolePolicy_D78C23B7"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testreset_Handler_IamRole_3FFC708F.name}"
+        "role": "${aws_iam_role.root_testset_Handler_IamRole_5149788C.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testreset_Handler_IamRolePolicyAttachment_EA60CD22": {
+      "root_testset_Handler_IamRolePolicyAttachment_3D12A4BB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testreset_Handler_IamRolePolicyAttachment_EA60CD22"
+            "path": "root/Default/Default/test:set/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testset_Handler_IamRolePolicyAttachment_3D12A4BB"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testreset_Handler_IamRole_3FFC708F.name}"
+        "role": "${aws_iam_role.root_testset_Handler_IamRole_5149788C.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testreset_Handler_6C29318E": {
+      "root_testset_Handler_9EAD6DA1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/Handler/Default",
-            "uniqueId": "root_testreset_Handler_6C29318E"
+            "path": "root/Default/Default/test:set/Handler/Default",
+            "uniqueId": "root_testset_Handler_9EAD6DA1"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "Handler-c81a3369"
+            "WING_FUNCTION_NAME": "Handler-c80adb7b",
+            "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c81a3369",
+        "function_name": "Handler-c80adb7b",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testreset_Handler_IamRole_3FFC708F.arn}",
+        "role": "${aws_iam_role.root_testset_Handler_IamRole_5149788C.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testreset_Handler_S3Object_0E10B0F5.key}",
+        "s3_key": "${aws_s3_object.root_testset_Handler_S3Object_445B1FA3.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -154,11 +153,11 @@ module.exports = function({ counter }) {
       }
     },
     "aws_s3_object": {
-      "root_testreset_Handler_S3Object_0E10B0F5": {
+      "root_testset_Handler_S3Object_445B1FA3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:reset/Handler/S3Object",
-            "uniqueId": "root_testreset_Handler_S3Object_0E10B0F5"
+            "path": "root/Default/Default/test:set/Handler/S3Object",
+            "uniqueId": "root_testset_Handler_S3Object_445B1FA3"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -212,18 +211,18 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(counter, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(counter, host, ["inc", "peek", "reset"]);
+          $Closure1._registerBindObject(counter, host, ["inc", "peek", "set"]);
         }
         super._registerBind(host, ops);
       }
     }
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 0 });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:reset",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "reset", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "set", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

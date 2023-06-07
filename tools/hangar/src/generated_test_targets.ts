@@ -1,4 +1,4 @@
-import { mkdir, readFile } from "fs-extra";
+import * as fs from "fs/promises";
 import { tmpDir, walkdir } from "./paths";
 import { basename, join, relative } from "path";
 import {
@@ -7,7 +7,11 @@ import {
   sanitize_json_paths,
 } from "./utils";
 
-export async function compileTest(sourceDir: string, wingFile: string) {
+export async function compileTest(
+  sourceDir: string,
+  wingFile: string,
+  env?: Record<string, string>
+) {
   const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
   const args = ["compile", "--target", "tf-aws"];
@@ -16,6 +20,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     "target",
     `${wingBasename.replace(".w", "")}.tfaws`
   );
+  await fs.rm(targetDir, { recursive: true, force: true });
   const tf_json = join(targetDir, "main.tf.json");
 
   const filePath = join(sourceDir, wingBasename);
@@ -23,7 +28,8 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     cwd: sourceDir,
     wingFile: filePath,
     args,
-    shouldSucceed: true,
+    expectStdErr: false,
+    env,
   });
 
   const npx_tfJson = sanitize_json_paths(tf_json);
@@ -39,7 +45,7 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     if (!include.find((f) => subpath.startsWith(f))) {
       continue;
     }
-    let fileContents = await readFile(dotFile, "utf8");
+    let fileContents = await fs.readFile(dotFile, "utf8");
 
     // remove requires with absolute paths
     fileContents = fileContents.replace(
@@ -53,18 +59,23 @@ export async function compileTest(sourceDir: string, wingFile: string) {
   await createMarkdownSnapshot(fileMap, filePath, "compile", "tf-aws");
 }
 
-export async function testTest(sourceDir: string, wingFile: string) {
+export async function testTest(
+  sourceDir: string,
+  wingFile: string,
+  env?: Record<string, string>
+) {
   const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
-  await mkdir(testDir, { recursive: true });
+  await fs.mkdir(testDir, { recursive: true });
 
   const filePath = join(sourceDir, wingFile);
   const out = await runWingCommand({
     cwd: testDir,
     wingFile: filePath,
     args,
-    shouldSucceed: true,
+    expectStdErr: false,
+    env,
   });
 
   fileMap["stdout.log"] = out.stdout;

@@ -119,7 +119,7 @@ exports[`dec() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b91c356a9e3d0c6b21a460be695c530ab496d9530bc0fd26db3d6e3c13ec13d1.zip",
+          "S3Key": "d67f1ad8d70bdc743141753dd76cf215a976cb60954be5b3780161a5c928fd88.zip",
         },
         "Environment": {
           "Variables": {
@@ -347,7 +347,7 @@ exports[`function with a counter binding 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "bd9aaef5b8f06ebc9b2a142c0e08354edd0429febf6261ad6f7421fb64c393b8.zip",
+          "S3Key": "9631c62dc45f49b1227489f95a27865dda3d0d3df6996b64112cd9e9083736b7.zip",
         },
         "Environment": {
           "Variables": {
@@ -514,7 +514,7 @@ exports[`inc() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "bd9aaef5b8f06ebc9b2a142c0e08354edd0429febf6261ad6f7421fb64c393b8.zip",
+          "S3Key": "9631c62dc45f49b1227489f95a27865dda3d0d3df6996b64112cd9e9083736b7.zip",
         },
         "Environment": {
           "Variables": {
@@ -681,7 +681,7 @@ exports[`peek() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "28532282ee0b537c4c9ec8fcc0678b4fb8ae9dcab3655e7af8d6950a78b7fb55.zip",
+          "S3Key": "4f75f2e0b20ec1cfbe64a239806cfaf061e34d45cb85ca8afdfdae79583b1f65.zip",
         },
         "Environment": {
           "Variables": {
@@ -790,7 +790,7 @@ exports[`peek() policy statement 2`] = `
 }
 `;
 
-exports[`reset() policy statement 1`] = `
+exports[`set() policy statement 1`] = `
 "new ((function(){
 return class Handler {
   constructor(clients) {
@@ -799,7 +799,7 @@ return class Handler {
     }
   }
   async handle(event) {
-  const val = await this.my_counter.reset();
+  const val = await this.my_counter.set();
   console.log(val);
 }
 };
@@ -808,7 +808,7 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 })"
 `;
 
-exports[`reset() policy statement 2`] = `
+exports[`set() policy statement 2`] = `
 {
   "Parameters": {
     "BootstrapVersion": {
@@ -848,7 +848,7 @@ exports[`reset() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "c560ab42ad5f55c14e110751daa7dc5442edd1146909ef9179b58a2a5f5054e4.zip",
+          "S3Key": "c4746e415c05ffc3a40869598f603b3235d1e0c5d22084ac9273cb7379d0e4bf.zip",
         },
         "Environment": {
           "Variables": {

@@ -172,6 +172,7 @@ module.exports = function({  }) {
           "variables": {
             "CLOUD_API_C8DACDCC": "${aws_api_gateway_stage.root_MyResource_cloudApi_api_stage_47CBB72B.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8f2f6b9",
+            "WING_TARGET": "tf-aws",
             "WING_TOKEN__TFTOKEN_TOKEN_7_": "${jsonencode(aws_api_gateway_stage.root_MyResource_cloudApi_api_stage_47CBB72B.invoke_url)}"
           }
         },

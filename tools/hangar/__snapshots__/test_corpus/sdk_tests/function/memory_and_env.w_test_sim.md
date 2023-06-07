@@ -2,9 +2,7 @@
 
 ## stdout.log
 ```log
-- Compiling function/memory_and_env.w to sim...
-✔ Compiling function/memory_and_env.w to sim...
-pass ─ memory_and_env.wsim » root/env0/test:test
+pass ─ memory_and_env.wsim » root/env0/test:function with memory and function with env can be invoked
  
 
 

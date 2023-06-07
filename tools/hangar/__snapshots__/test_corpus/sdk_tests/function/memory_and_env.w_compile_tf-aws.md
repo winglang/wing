@@ -85,7 +85,7 @@ module.exports = function({ c, f1, f2 }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:function with memory and function with env can be invoked\",\"${aws_lambda_function.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_D0AA45AD.arn}\"]]"
     }
   },
   "provider": {
@@ -132,11 +132,11 @@ module.exports = function({ c, f1, f2 }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRole",
+            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -163,15 +163,15 @@ module.exports = function({ c, f1, f2 }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_memoryfn_IamRole_93CF0A9D.name}"
       },
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_1E4BE4AC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicy",
+            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_1E4BE4AC"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_memoryfn_812AB0A5.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_envfn_7540B24D.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -195,15 +195,15 @@ module.exports = function({ c, f1, f2 }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_memoryfn_IamRole_93CF0A9D.name}"
       },
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_F48A468C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_F48A468C"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4.name}"
       }
     },
     "aws_lambda_function": {
@@ -218,6 +218,7 @@ module.exports = function({ c, f1, f2 }) {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "WING_FUNCTION_NAME": "env-fn-c8a226dd",
+            "WING_TARGET": "tf-aws",
             "catAge": "2",
             "catName": "Tion"
           }
@@ -245,7 +246,8 @@ module.exports = function({ c, f1, f2 }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "memory-fn-c844bdf7"
+            "WING_FUNCTION_NAME": "memory-fn-c844bdf7",
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "memory-fn-c844bdf7",
@@ -262,11 +264,11 @@ module.exports = function({ c, f1, f2 }) {
           "subnet_ids": []
         }
       },
-      "root_testtest_Handler_046C3415": {
+      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_D0AA45AD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/Default",
+            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_D0AA45AD"
           }
         },
         "environment": {
@@ -274,16 +276,17 @@ module.exports = function({ c, f1, f2 }) {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "FUNCTION_NAME_2d5b932f": "${aws_lambda_function.root_memoryfn_812AB0A5.arn}",
             "FUNCTION_NAME_d7a1b8c8": "${aws_lambda_function.root_envfn_7540B24D.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c8bf8232",
+            "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "Handler-c8bf8232",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_1C181B39.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -368,11 +371,11 @@ module.exports = function({ c, f1, f2 }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_1C181B39": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/S3Object",
+            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_1C181B39"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -523,7 +526,7 @@ class $Root extends $stdlib.std.Resource {
     (f2.addEnvironment("catAge","2"));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((f2.env)["catAge"] === "2")'`)})(((f2.env)["catAge"] === "2"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((f2.env)["catName"] === "Tion")'`)})(((f2.env)["catName"] === "Tion"))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure3(this,"$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:function with memory and function with env can be invoked",new $Closure3(this,"$Closure3"));
   }
 }
 class $App extends $AppBase {

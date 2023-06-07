@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/statements_if.w to sim...
-✔ Compiling valid/statements_if.w to sim...
 pass ─ statements_if.wsim » root/env0/test:test
  
 

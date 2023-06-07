@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-- Compiling valid/redis.w to sim...
-✔ Compiling valid/redis.w to sim...
 pass ─ redis.wsim » root/env0/test:test
  
 

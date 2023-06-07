@@ -1,7 +1,16 @@
+import { Code, InflightClient } from "../core";
+
 /**
  * Represents a length of time.
  */
 export class Duration {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Create a Duration representing an amount of minutes
    *
