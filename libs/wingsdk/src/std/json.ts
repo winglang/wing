@@ -29,19 +29,6 @@ export class Json {
   }
 
   /**
-   * Creates an immutable deep copy of the Json.
-   *
-   * @macro (JSON.parse(JSON.stringify($args$)))
-   *
-   * @param json to copy
-   * @returns the immutable copy of the Json
-   */
-  public static copy(json: Json): Json {
-    json;
-    throw new Error("Macro");
-  }
-
-  /**
    * Creates a mutable deep copy of the Json.
    *
    * @macro (JSON.parse(JSON.stringify($args$)))
@@ -49,7 +36,7 @@ export class Json {
    * @param json to copy
    * @returns the mutable copy of the Json
    */
-  public static copyMut(json: Json): MutJson {
+  public static deepCopyMut(json: Json): MutJson {
     json;
     throw new Error("Macro");
   }
@@ -149,7 +136,7 @@ export class MutJson {
    * @param json to copy
    * @returns the immutable copy of the Json
    */
-  public static copy(json: Json): Json {
+  public static deepCopy(json: MutJson): Json {
     json;
     throw new Error("Macro");
   }

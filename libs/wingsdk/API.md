@@ -3778,7 +3778,7 @@ The index of the element in the Json Array to return.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Json.copyMut">copyMut</a></code> | Creates a mutable deep copy of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
@@ -3788,20 +3788,22 @@ The index of the element in the Json Array to return.
 
 ---
 
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Json.copyMut"></a>
+##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.Json.deepCopyMut"></a>
 
 ```wing
 bring std;
 
-std.Json.copyMut(json: Json)
+std.Json.deepCopyMut(json: Json)
 ```
 
 Creates a mutable deep copy of the Json.
+Creates a mutable deep copy of the Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.copyMut.parameter.json"></a>
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopyMut.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
+to copy.
 to copy.
 
 ---
@@ -4407,10 +4409,29 @@ new std.MutJson()
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutJson.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
+
+---
+
+##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.MutJson.deepCopy"></a>
+
+```wing
+bring std;
+
+std.MutJson.deepCopy(json: MutJson)
+```
+
+Creates an immutable deep copy of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.deepCopy.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
+
+to copy.
 
 ---
 
