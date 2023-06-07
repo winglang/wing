@@ -31,7 +31,8 @@
     "package": {
       "options": {
         "commands": ["npm run bump", "npm pack", "npm run unbump"],
-        "cwd": "libs/wingcompiler"
+        "cwd": "libs/wingcompiler",
+        "parallel": false
       }
     }
   }
