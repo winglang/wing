@@ -93,7 +93,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       }
       throw new Error(result.join("\n"));
     } else if (error instanceof wingCompiler.PreflightError) {
-      const { causedBy } = error;
+      const causedBy = annotatePreflightError(error.causedBy);
 
       const output = new Array<string>();
 
@@ -136,6 +136,24 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       throw error;
     }
   }
+}
+
+function annotatePreflightError(error: Error): Error {
+  if (error.message.startsWith("There is already a Construct with name")) {
+    const newMessage = [];
+    newMessage.push(error.message);
+    newMessage.push(
+      "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:"
+    );
+    newMessage.push('> new cloud.Bucket() as "MyBucket";');
+    newMessage.push("For more information, see https://docs.winglang.io/concepts/resources");
+
+    const newError = new Error(newMessage.join("\n\n"), { cause: error });
+    newError.stack = error.stack;
+    return newError;
+  }
+
+  return error;
 }
 
 function offsetFromLineAndColumn(source: string, line: number, column: number) {
