@@ -4,6 +4,7 @@ import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
+import * as url from "url";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -545,10 +546,9 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
 
   // THEN
   await s.stop();
-  expect(response).toEqual(
-    // @ts-expect-error (reaching into private property)
-    `${client.fileDir}/${KEY}`
-  );
+  // @ts-expect-error (reaching into private property)
+  const filePath = `${client.fileDir}/${KEY}`;
+  expect(response).toEqual(url.pathToFileURL(filePath).href);
 });
 
 test("check if an object exists in the bucket", async () => {
