@@ -476,6 +476,7 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
+	CompilerDebugPanic,
 }
 
 #[derive(Derivative)]
