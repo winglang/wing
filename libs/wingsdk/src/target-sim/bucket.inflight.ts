@@ -1,6 +1,7 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
 import * as os from "os";
+import * as url from "url";
 import { dirname, join } from "path";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
 import {
@@ -198,7 +199,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           );
         }
 
-        return filePath;
+        return url.pathToFileURL(filePath).href;
       },
     });
   }
