@@ -1,10 +1,10 @@
+import * as url from "url";
 import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-import * as url from "url";
 
 test("create a bucket", async () => {
   // GIVEN

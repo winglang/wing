@@ -1,8 +1,8 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
 import * as os from "os";
-import * as url from "url";
 import { dirname, join } from "path";
+import * as url from "url";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
 import {
   BucketDeleteOptions,
