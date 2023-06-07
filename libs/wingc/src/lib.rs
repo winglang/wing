@@ -10,7 +10,7 @@ extern crate lazy_static;
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
-use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use diagnostic::{found_errors, get_diagnostics, report_diagnostic, Diagnostic};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -122,7 +122,8 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let absolute_project_dir = split.get(2).map(|s| Path::new(s));
 
 	let results = compile(source_file, output_dir, absolute_project_dir);
-	if let Err(diagnostics) = results {
+	if results.is_err() {
+		let diagnostics = get_diagnostics();
 		// Output diagnostics as a stringified JSON array
 		let json = serde_json::to_string(&diagnostics).unwrap();
 
