@@ -123,7 +123,7 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > ```TS
 > let z = {1, 2, 3};               // immutable set, Set<Num> is inferred
 > let zm = MutSet<num>{};          // mutable set
-> let y = {"a": 1, "b": 2};        // immutable map, Map<num> is inferred
+> let y = {"a" => 1, "b" => 2};    // immutable map, Map<num> is inferred
 > let ym = MutMap<num>{};          // mutable map
 > let x = [1, 2, 3];               // immutable array, Array<num> is inferred
 > let xm = MutArray<num>[];        // mutable array
@@ -225,6 +225,12 @@ let jsonMutObj = MutJson {
   world: [ 1, "cat", 3 ],       // <-- heterogenous array
   "boom boom": { hello: 1233 }  // <-- non-symbolic key
 };
+```
+
+The `Json` keyword can be omitted from `Json` object literals:
+
+```js
+let jsonObj = { boom: 123, bam: [4, 5, 6] };
 ```
 
 Every value within a `Json` array or object also has a type of `Json`.
@@ -1220,7 +1226,7 @@ expected from a call and it is not being caught.
 
 > ```TS
 > try {
->   let x? = 1;
+>   let x: num? = 1;
 >   throw("hello exception");
 > } catch e {
 >   log(e);
@@ -2625,7 +2631,7 @@ using a `bool?` type in this short-circuit is a compile error due to ambiguity.
 Using a `nil?` type is also ambiguous and results in a compile error.
 
 ```TS
-let x? = 1;
+let x: num? = 1;
 if x {
   // ...
 }
@@ -2634,7 +2640,7 @@ if x {
 Which is equivalent to:
 
 ```TS
-let x? = 1;
+let x: num? = 1;
 if x != nil {
   // ...
 }

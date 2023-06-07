@@ -3,11 +3,19 @@
 // TODO: This should be an interface, currently Wing does not support interface JSII imports
 
 import { Json } from "./json";
+import { Code, InflightClient } from "../core";
 
 /**
  * String
  */
 export class String {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Parse string from Json.
    *

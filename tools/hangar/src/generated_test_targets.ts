@@ -1,4 +1,4 @@
-import { mkdir, readFile } from "fs-extra";
+import * as fs from "fs/promises";
 import { tmpDir, walkdir } from "./paths";
 import { basename, join, relative } from "path";
 import {
@@ -16,11 +16,13 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     "target",
     `${wingBasename.replace(".w", "")}.tfaws`
   );
+  await fs.rm(targetDir, { recursive: true, force: true });
   const tf_json = join(targetDir, "main.tf.json");
 
+  const filePath = join(sourceDir, wingBasename);
   await runWingCommand({
     cwd: sourceDir,
-    wingFile: join(sourceDir, wingBasename),
+    wingFile: filePath,
     args,
     shouldSucceed: true,
   });
@@ -31,14 +33,14 @@ export async function compileTest(sourceDir: string, wingFile: string) {
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
-  const include = ["preflight.js", "clients/", "extern/", "proc"];
+  const include = ["preflight.js", "inflight.", "extern/", "proc"];
 
   for await (const dotFile of walkdir(dotWing)) {
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
     if (!include.find((f) => subpath.startsWith(f))) {
       continue;
     }
-    let fileContents = await readFile(dotFile, "utf8");
+    let fileContents = await fs.readFile(dotFile, "utf8");
 
     // remove requires with absolute paths
     fileContents = fileContents.replace(
@@ -49,23 +51,24 @@ export async function compileTest(sourceDir: string, wingFile: string) {
     fileMap[subpath] = fileContents;
   }
 
-  await createMarkdownSnapshot(fileMap, wingFile, "compile", "tf-aws");
+  await createMarkdownSnapshot(fileMap, filePath, "compile", "tf-aws");
 }
 
 export async function testTest(sourceDir: string, wingFile: string) {
   const fileMap: Record<string, string> = {};
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
-  await mkdir(testDir, { recursive: true });
+  await fs.mkdir(testDir, { recursive: true });
 
+  const filePath = join(sourceDir, wingFile);
   const out = await runWingCommand({
     cwd: testDir,
-    wingFile: join(sourceDir, wingFile),
+    wingFile: filePath,
     args,
     shouldSucceed: true,
   });
 
   fileMap["stdout.log"] = out.stdout;
 
-  await createMarkdownSnapshot(fileMap, wingFile, "test", "sim");
+  await createMarkdownSnapshot(fileMap, filePath, "test", "sim");
 }
