@@ -446,7 +446,7 @@ Use the `MutJson.deepCopy()` method to get an immutable *deep copy* of the objec
 
 ```js
 let mutObj = MutJson { hello: 123 };
-let immutObj = mutJson.deepCopy(mutObj);
+let immutObj = mutObj.deepCopy(mutObj);
 mutObj.hello = 999;
 assert(immutObj.hello == 123);
 ```

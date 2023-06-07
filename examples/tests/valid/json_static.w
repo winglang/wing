@@ -10,7 +10,7 @@ let v = Json.values(x);
 assert(v.at(0) == 123);
 
 // Mutable Copy
-let m = Json.copyMut(x);
+let m = Json.deepCopyMut(x);
 m.set("a", 321);
 assert(m.get("a") == 321);
 
