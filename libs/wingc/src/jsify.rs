@@ -21,6 +21,7 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 		TypeAnnotationKind, UnaryOperator,
 	},
+	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{Diagnostic, Diagnostics, WingSpan},
 	type_check::{
@@ -29,8 +30,7 @@ use crate::{
 		ClassLike, SymbolKind, Type, TypeRef, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
-	CompilationContext, CompilationPhase, MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME,
-	WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
 use self::codemaker::CodeMaker;

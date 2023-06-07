@@ -12,8 +12,9 @@ use crate::ast::{
 	Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
 	UnaryOperator, UserDefinedType,
 };
+use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::{dbg_panic, CompilationContext, CompilationPhase, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
