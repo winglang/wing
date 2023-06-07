@@ -5,6 +5,7 @@ skip: true
 
 bring cloud;
 
+// Those are testing the many errors in intalization of a cloud.Schedule
 let var error = "";
 try {
     new cloud.Schedule( rate: nil, cron: nil ) as "s1";
