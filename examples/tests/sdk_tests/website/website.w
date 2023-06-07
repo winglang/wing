@@ -17,7 +17,7 @@ assert(w.path.endsWith("sdk_tests/website/website"));
 
 
 test "test" {
-    // doesn't work on tf-aws, we need to create an inflight method for retrieveing the url (there are no inflight properties)
+    // TODO doesn't work on tf-aws, we need to create an inflight method for retrieveing the url (there are no inflight properties)
     assert(Json.stringify(Util.http(w.url).get("body")) == Json.stringify(indexFile));
     assert(Json.stringify(Util.http(w.url + "/inner-folder/other.html").get("body")) == Json.stringify(otherFile));
     assert(Json.stringify(Util.http(w.url + "/config.json").get("body")) == Json.stringify(Json.stringify(config)));
