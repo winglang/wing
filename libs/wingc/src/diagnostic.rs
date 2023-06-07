@@ -1,5 +1,5 @@
 use colored::Colorize;
-use std::fmt::Display;
+use std::{cell::RefCell, fmt::Display};
 use tree_sitter::Point;
 
 use lsp_types::{Position, Range};
@@ -7,7 +7,7 @@ use lsp_types::{Position, Range};
 use serde::Serialize;
 
 pub type FileId = String;
-pub type Diagnostics = Vec<Diagnostic>;
+type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
 
 /// Line and character location in a UTF8 Wing source file
@@ -170,6 +170,34 @@ impl PartialOrd for Diagnostic {
 	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
 		self.span.partial_cmp(&other.span)
 	}
+}
+
+thread_local! {
+	pub static DIAGNOSTICS: RefCell<Diagnostics> = RefCell::new(Diagnostics::new());
+}
+
+/// Report a compilation diagnostic
+pub fn report_diagnostic(diagnostic: Diagnostic) {
+	// Add the diagnostic to the list of diagnostics
+	DIAGNOSTICS.with(|diagnostics| {
+		diagnostics.borrow_mut().push(diagnostic);
+	});
+}
+
+/// Returns whether any errors were found during compilation
+pub fn found_errors() -> bool {
+	DIAGNOSTICS.with(|diagnostics| {
+		let diagnostics = diagnostics.borrow();
+		!diagnostics.is_empty()
+	})
+}
+
+/// Returns the list of diagnostics
+pub fn get_diagnostics() -> Vec<Diagnostic> {
+	DIAGNOSTICS.with(|diagnostics| {
+		let diagnostics = diagnostics.borrow();
+		diagnostics.clone()
+	})
 }
 
 #[derive(Debug)]

@@ -10,7 +10,7 @@ extern crate lazy_static;
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
-use diagnostic::{Diagnostic, Diagnostics};
+use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -75,7 +75,7 @@ const MACRO_REPLACE_ARGS: &'static str = "$args$";
 pub struct CompilerOutput {
 	pub preflight: String,
 	// pub inflights: BTreeMap<String, String>,
-	pub diagnostics: Diagnostics,
+	//pub diagnostics: Diagnostics,
 }
 
 /// Exposes an allocation function to the WASM host
@@ -132,7 +132,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
+pub fn parse(source_path: &Path) -> Scope {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
@@ -140,9 +140,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 	let source = match fs::read(&source_path) {
 		Ok(source) => source,
 		Err(err) => {
-			let mut diagnostics = Diagnostics::new();
-
-			diagnostics.push(Diagnostic {
+			report_diagnostic(Diagnostic {
 				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
 				span: None,
 			});
@@ -153,7 +151,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 				env: RefCell::new(None),
 				span: Default::default(),
 			};
-			return (empty_scope, diagnostics);
+			return empty_scope;
 		}
 	};
 
@@ -166,17 +164,10 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 
 	let wing_parser = Parser::new(&source[..], source_path.to_str().unwrap().to_string());
 
-	let scope = wing_parser.wingit(&tree.root_node());
-
-	(scope, wing_parser.diagnostics.into_inner())
+	wing_parser.wingit(&tree.root_node())
 }
 
-pub fn type_check(
-	scope: &mut Scope,
-	types: &mut Types,
-	source_path: &Path,
-	jsii_types: &mut TypeSystem,
-) -> Diagnostics {
+pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii_types: &mut TypeSystem) {
 	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
@@ -236,8 +227,6 @@ pub fn type_check(
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
-
-	tc.diagnostics.into_inner()
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
@@ -260,22 +249,24 @@ pub fn compile(
 	source_path: &Path,
 	out_dir: Option<&Path>,
 	absolute_project_root: Option<&Path>,
-) -> Result<CompilerOutput, Diagnostics> {
+) -> Result<CompilerOutput, ()> {
 	if !source_path.exists() {
-		return Err(vec![Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
 			span: None,
-		}]);
+		});
+		return Err(());
 	}
 
 	if !source_path.is_file() {
-		return Err(vec![Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: format!(
 				"Source path must be a file (not a directory or symlink): {}",
 				source_path.display()
 			),
 			span: None,
-		}]);
+		});
+		return Err(());
 	}
 
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
@@ -286,7 +277,7 @@ pub fn compile(
 	set_custom_panic_hook();
 
 	// -- PARSING PHASE --
-	let (scope, parse_diagnostics) = parse(&source_path);
+	let scope = parse(&source_path);
 
 	// -- DESUGARING PHASE --
 
@@ -301,24 +292,17 @@ pub fn compile(
 	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = if scope.statements.len() > 0 {
+	if scope.statements.len() > 0 {
 		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
-	} else {
-		// empty scope, no type checking needed
-		Diagnostics::new()
-	};
+	}
 
 	// Validate that every Expr has an evaluated_type
 	let mut tc_assert = TypeCheckAssert;
 	tc_assert.visit_scope(&scope);
 
-	// Collect all diagnostics
-	let mut diagnostics = parse_diagnostics;
-	diagnostics.extend(type_check_diagnostics);
-
 	// bail out now (before jsification) if there are errors (no point in jsifying)
-	if diagnostics.len() > 0 {
-		return Err(diagnostics);
+	if found_errors() {
+		return Err(());
 	}
 
 	// -- JSIFICATION PHASE --
@@ -337,11 +321,11 @@ pub fn compile(
 		// Check if this is a Windows path instead by checking if the second char is a colon
 		// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
 		if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
-			diagnostics.push(Diagnostic {
+			report_diagnostic(Diagnostic {
 				message: format!("Project directory must be absolute: {}", project_dir.display()),
 				span: None,
 			});
-			return Err(diagnostics);
+			return Err(());
 		}
 	}
 
@@ -352,14 +336,13 @@ pub fn compile(
 	let intermediate_file = jsifier.out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
 
-	// Filter diagnostics to only errors
-	if jsifier.diagnostics.len() > 0 {
-		return Err(jsifier.diagnostics);
+	// Fail if there were any jsification errors
+	if found_errors() {
+		return Err(());
 	}
 
 	return Ok(CompilerOutput {
 		preflight: intermediate_js,
-		diagnostics,
 	});
 }
 

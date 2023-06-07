@@ -5,10 +5,11 @@ use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
+use crate::diagnostic::{get_diagnostics, Diagnostic};
 use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
-use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
+use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
 pub struct FileData {
@@ -17,7 +18,7 @@ pub struct FileData {
 	/// tree-sitter tree
 	pub tree: Tree,
 	/// The diagnostics returned by wingc
-	pub diagnostics: Diagnostics,
+	pub diagnostics: Vec<Diagnostic>,
 	/// The top scope of the file
 	pub scope: Box<Scope>,
 	/// The universal type collection for the scope. This is saved to ensure references live long enough.
@@ -103,16 +104,12 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
 	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
 
-	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
-
-	let mut diagnostics = Diagnostics::new();
-	diagnostics.extend(wing_parser.diagnostics.into_inner());
-	diagnostics.extend(type_diag);
+	type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
 		tree,
-		diagnostics,
+		diagnostics: get_diagnostics(),
 		scope,
 		types,
 	};

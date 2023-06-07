@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use lsp_types::{Range, Url};
 
-use crate::diagnostic::Diagnostics;
+use crate::diagnostic::Diagnostic;
 
 lazy_static! {
 	static ref NOTIFICATION_TYPE_LOG: Vec<u8> = "window/logMessage".to_string().into_bytes();
@@ -37,7 +37,7 @@ pub unsafe fn send_notification(
 	dbg!(format!("send_notification: {} {}", notification_type, data));
 }
 
-pub fn send_diagnostics(uri: &Url, diagnostics: &Diagnostics) {
+pub fn send_diagnostics(uri: &Url, diagnostics: &[Diagnostic]) {
 	let final_diags = diagnostics
 		.iter()
 		.filter(|item| item.span.is_some())
