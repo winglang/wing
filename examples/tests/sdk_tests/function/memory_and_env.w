@@ -17,7 +17,7 @@ f2.addEnvironment("catAge", "2");
 assert(f2.env.get("catAge") == "2");
 assert(f2.env.get("catName") == "Tion");
 
-test "test" {
+test "function with memory and function with env can be invoked" {
     assert(c.peek() == 0);
     f1.invoke("");
     assert(c.peek() == 1);

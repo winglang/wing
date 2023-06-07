@@ -19,7 +19,7 @@ class Utils {
     extern "../external/sleep.js" static inflight sleep(milli: num);
 }
 
-
+// std.Test is used setting the timeout property
 new std.Test(inflight () => {
 
     assert(c1.peek() == 0);
