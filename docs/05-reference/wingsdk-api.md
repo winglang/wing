@@ -3805,7 +3805,7 @@ std.Json.deepCopyMut(json: Json)
 
 Creates a mutable deep copy of the Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.copyMut.parameter.json"></a>
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopyMut.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
@@ -4422,7 +4422,7 @@ new std.MutJson()
 
 ---
 
-##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.MutJson.deepCopy"></a>
+##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.MutJson.deepCopy"></a>
 
 ```wing
 bring std;

@@ -4417,7 +4417,7 @@ new std.MutJson()
 
 ---
 
-##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.MutJson.deepCopy"></a>
+##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.MutJson.deepCopy"></a>
 
 ```wing
 bring std;
