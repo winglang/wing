@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ memory_and_env.wsim » root/env0/test:test
+pass ─ memory_and_env.wsim » root/env0/test:function with memory and function with env can be invoked
  
 
 
