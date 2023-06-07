@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import * as path from "path";
-import fs from "fs-extra";
+import fs from "fs/promises";
 import { validTestDir } from "./paths";
 import {
   runWingCommand,
@@ -19,6 +19,6 @@ test("tree.json for an app with many resources", async () => {
     shouldSucceed: true,
   });
 
-  const treeJson = await fs.readJson(path.join(targetDir, "tree.json"));
+  const treeJson = JSON.parse(await fs.readFile(path.join(targetDir, "tree.json"), "utf-8"));
   expect(treeJson).toMatchSnapshot();
 });

@@ -9,7 +9,7 @@ import debug from "debug";
 import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "./constants";
-import { rmSync } from "fs-extra";
+import { rmSync } from "fs";
 
 const log = debug("wing:test");
 
@@ -112,10 +112,8 @@ async function testOne(entrypoint: string, options: TestOptions) {
   switch (options.target) {
     case Target.SIM:
       return await testSimulator(synthDir);
-      break;
     case Target.TF_AWS:
       return await testTfAws(synthDir);
-      break;
     default:
       throw new Error(`unsupported target ${options.target}`);
   }

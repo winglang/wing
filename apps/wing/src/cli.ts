@@ -32,6 +32,10 @@ async function main() {
     process.env.DEBUG = "1";
   });
 
+  program.option("--progress", "Show compilation progress", () => {
+    process.env.PROGRESS = "1";
+  });
+
   program
     .option("--no-update-check", "Skip checking for toolchain updates")
     .hook("preAction", async (cmd) => {

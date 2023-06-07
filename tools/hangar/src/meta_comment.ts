@@ -1,4 +1,4 @@
-import { readFileSync } from "fs-extra";
+import { readFileSync } from "fs";
 import YAML from "yaml";
 
 export interface MetaTestCase {
