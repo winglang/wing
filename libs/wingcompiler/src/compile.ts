@@ -129,11 +129,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   try {
     compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
   } catch (error) {
-    if (error instanceof Error) {
-      throw new InternalError(error);
-    } else {
-      throw error;
-    }
+    throw new InternalError(error as any);
   }
   if (compileResult !== 0) {
     // This is a bug in the user's code. Print the compiler diagnostics.
