@@ -123,7 +123,6 @@ export class Bucket extends cloud.Bucket {
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
-    host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
 
     super._bind(host, ops);
   }
@@ -134,15 +133,8 @@ export class Bucket extends cloud.Bucket {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "BucketClient",
-      [
-        `process.env["${this.envName()}"]`,
-        `process.env["${this.isPublicEnvName()}"]`,
-      ]
+      [`process.env["${this.envName()}"]`]
     );
-  }
-
-  private isPublicEnvName(): string {
-    return `${this.envName()}_IS_PUBLIC`;
   }
 
   private envName(): string {

@@ -257,11 +257,8 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
-            "BUCKET_NAME_51ee81c0_IS_PUBLIC": "false",
             "BUCKET_NAME_830bf023": "${aws_s3_bucket.root_MyResource_Another_First_cloudBucket_5E92C18E.bucket}",
-            "BUCKET_NAME_830bf023_IS_PUBLIC": "false",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
             "QUEUE_URL_ea9f63d6": "${aws_sqs_queue.root_MyResource_cloudQueue_156CFA11.url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",

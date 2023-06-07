@@ -15,7 +15,8 @@ module.exports = function({ publicBucket, privateBucket }) {
       let error = "";
       (await publicBucket.put("file1.txt","Foo"));
       (await privateBucket.put("file2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await publicBucket.publicUrl("file1.txt")) !== "")'`)})(((await publicBucket.publicUrl("file1.txt")) !== ""))};
+      const publicUrl = (await publicBucket.publicUrl("file1.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(publicUrl !== "")'`)})((publicUrl !== ""))};
       try {
         (await privateBucket.publicUrl("file2.txt"));
       }
@@ -107,9 +108,7 @@ module.exports = function({ publicBucket, privateBucket }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_7c320eda": "${aws_s3_bucket.root_publicBucket_8E082B9B.bucket}",
-            "BUCKET_NAME_7c320eda_IS_PUBLIC": "true",
             "BUCKET_NAME_e82f6088": "${aws_s3_bucket.root_privateBucket_9063F4A1.bucket}",
-            "BUCKET_NAME_e82f6088_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c849898f",
             "WING_TARGET": "tf-aws"
           }
@@ -258,6 +257,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

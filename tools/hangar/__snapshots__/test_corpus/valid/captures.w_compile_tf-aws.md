@@ -181,11 +181,8 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
-            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
-            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "AnotherFunction-c88d2a81",
             "WING_TARGET": "tf-aws"
           }
@@ -213,11 +210,8 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
-            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
-            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
           }
@@ -245,11 +239,8 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
-            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
-            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-cdafee6e-c89d2d3b",
             "WING_TARGET": "tf-aws"
           }

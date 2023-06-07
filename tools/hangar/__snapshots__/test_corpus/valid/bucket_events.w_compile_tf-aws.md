@@ -488,7 +488,6 @@ module.exports = function({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_create-OnMessage-aef3f85d-c8d1e844",
             "WING_TARGET": "tf-aws"
           }
@@ -516,7 +515,6 @@ module.exports = function({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_delete-OnMessage-1c41a2ad-c87344ee",
             "WING_TARGET": "tf-aws"
           }
@@ -570,7 +568,6 @@ module.exports = function({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_update-OnMessage-3ed6033f-c8b563a2",
             "WING_TARGET": "tf-aws"
           }
@@ -702,7 +699,6 @@ module.exports = function({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.root_b_6D0D1E6D.bucket}",
-            "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws"
           }
