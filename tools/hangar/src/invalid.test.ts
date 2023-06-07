@@ -34,7 +34,7 @@ invalidWingFiles.forEach((wingFile) => {
 
     expect(sanitize(out.stdout)).toMatchSnapshot();
     // when this env var is on, we allow the on-demand-panic-char (😱), right now panic writes to stderr (will be changed in the future)
-    if (metaComment?.env?.WINGC_DEBUG_PANIC === "type-checking") {
+    if (metaComment?.env?.WINGC_DEBUG_PANIC) {
       expect(sanitize(out.stderr)).toMatchSnapshot();
     }
   });
