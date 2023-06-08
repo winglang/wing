@@ -7,6 +7,10 @@
 
 > A specification for the Wing SDK utility libraries.
 
+This is a very initial non-exhaustive sketch of Wing's utility library.
+We plan to conduct a more thorough design of this library in the future,
+establish design tenets and determine the boundaries of the library.
+
 ## Design
 
 The Wing SDK includes a set of submodules which offer a set of useful functionality for building
@@ -17,6 +21,16 @@ cloud applications.
 For each module, we show a list of function declarations. For each function, we specify which phase this function
 is bound to: `inflight` (inflight only - async), `preflight` (preflight only - synchronous) or
 `preflight inflight` (for phase-independent).
+
+## `math` module
+
+```js
+preflight inflight min(arr: Set<num>): num
+preflight inflight max(arr: Set<num>): num
+preflight inflight abs(value: num): num
+preflight inflight floor(value: num): num;
+preflight inflight ceil(value: num): num;
+```
 
 ## `util` module
 
@@ -33,9 +47,9 @@ preflight inflight uuidv4(): str;
 preflight inflight sha256(data: str): str;
 preflight inflight nanoid(): str; // https://www.npmjs.com/package/nanoid
 
-// returns an pseudo random integer random number between [0, max] (inclusive).
-// the default `max` is JavaScript's `Number.MAX_VALUE`.
-preflight inflight random(max: num?): num;
+// returns an pseudo random double random number between [0, max] (inclusive).
+preflight inflight random(max: num? = 1.0): num;
+preflight inflight randomInt(max: num): num;
 
 preflight inflight class RegExp {
   test(s: str): bool;
@@ -50,6 +64,9 @@ preflight inflight regex(pattern: str): RegExp;
 File APIs are phase-independent and at the moment are all implemented using the "sync" node.js `fs` APIs.
 In the future we might separate preflight/inflight versions and the inflight versions will be async.
 
+All file paths must be POSIX file paths (`/` instead of `\`) and will be
+normalized to the target platform if running on Windows.
+
 ```js
 preflight inflight readFile(path: str): str;
 preflight inflight tryReadFile(path: str): str?; // nil if not found
@@ -59,11 +76,21 @@ preflight inflight tryReadJson(path: str): Json?;
 preflight inflight writeFile(path: str, data: str): void;
 preflight inflight writeJson(path: str, obj: Json): void;
 preflight inflight writeYaml(path: str, obj: Json): void;
+preflight inflight readYaml(path: str): Json;
+preflight inflight tryReadYaml(path: str): Json?;
 
 preflight inflight readDir(dir: str): Array<str>;
 preflight inflight tryReadDir(dir: str): Array<str>?; // nil if dir not found
 
 preflight inflight exists(path: str): bool;
+
+
+// paths (paths are always posix)
+inflight preflight join(p1: str, p2: str): str;
+inflight preflight dirname(p: str): str;
+inflight preflight basename(p: str): str;
+inflight preflight relative(p: str): str;
+inflight preflight absolute(p: str): str;
 
 // ...
 ```
