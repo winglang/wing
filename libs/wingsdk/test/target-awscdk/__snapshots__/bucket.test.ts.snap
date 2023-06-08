@@ -2,6 +2,11 @@
 
 exports[`bucket is public 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -93,6 +98,11 @@ exports[`bucket is public 1`] = `
 
 exports[`bucket with two preflight objects 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -428,6 +438,11 @@ exports[`bucket with two preflight objects 1`] = `
 
 exports[`create a bucket 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
