@@ -131,7 +131,7 @@ export class MutJson {
   /**
    * Creates an immutable deep copy of the Json.
    *
-   * @macro (JSON.parse(JSON.stringify($args$)))
+   * @macro Object.freeze(JSON.parse(JSON.stringify($args$)))
    *
    * @param json to copy
    * @returns the immutable copy of the Json
