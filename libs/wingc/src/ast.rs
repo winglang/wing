@@ -9,6 +9,11 @@ use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::TypeRef;
 
+// expr counter
+thread_local! {
+	static EXPR_COUNTER: RefCell<usize> = RefCell::new(0);
+}
+
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
 	pub name: String,
@@ -482,6 +487,7 @@ pub enum ExprKind {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Expr {
+	pub idx: usize,
 	pub kind: ExprKind,
 	pub span: WingSpan,
 	#[derivative(Debug = "ignore")]
@@ -490,7 +496,14 @@ pub struct Expr {
 
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
+		let idx = EXPR_COUNTER.with(|c| {
+			let idx = *c.borrow();
+			*c.borrow_mut() += 1;
+			idx
+		});
+
 		Self {
+			idx,
 			kind,
 			evaluated_type: RefCell::new(None),
 			span,

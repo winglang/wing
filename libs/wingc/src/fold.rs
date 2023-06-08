@@ -312,6 +312,7 @@ where
 		}
 	};
 	Expr {
+		idx: node.idx,
 		kind,
 		span: node.span,
 		evaluated_type: node.evaluated_type,
