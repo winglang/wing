@@ -8,7 +8,6 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
 
-// expr counter
 thread_local! {
 	static EXPR_COUNTER: RefCell<usize> = RefCell::new(0);
 }
@@ -495,13 +494,13 @@ pub struct Expr {
 
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
-		let idx = EXPR_COUNTER.with(|c| {
-			let idx = *c.borrow();
+		let id = EXPR_COUNTER.with(|c| {
+			let id = *c.borrow();
 			*c.borrow_mut() += 1;
-			idx
+			id
 		});
 
-		Self { id: idx, kind, span }
+		Self { id, kind, span }
 	}
 }
 

@@ -80,7 +80,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 			if parent.kind() == "nested_identifier" {
 				if let Some(nearest_expr) = scope_visitor.nearest_expr {
-					let nearest_expr_type = file_data.types.get_expr_type(nearest_expr).unwrap();
+					let nearest_expr_type = types.get_expr_type(nearest_expr).unwrap();
 
 					// If we are inside an incomplete reference, there is possibly a type error so we can't trust "any"
 					if !nearest_expr_type.is_anything() {

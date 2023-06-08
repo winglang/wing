@@ -94,7 +94,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn get_expr_type(&self, expr: &Expr) -> TypeRef {
-		// Safety: type checking has finished and validated that all expressions have types
+		// Safety: JSifier is always run after type checking has finished, so all types should be resolved.
 		self.types.get_expr_type(expr).unwrap()
 	}
 

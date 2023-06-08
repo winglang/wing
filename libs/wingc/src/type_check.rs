@@ -1090,6 +1090,7 @@ impl Types {
 		self.resource_base_type.unwrap()
 	}
 
+	/// Stores the type of a given expression node.
 	pub fn assign_type_to_expr(&mut self, expr: &Expr, type_: TypeRef) {
 		let expr_idx = expr.id;
 		if self.type_for_expr.len() <= expr_idx {
@@ -1098,6 +1099,8 @@ impl Types {
 		self.type_for_expr[expr_idx] = Some(type_);
 	}
 
+	/// Obtain the type of a given expression node. Returns None if the expression has not been type checked yet. If
+	/// this is called after type checking, it should always return Some.
 	pub fn get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
 		let expr_idx = expr.id;
 		if self.type_for_expr.len() <= expr_idx {
@@ -1106,6 +1109,7 @@ impl Types {
 		self.type_for_expr[expr_idx]
 	}
 
+	/// Returns true if all expressions have been type checked.
 	pub fn check_all_exprs_type_checked(&self) -> bool {
 		self.type_for_expr.iter().all(|t| t.is_some())
 	}
