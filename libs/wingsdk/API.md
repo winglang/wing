@@ -5289,7 +5289,7 @@ Inflight interface for `Counter`.
 | <code><a href="#@winglang/sdk.cloud.ICounterClient.dec">dec</a></code> | Decrement the counter, returning the previous value. |
 | <code><a href="#@winglang/sdk.cloud.ICounterClient.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
 | <code><a href="#@winglang/sdk.cloud.ICounterClient.peek">peek</a></code> | Get the current value of the counter. |
-| <code><a href="#@winglang/sdk.cloud.ICounterClient.reset">reset</a></code> | Reset a counter to a given value. |
+| <code><a href="#@winglang/sdk.cloud.ICounterClient.set">set</a></code> | Set a counter to a given value. |
 
 ---
 
@@ -5342,21 +5342,21 @@ Get the current value of the counter.
 Using this API may introduce race conditions since the value can change between
 the time it is read and the time it is used in your code.
 
-##### `reset` <a name="reset" id="@winglang/sdk.cloud.ICounterClient.reset"></a>
+##### `set` <a name="set" id="@winglang/sdk.cloud.ICounterClient.set"></a>
 
 ```wing
-reset(value?: num): void
+set(value: num): void
 ```
 
 **Inflight client:** [true](#true)
 
-Reset a counter to a given value.
+Set a counter to a given value.
 
-###### `value`<sup>Optional</sup> <a name="value" id="@winglang/sdk.cloud.ICounterClient.reset.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.ICounterClient.set.parameter.value"></a>
 
 - *Type:* num
 
-value to reset (default is 0).
+new value.
 
 ---
 

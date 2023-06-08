@@ -16,7 +16,7 @@ if (!SUPPORTED_NODE_VERSION) {
 function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
   return (...args: any[]) =>
     fn(...args).catch((err: Error) => {
-      console.error(err.message);
+      console.error(err);
       process.exit(1);
     });
 }
@@ -30,6 +30,10 @@ async function main() {
 
   program.option("--debug", "Enable debug logging (same as DEBUG=1)", () => {
     process.env.DEBUG = "1";
+  });
+
+  program.option("--progress", "Show compilation progress", () => {
+    process.env.PROGRESS = "1";
   });
 
   program

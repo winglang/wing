@@ -9,6 +9,7 @@ extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
+use comp_ctx::set_custom_panic_hook;
 use diagnostic::{Diagnostic, Diagnostics};
 use fold::Fold;
 use jsify::JSifier;
@@ -33,6 +34,7 @@ use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
 pub mod closure_transform;
+mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 pub mod fold;
@@ -175,6 +177,7 @@ pub fn type_check(
 	source_path: &Path,
 	jsii_types: &mut TypeSystem,
 ) -> Diagnostics {
+	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
@@ -278,6 +281,9 @@ pub fn compile(
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
+
+	// Setup a custom panic hook to report panics as complitation diagnostics
+	set_custom_panic_hook();
 
 	// -- PARSING PHASE --
 	let (scope, parse_diagnostics) = parse(&source_path);

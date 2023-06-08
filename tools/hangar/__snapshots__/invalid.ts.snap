@@ -1,16 +1,24 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`access_hidden_namespace.w > stderr 1`] = `
+exports[`access_hidden_namespace.w 1`] = `
 "error: Unknown symbol \\"core\\"
   --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
   |
 7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^ Unknown symbol \\"core\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`access_static_from_instance.w > stderr 1`] = `
+exports[`access_static_from_instance.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.w:4:3
   |
@@ -59,10 +67,18 @@ error: Variable this.f is not reassignable
 8 |     this.f = 1; // Can't access static fields through \`this\`
   |     ^^^^^^^^^^^ Variable this.f is not reassignable 
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`bring.w > stderr 1`] = `
+exports[`bring.w 1`] = `
 "error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.w:1:1
   |
@@ -83,10 +99,18 @@ error: \\"fs\\" is not a built-in module
 6 | bring fs;
   | ^^^^^^^^^ \\"fs\\" is not a built-in module
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`bring_jsii.w > stderr 1`] = `
+exports[`bring_jsii.w 1`] = `
 "error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
   --> ../../../examples/tests/invalid/bring_jsii.w:1:1
   |
@@ -100,10 +124,18 @@ error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"fo
 4 | bring \\"foobar\\" as baz;
   | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`capture_mutables.w > stderr 1`] = `
+exports[`capture_mutables.w 1`] = `
 "error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
   --> ../../../examples/tests/invalid/capture_mutables.w:8:10
   |
@@ -131,20 +163,54 @@ error: Cannot capture field 'aCloned' with non-capturable type 'MutArray<str>'
 14 |   assert(aCloned.length == 1);
    |          ^^^^^^^ Cannot capture field 'aCloned' with non-capturable type 'MutArray<str>'
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`capture_reassignable.w > stderr 1`] = `
+exports[`capture_reassignable.w 1`] = `
 "error: Cannot capture reassignable field 'x'
   --> ../../../examples/tests/invalid/capture_reassignable.w:6:15
   |
 6 |     log(\\"x: \${x}\\");
   |               ^ Cannot capture reassignable field 'x'
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`class.w > stderr 1`] = `
+exports[`capture_redefinition.w 1`] = `
+"error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+  --> ../../../examples/tests/invalid/capture_redefinition.w:4:7
+  |
+4 |   log(y);
+  |       ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`class.w 1`] = `
 "error: Expected block
    --> ../../../examples/tests/invalid/class.w:17:17
    |
@@ -243,18 +309,25 @@ error: Preflight field \\"y\\" is not initialized
    |   ^ Preflight field \\"y\\" is not initialized
 
 
-error: Expected 'x' to be a type but it's a variable
+error: Expected \\"x\\" to be a type but it's a variable
    --> ../../../examples/tests/invalid/class.w:68:18
    |
 68 | class C7 extends x {
-   |                  ^ Expected 'x' to be a type but it's a variable
+   |                  ^ Expected \\"x\\" to be a type but it's a variable
 
 
-error: Preflight class C8's parent \\"S1\\" is not a class
+error: Base class \\"S1\\" is not a class
    --> ../../../examples/tests/invalid/class.w:74:18
    |
 74 | class C8 extends S1 {
-   |                  ^^ Preflight class C8's parent \\"S1\\" is not a class
+   |                  ^^ Base class \\"S1\\" is not a class
+
+
+error: Class cannot extend itself
+   --> ../../../examples/tests/invalid/class.w:78:19
+   |
+78 | class C11 extends C11 {
+   |                   ^^^ Class cannot extend itself
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -263,10 +336,18 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 31 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`cloud_function_expects_inflight.w > stderr 1`] = `
+exports[`cloud_function_expects_inflight.w 1`] = `
 "error: Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20
   |  
@@ -277,7 +358,7 @@ exports[`cloud_function_expects_inflight.w > stderr 1`] = `
   | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
 
 
-error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Inflight1\\" instead
+error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
    --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
    |  
  9 |   q.addConsumer(inflight (x: num) => {
@@ -285,12 +366,20 @@ error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\"
 10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
 11 | |   return;
 12 | | });
-   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Inflight1\\" instead
+   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`container_types.w > stderr 1`] = `
+exports[`container_types.w 1`] = `
 "error: Unknown parser error
    --> ../../../examples/tests/invalid/container_types.w:10:24
    |
@@ -416,10 +505,18 @@ error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 23 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`enums.w > stderr 1`] = `
+exports[`enums.w 1`] = `
 "error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
   --> ../../../examples/tests/invalid/enums.w:5:21
   |
@@ -433,10 +530,18 @@ error: Property access unsupported on type \\"SomeEnum\\"
 8 | let two = SomeEnum.TWO.TWO;
   |           ^^^^^^^^^^^^ Property access unsupported on type \\"SomeEnum\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`extern.w > stderr 1`] = `
+exports[`extern.w 1`] = `
 "error: Failed to resolve extern \\"./sad.js\\": Not Found
   --> ../../../examples/tests/invalid/extern.w:2:3
   |
@@ -450,20 +555,36 @@ error: Failed to resolve extern \\"not-installed\\": Not Found
 4 |   extern \\"not-installed\\" static tooBad(): bool;
   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"not-installed\\": Not Found
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`for_loop.w > stderr 1`] = `
+exports[`for_loop.w 1`] = `
 "error: Unable to iterate over \\"Bucket\\"
   --> ../../../examples/tests/invalid/for_loop.w:5:13
   |
 5 | for test in bucket {
   |             ^^^^^^ Unable to iterate over \\"Bucket\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`function_type.w > stderr 1`] = `
+exports[`function_type.w 1`] = `
 "error: Expected function return type
   --> ../../../examples/tests/invalid/function_type.w:2:26
   |
@@ -486,32 +607,41 @@ error: Expected function return type
 
 
 error: Expected method return type
-   --> ../../../examples/tests/invalid/function_type.w:10:3
-   |
-10 |   my_method(x: num);
-   |   ^^^^^^^^^^^^^^^^^^ Expected method return type
-
-
-error: Expected method return type
    --> ../../../examples/tests/invalid/function_type.w:12:3
    |
 12 |   inflight my_method2(x: num);
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected method return type
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`immutable_container_types.w > stderr 1`] = `
+exports[`immutable_container_types.w 1`] = `
 "error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
   |    ^^^ Unknown symbol \\"set\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`impl_interface.w > stderr 1`] = `
+exports[`impl_interface.w 1`] = `
 "error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:7
   |
@@ -553,27 +683,138 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
 30 | class r impl I3 {
    |       ^ Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`inflight_in_class.w > stderr 1`] = `
-"error: Class cannot have inflight fields
-  --> ../../../examples/tests/invalid/inflight_in_class.w:2:3
+exports[`inflight_class_capture_mutable.w 1`] = `
+"error: Cannot capture field 'x' with non-capturable type 'MutArray<str>'
+  --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:5:9
   |
-2 |   inflight field: num; // No inflight fields in classes (only in resources)
-  |   ^^^^^^^^ Class cannot have inflight fields
+5 |     log(x.at(0));
+  |         ^ Cannot capture field 'x' with non-capturable type 'MutArray<str>'
 
 
-error: Inflight field \\"field\\" is not initialized
-  --> ../../../examples/tests/invalid/inflight_in_class.w:2:12
-  |
-2 |   inflight field: num; // No inflight fields in classes (only in resources)
-  |            ^^^^^ Inflight field \\"field\\" is not initialized
+error: Cannot capture reassignable field 'foo'
+   --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:14:12
+   |
+14 |     return foo;
+   |            ^^^ Cannot capture reassignable field 'foo'
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`inflight_ref_explicit_ops.w > stderr 1`] = `
+exports[`inflight_class_created_in_preflight.w 1`] = `
+"error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:3:1
+  |
+3 | new Foo();
+  | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:8:5
+  |
+8 |     new Foo();
+  |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create inflight class \\"Foo\\" in preflight phase
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:13:5
+   |
+13 |     new Foo();
+   |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:3
+   |
+19 |   new PreflightClass();
+   |   ^^^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"PreflightClass\\" in inflight phase
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`inflight_class_dup_init.w 1`] = `
+"error: Multiple inflight initializers defined in class Foo
+  --> ../../../examples/tests/invalid/inflight_class_dup_init.w:6:3
+  |  
+6 | /   inflight init() {
+7 | | 
+8 | |   }
+  | \\\\---^ Multiple inflight initializers defined in class Foo
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`inflight_class_in_preflight.w 1`] = `
+"error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_in_preflight.w:5:1
+  |
+5 | new Foo();
+  | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`inflight_class_interface_structural_typing.w 1`] = `
+"error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
+   --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.w:26:17
+   |
+26 |   let x: IGoo = new NotGoo();
+   |                 ^^^^^^^^^^^^ Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`inflight_ref_explicit_ops.w 1`] = `
 "error: Unable to qualify which operations are performed on 'this.myQueue' of type 'Queue'. This is not supported yet.
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:13:12
    |
@@ -588,16 +829,24 @@ error: Unable to qualify which operations are performed on 'this.b' of type 'Buc
    |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
 
 
-error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+error: Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:47:18
    |
 47 |     let b = this.array.at(1);
-   |                  ^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   |                  ^^^^^ Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`inflight_ref_resource_sub_method.w > stderr 1`] = `
+exports[`inflight_ref_resource_sub_method.w 1`] = `
 "error: Unable to qualify which operations are performed on 'this.myQueue' of type 'Queue'. This is not supported yet.
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:13:12
    |
@@ -611,10 +860,18 @@ error: Unable to qualify which operations are performed on 'globalQueue' of type
 18 |     return globalQueue;
    |            ^^^^^^^^^^^ Unable to qualify which operations are performed on 'globalQueue' of type 'Queue'. This is not supported yet.
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`inflight_ref_unknown_op.w > stderr 1`] = `
+exports[`inflight_ref_unknown_op.w 1`] = `
 "error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:13:13
    |
@@ -628,11 +885,26 @@ error: Unable to qualify which operations are performed on 'globalB' of type 'Bu
 17 |     let y = globalB;
    |             ^^^^^^^ Unable to qualify which operations are performed on 'globalB' of type 'Bucket'. This is not supported yet.
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`interface.w > stderr 1`] = `
-"error: Unknown symbol \\"IB\\"
+exports[`interface.w 1`] = `
+"error: Properties are not supported in interfaces
+   --> ../../../examples/tests/invalid/interface.w:30:3
+   |
+30 |   bar: str;
+   |   ^^^^^^^^^ Properties are not supported in interfaces
+
+
+error: Unknown symbol \\"IB\\"
   --> ../../../examples/tests/invalid/interface.w:2:22
   |
 2 | interface IA extends IB {
@@ -666,10 +938,18 @@ error: Symbol \\"foo\\" already defined in this scope
 25 |     foo(): num;
    |     ^^^ Symbol \\"foo\\" already defined in this scope
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`json.w > stderr 1`] = `
+exports[`json.w 1`] = `
 "error: Json literal must have an element
    --> ../../../examples/tests/invalid/json.w:30:26
    |
@@ -739,20 +1019,36 @@ error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json
 27 | let jsonObj = Json { boom: bkt };
    |                            ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`json_static.w > stderr 1`] = `
+exports[`json_static.w 1`] = `
 "error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/json_static.w:4:8
   |
 4 | immutJ.set(\\"a\\", \\"foo\\");
   |        ^^^ Unknown symbol \\"set\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`missing_semicolon.w > stderr 1`] = `
+exports[`missing_semicolon.w 1`] = `
 "error: Expected ';'
   --> ../../../examples/tests/invalid/missing_semicolon.w:9:3
   |
@@ -773,10 +1069,18 @@ error: Expected '}'
 20 |            //^ '}' expected
    |                            ^ Expected '}'
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`mut_container_types.w > stderr 1`] = `
+exports[`mut_container_types.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/mut_container_types.w:2:29
   |
@@ -874,10 +1178,18 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 25 | let m5: MutMap<str> = m4;
    |                       ^^ Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`nil.w > stderr 1`] = `
+exports[`nil.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
   --> ../../../examples/tests/invalid/nil.w:3:14
   |
@@ -912,10 +1224,18 @@ error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow 
 20 |   foo.setBar(nil);
    |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`optionals.w > stderr 1`] = `
+exports[`optionals.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"num?\\" instead
   --> ../../../examples/tests/invalid/optionals.w:7:3
   |
@@ -992,32 +1312,54 @@ error: Variable hi is not reassignable
 46 |   hi = \\"bye\\";
    |   ^^^^^^^^^^^ Variable hi is not reassignable 
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`preflight_class_inflight.w > stderr 1`] = `
-"error: Cannot define a preflight class in inflight scope
-  --> ../../../examples/tests/invalid/preflight_class_inflight.w:4:3
-  |  
-4 | /   class R {
-5 | |     init() {}
-6 | |   }
-  | \\\\---^ Cannot define a preflight class in inflight scope
+exports[`panic.w 1`] = `
+"RuntimeError: unreachable
+Internal error: An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.
+ 
 
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`preflight_from_inflight.w > stderr 1`] = `
+exports[`panic.w 2`] = `
+"Compiler bug when type-checking ../../../examples/tests/invalid/panic.w:6:1 | panicked at 'User invoked panic', libs/wingc/src/type_check.rs:1721:17
+Please report this bug at https://docs.winglang.io/contributors/bugs"
+`;
+
+exports[`preflight_from_inflight.w 1`] = `
 "error: Cannot call into preflight phase while inflight
    --> ../../../examples/tests/invalid/preflight_from_inflight.w:15:5
    |
 15 |     this.r.myPreflight();
    |     ^^^^^^^^^^^^^^^^^^^^ Cannot call into preflight phase while inflight
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`primitives.w > stderr 1`] = `
+exports[`primitives.w 1`] = `
 "error: Unexpected reference \\"structured_access_expression\\"
   --> ../../../examples/tests/invalid/primitives.w:5:5
   |
@@ -1045,10 +1387,18 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 13 | let n: str = arr.at(0);
    |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`reassign_to_nonreassignable.w > stderr 1`] = `
+exports[`reassign_to_nonreassignable.w 1`] = `
 "error: Variable x is not reassignable 
   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:3:1
   |
@@ -1083,20 +1433,36 @@ error: Variable arg is not reassignable
 42 |   arg = 0;
    |   ^^^^^^^^ Variable arg is not reassignable 
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`resource_access_field_as_method.w > stderr 1`] = `
+exports[`resource_access_field_as_method.w 1`] = `
 "error: Expected a function or method
   --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:1
   |
 9 | x.name();
   | ^^^^^^ Expected a function or method
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`resource_captures.w > stderr 1`] = `
+exports[`resource_captures.w 1`] = `
 "error: Cannot capture reassignable field 'reassignable'
    --> ../../../examples/tests/invalid/resource_captures.w:18:17
    |
@@ -1118,26 +1484,42 @@ error: Unable to qualify which operations are performed on 'this.bucket' of type
    |             ^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
 
 
-error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+error: Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
    --> ../../../examples/tests/invalid/resource_captures.w:27:10
    |
 27 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
-   |          ^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   |          ^^^^^^^^^^^^^^^^^^^^^ Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`resource_inflight.w > stderr 1`] = `
+exports[`resource_inflight.w 1`] = `
 "error: Cannot create preflight class \\"Bucket\\" in inflight phase
   --> ../../../examples/tests/invalid/resource_inflight.w:4:3
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
   |   ^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"Bucket\\" in inflight phase
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`resource_init.w > stderr 1`] = `
+exports[`resource_init.w 1`] = `
 "error: Multiple initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.w:3:3
   |
@@ -1165,10 +1547,18 @@ error: Inflight initializers cannot have parameters
 9 |   inflight init(x: num) {}
   |                ^^^^^^^^ Inflight initializers cannot have parameters
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`sorted_errors_no_span.w > stderr 1`] = `
+exports[`sorted_errors_no_span.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:1:14
   |
@@ -1176,11 +1566,11 @@ exports[`sorted_errors_no_span.w > stderr 1`] = `
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected 'b' to be a type but it's a variable
+error: Expected \\"b\\" to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
 3 | inflight class c extends b {}
-  |                          ^ Expected 'b' to be a type but it's a variable
+  |                          ^ Expected \\"b\\" to be a type but it's a variable
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1190,16 +1580,24 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected 'b' to be a type but it's a variable
+error: Expected \\"b\\" to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:5:26
   |
 5 | inflight class e extends b {}
-  |                          ^ Expected 'b' to be a type but it's a variable
+  |                          ^ Expected \\"b\\" to be a type but it's a variable
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`statement_invalid_scope.w > stderr 1`] = `
+exports[`statement_invalid_scope.w 1`] = `
 "error: Expected break statement to be inside of a loop (while/for)
   --> ../../../examples/tests/invalid/statement_invalid_scope.w:3:5
   |
@@ -1227,10 +1625,18 @@ error: Expected continue statement to be inside of a loop (while/for)
 15 |     continue;
    |     ^^^^^^^^^ Expected continue statement to be inside of a loop (while/for)
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`statements_if.w > stderr 1`] = `
+exports[`statements_if.w 1`] = `
 "error: Unexpected unary operator \\"--\\"
   --> ../../../examples/tests/invalid/statements_if.w:2:1
   |
@@ -1251,20 +1657,36 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
 8 | if !n || true {}
   |     ^ Expected type to be \\"bool\\", but got \\"num\\" instead
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`std_containers.w > stderr 1`] = `
+exports[`std_containers.w 1`] = `
 "error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
   --> ../../../examples/tests/invalid/std_containers.w:3:18
   |
 3 | let c = a.concat(b); 
   |                  ^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`struct_expansion.w > stderr 1`] = `
+exports[`struct_expansion.w 1`] = `
 "error: Unexpected 'keyword_argument'
    --> ../../../examples/tests/invalid/struct_expansion.w:11:15
    |
@@ -1321,10 +1743,18 @@ error: Expected 2 positional argument(s) but got 1
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`structs.w > stderr 1`] = `
+exports[`structs.w 1`] = `
 "error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
    --> ../../../examples/tests/invalid/structs.w:11:8
    |
@@ -1373,10 +1803,18 @@ error: Cannot instantiate type \\"BucketProps\\" because it is not a class
 47 | let x = new cloud.BucketProps(1);
    |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is not a class
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`try_no_catch_or_finally.w > stderr 1`] = `
+exports[`try_no_catch_or_finally.w 1`] = `
 "error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1
   |  
@@ -1385,10 +1823,18 @@ exports[`try_no_catch_or_finally.w > stderr 1`] = `
 3 | | }
   | \\\\-^ Missing \`catch\` or \`finally\` blocks for this try statement
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`types_strings_arithmetic.w > stderr 1`] = `
+exports[`types_strings_arithmetic.w 1`] = `
 "error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
   --> ../../../examples/tests/invalid/types_strings_arithmetic.w:1:10
   |
@@ -1409,10 +1855,18 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 10 | let e3 = \\"\${strExample}!\\" * numExample;
    |          ^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`unimplemented_grammar.w > stderr 1`] = `
+exports[`unimplemented_grammar.w 1`] = `
 "error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:1:8
   |
@@ -1440,10 +1894,18 @@ error: expression \\"await_expression\\" is not supported yet see https://github
 4 | let d = await c;
   |         ^^^^^^^ expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`unknown_symbol.w > stderr 1`] = `
+exports[`unknown_symbol.w 1`] = `
 "error: Unknown symbol \\"clod\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
   |
@@ -1492,10 +1954,18 @@ error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`use_before_defined.w > stderr 1`] = `
+exports[`use_before_defined.w 1`] = `
 "error: Unknown symbol \\"y\\"
   --> ../../../examples/tests/invalid/use_before_defined.w:1:8
   |
@@ -1509,20 +1979,36 @@ error: Symbol \\"x\\" used before being defined
 5 |   log(\\"\${x}\\"); // Access x before it's defined (even though it's defined in an outer scope)
   |          ^ Symbol \\"x\\" used before being defined
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`variable_scoping.w > stderr 1`] = `
+exports[`variable_scoping.w 1`] = `
 "error: Unknown symbol \\"x\\"
   --> ../../../examples/tests/invalid/variable_scoping.w:6:11
   |
 6 |   let z = x;
   |           ^ Unknown symbol \\"x\\"
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
 
-exports[`void_in_expression_position.w > stderr 1`] = `
+exports[`void_in_expression_position.w 1`] = `
 "error: Property access unsupported on type \\"void\\"
   --> ../../../examples/tests/invalid/void_in_expression_position.w:1:1
   |
@@ -1543,5 +2029,13 @@ error: Cannot assign expression of type \\"void\\" to a variable
 11 | let z = returnsNothing();
    |     ^ Cannot assign expression of type \\"void\\" to a variable
 
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
 "
 `;
