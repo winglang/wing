@@ -1,0 +1,42 @@
+{
+  "name": "@winglang/compiler",
+  "version": "0.0.0",
+  "description": "Wing Compiler",
+  "files": [
+    "wingc.wasm",
+    "dist/"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=v18.0.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winglang/wing.git"
+  },
+  "scripts": {
+    "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "test": "vitest run --passWithNoTests",
+    "bump": "node version.js",
+    "unbump": "node unversion.js"
+  },
+  "dependencies": {
+    "@winglang/sdk": "file:../../libs/wingsdk"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "esbuild": "^0.17.19",
+    "tsup": "^6.7.0",
+    "typescript": "^4.9.4",
+    "vitest": "^0.30.1",
+    "wasi-js": "^1.7.3"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
+  }
+}
