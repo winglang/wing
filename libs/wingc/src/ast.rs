@@ -8,6 +8,7 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
 
+// assumption: the compiler's main phases (parsing, type checking, jsifying) are executed in a single-threaded context
 thread_local! {
 	static EXPR_COUNTER: RefCell<usize> = RefCell::new(0);
 }
