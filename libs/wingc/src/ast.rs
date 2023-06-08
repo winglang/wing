@@ -7,7 +7,6 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::TypeRef;
 
 // expr counter
 thread_local! {
@@ -284,7 +283,7 @@ pub struct FunctionDefinition {
 	pub span: WingSpan,
 }
 
-#[derive(Derivative, Debug)]
+#[derive(Debug)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
@@ -484,14 +483,14 @@ pub enum ExprKind {
 	CompilerDebugPanic,
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct Expr {
-	pub idx: usize,
+	/// An identifier that is unique among all expressions in the AST.
+	pub id: usize,
+	/// The kind of expression.
 	pub kind: ExprKind,
+	/// The span of the expression.
 	pub span: WingSpan,
-	#[derivative(Debug = "ignore")]
-	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
 impl Expr {
@@ -502,12 +501,7 @@ impl Expr {
 			idx
 		});
 
-		Self {
-			idx,
-			kind,
-			evaluated_type: RefCell::new(None),
-			span,
-		}
+		Self { id: idx, kind, span }
 	}
 }
 

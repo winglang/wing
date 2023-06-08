@@ -312,10 +312,9 @@ where
 		}
 	};
 	Expr {
-		idx: node.idx,
+		id: node.id,
 		kind,
 		span: node.span,
-		evaluated_type: node.evaluated_type,
 	}
 }
 
