@@ -24,7 +24,7 @@ let getHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 };
 
 let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  let body: Json = req.body ?? {name: "", age: "", id: ""};
+  let body: Json = Json.parse(req.body ?? Json.stringify({name: "", age: "", id: ""}));
   if (body.get("name") == "" || body.get("age")  == "" || body.get("id")  == "") {
     return cloud.ApiResponse {
       body: Json.stringify({ error: "incomplete details" }),
