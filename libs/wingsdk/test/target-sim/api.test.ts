@@ -470,7 +470,10 @@ test("request & response body are strings", async () => {
   // GIVEN
   const app = new SimApp();
   const api = cloud.Api._newApi(app, "Api");
-  api.post("/test", Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY));
+  api.post(
+    "/test",
+    Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY)
+  );
 
   // WHEN
   const s = await app.startSimulator();

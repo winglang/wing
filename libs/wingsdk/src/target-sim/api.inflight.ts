@@ -26,7 +26,8 @@ import {
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
 export class Api
-  implements IApiClient, ISimulatorResourceInstance, IEventPublisher {
+  implements IApiClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly routes: ApiRoute[];
   private readonly context: ISimulatorContext;
   private readonly app: express.Application;
@@ -89,7 +90,9 @@ export class Api
         next: express.NextFunction
       ) => {
         this.addTrace(
-          `Processing "${route.method} ${route.path}" params=${JSON.stringify(req.params)}).`
+          `Processing "${route.method} ${route.path}" params=${JSON.stringify(
+            req.params
+          )}).`
         );
 
         const apiRequest = transformRequest(req);
