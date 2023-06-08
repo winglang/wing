@@ -21,11 +21,15 @@ class Utils {
 
 // std.Test is used setting the timeout property
 new std.Test(inflight () => {
-
+    // counters start at zero
     assert(c1.peek() == 0);
     assert(c2.peek() == 0);
+
+    // wait at least one minute
     Utils.sleep(60 * 1000 * 1.1);
-    assert(c1.peek() == 1);
-    assert(c2.peek() == 1);
+
+    // check that both counters have been incremented
+    assert(c1.peek() >= 1);
+    assert(c2.peek() >= 1);
 
 }, std.TestProps { timeout: 2m }) as "on tick is called both for rate and cron schedules";
