@@ -3,7 +3,6 @@ use std::{
 	cell::RefCell,
 };
 
-use colored::Colorize;
 use strum::{Display, EnumString};
 
 use crate::diagnostic::{report_diagnostic, Diagnostic, WingSpan};
@@ -95,25 +94,21 @@ macro_rules! dbg_panic {
 
 pub fn set_custom_panic_hook() {
 	std::panic::set_hook(Box::new(|pi| {
-		eprintln!(
-			"Compiler bug when {} {} | {}\nPlease report this bug at https://docs.winglang.io/contributors/bugs",
-			CompilationContext::get_phase(),
-			CompilationContext::get_span(),
-			pi.to_string().bold().white()
-		);
-
 		// Print backtrace if RUST_BACKTRACE=1
 		let bt = Backtrace::capture();
 		if bt.status() == BacktraceStatus::Captured {
-			eprintln!("Backtrace:\n{}", bt);
+			eprintln!("Panic backtrace:\n{}", bt);
+		} else {
+			eprintln!("Panicked, backtrace not captured: {:?}", bt.status());
 		}
 
 		report_diagnostic(Diagnostic {
-    	message: format!(
-				"Compiler bug during {}, please report with stack trace (run with RUST_BACKTRACE=1) at https://docs.winglang.io/contributors/bugs", 
+			message: format!(
+				"Compiler bug ({}) during {}, please report at https://docs.winglang.io/contributors/bugs",
+				pi,
 				CompilationContext::get_phase()
 			),
-    	span: Some(CompilationContext::get_span()),
+			span: Some(CompilationContext::get_span()),
 		})
 	}));
 }
