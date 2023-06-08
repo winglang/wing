@@ -9,19 +9,21 @@ import { SimApp } from "../sim-app";
 const INFLIGHT_CODE = (body: string) =>
   `async handle(req) { return { status: 200, body: "${body}" }; }`;
 // Handler that responds to a request with the request body
-const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { status: 200, body: req.body }; }`;
+const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }`;
 // Handler that responds to a request with the request method
 const INFLIGHT_CODE_ECHO_METHOD = `async handle(req) { return { status: 200, body: req.method }; }`;
 // Handler that responds to a request with the request path
 const INFLIGHT_CODE_ECHO_PATH = `async handle(req) { return { status: 200, body: req.path }; }`;
 // Handler that responds to a request with the request query params
-const INFLIGHT_CODE_ECHO_QUERY = `async handle(req) { return { status: 200, body: req.query }; }`;
+const INFLIGHT_CODE_ECHO_QUERY = `async handle(req) { return { status: 200, body: JSON.stringify(req.query), headers: { "Content-Type": "application/json" } }; }`;
 // Handler that responds to a request with the request params
 const INFLIGHT_CODE_ECHO_PARAMS = `async handle(req) { return { status: 200, body: req.vars ?? {} }; }`;
 // Handler that responds to a request with extra response headers
 const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
 // Handler that reseponds to a request with Content-Type different from default `application/json`
 const INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "Content-Type": "application/octet-stream; charset=utf-8" } }; }`;
+// Handler that responds to a request without a response body
+const INFLIGHT_CODE_NO_BODY = `async handle(req) { return { status: 200 }; }`;
 
 test("create an api", async () => {
   // GIVEN
@@ -68,7 +70,7 @@ test("api with one GET route", async () => {
   await s.stop();
 
   expect(response.status).toEqual(200);
-  expect(await response.json()).toEqual(RESPONSE);
+  expect(await response.text()).toEqual(RESPONSE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -144,9 +146,13 @@ test("api supports every method type", async () => {
   // WHEN
   const s = await app.startSimulator();
   const apiUrl = getApiUrl(s, "/my_api");
-  const responses = await Promise.all(
-    METHODS.map((method) => fetch(apiUrl + ROUTE, { method }))
-  );
+
+  // send all requests (we don't do that in parallel in order to avoid non-deterministic test behavior)
+  const responses = new Array<Response>();
+  for (const method of METHODS) {
+    const r = await fetch(apiUrl + ROUTE, { method });
+    responses.push(r);
+  }
 
   // THEN
   await s.stop();
@@ -154,7 +160,7 @@ test("api supports every method type", async () => {
   for (const [method, response] of zip(METHODS, responses)) {
     expect(response.status).toEqual(200);
     if (method !== "HEAD") {
-      expect(await response.json()).toEqual(method);
+      expect(await response.text()).toEqual(method);
     }
   }
 
@@ -192,10 +198,10 @@ test("api with multiple methods on same route", async () => {
   await s.stop();
 
   expect(getResponse.status).toEqual(200);
-  expect(await getResponse.json()).toEqual(GET_RESPONSE);
+  expect(await getResponse.text()).toEqual(GET_RESPONSE);
 
   expect(postResponse.status).toEqual(200);
-  expect(await postResponse.json()).toEqual(POST_RESPONSE);
+  expect(await postResponse.text()).toEqual(POST_RESPONSE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -232,10 +238,10 @@ test("api with multiple routes", async () => {
   await s.stop();
 
   expect(response1.status).toEqual(200);
-  expect(await response1.json()).toEqual(RESPONSE1);
+  expect(await response1.text()).toEqual(RESPONSE1);
 
   expect(response2.status).toEqual(200);
-  expect(await response2.json()).toEqual(RESPONSE2);
+  expect(await response2.text()).toEqual(RESPONSE2);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -272,35 +278,6 @@ test("api with one POST route, with body", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("api with one POST route, with body urlencoded", async () => {
-  // GIVEN
-  const ROUTE = "/hello";
-  const REQUEST_BODY = { message: "hello world" };
-
-  const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
-  api.post(ROUTE, inflight);
-
-  // WHEN
-  const s = await app.startSimulator();
-  const apiUrl = getApiUrl(s, "/my_api");
-  const params = new URLSearchParams(REQUEST_BODY);
-  const response = await fetch(apiUrl + ROUTE, {
-    method: "POST",
-    body: params,
-  });
-
-  // THEN
-  await s.stop();
-
-  expect(await response.json()).toEqual(REQUEST_BODY);
-  expect(response.status).toEqual(200);
-
-  expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
-});
-
 test("api handler can read the request path", async () => {
   // GIVEN
   const ROUTE = "/hello";
@@ -319,7 +296,7 @@ test("api handler can read the request path", async () => {
   await s.stop();
 
   expect(response.status).toEqual(200);
-  expect(await response.json()).toEqual(ROUTE);
+  expect(await response.text()).toEqual(ROUTE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -488,3 +465,47 @@ function getApiUrl(s: Simulator, path: string): string {
 function zip<T, U>(a: T[], b: U[]): Array<[T, U]> {
   return a.map((x, i) => [x, b[i]]);
 }
+
+test("request & response body are strings", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "Api");
+  api.post("/test", Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY));
+
+  // WHEN
+  const s = await app.startSimulator();
+
+  const apiUrl = getApiUrl(s, "/Api");
+  const response = await fetch(apiUrl + "/test", {
+    method: "POST",
+    body: "hello world, this is a string",
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.text()).toEqual("hello world, this is a string");
+});
+
+test("no response body", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "Api");
+  api.post("/test", Testing.makeHandler(app, "Handler", INFLIGHT_CODE_NO_BODY));
+
+  // WHEN
+  const s = await app.startSimulator();
+
+  const apiUrl = getApiUrl(s, "/Api");
+  const response = await fetch(apiUrl + "/test", {
+    method: "POST",
+    body: "hello world, this is a string",
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(response.bodyUsed).toBeFalsy();
+});
