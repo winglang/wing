@@ -231,11 +231,7 @@ async function testSimulator(synthDir: string) {
 
 async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
   try {
-    if (!isAwsCdkInstalled(synthDir)) {
-      throw new Error(
-        "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
-      );
-    }
+    isAwsCdkInstalled(synthDir);
 
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
@@ -277,8 +273,13 @@ async function cleanupCdk(synthDir: string) {
 }
 
 async function isAwsCdkInstalled(synthDir: string) {
-  const output = await execCapture("cdk version", { cwd: synthDir });
-  return output.startsWith("2");
+  try {
+    await execCapture("cdk version --ci true", { cwd: synthDir });
+  } catch (err) {
+    throw new Error(
+      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
+    );
+  }
 }
 
 export async function awsCdkDeploy(synthDir: string) {
