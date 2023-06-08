@@ -1686,7 +1686,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				optional_accessor: _optional_chain,
 			} => {
 				let obj_type = object.evaluated_type.borrow().unwrap();
-				let prop = if let Some(component_kind) = self.determine_component_kind_from_type(obj_type, property) {
+				let prop = if let Some(component_kind) = Self::determine_component_kind_from_type(obj_type, property) {
 					vec![Component {
 						text: property.name.clone(),
 						span: property.span.clone(),
@@ -1735,11 +1735,11 @@ impl<'a> FieldReferenceVisitor<'a> {
 		}
 	}
 
-	fn determine_component_kind_from_type(&self, obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
+	fn determine_component_kind_from_type(obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
 		match &*obj_type {
 			Type::Void => unreachable!("cannot reference a member of void"),
 			Type::Function(_) => unreachable!("cannot reference a member of a function"),
-			Type::Optional(t) => self.determine_component_kind_from_type(*t, property),
+			Type::Optional(t) => Self::determine_component_kind_from_type(*t, property),
 			// all fields / methods / values of these types are phase-independent so we can skip them
 			Type::Anything
 			| Type::Number
