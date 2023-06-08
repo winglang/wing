@@ -8,7 +8,7 @@ import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
-import { Target } from "./constants";
+import { Target } from "@winglang/compiler";
 import { rmSync } from "fs";
 
 const log = debug("wing:test");

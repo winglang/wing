@@ -46,6 +46,7 @@
     },
     "test": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "inputs": [
         "^default-build",
         "default-test"
