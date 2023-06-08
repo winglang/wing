@@ -9,7 +9,7 @@ import debug from "debug";
 import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
-import { rmSync } from "fs";
+import { readFile, rm, rmSync } from "fs";
 
 const log = debug("wing:test");
 
@@ -63,18 +63,16 @@ function printResults(
   const totalSum = failing.length + passing.length;
   console.log(" "); // for getting a new line- \n does't seem to work :(
   console.log(`
-${
-  totalSum > 1
-    ? `Tests Results:
+${totalSum > 1
+      ? `Tests Results:
 ${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
 ${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}
 ${" "}
 `
-    : ""
-}
-${
-  failing.length && totalSum > 1
-    ? `
+      : ""
+    }
+${failing.length && totalSum > 1
+      ? `
 ${" "}
 Errors:` +
       failing
@@ -85,15 +83,14 @@ At ${testName}\n ${chalk.red(error.message)}
         `
         )
         .join("\n\n")
-    : ""
-}
+      : ""
+    }
 
-${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
-    failing.length && passing.length ? chalk.dim(" |") : ""
-  }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(`(${totalSum})`)} 
+${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${failing.length && passing.length ? chalk.dim(" |") : ""
+    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(`(${totalSum})`)} 
 ${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(durationInSeconds % 60).toFixed(
-    2
-  )}s
+      2
+    )}s
 `);
 }
 
@@ -233,79 +230,19 @@ async function testSimulator(synthDir: string) {
 }
 
 async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
-
-  if (!isAwsCdkInstalled(synthDir)) {
-    throw new Error(
-      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
-    );
-  }
-
-  await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
-
-  const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-    const testArns = await awsCdkOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK, process.env.CDK_STACK_NAME!);
-    const testRunner = new TestRunnerClient(testArns);
-
-    const tests = await testRunner.listTests();
-    return [testRunner, pickOneTestPerEnvironment(tests)];
-  });
-
-  const results = await withSpinner("Running tests...", async () => {
-    const results = new Array<sdk.cloud.TestResult>();
-    for (const path of tests) {
-      results.push(await testRunner.runTest(path));
-    }
-    return results;
-  });
-
-  const testReport = renderTestReport(synthDir, results);
-  console.log(testReport);
-
-  if (testResultsContainsFailure(results)) {
-    console.log("One or more tests failed. Cleaning up resources...");
-  }
-
-  await withSpinner("aws-cdk destroy", () => awsCdkDestroy(synthDir));
-
-  return results;
-}
-
-async function isAwsCdkInstalled(synthDir: string) {
-  await execCapture("cdk version", { cwd: synthDir });
-}
-
-export async function awsCdkDeploy(synthDir: string) {
-  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", { cwd: synthDir });
-}
-
-export async function awsCdkDestroy(synthDir: string) {
-  const removeFile = promisify(fs.rm);
-  await removeFile(synthDir.concat("/output.json"));
-  await execCapture("cdk destroy -f --ci true --app ./", { cwd: synthDir });
-}
-
-async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
-  const readFile = promisify(fs.readFile);
-  const file = await readFile(synthDir.concat("/output.json"));
-  const parsed = JSON.parse(Buffer.from(file).toString());
-  return parsed[stackName][name];
-}
-
-async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | void> {
   try {
-    if (!isTerraformInstalled(synthDir)) {
+    if (!isAwsCdkInstalled(synthDir)) {
       throw new Error(
-        "Terraform is not installed. Please install Terraform to run tests in the cloud."
+        "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
       );
     }
 
-    await withSpinner("terraform init", async () => await terraformInit(synthDir));
-
-    await withSpinner("terraform apply", () => terraformApply(synthDir));
+    await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
-      const testRunner = new TfawsTestRunnerClient(testArns);
+      const testArns = await awsCdkOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK, process.env.CDK_STACK_NAME!);
+      const testRunner = new TestRunnerClient(testArns);
+
       const tests = await testRunner.listTests();
       return [testRunner, pickOneTestPerEnvironment(tests)];
     });
@@ -330,11 +267,82 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    await cleanup(synthDir);
+    await cleanupCdk(synthDir);
   }
 }
 
-async function cleanup(synthDir: string) {
+async function cleanupCdk(synthDir: string) {
+  await withSpinner("aws-cdk destroy", () => awsCdkDestroy(synthDir));
+  rmSync(synthDir, { recursive: true, force: true });
+}
+
+async function isAwsCdkInstalled(synthDir: string) {
+  const output = await execCapture("cdk version", { cwd: synthDir });
+  return output.startsWith("2");
+}
+
+export async function awsCdkDeploy(synthDir: string) {
+  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", { cwd: synthDir });
+}
+
+export async function awsCdkDestroy(synthDir: string) {
+  const removeFile = promisify(rm);
+  await removeFile(synthDir.concat("/output.json"));
+  await execCapture("cdk destroy -f --ci true --app ./", { cwd: synthDir });
+}
+
+async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
+  const readFileCmd = promisify(readFile);
+  const file = await readFileCmd(synthDir.concat("/output.json"));
+  const parsed = JSON.parse(Buffer.from(file).toString());
+  return parsed[stackName][name];
+}
+
+async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | void> {
+  try {
+    if (!isTerraformInstalled(synthDir)) {
+      throw new Error(
+        "Terraform is not installed. Please install Terraform to run tests in the cloud."
+      );
+    }
+
+    await withSpinner("terraform init", async () => await terraformInit(synthDir));
+
+    await withSpinner("terraform apply", () => terraformApply(synthDir));
+
+    const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+      const testRunner = new TestRunnerClient(testArns);
+
+      const tests = await testRunner.listTests();
+      return [testRunner, pickOneTestPerEnvironment(tests)];
+    });
+
+    const results = await withSpinner("Running tests...", async () => {
+      const results = new Array<sdk.cloud.TestResult>();
+      for (const path of tests) {
+        results.push(await testRunner.runTest(path));
+      }
+      return results;
+    });
+
+    const testReport = renderTestReport(synthDir, results);
+    console.log(testReport);
+
+    if (testResultsContainsFailure(results)) {
+      console.log("One or more tests failed. Cleaning up resources...");
+    }
+
+    return results;
+  } catch (err) {
+    console.warn((err as Error).message);
+    return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
+  } finally {
+    await cleanupTf(synthDir);
+  }
+}
+
+async function cleanupTf(synthDir: string) {
   await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
   rmSync(synthDir, { recursive: true, force: true });
 }
