@@ -6,7 +6,7 @@ use std::{
 use colored::Colorize;
 use strum::{Display, EnumString};
 
-use crate::diagnostic::WingSpan;
+use crate::diagnostic::{report_diagnostic, Diagnostic, WingSpan};
 
 /// The different phases of compilation, used for tracking compilation context
 /// for diagnostic purposes. Feel free to add new phases as needed.
@@ -107,5 +107,13 @@ pub fn set_custom_panic_hook() {
 		if bt.status() == BacktraceStatus::Captured {
 			eprintln!("Backtrace:\n{}", bt);
 		}
+
+		report_diagnostic(Diagnostic {
+    	message: format!(
+				"Compiler bug during {}, please report with stack trace (run with RUST_BACKTRACE=1) at https://docs.winglang.io/contributors/bugs", 
+				CompilationContext::get_phase()
+			),
+    	span: Some(CompilationContext::get_span()),
+		})
 	}));
 }

@@ -120,65 +120,54 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WINGC_PREFLIGHT,
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
+    imports: {
+      env: {
+        new_diagnostic,
+      }
+    }
   });
+
+  const raw_diagnostics: wingCompiler.WingDiagnostic[] = [];
+  const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
+
+  function new_diagnostic(
+    data_ptr: number,
+    data_len: number
+  ) {
+    const data_buf = Buffer.from(
+      (wingc.exports.memory as WebAssembly.Memory).buffer,
+      data_ptr,
+      data_len
+    );
+    const data_str = new TextDecoder().decode(data_buf);
+    raw_diagnostics.push(JSON.parse(data_str));
+  }
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(resolve(wingDir))}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  let compileResult;
+  let compileSuccess: boolean;
   try {
-    compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+    compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
   } catch (e) {
-    const message = [];
-    message.push(e);
-    message.push();
-    message.push();
-    message.push(
-      chalk.bold.red("Internal error:") +
-        " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
-    );
+    // const message = [];
+    // message.push(e);
+    // message.push();
+    // message.push();
+    // message.push(
+    //   chalk.bold.red("Internal error:") +
+    //   " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
+    // );
 
-    throw new Error(message.join("\n"));
+    // throw new Error(message.join("\n"));
+    compileSuccess = false;
   }
-  if (compileResult !== 0) {
+  if (!compileSuccess) {
     // This is a bug in the user's code. Print the compiler diagnostics.
-    const errors: wingCompiler.WingDiagnostic[] = JSON.parse(compileResult.toString());
+    //const errors: wingCompiler.WingDiagnostic[] = JSON.parse(compileResult.toString());
     const result = [];
-    const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
-    for (const error of errors) {
-      const { message, span } = error;
-      let files: File[] = [];
-      let labels: Label[] = [];
-
-      // file_id might be "" if the span is synthetic (see #2521)
-      if (span !== null && span.file_id) {
-        // `span` should only be null if source file couldn't be read etc.
-        const source = await fsPromise.readFile(span.file_id, "utf8");
-        const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
-        const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
-        files.push({ name: span.file_id, source });
-        labels.push({
-          fileId: span.file_id,
-          rangeStart: start,
-          rangeEnd: end,
-          message,
-          style: "primary",
-        });
-      }
-
-      const diagnosticText = await emitDiagnostic(
-        files,
-        {
-          message,
-          severity: "error",
-          labels,
-        },
-        {
-          chars: CHARS_ASCII,
-        },
-        coloring
-      );
-      result.push(diagnosticText);
+    for (const raw_diagnostic of raw_diagnostics) {
+      result.push(await buildDiagnostic(raw_diagnostic, coloring));
     }
     throw new Error(result.join("\n"));
   }
@@ -282,6 +271,42 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   }
 
   return synthDir;
+}
+
+async function buildDiagnostic(error: wingCompiler.WingDiagnostic, coloring: boolean): Promise<string> {
+  const { message, span } = error;
+  let files: File[] = [];
+  let labels: Label[] = [];
+
+  // file_id might be "" if the span is synthetic (see #2521)
+  if (span !== null && span.file_id) {
+    // `span` should only be null if source file couldn't be read etc.
+    const source = await fsPromise.readFile(span.file_id, "utf8");
+    const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
+    const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
+    files.push({ name: span.file_id, source });
+    labels.push({
+      fileId: span.file_id,
+      rangeStart: start,
+      rangeEnd: end,
+      message,
+      style: "primary",
+    });
+  }
+
+  const diagnosticText = await emitDiagnostic(
+    files,
+    {
+      message,
+      severity: "error",
+      labels,
+    },
+    {
+      chars: CHARS_ASCII,
+    },
+    coloring
+  );
+  return diagnosticText;
 }
 
 function annotatePreflightError(e: any): any {

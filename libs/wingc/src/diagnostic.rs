@@ -180,8 +180,23 @@ thread_local! {
 pub fn report_diagnostic(diagnostic: Diagnostic) {
 	// Add the diagnostic to the list of diagnostics
 	DIAGNOSTICS.with(|diagnostics| {
-		diagnostics.borrow_mut().push(diagnostic);
+		diagnostics.borrow_mut().push(diagnostic.clone());
 	});
+
+	// If we're running in wasm32 then send the diagnostic to the client
+	#[cfg(target_arch = "wasm32")]
+	{
+		let json = serde_json::to_string(&diagnostic).unwrap();
+		let bytes = json.as_bytes();
+		unsafe {
+			new_diagnostic(bytes.as_ptr(), bytes.len() as u32);
+		}
+	}
+}
+
+#[cfg(target_arch = "wasm32")]
+extern "C" {
+	pub fn new_diagnostic(data: *const u8, data_length: u32);
 }
 
 /// Returns whether any errors were found during compilation
