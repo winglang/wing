@@ -2,7 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ capture_tokens.wsim » root/env0/test:urlPrint
+pass ─ capture_tokens.wsim » root/env0/test:inflight class  
+pass ─ capture_tokens.wsim » root/env1/test:inflight globals
  
 
 

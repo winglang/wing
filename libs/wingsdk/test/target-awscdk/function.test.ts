@@ -84,3 +84,30 @@ test("basic function with timeout explicitly set", () => {
   );
   expect(template.toJSON()).toMatchSnapshot();
 });
+
+test("addEnvironment()", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const f = Function._newFunction(app, "Function", inflight);
+  f.addEnvironment("BOOM", "BAM");
+  expect(() => f.addEnvironment("BOOM", "BAP")).toThrowError();
+  f.addEnvironment("BOOM", "BAP", true);
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.hasResourceProperties(
+    "AWS::Lambda::Function",
+    Match.objectLike({
+      Handler: "index.handler",
+      Runtime: "nodejs18.x",
+      Timeout: 30,
+      Environment: {
+        Variables: {
+          BOOM: "BAP",
+        },
+      },
+    })
+  );
+});

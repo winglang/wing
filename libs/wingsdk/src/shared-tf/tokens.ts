@@ -1,7 +1,7 @@
 import { Fn, Token } from "cdktf";
 import { Function } from "../cloud";
 import { Tokens } from "../core/tokens";
-import { IResource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * Represents values that can only be resolved after the app is synthesized.
@@ -28,15 +28,14 @@ export class CdkTfTokens extends Tokens {
   /**
    * CDKTF tokens are bounded as Json values.
    */
-  public bindValue(host: IResource, value: any) {
+  public bindValue(host: IInflightHost, value: any) {
     if (!(host instanceof Function)) {
       throw new Error(`Tokens can only be bound by a Function for now`);
     }
 
     const envName = this.envName(JSON.stringify(value));
     const envValue = Fn.jsonencode(value);
-    if (host.env[envName] === undefined) {
-      host.addEnvironment(envName, envValue);
-    }
+    // the same token might be bound multiple times by different variables/inflight contexts
+    host.addEnvironment(envName, envValue, true);
   }
 }

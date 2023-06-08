@@ -38,16 +38,11 @@ export class Function extends cloud.Function {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
       runtime: Runtime.NODEJS_18_X,
+      environment: this.env,
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
     });
-
-    for (const [key, val] of Object.entries(
-      Object.assign({}, this.env, props.env)
-    )) {
-      this.function.addEnvironment(key, val);
-    }
 
     this.arn = this.function.functionArn;
   }
@@ -64,13 +59,18 @@ export class Function extends cloud.Function {
 
   /**
    * Add environment variable to the function.
+   * @param updateIfExists Whether to update the environment value if it exists. When false, updating an existing environment will throw an error.
    */
-  public addEnvironment(name: string, value: string) {
+  public addEnvironment(
+    name: string,
+    value: string,
+    updateIfExists: boolean = false
+  ) {
+    // Keep a local map of the env vars. Those env vars will be added once the function is initialized
+    super.addEnvironment(name, value, updateIfExists);
+
     if (this.function) {
       this.function.addEnvironment(name, value);
-    } else {
-      // Those env vars will be added once the function is initialized
-      super.addEnvironment(name, value);
     }
   }
 

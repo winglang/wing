@@ -1,7 +1,7 @@
 import { Fn, Token } from "aws-cdk-lib";
 import { Function } from "../cloud";
 import { Tokens } from "../core/tokens";
-import { IResource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * Represents values that can only be resolved after the app is synthesized.
@@ -19,18 +19,19 @@ export class CdkTokens extends Tokens {
    * "Lifts" a value into an inflight context.
    */
   public lift(value: any): string {
+    if (value == null) {
+      throw new Error(`Unable to lift null token`);
+    }
+
+    const envName = JSON.stringify(this.envName(value.toString()));
     switch (typeof value) {
       case "string":
-        return `process.env[${JSON.stringify(this.envName(value))}]`;
+        return `process.env[${envName}]`;
       case "number":
-        return `parseFloat(process.env[${JSON.stringify(
-          this.envName(value.toString())
-        )}], 10)`;
+        return `parseFloat(process.env[${envName}], 10)`;
       case "object":
         if (Array.isArray(value)) {
-          return `JSON.parse(process.env[${JSON.stringify(
-            this.envName(value.toString())
-          )}])`;
+          return `JSON.parse(process.env[${envName}])`;
         }
     }
     throw new Error(`Unable to lift token ${value}`);
@@ -39,7 +40,7 @@ export class CdkTokens extends Tokens {
   /**
    * Binds the given token to the host.
    */
-  public bindValue(host: IResource, value: any) {
+  public bindValue(host: IInflightHost, value: any) {
     if (!(host instanceof Function)) {
       throw new Error(`Tokens can only be bound by a Function for now`);
     }
@@ -64,8 +65,7 @@ export class CdkTokens extends Tokens {
     }
 
     const envName = this.envName(value.toString());
-    if (typeof host.env[envName] === "undefined") {
-      host.addEnvironment(envName, envValue);
-    }
+    // the same token might be bound multiple times by different variables/inflight contexts
+    host.addEnvironment(envName, envValue, true);
   }
 }

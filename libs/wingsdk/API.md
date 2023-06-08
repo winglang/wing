@@ -642,7 +642,7 @@ new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
 ##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.cloud.Function.addEnvironment"></a>
 
 ```wing
-addEnvironment(name: str, value: str): void
+addEnvironment(name: str, value: str, updateIfExists?: bool): void
 ```
 
 Add an environment variable to the function.
@@ -656,6 +656,16 @@ Add an environment variable to the function.
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.Function.addEnvironment.parameter.value"></a>
 
 - *Type:* str
+
+---
+
+###### `updateIfExists`<sup>Optional</sup> <a name="updateIfExists" id="@winglang/sdk.cloud.Function.addEnvironment.parameter.updateIfExists"></a>
+
+- *Type:* bool
+
+Whether to update the environment value if it exists.
+
+When false, updating an existing environment will throw an error.
 
 ---
 

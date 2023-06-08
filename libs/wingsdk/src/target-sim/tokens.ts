@@ -1,6 +1,6 @@
 import { Function } from "../cloud";
 import { Tokens } from "../core/tokens";
-import { IResource } from "../std";
+import { IInflightHost, IResource } from "../std";
 
 /**
  * Produce a token that will be replaced with the handle of a resource
@@ -57,7 +57,7 @@ export class SimTokens extends Tokens {
   /**
    * Binds the given token to the host.
    */
-  public bindValue(host: IResource, value: any) {
+  public bindValue(host: IInflightHost, value: any) {
     if (!(host instanceof Function)) {
       throw new Error(`Tokens can only be bound by a Function for now`);
     }
@@ -65,9 +65,8 @@ export class SimTokens extends Tokens {
     switch (typeof value) {
       case "string":
         const envName = this.envName(value);
-        if (typeof host.env[envName] === "undefined") {
-          host.addEnvironment(envName, value);
-        }
+        // the same token might be bound multiple times by different variables/inflight contexts
+        host.addEnvironment(envName, value, true);
         break;
       default:
         throw new Error(`Unable to bind token ${value}`);

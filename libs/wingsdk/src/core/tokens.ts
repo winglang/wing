@@ -1,4 +1,4 @@
-import { IResource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * Represents values that can only be resolved after the app is synthesized.
@@ -18,7 +18,7 @@ export abstract class Tokens {
   /**
    * Binds the given token to the host.
    */
-  public abstract bindValue(host: IResource, value: any): void;
+  public abstract bindValue(host: IInflightHost, value: any): void;
 
   /**
    * Creates a valid environment variable name from the given token.
@@ -26,6 +26,8 @@ export abstract class Tokens {
   protected envName(value: string): string {
     return `WING_TOKEN_${value
       .replace(/([^a-zA-Z0-9]+)/g, "_")
-      .toLocaleUpperCase()}`;
+      .replace(/_+$/, "")
+      .replace(/^_+/, "")
+      .toUpperCase()}`;
   }
 }
