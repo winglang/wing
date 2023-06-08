@@ -16,14 +16,14 @@ let usersTable = new cloud.Table(
 );
 
 
-let getHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+let getHandler = inflight (req: cloud.ApiRequest) -> cloud.ApiResponse {
   return cloud.ApiResponse {
     body: {users: usersTable.list()},
     status: 200
   };
 };
 
-let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+let postHandler = inflight (req: cloud.ApiRequest) -> cloud.ApiResponse {
   let body: Json = req.body ?? {name: "", age: "", id: ""};
   if (body.get("name") == "" || body.get("age")  == "" || body.get("id")  == "") {
     return cloud.ApiResponse {
@@ -39,7 +39,7 @@ let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 };
 
   // responsible for the CORS - https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html
-let optionsHandler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
+let optionsHandler = inflight(req: cloud.ApiRequest) -> cloud.ApiResponse {
   return cloud.ApiResponse {
     headers: {
       "Access-Control-Allow-Headers" : "Content-Type",

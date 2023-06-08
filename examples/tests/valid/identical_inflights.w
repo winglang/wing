@@ -1,2 +1,2 @@
-let x = inflight () => {};
-let y = inflight () => {};
+let x = inflight () -> void {};
+let y = inflight () -> void {};

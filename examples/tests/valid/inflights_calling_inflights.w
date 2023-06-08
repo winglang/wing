@@ -2,11 +2,11 @@ bring cloud;
 
 let globalBucket = new cloud.Bucket();
 
-let storeInBucket = inflight (event: str, file: str): str => {
+let storeInBucket = inflight (event: str, file: str) -> str {
   globalBucket.put(file, event);
 };
 
-let handler1 = inflight (event: str): str => {
+let handler1 = inflight (event: str) -> str {
   storeInBucket(event, "file1");
 };
 
@@ -20,16 +20,16 @@ test "inflights can call other inflights" {
 // -----
 
 class MyResource {
-  closure: inflight (str): str;
+  closure: inflight (str) -> str;
 
   init() {
-    this.closure = inflight (s: str): str => {
+    this.closure = inflight (s: str) -> str {
       globalBucket.list();
       return "hello";
     };
   }
 
-  inflight foo(): str {
+  inflight foo() -> str {
     return this.closure("anything");
   }
 }

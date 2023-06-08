@@ -28,7 +28,7 @@ class Foo {
     this.data = b;
   }
 
-  inflight getStuff(): str {
+  inflight getStuff() -> str {
     return this.data.field0;
   }
 }

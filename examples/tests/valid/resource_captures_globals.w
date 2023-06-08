@@ -30,12 +30,12 @@ class Another {
     assert(globalCounter.peek() == 0);
   }
 
-  inflight myMethod(): num {
+  inflight myMethod() -> num {
     globalCounter.inc();
     return globalCounter.peek();
   }
 
-  static inflight myStaticMethod(): num {
+  static inflight myStaticMethod() -> num {
     return globalCounter.peek();
   }
 }

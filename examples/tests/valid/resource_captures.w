@@ -17,11 +17,11 @@ class Another {
     this.first = new First();
   }
 
-  inflight meaningOfLife(): num {
+  inflight meaningOfLife() -> num {
     return 42;
   }
 
-  inflight anotherFunc(): str {
+  inflight anotherFunc() -> str {
     return "42";
   }
 }
@@ -94,7 +94,7 @@ class MyResource {
     assert(this.myOptStr ?? "" == "myOptString");
   }
 
-  helloPreflight(): Another {
+  helloPreflight() -> Another {
     return this.another;
   }
 

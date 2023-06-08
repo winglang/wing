@@ -1,6 +1,6 @@
 let dur = 1m;
 let dur2: duration = 10m;
-let f = (d: duration) => {};
+let f = (d: duration) -> void {};
 let stringy = "${dur.minutes}:${dur.seconds}";
 log(stringy);
 

@@ -4,7 +4,7 @@ let api = new cloud.Api();
 
 let counter = new cloud.Counter();
 
-let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+let handler = inflight (request: cloud.ApiRequest) -> cloud.ApiResponse {
 
   let count = counter.inc();
 
@@ -31,7 +31,7 @@ class A {
   api: cloud.Api;
   init() {
     this.api = new cloud.Api();
-    this.api.get("/endpoint1", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+    this.api.get("/endpoint1", inflight (req: cloud.ApiRequest) -> cloud.ApiResponse {
       let text = "${this.api.url}/endpoint2";
       return cloud.ApiResponse {
         status: 200,

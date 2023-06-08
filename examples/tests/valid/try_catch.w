@@ -44,8 +44,8 @@ try {
 assert(x == "finally with no catch and no exception");
 
 // Verify we can return from a closure in a finally block.
-assert((():num => { try {} finally {return 1;}})() == 1);
+assert((() -> num { try {} finally {return 1;}})() == 1);
 // Verify we can return from a closure in a catch block.
-assert((():num => { try {throw("");} catch {return 2;}})() == 2);
+assert((() -> num { try {throw("");} catch {return 2;}})() == 2);
 // Verify we can return from a closure in a try block.
-assert((():num => { try {return 3;} finally {}})() == 3);
+assert((() -> num { try {return 3;} finally {}})() == 3);

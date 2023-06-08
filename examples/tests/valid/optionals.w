@@ -47,7 +47,7 @@ if let n = name {
   assert(true);
 }
 
-let tryParseName = (fullName: str): Name? => {
+let tryParseName = (fullName: str) -> Name? {
   let parts = fullName.split(" ");
   if parts.length < 1 {
     return nil;
@@ -98,7 +98,7 @@ if let shadow = shadow {
 }
 
 // return out of if let
-let fun = (a: str?): str => {
+let fun = (a: str?) -> str {
   if let y = a {
     return y;
   } else {

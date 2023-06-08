@@ -76,7 +76,7 @@ class A {
     async preflight_func() {}
     public preflight_func2() {}
     inflight inflight_func() {}
-    public inflight inflight_func2(): num {}
+    public inflight inflight_func2() -> num {}
     pf_member: str;
     inflight if_member: str;
     public inflight var if_member2: str;
@@ -173,7 +173,7 @@ Interface definition
 
 interface A extends B, C {
     do_something();
-    inflight do_something_else(x: str): num;
+    inflight do_something_else(x: str) -> num;
     a_member: str;
     inflight b_member: num;
 }

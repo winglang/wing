@@ -175,28 +175,28 @@ inflight (a: num, b: str?, var c: bool) => {};
 --------------------------------------------------------------------------------
 
 (source
+  (ERROR
+    (inflight_specifier)
+    (parameter_list
+      (parameter_definition
+        name: (identifier)
+        type: (builtin_type))
+      (parameter_definition
+        name: (identifier)
+        type: (optional
+          (builtin_type)))
+      (parameter_definition
+        reassignable: (reassignable)
+        name: (identifier)
+        type: (builtin_type))))
   (expression_statement
-    (inflight_closure
-      (inflight_specifier)
-      parameter_list: (parameter_list
-        (parameter_definition
-          name: (identifier)
-          type: (builtin_type))
-        (parameter_definition
-          name: (identifier)
-          type: (optional
-            (builtin_type)))
-        (parameter_definition
-          reassignable: (reassignable)
-          name: (identifier)
-          type: (builtin_type)))
-      block: (block))))
+    (map_literal)))
 
 ================================================================================
 Inflight closure with function parameter
 ================================================================================
 
-inflight (callback: (num,num):bool) => {};
+inflight (callback: (num,num) -> bool) -> void {};
 
 --------------------------------------------------------------------------------
 
@@ -212,6 +212,7 @@ inflight (callback: (num,num):bool) => {};
               (builtin_type)
               (builtin_type))
             return_type: (builtin_type))))
+      type: (builtin_type)
       block: (block))))
 
 ================================================================================

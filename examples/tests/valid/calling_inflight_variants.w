@@ -1,18 +1,18 @@
 bring cloud;
 
 class Foo {
-  inflight1: inflight (): num;
+  inflight1: inflight () -> num;
   init() {
     // here is an inflight function created during preflight
-    this.inflight1 = inflight (): num => {
+    this.inflight1 = inflight () -> num {
       return 1;
     };
   }
 
-  inflight inflight2: inflight (): num;
+  inflight inflight2: inflight () -> num;
   inflight init() {
     // here is an inflight function created during inflight
-    this.inflight2 = (): num => {
+    this.inflight2 = () -> num {
       return 2;
     };
 
@@ -21,7 +21,7 @@ class Foo {
     assert(ret == 2);
   }
 
-  inflight makeFn(x: bool): inflight (): num {
+  inflight makeFn(x: bool) -> inflight () -> num {
     if x == true {
       return this.inflight1;
     } else {
@@ -29,14 +29,14 @@ class Foo {
     }
   }
 
-  inflight callFn(x: bool): num {
+  inflight callFn(x: bool) -> num {
     // partialFn could be an inflight function created during preflight or inflight,
     // so we have to code-generate this to work for both cases
     let partialFn = this.makeFn(x);
     return partialFn();
   }
 
-  inflight callFn2(): void {
+  inflight callFn2() -> void {
     // now we call inflight1 and inflight2 directly which know they are handler classes
     let one = this.inflight1();
     let two = this.inflight2();

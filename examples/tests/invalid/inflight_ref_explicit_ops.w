@@ -9,7 +9,7 @@ class Another {
     this.anotherStr = "bang";
   }
 
-  inflight inflightReturnsResource(): cloud.Queue {
+  inflight inflightReturnsResource() -> cloud.Queue {
     return this.myQueue;
 //              ^^^^^^^^ Cannot qualify which operations are performed on resource
   }

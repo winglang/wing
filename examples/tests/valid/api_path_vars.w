@@ -3,10 +3,10 @@ bring cloud;
 let api = new cloud.Api();
 
 class Fetch {
-  extern "./api_path_vars.js" inflight get(url: str): Json;
+  extern "./api_path_vars.js" inflight get(url: str) -> Json;
 }
 
-let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+let handler = inflight (req: cloud.ApiRequest) -> cloud.ApiResponse {
   return cloud.ApiResponse {
     body: {user:  req.vars.get("name")},
     status: 200

@@ -5,7 +5,7 @@ test "inner inflight class capture immutable" {
   let var i = 10;
 
   class Inner {
-    dang(): num {
+    dang() -> num {
       y.push(2);
 
       // TODO: this should be a compiler error (it doesn't)

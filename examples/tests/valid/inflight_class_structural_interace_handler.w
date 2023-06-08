@@ -1,18 +1,18 @@
 bring cloud;
 
 interface IGoo {
-  inflight handle(): num;
+  inflight handle() -> num;
 }
 
 inflight class NotGoo {
-  handle(): num {
+  handle() -> num {
     return 123;
   }
 }
 
 test "structure interface types for 'handle'" {
   inflight class YesGoo impl IGoo {
-    handle(): num {
+    handle() -> num {
       return 456;
     }
 

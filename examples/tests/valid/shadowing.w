@@ -3,7 +3,7 @@ bring cloud;
 let bar = "hola!";
 let foo = "not captured";
 
-let fn = inflight (): Array<str> => {
+let fn = inflight () -> Array<str> {
   let result = MutArray<str>[];
 
   // okay to capture "bar" because there isn't another variable with the same

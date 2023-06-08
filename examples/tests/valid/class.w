@@ -31,7 +31,7 @@ assert(c3.y == 2);
 
 // class with static method and no init
 class C4 {
-  static m():num {return 1;}
+  static m() -> num { return 1; }
 }
 assert(C4.m() == 1);
 

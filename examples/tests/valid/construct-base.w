@@ -9,11 +9,11 @@ class WingResource {
   }
 }
 
-let getPath = (c: cx.Construct): str => {
+let getPath = (c: cx.Construct) -> str {
   return c.node.path;
 };
 
-let getDisplayName = (r: std.Resource): str? => {
+let getDisplayName = (r: std.Resource) -> str? {
   return r.display.title;
 };
 

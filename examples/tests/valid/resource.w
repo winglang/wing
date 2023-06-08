@@ -24,11 +24,11 @@ class Foo {
     this.c.inc();
   }
 
-  inflight fooGet(): num {
+  inflight fooGet() -> num {
     return this.c.peek(); 
   }
 
-  static inflight fooStatic(): str {
+  static inflight fooStatic() -> str {
     return "foo static";
   }
 }
@@ -54,11 +54,11 @@ class Bar {
     this.e = e;
   }
 
-  static inflight barStatic(): str {
+  static inflight barStatic() -> str {
     return "bar static";
   }
 
-  inflight myMethod(): str {
+  inflight myMethod() -> str {
     // Call user defined inflight code from another user defined resource
     this.foo.fooInc();
 
@@ -107,15 +107,15 @@ class BigPublisher {
     this.q = new cloud.Queue();
     this.t = new cloud.Topic();
 
-    this.t.onMessage(inflight () => {
+    this.t.onMessage(inflight () -> void {
       this.b.put("foo1.txt", "bar");
     });
 
-    this.q.addConsumer(inflight () => {
+    this.q.addConsumer(inflight () -> void {
       this.b.put("foo2.txt", "bar");
     });
 
-    this.b2.onCreate(inflight () => {
+    this.b2.onCreate(inflight () -> void {
       this.q.push("foo");
     });
   }
@@ -126,7 +126,7 @@ class BigPublisher {
     this.b2.put("foo", s);
   }
 
-  inflight getObjectCount(): num {
+  inflight getObjectCount() -> num {
     return this.b.list().length;
   }
 }

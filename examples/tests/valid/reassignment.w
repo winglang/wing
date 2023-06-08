@@ -25,7 +25,7 @@ let r = new R();
 r.inc();
 assert(r.f == 2);
 
-let f = (var arg: num):num => {
+let f = (var arg: num) -> num {
   arg = 0;
   return arg;
 };

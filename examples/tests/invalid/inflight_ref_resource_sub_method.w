@@ -9,12 +9,12 @@ class Another {
     this.myQueue = new cloud.Queue();
   }
 
-  inflight inflightReturnsResource(): cloud.Queue {
+  inflight inflightReturnsResource() -> cloud.Queue {
     return this.myQueue;
 //              ^^^^^^^^ Cannot qualify which operations are performed on class "this.myQueue"
   }
 
-  inflight inflightReturnsResource2(): cloud.Queue {
+  inflight inflightReturnsResource2() -> cloud.Queue {
     return globalQueue;
 //         ^^^^^^^^^^^^ Cannot qualify which operations are performed on class "globalQueue"
   }

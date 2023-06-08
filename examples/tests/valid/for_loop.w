@@ -159,7 +159,7 @@ for x in (z*2)..0 {
 
 
 bring cloud;
-new cloud.Function(inflight(event:str): str => {
+new cloud.Function(inflight (event: str) -> str {
   for x in 0..10 {
     assert(x <= 0);
     assert(x > 10);

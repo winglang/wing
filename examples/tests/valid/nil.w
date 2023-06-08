@@ -7,7 +7,7 @@ class Foo {
     this.optionalVar = nil;
   }
 
-  inflight returnNil(t: bool): str? {
+  inflight returnNil(t: bool) -> str? {
     if t {
       return "hello";
     }
@@ -18,7 +18,7 @@ class Foo {
     this.optionalVar = msg;
   }
 
-  inflight getOptionalValue(): str? {
+  inflight getOptionalValue() -> str? {
     return this.optionalVar;
   }
 }

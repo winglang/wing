@@ -7,13 +7,13 @@ class Foo {
   // static staticField: str = "Static resource value"; 
   // static inflight inflightStaticField: str = "Inflight static resource value";
 
-  static m(): num { return 99; }
+  static m() -> num { return 99; }
 
   init() {
     this.instanceField = 100;
   }
 
-  static inflight get123(): num {
+  static inflight get123() -> num {
     return 123;
   }
 }
@@ -27,10 +27,10 @@ assert(Foo.m() == 99);
 test "test" {
   inflight class InflightClass {
     init() {}
-    inflight inflightMethod(): str {
+    inflight inflightMethod() -> str {
       return "Inflight method";
     }
-    static inflight staticInflightMethod(): str {
+    static inflight staticInflightMethod() -> str {
       return "Static inflight method";
     }
 

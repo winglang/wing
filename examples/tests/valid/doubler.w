@@ -7,13 +7,13 @@ class Doubler {
   init(func: cloud.IFunctionHandler) {
     this.func = func;
   }
-  inflight invoke(message: str): str {
+  inflight invoke(message: str) -> str {
     this.func.handle(message);
     this.func.handle(message);
   }
 }
 
-let fn = new Doubler(inflight (m: str): str => {
+let fn = new Doubler(inflight (m: str) -> str {
   return "Hello ${m}!";
 });
 
@@ -23,8 +23,8 @@ let fn = new Doubler(inflight (m: str): str => {
 
 class Doubler2 {
   // TODO: make into a static method - see https://github.com/winglang/wing/issues/2583
-  makeFunc(handler: inflight (num): num): cloud.Function {
-    return new cloud.Function(inflight (x: str): str => {
+  makeFunc(handler: inflight (num) -> num) -> cloud.Function {
+    return new cloud.Function(inflight (x: str) -> str {
       let xStr = num.fromStr(x);
       let y = handler(xStr);
       let z = handler(y);
@@ -34,7 +34,7 @@ class Doubler2 {
 }
 
 let doubler2 = new Doubler2();
-let f = doubler2.makeFunc(inflight (x: num): num => {
+let f = doubler2.makeFunc(inflight (x: num) -> num {
   return x * 2;
 });
 

@@ -1,6 +1,6 @@
 bring cloud;
 
-let make_name = (): str => {
+let make_name = () -> str {
   return "bucket" + "-name";
 };
 

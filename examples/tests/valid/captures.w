@@ -7,7 +7,7 @@ let bucket2 = new cloud.Bucket(cloud.BucketProps {
 let bucket3 = new cloud.Bucket(public: false) as "PrivateBucket";
 let queue = new cloud.Queue();
 
-let handler = inflight (event: str): str => {
+let handler = inflight (event: str) -> str {
   bucket1.put("file.txt", "data");
   bucket2.get("file.txt");
   bucket2.get("file2.txt");
