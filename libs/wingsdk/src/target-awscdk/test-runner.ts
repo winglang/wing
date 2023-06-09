@@ -1,12 +1,11 @@
-import { TerraformOutput } from "cdktf/lib/terraform-output";
-import { Lazy } from "cdktf/lib/tokens";
+import { CfnOutput, Lazy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost } from "../std";
 
-const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
+const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WingTestRunnerFunctionArns";
 
 /**
  * AWS implementation of `cloud.TestRunner`.
@@ -18,9 +17,9 @@ export class TestRunner extends cloud.TestRunner {
     super(scope, id, props);
 
     // This output is created so the CLI's `wing test` command can obtain a list
-    // of all ARNs of test functions by running `terraform output`.
-    const output = new TerraformOutput(this, "TestFunctionArns", {
-      value: Lazy.stringValue({
+    // of all ARNs of test functions
+    const output = new CfnOutput(this, "TestFunctionArns", {
+      value: Lazy.string({
         produce: () => {
           return JSON.stringify([...this.getTestFunctionArns().entries()]);
         },
@@ -80,7 +79,7 @@ export class TestRunner extends cloud.TestRunner {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "TestRunnerClient",
       [`process.env["${this.envTestFunctionArns()}"]`]
