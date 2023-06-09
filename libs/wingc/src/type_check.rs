@@ -1102,8 +1102,7 @@ impl Types {
 	/// Obtain the type of a given expression node. Returns None if the expression has not been type checked yet. If
 	/// this is called after type checking, it should always return Some.
 	pub fn get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
-		let expr_idx = expr.id;
-		self.type_for_expr.get(expr_idx).and_then(|t| *t)
+		self.type_for_expr.get(expr.id).and_then(|t| *t)
 	}
 
 	/// Returns true if all expressions have been type checked.
