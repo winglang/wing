@@ -1,7 +1,7 @@
 use lazy_static::__Deref;
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{Class, Reference, Scope, Stmt, Symbol, TypeAnnotation, TypeAnnotationKind};
+use crate::ast::{Reference, Scope, Stmt, Symbol, TypeAnnotation, TypeAnnotationKind};
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
