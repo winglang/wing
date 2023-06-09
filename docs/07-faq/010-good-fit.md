@@ -9,7 +9,7 @@ Wing was built from the ground up to make it an ideal choice for building applic
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
-* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/reference/wingsdk-spec).
+* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/contributors/rfcs/2023-01-20-wingsdk-spec).
 * [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
 * [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that can be used to customize the compilation output, such as infrastructure definitions.
 * [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
