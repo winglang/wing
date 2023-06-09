@@ -6,6 +6,7 @@ import {
 } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -26,11 +27,14 @@ export class Bucket extends cloud.Bucket {
 
     this.public = props.public ?? false;
 
+    const isTestEnvironment = App.of(scope).isTestEnvironment;
+
     this.bucket = new S3Bucket(this, "Default", {
       encryption: BucketEncryption.S3_MANAGED,
       blockPublicAccess: this.public ? undefined : BlockPublicAccess.BLOCK_ALL,
       publicReadAccess: this.public ? true : false,
       removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: isTestEnvironment ? true : false,
     });
   }
 
