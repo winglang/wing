@@ -1337,7 +1337,7 @@ Duration <DURATION>
 `;
 
 exports[`panic.w 2`] = `
-"Compiler bug when type-checking ../../../examples/tests/invalid/panic.w:6:1 | panicked at 'User invoked panic', libs/wingc/src/type_check.rs:1744:17
+"Compiler bug when type-checking ../../../examples/tests/invalid/panic.w:6:1 | panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL
 Please report this bug at https://docs.winglang.io/contributors/bugs"
 `;
 
