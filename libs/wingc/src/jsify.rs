@@ -284,7 +284,7 @@ impl<'a> JSifier<'a> {
 				let expression_type = self.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
 
-				let class_type = expression_type.as_class().unwrap();
+				let class_type = expression_type.as_class().expect("type to be a class");
 				let is_abstract = class_type.is_abstract;
 
 				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow

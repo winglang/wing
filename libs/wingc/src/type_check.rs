@@ -1103,10 +1103,7 @@ impl Types {
 	/// this is called after type checking, it should always return Some.
 	pub fn get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
 		let expr_idx = expr.id;
-		if self.type_for_expr.len() <= expr_idx {
-			return None;
-		}
-		self.type_for_expr[expr_idx]
+		self.type_for_expr.get(expr_idx).and_then(|t| *t)
 	}
 
 	/// Returns true if all expressions have been type checked.
