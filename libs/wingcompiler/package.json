@@ -18,13 +18,14 @@
   },
   "scripts": {
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
-    "build": "tsup",
-    "watch": "tsup --watch",
+    "build": "tsup-node",
+    "watch": "tsup-node --watch",
     "test": "vitest run --passWithNoTests",
     "bump": "node version.js",
     "unbump": "node unversion.js"
   },
   "dependencies": {
+    "wasi-js": "^1.7.3",
     "@winglang/sdk": "file:../../libs/wingsdk"
   },
   "devDependencies": {
@@ -32,8 +33,7 @@
     "esbuild": "^0.17.19",
     "tsup": "^6.7.0",
     "typescript": "^4.9.4",
-    "vitest": "^0.30.1",
-    "wasi-js": "^1.7.3"
+    "vitest": "^0.30.1"
   },
   "volta": {
     "node": "18.12.1",
