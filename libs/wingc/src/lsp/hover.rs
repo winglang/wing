@@ -1,175 +1,147 @@
+use lazy_static::__Deref;
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{Class, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol};
+use crate::ast::{Class, Reference, Scope, Stmt, Symbol, TypeAnnotation, TypeAnnotationKind};
 use crate::diagnostic::WingSpan;
+use crate::docs::Documented;
 use crate::lsp::sync::FILES;
-use crate::type_check::symbol_env::{LookupResult, SymbolLookupInfo};
-use crate::type_check::SymbolKind;
-use crate::visit::Visit;
+use crate::type_check::symbol_env::LookupResult;
+use crate::visit::{self, Visit};
 use crate::wasm_util::WASM_RETURN_ERROR;
-use crate::{
-	ast::ExprKind,
-	wasm_util::{ptr_to_string, string_to_combined_ptr},
-};
+use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
 
 pub struct HoverVisitor<'a> {
-	pub position: Position,
-	pub current_scope: Option<&'a Scope>,
-	pub current_expr: Option<&'a Expr>,
-	pub found_symbol: Option<&'a Symbol>,
+	position: Position,
+	current_scope: &'a Scope,
+	current_statement_index: usize,
+	found: Option<(WingSpan, String)>,
 }
 
 impl<'a> HoverVisitor<'a> {
-	pub fn new(position: Position) -> Self {
+	pub fn new(position: Position, scope: &'a Scope) -> Self {
 		Self {
 			position,
-			current_scope: None,
-			current_expr: None,
-			found_symbol: None,
+			current_scope: scope,
+			current_statement_index: 0,
+			found: None,
 		}
 	}
 
-	fn is_found(&self) -> bool {
-		self.found_symbol.is_some()
+	pub fn visit(&mut self) -> Option<(WingSpan, String)> {
+		self.visit_scope(self.current_scope);
+		self.found.clone()
 	}
 
-	fn should_check_span(&self, span: &'a WingSpan) -> bool {
-		span.contains(&self.position)
-	}
+	/// Try to look up a full path of a symbol in the current scope and if found, render the docs
+	/// associated with the symbol kind. Returns `None` if not found.
+	fn lookup_docs(&mut self, nested_str: &str, property: Option<&Symbol>) -> Option<String> {
+		let b = self.current_scope.env.borrow();
 
-	fn with_scope(&mut self, scope: &'a Scope, mut f: impl FnMut(&mut Self)) {
-		let last_scope = self.current_scope;
-		self.current_scope = Some(scope);
-		f(self);
-		if !self.is_found() {
-			self.current_scope = last_scope;
+		let Some(env) = b.deref() else {
+			return None;
+		};
+
+		let result = env.lookup_nested_str(nested_str, Some(self.current_statement_index));
+
+		if let LookupResult::Found(s, _) = result {
+			// if `property` is also specified, then continue to lookup within the found type
+			if let Some(p) = property {
+				if let Some(b) = s.as_type() {
+					if let Some(x) = b.as_class() {
+						if let Some(k) = x.env.lookup(&p, None) {
+							return Some(k.render_docs());
+						}
+					}
+				}
+			}
+
+			return Some(s.render_docs());
 		}
+
+		None
 	}
 }
 
 impl<'a> Visit<'a> for HoverVisitor<'a> {
-	fn visit_scope(&mut self, node: &'a Scope) {
-		if self.is_found() {
-			return;
-		}
-
-		self.with_scope(node, |v| {
-			for stmt in &node.statements {
-				v.visit_stmt(stmt);
-			}
-		});
-	}
-
 	fn visit_stmt(&mut self, node: &'a Stmt) {
-		if self.is_found() || !self.should_check_span(&node.span) {
+		if self.found.is_some() {
 			return;
 		}
 
-		// Handle situations where symbols are actually defined in inner scopes
-		match &node.kind {
-			StmtKind::ForLoop {
-				iterator,
-				iterable,
-				statements,
-			} => {
-				self.with_scope(statements, |v| {
-					v.visit_symbol(iterator);
-				});
-				self.visit_expr(iterable);
-				self.visit_scope(statements);
-			}
-			StmtKind::TryCatch {
-				try_statements,
-				catch_block,
-				finally_statements,
-			} => {
-				self.visit_scope(try_statements);
-				if let Some(catch_block) = catch_block {
-					if let Some(exception_var) = &catch_block.exception_var {
-						self.with_scope(&catch_block.statements, |v| {
-							v.visit_symbol(exception_var);
-						});
-					}
-					self.visit_scope(&catch_block.statements);
-				}
-				if let Some(finally_statements) = finally_statements {
-					self.visit_scope(finally_statements);
-				}
-			}
-			_ => crate::visit::visit_stmt(self, node),
-		}
+		self.current_statement_index = node.idx;
+		visit::visit_stmt(self, node);
 	}
 
-	fn visit_expr(&mut self, node: &'a Expr) {
-		if self.is_found() || !self.should_check_span(&node.span) {
+	fn visit_scope(&mut self, node: &'a Scope) {
+		if self.found.is_some() {
 			return;
 		}
 
-		let last_expr = self.current_expr;
-		self.current_expr = Some(node);
-
-		crate::visit::visit_expr(self, node);
-
-		if !self.is_found() {
-			self.current_expr = last_expr;
-		}
+		self.current_scope = node;
+		visit::visit_scope(self, node);
 	}
 
-	fn visit_function_definition(&mut self, node: &'a FunctionDefinition) {
-		if self.is_found() {
+	fn visit_type_annotation(&mut self, node: &'a TypeAnnotation) {
+		if self.found.is_some() {
 			return;
 		}
 
-		if let FunctionBody::Statements(scope) = &node.body {
-			self.with_scope(scope, |v| {
-				for param in &node.signature.parameters {
-					v.visit_function_parameter(&param);
+		if let TypeAnnotationKind::UserDefined(t) = &node.kind {
+			if t.span.contains(&self.position) {
+				if let Some(docs) = self.lookup_docs(&t.full_path_str(), None) {
+					self.found = Some((node.span.clone(), docs));
 				}
-			});
-		}
-
-		if let Some(return_type) = &node.signature.return_type {
-			self.visit_type_annotation(return_type);
-		}
-
-		if let FunctionBody::Statements(scope) = &node.body {
-			self.visit_scope(scope);
-		}
-	}
-
-	fn visit_class(&mut self, node: &'a Class) {
-		if self.is_found() {
-			return;
-		}
-		self.visit_symbol(&node.name);
-
-		self.visit_function_definition(&node.initializer);
-
-		let scope = if let FunctionBody::Statements(statements) = &node.initializer.body {
-			statements
-		} else {
-			panic!("Initializer cannot be 'extern'");
-		};
-
-		self.with_scope(&scope, |v| {
-			for field in &node.fields {
-				v.visit_symbol(&field.name);
-				v.visit_type_annotation(&field.member_type);
 			}
+		}
 
-			for method in &node.methods {
-				v.visit_symbol(&method.0);
-				v.visit_function_definition(&method.1);
-			}
-		});
+		visit::visit_type_annotation(self, node);
 	}
 
 	fn visit_symbol(&mut self, node: &'a Symbol) {
-		if self.is_found() || !self.should_check_span(&node.span) {
+		if self.found.is_some() {
 			return;
 		}
 
-		self.found_symbol = Some(node);
+		if node.span.contains(&self.position) {
+			if let Some(docs) = self.lookup_docs(&node.name, None) {
+				self.found = Some((node.span.clone(), docs));
+			}
+		}
+
+		visit::visit_symbol(self, node);
+	}
+
+	fn visit_reference(&mut self, node: &'a Reference) {
+		if self.found.is_some() {
+			return;
+		}
+
+		if let Reference::InstanceMember { object, property, .. } = node {
+			if let Some(obj_type) = object.evaluated_type.borrow().deref() {
+				if object.span.contains(&self.position) {
+					let docs = obj_type.render_docs();
+					self.found = Some((object.span.clone(), docs));
+				} else if property.span.contains(&self.position) {
+					if let Some(c) = obj_type.as_class() {
+						if let Some(v) = c.env.lookup(property, None) {
+							let docs = v.render_docs();
+							self.found = Some((property.span.clone(), docs));
+						}
+					}
+				}
+			}
+		}
+
+		if let Reference::TypeMember { type_, property } = node {
+			if property.span.contains(&self.position) {
+				// lookup type in environment
+				if let Some(docs) = self.lookup_docs(&type_.full_path_str(), Some(property)) {
+					self.found = Some((property.span.clone(), docs));
+				}
+			}
+		}
+
+		visit::visit_reference(self, node);
 	}
 }
 
@@ -203,96 +175,19 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 
 		let root_scope = &parse_result.scope;
 
-		let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position);
-		hover_visitor.visit_scope(root_scope);
-
-		if let Some(symbol) = hover_visitor.found_symbol {
-			// If the given symbol is in a nested identifier, we can skip looking it up in the symbol environment
-			if let Some(expr) = hover_visitor.current_expr {
-				if let ExprKind::Reference(Reference::InstanceMember { property, .. }) = &expr.kind {
-					return build_nested_identifier_hover(&property, &expr);
-				}
-			}
-
-			let env = hover_visitor
-				.current_scope
-				.expect("All symbols must be in a scope")
-				.env
-				.borrow();
-			let env = env.as_ref().expect("All scopes should have a symbol environment");
-
-			let symbol_lookup = env.lookup_ext(symbol, None);
-
-			let hover_string = if let LookupResult::Found(kind, info) = symbol_lookup {
-				format_symbol_with_lookup(&symbol.name, (kind, info))
-			} else {
-				format_unknown_symbol(&symbol.name)
-			};
-
-			return Some(Hover {
+		let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position, &root_scope);
+		if let Some((span, docs)) = hover_visitor.visit() {
+			Some(Hover {
 				contents: HoverContents::Markup(MarkupContent {
 					kind: MarkupKind::Markdown,
-					value: hover_string,
+					value: docs,
 				}),
-				range: Some((&symbol.span).into()),
-			});
+				range: Some(span.clone().into()),
+			})
+		} else {
+			None
 		}
-
-		None
 	})
-}
-
-/// Formats a hover string for a symbol that has been found in the symbol environment
-fn format_symbol_with_lookup(symbol_name: &str, symbol_lookup: (&SymbolKind, SymbolLookupInfo)) -> String {
-	let symbol_kind = symbol_lookup.0;
-	let lookup_info = symbol_lookup.1;
-
-	match symbol_kind {
-		SymbolKind::Type(t) => {
-			format!("**{}**", t)
-		}
-		SymbolKind::Variable(variable_info) => {
-			let flight = match lookup_info.phase {
-				Phase::Inflight => "inflight ",
-				Phase::Preflight => "preflight ",
-				Phase::Independent => "",
-			};
-			let reassignable = if variable_info.reassignable { "var " } else { "" };
-			let _type = &variable_info.type_;
-
-			format!("```wing\n{flight}{reassignable}{symbol_name}: {_type}\n```")
-		}
-		SymbolKind::Namespace(namespace) => {
-			let namespace_name = &namespace.name;
-
-			format!("```wing\nbring {namespace_name}\n```")
-		}
-	}
-}
-
-/// Formats a hover string for a symbol that we don't yet know how to handle yet
-fn format_unknown_symbol(symbol_name: &str) -> String {
-	format!("```wing\n{symbol_name}\n```")
-}
-
-/// Builds the entire Hover response for a nested identifier, which are handled differently than other "loose" symbols
-fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover> {
-	let symbol_name = &property.name;
-
-	let expression_type = expr
-		.evaluated_type
-		.borrow()
-		.expect("All expressions should have a type");
-
-	return Some(Hover {
-		contents: HoverContents::Markup(MarkupContent {
-			kind: MarkupKind::Markdown,
-			value: format!("```wing\n{symbol_name}: {expression_type}\n```"),
-		}),
-		// When hovering over a reference, we want to highlight the entire relevant expression
-		// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
-		range: Some((&expr.span).into()),
-	});
 }
 
 #[cfg(test)]
@@ -338,6 +233,13 @@ mod tests {
 	}
 
 	test_hover_list!(
+		just_variable,
+		r#"
+let myString = "hello";
+     //^"#,
+	);
+
+	test_hover_list!(
 		new_expression_nested,
 		r#"
 bring cloud;
@@ -372,5 +274,71 @@ bring cloud;
 let bucket = new cloud.Bucket();
 bucket.addObject
       //^"#,
+	);
+
+	test_hover_list!(
+		static_stdtype_method,
+		r#"
+Json.stringify(123);
+      //^"#,
+	);
+
+	test_hover_list!(
+		inside_inflight_test,
+		r#"
+		test "hello" {
+			let a = 1;
+			  //^
+		}
+		"#,
+	);
+
+	test_hover_list!(
+		inside_class_method,
+		r#"
+		class Foo {
+			bar() {
+				let hello = 1;
+			      //^	  
+			}
+		}
+		"#,
+	);
+
+	test_hover_list!(
+		inside_class_field,
+		r#"
+		bring cloud;
+		class Foo {
+			my_bucket: cloud.Bucket;
+  			//^
+		}
+		"#,
+	);
+
+	test_hover_list!(
+		new_statement,
+		r#"
+		bring cloud;
+		new cloud.Bucket();
+		   		 		//^"#,
+	);
+
+	test_hover_list!(
+		user_defined_types,
+		r#"
+		class Foo { };
+		   	 //^"#,
+	);
+
+	test_hover_list!(
+		static_method,
+		r#"
+		class Foo {
+			static my(): str { return "str"; }
+		}
+
+		new Foo();
+       //^"#,
 	);
 }

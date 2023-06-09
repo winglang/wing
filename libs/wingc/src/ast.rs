@@ -4,6 +4,7 @@ use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
+use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
@@ -165,6 +166,10 @@ impl UserDefinedType {
 		let mut path = vec![self.root.clone()];
 		path.extend(self.fields.clone());
 		path
+	}
+
+	pub fn full_path_str(&self) -> String {
+		self.full_path().iter().join(".")
 	}
 }
 

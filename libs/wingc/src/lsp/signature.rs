@@ -63,7 +63,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 					.parameters
 					.iter()
 					.enumerate()
-					.map(|(i, p)| format!("{}: {}", i, p))
+					.map(|(i, p)| format!("{}: {}", p.name.clone().unwrap_or(i.to_string()), p.typeref))
 					.join(", ");
 				let label = format!("({}): {}", param_text, sig.return_type);
 
@@ -76,8 +76,8 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 							.iter()
 							.enumerate()
 							.map(|p| ParameterInformation {
-								label: ParameterLabel::Simple(format!("{}: {}", p.0, p.1)),
-								documentation: if let Some(structy) = p.1.maybe_unwrap_option().as_struct() {
+								label: ParameterLabel::Simple(format!("{}: {}", p.0, p.1.typeref)),
+								documentation: if let Some(structy) = p.1.typeref.maybe_unwrap_option().as_struct() {
 									// print all fields
 									let fields = structy
 										.env

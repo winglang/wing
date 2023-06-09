@@ -1,4 +1,4 @@
-mod codemaker;
+pub mod codemaker;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;

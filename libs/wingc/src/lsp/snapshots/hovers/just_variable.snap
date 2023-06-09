@@ -3,12 +3,12 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "Namespace 'cloud'"
+  value: "```wing\nmyString: str\n```\n---\n```wing\nstr\n```"
 range:
   start:
-    line: 3
+    line: 1
     character: 4
   end:
-    line: 3
-    character: 10
+    line: 1
+    character: 12
 

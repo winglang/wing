@@ -82,7 +82,9 @@ pub trait Visit<'ast> {
 	fn visit_type_annotation(&mut self, node: &'ast TypeAnnotation) {
 		visit_type_annotation(self, node)
 	}
-	fn visit_symbol(&mut self, _node: &'ast Symbol) {}
+	fn visit_symbol(&mut self, node: &'ast Symbol) {
+		visit_symbol(self, node);
+	}
 }
 
 pub fn visit_scope<'ast, V>(v: &mut V, node: &'ast Scope)
@@ -494,4 +496,10 @@ where
 	for field in &node.fields {
 		v.visit_symbol(field);
 	}
+}
+
+pub fn visit_symbol<'ast, V>(_v: &mut V, _node: &'ast Symbol)
+where
+	V: Visit<'ast> + ?Sized,
+{
 }

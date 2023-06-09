@@ -617,7 +617,7 @@ impl<'s> Parser<'s> {
 				},
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
-				span: name.span.clone(),
+				span: WingSpan::default(),
 			},
 		};
 
@@ -640,7 +640,7 @@ impl<'s> Parser<'s> {
 				},
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
-				span: name.span.clone(),
+				span: WingSpan::default(),
 			},
 		};
 
