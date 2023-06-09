@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
@@ -8,10 +9,7 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
 
-// assumption: the compiler's main phases (parsing, type checking, jsifying) are executed in a single-threaded context
-thread_local! {
-	static EXPR_COUNTER: RefCell<usize> = RefCell::new(0);
-}
+static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -495,11 +493,7 @@ pub struct Expr {
 
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
-		let id = EXPR_COUNTER.with(|c| {
-			let id = *c.borrow();
-			*c.borrow_mut() += 1;
-			id
-		});
+		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
 
 		Self { id, kind, span }
 	}
