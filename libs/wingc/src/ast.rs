@@ -1,13 +1,15 @@
 use std::cell::RefCell;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::TypeRef;
+
+static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -279,7 +281,7 @@ pub struct FunctionDefinition {
 	pub span: WingSpan,
 }
 
-#[derive(Derivative, Debug)]
+#[derive(Debug)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
@@ -479,22 +481,21 @@ pub enum ExprKind {
 	CompilerDebugPanic,
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct Expr {
+	/// An identifier that is unique among all expressions in the AST.
+	pub id: usize,
+	/// The kind of expression.
 	pub kind: ExprKind,
+	/// The span of the expression.
 	pub span: WingSpan,
-	#[derivative(Debug = "ignore")]
-	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
-		Self {
-			kind,
-			evaluated_type: RefCell::new(None),
-			span,
-		}
+		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
+
+		Self { id, kind, span }
 	}
 }
 

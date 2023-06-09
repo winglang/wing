@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-
 use indexmap::IndexMap;
 
 use crate::{
@@ -81,11 +79,7 @@ impl Fold for ClosureTransformer {
 				kind: StmtKind::Let {
 					reassignable: false,
 					var_name: parent_this_name,
-					initial_value: Expr {
-						kind: ExprKind::Reference(Reference::Identifier(this_name)),
-						span: node.span.clone(),
-						evaluated_type: RefCell::new(None), // thank god we have type reference
-					},
+					initial_value: Expr::new(ExprKind::Reference(Reference::Identifier(this_name)), node.span.clone()),
 					type_: None,
 				},
 				span: node.span.clone(),
@@ -197,27 +191,21 @@ impl Fold for ClosureTransformer {
 					idx: 0,
 					kind: StmtKind::Assignment {
 						variable: Reference::InstanceMember {
-							object: Box::new(Expr {
-								kind: ExprKind::Reference(Reference::InstanceMember {
-									object: Box::new(Expr {
-										kind: ExprKind::Reference(Reference::Identifier(Symbol::new("this", expr.span.clone()))),
-										span: expr.span.clone(),
-										evaluated_type: RefCell::new(None),
-									}),
+							object: Box::new(Expr::new(
+								ExprKind::Reference(Reference::InstanceMember {
+									object: Box::new(Expr::new(
+										ExprKind::Reference(Reference::Identifier(Symbol::new("this", expr.span.clone()))),
+										expr.span.clone(),
+									)),
 									property: Symbol::new("display", expr.span.clone()),
 									optional_accessor: false,
 								}),
-								span: expr.span.clone(),
-								evaluated_type: RefCell::new(None),
-							}),
+								expr.span.clone(),
+							)),
 							property: Symbol::new("hidden", expr.span.clone()),
 							optional_accessor: false,
 						},
-						value: Expr {
-							kind: ExprKind::Literal(Literal::Boolean(true)),
-							span: expr.span.clone(),
-							evaluated_type: RefCell::new(None),
-						},
+						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), expr.span.clone()),
 					},
 					span: expr.span.clone(),
 				}];
