@@ -27,8 +27,10 @@ invalidWingFiles.forEach((wingFile) => {
 
     const sanitize = (output: string) =>
       output
-        // Remove absolute paths
+        // Remove absolute paths to wing files
         .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
+        // Remove absolute paths to source code
+        .replaceAll(/(libs\/wingc.+\.rs):\d+:\d+/g, "$1:LINE:COL")
         // Normalize line endings
         .replaceAll("\r\n", "\n");
 
