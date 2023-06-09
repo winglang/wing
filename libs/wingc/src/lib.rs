@@ -73,8 +73,6 @@ const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 
 pub struct CompilerOutput {
-	pub preflight: String,
-	// pub inflights: BTreeMap<String, String>,
 	pub diagnostics: Diagnostics,
 }
 
@@ -323,44 +321,44 @@ pub fn compile(
 
 	// -- JSIFICATION PHASE --
 
-	// Prepare output directory for support inflight code
-	fs::create_dir_all(out_dir).expect("create output dir");
-
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
 	let project_dir = absolute_project_root
 		.unwrap_or(source_path.parent().unwrap())
 		.to_path_buf();
 
 	// Verify that the project dir is absolute
-	if !project_dir.starts_with("/") {
-		let dir_str = project_dir.to_str().expect("Project dir is valid UTF-8");
-		// Check if this is a Windows path instead by checking if the second char is a colon
-		// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
-		if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
-			diagnostics.push(Diagnostic {
-				message: format!("Project directory must be absolute: {}", project_dir.display()),
-				span: None,
-			});
-			return Err(diagnostics);
-		}
+	if !is_project_dir_absolute(&project_dir) {
+		diagnostics.push(Diagnostic {
+			message: format!("Project directory must be absolute: {}", project_dir.display()),
+			span: None,
+		});
+		return Err(diagnostics);
 	}
 
-	let mut jsifier = JSifier::new(out_dir, app_name, project_dir.as_path(), true);
+	let mut jsifier = JSifier::new(app_name, &project_dir, true);
+	jsifier.jsify(&scope);
+	jsifier.emit_files(&out_dir);
 
-	let intermediate_js = jsifier.jsify(&scope);
-	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
-	let intermediate_file = jsifier.out_dir.join(intermediate_name);
-	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
-
-	// Filter diagnostics to only errors
 	if jsifier.diagnostics.len() > 0 {
 		return Err(jsifier.diagnostics);
 	}
 
-	return Ok(CompilerOutput {
-		preflight: intermediate_js,
-		diagnostics,
-	});
+	return Ok(CompilerOutput { diagnostics });
+}
+
+fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
+	if project_dir.starts_with("/") {
+		return true;
+	}
+
+	let dir_str = project_dir.to_str().expect("Project dir is valid UTF-8");
+	// Check if this is a Windows path instead by checking if the second char is a colon
+	// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
+	if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
+		return false;
+	}
+
+	return true;
 }
 
 #[cfg(test)]
