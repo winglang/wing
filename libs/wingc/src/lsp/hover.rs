@@ -6,20 +6,23 @@ use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::LookupResult;
+use crate::type_check::Types;
 use crate::visit::{self, Visit};
 use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
 
 pub struct HoverVisitor<'a> {
 	position: Position,
+	types: &'a Types,
 	current_scope: &'a Scope,
 	current_statement_index: usize,
 	found: Option<(WingSpan, String)>,
 }
 
 impl<'a> HoverVisitor<'a> {
-	pub fn new(position: Position, scope: &'a Scope) -> Self {
+	pub fn new(position: Position, scope: &'a Scope, types: &'a Types) -> Self {
 		Self {
+			types,
 			position,
 			current_scope: scope,
 			current_statement_index: 0,
@@ -117,7 +120,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 
 		if let Reference::InstanceMember { object, property, .. } = node {
-			if let Some(obj_type) = object.evaluated_type.borrow().deref() {
+			if let Some(obj_type) = self.types.get_expr_type(object) {
 				if object.span.contains(&self.position) {
 					let docs = obj_type.render_docs();
 					self.found = Some((object.span.clone(), docs));
@@ -164,8 +167,8 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 	FILES.with(|files| {
 		let files = files.borrow();
-		let parse_result = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let parse_result = parse_result.expect(
+		let file_data = files.get(&params.text_document_position_params.text_document.uri.clone());
+		let file_data = file_data.expect(
 			format!(
 				"Compiled data not found for \"{}\"",
 				params.text_document_position_params.text_document.uri
@@ -173,9 +176,13 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			.as_str(),
 		);
 
-		let root_scope = &parse_result.scope;
+		let root_scope = &file_data.scope;
 
-		let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position, &root_scope);
+		let mut hover_visitor = HoverVisitor::new(
+			params.text_document_position_params.position,
+			&root_scope,
+			&file_data.types,
+		);
 		if let Some((span, docs)) = hover_visitor.visit() {
 			Some(Hover {
 				contents: HoverContents::Markup(MarkupContent {

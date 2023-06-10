@@ -25,9 +25,9 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 	FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position_params.text_document.uri;
-		let result = files.get(&uri).expect("File must be open to get completions");
+		let file_data = files.get(&uri).expect("File must be open to get completions");
 
-		let root_scope = &result.scope;
+		let root_scope = &file_data.scope;
 
 		let mut scope_visitor = ScopeVisitor::new(params.text_document_position_params.position);
 		scope_visitor.visit_scope(root_scope);
@@ -38,7 +38,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				arg_list: provided_args,
 			} = &expr.kind
 			{
-				let t = callee.evaluated_type.borrow();
+				let t = file_data.types.get_expr_type(callee);
 				let t = t.as_ref()?;
 				let sig = t.as_function_sig()?;
 

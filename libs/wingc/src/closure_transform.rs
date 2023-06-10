@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-
 use indexmap::IndexMap;
 
 use crate::{
@@ -82,11 +80,7 @@ impl Fold for ClosureTransformer {
 				kind: StmtKind::Let {
 					reassignable: false,
 					var_name: parent_this_name,
-					initial_value: Expr {
-						kind: ExprKind::Reference(Reference::Identifier(this_name)),
-						span: WingSpan::default(),
-						evaluated_type: RefCell::new(None), // thank god we have type reference
-					},
+					initial_value: Expr::new(ExprKind::Reference(Reference::Identifier(this_name)), WingSpan::default()),
 					type_: None,
 				},
 				span: WingSpan::default(),
@@ -198,27 +192,21 @@ impl Fold for ClosureTransformer {
 					idx: 0,
 					kind: StmtKind::Assignment {
 						variable: Reference::InstanceMember {
-							object: Box::new(Expr {
-								kind: ExprKind::Reference(Reference::InstanceMember {
-									object: Box::new(Expr {
-										kind: ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::default()))),
-										span: WingSpan::default(),
-										evaluated_type: RefCell::new(None),
-									}),
+							object: Box::new(Expr::new(
+								ExprKind::Reference(Reference::InstanceMember {
+									object: Box::new(Expr::new(
+										ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::default()))),
+										WingSpan::default(),
+									)),
 									property: Symbol::new("display", WingSpan::default()),
 									optional_accessor: false,
 								}),
-								span: WingSpan::default(),
-								evaluated_type: RefCell::new(None),
-							}),
+								WingSpan::default(),
+							)),
 							property: Symbol::new("hidden", WingSpan::default()),
 							optional_accessor: false,
 						},
-						value: Expr {
-							kind: ExprKind::Literal(Literal::Boolean(true)),
-							span: WingSpan::default(),
-							evaluated_type: RefCell::new(None),
-						},
+						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::default()),
 					},
 					span: WingSpan::default(),
 				}];

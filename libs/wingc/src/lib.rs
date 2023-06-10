@@ -15,8 +15,6 @@ use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
-use type_check_assert::TypeCheckAssert;
-use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
@@ -44,7 +42,6 @@ pub mod jsify;
 pub mod lsp;
 pub mod parser;
 pub mod type_check;
-pub mod type_check_assert;
 pub mod visit;
 mod wasm_util;
 
@@ -329,9 +326,8 @@ pub fn compile(
 		Diagnostics::new()
 	};
 
-	// Validate that every Expr has an evaluated_type
-	let mut tc_assert = TypeCheckAssert;
-	tc_assert.visit_scope(&scope);
+	// Validate that every Expr has been type checked
+	types.check_all_exprs_type_checked();
 
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
@@ -366,7 +362,7 @@ pub fn compile(
 		}
 	}
 
-	let mut jsifier = JSifier::new(out_dir, app_name, project_dir.as_path(), true);
+	let mut jsifier = JSifier::new(&types, out_dir, app_name, project_dir.as_path(), true);
 
 	let intermediate_js = jsifier.jsify(&scope);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
