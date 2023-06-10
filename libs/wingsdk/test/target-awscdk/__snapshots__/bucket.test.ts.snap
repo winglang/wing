@@ -98,6 +98,11 @@ exports[`bucket is public 1`] = `
 
 exports[`bucket with onCreate method 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -444,6 +449,11 @@ def submit_response(event: dict, context, response_status: str, error_message: s
 
 exports[`bucket with onDelete method 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -790,6 +800,11 @@ def submit_response(event: dict, context, response_status: str, error_message: s
 
 exports[`bucket with onEvent method 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -1158,6 +1173,11 @@ def submit_response(event: dict, context, response_status: str, error_message: s
 
 exports[`bucket with onUpdate method 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
