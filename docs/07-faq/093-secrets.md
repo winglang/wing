@@ -13,4 +13,4 @@ When the Secret resource is compiled to a cloud provider, it is provisioned usin
 
 In the future, Wing may include support for secret rotation.
 
-You can find more info in the [SDK spec](https://docs.winglang.io/reference/wingsdk-spec#secret). 
+You can find more info in the [SDK spec](https://docs.winglang.io/contributors/rfcs/2023-01-20-wingsdk-spec#secret). 

@@ -70,6 +70,11 @@ export abstract class Schedule extends Resource {
         "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
       );
     }
+    if (cron && cron.split(" ")[2] == "*" && cron.split(" ")[4] == "*") {
+      throw new Error(
+        "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
+      );
+    }
   }
 
   /**

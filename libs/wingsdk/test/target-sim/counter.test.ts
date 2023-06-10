@@ -113,7 +113,7 @@ test("peek with initial value", async () => {
   expect(peek).toEqual(123);
 });
 
-test("reset with initial value", async () => {
+test("set to new value", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Counter._newCounter(app, "my_counter", {
@@ -124,26 +124,7 @@ test("reset with initial value", async () => {
 
   const client = s.getResource("/my_counter") as ICounterClient;
 
-  await client.reset(0);
-  const peek = await client.peek();
-  expect(peek).toEqual(0);
-
-  await s.stop();
-
-  expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
-});
-
-test("reset without initial value", async () => {
-  // GIVEN
-  const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {});
-
-  const s = await app.startSimulator();
-
-  const client = s.getResource("/my_counter") as ICounterClient;
-
-  await client.reset(5);
+  await client.set(5);
   const peek = await client.peek();
   expect(peek).toEqual(5);
 
