@@ -42,7 +42,7 @@ impl Docs {
 
 impl Documented for SymbolKind {
 	fn render_docs(&self) -> String {
-		match *&self {
+		match self {
 			SymbolKind::Type(t) => t.render_docs(),
 			SymbolKind::Variable(v) => v.render_docs(),
 			SymbolKind::Namespace(n) => n.render_docs(),
@@ -61,14 +61,28 @@ impl Documented for TypeRef {
 		match &**self {
 			Type::Function(f) => render_function(f),
 			Type::Class(c) => render_class(c),
-			_ => {
-				let mut markdown = CodeMaker::default();
-				markdown.line("```wing");
-				markdown.line(format!("{}", self));
-				markdown.line("```");
+			Type::Optional(t) => t.render_docs(),
 
-				markdown.to_string().trim().to_string()
-			}
+			// primitive types don't have docs yet
+			Type::Anything
+			| Type::Number
+			| Type::String
+			| Type::Duration
+			| Type::Boolean
+			| Type::Void
+			| Type::Json
+			| Type::MutJson
+			| Type::Nil
+			| Type::Array(_)
+			| Type::MutArray(_)
+			| Type::Map(_)
+			| Type::MutMap(_)
+			| Type::Set(_)
+			| Type::MutSet(_)
+			// TODO these types may have docs
+			| Type::Interface(_)
+			| Type::Struct(_)
+			| Type::Enum(_) => "".to_string(),
 		}
 	}
 }
@@ -81,7 +95,11 @@ impl Documented for VariableInfo {
 		markdown.line("```");
 		markdown.line("---");
 
-		markdown.line(self.type_.render_docs());
+		let type_docs = self.type_.render_docs();
+
+		if !type_docs.is_empty() {
+			markdown.line(type_docs);
+		}
 
 		markdown.to_string().trim().to_string()
 	}

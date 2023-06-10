@@ -11,7 +11,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: addConnection
   kind: 2
-  detail: "preflight (AddConnectionProps): void"
+  detail: "preflight (props: AddConnectionProps): void"
   insertText: addConnection($0)
   insertTextFormat: 2
   command:
@@ -19,7 +19,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: isConstruct
   kind: 2
-  detail: "preflight (any): bool"
+  detail: "preflight (x: any): bool"
   insertText: isConstruct($0)
   insertTextFormat: 2
   command:

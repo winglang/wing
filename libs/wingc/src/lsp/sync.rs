@@ -101,15 +101,15 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 
 	let wing_parser = Parser::new(text, source_file.to_string());
 
-	// Note: The scope is intentionally boxed here to force heap allocation
-	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
 	let scope = wing_parser.wingit(&tree.root_node());
 
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
 	let mut inflight_transformer = ClosureTransformer::new();
-	let mut scope = inflight_transformer.fold_scope(scope);
+	// Note: The scope is intentionally boxed here to force heap allocation
+	// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
+	let mut scope = Box::new(inflight_transformer.fold_scope(scope));
 
 	// -- TYPECHECKING PHASE --
 
@@ -123,7 +123,7 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 		contents: String::from_utf8(text.to_vec()).unwrap(),
 		tree,
 		diagnostics,
-		scope: Box::new(scope),
+		scope,
 		types,
 	};
 }

@@ -252,7 +252,7 @@ impl SymbolEnv {
 		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type] [SymbolLookupInfoMut];
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
-	/// nested symbol (e.g. `foo.bar`) if `nested_ver` is larger than 1.
+	/// nested symbol (e.g. `foo.bar`) if `nested_vec` is larger than 1.
 	pub fn lookup_nested(self: reference([Self]), nested_vec: &[&Symbol], statement_idx: Option<usize>) -> LookupResult {
 		let mut it = nested_vec.iter();
 

@@ -3,12 +3,12 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\na: num\n```\n---\n```wing\nnum\n```"
+  value: "```wing\na: num\n```\n---"
 range:
   start:
     line: 2
-    character: 7
+    character: 6
   end:
     line: 2
-    character: 8
+    character: 7
 

@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nhello: num\n```\n---\n```wing\nnum\n```"
+  value: "```wing\nhello: num\n```\n---"
 range:
   start:
     line: 3

@@ -80,7 +80,10 @@ impl Fold for ClosureTransformer {
 				kind: StmtKind::Let {
 					reassignable: false,
 					var_name: parent_this_name,
-					initial_value: Expr::new(ExprKind::Reference(Reference::Identifier(this_name)), WingSpan::default()),
+					initial_value: Expr::new(
+						ExprKind::Reference(Reference::Identifier(this_name)),
+						WingSpan::default(),
+					),
 					type_: None,
 				},
 				span: WingSpan::default(),
@@ -111,7 +114,7 @@ impl Fold for ClosureTransformer {
 
 		Scope {
 			statements,
-			span: WingSpan::default(),
+			span: node.span,
 			env: node.env,
 		}
 	}

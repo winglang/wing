@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/completions.rs
 ---
 - label: assert
   kind: 3
-  detail: "(bool): void"
+  detail: "(condition: bool): void"
   insertText: assert($0)
   insertTextFormat: 2
   command:
@@ -11,7 +11,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: log
   kind: 3
-  detail: "(str): void"
+  detail: "(message: str): void"
   insertText: log($0)
   insertTextFormat: 2
   command:
@@ -19,7 +19,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: panic
   kind: 3
-  detail: "(str): void"
+  detail: "(message: str): void"
   insertText: panic($0)
   insertTextFormat: 2
   command:
@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: bring std
 - label: throw
   kind: 3
-  detail: "(str): void"
+  detail: "(message: str): void"
   insertText: throw($0)
   insertTextFormat: 2
   command:
