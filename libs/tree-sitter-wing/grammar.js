@@ -332,10 +332,13 @@ module.exports = grammar({
 
     bool: ($) => choice("true", "false"),
 
-    duration: ($) => choice($.seconds, $.minutes, $.hours),
+    duration: ($) => choice($.seconds, $.minutes, $.hours, $.days, $.months, $.years),
     seconds: ($) => seq(field("value", $.number), "s"),
     minutes: ($) => seq(field("value", $.number), "m"),
     hours: ($) => seq(field("value", $.number), "h"),
+    days: ($) => seq(field("value", $.number), "d"),
+    months: ($) => seq(field("value", $.number), "m"),
+    years: ($) => seq(field("value", $.number), "y"),
     nil_value: ($) => "nil",
     string: ($) =>
       seq(
