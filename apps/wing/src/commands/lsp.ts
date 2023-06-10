@@ -6,7 +6,6 @@ import {
   DiagnosticSeverity,
   Diagnostic,
   Range,
-  PublishDiagnosticsParams,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
@@ -112,14 +111,13 @@ export async function run_server() {
     }
     raw_diagnostics.length = 0;
     callWing("wingc_on_did_open_text_document", params);
-    const notification: PublishDiagnosticsParams = {
-      "uri": params.textDocument.uri,
-      "diagnostics": raw_diagnostics.map((rd) => {
+    // purposely not awaiting this, notifications are fire-and-forget
+    void connection.sendDiagnostics({
+      uri: params.textDocument.uri,
+      diagnostics: raw_diagnostics.map((rd) => {
         return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
       })
-    };
-    // purposely not awaiting this, notifications are fire-and-forget
-    void connection.sendDiagnostics(notification);
+    });
   });
   connection.onDidChangeTextDocument(async (params) => {
     if (badState) {
@@ -135,14 +133,13 @@ export async function run_server() {
 
     raw_diagnostics.length = 0;
     callWing("wingc_on_did_change_text_document", params);
-    const notification: PublishDiagnosticsParams = {
-      "uri": params.textDocument.uri,
-      "diagnostics": raw_diagnostics.map((rd) => {
+    // purposely not awaiting this, notifications are fire-and-forget
+    void connection.sendDiagnostics({
+      uri: params.textDocument.uri,
+      diagnostics: raw_diagnostics.map((rd) => {
         return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
       })
-    };
-    // purposely not awaiting this, notifications are fire-and-forget
-    void connection.sendDiagnostics(notification);
+    });
   });
   connection.onCompletion(async (params) => {
     return callWing("wingc_on_completion", params);
