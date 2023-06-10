@@ -215,6 +215,15 @@ pub fn get_diagnostics() -> Vec<Diagnostic> {
 	})
 }
 
+/// Reset diagnostics, this is useful if we perform more than one compilation
+/// in a single session
+pub fn reset_diagnostics() {
+	DIAGNOSTICS.with(|diagnostics| {
+		let mut diagnostics = diagnostics.borrow_mut();
+		diagnostics.clear();
+	})
+}
+
 #[derive(Debug)]
 pub struct TypeError {
 	pub message: String,

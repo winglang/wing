@@ -24,7 +24,7 @@ export interface WingCompilerLoadOptions {
   /**
    * Additional imports to pass to the WASI instance. Imports objects/functions that WASM code can invoke.
    *
-   * @default `{ wasi_snapshot_preview1: wasi.wasiImport, env: { send_notification: () => {} }`
+   * @default `{ wasi_snapshot_preview1: wasi.wasiImport, env: { new_diagnostic: () => {} }`
    */
   imports?: Record<string, any>;
 
@@ -177,7 +177,6 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_notification: () => { },
       new_diagnostic: () => { },
     }
   }, options.imports ?? {}) as any;

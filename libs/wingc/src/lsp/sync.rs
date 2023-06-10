@@ -5,8 +5,8 @@ use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
-use crate::diagnostic::{get_diagnostics, Diagnostic};
-use crate::lsp::notifications::send_diagnostics;
+use crate::comp_ctx::set_custom_panic_hook;
+use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
 use crate::parser::Parser;
 use crate::type_check;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
@@ -50,7 +50,6 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 			let path = uri_path.to_str().unwrap();
 
 			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut jsii_types.borrow_mut());
-			send_diagnostics(&uri, &result.diagnostics);
 			files.borrow_mut().insert(uri, result);
 		});
 	});
@@ -77,7 +76,6 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 				params.content_changes[0].text.as_bytes(),
 				&mut jsii_types.borrow_mut(),
 			);
-			send_diagnostics(&uri, &result.diagnostics);
 			files.borrow_mut().insert(uri, result);
 		});
 	})
@@ -85,6 +83,11 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
 fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) -> FileData {
+	// Reset diagnostics before new compilation (`partial_compile` can be called multiple)
+	reset_diagnostics();
+	// Set custom panic hook before compilation (TODO: this is redundant in subsequent calls to `partial_compile`)
+	set_custom_panic_hook();
+
 	let mut types = type_check::Types::new();
 
 	let language = tree_sitter_wing::language();
