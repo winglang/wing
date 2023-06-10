@@ -74,16 +74,18 @@ export function convertDurationToCronExpression(dur: Duration): string {
 
   const h = Math.floor(totalInMinutes / 60);
   const m = totalInMinutes % 60;
-
+  // [minute] [hour] [day of month] [month] [day of week]
   const minute = m != 0 ? `*/${m}` : "*";
   const hour = h != 0 ? `*/${h}` : "*";
   // TODO: Support longer durations once we implement https://github.com/winglang/wing/issues/2243
   // for now we just use * for day, month, and year
-  const day = "*";
+  const dayInMonth = "*";
   const month = "*";
-  const year = "*";
+  // if day of month is "*", day of week should be "?"
+  // https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
+  const dayOfWeek = "?";
 
   // Generate cron string based on the duration
-  const cronString = `${minute} ${hour} ${day} ${month} ${year}`;
+  const cronString = `${minute} ${hour} ${dayInMonth} ${month} ${dayOfWeek}`;
   return cronString;
 }

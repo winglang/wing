@@ -318,7 +318,8 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.json_literal,
         $.struct_literal,
-        $.optional_test
+        $.optional_test,
+        $.compiler_dbg_panic,
       ),
 
     // Primitives
@@ -367,6 +368,8 @@ module.exports = grammar({
 
     optional_test: ($) =>
       prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
+
+    compiler_dbg_panic: ($) => "😱",
 
     _callable_expression: ($) =>
       choice(

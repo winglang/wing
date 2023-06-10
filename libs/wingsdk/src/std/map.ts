@@ -3,7 +3,8 @@
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
 import { ImmutableArray } from "./array";
-import { T1 } from "./util";
+import { T1 } from "./generics";
+import { Code, InflightClient } from "../core";
 
 /**
  * Immutable Map
@@ -11,6 +12,13 @@ import { T1 } from "./util";
  * @typeparam T1
  */
 export class ImmutableMap {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Returns the number of elements in the map.
    *
@@ -92,6 +100,13 @@ export class ImmutableMap {
  * @typeparam T1
  */
 export class MutableMap {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Returns the number of elements in the map.
    *

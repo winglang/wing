@@ -9,13 +9,12 @@ extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
+use comp_ctx::set_custom_panic_hook;
 use diagnostic::{Diagnostic, Diagnostics};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
-use type_check_assert::TypeCheckAssert;
-use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
@@ -33,6 +32,7 @@ use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
 pub mod closure_transform;
+mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 pub mod fold;
@@ -40,7 +40,6 @@ pub mod jsify;
 pub mod lsp;
 pub mod parser;
 pub mod type_check;
-pub mod type_check_assert;
 pub mod visit;
 mod wasm_util;
 
@@ -175,6 +174,7 @@ pub fn type_check(
 	source_path: &Path,
 	jsii_types: &mut TypeSystem,
 ) -> Diagnostics {
+	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
@@ -279,6 +279,9 @@ pub fn compile(
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
+	// Setup a custom panic hook to report panics as complitation diagnostics
+	set_custom_panic_hook();
+
 	// -- PARSING PHASE --
 	let (scope, parse_diagnostics) = parse(&source_path);
 
@@ -302,9 +305,8 @@ pub fn compile(
 		Diagnostics::new()
 	};
 
-	// Validate that every Expr has an evaluated_type
-	let mut tc_assert = TypeCheckAssert;
-	tc_assert.visit_scope(&scope);
+	// Validate that every Expr has been type checked
+	types.check_all_exprs_type_checked();
 
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
@@ -339,7 +341,7 @@ pub fn compile(
 		}
 	}
 
-	let mut jsifier = JSifier::new(out_dir, app_name, project_dir.as_path(), true);
+	let mut jsifier = JSifier::new(&types, out_dir, app_name, project_dir.as_path(), true);
 
 	let intermediate_js = jsifier.jsify(&scope);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());

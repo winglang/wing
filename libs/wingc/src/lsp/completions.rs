@@ -1,6 +1,6 @@
 use std::cmp::max;
 
-use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
+use lsp_types::{Command, CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
@@ -32,10 +32,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 	CompletionResponse::Array(FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position.text_document.uri;
-		let result = files.get(&uri).expect("File must be open to get completions");
+		let file_data = files.get(&uri).expect("File must be open to get completions");
 
-		let types = &result.types;
-		let root_scope = &result.scope;
+		let types = &file_data.types;
+		let root_scope = &file_data.scope;
 		let root_env = root_scope.env.borrow();
 		let root_env = root_env.as_ref().expect("The root scope must have an environment");
 
@@ -43,7 +43,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			params.text_document_position.position.line as usize,
 			max(params.text_document_position.position.character as i64 - 1, 0) as usize,
 		);
-		let mut node_to_complete = result
+		let mut node_to_complete = file_data
 			.tree
 			.root_node()
 			.descendant_for_point_range(point, point)
@@ -52,7 +52,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		while point.column > 0 && node_to_complete.kind() == "source" {
 			// We are somewhere in whitespace aether, so we need to backtrack to the nearest node on this line
 			point.column -= 1;
-			node_to_complete = result
+			node_to_complete = file_data
 				.tree
 				.root_node()
 				.descendant_for_point_range(point, point)
@@ -80,15 +80,12 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 			if parent.kind() == "nested_identifier" {
 				if let Some(nearest_expr) = scope_visitor.nearest_expr {
-					let nearest_expression_type = nearest_expr
-						.evaluated_type
-						.borrow()
-						.expect("Expressions must have a type");
+					let nearest_expr_type = types.get_expr_type(nearest_expr).unwrap();
 
 					// If we are inside an incomplete reference, there is possibly a type error so we can't trust "any"
-					if !nearest_expression_type.is_anything() {
+					if !nearest_expr_type.is_anything() {
 						return get_completions_from_type(
-							&nearest_expression_type,
+							&nearest_expr_type,
 							types,
 							scope_visitor
 								.found_scope
@@ -99,7 +96,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						if let ExprKind::Reference(_) = &nearest_expr.kind {
 							// This is probably a type of some kind
 							// just get the entire reference and try to resolve it
-							let wing_source = result.contents.as_bytes();
+							let wing_source = file_data.contents.as_bytes();
 							let mut reference_text = parent
 								.utf8_text(wing_source)
 								.expect("The referenced text should be available")
@@ -135,8 +132,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 									}
 								}
 							} else {
-								// This is probably a JSII type that has not been imported yet
-								// TODO Need to map a custom_type to a JSII FQN
+								// No lookup found, let's not provide any completions
+								// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
+
+								return vec![];
 							}
 						}
 					}
@@ -175,6 +174,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 						if let Ok(type_lookup) = type_lookup {
 							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
+						} else {
+							// No lookup found, let's not provide any completions
+							// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
+
+							return vec![];
 						}
 					}
 				}
@@ -222,7 +226,6 @@ fn get_completions_from_type(
 ) -> Vec<CompletionItem> {
 	match &**type_ {
 		Type::Class(c) => get_completions_from_class(c, current_phase, is_instance),
-		Type::Resource(c) => get_completions_from_class(c, current_phase, is_instance),
 		Type::Interface(i) => get_completions_from_class(i, current_phase, is_instance),
 		Type::Struct(s) => get_completions_from_class(s, current_phase, is_instance),
 		Type::Enum(enum_) => {
@@ -272,7 +275,12 @@ fn get_completions_from_type(
 				"MutSet" => "MutableSet",
 				"MutMap" => "MutableMap",
 				"MutArray" => "MutableArray",
-				s => s,
+				"str" => "String",
+				"duration" => "Duration",
+				"json" => "Json",
+				"bool" => "Boolean",
+				"num" => "Number",
+				_ => type_name,
 			};
 			if let LookupResult::Found(std_type, _) = types
 				.libraries
@@ -330,18 +338,27 @@ fn get_completions_from_class(
 			} else {
 				Some(CompletionItemKind::FIELD)
 			};
-			let insert_text = if kind == Some(CompletionItemKind::METHOD) {
-				Some(format!("{}($0)", symbol_data.0))
-			} else {
-				Some(symbol_data.0.to_string())
-			};
+			let is_method = kind == Some(CompletionItemKind::METHOD);
 
 			Some(CompletionItem {
-				insert_text,
+				insert_text: if is_method {
+					Some(format!("{}($0)", symbol_data.0))
+				} else {
+					Some(symbol_data.0.to_string())
+				},
 				label: symbol_data.0,
 				detail: Some(variable.type_.to_string()),
 				kind,
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
+				command: if is_method {
+					Some(Command {
+						title: "triggerParameterHints".to_string(),
+						command: "editor.action.triggerParameterHints".to_string(),
+						arguments: None,
+					})
+				} else {
+					None
+				},
 				..Default::default()
 			})
 		})
@@ -360,8 +377,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				| Type::MutMap(_)
 				| Type::Set(_)
 				| Type::MutSet(_)
-				| Type::Class(_)
-				| Type::Resource(_) => CompletionItemKind::CLASS,
+				| Type::Class(_) => CompletionItemKind::CLASS,
 				Type::Anything
 				| Type::Number
 				| Type::String
@@ -377,14 +393,11 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(
-				if t.as_resource().is_some() {
-					"preflight class"
-				} else {
-					"inflight class"
-				}
-				.to_string(),
-			),
+			detail: Some(if let Some(c) = t.as_class() {
+				format!("{} class", c.phase).to_string()
+			} else {
+				String::default()
+			}),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
@@ -393,17 +406,27 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 			} else {
 				Some(CompletionItemKind::VARIABLE)
 			};
-			let insert_text = if kind == Some(CompletionItemKind::FUNCTION) {
-				Some(format!("{}($0)", name))
-			} else {
-				Some(name.to_string())
-			};
+			let is_method = kind == Some(CompletionItemKind::FUNCTION);
+
 			CompletionItem {
 				label: name.to_string(),
-				insert_text,
+				insert_text: if is_method {
+					Some(format!("{}($0)", name))
+				} else {
+					Some(name.to_string())
+				},
 				detail: Some(v.type_.to_string()),
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
+				command: if is_method {
+					Some(Command {
+						title: "triggerParameterHints".to_string(),
+						command: "editor.action.triggerParameterHints".to_string(),
+						arguments: None,
+					})
+				} else {
+					None
+				},
 				..Default::default()
 			}
 		}
@@ -589,5 +612,14 @@ let a = MutMap<str> {};
 if a. 
    //^"#,
 		assert!(incomplete_if_statement.len() > 0)
+	);
+
+	test_completion_list!(
+		undeclared_var,
+		r#"
+let x = 2;
+notDefined.
+         //^"#,
+		assert!(undeclared_var.is_empty())
 	);
 }

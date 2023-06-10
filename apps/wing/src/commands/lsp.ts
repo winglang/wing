@@ -70,6 +70,9 @@ export async function run_server() {
         completionProvider: {
           triggerCharacters: ["."],
         },
+        signatureHelpProvider: {
+          triggerCharacters: ["(", ",", ")"],
+        },
         hoverProvider: true,
         documentSymbolProvider: true,
         definitionProvider: true,
@@ -108,6 +111,9 @@ export async function run_server() {
   });
   connection.onCompletion(async (params) => {
     return callWing("wingc_on_completion", params);
+  });
+  connection.onSignatureHelp(async (params) => {
+    return callWing("wingc_on_signature_help", params);
   });
   connection.onDefinition(async (params) => {
     return callWing("wingc_on_goto_definition", params);

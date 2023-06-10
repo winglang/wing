@@ -69,11 +69,11 @@ See [AWS documentation](https://docs.aws.amazon.com/secretsmanager/latest/usergu
 
 ### Azure (`tf-azure`)
 
-Tracking issue: [#2178](https://github.com/winglang/wing/issues/2178)
+🚧 Not supported yet (tracking issue: [#2178](https://github.com/winglang/wing/issues/2178))
 
 ### GCP (`tf-gcp`)
 
-Tracking issue: [#2179](https://github.com/winglang/wing/issues/2179)
+🚧 Not supported yet (tracking issue: [#2179](https://github.com/winglang/wing/issues/2179))
 
 ## API Reference
 
