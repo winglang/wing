@@ -5296,7 +5296,7 @@ Inflight interface for `Counter`.
 ##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
 
 ```wing
-dec(amount?: num): num
+dec(amount?: num, key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5311,10 +5311,18 @@ amount to decrement (default is 1).
 
 ---
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be decremented.
+
+---
+
 ##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
 
 ```wing
-inc(amount?: num): num
+inc(amount?: num, key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5329,10 +5337,18 @@ amount to increment (default is 1).
 
 ---
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.inc.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be incremented.
+
+---
+
 ##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
 
 ```wing
-peek(): num
+peek(key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5342,10 +5358,18 @@ Get the current value of the counter.
 Using this API may introduce race conditions since the value can change between
 the time it is read and the time it is used in your code.
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.peek.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be retrieved.
+
+---
+
 ##### `set` <a name="set" id="@winglang/sdk.cloud.ICounterClient.set"></a>
 
 ```wing
-set(value: num): void
+set(value: num, key?: str): void
 ```
 
 **Inflight client:** [true](#true)
@@ -5357,6 +5381,14 @@ Set a counter to a given value.
 - *Type:* num
 
 new value.
+
+---
+
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.set.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be set.
 
 ---
 
