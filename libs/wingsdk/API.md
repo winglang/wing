@@ -3636,7 +3636,7 @@ TODO: For now this has to be a method rather than a getter as macros only work o
 ##### `values` <a name="values" id="@winglang/sdk.std.ImmutableMap.values"></a>
 
 ```wing
-values(): MutArray<T1>
+values(): ImmutableArray
 ```
 
 Returns the values of this map.
@@ -4282,7 +4282,7 @@ TODO: For now this has to be a method rather than a getter as macros only work o
 ##### `values` <a name="values" id="@winglang/sdk.std.MutableMap.values"></a>
 
 ```wing
-values(): MutArray<T1>
+values(): ImmutableArray
 ```
 
 Returns the values of this map.

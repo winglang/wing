@@ -2,9 +2,9 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
+import { ImmutableArray } from "./array";
 import { T1 } from "./generics";
 import { Code, InflightClient } from "../core";
-import { ImmutableArray } from "./array";
 
 /**
  * Immutable Map
