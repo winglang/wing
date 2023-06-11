@@ -35,7 +35,7 @@ module.exports = function({ usersTable, std_Json }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
+      const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"name":"","age":"","id":""})]))));
       if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
         return {
         "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"error":"incomplete details"})]),
