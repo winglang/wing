@@ -5,6 +5,7 @@ import {
   npmBin,
   npmCacheDir,
   targetWingSDKSpec,
+  targetWingCompilerSpec,
   targetWingSpec,
   tmpDir,
   wingBin,
@@ -41,6 +42,7 @@ export default async function () {
     "--no-package-lock",
     "--install-links=false",
     targetWingSDKSpec,
+    targetWingCompilerSpec,
     targetWingSpec,
   ];
   const installResult = await execa(npmBin, installArgs, {
