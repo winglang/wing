@@ -546,7 +546,6 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
 
   // THEN
   await s.stop();
-  // @ts-expect-error (reaching into private property)
   const filePath = `${client.fileDir}/${KEY}`;
   expect(response).toEqual(url.pathToFileURL(filePath).href);
 });

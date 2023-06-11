@@ -18,7 +18,7 @@ import {
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly objectKeys: Set<string>;
-  private readonly fileDir: string;
+  private readonly _fileDir: string;
   private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;
   private readonly _public: boolean;
@@ -26,11 +26,15 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
     this.objectKeys = new Set();
-    this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
+    this._fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
     this.initialObjects = props.initialObjects ?? {};
     this._public = props.public ?? false;
     this.topicHandlers = props.topics;
+  }
+
+  public get fileDir(): string {
+    return this._fileDir;
   }
 
   public async init(): Promise<BucketAttributes> {
@@ -46,7 +50,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {
-    await fs.promises.rm(this.fileDir, { recursive: true, force: true });
+    await fs.promises.rm(this._fileDir, { recursive: true, force: true });
   }
 
   private async notifyListeners(actionType: BucketEventType, key: string) {
@@ -98,7 +102,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       message: `Get (key=${key}).`,
       activity: async () => {
         const hash = this.hashKey(key);
-        const filename = join(this.fileDir, hash);
+        const filename = join(this._fileDir, hash);
         try {
           return await fs.promises.readFile(filename, "utf8");
         } catch (e) {
@@ -123,7 +127,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       message: `Get Json (key=${key}).`,
       activity: async () => {
         const hash = this.hashKey(key);
-        const filename = join(this.fileDir, hash);
+        const filename = join(this._fileDir, hash);
         return JSON.parse(await fs.promises.readFile(filename, "utf8"));
       },
     });
@@ -152,7 +156,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         }
 
         const hash = this.hashKey(key);
-        const filename = join(this.fileDir, hash);
+        const filename = join(this._fileDir, hash);
         await fs.promises.unlink(filename);
         this.objectKeys.delete(key);
         await this.notifyListeners(BucketEventType.DELETE, key);
@@ -191,7 +195,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Public URL (key=${key}).`,
       activity: async () => {
-        const filePath = join(this.fileDir, key);
+        const filePath = join(this._fileDir, key);
 
         if (!this.objectKeys.has(key)) {
           throw new Error(
@@ -209,7 +213,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       ? BucketEventType.UPDATE
       : BucketEventType.CREATE;
     const hash = this.hashKey(key);
-    const filename = join(this.fileDir, hash);
+    const filename = join(this._fileDir, hash);
     const dirName = dirname(filename);
     await fs.promises.mkdir(dirName, { recursive: true });
     await fs.promises.writeFile(filename, value);
