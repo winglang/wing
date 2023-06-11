@@ -112,6 +112,14 @@ pub unsafe extern "C" fn wingc_free(ptr: *mut u8, size: usize) {
 	dealloc(ptr, layout);
 }
 
+/// Expose one time-initiliazation function to the WASM host,
+/// should be called before any other function
+#[no_mangle]
+pub unsafe extern "C" fn wingc_init() {
+	// Setup a custom panic hook to report panics as complitation diagnostics
+	set_custom_panic_hook();
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_string(ptr, len);
@@ -269,9 +277,6 @@ pub fn compile(
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
-
-	// Setup a custom panic hook to report panics as complitation diagnostics
-	set_custom_panic_hook();
 
 	// -- PARSING PHASE --
 	let scope = parse(&source_path);

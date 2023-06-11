@@ -194,6 +194,10 @@ export async function load(options: WingCompilerLoadOptions) {
   log("starting wingc WASM module");
   wasi.start(instance);
 
+  // Initialize the wingc module
+  const exports = instance.exports as any;
+  exports.wingc_init();
+
   return instance;
 }
 

@@ -5,7 +5,6 @@ use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
-use crate::comp_ctx::set_custom_panic_hook;
 use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
 use crate::parser::Parser;
 use crate::type_check;
@@ -85,8 +84,6 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) -> FileData {
 	// Reset diagnostics before new compilation (`partial_compile` can be called multiple)
 	reset_diagnostics();
-	// Set custom panic hook before compilation (TODO: this is redundant in subsequent calls to `partial_compile`)
-	set_custom_panic_hook();
 
 	let mut types = type_check::Types::new();
 
