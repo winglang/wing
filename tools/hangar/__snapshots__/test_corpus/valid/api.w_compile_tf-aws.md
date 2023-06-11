@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ counter }) {
+module.exports = function({ counter, std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -15,7 +15,8 @@ module.exports = function({ counter }) {
       const count = (await counter.inc());
       const bodyResponse = Object.freeze({"count":count});
       const resp = {
-      "body": bodyResponse,
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),
+      "headers": Object.freeze({"content-type":"application/json"}),
       "status": 200,}
       ;
       return resp;
@@ -502,9 +503,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
         const counter_client = context._lift(counter);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             counter: ${counter_client},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }

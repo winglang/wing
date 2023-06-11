@@ -12,6 +12,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { PolicyStatement } from "../shared-aws";
+import { IInflightHost } from "../std";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -45,6 +46,26 @@ export class Function extends cloud.Function {
     });
 
     this.arn = this.function.functionArn;
+  }
+
+  /** @internal */
+  public _bind(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("functions can only be bound by awscdk.Function for now");
+    }
+
+    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+      host.addPolicyStatements({
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.function.functionArn}`],
+      });
+    }
+
+    // The function name needs to be passed through an environment variable since
+    // it may not be resolved until deployment time.
+    host.addEnvironment(this.envName(), this.function.functionArn);
+
+    super._bind(host, ops);
   }
 
   /** @internal */

@@ -10,6 +10,7 @@ import { Function } from "./function";
 import { Queue } from "./queue";
 import { Secret } from "./secret";
 import { CdkTokens } from "./tokens";
+import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 
 import {
@@ -18,6 +19,7 @@ import {
   FUNCTION_FQN,
   QUEUE_FQN,
   SECRET_FQN,
+  TEST_RUNNER_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
@@ -48,6 +50,11 @@ export class App extends CoreApp {
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
+
+  /**
+   * The test runner for this app.
+   */
+  protected readonly testRunner: TestRunner;
 
   constructor(props: CdkAppProps) {
     const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
@@ -92,6 +99,7 @@ export class App extends CoreApp {
     this.synthed = false;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     this._tokens = new CdkTokens();
+    this.testRunner = new TestRunner(this, "cloud.TestRunner");
   }
 
   /**
@@ -140,6 +148,9 @@ export class App extends CoreApp {
 
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
+
+      case TEST_RUNNER_FQN:
+        return new TestRunner(scope, id, args[0]);
 
       case SECRET_FQN:
         return new Secret(scope, id, args[0]);

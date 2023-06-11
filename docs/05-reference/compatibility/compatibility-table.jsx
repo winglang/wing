@@ -50,7 +50,7 @@ export const Table = () => {
             <tr key={`${item}_${method}`}>
               {index === 0 && (
                 <td className="highlight" key={`${item}_main`} rowSpan={Object.keys(compatibilityData[item]).length}>
-                  <a target="_blank" href={`/reference/wingsdk-spec#${item.toLowerCase()}`}>
+                  <a target="_blank" href={`/contributors/rfcs/2023-01-20-wingsdk-spec#${item.toLowerCase()}`}>
                     {item}
                   </a>
                 </td>

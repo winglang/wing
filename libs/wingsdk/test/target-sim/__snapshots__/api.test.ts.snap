@@ -7,7 +7,7 @@ exports[`api handler can read the request params 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -28,7 +28,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle(req) { return { status: 200, body: req.query }; }
+  async handle(req) { return { status: 200, body: JSON.stringify(req.query), headers: { \\"Content-Type\\": \\"application/json\\" } }; }
 };
 })())({
 
@@ -214,7 +214,7 @@ exports[`api handler can read the request path 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -421,7 +421,7 @@ exports[`api handler can set response headers 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -628,7 +628,7 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -835,7 +835,7 @@ exports[`api response returns default Content-Type header 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -856,7 +856,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle(req) { return { status: 200, body: req.body }; }
+  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
 };
 })())({
 
@@ -1042,25 +1042,25 @@ exports[`api supports every method type 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
-  "Processing \\"POST /hello\\" (body={}, params={}).",
-  "Processing \\"PUT /hello\\" (body={}, params={}).",
-  "Processing \\"DELETE /hello\\" (body={}, params={}).",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
-  "Processing \\"OPTIONS /hello\\" (body={}, params={}).",
-  "Processing \\"PATCH /hello\\" (body={}, params={}).",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
+  "Processing \\"POST /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
+  "Processing \\"PUT /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"PUT\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "PUT /hello - 200.",
+  "Processing \\"DELETE /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"DELETE\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "DELETE /hello - 200.",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"HEAD\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
+  "Processing \\"OPTIONS /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"OPTIONS\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "OPTIONS /hello - 200.",
+  "Processing \\"PATCH /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "PATCH /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -1426,7 +1426,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle(req) { return { status: 200, body: req.body }; }
+  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
 };
 })())({
 
@@ -1630,10 +1630,10 @@ exports[`api with multiple methods on same route 1`] = `
   "wingsdk.sim.EventMapping created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "Processing \\"POST /hello\\" (body={}, params={}).",
+  "Processing \\"POST /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -1954,10 +1954,10 @@ exports[`api with multiple routes 1`] = `
   "wingsdk.sim.EventMapping created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello/world\\" (body={}, params={}).",
+  "Processing \\"GET /hello/world\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/world - 200.",
-  "Processing \\"GET /hello/wingnuts\\" (body={}, params={}).",
+  "Processing \\"GET /hello/wingnuts\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/wingnuts - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -2278,7 +2278,7 @@ exports[`api with one GET route 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /hello\\" (body={}, params={}).",
+  "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -2485,7 +2485,7 @@ exports[`api with one GET route with request params 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"GET /users/{name}\\" (body={}, params={\\"name\\":\\"tsuf\\"}).",
+  "Processing \\"GET /users/{name}\\" params={\\"name\\":\\"tsuf\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}).",
   "GET /users/{name} - 200.",
   "wingsdk.sim.EventMapping deleted.",
@@ -2701,8 +2701,8 @@ exports[`api with one POST route, with body 1`] = `
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
-  "Processing \\"POST /hello\\" (body={\\"message\\":\\"hello world\\"}, params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":{\\"message\\":\\"hello world\\"},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Processing \\"POST /hello\\" params={}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":\\"{\\\\\\"message\\\\\\":\\\\\\"hello world\\\\\\"}\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -2722,214 +2722,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle(req) { return { status: 200, body: req.body }; }
-};
-})())({
-
-})).handle(event);
-};",
-  "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "wingsdk.cloud.TestRunner",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "wingsdk.cloud.Function",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api",
-        "props": {
-          "openApiSpec": {
-            "openapi": "3.0.3",
-            "paths": {
-              "/hello": {
-                "post": {
-                  "operationId": "post-hello",
-                  "parameters": [],
-                  "responses": {
-                    "200": {
-                      "content": {},
-                      "description": "200 response",
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        "type": "wingsdk.cloud.Api",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
-        "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
-          "subscriptionProps": {
-            "routes": [
-              {
-                "method": "POST",
-                "path": "/hello",
-              },
-            ],
-          },
-        },
-        "type": "wingsdk.sim.EventMapping",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "on_post_request",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
-          "children": {
-            "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
-            },
-            "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "on_post_request",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "title": "Function",
-              },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A REST API endpoint",
-            "title": "Api",
-          },
-          "id": "my_api",
-          "path": "root/my_api",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`api with one POST route, with body urlencoded 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
-  "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
-  "Processing \\"POST /hello\\" (body={\\"message\\":\\"hello world\\"}, params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/x-www-form-urlencoded;charset=UTF-8\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"19\\"},\\"body\\":{\\"message\\":\\"hello world\\"},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
-  "POST /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
-]
-`;
-
-exports[`api with one POST route, with body urlencoded 2`] = `
-{
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
-  return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.body }; }
+  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
 };
 })())({
 
