@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { rmSync, mkdirSync, promises as fsPromise } from "fs";
+import { rmSync, mkdirSync, promises as fsPromise, readFileSync } from "fs";
 import { basename, dirname, join, resolve, relative } from "path";
 import * as os from "os";
 
@@ -122,15 +122,15 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     },
     imports: {
       env: {
-        new_diagnostic,
+        send_diagnostic,
       }
     }
   });
 
-  const raw_diagnostics: wingCompiler.WingDiagnostic[] = [];
+  const diagnostics: string[] = [];
   const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
-  function new_diagnostic(
+  function send_diagnostic(
     data_ptr: number,
     data_len: number
   ) {
@@ -140,7 +140,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       data_len
     );
     const data_str = new TextDecoder().decode(data_buf);
-    raw_diagnostics.push(JSON.parse(data_str));
+    diagnostics.push(buildDiagnostic(JSON.parse(data_str), coloring));
   }
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(resolve(wingDir))}`;
@@ -149,27 +149,13 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   try {
     compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
   } catch (e) {
-    // const message = [];
-    // message.push(e);
-    // message.push();
-    // message.push();
-    // message.push(
-    //   chalk.bold.red("Internal error:") +
-    //   " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
-    // );
-
-    // throw new Error(message.join("\n"));
+    // This is a bug in the compiler, indicate a compilation failure. 
+    // The bug details should be part of the diagnostics handling below.
     compileSuccess = false;
   }
   if (!compileSuccess) {
     // This is a bug in the user's code. Print the compiler diagnostics.
-    //const errors: wingCompiler.WingDiagnostic[] = JSON.parse(compileResult.toString());
-    const result = [];
-
-    for (const raw_diagnostic of raw_diagnostics) {
-      result.push(await buildDiagnostic(raw_diagnostic, coloring));
-    }
-    throw new Error(result.join("\n"));
+    throw new Error(diagnostics.join("\n"));
   }
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
@@ -273,7 +259,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   return synthDir;
 }
 
-async function buildDiagnostic(error: wingCompiler.WingDiagnostic, coloring: boolean): Promise<string> {
+function buildDiagnostic(error: wingCompiler.WingDiagnostic, coloring: boolean): string {
   const { message, span } = error;
   let files: File[] = [];
   let labels: Label[] = [];
@@ -281,7 +267,7 @@ async function buildDiagnostic(error: wingCompiler.WingDiagnostic, coloring: boo
   // file_id might be "" if the span is synthetic (see #2521)
   if (span !== null && span.file_id) {
     // `span` should only be null if source file couldn't be read etc.
-    const source = await fsPromise.readFile(span.file_id, "utf8");
+    const source = readFileSync(span.file_id, "utf8");
     const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
     const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
     files.push({ name: span.file_id, source });
@@ -294,7 +280,7 @@ async function buildDiagnostic(error: wingCompiler.WingDiagnostic, coloring: boo
     });
   }
 
-  const diagnosticText = await emitDiagnostic(
+  const diagnosticText = emitDiagnostic(
     files,
     {
       message,

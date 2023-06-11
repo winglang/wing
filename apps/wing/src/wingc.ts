@@ -5,7 +5,6 @@ import { resolve } from "path";
 import wasiBindings from "wasi-js/dist/bindings/node";
 import { exec } from "child_process";
 import { promisify } from "util";
-import merge from "lodash.merge";
 
 const log = debug("wing:compile");
 
@@ -24,7 +23,7 @@ export interface WingCompilerLoadOptions {
   /**
    * Additional imports to pass to the WASI instance. Imports objects/functions that WASM code can invoke.
    *
-   * @default `{ wasi_snapshot_preview1: wasi.wasiImport, env: { new_diagnostic: () => {} }`
+   * @default `{ wasi_snapshot_preview1: wasi.wasiImport, env: { send_diagnostic: () => {} }`
    */
   imports?: Record<string, any>;
 
@@ -173,13 +172,15 @@ export async function load(options: WingCompilerLoadOptions) {
     preopens,
   });
 
-  const importObject = merge({
+  const importObject = {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      new_diagnostic: () => { },
-    }
-  }, options.imports ?? {}) as any;
+      send_diagnostic: () => { },
+    },
+    ...(options.imports ?? {}),
+  } as any;
+
 
   log("compiling wingc WASM module");
   const binary =

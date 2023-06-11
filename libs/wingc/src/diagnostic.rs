@@ -189,14 +189,14 @@ pub fn report_diagnostic(diagnostic: Diagnostic) {
 		let json = serde_json::to_string(&diagnostic).unwrap();
 		let bytes = json.as_bytes();
 		unsafe {
-			new_diagnostic(bytes.as_ptr(), bytes.len() as u32);
+			send_diagnostic(bytes.as_ptr(), bytes.len() as u32);
 		}
 	}
 }
 
 #[cfg(target_arch = "wasm32")]
 extern "C" {
-	pub fn new_diagnostic(data: *const u8, data_length: u32);
+	pub fn send_diagnostic(data: *const u8, data_length: u32);
 }
 
 /// Returns whether any errors were found during compilation

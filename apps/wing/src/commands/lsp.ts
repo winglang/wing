@@ -6,6 +6,7 @@ import {
   DiagnosticSeverity,
   Diagnostic,
   Range,
+  DocumentUri,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
@@ -14,7 +15,7 @@ export async function run_server() {
   let wingc = await wingCompiler.load({
     imports: {
       env: {
-        new_diagnostic
+        send_diagnostic
       },
     },
   });
@@ -22,7 +23,7 @@ export async function run_server() {
 
   const raw_diagnostics: wingCompiler.WingDiagnostic[] = [];
 
-  function new_diagnostic(
+  function send_diagnostic(
     data_ptr: number,
     data_len: number
   ) {
@@ -98,48 +99,35 @@ export async function run_server() {
     return result;
   });
 
-  connection.onDidOpenTextDocument(async (params) => {
+  async function handle_event_and_update_diagnostics(wingc_handler_name: wingCompiler.WingCompilerFunction, params: any, uri: DocumentUri) {
     if (badState) {
       wingc = await wingCompiler.load({
         imports: {
           env: {
-            new_diagnostic,
+            send_diagnostic,
           },
         },
       });
       badState = false;
     }
+    // Reset diagnostics list
     raw_diagnostics.length = 0;
-    callWing("wingc_on_did_open_text_document", params);
+    // Call wingc handler
+    callWing(wingc_handler_name, params);
     // purposely not awaiting this, notifications are fire-and-forget
-    void connection.sendDiagnostics({
-      uri: params.textDocument.uri,
+    connection.sendDiagnostics({
+      uri,
       diagnostics: raw_diagnostics.map((rd) => {
         return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
       })
     });
+  }
+
+  connection.onDidOpenTextDocument(async (params) => {
+    handle_event_and_update_diagnostics("wingc_on_did_open_text_document", params, params.textDocument.uri);
   });
   connection.onDidChangeTextDocument(async (params) => {
-    if (badState) {
-      wingc = await wingCompiler.load({
-        imports: {
-          env: {
-            new_diagnostic,
-          },
-        },
-      });
-      badState = false;
-    }
-
-    raw_diagnostics.length = 0;
-    callWing("wingc_on_did_change_text_document", params);
-    // purposely not awaiting this, notifications are fire-and-forget
-    void connection.sendDiagnostics({
-      uri: params.textDocument.uri,
-      diagnostics: raw_diagnostics.map((rd) => {
-        return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
-      })
-    });
+    handle_event_and_update_diagnostics("wingc_on_did_change_text_document", params, params.textDocument.uri);
   });
   connection.onCompletion(async (params) => {
     return callWing("wingc_on_completion", params);
