@@ -2,7 +2,6 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
-import { ImmutableArray } from "./array";
 import { T1 } from "./generics";
 import { Code, InflightClient } from "../core";
 
@@ -78,7 +77,7 @@ export class ImmutableMap {
    *
    * @returns an array containing the keys of this map
    */
-  public keys(): ImmutableArray {
+  public keys(): string[] {
     throw new Error("Macro");
   }
 
@@ -89,7 +88,7 @@ export class ImmutableMap {
    *
    * @returns an array containing the values of this map
    */
-  public values(): ImmutableArray {
+  public values(): T1[] {
     throw new Error("Macro");
   }
 }
@@ -203,7 +202,7 @@ export class MutableMap {
    *
    * @returns an array containing the keys of this map
    */
-  public keys(): ImmutableArray {
+  public keys(): string[] {
     throw new Error("Macro");
   }
 
@@ -214,7 +213,7 @@ export class MutableMap {
    *
    * @returns an array containing the values of this map
    */
-  public values(): ImmutableArray {
+  public values(): T1[] {
     throw new Error("Macro");
   }
 }
