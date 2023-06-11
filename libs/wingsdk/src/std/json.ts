@@ -118,7 +118,7 @@ export class Json {
     str;
     throw new Error("Macro");
   }
-  
+
   /**
    * Checks if a Json object has a given key
    *
