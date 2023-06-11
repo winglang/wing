@@ -47,6 +47,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(mkeys.length === 2)'`)})((mkeys.length === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((mkeys.at(0)) === "hello")'`)})(((mkeys.at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((mkeys.at(1)) === "world")'`)})(((mkeys.at(1)) === "world"))};
+    const mvalues = Object.values(m);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(mvalues.length === 2)'`)})((mvalues.length === 2))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mvalues.at(0)) === 123)'`)})(((mvalues.at(0)) === 123))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mvalues.at(1)) === 99)'`)})(((mvalues.at(1)) === 99))};
   }
 }
 class $App extends $AppBase {

@@ -3618,7 +3618,7 @@ The key of the element to test for presence.
 ##### `keys` <a name="keys" id="@winglang/sdk.std.ImmutableMap.keys"></a>
 
 ```wing
-keys(): ImmutableArray
+keys(): MutArray<str>
 ```
 
 Returns the keys of this map.
@@ -3636,7 +3636,7 @@ TODO: For now this has to be a method rather than a getter as macros only work o
 ##### `values` <a name="values" id="@winglang/sdk.std.ImmutableMap.values"></a>
 
 ```wing
-values(): ImmutableArray
+values(): MutArray<T1>
 ```
 
 Returns the values of this map.
@@ -4238,7 +4238,7 @@ The key of the element to test for presence.
 ##### `keys` <a name="keys" id="@winglang/sdk.std.MutableMap.keys"></a>
 
 ```wing
-keys(): ImmutableArray
+keys(): MutArray<str>
 ```
 
 Returns the keys of this map.
@@ -4282,7 +4282,7 @@ TODO: For now this has to be a method rather than a getter as macros only work o
 ##### `values` <a name="values" id="@winglang/sdk.std.MutableMap.values"></a>
 
 ```wing
-values(): ImmutableArray
+values(): MutArray<T1>
 ```
 
 Returns the values of this map.
