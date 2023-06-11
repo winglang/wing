@@ -1,7 +1,16 @@
+import { Code, InflightClient } from "../core";
+
 /**
  * Immutable Json
  */
 export class Json {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Returns the keys from the Json object.
    *
@@ -29,14 +38,27 @@ export class Json {
   }
 
   /**
-   * Creates a mutable deep copy of the Json.
+   * Creates a mutable deep clone of the Json.
    *
    * @macro (JSON.parse(JSON.stringify($args$)))
    *
-   * @param json to copy
-   * @returns the mutable copy of the Json
+   * @param json to clone
+   * @returns the mutable clone of the Json
    */
-  public static deepCopyMut(json: Json): MutJson {
+  public static cloneMut(json: Json): MutJson {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Creates a immutable deep clone of the Json.
+   *
+   * @macro (JSON.parse(JSON.stringify($args$)))
+   *
+   * @param json to clone
+   * @returns the immutable clone of the Json
+   */
+  public static clone(json: Json): Json {
     json;
     throw new Error("Macro");
   }
@@ -129,16 +151,10 @@ export class Json {
  */
 export class MutJson {
   /**
-   * Creates an immutable deep copy of the Json.
-   *
-   * @macro Object.freeze(JSON.parse(JSON.stringify($args$)))
-   *
-   * @param json to copy
-   * @returns the immutable copy of the Json
+   * @internal
    */
-  public static deepCopy(json: MutJson): Json {
-    json;
-    throw new Error("Macro");
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
   }
 
   /**
