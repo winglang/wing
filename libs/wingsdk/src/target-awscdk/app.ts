@@ -9,8 +9,8 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { Queue } from "./queue";
 import { Secret } from "./secret";
-import { CdkTokens } from "./tokens";
 import { TestRunner } from "./test-runner";
+import { CdkTokens } from "./tokens";
 import { Topic } from "./topic";
 
 import {
