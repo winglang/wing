@@ -67,7 +67,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: values
   kind: 2
-  detail: "(): Array<T1>"
+  detail: "(): ImmutableArray"
   insertText: values($0)
   insertTextFormat: 2
   command:
