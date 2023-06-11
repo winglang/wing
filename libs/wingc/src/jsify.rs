@@ -27,7 +27,7 @@ use crate::{
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		ClassLike, SymbolKind, Type, TypeRef, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
+		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
@@ -59,10 +59,11 @@ pub struct JSifyContext {
 }
 
 pub struct JSifier<'a> {
+	pub types: &'a Types,
 	pub out_dir: &'a Path,
 	absolute_project_root: &'a Path,
 	shim: bool,
-	app_name: String,
+	app_name: &'a str,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -74,13 +75,25 @@ enum BindMethod {
 }
 
 impl<'a> JSifier<'a> {
-	pub fn new(out_dir: &'a Path, app_name: &str, absolute_project_root: &'a Path, shim: bool) -> Self {
+	pub fn new(
+		types: &'a Types,
+		out_dir: &'a Path,
+		app_name: &'a str,
+		absolute_project_root: &'a Path,
+		shim: bool,
+	) -> Self {
 		Self {
+			types,
 			out_dir,
 			shim,
-			app_name: app_name.to_string(),
+			app_name,
 			absolute_project_root,
 		}
+	}
+
+	fn get_expr_type(&self, expr: &Expr) -> TypeRef {
+		// Safety: JSifier is always run after type checking has finished, so all types should be resolved.
+		self.types.get_expr_type(expr).unwrap()
 	}
 
 	fn js_resolve_path(path_name: &str) -> String {
@@ -266,19 +279,11 @@ impl<'a> JSifier<'a> {
 				arg_list,
 				obj_scope: _, // TODO
 			} => {
-				let expression_type = expression.evaluated_type.borrow();
-				let is_preflight_class = if let Some(evaluated_type) = expression_type.as_ref() {
-					evaluated_type.is_preflight_class()
-				} else {
-					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
-					true
-				};
+				let expression_type = self.get_expr_type(&expression);
+				let is_preflight_class = expression_type.is_preflight_class();
 
-				let is_abstract = if let Some(cls) = expression_type.unwrap().as_class() {
-					cls.is_abstract
-				} else {
-					false
-				};
+				let class_type = expression_type.as_class().expect("type to be a class");
+				let is_abstract = class_type.is_abstract;
 
 				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
 				// targets and plugins to inject alternative implementations for types. otherwise (e.g.
@@ -297,7 +302,7 @@ impl<'a> JSifier<'a> {
 
 				let args = self.jsify_arg_list(&arg_list, scope, id, ctx);
 
-				let fqn = expression_type.expect("expression").as_class().expect("class").fqn.clone();
+				let fqn = class_type.fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
 					if is_abstract {
 						format!("this.node.root.newAbstract(\"{}\",{})", fqn, args)
@@ -318,7 +323,7 @@ impl<'a> JSifier<'a> {
 						.map(|p| match p {
 							InterpolatedStringPart::Static(l) => l.to_string(),
 							InterpolatedStringPart::Expr(e) => {
-								match *e.evaluated_type.borrow().expect("Should have type") {
+								match *self.get_expr_type(e) {
 									Type::Json | Type::MutJson => {
 										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, ctx))
 									}
@@ -352,7 +357,7 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
 			ExprKind::Call { callee, arg_list } => {
-				let function_type = callee.evaluated_type.borrow().unwrap();
+				let function_type = self.get_expr_type(callee);
 				let function_sig = function_type.as_function_sig();
 				assert!(
 					function_sig.is_some() || function_type.is_anything() || function_type.is_handler_preflight_class(),
@@ -435,7 +440,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if is_mutable_collection(expression) || ctx.in_json {
+				if self.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
 					// json arrays dont need frozen at nested level
 					format!("[{}]", item_list)
 				} else {
@@ -476,7 +481,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(",");
 
-				if is_mutable_collection(expression) || ctx.in_json {
+				if self.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
 					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
 				} else {
@@ -490,7 +495,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if is_mutable_collection(expression) {
+				if self.get_expr_type(expression).is_mutable_collection() {
 					format!("new Set([{}])", item_list)
 				} else {
 					format!("Object.freeze(new Set([{}]))", item_list)
@@ -1291,7 +1296,7 @@ impl<'a> JSifier<'a> {
 
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
-			let visitor = FieldReferenceVisitor::new(&function_def, free_vars);
+			let visitor = FieldReferenceVisitor::new(self.types, &function_def, free_vars);
 			let refs = visitor.find_refs();
 
 			// add the references to the result
@@ -1299,7 +1304,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// Also add field rerferences from the inflight initializer
-		let visitor = FieldReferenceVisitor::new(&resource_class.inflight_initializer, free_vars);
+		let visitor = FieldReferenceVisitor::new(self.types, &resource_class.inflight_initializer, free_vars);
 		let refs = visitor.find_refs();
 
 		result.insert(CLASS_INFLIGHT_INIT_NAME.to_string(), refs);
@@ -1392,17 +1397,11 @@ impl<'a> JSifier<'a> {
 	}
 }
 
-fn is_mutable_collection(expression: &Expr) -> bool {
-	if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
-		evaluated_type.is_mutable_collection()
-	} else {
-		false
-	}
-}
-
 /// Analysizes a resource inflight method and returns a list of fields that are referenced from the
 /// method and which operations are performed on them.
 struct FieldReferenceVisitor<'a> {
+	types: &'a Types,
+
 	/// The key is field name, value is a list of operations performed on this field
 	references: BTreeMap<String, BTreeSet<String>>,
 
@@ -1422,8 +1421,9 @@ struct FieldReferenceVisitor<'a> {
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(function_def: &'a FunctionDefinition, free_vars: &'a IndexSet<String>) -> Self {
+	pub fn new(types: &'a Types, function_def: &'a FunctionDefinition, free_vars: &'a IndexSet<String>) -> Self {
 		Self {
+			types,
 			references: BTreeMap::new(),
 			function_def,
 			env: None,
@@ -1675,7 +1675,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				property,
 				optional_accessor: _optional_chain,
 			} => {
-				let obj_type = object.evaluated_type.borrow().unwrap();
+				let obj_type = self.types.get_expr_type(object).unwrap();
 				let prop = if let Some(component_kind) = Self::determine_component_kind_from_type(obj_type, property) {
 					vec![Component {
 						text: property.name.clone(),

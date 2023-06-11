@@ -79,7 +79,7 @@ Wing was built from the ground up to make it an ideal choice for building applic
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
-* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/reference/wingsdk-spec) of cloud resources that lets you write cloud portable code.
+* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/contributors/rfcs/2023-01-20-wingsdk-spec) of cloud resources that lets you write cloud portable code.
 * [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that keep you in control by allowing you to customize the compilation output, such as infrastructure definitions.
 * Use any resource in the Terraform ecosystem as first-class citizen in your app.
 * [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).

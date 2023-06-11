@@ -967,8 +967,8 @@ impl<'s> Parser<'s> {
 
 		if let Some(property) = nested_node.child_by_field_name("property") {
 			let object_expr = if object_expr.kind() == "json_container_type" {
-				Expr {
-					kind: ExprKind::Reference(Reference::TypeMember {
+				Expr::new(
+					ExprKind::Reference(Reference::TypeMember {
 						type_: UserDefinedType {
 							root: Symbol {
 								name: WINGSDK_STD_MODULE.to_string(),
@@ -979,9 +979,8 @@ impl<'s> Parser<'s> {
 						},
 						property: self.node_symbol(&property)?,
 					}),
-					span: self.node_span(&object_expr),
-					evaluated_type: RefCell::new(None),
-				}
+					self.node_span(&object_expr),
+				)
 			} else {
 				self.build_expression(&object_expr, phase)?
 			};
@@ -990,15 +989,14 @@ impl<'s> Parser<'s> {
 				"?." => true,
 				_ => false,
 			};
-			Ok(Expr {
-				kind: ExprKind::Reference(Reference::InstanceMember {
+			Ok(Expr::new(
+				ExprKind::Reference(Reference::InstanceMember {
 					object: Box::new(object_expr),
 					property: self.node_symbol(&property)?,
 					optional_accessor,
 				}),
-				span: self.node_span(&nested_node),
-				evaluated_type: RefCell::new(None),
-			})
+				self.node_span(&nested_node),
+			))
 		} else {
 			// we are missing the last property, but we can still parse the rest of the expression
 			let err = self.add_error(
@@ -1044,11 +1042,10 @@ impl<'s> Parser<'s> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		let actual_node_span = self.node_span(&actual_node);
 		match actual_node.kind() {
-			"reference_identifier" => Ok(Expr {
-				kind: ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
-				span: actual_node_span,
-				evaluated_type: RefCell::new(None),
-			}),
+			"reference_identifier" => Ok(Expr::new(
+				ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
+				actual_node_span,
+			)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node, phase)?),
 			"structured_access_expression" => {
 				self.report_unimplemented_grammar("structured_access_expression", "reference", &actual_node)
@@ -1381,11 +1378,7 @@ impl<'s> Parser<'s> {
 						.is_missing()
 				{
 					_ = self.add_error::<()>("Json literal must have an element", &named_element_child.unwrap());
-					Expr {
-						evaluated_type: RefCell::new(None),
-						kind: ExprKind::Literal(Literal::Number(0.0)),
-						span: self.node_span(&element_node),
-					}
+					Expr::new(ExprKind::Literal(Literal::Number(0.0)), self.node_span(&element_node))
 				} else {
 					self.build_expression(&element_node, phase)?
 				};
@@ -1490,8 +1483,8 @@ impl<'s> Parser<'s> {
 		let statements_span = statements.span.clone();
 		let span = self.node_span(statement_node);
 
-		let inflight_closure = Expr {
-			kind: ExprKind::FunctionClosure(FunctionDefinition {
+		let inflight_closure = Expr::new(
+			ExprKind::FunctionClosure(FunctionDefinition {
 				body: FunctionBody::Statements(statements),
 				signature: FunctionSignature {
 					parameters: vec![],
@@ -1501,13 +1494,12 @@ impl<'s> Parser<'s> {
 				is_static: true,
 				span: statements_span.clone(),
 			}),
-			span: statements_span.clone(),
-			evaluated_type: RefCell::new(None),
-		};
+			statements_span.clone(),
+		);
 
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
-		Ok(StmtKind::Expression(Expr {
-			kind: ExprKind::New {
+		Ok(StmtKind::Expression(Expr::new(
+			ExprKind::New {
 				class: TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 						root: Symbol::global(WINGSDK_STD_MODULE),
@@ -1524,7 +1516,6 @@ impl<'s> Parser<'s> {
 				},
 			},
 			span,
-			evaluated_type: RefCell::new(None),
-		}))
+		)))
 	}
 }

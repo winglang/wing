@@ -12,6 +12,8 @@ use crate::{
 	wasm_util::{ptr_to_string, string_to_combined_ptr},
 };
 
+use super::sync::FileData;
+
 pub struct HoverVisitor<'a> {
 	pub position: Position,
 	pub current_scope: Option<&'a Scope>,
@@ -192,8 +194,8 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 	FILES.with(|files| {
 		let files = files.borrow();
-		let parse_result = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let parse_result = parse_result.expect(
+		let file_data = files.get(&params.text_document_position_params.text_document.uri.clone());
+		let file_data = file_data.expect(
 			format!(
 				"Compiled data not found for \"{}\"",
 				params.text_document_position_params.text_document.uri
@@ -201,7 +203,7 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			.as_str(),
 		);
 
-		let root_scope = &parse_result.scope;
+		let root_scope = &file_data.scope;
 
 		let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position);
 		hover_visitor.visit_scope(root_scope);
@@ -210,7 +212,7 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			// If the given symbol is in a nested identifier, we can skip looking it up in the symbol environment
 			if let Some(expr) = hover_visitor.current_expr {
 				if let ExprKind::Reference(Reference::InstanceMember { property, .. }) = &expr.kind {
-					return build_nested_identifier_hover(&property, &expr);
+					return build_nested_identifier_hover(file_data, &property, &expr);
 				}
 			}
 
@@ -276,18 +278,15 @@ fn format_unknown_symbol(symbol_name: &str) -> String {
 }
 
 /// Builds the entire Hover response for a nested identifier, which are handled differently than other "loose" symbols
-fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover> {
+fn build_nested_identifier_hover(file_data: &FileData, property: &Symbol, expr: &Expr) -> Option<Hover> {
 	let symbol_name = &property.name;
 
-	let expression_type = expr
-		.evaluated_type
-		.borrow()
-		.expect("All expressions should have a type");
+	let expr_type = file_data.types.get_expr_type(&expr).unwrap();
 
 	return Some(Hover {
 		contents: HoverContents::Markup(MarkupContent {
 			kind: MarkupKind::Markdown,
-			value: format!("```wing\n{symbol_name}: {expression_type}\n```"),
+			value: format!("```wing\n{symbol_name}: {expr_type}\n```"),
 		}),
 		// When hovering over a reference, we want to highlight the entire relevant expression
 		// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
