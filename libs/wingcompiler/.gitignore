@@ -1,0 +1,5 @@
+/dist
+/*.wsim
+/.wing
+/*.wasm
+/cdktf.out

@@ -118,5 +118,15 @@ export class InflightClient {
       )}")).${clientClass}(${args.join(", ")})`
     );
   }
+
+  /**
+   * Returns a `Code` instance with code for implementing `_toInflightType()`.
+   */
+  public static forType(filename: string, clientClass: string): Code {
+    return NodeJsCode.fromInline(
+      `require("${normalPath(filename)}").${clientClass}`
+    );
+  }
+
   private constructor() {}
 }

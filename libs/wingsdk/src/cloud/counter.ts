@@ -51,7 +51,7 @@ export abstract class Counter extends Resource {
       CounterInflightMethods.INC,
       CounterInflightMethods.DEC,
       CounterInflightMethods.PEEK,
-      CounterInflightMethods.RESET
+      CounterInflightMethods.SET
     );
 
     this.initial = props.initial ?? 0;
@@ -88,11 +88,11 @@ export interface ICounterClient {
   peek(): Promise<number>;
 
   /**
-   * Reset a counter to a given value.
-   * @param value value to reset (default is 0)
+   * Set a counter to a given value.
+   * @param value new value
    * @inflight
    */
-  reset(value?: number): Promise<void>;
+  set(value: number): Promise<void>;
 }
 
 /**
@@ -106,6 +106,6 @@ export enum CounterInflightMethods {
   DEC = "dec",
   /** `Counter.peek` */
   PEEK = "peek",
-  /** `Counter.reset` */
-  RESET = "reset",
+  /** `Counter.set` */
+  SET = "set",
 }
