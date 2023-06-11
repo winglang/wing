@@ -186,7 +186,7 @@ pub fn type_check(
 		Type::Function(FunctionSignature {
 			this_type: None,
 			parameters: vec![FunctionParameter {
-				name: Some("message".to_string()),
+				name: "message".into(),
 				typeref: types.string(),
 				docs: Docs::with_summary("The message to log"),
 			}],
@@ -203,7 +203,7 @@ pub fn type_check(
 		Type::Function(FunctionSignature {
 			this_type: None,
 			parameters: vec![FunctionParameter {
-				name: Some("condition".to_string()),
+				name: "condition".into(),
 				typeref: types.bool(),
 				docs: Docs::with_summary("The condition to assert"),
 			}],
@@ -221,7 +221,7 @@ pub fn type_check(
 			this_type: None,
 			parameters: vec![FunctionParameter {
 				typeref: types.string(),
-				name: Some("message".to_string()),
+				name: "message".into(),
 				docs: Docs::with_summary("The message to throw"),
 			}],
 			return_type: types.void(),
@@ -238,7 +238,7 @@ pub fn type_check(
 			this_type: None,
 			parameters: vec![FunctionParameter {
 				typeref: types.string(),
-				name: Some("message".to_string()),
+				name: "message".into(),
 				docs: Docs::with_summary("The message to panic with"),
 			}],
 			return_type: types.void(),
@@ -268,7 +268,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.unwrap()
 		.define(
 			&sym,
-			SymbolKind::make_variable(sym.clone(), types.add_type(typ), false, true, Phase::Independent),
+			SymbolKind::make_free_variable(sym.clone(), types.add_type(typ), false, Phase::Independent),
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");

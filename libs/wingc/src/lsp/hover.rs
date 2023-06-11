@@ -218,9 +218,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			});
 		}
 
-		if let Some(return_type) = &node.signature.return_type {
-			self.visit_type_annotation(return_type);
-		}
+		self.visit_type_annotation(&node.signature.return_type);
 
 		if let FunctionBody::Statements(scope) = &node.body {
 			self.visit_scope(scope);
@@ -318,11 +316,11 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			&root_scope,
 			&file_data.types,
 		);
-		if let Some((span, docs)) = hover_visitor.visit() {
+		if let Some((span, Some(docs))) = hover_visitor.visit() {
 			Some(Hover {
 				contents: HoverContents::Markup(MarkupContent {
 					kind: MarkupKind::Markdown,
-					value: docs.unwrap_or("".to_string()),
+					value: docs,
 				}),
 				range: Some(span.clone().into()),
 			})
@@ -377,35 +375,40 @@ mod tests {
 	test_hover_list!(
 		just_variable,
 		r#"
-let myString = "hello";
-     //^"#,
+		let myString = "hello";
+        //^
+		"#,
 	);
 
 	test_hover_list!(
 		new_expression_nested,
 		r#"
 bring cloud;
-
 new cloud. 
-   //^"#,
+		//^
+"#,
 	);
 
 	test_hover_list!(
 		class_symbol,
 		r#"
-bring cloud;
+		bring cloud;
 
-let bucket = new cloud.Bucket();
-   //^"#,
+		let bucket = new cloud.Bucket();
+        //^
+		"#,
 	);
 
 	test_hover_list!(
 		class_symbol_in_closure,
 		r#"
-bring cloud;
+inflight class MyClass { }
 
-let bucket = new cloud.Bucket();
-   //^"#,
+inflight () => {
+  let myClass = new MyClass();
+    //^
+
+}"#,
 	);
 
 	test_hover_list!(
@@ -477,10 +480,87 @@ class Foo { };
 		static_method,
 		r#"
 class Foo {
-  static my(): str { return "str"; }
+  static my(a: str, b: bool): str { return "str"; }
 }
 
-(new Foo()).my();
-          //^"#,
+Foo.my();
+  //^"#,
+	);
+
+	test_hover_list!(
+		builtin_in_preflight,
+		r#"
+assert(true);
+//^"#,
+	);
+
+	test_hover_list!(
+		builtin_in_inflight,
+		r#"
+class Foo {
+  inflight bar() {
+    throw("hello");
+    //^
+  }
+}"#,
+	);
+
+	test_hover_list!(
+		test_statement,
+		r#"
+test "foo" {
+//^
+};"#,
+	);
+
+	test_hover_list!(
+		test_bring_sdk,
+		r#"
+bring cloud;
+      //^
+"#,
+	);
+
+	test_hover_list!(
+		test_bring_library,
+		r#"
+bring "@winglang/sdk" as bar;
+                        //^"#,
+	);
+
+	test_hover_list!(
+		test_var,
+		r#"
+let var xoo = "hello";
+log(xoo);
+    //^"#,
+	);
+
+	test_hover_list!(
+		test_var_inside_preflight_closure,
+		r#"
+() => {
+  let var goooo = "gar";
+          //^
+}"#,
+	);
+
+	test_hover_list!(
+		test_var_inside_inflight_closure,
+		r#"
+inflight () => {
+  let var goooo = "gar";
+          //^
+}"#,
+	);
+
+	// TODO: this hover doc doesn't contain the member information because a `String` is not
+	// considered a class, but rather a primitive type. We need to make all built-in types classes to
+	// remove all the special cases.
+	test_hover_list!(
+		test_builtin_instance_method,
+		r#"
+"hello".startsWith("h");
+           //^"#,
 	);
 }

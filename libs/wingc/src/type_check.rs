@@ -85,18 +85,32 @@ pub struct VariableInfo {
 	pub reassignable: bool,
 	/// The phase in which this variable exists
 	pub phase: Phase,
-	/// Is this a static or instance variable?
+	/// Is this a member of a class/struct/interface or a free floating variable?
+	pub is_member: bool,
+	/// Is this a static or instance variable? (free variables are always static)
 	pub is_static: bool,
 }
 
 impl SymbolKind {
-	pub fn make_variable(name: Symbol, type_: TypeRef, reassignable: bool, is_static: bool, phase: Phase) -> Self {
+	pub fn make_member_variable(name: Symbol, type_: TypeRef, reassignable: bool, is_static: bool, phase: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
 			name,
 			type_,
 			reassignable,
 			phase,
 			is_static,
+			is_member: true,
+		})
+	}
+
+	pub fn make_free_variable(name: Symbol, type_: TypeRef, reassignable: bool, phase: Phase) -> Self {
+		SymbolKind::Variable(VariableInfo {
+			name,
+			type_,
+			reassignable,
+			phase,
+			is_static: true,
+			is_member: false,
 		})
 	}
 
@@ -594,7 +608,7 @@ impl Subtype for Type {
 
 #[derive(Clone, Debug)]
 pub struct FunctionParameter {
-	pub name: Option<String>,
+	pub name: String,
 	pub typeref: TypeRef,
 	pub docs: Docs,
 }
@@ -607,7 +621,6 @@ pub struct FunctionSignature {
 	pub parameters: Vec<FunctionParameter>,
 	pub return_type: TypeRef,
 	pub phase: Phase,
-
 	/// During jsify, calls to this function will be replaced with this string
 	/// In JSII imports, this is denoted by the `@macro` attribute
 	/// This string may contain special tokens:
@@ -702,7 +715,7 @@ impl Display for FunctionSignature {
 		let params_str = self
 			.parameters
 			.iter()
-			.map(|a| format!("{}: {}", a.name.clone().unwrap_or("p".into()), a.typeref))
+			.map(|a| format!("{}: {}", a.name, a.typeref))
 			.collect::<Vec<String>>()
 			.join(", ");
 
@@ -1212,6 +1225,7 @@ impl<'a> TypeChecker<'a> {
 			reassignable: false,
 			phase: Phase::Independent,
 			is_static,
+			is_member: false,
 		}
 	}
 
@@ -1949,17 +1963,17 @@ impl<'a> TypeChecker<'a> {
 				self.types.add_type(Type::Optional(value_type))
 			}
 			TypeAnnotationKind::Function(ast_sig) => {
-				let mut args = vec![];
-				for arg in ast_sig.param_types.iter() {
-					args.push(FunctionParameter {
-						name: None,
-						typeref: self.resolve_type_annotation(arg, env),
+				let mut parameters = vec![];
+				for p in ast_sig.parameters.iter() {
+					parameters.push(FunctionParameter {
+						name: p.name.name.clone(),
+						typeref: self.resolve_type_annotation(&p.type_annotation, env),
 						docs: Docs::default(),
 					});
 				}
 				let sig = FunctionSignature {
 					this_type: None,
-					parameters: args,
+					parameters,
 					return_type: self.resolve_type_annotation(ast_sig.return_type.as_ref(), env),
 					phase: ast_sig.phase,
 					js_override: None,
@@ -2061,7 +2075,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(var_name.clone(), explicit_type, *reassignable, true, env.phase),
+						SymbolKind::make_free_variable(var_name.clone(), explicit_type, *reassignable, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -2072,7 +2086,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(var_name.clone(), inferred_type, *reassignable, true, env.phase),
+						SymbolKind::make_free_variable(var_name.clone(), inferred_type, *reassignable, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -2107,7 +2121,7 @@ impl<'a> TypeChecker<'a> {
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
 				match scope_env.define(
 					&iterator,
-					SymbolKind::make_variable(iterator.clone(), iterator_type, false, true, env.phase),
+					SymbolKind::make_free_variable(iterator.clone(), iterator_type, false, env.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -2160,7 +2174,7 @@ impl<'a> TypeChecker<'a> {
 				// Add the variable to if block scope
 				match stmt_env.define(
 					var_name,
-					SymbolKind::make_variable(var_name.clone(), var_type, false, true, env.phase),
+					SymbolKind::make_free_variable(var_name.clone(), var_type, false, env.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -2386,7 +2400,7 @@ impl<'a> TypeChecker<'a> {
 					let field_type = self.resolve_type_annotation(&field.member_type, env);
 					match class_env.define(
 						&field.name,
-						SymbolKind::make_variable(
+						SymbolKind::make_member_variable(
 							field.name.clone(),
 							field_type,
 							field.reassignable,
@@ -2566,7 +2580,7 @@ impl<'a> TypeChecker<'a> {
 
 					match interface_env.define(
 						method_name,
-						SymbolKind::make_variable(method_name.clone(), method_type, false, false, sig.phase),
+						SymbolKind::make_member_variable(method_name.clone(), method_type, false, false, sig.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2600,7 +2614,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					match struct_env.define(
 						&field.name,
-						SymbolKind::make_variable(field.name.clone(), field_type, false, false, Phase::Independent),
+						SymbolKind::make_member_variable(field.name.clone(), field_type, false, false, Phase::Independent),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2675,7 +2689,7 @@ impl<'a> TypeChecker<'a> {
 					if let Some(exception_var) = &catch_block.exception_var {
 						match catch_env.define(
 							exception_var,
-							SymbolKind::make_variable(exception_var.clone(), self.types.string(), false, true, env.phase),
+							SymbolKind::make_free_variable(exception_var.clone(), self.types.string(), false, env.phase),
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -2785,7 +2799,7 @@ impl<'a> TypeChecker<'a> {
 						name: "this".into(),
 						span: method_name.span.clone(),
 					},
-					SymbolKind::make_variable("this".into(), class_type, false, true, class_env.phase),
+					SymbolKind::make_free_variable("this".into(), class_type, false, class_env.phase),
 					StatementIdx::Top,
 				)
 				.expect("Expected `this` to be added to constructor env");
@@ -2815,7 +2829,7 @@ impl<'a> TypeChecker<'a> {
 
 		match class_env.define(
 			method_name,
-			SymbolKind::make_variable(
+			SymbolKind::make_member_variable(
 				method_name.clone(),
 				method_type,
 				false,
@@ -2936,7 +2950,7 @@ impl<'a> TypeChecker<'a> {
 		for (arg, param) in args.iter().zip(sig.parameters.iter()) {
 			match env.define(
 				&arg.name,
-				SymbolKind::make_variable(arg.name.clone(), param.typeref, arg.reassignable, true, env.phase),
+				SymbolKind::make_free_variable(arg.name.clone(), param.typeref, arg.reassignable, env.phase),
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -3018,6 +3032,7 @@ impl<'a> TypeChecker<'a> {
 					reassignable,
 					phase: flight,
 					is_static,
+					is_member: _,
 				}) => {
 					// Replace type params in function signatures
 					if let Some(sig) = v.as_function_sig() {
@@ -3052,7 +3067,7 @@ impl<'a> TypeChecker<'a> {
 						match new_type_class.env.define(
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&sym,
-							SymbolKind::make_variable(
+							SymbolKind::make_member_variable(
 								sym.clone(),
 								self.types.add_type(Type::Function(new_sig)),
 								*reassignable,
@@ -3072,7 +3087,7 @@ impl<'a> TypeChecker<'a> {
 						match new_type_class.env.define(
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&var_name,
-							SymbolKind::make_variable(var_name.clone(), new_var_type, *reassignable, *is_static, *flight),
+							SymbolKind::make_member_variable(var_name.clone(), new_var_type, *reassignable, *is_static, *flight),
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -3348,6 +3363,7 @@ impl<'a> TypeChecker<'a> {
 								reassignable: false,
 								phase: Phase::Independent,
 								is_static: true,
+								is_member: true,
 							}
 						} else {
 							self.spanned_error(
@@ -3406,6 +3422,7 @@ impl<'a> TypeChecker<'a> {
 				reassignable: false,
 				phase: env.phase,
 				is_static: false,
+				is_member: true,
 			},
 
 			// Lookup wingsdk std types, hydrating generics if necessary
@@ -3651,7 +3668,7 @@ fn add_parent_members_to_struct_env(
 				};
 				struct_env.define(
 					&sym,
-					SymbolKind::make_variable(sym.clone(), member_type, false, false, struct_env.phase),
+					SymbolKind::make_member_variable(sym.clone(), member_type, false, false, struct_env.phase),
 					StatementIdx::Top,
 				)?;
 			}
@@ -3706,7 +3723,7 @@ fn add_parent_members_to_iface_env(
 				};
 				iface_env.define(
 					&sym,
-					SymbolKind::make_variable(sym.clone(), member_type, false, true, iface_env.phase),
+					SymbolKind::make_member_variable(sym.clone(), member_type, false, true, iface_env.phase),
 					StatementIdx::Top,
 				)?;
 			}
@@ -3834,7 +3851,7 @@ mod tests {
 			vec![FunctionParameter {
 				typeref: num,
 				docs: Docs::default(),
-				name: None,
+				name: "p1".into(),
 			}],
 			void,
 			Phase::Inflight,
@@ -3843,7 +3860,7 @@ mod tests {
 			vec![FunctionParameter {
 				typeref: string,
 				docs: Docs::default(),
-				name: None,
+				name: "p1".into(),
 			}],
 			void,
 			Phase::Inflight,
@@ -3881,7 +3898,7 @@ mod tests {
 			vec![FunctionParameter {
 				typeref: string,
 				docs: Docs::default(),
-				name: None,
+				name: "p1".into(),
 			}],
 			void,
 			Phase::Inflight,
@@ -3890,7 +3907,7 @@ mod tests {
 			vec![FunctionParameter {
 				typeref: opt_string,
 				docs: Docs::default(),
-				name: None,
+				name: "p1".into(),
 			}],
 			void,
 			Phase::Inflight,

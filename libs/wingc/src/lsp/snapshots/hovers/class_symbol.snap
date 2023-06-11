@@ -3,12 +3,12 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nbucket: Bucket\n```\n---\n```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
+  value: "```wing\npreflight bucket: Bucket\n```\n---\n```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
 range:
   start:
     line: 3
-    character: 4
+    character: 6
   end:
     line: 3
-    character: 10
+    character: 12
 

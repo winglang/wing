@@ -230,7 +230,7 @@ impl Fold for ClosureTransformer {
 						initializer: FunctionDefinition {
 							signature: FunctionSignature {
 								parameters: class_init_params,
-								return_type: Some(Box::new(class_type_annotation.clone())),
+								return_type: Box::new(class_type_annotation.clone()),
 								phase: Phase::Preflight,
 							},
 							is_static: true,
@@ -244,7 +244,10 @@ impl Fold for ClosureTransformer {
 						inflight_initializer: FunctionDefinition {
 							signature: FunctionSignature {
 								parameters: vec![],
-								return_type: None,
+								return_type: Box::new(TypeAnnotation {
+									kind: TypeAnnotationKind::Void,
+									span: Default::default(),
+								}),
 								phase: Phase::Inflight,
 							},
 							is_static: false,

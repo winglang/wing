@@ -428,9 +428,8 @@ where
 	for param in &node.parameters {
 		v.visit_function_parameter(param);
 	}
-	if let Some(return_type) = &node.return_type {
-		v.visit_type_annotation(return_type);
-	}
+
+	v.visit_type_annotation(&node.return_type);
 }
 
 pub fn visit_function_parameter<'ast, V>(v: &mut V, node: &'ast FunctionParameter)
@@ -474,8 +473,9 @@ where
 		TypeAnnotationKind::Set(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::MutSet(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::Function(f) => {
-			for param in &f.param_types {
-				v.visit_type_annotation(&param);
+			for param in &f.parameters {
+				v.visit_symbol(&param.name);
+				v.visit_type_annotation(&param.type_annotation);
 			}
 			v.visit_type_annotation(&f.return_type);
 		}

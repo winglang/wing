@@ -62,8 +62,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				let param_data = sig
 					.parameters
 					.iter()
-					.enumerate()
-					.map(|(i, p)| format!("{}: {}", p.name.clone().unwrap_or(i.to_string()), p.typeref))
+					.map(|p| format!("{}: {}", p.name, p.typeref))
 					.collect_vec();
 
 				let param_text = param_data.join(", ");

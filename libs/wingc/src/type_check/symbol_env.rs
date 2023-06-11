@@ -398,7 +398,7 @@ mod tests {
 		assert!(matches!(
 			parent_env.define(
 				&sym,
-				SymbolKind::make_variable(sym.clone(), types.number(), false, true, Phase::Independent),
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -409,7 +409,7 @@ mod tests {
 		assert!(matches!(
 			parent_env.define(
 				&sym,
-				SymbolKind::make_variable(sym.clone(), types.number(), false, true, Phase::Independent),
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Index(child_scope_idx - 1),
 			),
 			Ok(())
@@ -421,7 +421,7 @@ mod tests {
 		assert!(matches!(
 			parent_env.define(
 				&sym,
-				SymbolKind::make_variable(sym.clone(), types.number(), false, true, Phase::Independent),
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Index(parent_high_pos_var_idx),
 			),
 			Ok(())
@@ -432,7 +432,7 @@ mod tests {
 		assert!(matches!(
 			child_env.define(
 				&sym,
-				SymbolKind::make_variable(sym.clone(), types.number(), false, true, Phase::Independent),
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -535,7 +535,7 @@ mod tests {
 		assert!(matches!(
 			ns2.env.get_ref().define(
 				&sym,
-				SymbolKind::make_variable(sym.clone(), types.number(), false, true, Phase::Independent),
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -546,7 +546,7 @@ mod tests {
 		assert!(matches!(
 			ns1.env.get_ref().define(
 				&sym,
-				SymbolKind::make_variable(sym.clone(), types.number(), false, true, Phase::Independent),
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())

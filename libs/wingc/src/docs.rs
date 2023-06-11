@@ -3,6 +3,7 @@ use std::collections::BTreeMap;
 use itertools::Itertools;
 
 use crate::{
+	ast::Phase,
 	jsify::codemaker::CodeMaker,
 	type_check::{
 		jsii_importer::is_construct_base, Class, FunctionSignature, Namespace, SymbolKind, Type, TypeRef, VariableInfo,
@@ -52,7 +53,7 @@ impl Documented for SymbolKind {
 
 impl Documented for Namespace {
 	fn render_docs(&self) -> String {
-		format!("Namespace '{}'", self.name).to_string()
+		format!("Module '{}'", self.name).to_string()
 	}
 }
 
@@ -89,9 +90,27 @@ impl Documented for TypeRef {
 
 impl Documented for VariableInfo {
 	fn render_docs(&self) -> String {
+		let mut modifiers = vec![];
+
+		if self.is_member && self.is_static {
+			modifiers.push("static");
+		}
+
+		match self.phase {
+			Phase::Inflight => modifiers.push("inflight"),
+			Phase::Preflight => modifiers.push("preflight"),
+			Phase::Independent => {}
+		}
+
+		if self.reassignable {
+			modifiers.push("var");
+		}
+
+		let modifiers_str = modifiers.join(" ");
+
 		let mut markdown = CodeMaker::default();
 		markdown.line("```wing");
-		markdown.line(format!("{}: {}", self.name, self.type_.to_string()));
+		markdown.line(format!("{modifiers_str} {}: {}", self.name, self.type_.to_string()));
 		markdown.line("```");
 		markdown.line("---");
 
@@ -162,7 +181,7 @@ fn render_function(f: &FunctionSignature) -> String {
 		markdown.line(s);
 	}
 
-	if !f.parameters.is_empty() {
+	if has_parameters_documentation(f) {
 		markdown.empty_line();
 		markdown.line("### Parameters");
 
@@ -173,14 +192,17 @@ fn render_function(f: &FunctionSignature) -> String {
 				String::default()
 			};
 
-			let name = p.clone().name.unwrap_or("<unknown>".to_string());
-			markdown.line(format!(" - *{}*{}", name, summary));
+			markdown.line(format!(" - *{}*{}", p.name, summary));
 		}
 	}
 
 	render_docs(&mut markdown, &f.docs);
 
 	markdown.to_string().trim().to_string()
+}
+
+fn has_parameters_documentation(f: &FunctionSignature) -> bool {
+	f.parameters.iter().any(|p| p.docs.summary.is_some())
 }
 
 fn render_class(c: &Class) -> String {

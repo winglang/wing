@@ -452,7 +452,7 @@ impl<'a> JsiiImporter<'a> {
 
 					for param in params {
 						fn_params.push(FunctionParameter {
-							name: Some(param.name.clone()),
+							name: param.name.clone(),
 							typeref: self.parameter_to_wing_type(&param),
 							docs: Docs::from(&param.docs),
 						});
@@ -475,7 +475,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&sym,
-						SymbolKind::make_variable(sym.clone(), method_sig, false, is_static, member_phase),
+						SymbolKind::make_member_variable(sym.clone(), method_sig, false, is_static, member_phase),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -506,7 +506,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&sym,
-						SymbolKind::make_variable(
+						SymbolKind::make_member_variable(
 							sym.clone(),
 							wing_type,
 							!matches!(p.immutable, Some(true)),
@@ -685,7 +685,7 @@ impl<'a> JsiiImporter<'a> {
 						}
 					}
 					fn_params.push(FunctionParameter {
-						name: Some(param.name.clone()),
+						name: param.name.clone(),
 						typeref: self.parameter_to_wing_type(&param),
 						docs: Docs::from(&param.docs),
 					});
@@ -702,7 +702,7 @@ impl<'a> JsiiImporter<'a> {
 			let sym = Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module);
 			if let Err(e) = class_env.define(
 				&sym,
-				SymbolKind::make_variable(sym.clone(), method_sig, false, true, member_phase),
+				SymbolKind::make_member_variable(sym.clone(), method_sig, false, true, member_phase),
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)
