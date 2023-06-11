@@ -13,7 +13,7 @@ let handler = inflight (event: str): str => {
 };
 
 let x = cloud.ApiResponse {
-  body: Json "Hello, world!",
+  body: "Hello, world!",
 };
 // ^^^ "status" is not initialized
 
