@@ -39,13 +39,13 @@ module.exports = function({ counter }) {
     }
     async handle()  {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 1)'`)})(((await counter.peek(key)) === 1))};
-      const dec1 = (await counter.dec(undefined,key));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 0)'`)})(((await counter.peek(key)) === 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec1 === 1)'`)})((dec1 === 1))};
+      const dec1 = (await counter.dec(undefined,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === (-1))'`)})(((await counter.peek(key)) === (-1)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec1 === 0)'`)})((dec1 === 0))};
       const dec2 = (await counter.dec(2,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === (-2))'`)})(((await counter.peek(key)) === (-2)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === 0)'`)})((dec2 === 0))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === (-3))'`)})(((await counter.peek(key)) === (-3)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === (-1))'`)})((dec2 === (-1)))};
     }
   }
   return $Closure2;
