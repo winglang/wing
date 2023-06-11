@@ -42,7 +42,12 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(12).seconds === 12)'`)})(($stdlib.std.Duration.fromSeconds(12).seconds === 12))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(720).seconds === (12 * 60))'`)})(($stdlib.std.Duration.fromSeconds(720).seconds === (12 * 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(43200).seconds === ((12 * 60) * 60))'`)})(($stdlib.std.Duration.fromSeconds(43200).seconds === ((12 * 60) * 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1036800).seconds === (((12 * 60) * 60) * 24))'`)})(($stdlib.std.Duration.fromSeconds(1036800).seconds === (((12 * 60) * 60) * 24)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(31536000).seconds === (12 * 2628000))'`)})(($stdlib.std.Duration.fromSeconds(31536000).seconds === (12 * 2628000)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(378432000).seconds === (12 * 31536000))'`)})(($stdlib.std.Duration.fromSeconds(378432000).seconds === (12 * 31536000)))};
   }
 }
 class $App extends $AppBase {
