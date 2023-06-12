@@ -38,8 +38,11 @@ export class SimTokens extends Tokens {
    * Returns true is the given value is a Simulator token.
    */
   public isToken(value: any): boolean {
-    const str: string = value.toString();
-    return isToken(str);
+    if (typeof value === "string") {
+      return isToken(value);
+    }
+
+    return false;
   }
 
   /**
