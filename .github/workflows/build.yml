@@ -20,8 +20,8 @@ concurrency:
 
 env:
   RUST_VERSION: "1.67.1"
-  NODE_VERSION: "18.12.1"
-  NPM_VERSION: "8.19.3"
+  NODE_VERSION: "20.3.0"
+  NPM_VERSION: "9.6.7"
 
 jobs:
   build:
@@ -184,10 +184,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        runner: [ubuntu, macos, windows]
-        # Note: Node 19.7.0 is pinned due to regressions in later versions
-        # See https://github.com/nodejs/node/issues/47096
-        node: ["18", "19.7.0"]
+        runner: [windows, macos, ubuntu]
+        node: ["18", "19"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
@@ -198,7 +196,7 @@ jobs:
           - runner: windows
             full_run: false
           - runner: ubuntu
-            node: "19.7.0"
+            node: "19"
             full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:

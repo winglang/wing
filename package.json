@@ -32,8 +32,8 @@
     "postinstall": "run-p -l --max-parallel 3 'install:*'"
   },
   "volta": {
-    "node": "18.12.1",
-    "npm": "8.19.3"
+    "node": "20.3.0",
+    "npm": "9.6.7"
   },
   "dependencies": {
     "file-loader": "^6.2.0"

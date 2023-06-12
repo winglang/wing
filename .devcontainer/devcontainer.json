@@ -1,11 +1,11 @@
 {
   "name": "Wing Development",
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
-  "postCreateCommand": "npm install -g npm@8.19.3",
+  "postCreateCommand": "npm install -g npm@9.6.7",
   "updateContentCommand": "npm install",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "18.12.1"
+      "version": "20.3.0"
     },
     "ghcr.io/devcontainers/features/aws-cli:1": {},
     "ghcr.io/devcontainers/features/terraform:1": {},
