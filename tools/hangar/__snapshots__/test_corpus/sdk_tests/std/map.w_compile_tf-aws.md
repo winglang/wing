@@ -42,6 +42,15 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    const m = Object.freeze({"hello":123,"world":99});
+    const mkeys = Object.keys(m);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(mkeys.length === 2)'`)})((mkeys.length === 2))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mkeys.at(0)) === "hello")'`)})(((mkeys.at(0)) === "hello"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mkeys.at(1)) === "world")'`)})(((mkeys.at(1)) === "world"))};
+    const mvalues = Object.values(m);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(mvalues.length === 2)'`)})((mvalues.length === 2))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mvalues.at(0)) === 123)'`)})(((mvalues.at(0)) === 123))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mvalues.at(1)) === 99)'`)})(((mvalues.at(1)) === 99))};
   }
 }
 class $App extends $AppBase {
