@@ -18,6 +18,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
+env:
+  RUST_VERSION: "1.67.1"
+  NODE_VERSION: "18.12.1"
+  NPM_VERSION: "8.19.3"
+
 jobs:
   build:
     name: "Build"
@@ -26,7 +31,6 @@ jobs:
     env:
       # Testing runs out of memory without this
       NODE_OPTIONS: "--max-old-space-size=4096"
-      RUST_VERSION: "1.67.1"
       CARGO_TERM_COLOR: always
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
@@ -38,15 +42,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Reads versions from root package.json "volta" section
-      - name: Setup Node/NPM with pinned Volta version
-        uses: volta-cli/action@v4.0.0
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-      # Forces volta to load node and npm upfront, reducing conflict when running in parallel later
-      - name: Preload Node/NPM
-        run: |
-          node -v
-          npm -v
+      - name: Setup NPM
+        run: npm install -g npm@${{ env.NPM_VERSION }}
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -145,15 +147,13 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
-      # Reads versions from root package.json "volta" section
-      - name: Setup Node/NPM with pinned Volta version
-        uses: volta-cli/action@v4.0.0
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-      # Forces volta to load node and npm upfront, reducing conflict when running in parallel later
-      - name: Preload Node/NPM
-        run: |
-          node -v
-          npm -v
+      - name: Setup NPM
+        run: npm install -g npm@${{ env.NPM_VERSION }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1

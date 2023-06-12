@@ -3788,6 +3788,7 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.cloneMut">cloneMut</a></code> | Creates a mutable deep clone of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
@@ -3855,6 +3856,32 @@ to delete key from.
 - *Type:* str
 
 the key to delete.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
+
+```wing
+bring std;
+
+std.Json.has(json: Json, key: str)
+```
+
+Checks if a Json object has a given key.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.has.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+The json object to inspect.
+
+---
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.has.parameter.key"></a>
+
+- *Type:* str
+
+The key to check.
 
 ---
 
