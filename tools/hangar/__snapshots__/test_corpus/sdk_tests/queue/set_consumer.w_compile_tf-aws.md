@@ -492,7 +492,7 @@ class $Root extends $stdlib.std.Resource {
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "add_consumer", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "set_consumer", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
