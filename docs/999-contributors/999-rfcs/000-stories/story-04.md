@@ -177,8 +177,8 @@ the log message `Hello, cloud!`.
 Now that you've written your first Wing program, what's next? Here are some
 resources to help you get started:
 
-- [Wing Language Specification](/reference/spec)
-- [Wing SDK Reference](/reference/wingsdk-spec)
+- [Wing Language Specification](https://docs.winglang.io/reference/spec)
+- [Wing SDK Reference](https://docs.winglang.io/contributors/rfcs/2023-01-20-wingsdk-spec)
 
 ## Staying up to date
 
@@ -222,7 +222,7 @@ As such, our focus for this sprint is:
 - Consolidate everything related to Wing into the [monadahq/winglang](https://github.com/monadahq/winglang/) GitHub repo. This includes:
   - The [Wing SDK](https://github.com/monadahq/wingsdk)
   - The [language spec](https://github.com/monadahq/winglang-spec) - should go under `docs/winglang-spec.md`
-  - The [language requirements RFC](https://github.com/monadahq/rfcs/blob/main/0044-winglang-requirements.md) - 
+  - The [language requirements RFC](https://docs.winglang.io/contributors/rfcs/2022-05-28-winglang-reqs) - 
     should go under `rfcs/winglang-reqs.md`
   - All issues should also be transfered into this repository.
 - Updating the main README file to match this RFC as close as possible.

@@ -8,12 +8,13 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString, InterpolatedStringPart,
-	Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UnaryOperator, UserDefinedType,
+	FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
+	UserDefinedType,
 };
+use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
-use crate::{WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -159,6 +160,8 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_scope(&self, scope_node: &Node, phase: Phase) -> Scope {
+		let span = self.node_span(scope_node);
+		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let mut cursor = scope_node.walk();
 
 		Scope {
@@ -169,11 +172,13 @@ impl<'s> Parser<'s> {
 				.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
 				.collect(),
 			env: RefCell::new(None), // env should be set later when scope is type-checked
-			span: self.node_span(scope_node),
+			span,
 		}
 	}
 
 	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<Stmt> {
+		let span = self.node_span(statement_node);
+		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
 			"short_import_statement" => self.build_bring_statement(statement_node)?,
 
@@ -204,7 +209,7 @@ impl<'s> Parser<'s> {
 
 		Ok(Stmt {
 			kind: stmt_kind,
-			span: self.node_span(statement_node),
+			span,
 			idx,
 		})
 	}
@@ -546,14 +551,14 @@ impl<'s> Parser<'s> {
 							.err();
 					}
 
-					let return_type = Some(Box::new(TypeAnnotation {
+					let return_type = Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 							span: name.span.clone(),
 						}),
 						span: self.node_span(&class_element),
-					}));
+					});
 
 					if is_inflight {
 						inflight_initializer = Some(FunctionDefinition {
@@ -600,19 +605,19 @@ impl<'s> Parser<'s> {
 			None => FunctionDefinition {
 				signature: FunctionSignature {
 					parameters: vec![],
-					return_type: Some(Box::new(TypeAnnotation {
+					return_type: Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 							span: WingSpan::default(),
 						}),
 						span: WingSpan::default(),
-					})),
+					}),
 					phase: Phase::Preflight,
 				},
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
-				span: name.span.clone(),
+				span: WingSpan::default(),
 			},
 		};
 
@@ -623,19 +628,19 @@ impl<'s> Parser<'s> {
 			None => FunctionDefinition {
 				signature: FunctionSignature {
 					parameters: vec![],
-					return_type: Some(Box::new(TypeAnnotation {
+					return_type: Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 							span: WingSpan::default(),
 						}),
 						span: WingSpan::default(),
-					})),
+					}),
 					phase: Phase::Inflight,
 				},
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
-				span: name.span.clone(),
+				span: WingSpan::default(),
 			},
 		};
 
@@ -772,24 +777,23 @@ impl<'s> Parser<'s> {
 		let name = interface_element.child_by_field_name("name").unwrap();
 		let method_name = self.node_symbol(&name)?;
 		let func_sig = self.build_function_signature(&interface_element, phase)?;
-		match func_sig.return_type {
-			Some(_) => Ok((method_name, func_sig)),
-			None => {
-				self.add_error::<(Symbol, FunctionSignature)>("Expected method return type".to_string(), &interface_element)
-			}
-		}
+		Ok((method_name, func_sig))
 	}
 
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
 		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap(), phase)?;
 		let return_type = if let Some(rt) = func_sig_node.child_by_field_name("type") {
-			Some(Box::new(self.build_type_annotation(&rt, phase)?))
+			self.build_type_annotation(&rt, phase)?
 		} else {
-			None
+			TypeAnnotation {
+				kind: TypeAnnotationKind::Void,
+				span: Default::default(),
+			}
 		};
+
 		Ok(FunctionSignature {
 			parameters,
-			return_type,
+			return_type: Box::new(return_type),
 			phase,
 		})
 	}
@@ -885,14 +889,22 @@ impl<'s> Parser<'s> {
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
-				let param_types = param_type_list_node
-					.named_children(&mut cursor)
-					.filter_map(|param_type| self.build_type_annotation(&param_type, phase).ok())
-					.collect::<Vec<TypeAnnotation>>();
+
+				let mut parameters = vec![];
+				for param_type in param_type_list_node.named_children(&mut cursor) {
+					let t = self.build_type_annotation(&param_type, phase)?;
+
+					parameters.push(FunctionParameter {
+						name: "".into(),
+						type_annotation: t,
+						reassignable: false,
+					})
+				}
+
 				match type_node.child_by_field_name("return_type") {
 					Some(return_type) => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
-							param_types,
+						kind: TypeAnnotationKind::Function(FunctionSignature {
+							parameters,
 							return_type: Box::new(self.build_type_annotation(&return_type, phase)?),
 							phase: if type_node.child_by_field_name("inflight").is_some() {
 								Phase::Inflight
@@ -965,8 +977,8 @@ impl<'s> Parser<'s> {
 
 		if let Some(property) = nested_node.child_by_field_name("property") {
 			let object_expr = if object_expr.kind() == "json_container_type" {
-				Expr {
-					kind: ExprKind::Reference(Reference::TypeMember {
+				Expr::new(
+					ExprKind::Reference(Reference::TypeMember {
 						type_: UserDefinedType {
 							root: Symbol {
 								name: WINGSDK_STD_MODULE.to_string(),
@@ -977,9 +989,8 @@ impl<'s> Parser<'s> {
 						},
 						property: self.node_symbol(&property)?,
 					}),
-					span: self.node_span(&object_expr),
-					evaluated_type: RefCell::new(None),
-				}
+					self.node_span(&object_expr),
+				)
 			} else {
 				self.build_expression(&object_expr, phase)?
 			};
@@ -988,15 +999,14 @@ impl<'s> Parser<'s> {
 				"?." => true,
 				_ => false,
 			};
-			Ok(Expr {
-				kind: ExprKind::Reference(Reference::InstanceMember {
+			Ok(Expr::new(
+				ExprKind::Reference(Reference::InstanceMember {
 					object: Box::new(object_expr),
 					property: self.node_symbol(&property)?,
 					optional_accessor,
 				}),
-				span: self.node_span(&nested_node),
-				evaluated_type: RefCell::new(None),
-			})
+				self.node_span(&nested_node),
+			))
 		} else {
 			// we are missing the last property, but we can still parse the rest of the expression
 			let err = self.add_error(
@@ -1042,11 +1052,10 @@ impl<'s> Parser<'s> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		let actual_node_span = self.node_span(&actual_node);
 		match actual_node.kind() {
-			"reference_identifier" => Ok(Expr {
-				kind: ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
-				span: actual_node_span,
-				evaluated_type: RefCell::new(None),
-			}),
+			"reference_identifier" => Ok(Expr::new(
+				ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
+				actual_node_span,
+			)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node, phase)?),
 			"structured_access_expression" => {
 				self.report_unimplemented_grammar("structured_access_expression", "reference", &actual_node)
@@ -1093,8 +1102,9 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_expression(&self, exp_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
+		let expression_span = self.node_span(exp_node);
+		CompilationContext::set(CompilationPhase::Parsing, &expression_span);
 		let expression_node = &self.check_error(*exp_node, "expression")?;
-		let expression_span = self.node_span(expression_node);
 		match expression_node.kind() {
 			"new_expression" => {
 				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap(), phase)?;
@@ -1378,11 +1388,7 @@ impl<'s> Parser<'s> {
 						.is_missing()
 				{
 					_ = self.add_error::<()>("Json literal must have an element", &named_element_child.unwrap());
-					Expr {
-						evaluated_type: RefCell::new(None),
-						kind: ExprKind::Literal(Literal::Number(0.0)),
-						span: self.node_span(&element_node),
-					}
+					Expr::new(ExprKind::Literal(Literal::Number(0.0)), self.node_span(&element_node))
 				} else {
 					self.build_expression(&element_node, phase)?
 				};
@@ -1426,6 +1432,11 @@ impl<'s> Parser<'s> {
 					},
 					expression_span,
 				))
+			}
+			"compiler_dbg_panic" => {
+				// Handle the debug panic expression (during parsing)
+				dbg_panic!();
+				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
@@ -1479,31 +1490,36 @@ impl<'s> Parser<'s> {
 		let name_text = self.node_text(&name_node);
 		let test_id = format!("test:{}", &name_text[1..name_text.len() - 1]);
 		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), Phase::Inflight);
+		let statements_span = statements.span.clone();
+		let span = self.node_span(statement_node);
 
-		let inflight_closure = Expr {
-			kind: ExprKind::FunctionClosure(FunctionDefinition {
+		let inflight_closure = Expr::new(
+			ExprKind::FunctionClosure(FunctionDefinition {
 				body: FunctionBody::Statements(statements),
 				signature: FunctionSignature {
 					parameters: vec![],
-					return_type: None,
+					return_type: Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::Void,
+						span: Default::default(),
+					}),
 					phase: Phase::Inflight,
 				},
 				is_static: true,
-				span: WingSpan::default(),
+				span: statements_span.clone(),
 			}),
-			span: WingSpan::default(),
-			evaluated_type: RefCell::new(None),
-		};
+			statements_span.clone(),
+		);
 
-		Ok(StmtKind::Expression(Expr {
-			kind: ExprKind::New {
+		let type_span = self.node_span(&statement_node.child(0).unwrap());
+		Ok(StmtKind::Expression(Expr::new(
+			ExprKind::New {
 				class: TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 						root: Symbol::global(WINGSDK_STD_MODULE),
 						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
-						span: WingSpan::default(),
+						span: type_span.clone(),
 					}),
-					span: WingSpan::default(),
+					span: type_span.clone(),
 				},
 				obj_id: Some(test_id),
 				obj_scope: None,
@@ -1512,8 +1528,7 @@ impl<'s> Parser<'s> {
 					named_args: IndexMap::new(),
 				},
 			},
-			span: self.node_span(statement_node),
-			evaluated_type: RefCell::new(None),
-		}))
+			span,
+		)))
 	}
 }

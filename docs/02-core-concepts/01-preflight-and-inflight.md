@@ -127,7 +127,7 @@ great example. We believe it is impossible to ensure this level of isolation and
 semantics in existing languages through a library, or even through a compiler extension. We've seen
 some worthy efforts in projects like [Pulumi's Function
 Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/),
-[Punchcard](https://github.com/sam-goodwin/punchcard) and [Functionless](https://functionless.org/),
+[Punchcard](https://github.com/sam-goodwin/punchcard) and [Functionless](https://github.com/functionless/functionless),
 and in all of these cases, there are either compromises in safety (e.g. it is possible to capture
 mutable objects) or in the programming model (e.g. type system is too complex).
 

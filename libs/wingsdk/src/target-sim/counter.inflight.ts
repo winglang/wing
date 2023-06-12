@@ -54,11 +54,11 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
     });
   }
 
-  public async reset(reset_value: number = 0): Promise<void> {
+  public async set(value: number): Promise<void> {
     return this.context.withTrace({
-      message: `Reset (value=${this.value}).`,
+      message: `Set (value=${this.value}).`,
       activity: async () => {
-        this.value = reset_value;
+        this.value = value;
       },
     });
   }

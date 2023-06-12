@@ -1,13 +1,16 @@
 use std::cell::RefCell;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
+use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::TypeRef;
+
+static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -138,17 +141,8 @@ pub enum TypeAnnotationKind {
 	MutMap(Box<TypeAnnotation>),
 	Set(Box<TypeAnnotation>),
 	MutSet(Box<TypeAnnotation>),
-	Function(FunctionTypeAnnotation),
+	Function(FunctionSignature),
 	UserDefined(UserDefinedType),
-}
-
-/// Unlike a FunctionSignature, a FunctionTypeAnnotation doesn't include the names
-/// of parameters or whether they are reassignable.
-#[derive(Debug, Clone)]
-pub struct FunctionTypeAnnotation {
-	pub param_types: Vec<TypeAnnotation>,
-	pub return_type: Box<TypeAnnotation>,
-	pub phase: Phase,
 }
 
 // In the future this may be an enum for type-alias, class, etc. For now its just a nested name.
@@ -165,6 +159,10 @@ impl UserDefinedType {
 		let mut path = vec![self.root.clone()];
 		path.extend(self.fields.clone());
 		path
+	}
+
+	pub fn full_path_str(&self) -> String {
+		self.full_path().iter().join(".")
 	}
 }
 
@@ -208,7 +206,7 @@ impl Display for TypeAnnotation {
 	}
 }
 
-impl Display for FunctionTypeAnnotation {
+impl Display for FunctionSignature {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let phase_str = match self.phase {
 			Phase::Inflight => "inflight ",
@@ -216,11 +214,12 @@ impl Display for FunctionTypeAnnotation {
 			Phase::Independent => "",
 		};
 		let params_str = self
-			.param_types
+			.parameters
 			.iter()
-			.map(|a| format!("{}", a))
+			.map(|a| format!("{}: {}", a.name, a.type_annotation))
 			.collect::<Vec<String>>()
 			.join(", ");
+
 		let ret_type_str = format!("{}", &self.return_type);
 		write!(f, "{phase_str}({params_str}): {ret_type_str}")
 	}
@@ -229,24 +228,14 @@ impl Display for FunctionTypeAnnotation {
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
 	pub parameters: Vec<FunctionParameter>,
-	pub return_type: Option<Box<TypeAnnotation>>,
+	pub return_type: Box<TypeAnnotation>,
 	pub phase: Phase,
 }
 
 impl FunctionSignature {
 	pub fn to_type_annotation(&self) -> TypeAnnotation {
 		TypeAnnotation {
-			kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
-				param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
-				return_type: self.return_type.clone().map_or(
-					Box::new(TypeAnnotation {
-						kind: TypeAnnotationKind::Void,
-						span: Default::default(),
-					}),
-					|t| t.clone(),
-				),
-				phase: self.phase,
-			}),
+			kind: TypeAnnotationKind::Function(self.clone()),
 			// Function signatures may not necessarily have spans
 			span: Default::default(),
 		}
@@ -279,7 +268,7 @@ pub struct FunctionDefinition {
 	pub span: WingSpan,
 }
 
-#[derive(Derivative, Debug)]
+#[derive(Debug)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
@@ -476,24 +465,24 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
+	CompilerDebugPanic,
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct Expr {
+	/// An identifier that is unique among all expressions in the AST.
+	pub id: usize,
+	/// The kind of expression.
 	pub kind: ExprKind,
+	/// The span of the expression.
 	pub span: WingSpan,
-	#[derivative(Debug = "ignore")]
-	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
-		Self {
-			kind,
-			evaluated_type: RefCell::new(None),
-			span,
-		}
+		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
+
+		Self { id, kind, span }
 	}
 }
 

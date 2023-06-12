@@ -236,18 +236,18 @@ exports[`inc 2`] = `
 }
 `;
 
-exports[`reset with initial value 1`] = `
+exports[`set to new value 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Counter created.",
-  "Reset (value=123).",
-  "Peek (value=0).",
+  "Set (value=123).",
+  "Peek (value=5).",
   "wingsdk.cloud.Counter deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
-exports[`reset with initial value 2`] = `
+exports[`set to new value 2`] = `
 {
   "simulator.json": {
     "resources": [
@@ -264,87 +264,6 @@ exports[`reset with initial value 2`] = `
         "path": "root/my_counter",
         "props": {
           "initial": 123,
-        },
-        "type": "wingsdk.cloud.Counter",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A distributed atomic counter",
-            "title": "Counter",
-          },
-          "id": "my_counter",
-          "path": "root/my_counter",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`reset without initial value 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Counter created.",
-  "Reset (value=0).",
-  "Peek (value=5).",
-  "wingsdk.cloud.Counter deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
-]
-`;
-
-exports[`reset without initial value 2`] = `
-{
-  "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "wingsdk.cloud.TestRunner",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_counter",
-        "props": {
-          "initial": 0,
         },
         "type": "wingsdk.cloud.Counter",
       },

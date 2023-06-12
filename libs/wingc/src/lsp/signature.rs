@@ -25,9 +25,9 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 	FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position_params.text_document.uri;
-		let result = files.get(&uri).expect("File must be open to get completions");
+		let file_data = files.get(&uri).expect("File must be open to get completions");
 
-		let root_scope = &result.scope;
+		let root_scope = &file_data.scope;
 
 		let mut scope_visitor = ScopeVisitor::new(params.text_document_position_params.position);
 		scope_visitor.visit_scope(root_scope);
@@ -38,7 +38,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				arg_list: provided_args,
 			} = &expr.kind
 			{
-				let t = callee.evaluated_type.borrow();
+				let t = file_data.types.get_expr_type(callee);
 				let t = t.as_ref()?;
 				let sig = t.as_function_sig()?;
 
@@ -59,12 +59,13 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 					provided_args.pos_args.len() - positional_arg_pos
 				};
 
-				let param_text = sig
+				let param_data = sig
 					.parameters
 					.iter()
-					.enumerate()
-					.map(|(i, p)| format!("{}: {}", i, p))
-					.join(", ");
+					.map(|p| format!("{}: {}", p.name, p.typeref))
+					.collect_vec();
+
+				let param_text = param_data.join(", ");
 				let label = format!("({}): {}", param_text, sig.return_type);
 
 				let signature_info = SignatureInformation {
@@ -76,8 +77,13 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 							.iter()
 							.enumerate()
 							.map(|p| ParameterInformation {
-								label: ParameterLabel::Simple(format!("{}: {}", p.0, p.1)),
-								documentation: if let Some(structy) = p.1.maybe_unwrap_option().as_struct() {
+								label: ParameterLabel::Simple(
+									param_data
+										.get(p.0)
+										.unwrap_or(&format!("{}: {}", p.0, p.1.typeref))
+										.clone(),
+								),
+								documentation: if let Some(structy) = p.1.typeref.maybe_unwrap_option().as_struct() {
 									// print all fields
 									let fields = structy
 										.env
@@ -130,8 +136,10 @@ impl<'a> ScopeVisitor<'a> {
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_expr(&mut self, node: &'a Expr) {
-		// We want to find the nearest expression to our target location
-		// i.e we want the expression that is to the left of it
+		if self.call_expr.is_some() {
+			return;
+		}
+
 		if node.span.contains(&self.location) {
 			match node.kind {
 				ExprKind::Call { .. } | ExprKind::New { .. } => {
