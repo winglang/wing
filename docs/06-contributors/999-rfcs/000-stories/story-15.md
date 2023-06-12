@@ -118,7 +118,7 @@ resource TaskList impl ITaskList {
     } else {
       j.set("status", "uncompleted");
     }
-    this._add(id, Json.deepCopy(j));
+    this._add(id, Json.deepCopyMut(j));
     return id;
   }
         
