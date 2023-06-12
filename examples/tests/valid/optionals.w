@@ -148,3 +148,16 @@ assert(notThere == nil);
 if let o = tree.left?.left {
   assert(o.value == 1);
 }
+
+
+// Check that we can lift optionals
+struct Payload {
+    a: str;
+    b: Map<str>?;
+}
+
+let a = Payload {a: "a"};
+
+test "t" {
+  assert(a.b? == false);
+}

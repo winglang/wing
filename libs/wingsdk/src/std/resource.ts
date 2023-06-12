@@ -149,10 +149,12 @@ export abstract class Resource extends Construct implements IResource {
     host: IResource,
     ops: string[] = []
   ): void {
+    
     switch (typeof obj) {
       case "string":
       case "boolean":
       case "number":
+      case "undefined":
         return;
 
       case "object":
