@@ -120,6 +120,21 @@ export class Json {
   }
 
   /**
+   * Checks if a Json object has a given key
+   *
+   * @macro ((args) => { return args[0].hasOwnProperty(args[1]); })([$args$])
+   *
+   * @param json The json object to inspect
+   * @param key The key to check
+   * @returns Boolean value corresponding to whether the key exists
+   */
+  public static has(json: Json, key: string): boolean {
+    json;
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
    * Returns a specified element from the Json.
    *
    * @macro ($self$)[$args$]
