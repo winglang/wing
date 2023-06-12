@@ -37,7 +37,7 @@ export class Queue extends cloud.Queue {
     }
   }
 
-  public addConsumer(
+  public setConsumer(
     inflight: cloud.IQueueAddConsumerHandler,
     props: cloud.QueueAddConsumerProps = {}
   ): cloud.Function {

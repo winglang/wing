@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ add_consumer.wsim » root/env0/test:addConsumer
+pass ─ add_consumer.wsim » root/env0/test:setConsumer
  
 
 

@@ -361,7 +361,7 @@ exports[`cloud_function_expects_inflight.w 1`] = `
 error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
    --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
    |  
- 9 |   q.addConsumer(inflight (x: num) => {
+ 9 |   q.setConsumer(inflight (x: num) => {
    | /---------------^
 10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
 11 | |   return;

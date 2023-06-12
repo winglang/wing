@@ -110,7 +110,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:addConsumer\",\"${aws_lambda_function.root_testaddConsumer_Handler_3B513ABC.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:setConsumer\",\"${aws_lambda_function.root_testaddConsumer_Handler_3B513ABC.arn}\"]]"
     }
   },
   "provider": {
@@ -151,7 +151,7 @@ module.exports = function({  }) {
       "root_testaddConsumer_Handler_IamRole_8E4E4EFE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:addConsumer/Handler/IamRole",
+            "path": "root/Default/Default/test:setConsumer/Handler/IamRole",
             "uniqueId": "root_testaddConsumer_Handler_IamRole_8E4E4EFE"
           }
         },
@@ -172,7 +172,7 @@ module.exports = function({  }) {
       "root_testaddConsumer_Handler_IamRolePolicy_9DC09BA2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:addConsumer/Handler/IamRolePolicy",
+            "path": "root/Default/Default/test:setConsumer/Handler/IamRolePolicy",
             "uniqueId": "root_testaddConsumer_Handler_IamRolePolicy_9DC09BA2"
           }
         },
@@ -194,7 +194,7 @@ module.exports = function({  }) {
       "root_testaddConsumer_Handler_IamRolePolicyAttachment_FAA6841D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:addConsumer/Handler/IamRolePolicyAttachment",
+            "path": "root/Default/Default/test:setConsumer/Handler/IamRolePolicyAttachment",
             "uniqueId": "root_testaddConsumer_Handler_IamRolePolicyAttachment_FAA6841D"
           }
         },
@@ -246,7 +246,7 @@ module.exports = function({  }) {
       "root_testaddConsumer_Handler_3B513ABC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:addConsumer/Handler/Default",
+            "path": "root/Default/Default/test:setConsumer/Handler/Default",
             "uniqueId": "root_testaddConsumer_Handler_3B513ABC"
           }
         },
@@ -298,7 +298,7 @@ module.exports = function({  }) {
       "root_testaddConsumer_Handler_S3Object_2F78F235": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:addConsumer/Handler/S3Object",
+            "path": "root/Default/Default/test:setConsumer/Handler/S3Object",
             "uniqueId": "root_testaddConsumer_Handler_S3Object_2F78F235"
           }
         },
@@ -484,10 +484,10 @@ class $Root extends $stdlib.std.Resource {
     }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    (q.addConsumer(new $Closure1(this,"$Closure1")));
+    (q.setConsumer(new $Closure1(this,"$Closure1")));
     const js = new TestHelper(this,"TestHelper");
     const predicate = new Predicate(this,"Predicate",c);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addConsumer",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:setConsumer",new $Closure2(this,"$Closure2"));
   }
 }
 class $App extends $AppBase {
