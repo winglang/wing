@@ -1131,11 +1131,6 @@ impl Types {
 	pub fn get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
 		self.type_for_expr.get(expr.id).and_then(|t| *t)
 	}
-
-	/// Returns true if all expressions have been type checked.
-	pub fn check_all_exprs_type_checked(&self) -> bool {
-		self.type_for_expr.iter().all(|t| t.is_some())
-	}
 }
 
 pub struct TypeChecker<'a> {

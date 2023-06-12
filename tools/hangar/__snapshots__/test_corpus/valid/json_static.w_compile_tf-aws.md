@@ -21,6 +21,28 @@ module.exports = function({ jj, std_Json }) {
 
 ```
 
+## inflight.$Closure2.js
+```js
+module.exports = function({ std_Json }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const hasCheck = Object.freeze({"a":"hello","b":"wing"});
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true)'`)})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false)'`)})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false))};
+    }
+  }
+  return $Closure2;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -42,7 +64,7 @@ module.exports = function({ jj, std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:Access Json static inflight\",\"${aws_lambda_function.root_testAccessJsonstaticinflight_Handler_8BBF2CE3.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:Access Json static inflight\",\"${aws_lambda_function.root_testAccessJsonstaticinflight_Handler_8BBF2CE3.arn}\"],[\"root/Default/Default/test:has key or not\",\"${aws_lambda_function.root_testhaskeyornot_Handler_116291B8.arn}\"]]"
     }
   },
   "provider": {
@@ -60,6 +82,15 @@ module.exports = function({ jj, std_Json }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "root_testhaskeyornot_Handler_IamRole_D0DACC8E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:has key or not/Handler/IamRole",
+            "uniqueId": "root_testhaskeyornot_Handler_IamRole_D0DACC8E"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -72,6 +103,16 @@ module.exports = function({ jj, std_Json }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testAccessJsonstaticinflight_Handler_IamRole_9D202F56.name}"
+      },
+      "root_testhaskeyornot_Handler_IamRolePolicy_D4FB4EEA": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:has key or not/Handler/IamRolePolicy",
+            "uniqueId": "root_testhaskeyornot_Handler_IamRolePolicy_D4FB4EEA"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testhaskeyornot_Handler_IamRole_D0DACC8E.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -84,6 +125,16 @@ module.exports = function({ jj, std_Json }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testAccessJsonstaticinflight_Handler_IamRole_9D202F56.name}"
+      },
+      "root_testhaskeyornot_Handler_IamRolePolicyAttachment_C162CF5E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:has key or not/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testhaskeyornot_Handler_IamRolePolicyAttachment_C162CF5E"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testhaskeyornot_Handler_IamRole_D0DACC8E.name}"
       }
     },
     "aws_lambda_function": {
@@ -112,6 +163,32 @@ module.exports = function({ jj, std_Json }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
+      },
+      "root_testhaskeyornot_Handler_116291B8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:has key or not/Handler/Default",
+            "uniqueId": "root_testhaskeyornot_Handler_116291B8"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8ecbdc2",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8ecbdc2",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testhaskeyornot_Handler_IamRole_D0DACC8E.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testhaskeyornot_Handler_S3Object_81BB8263.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
       }
     },
     "aws_s3_bucket": {
@@ -131,6 +208,17 @@ module.exports = function({ jj, std_Json }) {
           "metadata": {
             "path": "root/Default/Default/test:Access Json static inflight/Handler/S3Object",
             "uniqueId": "root_testAccessJsonstaticinflight_Handler_S3Object_BE5E17BA"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "root_testhaskeyornot_Handler_S3Object_81BB8263": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:has key or not/Handler/S3Object",
+            "uniqueId": "root_testhaskeyornot_Handler_S3Object_81BB8263"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -191,6 +279,40 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Closure2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure2.js";
+        const std_JsonClient = std.Json._toInflightType(context);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            std_Json: ${std_JsonClient.text},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const x = Object.freeze({"a":123,"b":{"c":456,"d":789}});
     const k = (Object.keys(x));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(k.length === 2)'`)})((k.length === 2))};
@@ -220,6 +342,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })((jsonOfMany)["a"]) === 123))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(std.Boolean.fromJson((jsonOfMany)["c"]))'`)})((std.Boolean.fromJson((jsonOfMany)["c"])))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Access Json static inflight",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:has key or not",new $Closure2(this,"$Closure2"));
   }
 }
 class $App extends $AppBase {

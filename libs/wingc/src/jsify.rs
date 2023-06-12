@@ -1,4 +1,5 @@
 pub mod codemaker;
+mod files;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
@@ -9,7 +10,6 @@ use std::{
 	cmp::Ordering,
 	collections::{BTreeMap, BTreeSet},
 	fmt::Display,
-	fs,
 	path::Path,
 	slice::Iter,
 	vec,
@@ -33,7 +33,9 @@ use crate::{
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
-use self::codemaker::CodeMaker;
+use self::{codemaker::CodeMaker, files::Files};
+
+const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -61,7 +63,9 @@ pub struct JSifyContext {
 pub struct JSifier<'a> {
 	pub types: &'a Types,
 	pub diagnostics: Diagnostics,
-	pub out_dir: &'a Path,
+	/// Stores all generated JS files in memory.
+	files: Files,
+	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
 	shim: bool,
 	app_name: &'a str,
@@ -76,17 +80,11 @@ enum BindMethod {
 }
 
 impl<'a> JSifier<'a> {
-	pub fn new(
-		types: &'a Types,
-		out_dir: &'a Path,
-		app_name: &'a str,
-		absolute_project_root: &'a Path,
-		shim: bool,
-	) -> Self {
+	pub fn new(types: &'a Types, app_name: &'a str, absolute_project_root: &'a Path, shim: bool) -> Self {
 		Self {
 			types,
 			diagnostics: Diagnostics::new(),
-			out_dir,
+			files: Files::new(),
 			shim,
 			app_name,
 			absolute_project_root,
@@ -102,7 +100,7 @@ impl<'a> JSifier<'a> {
 		format!("\"./{}\"", path_name.replace("\\", "/"))
 	}
 
-	pub fn jsify(&mut self, scope: &Scope) -> String {
+	pub fn jsify(&mut self, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
@@ -184,7 +182,18 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		output.to_string()
+		match self.files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
+			Ok(()) => {}
+			Err(err) => self.diagnostics.push(err.into()),
+		}
+	}
+
+	/// Write all files to the output directory
+	pub fn emit_files(&mut self, out_dir: &Path) {
+		match self.files.emit_files(out_dir) {
+			Ok(()) => {}
+			Err(err) => self.diagnostics.push(err.into()),
+		}
 	}
 
 	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
@@ -1276,11 +1285,10 @@ impl<'a> JSifier<'a> {
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		let clients_dir = format!("{}", self.out_dir.to_string_lossy());
-		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
-		let client_file_name = inflight_filename(class);
-		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
-		fs::write(&relative_file_path, code.to_string()).expect("Writing client inflight source");
+		match self.files.add_file(inflight_filename(class), code.to_string()) {
+			Ok(()) => {}
+			Err(err) => self.diagnostics.push(err.into()),
+		}
 	}
 
 	/// Get the type and capture info for fields that are captured in the client of the given resource
