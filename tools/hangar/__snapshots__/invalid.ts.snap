@@ -348,25 +348,17 @@ Duration <DURATION>
 `;
 
 exports[`cloud_function_expects_inflight.w 1`] = `
-"error: Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
+"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |   return \\"Hello \${name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
+  | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
 
 
-error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
-   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
-   |  
- 9 |   q.addConsumer(inflight (x: num) => {
-   | /---------------^
-10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
-11 | |   return;
-12 | | });
-   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
+error: Expected type to be \\"inflight (message: str): void\\", but got \\"$Closure1\\" instead
 
 
  
@@ -599,20 +591,6 @@ error: Expected function return type
   |                            ^^^^^ Expected function return type
 
 
-error: Expected function return type
-  --> ../../../examples/tests/invalid/function_type.w:4:36
-  |
-4 | let my_func2 = (callback: ((num)): (str)) => {  };
-  |                                    ^^^^^ Expected function return type
-
-
-error: Expected method return type
-   --> ../../../examples/tests/invalid/function_type.w:12:3
-   |
-12 |   inflight my_method2(x: num);
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected method return type
-
-
  
 
 
@@ -649,11 +627,11 @@ exports[`impl_interface.w 1`] = `
   |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
 
 
-error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
+error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:7:7
   |
 7 | class B impl cloud.IQueueAddConsumerHandler {
-  |       ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
+  |       ^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
 
 
 error: Expected an interface, instead found type \\"Bucket\\"
@@ -1720,7 +1698,7 @@ error: \\"status\\" is not initialized
    |  
 15 |   let x = cloud.ApiResponse {
    | /---------^
-16 | |   body: Json \\"Hello, world!\\",
+16 | |   body: \\"Hello, world!\\",
 17 | | };
    | \\\\-^ \\"status\\" is not initialized
 
@@ -1893,6 +1871,42 @@ error: expression \\"await_expression\\" is not supported yet see https://github
   |
 4 | let d = await c;
   |         ^^^^^^^ expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`unknown_field.w 1`] = `
+"error: No member \\"a\\" in class \\"String\\"
+  --> ../../../examples/tests/invalid/unknown_field.w:1:12
+  |
+1 | std.String.a.b.c.fromJson();
+  |            ^ No member \\"a\\" in class \\"String\\"
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`unknown_submodule.w 1`] = `
+"error: Expected identifier \\"std\\" to be a variable, but it's a namespace
+  --> ../../../examples/tests/invalid/unknown_submodule.w:1:1
+  |
+1 | std.random.String.fromJson(\\"hello\\");
+  | ^^^ Expected identifier \\"std\\" to be a variable, but it's a namespace
 
 
  

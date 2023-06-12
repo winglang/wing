@@ -1761,7 +1761,7 @@ let ApiRequest = cloud.ApiRequest{ ... }
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>json</code> | The request's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>str</code> | The request's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
 
 ---
@@ -1817,10 +1817,10 @@ The path variables.
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
 
 ```wing
-body: json;
+body: str;
 ```
 
-- *Type:* json
+- *Type:* str
 
 The request's body.
 
@@ -1855,7 +1855,7 @@ let ApiResponse = cloud.ApiResponse{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>json</code> | The response's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>str</code> | The response's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers. |
 
 ---
@@ -1875,10 +1875,10 @@ The response's status code.
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiResponse.property.body"></a>
 
 ```wing
-body: json;
+body: str;
 ```
 
-- *Type:* json
+- *Type:* str
 
 The response's body.
 
@@ -3659,7 +3659,7 @@ The key of the element to test for presence.
 ##### `keys` <a name="keys" id="@winglang/sdk.std.ImmutableMap.keys"></a>
 
 ```wing
-keys(): ImmutableArray
+keys(): MutArray<str>
 ```
 
 Returns the keys of this map.
@@ -3822,6 +3822,7 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.cloneMut">cloneMut</a></code> | Creates a mutable deep clone of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
@@ -3889,6 +3890,32 @@ to delete key from.
 - *Type:* str
 
 the key to delete.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
+
+```wing
+bring std;
+
+std.Json.has(json: Json, key: str)
+```
+
+Checks if a Json object has a given key.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.has.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+The json object to inspect.
+
+---
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.has.parameter.key"></a>
+
+- *Type:* str
+
+The key to check.
 
 ---
 
@@ -4279,7 +4306,7 @@ The key of the element to test for presence.
 ##### `keys` <a name="keys" id="@winglang/sdk.std.MutableMap.keys"></a>
 
 ```wing
-keys(): ImmutableArray
+keys(): MutArray<str>
 ```
 
 Returns the keys of this map.
