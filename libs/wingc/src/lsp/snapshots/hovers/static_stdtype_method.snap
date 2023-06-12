@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nstatic stringify: (json: Json, indent: num?): str\n```\n---\nFormats Json as string.\n\n### Parameters\n - *json* - to format as string.\n - *indent*\n\n### Returns\nstring representation of the Json\n\n### Remarks\n(JSON.stringify($args$))"
+range:
+  start:
+    line: 1
+    character: 5
+  end:
+    line: 1
+    character: 14
+
