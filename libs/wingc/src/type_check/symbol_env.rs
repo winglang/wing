@@ -238,6 +238,8 @@ impl SymbolEnv {
 			);
 		}
 
+		// we couldn't find the symbol in the current environment, let's look up in the parent
+		// environment.
 		if let Some(ref_annotation([parent_env])) = self.parent {
 			return parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx));
 		}
