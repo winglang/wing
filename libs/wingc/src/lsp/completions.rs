@@ -4,6 +4,7 @@ use lsp_types::{Command, CompletionItem, CompletionItemKind, CompletionResponse,
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
+use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
@@ -13,6 +14,7 @@ use crate::type_check::{
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use crate::WINGSDK_STD_MODULE;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
@@ -204,12 +206,16 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		}) {
 			let symbol_kind = &symbol_data.1 .1;
 
-			completions.push(format_symbol_kind_as_completion(symbol_data.0, symbol_kind));
+			if let Some(completion) = format_symbol_kind_as_completion(symbol_data.0, symbol_kind) {
+				completions.push(completion);
+			}
 		}
 
 		if let Some(parent) = found_env.parent {
 			for data in parent.iter(true) {
-				completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
+				if let Some(completion) = format_symbol_kind_as_completion(&data.0, &data.1) {
+					completions.push(completion);
+				}
 			}
 		}
 
@@ -299,7 +305,7 @@ fn get_completions_from_namespace(namespace: &UnsafeRef<Namespace>) -> Vec<Compl
 		.env
 		.symbol_map
 		.iter()
-		.map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
+		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
 		.collect()
 }
 
@@ -366,8 +372,11 @@ fn get_completions_from_class(
 }
 
 /// Formats a SymbolKind from a SymbolEnv as a CompletionItem
-fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> CompletionItem {
-	match symbol_kind {
+fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Option<CompletionItem> {
+	if should_exclude_symbol(name) {
+		return None;
+	}
+	Some(match symbol_kind {
 		SymbolKind::Type(t) => CompletionItem {
 			label: name.to_string(),
 			kind: Some(match **t {
@@ -436,7 +445,11 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 			kind: Some(CompletionItemKind::MODULE),
 			..Default::default()
 		},
-	}
+	})
+}
+
+fn should_exclude_symbol(symbol: &str) -> bool {
+	symbol == WINGSDK_STD_MODULE || symbol.starts_with(CLOSURE_CLASS_PREFIX) || symbol == PARENT_THIS_NAME
 }
 
 /// This visitor is used to find the scope
@@ -489,8 +502,15 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_expr(&mut self, node: &'a Expr) {
 		// We want to find the nearest expression to our target location
 		// i.e we want the expression that is to the left of it
-		if node.span <= self.location {
-			self.nearest_expr = Some(node);
+		if node.span.end <= self.location.start {
+			if let Some(nearest_expr) = self.nearest_expr {
+				// make sure we're not overwriting a more relevant expression
+				if nearest_expr.span.end < node.span.end {
+					self.nearest_expr = Some(node);
+				}
+			} else {
+				self.nearest_expr = Some(node);
+			}
 		}
 
 		// We don't want to visit the children of a reference expression
@@ -503,7 +523,14 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 
 	fn visit_type_annotation(&mut self, node: &'a TypeAnnotation) {
 		if node.span <= self.location {
-			self.nearest_type_annotation = Some(node);
+			if let Some(nearest_type_annotation) = self.nearest_type_annotation {
+				// make sure we're not overwriting a more relevant type annotation
+				if nearest_type_annotation.span.end < node.span.end {
+					self.nearest_type_annotation = Some(node);
+				}
+			} else {
+				self.nearest_type_annotation = Some(node);
+			}
 		}
 
 		visit_type_annotation(self, node);
@@ -554,7 +581,7 @@ mod tests {
 		};
 	}
 
-	test_completion_list!(empty, "", assert!(empty.len() > 0));
+	test_completion_list!(empty, "", assert!(!empty.is_empty()));
 
 	test_completion_list!(
 		new_expression_nested,
@@ -563,7 +590,7 @@ bring cloud;
 
 new cloud. 
         //^"#,
-		assert!(new_expression_nested.len() > 0)
+		assert!(!new_expression_nested.is_empty())
 
 		// all items are classes
 		assert!(new_expression_nested.iter().all(|item| item.kind == Some(CompletionItemKind::CLASS)))
@@ -582,7 +609,7 @@ class Resource {
 
 Resource. 
        //^"#,
-		assert!(static_method_call.len() > 0)
+		assert!(!static_method_call.is_empty())
 
 		assert!(static_method_call.iter().filter(|c| c.label == "hello").count() == 1)
 	);
@@ -600,7 +627,7 @@ let b =
 			//^
 			
 let c = 3;"#,
-		assert!(only_show_symbols_in_scope.len() > 0)
+		assert!(!only_show_symbols_in_scope.is_empty())
 
 		assert!(only_show_symbols_in_scope.iter().all(|c| c.label != "c"))
 	);
@@ -611,7 +638,7 @@ let c = 3;"#,
 let a = MutMap<str> {};
 if a. 
    //^"#,
-		assert!(incomplete_if_statement.len() > 0)
+		assert!(!incomplete_if_statement.is_empty())
 	);
 
 	test_completion_list!(
@@ -621,5 +648,20 @@ let x = 2;
 notDefined.
          //^"#,
 		assert!(undeclared_var.is_empty())
+	);
+
+	test_completion_list!(
+		capture_in_test,
+		r#"
+bring cloud;
+let b = new cloud.Bucket();
+let x = 2;
+
+test "test" {
+  b.
+  //^
+}
+"#,
+		assert!(!capture_in_test.is_empty())
 	);
 }
