@@ -9,11 +9,14 @@ assert(k.length == 2);
 let v = Json.values(x);
 assert(v.at(0) == 123);
 
-// Mutable Copy
+// Mutable Deep Copy
 let m = Json.deepCopyMut(x);
 m.set("a", 321);
 assert(m.get("a") == 321);
 
+// Immutable Deep Copy
+let n = MutJson.deepCopy(m);
+assert(m != n);
 
 // Deleting keys
 let var k2 = Json.keys(m);
