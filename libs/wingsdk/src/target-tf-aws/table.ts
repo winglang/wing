@@ -42,7 +42,7 @@ export class Table extends cloud.Table {
     new DynamodbTableItem(this, `DynamodbTableItem-${key}`, {
       tableName: this.table.name,
       hashKey: key,
-      item: Json.stringify(row),
+      item: JSON.stringify(row),
     });
   }
 
