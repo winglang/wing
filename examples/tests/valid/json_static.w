@@ -51,3 +51,10 @@ test "Access Json static inflight" {
   let ss = Json.stringify(jj);
   assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
 }
+
+// Check whether some key exists in a json
+test "has key or not" {
+  let hasCheck = Json {a: "hello", b: "wing"};
+  assert(Json.has(hasCheck, "a") == true);
+  assert(Json.has(hasCheck, "c") == false);
+}
