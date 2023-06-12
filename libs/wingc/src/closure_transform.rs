@@ -10,8 +10,8 @@ use crate::{
 	type_check::HANDLE_METHOD_NAME,
 };
 
-const CLOSURE_CLASS_PREFIX: &str = "$Closure";
-const PARENT_THIS_NAME: &str = "__parent_this";
+pub const CLOSURE_CLASS_PREFIX: &str = "$Closure";
+pub const PARENT_THIS_NAME: &str = "__parent_this";
 
 /// Transforms inflight closures defined in preflight scopes into preflight classes.
 ///
