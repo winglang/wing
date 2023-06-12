@@ -6,9 +6,9 @@ contents:
   value: "Module 'cloud'"
 range:
   start:
-    line: 2
-    character: 4
+    line: 1
+    character: 6
   end:
-    line: 2
-    character: 10
+    line: 1
+    character: 11
 
