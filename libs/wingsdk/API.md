@@ -3618,7 +3618,7 @@ The key of the element to test for presence.
 ##### `keys` <a name="keys" id="@winglang/sdk.std.ImmutableMap.keys"></a>
 
 ```wing
-keys(): ImmutableArray
+keys(): MutArray<str>
 ```
 
 Returns the keys of this map.
@@ -4238,7 +4238,7 @@ The key of the element to test for presence.
 ##### `keys` <a name="keys" id="@winglang/sdk.std.MutableMap.keys"></a>
 
 ```wing
-keys(): ImmutableArray
+keys(): MutArray<str>
 ```
 
 Returns the keys of this map.

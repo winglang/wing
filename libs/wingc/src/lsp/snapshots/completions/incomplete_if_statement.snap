@@ -43,7 +43,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: keys
   kind: 2
-  detail: "(): ImmutableArray"
+  detail: "(): Array<str>"
   insertText: keys($0)
   insertTextFormat: 2
   command:
