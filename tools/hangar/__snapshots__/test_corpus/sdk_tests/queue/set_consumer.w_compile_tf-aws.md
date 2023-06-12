@@ -1,4 +1,4 @@
-# [add_consumer.w](../../../../../../examples/tests/sdk_tests/queue/add_consumer.w) | compile | tf-aws
+# [set_consumer.w](../../../../../../examples/tests/sdk_tests/queue/set_consumer.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
 ```js
