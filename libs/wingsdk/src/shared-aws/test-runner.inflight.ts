@@ -1,5 +1,5 @@
+import { FunctionClient } from "./function.inflight";
 import { ITestRunnerClient, TestResult } from "../cloud";
-import { FunctionClient } from "../shared-aws/function.inflight";
 
 export class TestRunnerClient implements ITestRunnerClient {
   // A map from test names to their corresponding function ARNs.

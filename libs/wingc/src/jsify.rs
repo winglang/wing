@@ -1,4 +1,5 @@
-mod codemaker;
+pub mod codemaker;
+mod files;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
@@ -9,7 +10,6 @@ use std::{
 	cmp::Ordering,
 	collections::{BTreeMap, BTreeSet},
 	fmt::Display,
-	fs,
 	path::Path,
 	slice::Iter,
 	vec,
@@ -27,13 +27,15 @@ use crate::{
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		ClassLike, SymbolKind, Type, TypeRef, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
+		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
-use self::codemaker::CodeMaker;
+use self::{codemaker::CodeMaker, files::Files};
+
+const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -59,11 +61,14 @@ pub struct JSifyContext {
 }
 
 pub struct JSifier<'a> {
+	pub types: &'a Types,
 	pub diagnostics: Diagnostics,
-	pub out_dir: &'a Path,
+	/// Stores all generated JS files in memory.
+	files: Files,
+	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
 	shim: bool,
-	app_name: String,
+	app_name: &'a str,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -75,21 +80,27 @@ enum BindMethod {
 }
 
 impl<'a> JSifier<'a> {
-	pub fn new(out_dir: &'a Path, app_name: &str, absolute_project_root: &'a Path, shim: bool) -> Self {
+	pub fn new(types: &'a Types, app_name: &'a str, absolute_project_root: &'a Path, shim: bool) -> Self {
 		Self {
+			types,
 			diagnostics: Diagnostics::new(),
-			out_dir,
+			files: Files::new(),
 			shim,
-			app_name: app_name.to_string(),
+			app_name,
 			absolute_project_root,
 		}
+	}
+
+	fn get_expr_type(&self, expr: &Expr) -> TypeRef {
+		// Safety: JSifier is always run after type checking has finished, so all types should be resolved.
+		self.types.get_expr_type(expr).unwrap()
 	}
 
 	fn js_resolve_path(path_name: &str) -> String {
 		format!("\"./{}\"", path_name.replace("\\", "/"))
 	}
 
-	pub fn jsify(&mut self, scope: &Scope) -> String {
+	pub fn jsify(&mut self, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
@@ -171,7 +182,18 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		output.to_string()
+		match self.files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
+			Ok(()) => {}
+			Err(err) => self.diagnostics.push(err.into()),
+		}
+	}
+
+	/// Write all files to the output directory
+	pub fn emit_files(&mut self, out_dir: &Path) {
+		match self.files.emit_files(out_dir) {
+			Ok(()) => {}
+			Err(err) => self.diagnostics.push(err.into()),
+		}
 	}
 
 	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
@@ -268,19 +290,11 @@ impl<'a> JSifier<'a> {
 				arg_list,
 				obj_scope: _, // TODO
 			} => {
-				let expression_type = expression.evaluated_type.borrow();
-				let is_preflight_class = if let Some(evaluated_type) = expression_type.as_ref() {
-					evaluated_type.is_preflight_class()
-				} else {
-					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
-					true
-				};
+				let expression_type = self.get_expr_type(&expression);
+				let is_preflight_class = expression_type.is_preflight_class();
 
-				let is_abstract = if let Some(cls) = expression_type.unwrap().as_class() {
-					cls.is_abstract
-				} else {
-					false
-				};
+				let class_type = expression_type.as_class().expect("type to be a class");
+				let is_abstract = class_type.is_abstract;
 
 				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
 				// targets and plugins to inject alternative implementations for types. otherwise (e.g.
@@ -299,7 +313,7 @@ impl<'a> JSifier<'a> {
 
 				let args = self.jsify_arg_list(&arg_list, scope, id, ctx);
 
-				let fqn = expression_type.expect("expression").as_class().expect("class").fqn.clone();
+				let fqn = class_type.fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
 					if is_abstract {
 						format!("this.node.root.newAbstract(\"{}\",{})", fqn, args)
@@ -320,7 +334,7 @@ impl<'a> JSifier<'a> {
 						.map(|p| match p {
 							InterpolatedStringPart::Static(l) => l.to_string(),
 							InterpolatedStringPart::Expr(e) => {
-								match *e.evaluated_type.borrow().expect("Should have type") {
+								match *self.get_expr_type(e) {
 									Type::Json | Type::MutJson => {
 										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, ctx))
 									}
@@ -354,7 +368,7 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
 			ExprKind::Call { callee, arg_list } => {
-				let function_type = callee.evaluated_type.borrow().unwrap();
+				let function_type = self.get_expr_type(callee);
 				let function_sig = function_type.as_function_sig();
 				assert!(
 					function_sig.is_some() || function_type.is_anything() || function_type.is_handler_preflight_class(),
@@ -437,7 +451,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if is_mutable_collection(expression) || ctx.in_json {
+				if self.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
 					// json arrays dont need frozen at nested level
 					format!("[{}]", item_list)
 				} else {
@@ -478,7 +492,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(",");
 
-				if is_mutable_collection(expression) || ctx.in_json {
+				if self.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
 					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
 				} else {
@@ -492,7 +506,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if is_mutable_collection(expression) {
+				if self.get_expr_type(expression).is_mutable_collection() {
 					format!("new Set([{}])", item_list)
 				} else {
 					format!("Object.freeze(new Set([{}]))", item_list)
@@ -1271,11 +1285,10 @@ impl<'a> JSifier<'a> {
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		let clients_dir = format!("{}", self.out_dir.to_string_lossy());
-		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
-		let client_file_name = inflight_filename(class);
-		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
-		fs::write(&relative_file_path, code.to_string()).expect("Writing client inflight source");
+		match self.files.add_file(inflight_filename(class), code.to_string()) {
+			Ok(()) => {}
+			Err(err) => self.diagnostics.push(err.into()),
+		}
 	}
 
 	/// Get the type and capture info for fields that are captured in the client of the given resource
@@ -1294,7 +1307,7 @@ impl<'a> JSifier<'a> {
 
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
-			let visitor = FieldReferenceVisitor::new(&function_def, free_vars);
+			let visitor = FieldReferenceVisitor::new(self.types, &function_def, free_vars);
 			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
@@ -1304,7 +1317,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// Also add field rerferences from the inflight initializer
-		let visitor = FieldReferenceVisitor::new(&resource_class.inflight_initializer, free_vars);
+		let visitor = FieldReferenceVisitor::new(self.types, &resource_class.inflight_initializer, free_vars);
 		let (refs, find_diags) = visitor.find_refs();
 
 		self.diagnostics.extend(find_diags);
@@ -1399,17 +1412,11 @@ impl<'a> JSifier<'a> {
 	}
 }
 
-fn is_mutable_collection(expression: &Expr) -> bool {
-	if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
-		evaluated_type.is_mutable_collection()
-	} else {
-		false
-	}
-}
-
 /// Analysizes a resource inflight method and returns a list of fields that are referenced from the
 /// method and which operations are performed on them.
 struct FieldReferenceVisitor<'a> {
+	types: &'a Types,
+
 	/// The key is field name, value is a list of operations performed on this field
 	references: BTreeMap<String, BTreeSet<String>>,
 
@@ -1431,8 +1438,9 @@ struct FieldReferenceVisitor<'a> {
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(function_def: &'a FunctionDefinition, free_vars: &'a IndexSet<String>) -> Self {
+	pub fn new(types: &'a Types, function_def: &'a FunctionDefinition, free_vars: &'a IndexSet<String>) -> Self {
 		Self {
+			types,
 			references: BTreeMap::new(),
 			function_def,
 			diagnostics: Diagnostics::new(),
@@ -1685,8 +1693,8 @@ impl<'a> FieldReferenceVisitor<'a> {
 				property,
 				optional_accessor: _optional_chain,
 			} => {
-				let obj_type = object.evaluated_type.borrow().unwrap();
-				let prop = if let Some(component_kind) = self.determine_component_kind_from_type(obj_type, property) {
+				let obj_type = self.types.get_expr_type(object).unwrap();
+				let prop = if let Some(component_kind) = Self::determine_component_kind_from_type(obj_type, property) {
 					vec![Component {
 						text: property.name.clone(),
 						span: property.span.clone(),
@@ -1735,11 +1743,11 @@ impl<'a> FieldReferenceVisitor<'a> {
 		}
 	}
 
-	fn determine_component_kind_from_type(&self, obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
+	fn determine_component_kind_from_type(obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
 		match &*obj_type {
 			Type::Void => unreachable!("cannot reference a member of void"),
 			Type::Function(_) => unreachable!("cannot reference a member of a function"),
-			Type::Optional(t) => self.determine_component_kind_from_type(*t, property),
+			Type::Optional(t) => Self::determine_component_kind_from_type(*t, property),
 			// all fields / methods / values of these types are phase-independent so we can skip them
 			Type::Anything
 			| Type::Number
