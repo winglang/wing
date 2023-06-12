@@ -117,7 +117,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     env: {
       RUST_BACKTRACE: "full",
       WING_SYNTH_DIR: normalPath(tmpSynthDir),
-      WINGC_PREFLIGHT,
       // TODO: Use an option?
       // CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
