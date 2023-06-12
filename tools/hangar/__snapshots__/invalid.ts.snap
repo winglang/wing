@@ -18,6 +18,66 @@ Duration <DURATION>
 "
 `;
 
+exports[`access_static_from_instance.w 1`] = `
+"error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:4:3
+  |
+4 |   static f: num;
+  |   ^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
+
+
+error: Cannot access static property \\"f\\" from instance
+   --> ../../../examples/tests/invalid/access_static_from_instance.w:19:5
+   |
+19 | foo.f; // Can't access static fields through instances
+   |     ^ Cannot access static property \\"f\\" from instance
+
+
+error: Cannot access static property \\"m\\" from instance
+   --> ../../../examples/tests/invalid/access_static_from_instance.w:20:5
+   |
+20 | foo.m(); // Can't access static methods through instances
+   |     ^ Cannot access static property \\"m\\" from instance
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
+  |
+7 |     this.instanceField = 1; // Can't access instance fields from static methods
+  |     ^^^^ Unknown symbol \\"this\\"
+
+
+error: Variable this.instanceField is not reassignable 
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
+  |
+7 |     this.instanceField = 1; // Can't access instance fields from static methods
+  |     ^^^^^^^^^^^^^^^^^^^^^^^ Variable this.instanceField is not reassignable 
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
+  |
+8 |     this.f = 1; // Can't access static fields through \`this\`
+  |     ^^^^ Unknown symbol \\"this\\"
+
+
+error: Variable this.f is not reassignable 
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
+  |
+8 |     this.f = 1; // Can't access static fields through \`this\`
+  |     ^^^^^^^^^^^ Variable this.f is not reassignable 
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`bring.w 1`] = `
 "error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.w:1:1
@@ -275,6 +335,30 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |
 31 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`cloud_function_expects_inflight.w 1`] = `
+"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+  --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20
+  |  
+3 |   new cloud.Function((name: str): str => {
+  | /--------------------^
+4 | |   return \\"Hello \${name}\\";
+5 | | });
+  | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+
+
+error: Expected type to be \\"inflight (message: str): void\\", but got \\"$Closure1\\" instead
 
 
  
