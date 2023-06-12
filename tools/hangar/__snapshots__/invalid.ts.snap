@@ -1907,6 +1907,42 @@ Duration <DURATION>
 "
 `;
 
+exports[`unknown_field.w 1`] = `
+"error: No member \\"a\\" in class \\"String\\"
+  --> ../../../examples/tests/invalid/unknown_field.w:1:12
+  |
+1 | std.String.a.b.c.fromJson();
+  |            ^ No member \\"a\\" in class \\"String\\"
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`unknown_submodule.w 1`] = `
+"error: Expected identifier \\"std\\" to be a variable, but it's a namespace
+  --> ../../../examples/tests/invalid/unknown_submodule.w:1:1
+  |
+1 | std.random.String.fromJson(\\"hello\\");
+  | ^^^ Expected identifier \\"std\\" to be a variable, but it's a namespace
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`unknown_symbol.w 1`] = `
 "error: Unknown symbol \\"clod\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
