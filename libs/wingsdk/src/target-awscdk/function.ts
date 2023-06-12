@@ -80,15 +80,10 @@ export class Function extends cloud.Function {
 
   /**
    * Add environment variable to the function.
-   * @param updateIfExists Whether to update the environment value if it exists. When false, updating an existing environment will throw an error.
    */
-  public addEnvironment(
-    name: string,
-    value: string,
-    updateIfExists: boolean = false
-  ) {
+  public addEnvironment(name: string, value: string) {
     // Keep a local map of the env vars. Those env vars will be added once the function is initialized
-    super.addEnvironment(name, value, updateIfExists);
+    super.addEnvironment(name, value);
 
     if (this.function) {
       this.function.addEnvironment(name, value);

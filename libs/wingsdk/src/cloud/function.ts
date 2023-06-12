@@ -114,14 +114,9 @@ export abstract class Function extends Resource implements IInflightHost {
 
   /**
    * Add an environment variable to the function.
-   * @param updateIfExists Whether to update the environment value if it exists. When false, updating an existing environment will throw an error.
    */
-  public addEnvironment(
-    name: string,
-    value: string,
-    updateIfExists: boolean = false
-  ) {
-    if (this._env[name] !== undefined && !updateIfExists) {
+  public addEnvironment(name: string, value: string) {
+    if (this._env[name] !== undefined) {
       throw new Error(`Environment variable "${name}" already set.`);
     }
     this._env[name] = value;

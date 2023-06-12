@@ -66,7 +66,9 @@ export class SimTokens extends Tokens {
       case "string":
         const envName = this.envName(value);
         // the same token might be bound multiple times by different variables/inflight contexts
-        host.addEnvironment(envName, value, true);
+        if (host.env[envName] === undefined) {
+          host.addEnvironment(envName, value);
+        }
         break;
       default:
         throw new Error(`Unable to bind token ${value}`);
