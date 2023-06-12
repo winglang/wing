@@ -153,8 +153,6 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	pub fn import_type(&mut self, type_fqn: &FQN) -> bool {
-		self.setup_namespaces_for(&type_fqn);
-
 		let type_str = type_fqn.as_str();
 
 		// check if type is already imported
@@ -250,13 +248,7 @@ impl<'a> JsiiImporter<'a> {
 			} else {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					env: SymbolEnv::new(
-						Some(parent_ns.env.get_ref()),
-						self.wing_types.void(),
-						false,
-						Phase::Preflight,
-						0,
-					),
+					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
 				});
 				parent_ns
 					.env
@@ -859,6 +851,9 @@ impl<'a> JsiiImporter<'a> {
 		) {
 			return;
 		}
+
+		// make sure we have a namespace for this type
+		self.setup_namespaces_for(&fqn);
 
 		let mut ns = self
 			.wing_types
