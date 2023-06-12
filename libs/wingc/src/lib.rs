@@ -19,6 +19,7 @@ use type_check_assert::TypeCheckAssert;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
+use crate::docs::Docs;
 use crate::parser::Parser;
 use std::alloc::{alloc, dealloc, Layout};
 use std::cell::RefCell;
@@ -29,13 +30,14 @@ use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::{TypeChecker, Types};
+use crate::type_check::{FunctionParameter, TypeChecker, Types};
 
 pub mod ast;
 pub mod closure_transform;
 mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
+mod docs;
 pub mod fold;
 pub mod jsify;
 pub mod lsp;
@@ -47,7 +49,7 @@ mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 
-const WINGSDK_STD_MODULE: &'static str = "std";
+pub const WINGSDK_STD_MODULE: &'static str = "std";
 const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 const WINGSDK_UTIL_MODULE: &'static str = "util";
@@ -63,7 +65,6 @@ const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
-const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
@@ -179,10 +180,15 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii
 		UtilityFunctions::Log.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			this_type: None,
-			parameters: vec![types.string()],
+			parameters: vec![FunctionParameter {
+				name: "message".into(),
+				typeref: types.string(),
+				docs: Docs::with_summary("The message to log"),
+			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
 			js_override: Some("{console.log($args$)}".to_string()),
+			docs: Docs::with_summary("Logs a message"),
 		}),
 		scope,
 		types,
@@ -191,10 +197,15 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii
 		UtilityFunctions::Assert.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			this_type: None,
-			parameters: vec![types.bool()],
+			parameters: vec![FunctionParameter {
+				name: "condition".into(),
+				typeref: types.bool(),
+				docs: Docs::with_summary("The condition to assert"),
+			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
 			js_override: Some("{((cond) => {if (!cond) throw new Error(`assertion failed: '$args$'`)})($args$)}".to_string()),
+			docs: Docs::with_summary("Asserts that a condition is true"),
 		}),
 		scope,
 		types,
@@ -203,10 +214,15 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii
 		UtilityFunctions::Throw.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			this_type: None,
-			parameters: vec![types.string()],
+			parameters: vec![FunctionParameter {
+				typeref: types.string(),
+				name: "message".into(),
+				docs: Docs::with_summary("The message to throw"),
+			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
 			js_override: Some("{((msg) => {throw new Error(msg)})($args$)}".to_string()),
+			docs: Docs::with_summary("throws an error"),
 		}),
 		scope,
 		types,
@@ -215,10 +231,15 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii
 		UtilityFunctions::Panic.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			this_type: None,
-			parameters: vec![types.string()],
+			parameters: vec![FunctionParameter {
+				typeref: types.string(),
+				name: "message".into(),
+				docs: Docs::with_summary("The message to panic with"),
+			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
 			js_override: Some("{((msg) => {console.error(msg, (new Error()).stack);process.exit(1)})($args$)}".to_string()),
+			docs: Docs::with_summary("panics with an error"),
 		}),
 		scope,
 		types,
@@ -240,7 +261,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.unwrap()
 		.define(
 			&sym,
-			SymbolKind::make_variable(types.add_type(typ), false, true, Phase::Independent),
+			SymbolKind::make_free_variable(sym.clone(), types.add_type(typ), false, Phase::Independent),
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");

@@ -1,4 +1,4 @@
-mod codemaker;
+pub mod codemaker;
 mod files;
 
 use aho_corasick::AhoCorasick;
