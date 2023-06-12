@@ -15,6 +15,7 @@ use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
+use type_check_assert::TypeCheckAssert;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
@@ -40,6 +41,7 @@ pub mod jsify;
 pub mod lsp;
 pub mod parser;
 pub mod type_check;
+mod type_check_assert;
 pub mod visit;
 mod wasm_util;
 
@@ -291,12 +293,11 @@ pub fn compile(
 	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
-	if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
-	}
+	let type_check_diagnostics = type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
 
-	// Validate that every Expr has been type checked
-	types.check_all_exprs_type_checked();
+	// Validate that every Expr in the final tree has been type checked
+	let mut tc_assert = TypeCheckAssert::new(&types);
+	tc_assert.check(&scope);
 
 	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if found_errors() {
