@@ -7,7 +7,7 @@ keywords: [Inflights, Inflight functions, Preflight, Preflight code]
 
 ## Preflight
 
-MISSING
+TODO
 
 ## Inflight 
 
@@ -151,7 +151,7 @@ let handler = inflight (e: str): str => {
 
 ## Preflight Classes
 
-MISSING
+TODO
 
 Resources are cloud services that are part of the application. Wing uses preflight classes to
 represent these resources and expose both a *preflight API* used to define their deployment
@@ -226,5 +226,5 @@ new Group2();
 
 ## Inflight Classes
 
-MISSING
+TODO
 

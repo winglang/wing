@@ -1,5 +1,5 @@
 ---
-title: Run Locally
+title: Run locally
 id: local
 keywords: [Wing Local, Wing testing, Wing Console installation, Wing Console usage, Wing Console setup]
 ---
