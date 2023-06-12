@@ -9,13 +9,13 @@ extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
+use comp_ctx::set_custom_panic_hook;
 use diagnostic::{Diagnostic, Diagnostics};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
-use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
@@ -33,6 +33,7 @@ use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
 pub mod closure_transform;
+mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 pub mod fold;
@@ -40,7 +41,7 @@ pub mod jsify;
 pub mod lsp;
 pub mod parser;
 pub mod type_check;
-pub mod type_check_assert;
+mod type_check_assert;
 pub mod visit;
 mod wasm_util;
 
@@ -63,6 +64,7 @@ const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
+const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 
@@ -70,8 +72,6 @@ const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 
 pub struct CompilerOutput {
-	pub preflight: String,
-	// pub inflights: BTreeMap<String, String>,
 	pub diagnostics: Diagnostics,
 }
 
@@ -174,6 +174,7 @@ pub fn type_check(
 	source_path: &Path,
 	jsii_types: &mut TypeSystem,
 ) -> Diagnostics {
+	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
@@ -278,6 +279,9 @@ pub fn compile(
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
+	// Setup a custom panic hook to report panics as complitation diagnostics
+	set_custom_panic_hook();
+
 	// -- PARSING PHASE --
 	let (scope, parse_diagnostics) = parse(&source_path);
 
@@ -294,16 +298,11 @@ pub fn compile(
 	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
-	} else {
-		// empty scope, no type checking needed
-		Diagnostics::new()
-	};
+	let type_check_diagnostics = type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
 
-	// Validate that every Expr has an evaluated_type
-	let mut tc_assert = TypeCheckAssert;
-	tc_assert.visit_scope(&scope);
+	// Validate that every Expr in the final tree has been type checked
+	let mut tc_assert = TypeCheckAssert::new(&types);
+	tc_assert.check(&scope);
 
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
@@ -316,44 +315,44 @@ pub fn compile(
 
 	// -- JSIFICATION PHASE --
 
-	// Prepare output directory for support inflight code
-	fs::create_dir_all(out_dir).expect("create output dir");
-
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
 	let project_dir = absolute_project_root
 		.unwrap_or(source_path.parent().unwrap())
 		.to_path_buf();
 
 	// Verify that the project dir is absolute
-	if !project_dir.starts_with("/") {
-		let dir_str = project_dir.to_str().expect("Project dir is valid UTF-8");
-		// Check if this is a Windows path instead by checking if the second char is a colon
-		// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
-		if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
-			diagnostics.push(Diagnostic {
-				message: format!("Project directory must be absolute: {}", project_dir.display()),
-				span: None,
-			});
-			return Err(diagnostics);
-		}
+	if !is_project_dir_absolute(&project_dir) {
+		diagnostics.push(Diagnostic {
+			message: format!("Project directory must be absolute: {}", project_dir.display()),
+			span: None,
+		});
+		return Err(diagnostics);
 	}
 
-	let mut jsifier = JSifier::new(out_dir, app_name, project_dir.as_path(), true);
+	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
+	jsifier.jsify(&scope);
+	jsifier.emit_files(&out_dir);
 
-	let intermediate_js = jsifier.jsify(&scope);
-	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
-	let intermediate_file = jsifier.out_dir.join(intermediate_name);
-	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
-
-	// Filter diagnostics to only errors
 	if jsifier.diagnostics.len() > 0 {
 		return Err(jsifier.diagnostics);
 	}
 
-	return Ok(CompilerOutput {
-		preflight: intermediate_js,
-		diagnostics,
-	});
+	return Ok(CompilerOutput { diagnostics });
+}
+
+fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
+	if project_dir.starts_with("/") {
+		return true;
+	}
+
+	let dir_str = project_dir.to_str().expect("Project dir is valid UTF-8");
+	// Check if this is a Windows path instead by checking if the second char is a colon
+	// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
+	if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
+		return false;
+	}
+
+	return true;
 }
 
 #[cfg(test)]

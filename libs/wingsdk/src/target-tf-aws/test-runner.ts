@@ -79,9 +79,12 @@ export class TestRunner extends cloud.TestRunner {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "TestRunnerClient", [
-      `process.env["${this.envTestFunctionArns()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "TestRunnerClient",
+      [`process.env["${this.envTestFunctionArns()}"]`]
+    );
   }
 
   private envTestFunctionArns(): string {

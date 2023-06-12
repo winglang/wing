@@ -1,13 +1,15 @@
 use std::cell::RefCell;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::TypeRef;
+
+static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -128,6 +130,7 @@ pub enum TypeAnnotationKind {
 	String,
 	Bool,
 	Duration,
+	Void,
 	Json,
 	MutJson,
 	Optional(Box<TypeAnnotation>),
@@ -146,7 +149,7 @@ pub enum TypeAnnotationKind {
 #[derive(Debug, Clone)]
 pub struct FunctionTypeAnnotation {
 	pub param_types: Vec<TypeAnnotation>,
-	pub return_type: Option<Box<TypeAnnotation>>,
+	pub return_type: Box<TypeAnnotation>,
 	pub phase: Phase,
 }
 
@@ -157,6 +160,14 @@ pub struct UserDefinedType {
 	pub root: Symbol,
 	pub fields: Vec<Symbol>,
 	pub span: WingSpan,
+}
+
+impl UserDefinedType {
+	pub fn full_path(&self) -> Vec<Symbol> {
+		let mut path = vec![self.root.clone()];
+		path.extend(self.fields.clone());
+		path
+	}
 }
 
 impl Display for UserDefinedType {
@@ -177,6 +188,7 @@ impl Display for TypeAnnotationKind {
 			TypeAnnotationKind::String => write!(f, "str"),
 			TypeAnnotationKind::Bool => write!(f, "bool"),
 			TypeAnnotationKind::Duration => write!(f, "duration"),
+			TypeAnnotationKind::Void => write!(f, "void"),
 			TypeAnnotationKind::Json => write!(f, "Json"),
 			TypeAnnotationKind::MutJson => write!(f, "MutJson"),
 			TypeAnnotationKind::Optional(t) => write!(f, "{}?", t),
@@ -211,11 +223,7 @@ impl Display for FunctionTypeAnnotation {
 			.map(|a| format!("{}", a))
 			.collect::<Vec<String>>()
 			.join(", ");
-		let ret_type_str = if let Some(ret_val) = &self.return_type {
-			format!("{}", ret_val)
-		} else {
-			"void".to_string()
-		};
+		let ret_type_str = format!("{}", &self.return_type);
 		write!(f, "{phase_str}({params_str}): {ret_type_str}")
 	}
 }
@@ -232,7 +240,13 @@ impl FunctionSignature {
 		TypeAnnotation {
 			kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
 				param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
-				return_type: self.return_type.clone(),
+				return_type: self.return_type.clone().map_or(
+					Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::Void,
+						span: Default::default(),
+					}),
+					|t| t.clone(),
+				),
 				phase: self.phase,
 			}),
 			// Function signatures may not necessarily have spans
@@ -256,28 +270,6 @@ pub enum FunctionBody {
 	External(String),
 }
 
-impl FunctionBody {
-	pub fn as_ref(&self) -> FunctionBodyRef {
-		match self {
-			FunctionBody::Statements(statements) => FunctionBodyRef::Statements(statements),
-			FunctionBody::External(external) => FunctionBodyRef::External(external),
-		}
-	}
-}
-
-pub enum FunctionBodyRef<'a> {
-	Statements(&'a Scope),
-	External(&'a String),
-}
-
-pub trait MethodLike<'a> {
-	fn body(&self) -> FunctionBodyRef;
-	fn parameters(&self) -> &Vec<FunctionParameter>;
-	fn signature(&self) -> &FunctionSignature;
-	fn is_static(&self) -> bool;
-	fn span(&self) -> WingSpan;
-}
-
 #[derive(Debug)]
 pub struct FunctionDefinition {
 	/// The function implementation.
@@ -286,62 +278,10 @@ pub struct FunctionDefinition {
 	pub signature: FunctionSignature,
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
-
 	pub span: WingSpan,
-}
-
-impl MethodLike<'_> for FunctionDefinition {
-	fn body(&self) -> FunctionBodyRef {
-		self.body.as_ref()
-	}
-
-	fn parameters(&self) -> &Vec<FunctionParameter> {
-		&self.signature.parameters
-	}
-
-	fn signature(&self) -> &FunctionSignature {
-		&self.signature
-	}
-
-	fn is_static(&self) -> bool {
-		self.is_static
-	}
-
-	fn span(&self) -> WingSpan {
-		self.span.clone()
-	}
 }
 
 #[derive(Debug)]
-pub struct Initializer {
-	pub signature: FunctionSignature,
-	pub statements: Scope,
-	pub span: WingSpan,
-}
-
-impl MethodLike<'_> for Initializer {
-	fn body(&self) -> FunctionBodyRef {
-		FunctionBodyRef::Statements(&self.statements)
-	}
-
-	fn parameters(&self) -> &Vec<FunctionParameter> {
-		&self.signature.parameters
-	}
-
-	fn signature(&self) -> &FunctionSignature {
-		&self.signature
-	}
-
-	fn is_static(&self) -> bool {
-		true
-	}
-
-	fn span(&self) -> WingSpan {
-		self.span.clone()
-	}
-}
-
-#[derive(Derivative, Debug)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
@@ -390,11 +330,11 @@ pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
-	pub initializer: Initializer,
-	pub inflight_initializer: Option<FunctionDefinition>,
+	pub initializer: FunctionDefinition,
+	pub inflight_initializer: FunctionDefinition,
 	pub parent: Option<UserDefinedType>,
 	pub implements: Vec<UserDefinedType>,
-	pub is_resource: bool,
+	pub phase: Phase,
 }
 
 #[derive(Debug)]
@@ -538,24 +478,24 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
+	CompilerDebugPanic,
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct Expr {
+	/// An identifier that is unique among all expressions in the AST.
+	pub id: usize,
+	/// The kind of expression.
 	pub kind: ExprKind,
+	/// The span of the expression.
 	pub span: WingSpan,
-	#[derivative(Debug = "ignore")]
-	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
-		Self {
-			kind,
-			evaluated_type: RefCell::new(None),
-			span,
-		}
+		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
+
+		Self { id, kind, span }
 	}
 }
 
@@ -652,7 +592,11 @@ pub enum Reference {
 	/// A simple identifier: `x`
 	Identifier(Symbol),
 	/// A reference to a member nested inside some object `expression.x`
-	InstanceMember { object: Box<Expr>, property: Symbol },
+	InstanceMember {
+		object: Box<Expr>,
+		property: Symbol,
+		optional_accessor: bool,
+	},
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember { type_: UserDefinedType, property: Symbol },
 }
@@ -661,7 +605,11 @@ impl Display for Reference {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self {
 			Reference::Identifier(symb) => write!(f, "{}", symb.name),
-			Reference::InstanceMember { object, property } => {
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _,
+			} => {
 				let obj_str = match &object.kind {
 					ExprKind::Reference(r) => format!("{}", r),
 					_ => "object".to_string(), // TODO!

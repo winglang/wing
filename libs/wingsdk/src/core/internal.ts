@@ -1,4 +1,4 @@
-import { Duration } from "../std";
+import { Duration } from "../std/duration";
 import { IResource } from "../std/resource";
 
 export function serializeImmutableData(obj: any): string {

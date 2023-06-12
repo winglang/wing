@@ -1,16 +1,29 @@
 use crate::{
-	ast::Expr,
+	ast::{Expr, Scope},
+	type_check::Types,
 	visit::{self, Visit},
 };
 
-pub struct TypeCheckAssert;
+pub struct TypeCheckAssert<'a> {
+	types: &'a Types,
+}
 
-impl Visit<'_> for TypeCheckAssert {
+impl<'a> TypeCheckAssert<'a> {
+	pub fn new(types: &'a Types) -> Self {
+		Self { types }
+	}
+
+	pub fn check(&mut self, scope: &Scope) {
+		self.visit_scope(scope);
+	}
+}
+
+impl<'a> Visit<'_> for TypeCheckAssert<'a> {
 	fn visit_expr(&mut self, expr: &Expr) {
 		assert!(
-			expr.evaluated_type.borrow().is_some(),
+			self.types.get_expr_type(expr).is_some(),
 			"Expr was not type checked: {:?}",
-			expr
+			expr,
 		);
 		visit::visit_expr(self, expr);
 	}

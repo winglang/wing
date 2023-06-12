@@ -1,6 +1,5 @@
-# Welcome to the Wing Language! :wave:
-
-<p align="left">
+<h1 align="center">Welcome to the Wing Language! :wave:</h1>
+<p align="center">
   <a href="https://docs.winglang.io/getting-started">Quick Start</a>
   ▪︎
   <a href="http://t.winglang.io/slack">Join Slack</a>
@@ -28,9 +27,9 @@ Developing for the cloud today requires mastering various layers of cloud stack,
 
 We fulfill our mission by reducing cognitive load and increasing iteration speeds. How? by enabling you to work at a higher level of abstraction, letting you focus on business logic instead of cloud mechanics, and write much less code. We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
-<a href="https://youtu.be/vHy1TM2JzUQ" target="_blank" align="left">
-    <img src="./logo/demo.gif" alt="Wing Demo" height="300px">
-</a>
+<p align="center">
+  <img src="./logo/demo.gif" alt="Wing Demo" height="360px">
+</p>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
@@ -80,7 +79,7 @@ Wing was built from the ground up to make it an ideal choice for building applic
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
-* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/reference/wingsdk-spec) of cloud resources that lets you write cloud portable code.
+* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/contributors/rfcs/2023-01-20-wingsdk-spec) of cloud resources that lets you write cloud portable code.
 * [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that keep you in control by allowing you to customize the compilation output, such as infrastructure definitions.
 * Use any resource in the Terraform ecosystem as first-class citizen in your app.
 * [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
@@ -127,7 +126,9 @@ Alternatively, post any questions on [GitHub Discussions](https://github.com/win
 
 Want to help Wing take flight?
 Check out our [contribution guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) to learn how to set up a development environment and contribute to the project.
-We appreciate your support and look forward to learning and building together.
+You can also get started by opening the project in GitHub Codespaces.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
 
 We are incredibly grateful to our entire community for contributing bug fixes and improvements:
 

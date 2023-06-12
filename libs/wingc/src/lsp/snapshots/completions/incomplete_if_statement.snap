@@ -6,44 +6,71 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): void"
   insertText: clear($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: copy
   kind: 2
   detail: "(): ImmutableMap"
   insertText: copy($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: delete
   kind: 2
   detail: "(str): bool"
   insertText: delete($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: get
   kind: 2
   detail: "(str): T1"
   insertText: get($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: has
   kind: 2
   detail: "(str): bool"
   insertText: has($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: keys
   kind: 2
-  detail: "(): ImmutableArray"
+  detail: "(): Array<str>"
   insertText: keys($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: set
   kind: 2
   detail: "(str, T1): void"
   insertText: set($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: size
   kind: 2
   detail: "(): num"
   insertText: size($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: values
   kind: 2
   detail: "(): ImmutableArray"
   insertText: values($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 

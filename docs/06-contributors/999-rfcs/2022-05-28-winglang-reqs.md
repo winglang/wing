@@ -6,7 +6,7 @@ description: The original requirements documents for the wing language experienc
 - **Author(s):**: @eladb
 - **Submission Date**: {2022-05-28}
 - **Stage**: Approved
-- **Implementation**: [Language Specification](https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md)
+- **Implementation**: [Language Specification](https://docs.winglang.io/reference/spec)
 
 ## About this Document
 
@@ -986,7 +986,7 @@ This is a list of features we will consider for wing as it evolves:-
   workflow engines such as [AWS Step
   Functions](http://aws.amazon.com/step-functions) or [Apache
   Airflow](https://airflow.apache.org/). The
-  [functionless](https://functionless.org) project is exploring this direction
+  [functionless](https://github.com/functionless/functionless) project is exploring this direction
   with TypeScript. This can also be used to generate things like CI/CD workflows
   such as GitHub Workflow.
 

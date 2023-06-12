@@ -1,8 +1,6 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{
-	Class, Expr, FunctionBody, FunctionDefinition, Initializer, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-};
+use crate::ast::{Class, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol};
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::{LookupResult, SymbolLookupInfo};
@@ -13,6 +11,8 @@ use crate::{
 	ast::ExprKind,
 	wasm_util::{ptr_to_string, string_to_combined_ptr},
 };
+
+use super::sync::FileData;
 
 pub struct HoverVisitor<'a> {
 	pub position: Position,
@@ -145,9 +145,15 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 		self.visit_symbol(&node.name);
 
-		self.visit_constructor(&node.initializer);
+		self.visit_function_definition(&node.initializer);
 
-		self.with_scope(&node.initializer.statements, |v| {
+		let scope = if let FunctionBody::Statements(statements) = &node.initializer.body {
+			statements
+		} else {
+			panic!("Initializer cannot be 'extern'");
+		};
+
+		self.with_scope(&scope, |v| {
 			for field in &node.fields {
 				v.visit_symbol(&field.name);
 				v.visit_type_annotation(&field.member_type);
@@ -158,24 +164,6 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				v.visit_function_definition(&method.1);
 			}
 		});
-	}
-
-	fn visit_constructor(&mut self, node: &'a Initializer) {
-		if self.is_found() {
-			return;
-		}
-
-		if let Some(return_type) = &node.signature.return_type {
-			self.visit_type_annotation(return_type);
-		}
-
-		self.with_scope(&node.statements, |v| {
-			for param in &node.signature.parameters {
-				v.visit_function_parameter(&param);
-			}
-		});
-
-		self.visit_scope(&node.statements);
 	}
 
 	fn visit_symbol(&mut self, node: &'a Symbol) {
@@ -206,8 +194,8 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 	FILES.with(|files| {
 		let files = files.borrow();
-		let parse_result = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let parse_result = parse_result.expect(
+		let file_data = files.get(&params.text_document_position_params.text_document.uri.clone());
+		let file_data = file_data.expect(
 			format!(
 				"Compiled data not found for \"{}\"",
 				params.text_document_position_params.text_document.uri
@@ -215,7 +203,7 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			.as_str(),
 		);
 
-		let root_scope = &parse_result.scope;
+		let root_scope = &file_data.scope;
 
 		let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position);
 		hover_visitor.visit_scope(root_scope);
@@ -224,7 +212,7 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			// If the given symbol is in a nested identifier, we can skip looking it up in the symbol environment
 			if let Some(expr) = hover_visitor.current_expr {
 				if let ExprKind::Reference(Reference::InstanceMember { property, .. }) = &expr.kind {
-					return build_nested_identifier_hover(&property, &expr);
+					return build_nested_identifier_hover(file_data, &property, &expr);
 				}
 			}
 
@@ -290,18 +278,15 @@ fn format_unknown_symbol(symbol_name: &str) -> String {
 }
 
 /// Builds the entire Hover response for a nested identifier, which are handled differently than other "loose" symbols
-fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover> {
+fn build_nested_identifier_hover(file_data: &FileData, property: &Symbol, expr: &Expr) -> Option<Hover> {
 	let symbol_name = &property.name;
 
-	let expression_type = expr
-		.evaluated_type
-		.borrow()
-		.expect("All expressions should have a type");
+	let expr_type = file_data.types.get_expr_type(&expr).unwrap();
 
 	return Some(Hover {
 		contents: HoverContents::Markup(MarkupContent {
 			kind: MarkupKind::Markdown,
-			value: format!("```wing\n{symbol_name}: {expression_type}\n```"),
+			value: format!("```wing\n{symbol_name}: {expr_type}\n```"),
 		}),
 		// When hovering over a reference, we want to highlight the entire relevant expression
 		// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`

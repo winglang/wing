@@ -29,32 +29,6 @@ test("create a bucket", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("put json objects from bucket", async () => {
-  // GIVEN
-  const app = new SimApp();
-  cloud.Bucket._newBucket(app, "my_bucket");
-
-  const s = await app.startSimulator();
-  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
-
-  const KEY = "greeting.json";
-  const VALUE = { msg: "Hello world!" };
-
-  // WHEN
-
-  const notifyListeners = vi.spyOn(client as any, "notifyListeners");
-  await client.putJson(KEY, VALUE as any);
-  const response = await client.getJson("greeting.json");
-
-  // THEN
-  await s.stop();
-
-  expect(response).toEqual(VALUE);
-  expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
-  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.CREATE, KEY);
-});
-
 test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
@@ -155,6 +129,32 @@ test("put and get objects from bucket", async () => {
 
   expect(response).toEqual(VALUE);
   expect(listMessages(s)).toMatchSnapshot();
+});
+
+test("put and get Json object from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "greeting.json";
+  const VALUE = { msg: "Hello world!" };
+
+  // WHEN
+
+  const notifyListeners = vi.spyOn(client as any, "notifyListeners");
+  await client.putJson(KEY, VALUE as any);
+  const response = await client.getJson("greeting.json");
+
+  // THEN
+  await s.stop();
+
+  expect(response).toEqual(VALUE);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.CREATE, KEY);
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -554,7 +554,7 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
 test("check if an object exists in the bucket", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+  cloud.Bucket._newBucket(app, "my_bucket");
 
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
@@ -571,4 +571,89 @@ test("check if an object exists in the bucket", async () => {
   await s.stop();
   expect(existingObjectExists).toBe(true);
   expect(nonExistentObjectExists).toBe(false);
+});
+
+test("tryGet objects from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  await client.put(KEY, VALUE);
+  const existingObjectTryGet = await client.tryGet(KEY);
+  const nonExistentObjectTryGet = await client.tryGet("NON_EXISTENT_KEY");
+
+  // THEN
+  await s.stop();
+  expect(existingObjectTryGet).toEqual(VALUE);
+  expect(nonExistentObjectTryGet).toEqual(undefined);
+});
+
+test("tryGetJson objects from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  await client.put(KEY, VALUE);
+  const existingObjectTryGet = await client.tryGet(KEY);
+});
+
+test("tryGetJson an existing non-Json object from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  await client.put(KEY, VALUE);
+
+  // THEN
+  // it seems to throw a different error per OS/ node version
+  await expect(() => client.tryGetJson(KEY)).rejects.toThrowError();
+  await s.stop();
+});
+
+test("tryDelete objects from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY1 = "KEY";
+  const VALUE1 = "VALUE";
+  const KEY2 = "file.json";
+  const VALUE2 = { msg: "Hello world!" };
+
+  // WHEN
+  await client.put(KEY1, VALUE1);
+  await client.putJson(KEY2, VALUE2 as any);
+  const existingObject1TryDelete = await client.tryDelete(KEY1);
+  const existingObject2TryDelete = await client.tryDelete(KEY2);
+  const nonExistentObjectTryDelete = await client.tryDelete("NON_EXISTENT_KEY");
+
+  // THEN
+  await s.stop();
+  expect(existingObject1TryDelete).toEqual(true);
+  expect(existingObject2TryDelete).toEqual(true);
+  expect(nonExistentObjectTryDelete).toEqual(false);
 });

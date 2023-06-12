@@ -1,16 +1,15 @@
-use std::cell::RefCell;
-
 use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		ArgList, Class, ClassField, Expr, ExprKind, FunctionDefinition, FunctionParameter, FunctionSignature, Initializer,
+		ArgList, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
 		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	fold::{self, Fold},
 	type_check::HANDLE_METHOD_NAME,
 };
 
+const CLOSURE_CLASS_PREFIX: &str = "$Closure";
 const PARENT_THIS_NAME: &str = "__parent_this";
 
 /// Transforms inflight closures defined in preflight scopes into preflight classes.
@@ -32,13 +31,13 @@ const PARENT_THIS_NAME: &str = "__parent_this";
 ///
 /// ```wing
 /// let b = new cloud.Bucket();
-/// class $Inflight1 {
+/// class $Closure1 {
 ///   init() {}
 ///   inflight handle(message: str) {
 ///     b.put("file.txt", message);
 ///   }
 /// }
-/// let f = new $Inflight1();
+/// let f = new $Closure1();
 /// ```
 pub struct ClosureTransformer {
 	// Whether the transformer is inside a preflight or inflight scope.
@@ -47,7 +46,7 @@ pub struct ClosureTransformer {
 	// Whether the transformer is inside a scope where "this" is valid.
 	inside_scope_with_this: bool,
 	// Helper state for generating unique class names
-	inflight_counter: usize,
+	closure_counter: usize,
 	// Stores the list of class definitions that need to be added to the nearest scope
 	class_statements: Vec<Stmt>,
 	// Track the statement index of the nearest statement we're inside so that
@@ -60,7 +59,7 @@ impl ClosureTransformer {
 		Self {
 			phase: Phase::Preflight,
 			inside_scope_with_this: false,
-			inflight_counter: 0,
+			closure_counter: 0,
 			class_statements: vec![],
 			nearest_stmt_idx: 0,
 		}
@@ -80,11 +79,7 @@ impl Fold for ClosureTransformer {
 				kind: StmtKind::Let {
 					reassignable: false,
 					var_name: parent_this_name,
-					initial_value: Expr {
-						kind: ExprKind::Reference(Reference::Identifier(this_name)),
-						span: node.span.clone(),
-						evaluated_type: RefCell::new(None), // thank god we have type reference
-					},
+					initial_value: Expr::new(ExprKind::Reference(Reference::Identifier(this_name)), node.span.clone()),
 					type_: None,
 				},
 				span: node.span.clone(),
@@ -133,14 +128,6 @@ impl Fold for ClosureTransformer {
 		new_node
 	}
 
-	fn fold_initializer(&mut self, node: Initializer) -> Initializer {
-		let prev_inside_scope_with_this = self.inside_scope_with_this;
-		self.inside_scope_with_this = true;
-		let new_node = fold::fold_initializer(self, node);
-		self.inside_scope_with_this = prev_inside_scope_with_this;
-		new_node
-	}
-
 	fn fold_expr(&mut self, expr: Expr) -> Expr {
 		// Inflight closures that are themselves defined inflight do not need
 		// to be transformed, since they are not created in preflight.
@@ -159,10 +146,10 @@ impl Fold for ClosureTransformer {
 
 		match expr.kind {
 			ExprKind::FunctionClosure(func_def) => {
-				self.inflight_counter += 1;
+				self.closure_counter += 1;
 
 				let new_class_name = Symbol {
-					name: format!("$Inflight{}", self.inflight_counter),
+					name: format!("{}{}", CLOSURE_CLASS_PREFIX, self.closure_counter),
 					span: expr.span.clone(),
 				};
 				let handle_name = Symbol {
@@ -204,25 +191,21 @@ impl Fold for ClosureTransformer {
 					idx: 0,
 					kind: StmtKind::Assignment {
 						variable: Reference::InstanceMember {
-							object: Box::new(Expr {
-								kind: ExprKind::Reference(Reference::InstanceMember {
-									object: Box::new(Expr {
-										kind: ExprKind::Reference(Reference::Identifier(Symbol::new("this", expr.span.clone()))),
-										span: expr.span.clone(),
-										evaluated_type: RefCell::new(None),
-									}),
+							object: Box::new(Expr::new(
+								ExprKind::Reference(Reference::InstanceMember {
+									object: Box::new(Expr::new(
+										ExprKind::Reference(Reference::Identifier(Symbol::new("this", expr.span.clone()))),
+										expr.span.clone(),
+									)),
 									property: Symbol::new("display", expr.span.clone()),
+									optional_accessor: false,
 								}),
-								span: expr.span.clone(),
-								evaluated_type: RefCell::new(None),
-							}),
+								expr.span.clone(),
+							)),
 							property: Symbol::new("hidden", expr.span.clone()),
+							optional_accessor: false,
 						},
-						value: Expr {
-							kind: ExprKind::Literal(Literal::Boolean(true)),
-							span: expr.span.clone(),
-							evaluated_type: RefCell::new(None),
-						},
+						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), expr.span.clone()),
 					},
 					span: expr.span.clone(),
 				}];
@@ -239,21 +222,31 @@ impl Fold for ClosureTransformer {
 				let class_def = Stmt {
 					kind: StmtKind::Class(Class {
 						name: new_class_name.clone(),
-						is_resource: true,
-						initializer: Initializer {
+						phase: Phase::Preflight,
+						initializer: FunctionDefinition {
 							signature: FunctionSignature {
 								parameters: class_init_params,
 								return_type: Some(Box::new(class_type_annotation.clone())),
 								phase: Phase::Preflight,
 							},
-							statements: Scope::new(class_init_body, expr.span.clone()),
+							is_static: true,
+							body: FunctionBody::Statements(Scope::new(class_init_body, expr.span.clone())),
 							span: expr.span.clone(),
 						},
 						fields: class_fields,
 						implements: vec![],
 						parent: None,
 						methods: vec![(handle_name.clone(), new_func_def)],
-						inflight_initializer: None,
+						inflight_initializer: FunctionDefinition {
+							signature: FunctionSignature {
+								parameters: vec![],
+								return_type: None,
+								phase: Phase::Inflight,
+							},
+							is_static: false,
+							body: FunctionBody::Statements(Scope::new(vec![], expr.span.clone())),
+							span: expr.span.clone(),
+						},
 					}),
 					idx: self.nearest_stmt_idx,
 					span: expr.span.clone(),
