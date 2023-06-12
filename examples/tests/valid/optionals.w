@@ -151,13 +151,21 @@ if let o = tree.left?.left {
 
 
 // Check that we can lift optionals
+bring cloud;
+
 struct Payload {
     a: str;
     b: Map<str>?;
+    c: cloud.Bucket?;
 }
 
-let a = Payload {a: "a"};
+let payloadWithoutOptions = Payload {a: "a"};
+let payloadWithBucket = Payload {a: "a", c: new cloud.Bucket() as "orange bucket"};
 
 test "t" {
-  assert(a.b? == false);
+  assert(payloadWithoutOptions.b? == false);
+
+  if (payloadWithBucket.c?) {
+    payloadWithBucket.c?.put("x.txt", "something");
+  }
 }
