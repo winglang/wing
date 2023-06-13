@@ -529,6 +529,15 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
+      StmtKind::Super { 
+        arg_list 
+      } => {
+        let mut args = "".to_string();
+        if let Some(a) = arg_list {
+          args = self.jsify_arg_list(&a, None, None, ctx);
+        }
+        CodeMaker::one_line(format!("super(scope,id,{});", args))
+      }
 			StmtKind::Bring {
 				module_name,
 				identifier,
