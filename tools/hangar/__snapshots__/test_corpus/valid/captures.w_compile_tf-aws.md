@@ -524,7 +524,7 @@ class $Root extends $stdlib.std.Resource {
     const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PrivateBucket",{ public: false });
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     const handler = new $Closure1(this,"$Closure1");
-    (queue.addConsumer(handler,{ batchSize: 5 }));
+    (queue.setConsumer(handler,{ batchSize: 5 }));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: Object.freeze({}) });
     const emptyEnv = Object.freeze({});
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: emptyEnv });

@@ -744,25 +744,25 @@ new cloud.Queue(props?: QueueProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.addConsumer">addConsumer</a></code> | Create a function to consume messages from this queue. |
+| <code><a href="#@winglang/sdk.cloud.Queue.setConsumer">setConsumer</a></code> | Create a function to consume messages from this queue. |
 
 ---
 
-##### `addConsumer` <a name="addConsumer" id="@winglang/sdk.cloud.Queue.addConsumer"></a>
+##### `setConsumer` <a name="setConsumer" id="@winglang/sdk.cloud.Queue.setConsumer"></a>
 
 ```wing
-addConsumer(handler: IQueueAddConsumerHandler, props?: QueueAddConsumerProps): Function
+setConsumer(handler: IQueueAddConsumerHandler, props?: QueueAddConsumerProps): Function
 ```
 
 Create a function to consume messages from this queue.
 
-###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.addConsumer.parameter.handler"></a>
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.handler"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>
 
 ---
 
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.addConsumer.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.QueueAddConsumerProps">QueueAddConsumerProps</a>
 
@@ -2302,7 +2302,7 @@ Whether to cache the value.
 
 ### QueueAddConsumerProps <a name="QueueAddConsumerProps" id="@winglang/sdk.cloud.QueueAddConsumerProps"></a>
 
-Options for Queue.addConsumer.
+Options for Queue.setConsumer.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueAddConsumerProps.Initializer"></a>
 
@@ -5551,7 +5551,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueAddConsumerHandlerClient](#@winglang/sdk.cloud.IQueueAddConsumerHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Queue.addConsumer`.
+Represents a resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>

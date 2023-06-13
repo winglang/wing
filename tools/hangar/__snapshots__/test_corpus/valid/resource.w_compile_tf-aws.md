@@ -1134,7 +1134,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
-        (this.q.addConsumer(new $Closure3(this,"$Closure3")));
+        (this.q.setConsumer(new $Closure3(this,"$Closure3")));
         class $Closure4 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);

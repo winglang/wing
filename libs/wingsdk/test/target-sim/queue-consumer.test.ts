@@ -36,7 +36,7 @@ test("pushing messages through a queue", async () => {
           console.log("Received " + event);
         }`
       );
-      queue.addConsumer(processor);
+      queue.setConsumer(processor);
     }
   }
 
