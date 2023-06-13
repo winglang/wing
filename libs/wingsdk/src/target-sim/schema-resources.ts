@@ -1,4 +1,4 @@
-import { ColumnType, HttpMethod, OpenApiSpec } from "../cloud";
+import { ApiCorsProps, ColumnType, HttpMethod, OpenApiSpec } from "../cloud";
 import { Json } from "../std";
 import {
   BaseResourceAttributes,
@@ -29,6 +29,7 @@ export interface ApiSchema extends BaseResourceSchema {
   readonly type: typeof API_TYPE;
   readonly props: {
     openApiSpec: OpenApiSpec;
+    cors?: ApiCorsProps;
   };
   readonly attrs: ApiAttributes & BaseResourceAttributes;
 }

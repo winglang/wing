@@ -38,6 +38,7 @@ export class Api
     props;
     this.routes = [];
     this.context = context;
+    const { cors } = props;
 
     // Set up an express server that handles the routes.
     this.app = express();
@@ -46,6 +47,35 @@ export class Api
     // matching the limit to aws api gateway's payload size limit:
     // https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
     this.app.use(express.text({ limit: "10mb", type: "*/*" }));
+
+    // Set up CORS headers for options requests.
+    if (cors) {
+      // inspired by https://github.com/expressjs/cors/blob/f038e7722838fd83935674aa8c5bf452766741fb/lib/index.js#L159-L190
+      const { origins, methods, headers, exposedHeaders } = cors;
+      this.app.use((req, res, next) => {
+        const responseHeaders: Record<string, string> = {};
+        const method = req.method && req.method.toUpperCase && req.method.toUpperCase();
+
+        responseHeaders["Access-Control-Allow-Origin"] = origins.join(",");
+        responseHeaders["Access-Control-Allow-Methods"] = methods.join(",");
+        responseHeaders["Access-Control-Expose-Headers"] = exposedHeaders.join(",");
+
+        if (method === 'OPTIONS') {
+          if (headers) {
+            responseHeaders["Access-Control-Allow-Headers"] = headers.join(",");
+          }
+          for (const key of Object.keys(responseHeaders)) {
+            res.setHeader(key, responseHeaders[key]);
+          }
+          res.status(204).send();
+        } else {
+          for (const key of Object.keys(responseHeaders)) {
+            res.setHeader(key, responseHeaders[key]);
+          }
+          next();
+        }
+      });
+    }
   }
 
   public async addEventSubscription(

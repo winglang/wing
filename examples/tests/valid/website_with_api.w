@@ -1,7 +1,15 @@
 bring cloud;
 
 //needs to be written before the website (so the website will be able to use it's url on sim env)
-let api = new cloud.Api();
+let api = new cloud.Api(
+  cors: cloud.ApiCorsProps {
+    origins: ["*"],
+    methods: [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],
+    headers: ["Content-Type"],
+    allowCredentials: false,
+    exposedHeaders: ["Content-Type"]
+  }
+);
 
 let website = new cloud.Website(path: "./website_with_api");
 
@@ -52,6 +60,5 @@ let optionsHandler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
 
 api.get("/users", getHandler);
 api.post("/users", postHandler);
-api.options("/users", optionsHandler);
 
 website.addJson("config.json", { apiUrl: api.url });

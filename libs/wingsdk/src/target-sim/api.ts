@@ -8,6 +8,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
+import { Construct } from "constructs";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -15,7 +16,15 @@ import { BaseResourceSchema } from "../testing/simulator";
  * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 export class Api extends cloud.Api implements ISimulatorResource {
+  public readonly cors?: cloud.ApiCorsProps;
+
   private eventMappings: { [key: string]: EventMapping } = {};
+
+  constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
+    super(scope, id, props);
+
+    this.cors = props.cors
+  }
 
   public get url(): string {
     return simulatorAttrToken(this, "url");
@@ -201,6 +210,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       path: this.node.path,
       props: {
         openApiSpec: this._getApiSpec(),
+        cors: this.cors,
       },
       attrs: {} as any,
     };

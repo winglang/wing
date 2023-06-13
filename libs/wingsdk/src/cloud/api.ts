@@ -10,10 +10,51 @@ import { IResource, Resource } from "../std/resource";
 export const API_FQN = fqnForType("cloud.Api");
 
 /**
+ * Cors Properties for `Api`.
+ */
+export interface ApiCorsProps {
+  /**
+   * The list of allowed origins.
+   * @example ["https://example.com"]
+   */
+  readonly origins: Array<string>;
+
+  /**
+   * The list of allowed methods.
+   * @example [HttpMethod.GET, HttpMethod.POST]
+   */
+  readonly methods: Array<HttpMethod>;
+
+  /**
+   * The list of allowed headers.
+   * @example ["Content-Type"]
+   */
+  readonly headers?: Array<string>;
+
+  /**
+   * The list of exposed headers.
+   * @example ["Content-Type"]
+   */
+  readonly exposedHeaders: Array<string>;
+
+  /**
+   * Whether to allow credentials.
+   */
+  readonly allowCredentials: boolean;
+}
+
+/**
  * Properties for `Api`.
  */
 
-export interface ApiProps {}
+export interface ApiProps {
+  /**
+   * Options for configuring the API's CORS behavior across all routes.
+   * Options can also be overridden on a per-route basis. (not yet implemented)
+   * @default - CORS is disabled
+   */
+  readonly cors?: ApiCorsProps;
+}
 /**
  * The OpenAPI spec.
  */
