@@ -6,8 +6,8 @@ use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
+use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
 use crate::fold::Fold;
-use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};

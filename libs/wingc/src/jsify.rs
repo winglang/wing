@@ -182,7 +182,7 @@ impl<'a> JSifier<'a> {
 
 		match self.files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
 			Ok(()) => {}
-			Err(err) => self.diagnostics.push(err.into()),
+			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 
@@ -190,7 +190,7 @@ impl<'a> JSifier<'a> {
 	pub fn emit_files(&mut self, out_dir: &Path) {
 		match self.files.emit_files(out_dir) {
 			Ok(()) => {}
-			Err(err) => self.diagnostics.push(err.into()),
+			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 
@@ -1284,7 +1284,7 @@ impl<'a> JSifier<'a> {
 
 		match self.files.add_file(inflight_filename(class), code.to_string()) {
 			Ok(()) => {}
-			Err(err) => self.diagnostics.push(err.into()),
+			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 

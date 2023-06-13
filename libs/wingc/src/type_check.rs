@@ -9,7 +9,7 @@ use crate::ast::{
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::{
 	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON,
