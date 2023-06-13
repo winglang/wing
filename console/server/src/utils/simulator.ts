@@ -1,6 +1,8 @@
 import { testing, cloud } from "@winglang/sdk";
 import Emittery from "emittery";
 
+import { formatWingError } from "./format-wing-error.js";
+
 export interface SimulatorEvents {
   starting: { instance: testing.Simulator };
   started: undefined;
@@ -51,7 +53,12 @@ export const createSimulator = (): Simulator => {
     } catch (error) {
       await events.emit(
         "error",
-        new Error(`Failed to start simulator.\n\n${error}`, { cause: error }),
+        new Error(
+          `Failed to start simulator.\n\n${await formatWingError(error)}`,
+          {
+            cause: error,
+          },
+        ),
       );
     }
   };

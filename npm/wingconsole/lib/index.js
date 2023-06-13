@@ -16,7 +16,7 @@ const findImportName = () => {
   if (!availablePackages.has(query)) {
     throw new Error(`[wingconsole] Unsupported platform/arch: ${query}`);
   }
-  return `@wingconsole/desktop-${query}/lib/index.js`;
+  return `@wingconsole/desktop-${query}`;
 };
 
 export const open = async () => {

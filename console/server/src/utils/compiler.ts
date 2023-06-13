@@ -4,6 +4,8 @@ import * as wing from "@winglang/compiler";
 import chokidar from "chokidar";
 import Emittery from "emittery";
 
+import { formatWingError } from "./format-wing-error.js";
+
 export interface CompilerEvents {
   compiling: undefined;
   compiled: { simfile: string };
@@ -39,14 +41,11 @@ export const createCompiler = (wingfile: string): Compiler => {
     try {
       isCompiling = true;
       await events.emit("compiling");
-      console.log({ simfile });
       const outdir = await wing.compile(wingfile, {
         target: wing.Target.SIM,
       });
-      console.log({ outdir });
       await events.emit("compiled", { simfile });
     } catch (error) {
-      console.log({ error });
       // There's no point in showing errors if we're going to recompile anyway.
       if (shouldCompileAgain) {
         return;
@@ -54,7 +53,9 @@ export const createCompiler = (wingfile: string): Compiler => {
 
       await events.emit(
         "error",
-        new Error(`Failed to compile.\n\n${error}`, { cause: error }),
+        new Error(`Failed to compile.\n\n${await formatWingError(error)}`, {
+          cause: error,
+        }),
       );
     } finally {
       isCompiling = false;
