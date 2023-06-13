@@ -1,5 +1,3 @@
-use std::borrow::Borrow;
-
 use indexmap::IndexMap;
 
 use crate::{
@@ -72,28 +70,6 @@ impl ClosureTransformer {
 impl Fold for ClosureTransformer {
 	fn fold_scope(&mut self, node: Scope) -> Scope {
 		let mut statements = vec![];
-
-		// If we are inside a scope with "this", add define `let __parent_this = this` which can be
-		// used by the newly-created preflight classes
-		// if self.inside_scope_with_this {
-		// 	let parent_this_name = Symbol::new(PARENT_THIS_NAME, WingSpan::default());
-		// 	let this_name = Symbol::new("this", WingSpan::default());
-		// 	let parent_this_def = Stmt {
-		// 		kind: StmtKind::Let {
-		// 			reassignable: false,
-		// 			var_name: parent_this_name,
-		// 			initial_value: Expr::new(
-		// 				ExprKind::Reference(Reference::Identifier(this_name)),
-		// 				WingSpan::default(),
-		// 			),
-		// 			type_: None,
-		// 		},
-		// 		span: WingSpan::default(),
-		// 		idx: 0,
-		// 	};
-
-		// 	statements.push(parent_this_def);
-		// }
 
 		for stmt in node.statements {
 			// TODO: can we remove "idx" from Stmt to avoid having to reason about this?
@@ -221,22 +197,26 @@ impl Fold for ClosureTransformer {
 					span: WingSpan::default(),
 				}];
 
-        // const parent_this_name_${closure_number}
-        let parent_this_name = Symbol::new(format!("{}_{}", PARENT_THIS_NAME, self.closure_counter), WingSpan::default());
-        let this_name = Symbol::new("this", WingSpan::default());
-        let parent_this_def = Stmt {
-          kind: StmtKind::Let {
-            reassignable: false,
-            var_name: parent_this_name,
-            initial_value: Expr::new(
-              ExprKind::Reference(Reference::Identifier(this_name)),
-              WingSpan::default(),
-            ),
-            type_: None,
-          },
-          span: WingSpan::default(),
-          idx: 0,
-        };
+        // If we are inside a scope with "this", add define `let __parent_this_${closure_count} = this` which can be
+		    // used by the newly-created preflight classes
+        if self.inside_scope_with_this {
+          let parent_this_name = Symbol::new(format!("{}_{}", PARENT_THIS_NAME, self.closure_counter), WingSpan::default());
+          let this_name = Symbol::new("this", WingSpan::default());
+          let parent_this_def = Stmt {
+            kind: StmtKind::Let {
+              reassignable: false,
+              var_name: parent_this_name,
+              initial_value: Expr::new(
+                ExprKind::Reference(Reference::Identifier(this_name)),
+                WingSpan::default(),
+              ),
+              type_: None,
+            },
+            span: WingSpan::default(),
+            idx: 0,
+          };
+          self.class_statements.push(parent_this_def);
+        }
 
 				// class_def :=
 				// ```
@@ -300,7 +280,6 @@ impl Fold for ClosureTransformer {
 					WingSpan::default(),
 				);
 
-        self.class_statements.push(parent_this_def);
 				self.class_statements.push(class_def);
 
 				new_class_instance
