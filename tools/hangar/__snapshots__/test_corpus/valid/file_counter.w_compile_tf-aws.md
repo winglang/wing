@@ -286,7 +286,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 100 });
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue",{ timeout: (std.Duration.fromSeconds(10)) });
     const handler = new $Closure1(this,"$Closure1");
     (queue.addConsumer(handler));
   }

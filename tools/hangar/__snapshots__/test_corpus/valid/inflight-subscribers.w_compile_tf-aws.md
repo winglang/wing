@@ -365,10 +365,10 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic").onMessage(new $Closure1(this,"$Closure1"),{
-    "timeout": $stdlib.std.Duration.fromSeconds(180),}
+    "timeout": (std.Duration.fromSeconds(180)),}
     ));
     (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue").addConsumer(new $Closure2(this,"$Closure2"),{
-    "timeout": $stdlib.std.Duration.fromSeconds(180),}
+    "timeout": (std.Duration.fromSeconds(180)),}
     ));
   }
 }

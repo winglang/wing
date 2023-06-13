@@ -42,8 +42,8 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const dur = $stdlib.std.Duration.fromSeconds(60);
-    const dur2 = $stdlib.std.Duration.fromSeconds(600);
+    const dur = (std.Duration.fromSeconds(60));
+    const dur2 = (std.Duration.fromSeconds(600));
     const f =  (d) =>  {
     }
     ;

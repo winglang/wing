@@ -131,22 +131,51 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_duration(&self, node: &Node) -> DiagnosticResult<Literal> {
+	fn build_duration(&self, node: &Node) -> DiagnosticResult<Expr> {
 		let value = self.check_error(node.named_child(0).unwrap(), "duration")?;
-		let value_text = self.node_text(&self.get_child_field(&value, "value")?);
+		let value_literal = self
+			.node_text(&self.get_child_field(&value, "value")?)
+			.parse::<f64>()
+			.expect("Duration string");
 
-		match value.kind() {
-			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
-			"minutes" => Ok(Literal::Duration(
-				// Specific "Minutes" duration needed here
-				value_text.parse::<f64>().expect("Duration string") * 60_f64,
-			)),
-			"hours" => Ok(Literal::Duration(
-				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
-			)),
-			"ERROR" => self.add_error("Expected duration type", &node),
-			other => self.report_unimplemented_grammar(other, "duration type", node),
-		}
+		let seconds = match value.kind() {
+			"seconds" => value_literal,
+			"minutes" => value_literal * 60_f64,
+			"hours" => value_literal * 3600_f64,
+			"ERROR" => self.add_error("Expected duration type", &node)?,
+			other => self.report_unimplemented_grammar(other, "duration type", node)?,
+		};
+		let span = self.node_span(node);
+		// represent duration literals as the AST equivalent of `std.Duration.fromSeconds(value)`
+		Ok(Expr::new(
+			ExprKind::Call {
+				callee: Box::new(Expr::new(
+					ExprKind::Reference(Reference::TypeMember {
+						type_: UserDefinedType {
+							root: Symbol {
+								name: WINGSDK_STD_MODULE.to_string(),
+								span: span.clone(),
+							},
+							fields: vec![Symbol {
+								name: "Duration".to_string(),
+								span: span.clone(),
+							}],
+							span: span.clone(),
+						},
+						property: Symbol {
+							name: "fromSeconds".to_string(),
+							span: span.clone(),
+						},
+					}),
+					span.clone(),
+				)),
+				arg_list: ArgList {
+					pos_args: vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
+					named_args: IndexMap::new(),
+				},
+			},
+			span.clone(),
+		))
 	}
 
 	fn node_span(&self, node: &Node) -> WingSpan {
@@ -1269,10 +1298,7 @@ impl<'s> Parser<'s> {
 				})),
 				expression_span,
 			)),
-			"duration" => Ok(Expr::new(
-				ExprKind::Literal(self.build_duration(&expression_node)?),
-				expression_span,
-			)),
+			"duration" => self.build_duration(&expression_node),
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),

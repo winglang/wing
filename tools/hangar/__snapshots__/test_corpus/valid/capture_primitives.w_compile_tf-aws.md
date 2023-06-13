@@ -222,7 +222,7 @@ class $Root extends $stdlib.std.Resource {
     const myNum = 1234;
     const myBool = true;
     const mySecondBool = false;
-    const myDur = $stdlib.std.Duration.fromSeconds(600);
+    const myDur = (std.Duration.fromSeconds(600));
     const handler = new $Closure1(this,"$Closure1");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler);
   }

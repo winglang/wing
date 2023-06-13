@@ -519,7 +519,6 @@ pub enum Literal {
 	String(String),
 	InterpolatedString(InterpolatedString),
 	Number(f64),
-	Duration(f64),
 	Boolean(bool),
 	Nil,
 }
