@@ -32,7 +32,9 @@ export class Util {
    * @param duration The duration that has to pass before the Promise is resolved.
    */
   public static async sleep(duration: Duration): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, duration.seconds * 1000));
+    return new Promise((resolve) =>
+      setTimeout(resolve, duration.seconds * 1000)
+    );
   }
 
   /**

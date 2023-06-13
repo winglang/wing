@@ -12,6 +12,14 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: sleep
+  kind: 2
+  detail: "(duration: duration): void"
+  insertText: sleep($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: tryEnv
   kind: 2
   detail: "(name: str): str?"
