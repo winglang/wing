@@ -508,6 +508,24 @@ Duration <DURATION>
 "
 `;
 
+exports[`diags_with_multibyte_chars.w 1`] = `
+"error: Unknown symbol \\"asdf\\"
+  --> ../../../examples/tests/invalid/diags_with_multibyte_chars.w:4:1
+  |
+4 | asdf;
+  | ^^^^ Unknown symbol \\"asdf\\"
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`enums.w 1`] = `
 "error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
   --> ../../../examples/tests/invalid/enums.w:5:21
