@@ -13,6 +13,7 @@ import { Secret } from "./secret";
 import { Service } from "./service";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
+import { SimTokens } from "./tokens";
 import { Topic } from "./topic";
 import { Website } from "./website";
 import {
@@ -47,6 +48,7 @@ export const SIMULATOR_FILE_PATH = "simulator.json";
 export class App extends core.App {
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
+  public readonly _tokens: SimTokens;
 
   /**
    * The test runner for this app.
@@ -59,6 +61,7 @@ export class App extends core.App {
     super(undefined as any, "root");
     this.outdir = props.outdir ?? ".";
     this.isTestEnvironment = props.isTestEnvironment ?? false;
+    this._tokens = new SimTokens();
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
   }

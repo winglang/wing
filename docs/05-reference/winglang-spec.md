@@ -2748,7 +2748,7 @@ let filterFn = inflight (event: cloud.QueueEvent) => {
 
 queue = cloud.Queue();
 filter = cloud.Function(filterFn);
-queue.addConsumer(filter);
+queue.setConsumer(filter);
 ```
 
 [`▲ top`][top]

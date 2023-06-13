@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\npreflight var xoo: str\n```\n---"
+range:
+  start:
+    line: 2
+    character: 4
+  end:
+    line: 2
+    character: 7
+

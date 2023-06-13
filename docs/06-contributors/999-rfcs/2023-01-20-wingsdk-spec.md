@@ -448,7 +448,7 @@ resource Queue {
   /**
    * Run an inflight in a cloud function whenever a message is pushed to the queue.
    */
-  addConsumer(fn: inflight (message: Json) => void, opts: QueueAddConsumerProps?): void;
+  setConsumer(fn: inflight (message: Json) => void, opts: QueueAddConsumerProps?): void;
 
   /**
    * Return the approximate message count of the queue.

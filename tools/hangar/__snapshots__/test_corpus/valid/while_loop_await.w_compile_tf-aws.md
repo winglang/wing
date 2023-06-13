@@ -217,7 +217,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     const handler = new $Closure1(this,"$Closure1");
-    (queue.addConsumer(handler));
+    (queue.setConsumer(handler));
   }
 }
 class $App extends $AppBase {
