@@ -1,4 +1,3 @@
-use colored::Colorize;
 use derivative::Derivative;
 use duplicate::duplicate_item;
 
@@ -33,8 +32,6 @@ pub struct SymbolEnv {
 
 impl Display for SymbolEnv {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		colored::control::set_override(true);
-
 		let mut level = 0;
 		let mut env = self;
 		loop {
@@ -42,9 +39,9 @@ impl Display for SymbolEnv {
 			let mut items = vec![];
 			for (name, (_, kind)) in &env.symbol_map {
 				let repr = match kind {
-					SymbolKind::Type(t) => format!("{} [type]", t).blue(),
-					SymbolKind::Variable(v) => format!("{}", v.type_).red(),
-					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
+					SymbolKind::Type(t) => format!("{} [type]", t),
+					SymbolKind::Variable(v) => format!("{}", v.type_),
+					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name),
 				};
 				items.push(format!("{} => {}", name, repr));
 			}
@@ -58,8 +55,6 @@ impl Display for SymbolEnv {
 				break;
 			}
 		}
-
-		colored::control::unset_override();
 
 		Ok(())
 	}

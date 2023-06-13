@@ -1,4 +1,9 @@
+bring cloud;
+
 class A {
-  init() {}
-  🗺️
+  b: cloud.Bucket;
+  init() {
+    this.b = new cloud.Bucket();
+    🗺️;
+  }
 }
