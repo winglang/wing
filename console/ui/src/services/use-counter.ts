@@ -9,7 +9,7 @@ export const useCounter = ({ resourcePath }: UseCounterOptions) => {
   const incrementCounter = trpc["counter.inc"].useMutation();
   const decrementCounter = trpc["counter.dec"].useMutation();
   const counterValue = trpc["counter.peek"].useQuery({ resourcePath });
-  const resetCounter = trpc["counter.reset"].useMutation();
+  const resetCounter = trpc["counter.set"].useMutation();
 
   const [currentValue, setCurrentValue] = useState(0);
 
@@ -26,7 +26,7 @@ export const useCounter = ({ resourcePath }: UseCounterOptions) => {
   };
 
   const reset = () => {
-    resetCounter.mutate({ resourcePath });
+    resetCounter.mutate({ resourcePath, value: 0 });
   };
 
   return {

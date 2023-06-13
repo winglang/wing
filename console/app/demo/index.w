@@ -8,9 +8,9 @@ let api = new cloud.Api();
 api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     status: 200,
-    body: {
+    body: Json.stringify({
       query: Json (Json req).get("query"),
-    }
+    })
   };
 });
 api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
@@ -75,7 +75,7 @@ rateSchedule.onTick(inflight () => {
 });
 
 let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
-  cron: "* * * * *"
+  cron: "* * * * ?"
 }) as "Cron Schedule";
 
 cronSchedule.onTick(inflight () => {
@@ -112,6 +112,6 @@ test "Add fixtures" {
   topic.publish("Hello, topic!");
 
   log("Setting up counter..");
-  counter.reset();
+  counter.set(0);
   counter.inc(100);
 }

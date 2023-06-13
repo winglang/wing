@@ -52,10 +52,11 @@ export const createCounterRouter = () => {
         const response = await client.peek();
         return response;
       }),
-    "counter.reset": createProcedure
+    "counter.set": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),
+          value: z.number(),
         }),
       )
       .mutation(async ({ input, ctx }) => {
@@ -63,7 +64,7 @@ export const createCounterRouter = () => {
         const client = simulator.getResource(
           input.resourcePath,
         ) as ICounterClient;
-        const response = await client.reset();
+        const response = await client.set(input.value);
         return response;
       }),
   });
