@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { promises as fsPromise } from "fs";
 import { relative } from "path";
 
 import chalk from "chalk";
@@ -53,7 +53,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         // file_id might be "" if the span is synthetic (see #2521)
         if (span !== null && span.file_id) {
           // `span` should only be null if source file couldn't be read etc.
-          const source = readFileSync(span.file_id, "utf8");
+          const source = await fsPromise.readFile(span.file_id, "utf8");
           const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
           const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
           files.push({ name: span.file_id, source });
