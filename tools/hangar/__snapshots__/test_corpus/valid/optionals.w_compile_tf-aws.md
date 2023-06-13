@@ -42,10 +42,10 @@ module.exports = function({  }) {
 
 ## inflight.Sub.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ Super }) {
   class Sub extends Super {
     constructor({ name }) {
-      super(name);
+      super({name});
     }
     async $inflight_init()  {
     }
@@ -57,10 +57,10 @@ module.exports = function({  }) {
 
 ## inflight.Sub1.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ Super }) {
   class Sub1 extends Super {
     constructor({ name }) {
-      super(name);
+      super({name});
     }
     async $inflight_init()  {
     }
@@ -300,8 +300,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Sub.js";
+        const SuperClient = Super._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
+            Super: ${SuperClient.text},
           })
         `);
       }
@@ -331,8 +333,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Sub1.js";
+        const SuperClient = Super._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
+            Super: ${SuperClient.text},
           })
         `);
       }
