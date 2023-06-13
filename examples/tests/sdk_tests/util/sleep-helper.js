@@ -1,3 +1,3 @@
 exports.getTime = function(){
-  return new new Date().getTime();
+  return (new Date()).getTime();
 };

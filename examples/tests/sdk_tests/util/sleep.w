@@ -4,11 +4,11 @@ class JSHelper {
   extern "./sleep-helper.js" static inflight getTime(): num;
 }
 
-
+let oneHundredMiliseconds = 0.1s;
 test "sleep a second" {
   let start = JSHelper.getTime();
-  util.sleep(1s);
+  util.sleep(oneHundredMiliseconds);
   let end = JSHelper.getTime();
-  assert(end - start > 800 );
-  assert(end - start < 1200 );
+  assert(end - start > 80 );
+  assert(end - start < 120 );
 }
