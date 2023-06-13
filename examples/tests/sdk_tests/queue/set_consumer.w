@@ -21,14 +21,14 @@ class TestHelper {
   extern "../external/sleep.js" inflight sleep(milli: num);
 }
 
-q.addConsumer(inflight (msg: str): str => {
+q.setConsumer(inflight (msg: str): str => {
   c.inc();
 });
 
 let js = new TestHelper();
 
 let predicate = new Predicate(c);
-test "addConsumer" {
+test "setConsumer" {
   q.push("hello");
   q.push("world");
 

@@ -12,4 +12,4 @@ let handler = inflight (body: str): str => {
     }
 };
 
-queue.addConsumer(handler);
+queue.setConsumer(handler);

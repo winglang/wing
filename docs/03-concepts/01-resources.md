@@ -31,7 +31,7 @@ class SafeQueue extends cloud.Queue {
   init() {
     let dlq = new cloud.Queue();
 
-    dlq.addConsumer(inflight (m: str) => {
+    dlq.setConsumer(inflight (m: str) => {
       log.error("dead-letter: ${m}");
     });
 
