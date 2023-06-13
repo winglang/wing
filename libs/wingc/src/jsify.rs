@@ -914,7 +914,7 @@ impl<'a> JSifier<'a> {
 		// Find all free variables in the class, and return a list of their symbols
 		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
 
-    if let Some(parent) = &class.parent {
+		if let Some(parent) = &class.parent {
 			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
 			captured_types.insert(parent.full_path(), parent_type);
 		}
