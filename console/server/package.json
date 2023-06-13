@@ -15,8 +15,8 @@
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
   },
   "dependencies": {
-    "@winglang/compiler": "^0.19.17",
-    "@winglang/sdk": "^0.19.17",
+    "@winglang/compiler": "^0.21.1",
+    "@winglang/sdk": "^0.21.1",
     "codespan-wasm": "^0.4.0",
     "debug": "^4.3.4",
     "ms": "^2.1.3"
