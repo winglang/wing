@@ -1,3 +1,4 @@
+use colored::Colorize;
 use derivative::Derivative;
 use duplicate::duplicate_item;
 
@@ -6,8 +7,11 @@ use crate::{
 	diagnostic::TypeError,
 	type_check::{SymbolKind, Type, TypeRef},
 };
-use std::collections::{btree_map, BTreeMap, HashSet};
 use std::fmt::Debug;
+use std::{
+	collections::{btree_map, BTreeMap, HashSet},
+	fmt::Display,
+};
 
 use super::{UnsafeRef, VariableInfo};
 
@@ -25,6 +29,40 @@ pub struct SymbolEnv {
 	pub is_init: bool,
 	pub phase: Phase,
 	statement_idx: usize,
+}
+
+impl Display for SymbolEnv {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		colored::control::set_override(true);
+
+		let mut level = 0;
+		let mut env = self;
+		loop {
+			write!(f, "level {}: {{ ", level)?;
+			let mut items = vec![];
+			for (name, (_, kind)) in &env.symbol_map {
+				let repr = match kind {
+					SymbolKind::Type(t) => format!("{} [type]", t).blue(),
+					SymbolKind::Variable(v) => format!("{}", v.type_).red(),
+					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
+				};
+				items.push(format!("{} => {}", name, repr));
+			}
+			write!(f, "{} }}", items.join(", "))?;
+
+			if let Some(parent) = &env.parent {
+				env = parent;
+				level += 1;
+				writeln!(f)?; // new line
+			} else {
+				break;
+			}
+		}
+
+		colored::control::unset_override();
+
+		Ok(())
+	}
 }
 
 impl Debug for SymbolEnv {

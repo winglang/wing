@@ -520,11 +520,14 @@ impl<'a> JSifier<'a> {
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, false, ctx).to_string(),
 			},
-    	ExprKind::CompilerDebugPanic => {
+			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during jsifying)
 				dbg_panic!();
 				"".to_string()
 			},
+			ExprKind::CompilerDebugEnv => {
+				"".to_string()
+			}
 		}
 	}
 

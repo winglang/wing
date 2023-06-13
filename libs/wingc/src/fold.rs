@@ -309,6 +309,7 @@ where
 			dbg_panic!(); // Handle the debug panic expression (during folding)
 			ExprKind::CompilerDebugPanic
 		}
+		ExprKind::CompilerDebugEnv => ExprKind::CompilerDebugEnv,
 	};
 	Expr {
 		id: node.id,

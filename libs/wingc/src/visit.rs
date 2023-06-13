@@ -365,6 +365,7 @@ where
 			// Handle the debug panic expression (during visiting)
 			dbg_panic!();
 		}
+		ExprKind::CompilerDebugEnv => {}
 	}
 }
 

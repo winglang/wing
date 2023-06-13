@@ -466,6 +466,7 @@ pub enum ExprKind {
 	},
 	FunctionClosure(FunctionDefinition),
 	CompilerDebugPanic,
+	CompilerDebugEnv,
 }
 
 #[derive(Debug)]

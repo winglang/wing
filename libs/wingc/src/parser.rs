@@ -1438,6 +1438,7 @@ impl<'s> Parser<'s> {
 				dbg_panic!();
 				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
 			}
+			"compiler_dbg_env" => Ok(Expr::new(ExprKind::CompilerDebugEnv, expression_span)),
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
 	}

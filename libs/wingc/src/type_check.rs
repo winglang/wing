@@ -1603,6 +1603,14 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(*arg_type, param.typeref, arg_expr);
 				}
 
+				// If the function is "wingc_env", then print out the current environment
+				if let ExprKind::Reference(Reference::Identifier(ident)) = &callee.kind {
+					if ident.name == "wingc_env" {
+						println!("[symbol environment at {}]", exp.span().to_string());
+						println!("{}", env.to_string());
+					}
+				}
+
 				func_sig.return_type
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
@@ -1769,6 +1777,10 @@ impl<'a> TypeChecker<'a> {
 					message: "Panic expression".to_string(),
 					span: exp.span.clone(),
 				})
+			}
+			ExprKind::CompilerDebugEnv => {
+				println!("{}", env);
+				self.types.anything()
 			}
 		}
 	}
