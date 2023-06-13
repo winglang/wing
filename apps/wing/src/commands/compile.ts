@@ -151,10 +151,9 @@ function byteOffsetFromLineAndColumn(source: string, line: number, column: numbe
   for (let i = 0; i < line; i++) {
     offset += lines[i].length + 1;
   }
-  offset += column;
 
   // Convert char offset to byte offset
   const encoder = new TextEncoder();
   const srouce_bytes = encoder.encode(source.substring(0, offset));
-  return srouce_bytes.length;
+  return srouce_bytes.length + column;
 }
