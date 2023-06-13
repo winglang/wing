@@ -26,7 +26,7 @@ let handler = inflight (message: str): str => {
   return message;
 };
 
-queue.addConsumer(handler);
+queue.setConsumer(handler);
 
 let counter = new cloud.Counter(initial: 0);
 new cloud.Function(inflight (message: str): str => {
