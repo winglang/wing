@@ -5,7 +5,7 @@ description: A built-in resource for representing an container for numbers in th
 keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Counter]
 ---
 
-The `cloud.Counter` resource represents a stateful container for one or more numbers in the cloud.
+The `cloud.Counter` resource represents a stateful container for a number in the cloud.
 
 ## Usage
 
@@ -28,9 +28,9 @@ let counter = new cloud.Counter();
 
 inflight () => {
   let prev = counter.inc(); // increment by 1 and return previous value
-  counter.inc(5);
+  counter.inc(5); // increment by 5
   counter.dec(); // decrement by 1
-  counter.dec(2);
+  counter.dec(2); // decrement by 2
 
   assert(counter.peek() == 3); // check the current value
 
@@ -38,7 +38,7 @@ inflight () => {
 };
 ```
 
-### Using keys to manage multiple counter values
+### Using keys to update and retrieve multiple values
 
 🚧 Not implemented yet (tracking issue: [#1375](https://github.com/winglang/wing/issues/1375))
 
