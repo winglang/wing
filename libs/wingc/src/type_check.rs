@@ -1779,6 +1779,7 @@ impl<'a> TypeChecker<'a> {
 				})
 			}
 			ExprKind::CompilerDebugEnv => {
+				println!("[symbol environment at {}]", exp.span);
 				println!("{}", env);
 				self.types.anything()
 			}
