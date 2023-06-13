@@ -13,7 +13,7 @@ class JSHelper {
 
 let js = new JSHelper();
 
-q.addConsumer(inflight () => {
+q.setConsumer(inflight () => {
   js.sleep(2000);
 });
 
