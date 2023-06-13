@@ -75,6 +75,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		});
 		scope_visitor.visit_scope(root_scope);
 
+		let found_env = scope_visitor.found_scope.unwrap();
+		let found_env = found_env.env.borrow();
+		let found_env = found_env.as_ref().unwrap();
+
 		let parent = node_to_complete.parent();
 
 		if node_to_complete.kind() == "." {
@@ -109,9 +113,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 				reference_text = add_std_namespace(&reference_text);
 
-				let found_env = scope_visitor.found_scope.unwrap();
-				let found_env = found_env.env.borrow();
-				let found_env = found_env.as_ref().unwrap();
 				let lookup_thing = found_env
 					.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
 					.ok();
@@ -132,7 +133,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							)
 						}
 						SymbolKind::Namespace(n) => {
-							return get_completions_from_namespace(n);
+							return get_completions_from_namespace(&n, Some(found_env.phase));
 						}
 					}
 				} else {
@@ -151,7 +152,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								.ok();
 							if let Some((namespace, _)) = namespace {
 								if let SymbolKind::Namespace(namespace) = namespace {
-									let completions = get_completions_from_namespace(namespace);
+									let completions = get_completions_from_namespace(namespace, Some(found_env.phase));
 									//for namespaces - return only classes
 									if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
 										return completions
@@ -165,9 +166,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								}
 							}
 						}
-						let found_env = scope_visitor.found_scope.unwrap();
-						let found_env = found_env.env.borrow();
-						let found_env = found_env.as_ref().unwrap();
 						let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap());
 
 						if let Ok(type_lookup) = type_lookup {
@@ -185,9 +183,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		// we are somewhere but not entirely sure
 		// for now, lets just get all the symbols within the current scope
-		let found_scope = scope_visitor.found_scope.unwrap_or(root_scope);
-		let found_env = found_scope.env.borrow();
-		let found_env = found_env.as_ref().expect("Scope should have an env");
 		let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
 
 		let mut completions = vec![];
@@ -312,12 +307,35 @@ fn add_std_namespace(type_: &str) -> std::string::String {
 	format!("{WINGSDK_STD_MODULE}.{type_name}")
 }
 
-fn get_completions_from_namespace(namespace: &UnsafeRef<Namespace>) -> Vec<CompletionItem> {
+fn get_completions_from_namespace(
+	namespace: &UnsafeRef<Namespace>,
+	current_phase: Option<Phase>,
+) -> Vec<CompletionItem> {
+	// If a namespace has a class named "Util", then its members can be accessed directly from
+	// the namespace as a syntactic sugar. e.g. "foo.bar()" is equivalent to "foo.Util.bar()"
+	let util_completions = match namespace.env.lookup_nested_str("Util", None) {
+		LookupResult::Found(kind, _) => match kind {
+			SymbolKind::Type(typeref) => {
+				let util_class = typeref.as_class();
+				if let Some(util_class) = util_class {
+					get_completions_from_class(util_class, current_phase, false)
+				} else {
+					vec![]
+				}
+			}
+			SymbolKind::Variable(_) => vec![],
+			SymbolKind::Namespace(_) => vec![],
+		},
+		LookupResult::NotFound(_) => vec![],
+		LookupResult::DefinedLater => vec![],
+		LookupResult::ExpectedNamespace(_) => vec![],
+	};
 	namespace
 		.env
 		.symbol_map
 		.iter()
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
+		.chain(util_completions.into_iter())
 		.collect()
 }
 
@@ -683,5 +701,17 @@ test "test" {
 }
 "#,
 		assert!(!capture_in_test.is_empty())
+	);
+
+	test_completion_list!(
+		util_static_methods,
+		r#"
+bring util;
+
+util.
+   //^"#,
+		assert!(!util_static_methods.is_empty())
+
+		assert!(util_static_methods.iter().filter(|c| c.label == "env").count() == 1)
 	);
 }
