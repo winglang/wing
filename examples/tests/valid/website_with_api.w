@@ -1,5 +1,9 @@
 bring cloud;
 
+class TestUtils {
+  extern "./website_with_api.js" static inflight fetch(url: str, method: str, headers: Json?, body: str?): Json;
+}
+
 //needs to be written before the website (so the website will be able to use it's url on sim env)
 let api = new cloud.Api(
   cors: cloud.ApiCorsProps {
@@ -46,19 +50,29 @@ let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 };
 
-  // responsible for the CORS - https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html
-let optionsHandler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
-  return cloud.ApiResponse {
-    headers: {
-      "Access-Control-Allow-Headers" : "Content-Type",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-    },
-    status: 204
-  };
-};
-
 api.get("/users", getHandler);
 api.post("/users", postHandler);
 
 website.addJson("config.json", { apiUrl: api.url });
+
+test "GET /users" {
+  let res = TestUtils.fetch(api.url + "/users", "GET");
+  assert(num.fromJson(res.get("status")) == 200);
+
+  assert(res.get("headers").get("access-control-allow-origin") == "*");
+  assert(res.get("headers").get("access-control-expose-headers") == "Content-Type");
+  assert(res.get("headers").get("access-control-allow-credentials") == "false");
+
+  assert(res.get("headers").get("access-control-allow-headers") == nil);
+  assert(res.get("headers").get("access-control-allow-methods") == nil);
+}
+
+test "OPTIONS /users" {
+  let res = TestUtils.fetch(api.url + "/users", "OPTIONS");
+  assert(num.fromJson(res.get("status")) == 204);
+  assert(res.get("headers").get("access-control-allow-origin") == "*");
+  assert(res.get("headers").get("access-control-allow-methods") == "GET,POST,OPTIONS");
+  assert(res.get("headers").get("access-control-allow-headers") == "Content-Type");
+  assert(res.get("headers").get("access-control-expose-headers") == "Content-Type");
+  assert(res.get("headers").get("access-control-allow-credentials") == "false");
+}
