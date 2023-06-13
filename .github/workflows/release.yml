@@ -167,7 +167,7 @@ jobs:
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Publish
-        run: npm publish *.tgz --access public
+        run: for file in *.tgz ; do npm publish "$file" --access public ; done
         working-directory: dist/packages
 
       - name: Extract version
