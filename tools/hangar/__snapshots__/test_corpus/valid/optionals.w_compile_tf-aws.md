@@ -33,7 +33,6 @@ module.exports = function({  }) {
       this.value = value;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Node;
@@ -49,7 +48,6 @@ module.exports = function({  }) {
       super(name);
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Sub;
@@ -65,7 +63,6 @@ module.exports = function({  }) {
       super(name);
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Sub1;
@@ -81,7 +78,6 @@ module.exports = function({  }) {
       this.name = name;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Super;
@@ -269,7 +265,6 @@ class $Root extends $stdlib.std.Resource {
     class Super extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         this.name = "Super";
       }
       static _toInflightType(context) {
@@ -301,7 +296,6 @@ class $Root extends $stdlib.std.Resource {
     }
     class Sub extends Super {
       constructor(scope, id, ) {
-        const __parent_this = this;
         this.name = "Sub";
       }
       static _toInflightType(context) {
@@ -333,7 +327,6 @@ class $Root extends $stdlib.std.Resource {
     }
     class Sub1 extends Super {
       constructor(scope, id, ) {
-        const __parent_this = this;
         this.name = "Sub";
       }
       static _toInflightType(context) {
@@ -366,7 +359,6 @@ class $Root extends $stdlib.std.Resource {
     class Node extends $stdlib.std.Resource {
       constructor(scope, id, value, left, right) {
         super(scope, id);
-        const __parent_this = this;
         this.value = value;
         this.left = left;
         this.right = right;

@@ -2046,13 +2046,11 @@ impl<'a> TypeChecker<'a> {
 		self.statement_idx = stmt.idx;
 
 		match &stmt.kind {
-      StmtKind::Super { 
-        arg_list 
-      } => {
-        if let Some(args) = arg_list {
-          self.type_check_arg_list(args, env);
-        }
-      },
+			StmtKind::Super { arg_list } => {
+				if let Some(args) = arg_list {
+					self.type_check_arg_list(args, env);
+				}
+			}
 			StmtKind::Let {
 				reassignable,
 				var_name,
@@ -2458,7 +2456,7 @@ impl<'a> TypeChecker<'a> {
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class().unwrap().env = class_env;
 				let class_env = &class_type.as_class().unwrap().env;
-        
+
 				// Type check constructor
 				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
 

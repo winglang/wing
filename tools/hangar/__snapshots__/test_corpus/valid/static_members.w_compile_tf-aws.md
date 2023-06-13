@@ -31,7 +31,6 @@ module.exports = function({  }) {
       this.instanceField = instanceField;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     static async get123()  {
       return 123;
@@ -196,7 +195,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("get123");
-        const __parent_this = this;
         this.instanceField = 100;
       }
       static m()  {

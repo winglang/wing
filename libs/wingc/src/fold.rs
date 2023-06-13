@@ -77,11 +77,9 @@ where
 	F: Fold + ?Sized,
 {
 	let kind = match node.kind {
-    StmtKind::Super { 
-      arg_list 
-    } => StmtKind::Super { 
-      arg_list: Some(f.fold_args(arg_list.unwrap()))
-    },
+		StmtKind::Super { arg_list } => StmtKind::Super {
+			arg_list: Some(f.fold_args(arg_list.unwrap())),
+		},
 		StmtKind::Bring {
 			module_name,
 			identifier,

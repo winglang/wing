@@ -101,13 +101,11 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-    StmtKind::Super { 
-      arg_list 
-    } => {
-      if let Some(args) = arg_list {
-        v.visit_args(args)
-      }
-    },
+		StmtKind::Super { arg_list } => {
+			if let Some(args) = arg_list {
+				v.visit_args(args)
+			}
+		}
 		StmtKind::Bring {
 			module_name,
 			identifier,

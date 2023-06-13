@@ -8,7 +8,6 @@ module.exports = function({  }) {
       this.function = function;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return CdkDockerImageFunction;
@@ -62,7 +61,6 @@ class $Root extends $stdlib.std.Resource {
     class CdkDockerImageFunction extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",{
         "code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts")),}
         );
