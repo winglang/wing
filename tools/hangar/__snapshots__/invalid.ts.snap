@@ -1775,11 +1775,11 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
    |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
 
 
-error: Cannot instantiate type \\"BucketProps\\" because it is not a class
+error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
    --> ../../../examples/tests/invalid/structs.w:47:13
    |
 47 | let x = new cloud.BucketProps(1);
-   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is not a class
+   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
  
