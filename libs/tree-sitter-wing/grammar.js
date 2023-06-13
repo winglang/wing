@@ -112,7 +112,8 @@ module.exports = grammar({
         $.if_let_statement,
         $.struct_definition,
         $.enum_definition,
-        $.try_catch_statement
+        $.try_catch_statement,
+        $.super_statement
       ),
 
     short_import_statement: ($) =>
@@ -262,6 +263,7 @@ module.exports = grammar({
       seq("while", field("condition", $.expression), field("block", $.block)),
 
     break_statement: ($) => seq("break", $._semicolon),
+    super_statement: ($) => seq("super", field("args", $.argument_list), $._semicolon),
 
     continue_statement: ($) => seq("continue", $._semicolon),
 

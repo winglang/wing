@@ -203,6 +203,7 @@ impl<'s> Parser<'s> {
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
+      "super_statement" => self.build_super_statement(statement_node, phase)?,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -1484,6 +1485,13 @@ impl<'s> Parser<'s> {
 			}
 		}
 	}
+
+  fn build_super_statement(&self, statement_node: &Node, phase: Phase) -> Result<StmtKind, ()> {
+    let arg_node = statement_node.child_by_field_name("args").unwrap();
+    let arg_list = self.build_arg_list(&arg_node, phase)?;
+
+    Ok(StmtKind::Super { arg_list: Some(arg_list) })
+  }
 
 	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
 		let name_node = statement_node.child_by_field_name("name").unwrap();
