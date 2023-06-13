@@ -72,8 +72,7 @@ const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 
-pub struct CompilerOutput {
-}
+pub struct CompilerOutput {}
 
 /// Exposes an allocation function to the WASM host
 ///
@@ -311,7 +310,7 @@ pub fn compile(
 	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
+	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
 
 	// Validate that every Expr in the final tree has been type checked
 	let mut tc_assert = TypeCheckAssert::new(&types);
@@ -346,7 +345,7 @@ pub fn compile(
 		return Err(());
 	}
 
-	return Ok(CompilerOutput { });
+	return Ok(CompilerOutput {});
 }
 
 fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
