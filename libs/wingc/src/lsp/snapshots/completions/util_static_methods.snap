@@ -1,0 +1,23 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: Util
+  kind: 7
+  detail: independent class
+- label: env
+  kind: 2
+  detail: "(name: str): str"
+  insertText: env($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryEnv
+  kind: 2
+  detail: "(name: str): str?"
+  insertText: tryEnv($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+
