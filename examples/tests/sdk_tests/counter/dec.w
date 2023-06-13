@@ -11,3 +11,14 @@ test "dec" {
   assert(counter.peek() == -2);
   assert(dec2 == 0);
 }
+
+test "key dec" {
+  let key = "my-key";
+  assert(counter.peek(key) == 0);
+  let dec1 = counter.dec(nil, key);
+  assert(counter.peek(key) == -1);
+  assert(dec1 == 0);
+  let dec2 = counter.dec(2, key);
+  assert(counter.peek(key) == -3);
+  assert(dec2 == -1);
+}

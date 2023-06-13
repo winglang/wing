@@ -10,6 +10,7 @@ import { Function } from "./function";
 import { Queue } from "./queue";
 import { Secret } from "./secret";
 import { TestRunner } from "./test-runner";
+import { CdkTokens } from "./tokens";
 import { Topic } from "./topic";
 
 import {
@@ -41,6 +42,7 @@ export interface CdkAppProps extends AppProps {
 export class App extends CoreApp {
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
+  public readonly _tokens: CdkTokens;
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
@@ -96,7 +98,7 @@ export class App extends CoreApp {
     this.cdkStack = cdkStack;
     this.synthed = false;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
-
+    this._tokens = new CdkTokens();
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
   }
 

@@ -737,25 +737,25 @@ new cloud.Queue(props?: QueueProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.addConsumer">addConsumer</a></code> | Create a function to consume messages from this queue. |
+| <code><a href="#@winglang/sdk.cloud.Queue.setConsumer">setConsumer</a></code> | Create a function to consume messages from this queue. |
 
 ---
 
-##### `addConsumer` <a name="addConsumer" id="@winglang/sdk.cloud.Queue.addConsumer"></a>
+##### `setConsumer` <a name="setConsumer" id="@winglang/sdk.cloud.Queue.setConsumer"></a>
 
 ```wing
-addConsumer(handler: IQueueAddConsumerHandler, props?: QueueAddConsumerProps): Function
+setConsumer(handler: IQueueAddConsumerHandler, props?: QueueAddConsumerProps): Function
 ```
 
 Create a function to consume messages from this queue.
 
-###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.addConsumer.parameter.handler"></a>
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.handler"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>
 
 ---
 
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.addConsumer.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.QueueAddConsumerProps">QueueAddConsumerProps</a>
 
@@ -2295,7 +2295,7 @@ Whether to cache the value.
 
 ### QueueAddConsumerProps <a name="QueueAddConsumerProps" id="@winglang/sdk.cloud.QueueAddConsumerProps"></a>
 
-Options for Queue.addConsumer.
+Options for Queue.setConsumer.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueAddConsumerProps.Initializer"></a>
 
@@ -3778,8 +3778,7 @@ The index of the element in the Json Array to return.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
-| <code><a href="#@winglang/sdk.std.Json.cloneMut">cloneMut</a></code> | Creates a mutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
@@ -3790,39 +3789,21 @@ The index of the element in the Json Array to return.
 
 ---
 
-##### `clone` <a name="clone" id="@winglang/sdk.std.Json.clone"></a>
+##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.Json.deepCopyMut"></a>
 
 ```wing
 bring std;
 
-std.Json.clone(json: Json)
+std.Json.deepCopyMut(json: Json)
 ```
 
-Creates a immutable deep clone of the Json.
+Creates a mutable deep copy of the Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.clone.parameter.json"></a>
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopyMut.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to clone.
-
----
-
-##### `cloneMut` <a name="cloneMut" id="@winglang/sdk.std.Json.cloneMut"></a>
-
-```wing
-bring std;
-
-std.Json.cloneMut(json: Json)
-```
-
-Creates a mutable deep clone of the Json.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.cloneMut.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to clone.
+to copy.
 
 ---
 
@@ -4538,6 +4519,31 @@ The value of the element to set.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutJson.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
+
+---
+
+##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.MutJson.deepCopy"></a>
+
+```wing
+bring std;
+
+std.MutJson.deepCopy(json: MutJson)
+```
+
+Creates an immutable deep copy of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.deepCopy.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
+
+to copy.
+
+---
 
 
 
@@ -5323,7 +5329,7 @@ Inflight interface for `Counter`.
 ##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
 
 ```wing
-dec(amount?: num): num
+dec(amount?: num, key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5338,10 +5344,18 @@ amount to decrement (default is 1).
 
 ---
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be decremented.
+
+---
+
 ##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
 
 ```wing
-inc(amount?: num): num
+inc(amount?: num, key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5356,10 +5370,18 @@ amount to increment (default is 1).
 
 ---
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.inc.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be incremented.
+
+---
+
 ##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
 
 ```wing
-peek(): num
+peek(key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5369,10 +5391,18 @@ Get the current value of the counter.
 Using this API may introduce race conditions since the value can change between
 the time it is read and the time it is used in your code.
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.peek.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be retrieved.
+
+---
+
 ##### `set` <a name="set" id="@winglang/sdk.cloud.ICounterClient.set"></a>
 
 ```wing
-set(value: num): void
+set(value: num, key?: str): void
 ```
 
 **Inflight client:** [true](#true)
@@ -5384,6 +5414,14 @@ Set a counter to a given value.
 - *Type:* num
 
 new value.
+
+---
+
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.set.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be set.
 
 ---
 
@@ -5544,7 +5582,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueAddConsumerHandlerClient](#@winglang/sdk.cloud.IQueueAddConsumerHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Queue.addConsumer`.
+Represents a resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>

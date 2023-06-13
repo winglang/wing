@@ -2,7 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ dec.wsim » root/env0/test:dec
+pass ─ dec.wsim » root/env0/test:dec    
+pass ─ dec.wsim » root/env1/test:key dec
  
 
 
