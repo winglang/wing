@@ -43,7 +43,10 @@ export async function runWingCommand(options: RunWingCommandOptions) {
 }
 
 function sanitizeOutput(output: string) {
-  return output.replace(/\d+m[\d.]+s/g, "<DURATION>");
+  // Replace timestamps like 1m0.123s with <DURATION>.
+  // Sometimes, they can be negative, like -1m-0.123s.
+  // See https://github.com/winglang/wing/actions/runs/5250503621/jobs/9484788227.
+  return output.replace(/-?\d+m-?[\d.]+s/g, "<DURATION>");
 }
 
 export function sanitize_json_paths(path: string) {
