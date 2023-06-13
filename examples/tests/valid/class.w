@@ -81,13 +81,22 @@ class PaidStudent extends Student {
 }
 
 let student = new PaidStudent("Tom", "MySpace", 38);
-assert(student.name == "Tom");
-assert(student.major == "MySpace");
-assert(student.hrlyWage == 38);
 
-// TODO: cant access derived classes inflight yet, super class is not defined
-// test "check derived class instance variables" {
-//   assert(student.name == "Tom");
-//   assert(student.major == "MySpace");
-//   assert(student.hrlyWage == 38);  
-// }
+test "check derived class instance variables" {
+  assert(student.name == "Tom");
+  assert(student.major == "MySpace");
+  assert(student.hrlyWage == 38);  
+}
+
+class TeacherAid extends PaidStudent {
+  init(name: str, major: str, hrlyWage: num) {
+    super(name, major, hrlyWage);
+    this.hrlyWage = 10; // should overwrite the super set value
+  }
+}
+
+let ta = new TeacherAid("John", "Rock'n Roll", 50);
+
+test "devived class init body happens after super" {
+  assert(ta.hrlyWage == 10);
+}
