@@ -6,6 +6,9 @@
   "types": "./src/index.ts",
   "sideEffects": false,
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "tsc": "tsc --build",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
@@ -13,6 +16,6 @@
   "devDependencies": {
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.3"
   }
 }

@@ -1,0 +1,34 @@
+{
+  "name": "wingconsole",
+  "description": "The Wing Console for Desktop.",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "repository": "https://github.com/winglang/console",
+  "type": "module",
+  "version": "0.0.0",
+  "files": [
+    "bin",
+    "lib",
+    "scripts/postinstall.js"
+  ],
+  "exports": "./lib/index.js",
+  "bin": {
+    "wingconsole": "./bin/index.js"
+  },
+  "preferUnplugged": true,
+  "engines": {
+    "node": ">=12"
+  },
+  "optionalDependencies": {
+    "@wingconsole/desktop-darwin-arm64": "workspace:^",
+    "@wingconsole/desktop-darwin-x64": "workspace:^",
+    "@wingconsole/desktop-linux-arm": "workspace:^",
+    "@wingconsole/desktop-linux-arm64": "workspace:^",
+    "@wingconsole/desktop-linux-x64": "workspace:^",
+    "@wingconsole/desktop-win32-arm64": "workspace:^",
+    "@wingconsole/desktop-win32-ia32": "workspace:^",
+    "@wingconsole/desktop-win32-x64": "workspace:^"
+  },
+  "devDependencies": {
+    "@wingconsole/eslint-plugin": "workspace:^"
+  }
+}

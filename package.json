@@ -2,6 +2,7 @@
   "name": "@wingconsole/monorepo",
   "version": "0.0.0",
   "private": true,
+  "files": [],
   "scripts": {
     "dev": "turbo run dev",
     "compile": "turbo run compile",
@@ -12,8 +13,9 @@
   },
   "devDependencies": {
     "@wingconsole/conventional-release": "workspace:^",
-    "eslint": "^8.40.0",
-    "turbo": "^1.9.4",
-    "typescript": "^5.0.4"
+    "eslint": "^8.42.0",
+    "turbo": "^1.10.3",
+    "typescript": "^5.1.3",
+    "wingconsole": "workspace:^"
   }
 }

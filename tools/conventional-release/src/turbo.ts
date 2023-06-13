@@ -6,7 +6,7 @@ const turbo = (arguments_: string[], dryRun: boolean) => {
   if (dryRun) {
     console.log(colors.green("✔"), `running turbo ${arguments_.join(" ")}`);
   } else {
-    spawnSync("npx", ["turbo", ...arguments_], {
+    spawnSync("pnpm", ["exec", "turbo", ...arguments_], {
       stdio: "inherit",
     });
   }
@@ -24,7 +24,27 @@ export const turboCompile = ({
   turbo(
     [
       "compile", // "--filter", filter
+      // "--no-cache",
+      // "--force",
     ],
     dryRun,
   );
+};
+
+export interface TurboBundleOptions {
+  // filter: string;
+  dryRun: boolean;
+  force: boolean;
+}
+
+export const turboBundle = ({
+  // filter,
+  dryRun,
+  force,
+}: TurboBundleOptions) => {
+  let options = ["bundle"];
+  if (force) {
+    options.push("--force");
+  }
+  turbo(options, dryRun);
 };

@@ -1,0 +1,35 @@
+{
+  "name": "@wingconsole/desktop-win32-arm64",
+  "description": "The Windows ARM 64-bit binary for the Wing Console Desktop app.",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "repository": "https://github.com/winglang/console",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "lib",
+    "release",
+    "scripts/postinstall.js"
+  ],
+  "exports": "./lib/index.js",
+  "engines": {
+    "node": ">=12"
+  },
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "scripts": {
+    "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
+    "bundle": "node scripts/bundle.js"
+  },
+  "dependencies": {
+    "open": "^9.1.0",
+    "tar": "^6.1.15"
+  },
+  "devDependencies": {
+    "@wingconsole/desktop": "workspace:^",
+    "@wingconsole/eslint-plugin": "workspace:^"
+  }
+}

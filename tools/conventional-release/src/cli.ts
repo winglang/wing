@@ -1,5 +1,6 @@
 import { bumpFiles } from "./bump-files.js";
-import { turboCompile } from "./turbo.js";
+import { pack } from "./pack.js";
+import { turboBundle, turboCompile } from "./turbo.js";
 import { unbumpFiles } from "./unbump-files.js";
 
 const filter = process.argv[2];
@@ -10,6 +11,7 @@ if (!filter) {
 }
 
 const dryRun = process.argv.includes("--dry-run");
+const force = process.argv.includes("--force");
 
 const versionFile = "dist/package.json";
 const releaseFile = "dist/releasetag.txt";
@@ -23,9 +25,16 @@ const { releaseTag } = await bumpFiles({
   dryRun,
 });
 
-turboCompile({
-  // filter,
-  dryRun,
-});
-
-await unbumpFiles({ filter, dryRun });
+try {
+  turboBundle({
+    // filter,
+    dryRun,
+    force,
+  });
+  await pack();
+} finally {
+  await unbumpFiles({
+    // filter,
+    dryRun,
+  });
+}

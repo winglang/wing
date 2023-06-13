@@ -29,3 +29,9 @@ pnpm run test
 ```sh
 pnpm run compile
 ```
+
+## Release
+
+```sh
+pnpm run release "...[origin/main]"
+```

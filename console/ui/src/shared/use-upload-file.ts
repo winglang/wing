@@ -7,6 +7,7 @@ interface Reader {
 
 class UTF8Reader implements Reader {
   read(file: Blob, fileReader: FileReader) {
+    // eslint-disable-next-line unicorn/prefer-blob-reading-methods
     fileReader.readAsText(file);
   }
 

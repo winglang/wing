@@ -1,12 +1,8 @@
-import { exec } from "node:child_process";
-import util from "node:util";
+import packageJson from "../../package.json" assert { type: "json" };
 
-export const getWingVersion = async (): Promise<string | undefined> => {
-  try {
-    const { stdout } = await util.promisify(exec)("wing -V");
+const version = packageJson.dependencies["@winglang/compiler"].slice(1);
 
-    return stdout.replace(/(\n)/gm, "");
-  } catch {
-    return;
-  }
+export const getWingVersion = async (): Promise<string> => {
+  console.log({ version });
+  return version;
 };

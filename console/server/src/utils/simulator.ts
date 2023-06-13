@@ -23,7 +23,7 @@ const stopSilently = async (simulator: testing.Simulator) => {
   try {
     await simulator.stop();
   } catch (error) {
-    console.error(error);
+    console.error("ignore this error:", error);
   }
 };
 

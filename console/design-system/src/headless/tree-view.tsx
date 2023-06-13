@@ -196,7 +196,7 @@ export const TreeView = ({
         return itemId;
       }
 
-      return findLatestVisibleItem(children[children.length - 1]);
+      return findLatestVisibleItem(children.at(-1));
     },
     [itemRecord, expandedItems],
   );
