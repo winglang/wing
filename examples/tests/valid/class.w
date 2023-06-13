@@ -56,3 +56,38 @@ test "access inflight field" {
   assert(c5.y == 111);
 }
 
+class Person {
+  name: str;
+  init(name: str) {
+    this.name = name;
+  }
+}
+
+class Student extends Person {
+  major: str;
+
+  init(name: str, major: str) {
+    super(name);
+    this.major = major;
+  }
+}
+
+class PaidStudent extends Student {
+  hrlyWage: num;
+  init(name: str, major: str, hrlyWage: num) {
+    super(name, major);
+    this.hrlyWage = hrlyWage;
+  }
+}
+
+let student = new PaidStudent("Tom", "MySpace", 38);
+assert(student.name == "Tom");
+assert(student.major == "MySpace");
+assert(student.hrlyWage == 38);
+
+// TODO: cant access derived classes inflight yet, super class is not defined
+// test "check derived class instance variables" {
+//   assert(student.name == "Tom");
+//   assert(student.major == "MySpace");
+//   assert(student.hrlyWage == 38);  
+// }
