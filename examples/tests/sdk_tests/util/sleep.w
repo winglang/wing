@@ -5,7 +5,7 @@ class JSHelper {
 }
 
 let oneHundredMiliseconds = 0.1s;
-test "sleep a second" {
+test "sleep 100 mili seconds" {
   let start = JSHelper.getTime();
   util.sleep(oneHundredMiliseconds);
   let end = JSHelper.getTime();
