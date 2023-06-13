@@ -1,15 +1,22 @@
 ---
-title: Language Reference
+title: Language Spec
 id: spec
 description: The Wing Language Specification
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
+:::caution Not fully implemented yet
+
+This document is a *specification* of the programming language, and many features
+are still not implemented (see [project board](https://github.com/orgs/winglang/projects/1)).
+
+:::
+
 ## 0. Preface
 
 ### 0.1 Motivation
 
-The Wing Programming Language (aka Winglang) is a general
+The Wing Programming Language (aka winglang[<sup>RFC</sup>](/contributors/rfcs/2022-05-28-winglang-reqs)) is a general
 purpose programming language designed for building applications for the cloud.
 
 What makes Wing special? Traditional programming languages are designed around
@@ -62,15 +69,23 @@ import TOCInline from '@theme/TOCInline';
 | ------ | ---------------------------------- |
 | `void` | represents the absence of a type   |
 | `nil`  | represents the absence of a value  |
+| `any`  | represents everything and anything |
 | `num`  | represents numbers (doubles)       |
 | `str`  | UTF-16 encoded strings             |
 | `bool` | represents true or false           |
+
+> `any` is only available to JSII imported modules.
+
+User defined explicit "any" is supported iff declared by the user.  
+Almost all types can be implicitly resolved by the compiler except for "any".  
+"any" must be explicitly declared and annotated.
 
 > ```TS
 > let x = 1;                  // x is a num
 > let v = 23.6;               // v is a num
 > let y = "Hello";            // y is a str
 > let z = true;               // z is a bool
+> let w: any = 1;             // w is an any
 > let q: num? = nil;          // q is an optional num
 > ```
 
@@ -81,6 +96,7 @@ import TOCInline from '@theme/TOCInline';
 > const v: number = 23.6;
 > const y: string = "Hello";
 > const z: boolean = true;
+> const w: any = 1;
 > const q: number? = undefined;
 > ```
   
@@ -100,6 +116,9 @@ import TOCInline from '@theme/TOCInline';
 | `MutSet<T>`   | mutable set type                      |
 | `MutMap<T>`   | mutable map type                      |
 | `MutArray<T>` | mutable array type                    |
+| `Promise<T>`  | promise type (inflight code)          |
+
+> `Promise<T>` is only available to JSII imported modules.
 
 > ```TS
 > let z = {1, 2, 3};               // immutable set, Set<Num> is inferred
@@ -138,8 +157,8 @@ The `inflight` modifier indicates that a function is an inflight function.
 `inflight` in Wing implies `async` in JavaScript.
 
 ```pre
-(arg1: <type1>, arg2: <type2>, ...): returnType => <type>
-inflight (arg1: <type1>, arg2: <type2>, ...): returnType => <type>
+(arg1: <type1>, arg2: <type2>, ...) => <type>
+inflight (arg1: <type1>, arg2: <type2>, ...) => <type>
 ```
 
 > ```TS
@@ -149,36 +168,53 @@ inflight (arg1: <type1>, arg2: <type2>, ...): returnType => <type>
 > let f2 = inflight (x: num, s: str) => { /* no-op */ };
 > ```
 
-Return type is required for function types.
-> ```TS
-> let my_func = (callback: (num): void) => {  };
-> let my_func2 = (callback: ((num): void): (str): void) => {  };
-> ```
-Return type is optional for closures.
-> ```TS
-> let my_func3 = (x: num) => {  };
-> let my_func4 = (x: num): void => {  };
-> let my_func5 = inflight (x: num) => {  };
-> let my_func6 = inflight (x: num): void => {  };
-```
 [`▲ top`][top]
 
 ---
 
 #### 1.1.4 Json type
 
-Wing has a data type called `Json`. This type represents an immutable untyped [JSON
+Wing has a data type called `Json` (alias is `json`). This type represents an immutable untyped [JSON
 value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
 `boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
-strings and values can be any other JSON value).
+strings and values can be any other JSON value)).
 
 `Json` objects are immutable and can be referenced across inflight context.
+
+JSON is the "wire protocol of the cloud" and as such Wing offers built-in support for it. However,
+since Wing is statically-typed (type must be known during compilation) and JSON is dynamically typed
+(type is only known at runtime), bridging is required between these two models.
+
+Let's look at a quick example:
+
+```js
+struct Employee { 
+  id: str;
+  name: str;
+}
+
+let response = httpGet("/employees"); 
+ // returns something like { "items": [ { "id": "12234", "name": "bob" }, ... ] }
+ 
+let employees = Array<Employee>.fromJson(response.items);
+
+for e in employees {
+  log("hello, ${e.name}, your employee id is ${e.id}");
+}
+```
+
+In the above example, the `httpGet` function returns a `Json` object from the server that has a
+single field `items`, with a JSON array of JSON objects, each with an `id` and `name` fields.
+
+The expression `response.items` returns a `Json` array, and we use `Array<T>.fromJson` to convert
+this array from `Json` to an `Array<Employee>`. Note that by default `fromJson` will perform schema
+validation on the array and on each item (based on the declaration of the `Employee` struct).
 
 ##### 1.1.4.1 Literals
 
 Literals can be defined using the `Json` type initializers:
 
-```TS
+```js
 let jsonString  = Json "hello";
 let jsonNumber  = Json 123;
 let jsonBool    = Json true;
@@ -193,7 +229,7 @@ let jsonMutObj = MutJson {
 
 The `Json` keyword can be omitted from `Json` object literals:
 
-```TS
+```js
 let jsonObj = { boom: 123, bam: [4, 5, 6] };
 ```
 
@@ -201,42 +237,63 @@ Every value within a `Json` array or object also has a type of `Json`.
 
 ##### 1.1.4.2 JSON objects
 
-To access a field within an object, use `.get("{field name}")`:
+To access a field within an object, use the `.` notation:
 
-```TS
-let boom: Json = jsonObj.get("boom");
+```js
+let boom: Json = jsonObj.boom;
 ```
 
 Trying to access a non-existent field will fail at runtime. For example:
 
-```TS
-log(jsonObj.get("boom").get("dude").get("world"));
+```js
+log(jsonObj.boom.dude.world);
 // RUNTIME ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'world')
+```
+
+Like in JavaScript, it is also possible to access object fields using `[]`:
+
+```js
+let foo = j["my-field"].yourField["their-field"];
 ```
 
 To obtain an array of all the keys within a JSON object use the `Json.keys(o)` method. 
 
-```TS
+
+```js
 let j = Json { hello: 123, world: [ 1, 2, 3 ] };
-assert(Json.keys(j).at(0) == "hello");
-assert(Json.keys(j).at(1) == "world");
+assert(Json.keys(j) == ["hello", "world"]);
 ```
 
-To obtain an array of all the values, use `Json.values(o)`:
+To obtain an array of all the values, use `Json.values(o)`. To obtain an array of all key/value
+pairs use `Json.entries(o)` (P2):
 
-```TS
+```js
 assert(Json.values(j).equals([ Json 123, Json [ 1, 2, 3 ] ]));
+assert(Json.entries(j).equals([
+  [ Json "hello", Json 123 ],
+  [ Json "world", Json [ 1, 2, 3 ] ]
+]));
 ```
 
-> NOTE: `values()` returns an array inside a `Json` object because at the moment we
+> NOTE: `values()` and `entries()` return an array inside a `Json` object because at the moment we
 > cannot represent heterogenous arrays in Wing.
+
+##### 1.1.4.3 JSON arrays
+
+To access an array element, use the `[]` notation:
+
+```js
+let item2 = jsonArray[2]; // type: Json
+```
+
+Trying to index a value that is not an array will return JavaScript `undefined`.
 
 ##### 1.1.4.4 Assignment from native types
 
 It is also possible to assign the native `str`, `num`, `bool` and `Array<T>` values and they will
 implicitly be casted to `Json`:
 
-```TS
+```js
 let myStr: str = "hello";
 let myNum: num = 183;
 let myBool: bool = true;
@@ -256,7 +313,7 @@ let jsonObj = Json {
 We only allow implicit assignment from *safe* to *unsafe* types because otherwise we cannot
 guarantee safety (e.g. from `str` to `Json` but not from `Json` to `str`), so this won't work:
 
-```TS
+```js
 let j = Json "hello";
 let s: str = j;
 //           ^ cannot assign `Json` to `str`.
@@ -265,9 +322,10 @@ let s: str = j;
 To assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
 type:
 
-```TS
+```js
 let myStr = str.fromJson(jsonString);
 let myNumber = num.fromJson(jsonNumber);
+let myArr = Array<num>.fromJson(jsonArray);
 ```
 
 ##### 1.1.4.6 Schema validation
@@ -275,42 +333,124 @@ let myNumber = num.fromJson(jsonNumber);
 All `fromJson()` methods will validate that the runtime type is compatible with the target type in
 order to ensure type safety (at a runtime cost):
 
-```TS
+```js
 str.fromJson(jsonNumber);      // RUNTIME ERROR: unable to parse number `123` as a string.
 num.fromJson(Json "\"hello\""); // RUNTIME ERROR: unable to parse string "hello" as a number
+
+let myArray = Json [1,2,3,"hello"];
+Array<num>.fromJson(myArray); // RUNTIME ERROR: unable to parse `[1,2,3,"hello"]` as an array of `num`.
+```
+
+Use `unsafe: true` to disable this check at your own risk (P2):
+
+```js
+let trustMe = Json [1,2,3];
+let x = Array<num>.fromJson(trustMe, unsafe: true);
+assert(x.at(1) == 2);
+```
+
+For each `fromJson()`, there is a `tryFromJson()` method which returns an optional `T?` which
+indicates if parsing was successful or not:
+
+```js
+let s = str.tryFromJson(myJson) ?? "invalid string";
+```
+
+##### 1.1.4.7 Assignment to user-defined structs
+
+All [structs](#31-structs) also have a `fromJson()` method that can be used to parse `Json` into a
+struct:
+
+```js
+struct Contact {
+  first: str;
+  last: str;
+  phone: str?;
+}
+
+let j = Json { first: "Wing", last: "Lyly" };
+let myContact = Contact.fromJson(j);
+assert(myContact.first == "Wing");
+```
+
+When a `Json` is parsed into a struct, the schema will be validated to ensure the result is
+type-safe:
+
+```js
+let p = Json { first: "Wing", phone: 1234 };
+Contact.fromJson(p);
+// RUNTIME ERROR: unable to parse Contact:
+// - field "last" is required and missing
+// - field "phone" is expected to be a string, got number.
+```
+
+Same as with primitives and containers, it is possible to opt-out of validation using `unsafe:
+true`:
+
+```js
+let p = Json { first: "Wing", phone: 1234 };
+let x = Contact.fromJson(p, unsafe: true);
+assert(x.last.len > 0);
+// RUNTIME ERROR: Cannot read properties of undefined (reading 'length')
+```
+
+Struct parsing is *partial* by default. This means that parsing is successful even if the `Json`
+includes extraneous fields:
+
+```js
+let p = Json { first: "hello", last: "world", anotherField: "ignored" };
+let c = Contact.fromJson(p);
+assert(c.first == "hello");
+assert(c.last == "world");
+// `c.anotherField` is not a thing
+```
+
+This can be disabled using `partial: false` (P2):
+
+```js
+Contact.fromJson(Json { first: "hello", last: "world", anotherField: "ignored" }, partial: false);
+// RUNTIME ERROR: cannot parse Contact due to extraneous field "anotherField"
+```
+
+##### 1.1.4.7 Schemas
+
+Structs have a `schema` static method which returns a `JsonSchema` object (P2):
+
+```js
+let schema = Contact.schema();
+schema.validate(j);
 ```
 
 ##### 1.1.4.8 Mutability
 
 To define a mutable JSON container, use the `MutJson` type:
 
-```TS
+```js
 let myObj = MutJson { hello: "dear" };
 ```
 
 Now you can mutate the contents by assigning values:
 
-```TS
-let myObj = MutJson { hello: "dear" };
+```js
 let fooNum = 123;
-myObj.set("world", "world");
-myObj.set("dang", [1,2,3,4]);
-myObj.set("subObject", MutJson {});
-myObj.get("subObject").set("arr", MutJson [1,"hello","world"]);
-myObj.set("foo", fooNum);
+myObj.world = "world";
+myObj.dang = [1,2,3,4];
+myObj.subObject = {};
+myObj.subObject.arr = [1,"hello","world"];
+myObj.foo = fooNum;
 ```
 
 For the sake of completeness, it is possible to also define primitives using `MutJson` but that's
 not very interesting because there is no way to mutate them:
 
-```TS
+```js
 let foo = MutJson "hello";
 // ok what now?
 ```
 
 Use the `Json.clone()` and `Json.cloneMut()` methods to get a *deep clone* of the object:
 
-```TS
+```js
 let mutJson = MutJson { hello: 123 };
 let immut = Json.clone(mutJson);
 mutJson.hello = 999;
@@ -319,7 +459,7 @@ assert(immut.hello == 123);
 
 To delete a key from an object, use the `Json.delete()` method:
 
-```TS
+```js
 let myObj = MutJson { hello: 123, world: 555 };
 Json.delete(myObj, "world");
 
@@ -328,14 +468,25 @@ Json.delete(immutObj, "hello");
 //          ^^^^^^^^^ expected `JsonMut`
 ```
 
+To modify a Json array, you will need to parse it into a native `MutArray` and then modify it. This
+implies that at the moment, it is not possible to mutate heterogenous JSON arrays:
+
+```js
+let j1 = MutJson { hello: [1,2,3,4] };
+let a1 = MutArray<num>.fromJson(j1);
+a1.push(5);
+
+j1.hello = a1;
+```
+
+> We will need to revisit this as we progress if this is a major use case.
+
 ##### 1.1.4.9 Serialization
 
 The `Json.stringify(j: Json): str` static method can be used to serialize a `Json` as a string
 ([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
 
-```TS
-let jsonString  = Json "hello";
-let jsonObj = Json { boom: 123 };
+```js
 assert(Json.stringify(jsonString) == "\"hello\"");
 assert(Json.stringify(jsonObj) == "{\"boom\":123}");
 assert(Json.stringify(jsonMutObj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
@@ -343,14 +494,14 @@ assert(Json.stringify(jsonMutObj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\
 
 The `Json.parse(s: str): Json` static method can be used to parse a string into a `Json`:
 
-```TS
+```js
 let jArray = Json.parse("[1,2,3]");
 let arr = Array<num>.fromJson(jArray);
 ```
 
 `Json.tryParse` returns an optional:
 
-```TS
+```js
 let o = Json.tryParse("xxx") ?? Json [1,2,3];
 ```
 
@@ -359,7 +510,7 @@ let o = Json.tryParse("xxx") ?? Json [1,2,3];
 The `Json.equals(lhs: Json, rhs: Json): bool` static method can be used to determine if two values
 are equal (recursively comparing arrays and objects):
 
-```TS
+```js
 assert(Json.equals(jsonString, Json "hello"));
 assert(Json.equals(jsonObj, { boom: [ 1, 2, 3 ] }));
 assert(!Json.equals(Json { hello: [ 1, 2, 3 ] }, Json { hello: [ 1, 2 ] }));
@@ -369,7 +520,7 @@ The `Json.diff(lhs: Json, rhs: Json): JsonPatch` static method can be used to ca
 difference between two JSON values. It returns a list of differences in
 [json-patch](https://jsonpatch.com/) format (P2).
 
-```TS
+```js
 let j1 = Json {
   baz: "qux",
   foo: "bar"
@@ -393,7 +544,7 @@ The `Json.patch(j: Json, patch: JsonPatch): Json` static method applies a `JsonP
 
 A `Json` value can be logged using `log()`, in which case it will be pretty-formatted:
 
-```TS
+```js
 log("my object is: ${jsonObj}");
 // is equivalent to
 log("my object is: ${Json.stringify(jsonObj, indent: 2)}");
@@ -401,7 +552,7 @@ log("my object is: ${Json.stringify(jsonObj, indent: 2)}");
 
 This will output:
 
-```TS
+```js
 my object is: {
   boom: 123
 }
@@ -409,7 +560,7 @@ my object is: {
 
 It is also legal to just log a json object:
 
-```TS
+```js
 log(jsonMutObj);
 ```
 
@@ -423,7 +574,7 @@ The `Duration` (alias `duration`) type represents a time duration.
 
 Duration literals are numbers with `m`, `s`, `h` suffixes:
 
-```TS
+```js
 let oneMinute = 1m;
 let twoSeconds = 2s;
 let threeHours = 3h;
@@ -432,7 +583,7 @@ let halfMinute: duration = 0.5m;
 
 Then:
 
-```TS
+```js
 assert(oneMinute.seconds == 60);
 assert(halfMinute.seconds == 30);
 assert(threeHours.minutes == 180);
@@ -449,7 +600,7 @@ format.
 
 Here is the initial API for the `Datetime` type:
 
-```TS
+```js
 struct DatetimeComponents {
   year: num;
   month: num;
@@ -487,7 +638,7 @@ class Datetime {
 
 A few examples:
 
-```TS
+```js
 let now = Datetime.utcNow();
 log("It is now ${now.month}/${now.day}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
 assert(now.timezone == 0); // UTC
@@ -599,7 +750,7 @@ inflight class Foo {
 
 For example (continuing the `Bucket` example above):
 
-```TS
+```ts
 let bucket = new Bucket();
 // OK! We are calling a preflight method from a preflight context
 bucket.allowPublicAccess();
@@ -695,7 +846,7 @@ Re-assignment to variables that are defined with `let` is not allowed in Wing.
 
 Variables can be reassigned to by adding the `var` modifier:
 
-```TS
+```ts
 // wing
 let var sum = 0;
 for item in [1,2,3] {
@@ -713,7 +864,7 @@ to assigning non `readonly`s to `readonly`s in TypeScript.
 By default function closure arguments are non-reassignable. By prefixing `var`
 to an argument definition you can make a re-assignable function argument:
 
-```TS
+```ts
 // wing
 let f = (arg1: num, var arg2: num) => {
   if (arg2 > 100) {
@@ -763,7 +914,7 @@ Here's a quick summary of how optionality works in Wing:
 
 One of the more common use cases for optionals is to use them in struct declarations.
 
-```TS
+```js
 struct Person {
   name: str;
   address: str?;
@@ -773,7 +924,7 @@ struct Person {
 In the `Person` struct above, the `address` field is marked as optional using `?`. This means that
 we can initialize without defining the `address` field:
 
-```TS
+```js
 let david = Person { name: "david" };
 let jonathan = Person { name: "jonathan", address: "earth" };
 assert(david.address? == false);
@@ -785,7 +936,7 @@ is also not required in a struct literal definition, and the default value will 
 means that the type of the field must be `T` and not `T?`, because we can ensure it has a value (in
 the example below the field `radix` as a type of `num`).
 
-```TS
+```js
 struct FormatOpts {
   radix: num = 10;
   someOptional: str?;
@@ -802,7 +953,7 @@ in the struct declaration. If an optional field doesn't have a default value, it
 
 This is a compilation error:
 
-```TS
+```js
 struct Test {
   hello: str? = "hello";
 //       ^^^^ type should be `str` since a default value is provided
@@ -817,7 +968,7 @@ struct Test {
 
 Use `T?` to indicate that a variable is optional. To initialize it without a value use `= nil`.
 
-```TS
+```js
 let var x: num? = 12;
 let var y: num? = nil;
 assert(y? == false); // y doesn't have a value
@@ -835,7 +986,7 @@ assert(x? == false);
 
 Similarly to struct fields, fields of classes can be also defined as optional using `T?`:
 
-```TS
+```js
 class Foo {
   myOpt: num?;
   var myVar: str?;
@@ -856,7 +1007,7 @@ class Foo {
 In the following example, the argument `by` is optional, so it is possible to call `increment()`
 without supplying a value for `by`:
 
-```TS
+```js
 let increment = (x: num, by: num?): num => {
   return x + (by ?? 1);
 };
@@ -869,7 +1020,7 @@ Alternatively, using the default value notation can be used to allow a parameter
 when calling the function. Using a default value in the function declaration ensures that `by`
 always has a value so there is no need to unwrap it (this is why its type is `num` and not `num?`):
 
-```TS
+```js
 let increment = (x: num, by: num = 1): num {
   return x + by;
 }
@@ -877,7 +1028,7 @@ let increment = (x: num, by: num = 1): num {
 
 Non-optional arguments can only be used before all optional arguments:
 
-```TS
+```js
 let myFun = (a: str, x?: num, y: str): void = { /* ... */ };
 //-----------------------------^^^^^^ ERROR: cannot declare a non-optional argument after an optional
 ```
@@ -885,7 +1036,7 @@ let myFun = (a: str, x?: num, y: str): void = { /* ... */ };
 If a function uses a keyword argument struct as the last argument, and there are other optional
 arguments before, it also has to be declared as optional.
 
-```TS
+```js
 let parseInt = (x: str, radix: num?, opts?: ParseOpts): num { /* ... */ };
 // or
 let parseInt = (x: str, radix: num = 10, opts: ParseOpts = ParseOpts {}): num { /* ... */ };
@@ -893,7 +1044,7 @@ let parseInt = (x: str, radix: num = 10, opts: ParseOpts = ParseOpts {}): num { 
 
 The optionality of keyword arguments is determined by the struct field's optionality:
 
-```TS
+```js
 struct Options {
   myRequired: str;
   myOptional: num?;
@@ -912,7 +1063,7 @@ f(myRequired: "dude", implicitOptional: true);
 If a function returns an optional type, use the `return nil;` statement to indicate that the value
 is not defined.
 
-```TS
+```js
 struct Name { first: str, last: str };
 
 let tryParseName = (fullName: str): Name? => {
@@ -935,7 +1086,7 @@ if let name = tryParseName("Neo Matrix") {
 To test if an optional has a value or not, you can either use `x == nil` or `x != nil` or the
 special syntax `x?`.
 
-```TS
+```js
 let isAddressDefined = myPerson.address?; // type is `bool`
 let isAddressReallyDefined = myPerson.address != nil; // equivalent
 
@@ -959,7 +1110,7 @@ if myPerson.address == nil {
 The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
 non-optional variable defined inside the block:
 
-```TS
+```js
 if let address = myPerson.address {
   print(address.len);
   print(address); // address is type `str`
@@ -975,13 +1126,13 @@ if let address = myPerson.address {
 The `??` operator can be used to unwrap or provide a default value. This returns a value of `T` that
 can safely be used.
 
-```TS
+```js
 let address: str = myPerson.address ?? "Planet Earth";
 ```
 
 `??` can be chained:
 
-```TS
+```js
 let address = myPerson.address ?? yourPerson.address ?? "No address";
 //            <----- str? ---->    <----- str? ------>    <-- str --->
 ```
@@ -993,7 +1144,7 @@ The last element in a `??` chain must be a non-optional type `T`.
 The `?.` syntax can be used for optional chaining. Optional chaining returns a value of type `T?`
 which must be unwrapped in order to be used.
 
-```TS
+```js
 let ipAddress: str? = options.networking?.ipAddress;
 
 if let ip = ipAddress {
@@ -1775,7 +1926,6 @@ separated with commas.
 
 All methods of an interface are implicitly public and cannot be of any other
 type of visibility (private, protected, etc.).
-Return type is required for interface methods.
 
 Interface fields are not supported.
 
@@ -2143,7 +2293,7 @@ class Rect {
 Unit tests can be defined in Wing using the built-in test statement.
 A test statement expects a name and a block of inflight code to execute.
 
-```TS
+```js
 let b = new cloud.Bucket();
 
 test "can add objects" {
@@ -2213,7 +2363,7 @@ You may import JSII modules in Wing and they are considered preflight classes if
 JSII type manifest shows that the JSII module is a construct. Wing is a consumer
 of JSII modules currently.
 
-```TS
+```ts
 bring "aws-cdk-lib" as cdk;
 let bucket = cdk.awsS3.Bucket(
   publicAccess: true,
@@ -2232,7 +2382,7 @@ The `extern "<commonjs module path or name>"` modifier can be used on method dec
 In the following example, the static inflight method `makeId` is implemented
 in `helper.js`:
 
-```TS
+```js
 // task-list.w
 class TaskList {
   // ...
