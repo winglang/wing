@@ -338,14 +338,13 @@ let jsonString  = Json "hello";
 let jsonObj = Json { boom: 123 };
 assert(Json.stringify(jsonString) == "\"hello\"");
 assert(Json.stringify(jsonObj) == "{\"boom\":123}");
-assert(Json.stringify(jsonMutObj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
 ```
 
 The `Json.parse(s: str): Json` static method can be used to parse a string into a `Json`:
 
 ```TS
-let jArray = Json.parse("[1,2,3]");
-let arr = Array<num>.fromJson(jArray);
+let j = Json.parse("{ \"boom\": 123 }");
+let boom = num.fromJson(j.get("boom"));
 ```
 
 `Json.tryParse` returns an optional:
@@ -353,41 +352,6 @@ let arr = Array<num>.fromJson(jArray);
 ```TS
 let o = Json.tryParse("xxx") ?? Json [1,2,3];
 ```
-
-##### 1.1.4.10 Equality, diff and patch
-
-The `Json.equals(lhs: Json, rhs: Json): bool` static method can be used to determine if two values
-are equal (recursively comparing arrays and objects):
-
-```TS
-assert(Json.equals(jsonString, Json "hello"));
-assert(Json.equals(jsonObj, { boom: [ 1, 2, 3 ] }));
-assert(!Json.equals(Json { hello: [ 1, 2, 3 ] }, Json { hello: [ 1, 2 ] }));
-```
-
-The `Json.diff(lhs: Json, rhs: Json): JsonPatch` static method can be used to calculate the deep
-difference between two JSON values. It returns a list of differences in
-[json-patch](https://jsonpatch.com/) format (P2).
-
-```TS
-let j1 = Json {
-  baz: "qux",
-  foo: "bar"
-};
-
-let j2 = Json {
-  baz: "boo",
-  hello: ["world"]
-};
-
-assert(Json.diff(j1, j2) = [
-  { op: JsonPatch.REPLACE, path: "/baz", value: "boo" },
-  { op: JsonPatch.ADD, path: "/hello", value: ["world"] },
-  { op: JsonPatch.REMOVE, path: "/foo" }
-]);
-```
-
-The `Json.patch(j: Json, patch: JsonPatch): Json` static method applies a `JsonPatch` to a `Json` object (P2).
 
 ##### 1.1.4.11 Logging
 
