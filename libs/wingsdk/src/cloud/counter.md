@@ -2,7 +2,7 @@
 title: cloud.Counter 
 id: counter
 description: A built-in resource for representing an container for numbers in the cloud.
-keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, Counter]
+keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Counter]
 ---
 
 The `cloud.Counter` resource represents a stateful container for one or more numbers in the cloud.
@@ -64,7 +64,4 @@ The AWS implementation of `cloud.Counter` uses [Amazon DynamoDB](https://aws.ama
 
 ## API Reference
 
-The full list of APIs for `cloud.Counter` is available in the [API Reference](../05-reference/wingsdk-api.md).
-
-
-
+The full list of APIs for `cloud.Counter` is available in the [API Reference](../04-api-reference.md).

@@ -4,11 +4,11 @@ id: wingsdk
 keywords: [Wing contributors, contributors, sdk]
 ---
 
-This topic includes contribution guidelines related to the Wing SDK.
+This topic includes contribution guidelines related to the Wing SDK, the package containing the language's standard library.
 
 ## 🔨 How do I build just the SDK?
 
-The SDK resides in `libs/wingsdk` and it's where Wing's standard library of resources lives. It's written in TypeScript, and is published to npm.
+The SDK resides in `libs/wingsdk`. It's written in TypeScript, and is published to npm.
 
 The SDK is built using a couple of extra libraries and tools:
 

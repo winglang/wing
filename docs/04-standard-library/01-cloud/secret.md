@@ -2,7 +2,7 @@
 title: cloud.Secret 
 id: secret
 description: A built-in resource for securely storing secrets in the cloud.
-keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, secrets]
+keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, secrets]
 ---
 
 The `cloud.Secret` class represents a secret value (like an API key, certificate, etc.) that is securely stored in the cloud.

@@ -5,9 +5,9 @@ description: A facility for executing Wing applications on the local machine for
 keywords: [Wing simulator, simulator]
 ---
 
-The simulator is a set of APIs in the SDK that can be used to test Wing
+The simulator is a set of APIs in the standard library that can be used to test Wing
 applications without having to deploy the application to a cloud provider. The
-simulator works with any Wing application made with the SDK's `cloud` APIs.
+simulator works with any Wing application made with the standard library's `cloud` APIs.
 
 ## Quick start guide
 

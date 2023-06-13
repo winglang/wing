@@ -1,7 +1,7 @@
 ---
 title: API reference
-id: api-reference
-description: Wing Standard Library API Reference
+id: sdk
+description: Wing standard library API reference
 keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 

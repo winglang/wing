@@ -2,7 +2,7 @@
 title: cloud.Topic 
 id: topic
 description: A built-in resource for publishing messages to subscribers.
-keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, topics]
+keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, topics]
 ---
 
 The `cloud.Topic` class represents a subject of data that is open for subscription.
@@ -95,4 +95,4 @@ AWS implementations of `cloud.Topic` use [AWS SNS](https://docs.aws.amazon.com/s
 
 ## API Reference
 
-The full list of APIs for `cloud.Topic` is available in the [API Reference](../05-reference/wingsdk-api.md).
+The full list of APIs for `cloud.Topic` is available in the [API Reference](../04-api-reference.md).

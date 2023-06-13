@@ -15,7 +15,7 @@ There are many ways to contribute to Wing:
 * Submitting [pull requests](./pull_requests) for new features or helping with [reviews](https://github.com/winglang/wing/pulls)
 * Picking up a [good first issue](https://github.com/winglang/wing/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee+sort%3Aupdated-desc+) to work on
 * Reporting and fixing [bugs](./bugs)
-* Contributing to the [Wing SDK](./wingsdk)
+* Contributing to the [Wing SDK (standard library)](./wingsdk)
 * Find solutions to common issues in our [troubleshooting guide](./troubleshooting)
 * Commenting on [RFCs](/category/rfcs) or submitting one for major features
 * Asking and answering questions in the [Wing Slack](https://t.winglang.io/slack)

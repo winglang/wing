@@ -188,19 +188,19 @@ project.tasks
 project.preCompileTask.exec("patch-package");
 
 const docsFrontMatter = `---
-title: API Reference
+title: API reference
 id: sdk
-description: Wing SDK API Reference
+description: Wing standard library API reference
 keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 `;
 
-const docsPath = "../../docs/05-reference/wingsdk-api.md";
+const docsPath = "../../docs/04-standard-library/04-api-reference.md";
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
 // copy resource docs from src/cloud to docs
-docgen.exec(`cp -r src/cloud/*.md ../../docs/04-resources/`);
+docgen.exec(`cp -r src/cloud/*.md ../../docs/04-standard-library/01-cloud/`);
 
 docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);

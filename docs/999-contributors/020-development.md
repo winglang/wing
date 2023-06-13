@@ -74,7 +74,7 @@ It will run the `build`, `test` and `package` targets on all modules.
 ## 🏠 What's the recommended development workflow?
 
 The `npx nx wing` command can be executed from the root of the repository in order to build and run the
-compiler, SDK and the Wing CLI. Nx is configured to make sure only the changed components are built
+compiler, SDK (standard library) and the Wing CLI. Nx is configured to make sure only the changed components are built
 every time.
 
 To get full diagnostics, use these exports:
@@ -102,7 +102,7 @@ written in Rust, while others are written in TypeScript. Each has a README expla
 and how to use it. (If you see one missing, please open an issue and let us know!)
 
 The Wing monorepo uses [Nx] to run commands across all code packages in the `libs` and `apps`
-folders. This means it includes packages that form the entire toolchain (compiler, SDK, IDE
+folders. This means it includes packages that form the entire toolchain (compiler, standard library, IDE
 extension, etc), and the build and release bind them all together.
 
 Nx will be installed alongside the rest of the project's dependencies after you run `npm install`

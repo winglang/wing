@@ -2,7 +2,7 @@
 title: cloud.Bucket 
 id: bucket
 description: A built-in resource for handling object storage in the cloud.
-keywords: [Wing reference, Wing language, language, Wing sdk, Wing programming language, Object storage, Buckets]
+keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Object storage, Buckets]
 ---
 
 The `cloud.Bucket` resource represents a container for storing data in the cloud.
@@ -106,7 +106,7 @@ The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](ht
 
 ## API Reference
 
-The full list of APIs for `cloud.Bucket` is available in the [API Reference](../05-reference/wingsdk-api.md).
+The full list of APIs for `cloud.Bucket` is available in the [API Reference](../04-api-reference.md).
 
 
 
