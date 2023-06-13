@@ -1,4 +1,5 @@
 import { Code, InflightClient } from "../core";
+import { Duration } from "../std";
 
 /**
  * Utility functions.
@@ -31,8 +32,8 @@ export class Util {
    * @param duration The duration that has to pass before the Promise is resolved.
    * @inflight
    */
-  public static async sleep(duration: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, duration));
+  public static async sleep(duration: Duration): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, duration.seconds * 1000));
   }
 
   /**
