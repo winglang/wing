@@ -1,0 +1,102 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: delete
+  kind: 2
+  detail: "inflight (key: str, opts: BucketDeleteOptions?): void"
+  insertText: delete($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: exists
+  kind: 2
+  detail: "inflight (key: str): bool"
+  insertText: exists($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: get
+  kind: 2
+  detail: "inflight (key: str): str"
+  insertText: get($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: getJson
+  kind: 2
+  detail: "inflight (key: str): Json"
+  insertText: getJson($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: list
+  kind: 2
+  detail: "inflight (prefix: str?): Array<str>"
+  insertText: list($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: publicUrl
+  kind: 2
+  detail: "inflight (key: str): str"
+  insertText: publicUrl($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: put
+  kind: 2
+  detail: "inflight (key: str, body: str): void"
+  insertText: put($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: putJson
+  kind: 2
+  detail: "inflight (key: str, body: Json): void"
+  insertText: putJson($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryDelete
+  kind: 2
+  detail: "inflight (key: str): bool"
+  insertText: tryDelete($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryGet
+  kind: 2
+  detail: "inflight (key: str): str?"
+  insertText: tryGet($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryGetJson
+  kind: 2
+  detail: "inflight (key: str): Json?"
+  insertText: tryGetJson($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: display
+  kind: 5
+  detail: Display
+  insertText: display
+  insertTextFormat: 2
+- label: node
+  kind: 5
+  detail: Node
+  insertText: node
+  insertTextFormat: 2
+

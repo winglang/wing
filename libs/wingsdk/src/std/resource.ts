@@ -159,6 +159,7 @@ export abstract class Resource extends Construct implements IResource {
       case "string":
       case "boolean":
       case "number":
+      case "undefined":
         return;
 
       case "object":

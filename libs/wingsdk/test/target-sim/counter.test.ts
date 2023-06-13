@@ -57,6 +57,32 @@ test("inc", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("key inc", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Counter._newCounter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const value0 = await client.inc(1, "my-key");
+  expect(value0).toEqual(0); // always returns the value before inc (like "i++");
+
+  const value1 = await client.inc(undefined, "my-key");
+  expect(value1).toEqual(1);
+
+  const value2 = await client.inc(10, "my-key");
+  expect(value2).toEqual(1 + 1);
+
+  const value3 = await client.inc(10, "my-key");
+  expect(value3).toEqual(1 + 1 + 10);
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 test("dec", async () => {
   // GIVEN
   const app = new SimApp();
@@ -79,6 +105,32 @@ test("dec", async () => {
 
   const value3 = await client.dec(10);
   expect(value3).toEqual(123 - 1 - 1 - 10);
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("key dec", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Counter._newCounter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const value0 = await client.dec(1, "my-key");
+  expect(value0).toEqual(0); // always returns the value before inc (like "i--");
+
+  const value1 = await client.dec(undefined, "my-key");
+  expect(value1).toEqual(-1);
+
+  const value2 = await client.dec(10, "my-key");
+  expect(value2).toEqual(-1 - 1);
+
+  const value3 = await client.dec(10, "my-key");
+  expect(value3).toEqual(-1 - 1 - 10);
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
@@ -113,6 +165,33 @@ test("peek with initial value", async () => {
   expect(peek).toEqual(123);
 });
 
+test("key peek without value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Counter._newCounter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const peek = await client.peek("my-key");
+  expect(peek).toEqual(0);
+});
+
+test("key peek with value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Counter._newCounter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  await client.inc(10, "my-key");
+  const peek = await client.peek("my-key");
+  expect(peek).toEqual(10);
+});
+
 test("set to new value", async () => {
   // GIVEN
   const app = new SimApp();
@@ -126,6 +205,25 @@ test("set to new value", async () => {
 
   await client.set(5);
   const peek = await client.peek();
+  expect(peek).toEqual(5);
+
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("key set to new value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Counter._newCounter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  await client.set(5, "my-key");
+  const peek = await client.peek("my-key");
   expect(peek).toEqual(5);
 
   await s.stop();

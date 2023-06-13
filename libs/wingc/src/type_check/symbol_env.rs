@@ -254,7 +254,7 @@ impl SymbolEnv {
 		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type] [SymbolLookupInfoMut];
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
-	/// nested symbol (e.g. `foo.bar`) if `nested_ver` is larger than 1.
+	/// nested symbol (e.g. `foo.bar`) if `nested_vec` is larger than 1.
 	pub fn lookup_nested(self: reference([Self]), nested_vec: &[&Symbol], statement_idx: Option<usize>) -> LookupResult {
 		let mut it = nested_vec.iter();
 
@@ -396,20 +396,22 @@ mod tests {
 		);
 
 		// Define a globally visible variable in the parent env
+		let sym = Symbol::global("parent_global_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_global_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
 		));
 
 		// Define a positionally visible variable in the parent env before the child scope
+		let sym = Symbol::global("parent_low_pos_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_low_pos_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Index(child_scope_idx - 1),
 			),
 			Ok(())
@@ -417,20 +419,22 @@ mod tests {
 
 		// Define a positionally visible variable in the parent env after the child scope
 		let parent_high_pos_var_idx = child_scope_idx + 1;
+		let sym = Symbol::global("parent_high_pos_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_high_pos_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Index(parent_high_pos_var_idx),
 			),
 			Ok(())
 		));
 
 		// Define a globally visible variable in the child env
+		let sym = Symbol::global("child_global_var");
 		assert!(matches!(
 			child_env.define(
-				&Symbol::global("child_global_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -529,20 +533,22 @@ mod tests {
 		));
 
 		// Define a variable in n2's env
+		let sym = Symbol::global("ns2_var");
 		assert!(matches!(
 			ns2.env.get_ref().define(
-				&Symbol::global("ns2_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
 		));
 
 		// Define a variable in n1's env
+		let sym = Symbol::global("ns1_var");
 		assert!(matches!(
 			ns1.env.get_ref().define(
-				&Symbol::global("ns1_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
