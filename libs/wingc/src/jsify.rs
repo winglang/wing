@@ -180,18 +180,9 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		match self.files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
-			Ok(()) => {}
-			Err(err) => report_diagnostic(err.into()),
-		}
-	}
-
-	/// Write all files to the output directory
-	pub fn emit_files(&mut self, out_dir: &Path) {
-		match self.files.emit_files(out_dir) {
-			Ok(()) => {}
-			Err(err) => report_diagnostic(err.into()),
-		}
+==== BASE ====
+		output.to_string()
+==== BASE ====
 	}
 
 	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
