@@ -126,7 +126,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.ref }}
-        run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF packages/*.tgz playground-console.tgz 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
+        run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF dist/packages/*.tgz playground-console.tgz 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
 
       - name: Extract version
         id: extract-version
@@ -164,10 +164,10 @@ jobs:
           node-version: 18
 
       - name: Login to NPM registry
-        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Publish
-        run: for file in *.tgz ; do npm publish "$file" --access public ; done
+        run: npm publish *.tgz --access public
         working-directory: dist/packages
 
       - name: Extract version
