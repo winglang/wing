@@ -3778,8 +3778,7 @@ The index of the element in the Json Array to return.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
-| <code><a href="#@winglang/sdk.std.Json.cloneMut">cloneMut</a></code> | Creates a mutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
@@ -3790,39 +3789,21 @@ The index of the element in the Json Array to return.
 
 ---
 
-##### `clone` <a name="clone" id="@winglang/sdk.std.Json.clone"></a>
+##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.Json.deepCopyMut"></a>
 
 ```wing
 bring std;
 
-std.Json.clone(json: Json)
+std.Json.deepCopyMut(json: Json)
 ```
 
-Creates a immutable deep clone of the Json.
+Creates a mutable deep copy of the Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.clone.parameter.json"></a>
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopyMut.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to clone.
-
----
-
-##### `cloneMut` <a name="cloneMut" id="@winglang/sdk.std.Json.cloneMut"></a>
-
-```wing
-bring std;
-
-std.Json.cloneMut(json: Json)
-```
-
-Creates a mutable deep clone of the Json.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.cloneMut.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to clone.
+to copy.
 
 ---
 
@@ -4538,6 +4519,31 @@ The value of the element to set.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutJson.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
+
+---
+
+##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.MutJson.deepCopy"></a>
+
+```wing
+bring std;
+
+std.MutJson.deepCopy(json: MutJson)
+```
+
+Creates an immutable deep copy of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.deepCopy.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
+
+to copy.
+
+---
 
 
 

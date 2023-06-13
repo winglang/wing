@@ -508,6 +508,24 @@ Duration <DURATION>
 "
 `;
 
+exports[`diags_with_multibyte_chars.w 1`] = `
+"error: Unknown symbol \\"asdf\\"
+  --> ../../../examples/tests/invalid/diags_with_multibyte_chars.w:4:1
+  |
+4 | asdf;
+  | ^^^^ Unknown symbol \\"asdf\\"
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`enums.w 1`] = `
 "error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
   --> ../../../examples/tests/invalid/enums.w:5:21
@@ -1010,10 +1028,10 @@ Duration <DURATION>
 
 exports[`json_static.w 1`] = `
 "error: Unknown symbol \\"set\\"
-  --> ../../../examples/tests/invalid/json_static.w:4:8
+  --> ../../../examples/tests/invalid/json_static.w:4:10
   |
-4 | immutJ.set(\\"a\\", \\"foo\\");
-  |        ^^^ Unknown symbol \\"set\\"
+4 | immutObj.set(\\"a\\", \\"foo\\");
+  |          ^^^ Unknown symbol \\"set\\"
 
 
  
