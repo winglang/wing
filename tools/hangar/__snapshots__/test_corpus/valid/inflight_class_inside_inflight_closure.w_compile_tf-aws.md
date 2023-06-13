@@ -439,11 +439,9 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure1.js";
-            const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+              require("./inflight.$Closure1.js")({
+                __parent_this: ${context._lift(__parent_this, [])},
               })
             `);
           }
@@ -472,19 +470,17 @@ class $Root extends $stdlib.std.Resource {
         return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",inflight_closure);
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.PreflightClass.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.PreflightClass.js")({
           })
         `);
       }
       _toInflight() {
-        const b_client = this._lift(this.b);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const PreflightClassClient = ${PreflightClass._toInflightType(this).text};
             const client = new PreflightClassClient({
-              b: ${b_client},
+              b: ${this._lift(this.b, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -505,11 +501,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const f_client = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            f: ${f_client},
+          require("./inflight.$Closure2.js")({
+            f: ${context._lift(f, ["invoke"])},
           })
         `);
       }
@@ -541,9 +535,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({
           })
         `);
       }

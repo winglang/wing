@@ -251,8 +251,7 @@ module.exports = function({  }) {
           "variables": {
             "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
-            "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
+            "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Handler-c8f4f2a1",
@@ -341,9 +340,8 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Fetch.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Fetch.js")({
           })
         `);
       }
@@ -373,10 +371,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
             std_Json: ${std_JsonClient.text},
           })
         `);
@@ -407,13 +404,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const f_client = context._lift(f);
-        const api_client = context._lift(api);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            f: ${f_client},
-            api: ${api_client},
+          require("./inflight.$Closure2.js")({
+            f: ${context._lift(f, ["get"])},
+            api: ${context._lift(api, ["url"])},
           })
         `);
       }
@@ -434,7 +428,7 @@ class $Root extends $stdlib.std.Resource {
           $Closure2._registerBindObject(f, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(api.url, host, []);
+          $Closure2._registerBindObject(api, host, ["url"]);
           $Closure2._registerBindObject(f, host, ["get"]);
         }
         super._registerBind(host, ops);

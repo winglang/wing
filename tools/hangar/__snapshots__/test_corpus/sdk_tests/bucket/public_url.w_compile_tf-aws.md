@@ -268,13 +268,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const publicBucket_client = context._lift(publicBucket);
-        const privateBucket_client = context._lift(privateBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            publicBucket: ${publicBucket_client},
-            privateBucket: ${privateBucket_client},
+          require("./inflight.$Closure1.js")({
+            publicBucket: ${context._lift(publicBucket, ["publicUrl", "put"])},
+            privateBucket: ${context._lift(privateBucket, ["publicUrl", "put"])},
           })
         `);
       }

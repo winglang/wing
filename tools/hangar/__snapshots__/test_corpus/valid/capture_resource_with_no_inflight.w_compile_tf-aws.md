@@ -175,19 +175,17 @@ class $Root extends $stdlib.std.Resource {
         this.field = "hey";
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.A.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.A.js")({
           })
         `);
       }
       _toInflight() {
-        const field_client = this._lift(this.field);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const AClient = ${A._toInflightType(this).text};
             const client = new AClient({
-              field: ${field_client},
+              field: ${this._lift(this.field, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -208,11 +206,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const a_client = context._lift(a);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            a: ${a_client},
+          require("./inflight.$Closure1.js")({
+            a: ${context._lift(a, ["field"])},
           })
         `);
       }
@@ -232,7 +228,7 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(a, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a.field, host, []);
+          $Closure1._registerBindObject(a, host, ["field"]);
         }
         super._registerBind(host, ops);
       }

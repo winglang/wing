@@ -203,19 +203,17 @@ class $Root extends $stdlib.std.Resource {
         return 99;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
-        const instanceField_client = this._lift(this.instanceField);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              instanceField: ${instanceField_client},
+              instanceField: ${this._lift(this.instanceField, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -241,9 +239,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }

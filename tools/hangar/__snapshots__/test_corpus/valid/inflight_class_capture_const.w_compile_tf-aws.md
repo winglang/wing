@@ -177,11 +177,9 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
-        const myConst_client = context._lift(myConst);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            myConst: ${myConst_client},
+          require("./inflight.Foo.js")({
+            myConst: ${context._lift(myConst, [])},
           })
         `);
       }
@@ -213,12 +211,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const myConst_client = context._lift(myConst);
         const FooClient = Foo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            myConst: ${myConst_client},
+          require("./inflight.$Closure1.js")({
+            myConst: ${context._lift(myConst, [])},
             Foo: ${FooClient.text},
           })
         `);

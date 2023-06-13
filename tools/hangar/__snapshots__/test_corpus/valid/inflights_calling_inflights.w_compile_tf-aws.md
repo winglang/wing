@@ -444,11 +444,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const globalBucket_client = context._lift(globalBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            globalBucket: ${globalBucket_client},
+          require("./inflight.$Closure1.js")({
+            globalBucket: ${context._lift(globalBucket, ["put"])},
           })
         `);
       }
@@ -480,11 +478,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const storeInBucket_client = context._lift(storeInBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            storeInBucket: ${storeInBucket_client},
+          require("./inflight.$Closure2.js")({
+            storeInBucket: ${context._lift(storeInBucket, ["handle"])},
           })
         `);
       }
@@ -516,13 +512,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const func1_client = context._lift(func1);
-        const globalBucket_client = context._lift(globalBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            func1: ${func1_client},
-            globalBucket: ${globalBucket_client},
+          require("./inflight.$Closure3.js")({
+            func1: ${context._lift(func1, ["invoke"])},
+            globalBucket: ${context._lift(globalBucket, ["get"])},
           })
         `);
       }
@@ -561,11 +554,9 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure4.js";
-            const globalBucket_client = context._lift(globalBucket);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                globalBucket: ${globalBucket_client},
+              require("./inflight.$Closure4.js")({
+                globalBucket: ${context._lift(globalBucket, ["list"])},
               })
             `);
           }
@@ -593,19 +584,17 @@ class $Root extends $stdlib.std.Resource {
         this.closure = new $Closure4(this,"$Closure4");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.MyResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.MyResource.js")({
           })
         `);
       }
       _toInflight() {
-        const closure_client = this._lift(this.closure);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this).text};
             const client = new MyResourceClient({
-              closure: ${closure_client},
+              closure: ${this._lift(this.closure, ["handle"])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -629,11 +618,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure5.js";
-        const x_client = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            x: ${x_client},
+          require("./inflight.$Closure5.js")({
+            x: ${context._lift(x, ["foo"])},
           })
         `);
       }

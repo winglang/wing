@@ -387,11 +387,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const counterA_client = context._lift(counterA);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counterA: ${counterA_client},
+          require("./inflight.$Closure1.js")({
+            counterA: ${context._lift(counterA, ["peek"])},
           })
         `);
       }
@@ -423,11 +421,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const counterB_client = context._lift(counterB);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counterB: ${counterB_client},
+          require("./inflight.$Closure2.js")({
+            counterB: ${context._lift(counterB, ["peek"])},
           })
         `);
       }
@@ -459,11 +455,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const counterC_client = context._lift(counterC);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counterC: ${counterC_client},
+          require("./inflight.$Closure3.js")({
+            counterC: ${context._lift(counterC, ["peek"])},
           })
         `);
       }

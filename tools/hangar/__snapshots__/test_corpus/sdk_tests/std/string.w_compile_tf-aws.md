@@ -338,12 +338,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const PARSE_ERROR_client = context._lift(PARSE_ERROR);
         const std_StringClient = std.String._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            PARSE_ERROR: ${PARSE_ERROR_client},
+          require("./inflight.$Closure1.js")({
+            PARSE_ERROR: ${context._lift(PARSE_ERROR, [])},
             std_String: ${std_StringClient.text},
           })
         `);
@@ -376,9 +374,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure2.js")({
           })
         `);
       }
@@ -408,9 +405,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({
           })
         `);
       }

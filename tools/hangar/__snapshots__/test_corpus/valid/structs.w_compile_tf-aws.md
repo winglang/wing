@@ -70,19 +70,17 @@ class $Root extends $stdlib.std.Resource {
         this.data = b;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
-        const data_client = this._lift(this.data);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              data: ${data_client},
+              data: ${this._lift(this.data, ["field0"])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -94,7 +92,7 @@ class $Root extends $stdlib.std.Resource {
           Foo._registerBindObject(this.data, host, []);
         }
         if (ops.includes("getStuff")) {
-          Foo._registerBindObject(this.data.field0, host, []);
+          Foo._registerBindObject(this.data, host, ["field0"]);
         }
         super._registerBind(host, ops);
       }

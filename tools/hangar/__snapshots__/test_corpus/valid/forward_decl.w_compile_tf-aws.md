@@ -74,19 +74,17 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.R.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.R.js")({
           })
         `);
       }
       _toInflight() {
-        const f_client = this._lift(this.f);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const RClient = ${R._toInflightType(this).text};
             const client = new RClient({
-              f: ${f_client},
+              f: ${this._lift(this.f, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

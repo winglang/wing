@@ -192,12 +192,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const table_client = context._lift(table);
         const std_StringClient = std.String._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            table: ${table_client},
+          require("./inflight.$Closure1.js")({
+            table: ${context._lift(table, ["insert", "list"])},
             std_String: ${std_StringClient.text},
           })
         `);

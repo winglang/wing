@@ -465,11 +465,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const c1_client = context._lift(c1);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c1: ${c1_client},
+          require("./inflight.$Closure1.js")({
+            c1: ${context._lift(c1, ["inc"])},
           })
         `);
       }
@@ -501,11 +499,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const c2_client = context._lift(c2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c2: ${c2_client},
+          require("./inflight.$Closure2.js")({
+            c2: ${context._lift(c2, ["inc"])},
           })
         `);
       }
@@ -537,9 +533,8 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Utils.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Utils.js")({
           })
         `);
       }
@@ -572,14 +567,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const c1_client = context._lift(c1);
-        const c2_client = context._lift(c2);
         const UtilsClient = Utils._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c1: ${c1_client},
-            c2: ${c2_client},
+          require("./inflight.$Closure3.js")({
+            c1: ${context._lift(c1, ["peek"])},
+            c2: ${context._lift(c2, ["peek"])},
             Utils: ${UtilsClient.text},
           })
         `);

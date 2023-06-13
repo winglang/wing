@@ -327,19 +327,17 @@ class $Root extends $stdlib.std.Resource {
         this.func = func;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Doubler.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Doubler.js")({
           })
         `);
       }
       _toInflight() {
-        const func_client = this._lift(this.func);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const DoublerClient = ${Doubler._toInflightType(this).text};
             const client = new DoublerClient({
-              func: ${func_client},
+              func: ${this._lift(this.func, ["handle"])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -363,9 +361,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }
@@ -402,13 +399,11 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure2.js";
-            const handler_client = context._lift(handler);
             const std_NumberClient = std.Number._toInflightType(context);
             const std_JsonClient = std.Json._toInflightType(context);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                handler: ${handler_client},
+              require("./inflight.$Closure2.js")({
+                handler: ${context._lift(handler, ["handle"])},
                 std_Number: ${std_NumberClient.text},
                 std_Json: ${std_JsonClient.text},
               })
@@ -438,9 +433,8 @@ class $Root extends $stdlib.std.Resource {
         return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure2(this,"$Closure2"));
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Doubler2.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Doubler2.js")({
           })
         `);
       }
@@ -468,9 +462,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({
           })
         `);
       }
@@ -500,11 +493,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
-        const f_client = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            f: ${f_client},
+          require("./inflight.$Closure4.js")({
+            f: ${context._lift(f, ["invoke"])},
           })
         `);
       }

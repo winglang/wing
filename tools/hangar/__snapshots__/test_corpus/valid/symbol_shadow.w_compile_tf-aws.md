@@ -439,11 +439,9 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure2.js";
-            const s_client = context._lift(s);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                s: ${s_client},
+              require("./inflight.$Closure2.js")({
+                s: ${context._lift(s, [])},
               })
             `);
           }
@@ -471,9 +469,8 @@ class $Root extends $stdlib.std.Resource {
         this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight in resource should capture the right scoped var",new $Closure2(this,"$Closure2"));
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.A.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.A.js")({
           })
         `);
       }
@@ -501,11 +498,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const s_client = context._lift(s);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            s: ${s_client},
+          require("./inflight.$Closure3.js")({
+            s: ${context._lift(s, [])},
           })
         `);
       }
@@ -537,9 +532,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure4.js")({
           })
         `);
       }
@@ -573,11 +567,9 @@ class $Root extends $stdlib.std.Resource {
           this.display.hidden = true;
         }
         static _toInflightType(context) {
-          const self_client_path = "././inflight.$Closure1.js";
-          const s_client = context._lift(s);
           return $stdlib.core.NodeJsCode.fromInline(`
-            require("${self_client_path}")({
-              s: ${s_client},
+            require("./inflight.$Closure1.js")({
+              s: ${context._lift(s, [])},
             })
           `);
         }

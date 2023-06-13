@@ -79,9 +79,8 @@ class $Root extends $stdlib.std.Resource {
         {console.log(`my id is ${this.node.id}`)};
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.WingResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.WingResource.js")({
           })
         `);
       }

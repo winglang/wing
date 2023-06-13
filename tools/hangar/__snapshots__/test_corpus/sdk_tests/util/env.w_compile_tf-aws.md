@@ -161,14 +161,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const RANDOM_client = context._lift(RANDOM);
-        const NIL_client = context._lift(NIL);
         const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            RANDOM: ${RANDOM_client},
-            NIL: ${NIL_client},
+          require("./inflight.$Closure1.js")({
+            RANDOM: ${context._lift(RANDOM, [])},
+            NIL: ${context._lift(NIL, [])},
             util_Util: ${util_UtilClient.text},
           })
         `);

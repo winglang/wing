@@ -160,13 +160,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const s1_client = context._lift(s1);
-        const s2_client = context._lift(s2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            s1: ${s1_client},
-            s2: ${s2_client},
+          require("./inflight.$Closure1.js")({
+            s1: ${context._lift(s1, [])},
+            s2: ${context._lift(s2, [])},
           })
         `);
       }

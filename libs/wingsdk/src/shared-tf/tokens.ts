@@ -1,13 +1,18 @@
-import { Fn, Token } from "cdktf";
+import { DefaultTokenResolver, Fn, StringConcat, Token, Tokenization } from "cdktf";
 import { Function } from "../cloud";
 import { Tokens } from "../core/tokens";
 import { IInflightHost } from "../std";
+import { IConstruct } from "constructs";
 
 /**
  * Represents values that can only be resolved after the app is synthesized.
  * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
  */
 export class CdkTfTokens extends Tokens {
+  constructor(private readonly stack: IConstruct) {
+    super();
+  }
+
   /**
    * Returns true is the given value is a CDKTF token.
    */
@@ -21,7 +26,7 @@ export class CdkTfTokens extends Tokens {
    */
   public lift(value: any): string {
     return `JSON.parse(process.env[${JSON.stringify(
-      this.envName(JSON.stringify(value))
+      this.envNameForToken(value)
     )}])`;
   }
 
@@ -33,11 +38,16 @@ export class CdkTfTokens extends Tokens {
       throw new Error(`Tokens can only be bound by a Function for now`);
     }
 
-    const envName = this.envName(JSON.stringify(value));
+    const envName = this.envNameForToken(value);
     const envValue = Fn.jsonencode(value);
-    // the same token might be bound multiple times by different variables/inflight contexts
     if (host.env[envName] === undefined) {
       host.addEnvironment(envName, envValue);
     }
   }
+
+  private envNameForToken(value: any) {
+    const resolved = Tokenization.resolve(value, { scope: this.stack, resolver: new DefaultTokenResolver(new StringConcat()) });
+    return this.envName(resolved);
+  }
 }
+

@@ -205,11 +205,12 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        // structs are just plain objects
-        if (obj.constructor.name === "Object") {
-          Object.values(obj).forEach((item) =>
-            this._registerBindObject(item, host, ops)
-          );
+        // if this is a struct or a construct, recursively register its members
+        if (obj.constructor.name === "Object" || Construct.isConstruct(obj)) {
+          for (const op of ops) {
+            const value = (obj as any)[op];
+            this._registerBindObject(value, host, []);
+          }
           return;
         }
         break;
@@ -224,7 +225,7 @@ export abstract class Resource extends Construct implements IResource {
     }
 
     throw new Error(
-      `unable to serialize immutable data object of type ${obj.constructor?.name}`
+      `objects of type '${obj.constructor?.name}' cannot be referenced from an inflight scope`
     );
   }
 
@@ -280,15 +281,20 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
     for (const op of ops) {
+      // if there is a preflight property with the op name, we can just allow it to be bound. we
+      // don't allow preflight and inflight members to have the same name, so this is a safe.
+      if (op in this) {
+        continue;
+      }
+
       if (!this.inflightOps.includes(op)) {
         throw new Error(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
+          `Resource "${this.node.path}" does not support inflight operation "${op}" (requested by "${host.node.path})"`
         );
       }
     }
@@ -349,12 +355,13 @@ export abstract class Resource extends Construct implements IResource {
    * method), this method will be called and the result will be returned. Otherwise, the value is
    * returned as-is.
    *
-   * @param value The value to lift.
+   * @param obj The object to lift.
+   * @param props The names of the properties being referenced within the object.
    * @returns a string representation of the value in an inflight context.
    * @internal
    */
-  protected _lift(value: any): string {
-    return serializeImmutableData(this, value);
+  protected _lift(value: any, props: string[] = []): string {
+    return serializeImmutableData(this, value, props);
   }
 }
 

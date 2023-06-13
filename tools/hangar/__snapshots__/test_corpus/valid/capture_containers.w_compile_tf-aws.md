@@ -167,19 +167,13 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const arr_client = context._lift(arr);
-        const mySet_client = context._lift(mySet);
-        const myMap_client = context._lift(myMap);
-        const arrOfMap_client = context._lift(arrOfMap);
-        const j_client = context._lift(j);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            arr: ${arr_client},
-            mySet: ${mySet_client},
-            myMap: ${myMap_client},
-            arrOfMap: ${arrOfMap_client},
-            j: ${j_client},
+          require("./inflight.$Closure1.js")({
+            arr: ${context._lift(arr, ["at", "length"])},
+            mySet: ${context._lift(mySet, ["has", "size"])},
+            myMap: ${context._lift(myMap, ["has", "size"])},
+            arrOfMap: ${context._lift(arrOfMap, ["at"])},
+            j: ${context._lift(j, [])},
           })
         `);
       }

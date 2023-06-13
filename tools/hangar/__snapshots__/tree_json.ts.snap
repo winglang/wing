@@ -26,8 +26,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       "wing:resource:connections": [],
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.245",
                     },
                     "display": {
                       "hidden": true,
@@ -40,8 +40,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       "wing:resource:connections": [],
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.245",
                     },
                     "display": {
                       "hidden": true,
@@ -137,16 +137,16 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "id": "Foo",
                         "path": "root/Default/Default/Bar/Foo",
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.245",
                     },
                     "id": "Bar",
                     "path": "root/Default/Default/Bar",
@@ -181,8 +181,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           ],
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "hidden": true,
@@ -202,8 +202,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           ],
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "hidden": true,
@@ -223,8 +223,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           ],
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "hidden": true,
@@ -424,8 +424,8 @@ exports[`tree.json for an app with many resources 1`] = `
                               },
                             },
                             "constructInfo": {
-                              "fqn": "@winglang/sdk.cloud.Function",
-                              "version": "0.0.0",
+                              "fqn": "constructs.Construct",
+                              "version": "10.1.245",
                             },
                             "display": {
                               "description": "A cloud function (FaaS)",
@@ -439,8 +439,8 @@ exports[`tree.json for an app with many resources 1`] = `
                               "wing:resource:connections": [],
                             },
                             "constructInfo": {
-                              "fqn": "@winglang/sdk.std.Resource",
-                              "version": "0.0.0",
+                              "fqn": "constructs.Construct",
+                              "version": "10.1.245",
                             },
                             "display": {
                               "hidden": true,
@@ -472,8 +472,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           ],
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "hidden": true,
@@ -667,8 +667,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Function",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "description": "A cloud function (FaaS)",
@@ -682,8 +682,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           "wing:resource:connections": [],
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "hidden": true,
@@ -819,8 +819,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Function",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "description": "A cloud function (FaaS)",
@@ -834,8 +834,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           "wing:resource:connections": [],
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "hidden": true,
@@ -845,8 +845,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.245",
                     },
                     "id": "BigPublisher",
                     "path": "root/Default/Default/BigPublisher",
@@ -1008,8 +1008,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Function",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "description": "A cloud function (FaaS)",
@@ -1020,8 +1020,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Test",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.245",
                     },
                     "display": {
                       "description": "A cloud unit test.",
@@ -1157,8 +1157,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Function",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.245",
                         },
                         "display": {
                           "description": "A cloud function (FaaS)",
@@ -1169,8 +1169,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Test",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.245",
                     },
                     "display": {
                       "description": "A cloud unit test.",
@@ -1181,8 +1181,8 @@ exports[`tree.json for an app with many resources 1`] = `
                   },
                 },
                 "constructInfo": {
-                  "fqn": "@winglang/sdk.std.Resource",
-                  "version": "0.0.0",
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
                 },
                 "id": "Default",
                 "path": "root/Default/Default",
@@ -1223,8 +1223,8 @@ exports[`tree.json for an app with many resources 1`] = `
               },
             },
             "constructInfo": {
-              "fqn": "@winglang/sdk.core.App",
-              "version": "0.0.0",
+              "fqn": "constructs.Construct",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",

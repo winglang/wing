@@ -65,19 +65,17 @@ class $Root extends $stdlib.std.Resource {
         this.SumStr = "wow!";
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
-        const SumStr_client = this._lift(this.SumStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              SumStr: ${SumStr_client},
+              SumStr: ${this._lift(this.SumStr, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

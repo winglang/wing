@@ -173,19 +173,13 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const myStr_client = context._lift(myStr);
-        const myNum_client = context._lift(myNum);
-        const mySecondBool_client = context._lift(mySecondBool);
-        const myBool_client = context._lift(myBool);
-        const myDur_client = context._lift(myDur);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            myStr: ${myStr_client},
-            myNum: ${myNum_client},
-            mySecondBool: ${mySecondBool_client},
-            myBool: ${myBool_client},
-            myDur: ${myDur_client},
+          require("./inflight.$Closure1.js")({
+            myStr: ${context._lift(myStr, [])},
+            myNum: ${context._lift(myNum, [])},
+            mySecondBool: ${context._lift(mySecondBool, [])},
+            myBool: ${context._lift(myBool, [])},
+            myDur: ${context._lift(myDur, [])},
           })
         `);
       }

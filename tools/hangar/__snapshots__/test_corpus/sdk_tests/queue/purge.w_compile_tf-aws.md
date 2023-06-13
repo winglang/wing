@@ -218,9 +218,8 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.TestHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.TestHelper.js")({
           })
         `);
       }
@@ -250,13 +249,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const q_client = context._lift(q);
-        const js_client = context._lift(js);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            q: ${q_client},
-            js: ${js_client},
+          require("./inflight.$Closure1.js")({
+            q: ${context._lift(q, ["approxSize", "purge", "push"])},
+            js: ${context._lift(js, ["sleep"])},
           })
         `);
       }

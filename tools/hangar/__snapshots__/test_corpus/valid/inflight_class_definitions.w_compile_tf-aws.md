@@ -312,9 +312,8 @@ class $Root extends $stdlib.std.Resource {
         return "a1";
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.A.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.A.js")({
           })
         `);
       }
@@ -344,9 +343,8 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.B.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.B.js")({
           })
         `);
       }
@@ -376,9 +374,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }
@@ -416,9 +413,8 @@ class $Root extends $stdlib.std.Resource {
             return "e1";
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.E.js";
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
+              require("./inflight.E.js")({
               })
             `);
           }
@@ -448,9 +444,8 @@ class $Root extends $stdlib.std.Resource {
             const __parent_this = this;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.F.js";
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
+              require("./inflight.F.js")({
               })
             `);
           }
@@ -480,10 +475,9 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure2.js";
             const FClient = F._toInflightType(context);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
+              require("./inflight.$Closure2.js")({
                 F: ${FClient.text},
               })
             `);
@@ -514,19 +508,17 @@ class $Root extends $stdlib.std.Resource {
         return this.inner;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.D.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.D.js")({
           })
         `);
       }
       _toInflight() {
-        const inner_client = this._lift(this.inner);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const DClient = ${D._toInflightType(this).text};
             const client = new DClient({
-              inner: ${inner_client},
+              inner: ${this._lift(this.inner, ["handle"])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -550,18 +542,13 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const a_client = context._lift(a);
-        const fn_client = context._lift(fn);
-        const d_client = context._lift(d);
-        const innerD_client = context._lift(innerD);
         const BClient = B._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            a: ${a_client},
-            fn: ${fn_client},
-            d: ${d_client},
-            innerD: ${innerD_client},
+          require("./inflight.$Closure3.js")({
+            a: ${context._lift(a, ["goo"])},
+            fn: ${context._lift(fn, ["handle"])},
+            d: ${context._lift(d, ["callInner"])},
+            innerD: ${context._lift(innerD, ["handle"])},
             B: ${BClient.text},
           })
         `);

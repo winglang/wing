@@ -263,8 +263,7 @@ module.exports = function({  }) {
             "CLOUD_API_C8DACDCC": "${aws_api_gateway_stage.root_MyResource_cloudApi_api_stage_47CBB72B.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8ed8f29",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_10": "${jsonencode(aws_api_gateway_stage.root_MyResource_cloudApi_api_stage_47CBB72B.invoke_url)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.root_MyResource_cloudApi_api_stage_47CBB72B.invoke_url)}"
+            "WING_TOKEN_AWS_API_GATEWAY_STAGE_ROOT_MYRESOURCE_CLOUDAPI_API_STAGE_47CBB72B_INVOKE_URL": "${jsonencode(aws_api_gateway_stage.root_MyResource_cloudApi_api_stage_47CBB72B.invoke_url)}"
           }
         },
         "function_name": "Handler-c8ed8f29",
@@ -292,8 +291,7 @@ module.exports = function({  }) {
             "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8ecc6d5",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_31": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_33": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
+            "WING_TOKEN_AWS_API_GATEWAY_STAGE_ROOT_CLOUDAPI_API_STAGE_57D6284A_INVOKE_URL": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
           }
         },
         "function_name": "Handler-c8ecc6d5",
@@ -369,21 +367,18 @@ class $Root extends $stdlib.std.Resource {
         this.url = this.api.url;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.MyResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.MyResource.js")({
           })
         `);
       }
       _toInflight() {
-        const api_client = this._lift(this.api);
-        const url_client = this._lift(this.url);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this).text};
             const client = new MyResourceClient({
-              api: ${api_client},
-              url: ${url_client},
+              api: ${this._lift(this.api, ["url"])},
+              url: ${this._lift(this.url, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -397,7 +392,7 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("foo")) {
           MyResource._registerBindObject(MyResource, host, ["isValidUrl"]);
-          MyResource._registerBindObject(this.api.url, host, []);
+          MyResource._registerBindObject(this.api, host, ["url"]);
           MyResource._registerBindObject(this.url, host, []);
         }
         super._registerBind(host, ops);
@@ -415,11 +410,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const r_client = context._lift(r);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            r: ${r_client},
+          require("./inflight.$Closure1.js")({
+            r: ${context._lift(r, ["foo"])},
           })
         `);
       }
@@ -451,14 +444,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const url_client = context._lift(url);
-        const api_client = context._lift(api);
         const MyResourceClient = MyResource._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            url: ${url_client},
-            api: ${api_client},
+          require("./inflight.$Closure2.js")({
+            url: ${context._lift(url, [])},
+            api: ${context._lift(api, ["url"])},
             MyResource: ${MyResourceClient.text},
           })
         `);
@@ -481,7 +471,7 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(MyResource, host, ["isValidUrl"]);
-          $Closure2._registerBindObject(api.url, host, []);
+          $Closure2._registerBindObject(api, host, ["url"]);
           $Closure2._registerBindObject(url, host, []);
         }
         super._registerBind(host, ops);

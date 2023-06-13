@@ -219,15 +219,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const data_client = context._lift(data);
-        const res_client = context._lift(res);
-        const queue_client = context._lift(queue);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            data: ${data_client},
-            res: ${res_client},
-            queue: ${queue_client},
+          require("./inflight.$Closure1.js")({
+            data: ${context._lift(data, ["size"])},
+            res: ${context._lift(res, ["get", "put"])},
+            queue: ${context._lift(queue, ["push"])},
           })
         `);
       }

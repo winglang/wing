@@ -495,16 +495,11 @@ impl<'a> JsiiImporter<'a> {
 				};
 
 				let sym = Self::jsii_name_to_symbol(&p.name, &p.location_in_module);
+				let reassignable = !p.immutable.unwrap_or(false);
 				class_env
 					.define(
 						&sym,
-						SymbolKind::make_member_variable(
-							sym.clone(),
-							wing_type,
-							!matches!(p.immutable, Some(true)),
-							is_static,
-							member_phase,
-						),
+						SymbolKind::make_member_variable(sym.clone(), wing_type, reassignable, is_static, member_phase),
 						StatementIdx::Top,
 					)
 					.expect(&format!(

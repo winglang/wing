@@ -228,11 +228,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const bucket_client = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            bucket: ${bucket_client},
+          require("./inflight.$Closure1.js")({
+            bucket: ${context._lift(bucket, ["put"])},
           })
         `);
       }

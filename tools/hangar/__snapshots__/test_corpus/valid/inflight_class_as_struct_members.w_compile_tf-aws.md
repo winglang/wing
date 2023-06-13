@@ -198,9 +198,8 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
@@ -230,10 +229,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         const FooClient = Foo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
             Foo: ${FooClient.text},
           })
         `);
@@ -264,11 +262,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const getBar_client = context._lift(getBar);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            getBar: ${getBar_client},
+          require("./inflight.$Closure2.js")({
+            getBar: ${context._lift(getBar, ["handle"])},
           })
         `);
       }

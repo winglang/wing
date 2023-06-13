@@ -50,7 +50,7 @@ export abstract class CdktfApp extends App {
 
     this.outdir = outdir;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
-    this._tokens = new CdkTfTokens();
+    this._tokens = new CdkTfTokens(cdktfStack);
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.

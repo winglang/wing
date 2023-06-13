@@ -11,7 +11,6 @@ use std::{
 	collections::{BTreeMap, BTreeSet},
 	fmt::Display,
 	path::Path,
-	slice::Iter,
 	vec,
 };
 
@@ -906,8 +905,13 @@ impl<'a> JSifier<'a> {
 		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
 
 		// Find all free variables in the class, and return a list of their symbols
-		let (captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
 
+		if let Some(parent) = &class.parent {
+			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
+			captured_types.insert(parent.full_path(), parent_type);
+		}
+		
 		// Get all references between inflight methods and preflight values
 		let mut refs = self.find_inflight_references(class, &captured_vars);
 
@@ -965,10 +969,10 @@ impl<'a> JSifier<'a> {
 			}
 
 			// emit the `_toInflightType` static method
-			code.add_code(self.jsify_to_inflight_type_method(&class, &captured_vars, &captured_types));
+			code.add_code(self.jsify_to_inflight_type_method(&class, &captured_vars, &captured_types, &refs));
 
 			// emit the `_toInflight` instance method
-			code.add_code(self.jsify_toinflight_method(&class.name, &lifted_fields));
+			code.add_code(self.jsify_to_inflight_instance_method(&class.name, &lifted_fields, &refs));
 
 			// call `_registerBindObject` to register the class's host binding methods (for type & instance binds).
 			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Instance));
@@ -1046,24 +1050,24 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
+	/// Emits the `_toInflightType()` static method
+	///
+	/// Parameters:
+	/// - `class` is the class that is being jsified.
+	/// - `lifted_objects` is a map from object names to the set of properties that are accessed on that object.
+	/// - `captured_types` is the list of types that are referenced in the inflight class.
 	fn jsify_to_inflight_type_method(
 		&mut self,
 		class: &AstClass,
-		lifted_vars: &IndexSet<String>,
+		captured_vars: &IndexSet<String>,
 		captured_types: &IndexMap<Vec<Symbol>, TypeRef>,
+		refs: &BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
 	) -> CodeMaker {
-		let client_path = Self::js_resolve_path(&format!("./{}", inflight_filename(class)));
+		let client_path = Self::js_resolve_path(&inflight_filename(class));
 
 		let mut code = CodeMaker::default();
 
 		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
-
-		code.line(format!("const self_client_path = {client_path};"));
-
-		// create an inflight client for each object that is captured from the environment
-		for var_name in lifted_vars {
-			code.line(format!("const {var_name}_client = context._lift({var_name});",));
-		}
 
 		// create an inflight type for each referenced preflight type
 		for (n, t) in captured_types {
@@ -1089,9 +1093,13 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
-		code.open("require(\"${self_client_path}\")({");
-		for var_name in lifted_vars {
-			code.line(format!("{var_name}: ${{{var_name}_client}},"));
+		code.open(format!("require({client_path})({{"));
+
+		// create a _lift() calls for each referenced preflight object
+		let lifted_objects = make_lift_args(&captured_vars.iter().map(|f| f.clone()).collect_vec(), &refs);
+
+		for (var_name, props) in lifted_objects {
+			code.line(format!("{var_name}: ${{context._lift({var_name}, {props})}},"));
 		}
 		for (type_name, _) in captured_types {
 			let inflight_name = jsify_type_name(type_name, Phase::Inflight);
@@ -1105,18 +1113,17 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_toinflight_method(&mut self, resource_name: &Symbol, captured_fields: &[String]) -> CodeMaker {
+	fn jsify_to_inflight_instance_method(
+		&mut self,
+		resource_name: &Symbol,
+		lifted_fields: &[String],
+		refs: &BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
+	) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		code.open("_toInflight() {");
-
 		// create an inflight client for each "child" object
-		for inner_member_name in captured_fields {
-			code.line(format!(
-				"const {}_client = this._lift(this.{});",
-				inner_member_name, inner_member_name,
-			));
-		}
+		let with_this = lifted_fields.iter().map(|f| format!("this.{f}")).collect_vec();
 
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
@@ -1129,8 +1136,10 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("const client = new {}Client({{", resource_name.name));
 
-		for inner_member_name in captured_fields {
-			code.line(format!("{inner_member_name}: ${{{inner_member_name}_client}},"));
+		for (field, ops) in make_lift_args(&with_this, refs) {
+			// remove the "this." prefix from the field name
+			let key = field.strip_prefix("this.").unwrap_or(&field);
+			code.line(format!("{key}: ${{this._lift({field}, {ops})}},"));
 		}
 
 		code.close("});");
@@ -1328,8 +1337,8 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Get the type and capture info for fields that are captured in the client of the given resource
-	fn get_lifted_fields(&self, resource_type: TypeRef) -> Vec<String> {
-		resource_type
+	fn get_lifted_fields(&self, class: TypeRef) -> Vec<String> {
+		class
 			.as_class()
 			.unwrap()
 			.env
@@ -1410,6 +1419,34 @@ impl<'a> JSifier<'a> {
 			init_refs_entry.entry(free_var.clone()).or_default();
 		}
 	}
+}
+
+/// Creates a map from object names to a JavaScript array of operations that are performed on that
+/// object. This is used when generating calls to `_lift(obj, ops)`.
+fn make_lift_args(
+	objects: &[String],
+	refs: &BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
+) -> IndexMap<String, String> {
+	let mut lifted_objects = indexmap![];
+	for var in objects {
+		let mut ops = BTreeSet::<String>::default();
+
+		for (_, method_refs) in refs {
+			if let Some(method_ops) = method_refs.get(var) {
+				ops.extend(method_ops.iter().map(|f| f.clone()));
+			}
+		}
+
+		lifted_objects.insert(var, ops);
+	}
+
+	let mut result = indexmap![];
+	for (var, ops) in lifted_objects {
+		let arr = ops.iter().map(|f| format!("\"{f}\"").clone()).collect_vec().join(", ");
+		result.insert(var.clone(), format!("[{arr}]"));
+	}
+
+	return result;
 }
 
 /// Analysizes a resource inflight method and returns a list of fields that are referenced from the
@@ -1590,24 +1627,20 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 
 		// now that we have "capture", the rest of the expression
 		// is the "qualification" of the capture
-		let binding = parts.iter().collect::<Vec<_>>();
-		let qualification = binding.split_at(index).1.iter();
+		let binding = parts.iter().collect_vec();
 
-		let fmt = |x: Iter<&Component>| x.map(|f| f.text.to_string()).collect_vec();
-		let mut key = fmt(capture.iter()).join(".");
-		if is_field_reference {
-			key = format!("this.{}", key);
-		}
+		let mut qualification = binding.split_at(index).1.iter().map(|f| f.text.clone()).collect_vec();
 
 		if let Some(c) = capture.last() {
-			if let ComponentKind::Member(v) = &c.kind {
-				// if our last captured component is a non-handler preflight class and we don't have a
+			if let ComponentKind::Member(last) = &c.kind {
+				// if our last captured component is a non-handler preflight object and we don't have a
 				// qualification for it, it's currently an error.
-				if v.type_.is_preflight_class() && !v.type_.is_handler_preflight_class() && qualification.len() == 0 {
+				if last.type_.is_preflight_class() && !last.type_.is_handler_preflight_class() && qualification.len() == 0 {
 					self.diagnostics.push(Diagnostic {
 						message: format!(
 							"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
-							key, v.type_,
+							render_key(capture, is_field_reference),
+							last.type_,
 						),
 						span: Some(node.span.clone()),
 					});
@@ -1617,21 +1650,28 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 
 				// if this reference refers to an inflight function or handler resource,
 				// we need to give permission to the "handle" operation
-				if v.type_.is_inflight_function() || v.type_.is_handler_preflight_class() {
-					self
-						.references
-						.entry(key)
-						.or_default()
-						.insert(HANDLE_METHOD_NAME.to_string());
-					return;
+				if last.type_.is_inflight_function() || last.type_.is_handler_preflight_class() {
+					qualification.push(HANDLE_METHOD_NAME.into());
+				}
+
+				if last.type_.is_capturable() && capture.len() > 1 && qualification.len() == 0 {
+					qualification.push(c.text.clone());
+					capture.pop();
 				}
 			}
 		}
 
-		let ops = fmt(qualification);
-
-		self.references.entry(key).or_default().extend(ops);
+		let key = render_key(capture, is_field_reference);
+		self.references.entry(key).or_default().extend(qualification);
 	}
+}
+
+fn render_key(capture: Vec<&Component>, is_field_reference: bool) -> String {
+	let mut key = capture.iter().map(|f| f.text.clone()).join(".");
+	if is_field_reference {
+		key = format!("this.{}", key);
+	}
+	key
 }
 
 #[derive(Clone, Debug)]

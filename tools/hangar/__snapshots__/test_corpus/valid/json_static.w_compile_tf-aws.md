@@ -248,12 +248,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const jj_client = context._lift(jj);
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            jj: ${jj_client},
+          require("./inflight.$Closure1.js")({
+            jj: ${context._lift(jj, [])},
             std_Json: ${std_JsonClient.text},
           })
         `);
@@ -286,10 +284,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure2.js")({
             std_Json: ${std_JsonClient.text},
           })
         `);

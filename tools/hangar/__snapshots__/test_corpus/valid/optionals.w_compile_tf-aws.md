@@ -273,19 +273,17 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Super";
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Super.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Super.js")({
           })
         `);
       }
       _toInflight() {
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const SuperClient = ${Super._toInflightType(this).text};
             const client = new SuperClient({
-              name: ${name_client},
+              name: ${this._lift(this.name, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -305,19 +303,17 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Sub";
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Sub.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Sub.js")({
           })
         `);
       }
       _toInflight() {
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const SubClient = ${Sub._toInflightType(this).text};
             const client = new SubClient({
-              name: ${name_client},
+              name: ${this._lift(this.name, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -337,19 +333,17 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Sub";
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Sub1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Sub1.js")({
           })
         `);
       }
       _toInflight() {
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const Sub1Client = ${Sub1._toInflightType(this).text};
             const client = new Sub1Client({
-              name: ${name_client},
+              name: ${this._lift(this.name, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -372,23 +366,19 @@ class $Root extends $stdlib.std.Resource {
         this.right = right;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Node.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Node.js")({
           })
         `);
       }
       _toInflight() {
-        const left_client = this._lift(this.left);
-        const right_client = this._lift(this.right);
-        const value_client = this._lift(this.value);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const NodeClient = ${Node._toInflightType(this).text};
             const client = new NodeClient({
-              left: ${left_client},
-              right: ${right_client},
-              value: ${value_client},
+              left: ${this._lift(this.left, [])},
+              right: ${this._lift(this.right, [])},
+              value: ${this._lift(this.value, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -411,13 +401,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const payloadWithoutOptions_client = context._lift(payloadWithoutOptions);
-        const payloadWithBucket_client = context._lift(payloadWithBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            payloadWithoutOptions: ${payloadWithoutOptions_client},
-            payloadWithBucket: ${payloadWithBucket_client},
+          require("./inflight.$Closure1.js")({
+            payloadWithoutOptions: ${context._lift(payloadWithoutOptions, ["b"])},
+            payloadWithBucket: ${context._lift(payloadWithBucket, ["c"])},
           })
         `);
       }
@@ -438,8 +425,9 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(payloadWithoutOptions, host, []);
         }
         if (ops.includes("handle")) {
+          $Closure1._registerBindObject(payloadWithBucket, host, ["c"]);
           $Closure1._registerBindObject(payloadWithBucket.c, host, ["put"]);
-          $Closure1._registerBindObject(payloadWithoutOptions.b, host, []);
+          $Closure1._registerBindObject(payloadWithoutOptions, host, ["b"]);
         }
         super._registerBind(host, ops);
       }

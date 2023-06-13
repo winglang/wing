@@ -579,19 +579,17 @@ class $Root extends $stdlib.std.Resource {
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.First.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.First.js")({
           })
         `);
       }
       _toInflight() {
-        const myResource_client = this._lift(this.myResource);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FirstClient = ${First._toInflightType(this).text};
             const client = new FirstClient({
-              myResource: ${myResource_client},
+              myResource: ${this._lift(this.myResource, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -614,23 +612,19 @@ class $Root extends $stdlib.std.Resource {
         this.first = new First(this,"First");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Another.js";
-        const globalCounter_client = context._lift(globalCounter);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            globalCounter: ${globalCounter_client},
+          require("./inflight.Another.js")({
+            globalCounter: ${context._lift(globalCounter, ["inc", "peek"])},
           })
         `);
       }
       _toInflight() {
-        const first_client = this._lift(this.first);
-        const myField_client = this._lift(this.myField);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const AnotherClient = ${Another._toInflightType(this).text};
             const client = new AnotherClient({
-              first: ${first_client},
-              myField: ${myField_client},
+              first: ${this._lift(this.first, [])},
+              myField: ${this._lift(this.myField, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -670,13 +664,10 @@ class $Root extends $stdlib.std.Resource {
             const __parent_this = this;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.R.js";
-            const globalCounter_client = context._lift(globalCounter);
-            const $parentThis_client = context._lift($parentThis);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                globalCounter: ${globalCounter_client},
-                $parentThis: ${$parentThis_client},
+              require("./inflight.R.js")({
+                globalCounter: ${context._lift(globalCounter, ["inc"])},
+                $parentThis: ${context._lift($parentThis, [])},
               })
             `);
           }
@@ -706,39 +697,28 @@ class $Root extends $stdlib.std.Resource {
         (this.localTopic.onMessage(new R(this,"R")));
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.MyResource.js";
-        const globalBucket_client = context._lift(globalBucket);
-        const globalStr_client = context._lift(globalStr);
-        const globalBool_client = context._lift(globalBool);
-        const globalNum_client = context._lift(globalNum);
-        const globalArrayOfStr_client = context._lift(globalArrayOfStr);
-        const globalMapOfNum_client = context._lift(globalMapOfNum);
-        const globalSetOfStr_client = context._lift(globalSetOfStr);
-        const globalAnother_client = context._lift(globalAnother);
         const AnotherClient = Another._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            globalBucket: ${globalBucket_client},
-            globalStr: ${globalStr_client},
-            globalBool: ${globalBool_client},
-            globalNum: ${globalNum_client},
-            globalArrayOfStr: ${globalArrayOfStr_client},
-            globalMapOfNum: ${globalMapOfNum_client},
-            globalSetOfStr: ${globalSetOfStr_client},
-            globalAnother: ${globalAnother_client},
+          require("./inflight.MyResource.js")({
+            globalBucket: ${context._lift(globalBucket, ["put"])},
+            globalStr: ${context._lift(globalStr, [])},
+            globalBool: ${context._lift(globalBool, [])},
+            globalNum: ${context._lift(globalNum, [])},
+            globalArrayOfStr: ${context._lift(globalArrayOfStr, ["at"])},
+            globalMapOfNum: ${context._lift(globalMapOfNum, ["get"])},
+            globalSetOfStr: ${context._lift(globalSetOfStr, ["has"])},
+            globalAnother: ${context._lift(globalAnother, ["myField", "myMethod"])},
             Another: ${AnotherClient.text},
           })
         `);
       }
       _toInflight() {
-        const localCounter_client = this._lift(this.localCounter);
-        const localTopic_client = this._lift(this.localTopic);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this).text};
             const client = new MyResourceClient({
-              localCounter: ${localCounter_client},
-              localTopic: ${localTopic_client},
+              localCounter: ${this._lift(this.localCounter, [])},
+              localTopic: ${this._lift(this.localTopic, ["publish"])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -760,9 +740,8 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("myPut")) {
           MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
-          MyResource._registerBindObject(globalAnother, host, ["myMethod"]);
+          MyResource._registerBindObject(globalAnother, host, ["myField", "myMethod"]);
           MyResource._registerBindObject(globalAnother.first.myResource, host, ["put"]);
-          MyResource._registerBindObject(globalAnother.myField, host, []);
           MyResource._registerBindObject(globalArrayOfStr, host, ["at"]);
           MyResource._registerBindObject(globalBool, host, []);
           MyResource._registerBindObject(globalBucket, host, ["put"]);
@@ -782,11 +761,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const res_client = context._lift(res);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            res: ${res_client},
+          require("./inflight.$Closure1.js")({
+            res: ${context._lift(res, ["myPut"])},
           })
         `);
       }
@@ -818,10 +795,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
         const AnotherClient = Another._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure2.js")({
             Another: ${AnotherClient.text},
           })
         `);

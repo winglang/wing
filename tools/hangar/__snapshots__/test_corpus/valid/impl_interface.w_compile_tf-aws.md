@@ -130,9 +130,8 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.A.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.A.js")({
           })
         `);
       }
@@ -162,11 +161,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const x_client = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            x: ${x_client},
+          require("./inflight.$Closure1.js")({
+            x: ${context._lift(x, ["handle"])},
           })
         `);
       }
@@ -206,9 +203,8 @@ class $Root extends $stdlib.std.Resource {
         return x;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.r.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.r.js")({
           })
         `);
       }
@@ -238,9 +234,8 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Dog.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Dog.js")({
           })
         `);
       }

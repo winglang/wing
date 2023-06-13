@@ -228,14 +228,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
-        const jsonObj1_client = context._lift(jsonObj1);
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-            jsonObj1: ${jsonObj1_client},
+          require("./inflight.$Closure1.js")({
+            b: ${context._lift(b, ["get", "getJson", "list"])},
+            jsonObj1: ${context._lift(jsonObj1, [])},
             std_Json: ${std_JsonClient.text},
           })
         `);

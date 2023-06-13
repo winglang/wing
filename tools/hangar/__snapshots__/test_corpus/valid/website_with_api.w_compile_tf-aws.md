@@ -617,12 +617,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const usersTable_client = context._lift(usersTable);
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            usersTable: ${usersTable_client},
+          require("./inflight.$Closure1.js")({
+            usersTable: ${context._lift(usersTable, ["list"])},
             std_Json: ${std_JsonClient.text},
           })
         `);
@@ -655,12 +653,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const usersTable_client = context._lift(usersTable);
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            usersTable: ${usersTable_client},
+          require("./inflight.$Closure2.js")({
+            usersTable: ${context._lift(usersTable, ["insert"])},
             std_Json: ${std_JsonClient.text},
           })
         `);
@@ -693,9 +689,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({
           })
         `);
       }

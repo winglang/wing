@@ -295,13 +295,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
-        const fileName_client = context._lift(fileName);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-            fileName: ${fileName_client},
+          require("./inflight.$Closure1.js")({
+            b: ${context._lift(b, ["getJson"])},
+            fileName: ${context._lift(fileName, [])},
           })
         `);
       }
@@ -335,17 +332,12 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const b_client = context._lift(b);
-        const fileName_client = context._lift(fileName);
-        const j_client = context._lift(j);
-        const getJson_client = context._lift(getJson);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-            fileName: ${fileName_client},
-            j: ${j_client},
-            getJson: ${getJson_client},
+          require("./inflight.$Closure2.js")({
+            b: ${context._lift(b, ["putJson"])},
+            fileName: ${context._lift(fileName, [])},
+            j: ${context._lift(j, [])},
+            getJson: ${context._lift(getJson, ["invoke"])},
           })
         `);
       }

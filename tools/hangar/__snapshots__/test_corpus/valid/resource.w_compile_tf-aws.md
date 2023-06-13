@@ -902,19 +902,17 @@ class $Root extends $stdlib.std.Resource {
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
-        const c_client = this._lift(this.c);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              c: ${c_client},
+              c: ${this._lift(this.c, ["dec", "inc", "peek"])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -950,7 +948,6 @@ class $Root extends $stdlib.std.Resource {
         this.e = e;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Bar.js";
         const FooClient = Foo._toInflightType(context);
         const MyEnumClient = $stdlib.core.NodeJsCode.fromInline(`
           Object.freeze((function (tmp) {
@@ -961,25 +958,21 @@ class $Root extends $stdlib.std.Resource {
           })({}))
         `);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Bar.js")({
             Foo: ${FooClient.text},
             MyEnum: ${MyEnumClient.text},
           })
         `);
       }
       _toInflight() {
-        const b_client = this._lift(this.b);
-        const e_client = this._lift(this.e);
-        const foo_client = this._lift(this.foo);
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const BarClient = ${Bar._toInflightType(this).text};
             const client = new BarClient({
-              b: ${b_client},
-              e: ${e_client},
-              foo: ${foo_client},
-              name: ${name_client},
+              b: ${this._lift(this.b, ["get", "put"])},
+              e: ${this._lift(this.e, [])},
+              foo: ${this._lift(this.foo, ["fooGet", "fooInc"])},
+              name: ${this._lift(this.name, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1018,13 +1011,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const res_client = context._lift(res);
-        const bucket_client = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            res: ${res_client},
-            bucket: ${bucket_client},
+          require("./inflight.$Closure1.js")({
+            res: ${context._lift(res, ["myMethod", "testTypeAccess"])},
+            bucket: ${context._lift(bucket, ["list"])},
           })
         `);
       }
@@ -1068,11 +1058,9 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure2.js";
-            const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+              require("./inflight.$Closure2.js")({
+                __parent_this: ${context._lift(__parent_this, [])},
               })
             `);
           }
@@ -1105,11 +1093,9 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure3.js";
-            const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+              require("./inflight.$Closure3.js")({
+                __parent_this: ${context._lift(__parent_this, [])},
               })
             `);
           }
@@ -1142,11 +1128,9 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure4.js";
-            const __parent_this_client = context._lift(__parent_this);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+              require("./inflight.$Closure4.js")({
+                __parent_this: ${context._lift(__parent_this, [])},
               })
             `);
           }
@@ -1174,25 +1158,20 @@ class $Root extends $stdlib.std.Resource {
         (this.b2.onCreate(new $Closure4(this,"$Closure4")));
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.BigPublisher.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.BigPublisher.js")({
           })
         `);
       }
       _toInflight() {
-        const b_client = this._lift(this.b);
-        const b2_client = this._lift(this.b2);
-        const q_client = this._lift(this.q);
-        const t_client = this._lift(this.t);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const BigPublisherClient = ${BigPublisher._toInflightType(this).text};
             const client = new BigPublisherClient({
-              b: ${b_client},
-              b2: ${b2_client},
-              q: ${q_client},
-              t: ${t_client},
+              b: ${this._lift(this.b, ["list"])},
+              b2: ${this._lift(this.b2, ["put"])},
+              q: ${this._lift(this.q, ["push"])},
+              t: ${this._lift(this.t, ["publish"])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1224,11 +1203,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure5.js";
-        const bigOlPublisher_client = context._lift(bigOlPublisher);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            bigOlPublisher: ${bigOlPublisher_client},
+          require("./inflight.$Closure5.js")({
+            bigOlPublisher: ${context._lift(bigOlPublisher, ["getObjectCount", "publish"])},
           })
         `);
       }

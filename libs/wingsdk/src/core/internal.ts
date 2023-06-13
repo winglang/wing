@@ -1,9 +1,15 @@
-import { IConstruct } from "constructs";
-import { App } from "./app";
+import { Construct, IConstruct } from "constructs";
 import { Duration } from "../std/duration";
 import { IResource } from "../std/resource";
+import { App } from "./app";
 
-export function serializeImmutableData(scope: IConstruct, obj: any): string {
+/**
+ * Serializes `obj` into a string that can be used in an inflight scope.
+ * @param obj The object to serialize
+ * @param props The properties to serialize. If not specified, all properties are serialized.
+ * @returns JavaScript code, not JSON!
+ */
+export function serializeImmutableData(scope: IConstruct, obj: any, props: string[] = []): string {
   // since typeof(null) is "object", we cover all nullity cases (undefined and null) apriori.
   if (obj == null) {
     return JSON.stringify(obj);
@@ -50,11 +56,11 @@ export function serializeImmutableData(scope: IConstruct, obj: any): string {
       }
 
       // structs are just plain objects
-      if (obj.constructor.name === "Object") {
+      if (obj.constructor.name === "Object" || Construct.isConstruct(obj)) {
         const lines = [];
         lines.push("{");
-        for (const [k, v] of Object.entries(obj)) {
-          lines.push(`${k}: ${serializeImmutableData(scope, v)},`);
+        for (const k of props) {
+          lines.push(`${k}: ${serializeImmutableData(scope, obj[k])},`);
         }
         lines.push("}");
         return lines.join("");
@@ -62,6 +68,6 @@ export function serializeImmutableData(scope: IConstruct, obj: any): string {
   }
 
   throw new Error(
-    `unable to serialize immutable data object of type ${obj.constructor?.name}`
+    `objects of type '${obj.constructor?.name}' cannot be referenced from an inflight scope`
   );
 }

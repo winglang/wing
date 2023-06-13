@@ -460,19 +460,17 @@ class $Root extends $stdlib.std.Resource {
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.First.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.First.js")({
           })
         `);
       }
       _toInflight() {
-        const myResource_client = this._lift(this.myResource);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FirstClient = ${First._toInflightType(this).text};
             const client = new FirstClient({
-              myResource: ${myResource_client},
+              myResource: ${this._lift(this.myResource, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -495,21 +493,18 @@ class $Root extends $stdlib.std.Resource {
         this.first = new First(this,"First");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Another.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Another.js")({
           })
         `);
       }
       _toInflight() {
-        const first_client = this._lift(this.first);
-        const myField_client = this._lift(this.myField);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const AnotherClient = ${Another._toInflightType(this).text};
             const client = new AnotherClient({
-              first: ${first_client},
-              myField: ${myField_client},
+              first: ${this._lift(this.first, [])},
+              myField: ${this._lift(this.myField, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -552,43 +547,29 @@ class $Root extends $stdlib.std.Resource {
         return this.another;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.MyResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.MyResource.js")({
           })
         `);
       }
       _toInflight() {
-        const another_client = this._lift(this.another);
-        const arrayOfStr_client = this._lift(this.arrayOfStr);
-        const extBucket_client = this._lift(this.extBucket);
-        const extNum_client = this._lift(this.extNum);
-        const mapOfNum_client = this._lift(this.mapOfNum);
-        const myBool_client = this._lift(this.myBool);
-        const myNum_client = this._lift(this.myNum);
-        const myOptStr_client = this._lift(this.myOptStr);
-        const myQueue_client = this._lift(this.myQueue);
-        const myResource_client = this._lift(this.myResource);
-        const myStr_client = this._lift(this.myStr);
-        const setOfStr_client = this._lift(this.setOfStr);
-        const unusedResource_client = this._lift(this.unusedResource);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this).text};
             const client = new MyResourceClient({
-              another: ${another_client},
-              arrayOfStr: ${arrayOfStr_client},
-              extBucket: ${extBucket_client},
-              extNum: ${extNum_client},
-              mapOfNum: ${mapOfNum_client},
-              myBool: ${myBool_client},
-              myNum: ${myNum_client},
-              myOptStr: ${myOptStr_client},
-              myQueue: ${myQueue_client},
-              myResource: ${myResource_client},
-              myStr: ${myStr_client},
-              setOfStr: ${setOfStr_client},
-              unusedResource: ${unusedResource_client},
+              another: ${this._lift(this.another, ["anotherFunc", "meaningOfLife", "myField"])},
+              arrayOfStr: ${this._lift(this.arrayOfStr, ["at", "length"])},
+              extBucket: ${this._lift(this.extBucket, ["list"])},
+              extNum: ${this._lift(this.extNum, [])},
+              mapOfNum: ${this._lift(this.mapOfNum, ["get"])},
+              myBool: ${this._lift(this.myBool, [])},
+              myNum: ${this._lift(this.myNum, [])},
+              myOptStr: ${this._lift(this.myOptStr, [])},
+              myQueue: ${this._lift(this.myQueue, ["push"])},
+              myResource: ${this._lift(this.myResource, ["get", "list", "put"])},
+              myStr: ${this._lift(this.myStr, [])},
+              setOfStr: ${this._lift(this.setOfStr, ["has"])},
+              unusedResource: ${this._lift(this.unusedResource, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -638,7 +619,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("testInflightField")) {
         }
         if (ops.includes("testNestedInflightField")) {
-          MyResource._registerBindObject(this.another.myField, host, []);
+          MyResource._registerBindObject(this.another, host, ["myField"]);
         }
         if (ops.includes("testNestedResource")) {
           MyResource._registerBindObject(this.another.first.myResource, host, ["get", "list", "put"]);
@@ -659,11 +640,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const r_client = context._lift(r);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            r: ${r_client},
+          require("./inflight.$Closure1.js")({
+            r: ${context._lift(r, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"])},
           })
         `);
       }

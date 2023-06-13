@@ -406,11 +406,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const c_client = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c: ${c_client},
+          require("./inflight.$Closure1.js")({
+            c: ${context._lift(c, ["inc"])},
           })
         `);
       }
@@ -442,11 +440,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const c_client = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c: ${c_client},
+          require("./inflight.$Closure2.js")({
+            c: ${context._lift(c, ["inc"])},
           })
         `);
       }
@@ -478,15 +474,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const c_client = context._lift(c);
-        const f1_client = context._lift(f1);
-        const f2_client = context._lift(f2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c: ${c_client},
-            f1: ${f1_client},
-            f2: ${f2_client},
+          require("./inflight.$Closure3.js")({
+            c: ${context._lift(c, ["peek"])},
+            f1: ${context._lift(f1, ["invoke"])},
+            f2: ${context._lift(f2, ["invoke"])},
           })
         `);
       }

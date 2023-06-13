@@ -68,19 +68,17 @@ class $Root extends $stdlib.std.Resource {
         );
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.CdkDockerImageFunction.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.CdkDockerImageFunction.js")({
           })
         `);
       }
       _toInflight() {
-        const function_client = this._lift(this.function);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const CdkDockerImageFunctionClient = ${CdkDockerImageFunction._toInflightType(this).text};
             const client = new CdkDockerImageFunctionClient({
-              function: ${function_client},
+              function: ${this._lift(this.function, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
