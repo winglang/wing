@@ -247,7 +247,7 @@ fn get_completions_from_type(
 				.collect()
 		}
 		Type::Optional(t) => get_completions_from_type(t, types, current_phase, is_instance),
-		Type::Void | Type::Function(_) | Type::Anything => vec![],
+		Type::Void | Type::Function(_) | Type::Anything | Type::Error => vec![],
 		Type::Number
 		| Type::String
 		| Type::Duration
@@ -419,6 +419,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				| Type::Json
 				| Type::MutJson
 				| Type::Nil
+				| Type::Error
 				| Type::Optional(_) => CompletionItemKind::CONSTANT,
 				Type::Function(_) => CompletionItemKind::FUNCTION,
 				Type::Struct(_) => CompletionItemKind::STRUCT,

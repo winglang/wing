@@ -161,6 +161,7 @@ pub enum Type {
 	Json,
 	MutJson,
 	Nil,
+	Error,
 	Optional(TypeRef),
 	Array(TypeRef),
 	MutArray(TypeRef),
@@ -689,6 +690,7 @@ impl Display for Type {
 			Type::Json => write!(f, "Json"),
 			Type::MutJson => write!(f, "MutJson"),
 			Type::Nil => write!(f, "nil"),
+			Type::Error => write!(f, "error"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
@@ -805,6 +807,10 @@ impl TypeRef {
 		matches!(**self, Type::Anything)
 	}
 
+	pub fn is_error(&self) -> bool {
+		matches!(**self, Type::Error)
+	}
+
 	pub fn is_preflight_class(&self) -> bool {
 		if let Type::Class(ref class) = **self {
 			return class.phase == Phase::Preflight;
@@ -887,6 +893,7 @@ impl TypeRef {
 			Type::Struct(_) => true,
 			Type::Optional(v) => v.is_capturable(),
 			Type::Anything => false,
+			Type::Error => false,
 			Type::Void => false,
 			Type::MutJson => false,
 			Type::MutArray(_) => false,
@@ -976,6 +983,7 @@ pub struct Types {
 	json_idx: usize,
 	mut_json_idx: usize,
 	nil_idx: usize,
+	err_idx: usize,
 
 	type_for_expr: Vec<Option<TypeRef>>,
 
@@ -1003,6 +1011,8 @@ impl Types {
 		let mut_json_idx = types.len() - 1;
 		types.push(Box::new(Type::Nil));
 		let nil_idx = types.len() - 1;
+		types.push(Box::new(Type::Error));
+		let err_idx = types.len() - 1;
 
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
@@ -1022,6 +1032,7 @@ impl Types {
 			json_idx,
 			mut_json_idx,
 			nil_idx,
+			err_idx,
 			type_for_expr: Vec::new(),
 			resource_base_type: None,
 		}
@@ -1052,7 +1063,7 @@ impl Types {
 	}
 
 	pub fn error(&self) -> TypeRef {
-		self.get_typeref(self.anything_idx)
+		self.get_typeref(self.err_idx)
 	}
 
 	pub fn void(&self) -> TypeRef {
@@ -1895,41 +1906,46 @@ impl<'a> TypeChecker<'a> {
 	/// Returns the given type on success, otherwise returns one of the expected types.
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
 		assert!(expected_types.len() > 0);
-		if !actual_type.is_anything()
-			&& !expected_types
-				.iter()
-				.any(|expected| actual_type.is_subtype_of(&expected))
-		{
-			self.diagnostics.borrow_mut().push(Diagnostic {
-				message: if expected_types.len() > 1 {
-					let expected_types_list = expected_types
-						.iter()
-						.map(|t| format!("{}", t))
-						.collect::<Vec<String>>()
-						.join(",");
-					format!(
-						"Expected type to be one of \"{}\", but got \"{}\" instead",
-						expected_types_list, actual_type
-					)
-				} else {
-					let mut message = format!(
-						"Expected type to be \"{}\", but got \"{}\" instead",
-						expected_types[0], actual_type
-					);
-					if actual_type.is_nil() {
-						message = format!(
-							"{} (hint: to allow \"nil\" assignment use optional type: \"{}?\")",
-							message, expected_types[0]
-						);
-					}
-					message
-				},
-				span: Some(span.span()),
-			});
-			expected_types[0]
-		} else {
-			actual_type
+
+		// If the actuall type is anything or any of the expected types then we're good
+		if actual_type.is_anything() || expected_types.iter().any(|t| actual_type.is_subtype_of(t)) {
+			return actual_type;
 		}
+
+		// If the actual type is an error (a type we failed to resolve) then we silently ignore it assuming
+		// the error was already been reported.
+		if actual_type.is_error() {
+			return actual_type;
+		}
+
+		let expected_type_str = if expected_types.len() > 1 {
+			let expected_types_list = expected_types
+				.iter()
+				.map(|t| format!("{}", t))
+				.collect::<Vec<String>>()
+				.join(",");
+			format!("one of \"{}\"", expected_types_list)
+		} else {
+			format!("\"{}\"", expected_types[0])
+		};
+
+		let mut message = format!(
+			"Expected type to be {}, but got \"{}\" instead",
+			expected_type_str, actual_type
+		);
+		if actual_type.is_nil() && expected_types.len() == 1 {
+			message = format!(
+				"{} (hint: to allow \"nil\" assignment use optional type: \"{}?\")",
+				message, expected_types[0]
+			);
+		}
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			message,
+			span: Some(span.span()),
+		});
+
+		// Evaluate to one of the expected types
+		expected_types[0]
 	}
 
 	pub fn type_check_scope(&mut self, scope: &Scope) {
@@ -2538,7 +2554,7 @@ impl<'a> TypeChecker<'a> {
 							Some(t)
 						} else {
 							// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
-							if !t.is_anything() {
+							if !t.is_error() {
 								self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
 							}
 							None
