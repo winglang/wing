@@ -448,13 +448,13 @@ let foo = MutJson "hello";
 // ok what now?
 ```
 
-Use the `Json.clone()` and `Json.cloneMut()` methods to get a *deep clone* of the object:
+Use the `MutJson.deepCopy()` method to get an immutable *deep copy* of the object:
 
 ```js
-let mutJson = MutJson { hello: 123 };
-let immut = Json.clone(mutJson);
-mutJson.hello = 999;
-assert(immut.hello == 123);
+let mutObj = MutJson { hello: 123 };
+let immutObj = mutObj.deepCopy(mutObj);
+mutObj.hello = 999;
+assert(immutObj.hello == 123);
 ```
 
 To delete a key from an object, use the `Json.delete()` method:
