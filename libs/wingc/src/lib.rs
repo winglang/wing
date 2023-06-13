@@ -10,7 +10,7 @@ extern crate lazy_static;
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
-use diagnostic::{Diagnostic, Diagnostics};
+use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use fold::Fold;
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -72,9 +72,7 @@ const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 
-pub struct CompilerOutput {
-	pub diagnostics: Diagnostics,
-}
+pub struct CompilerOutput {}
 
 /// Exposes an allocation function to the WASM host
 ///
@@ -110,6 +108,14 @@ pub unsafe extern "C" fn wingc_free(ptr: *mut u8, size: usize) {
 	dealloc(ptr, layout);
 }
 
+/// Expose one time-initiliazation function to the WASM host,
+/// should be called before any other function
+#[no_mangle]
+pub unsafe extern "C" fn wingc_init() {
+	// Setup a custom panic hook to report panics as complitation diagnostics
+	set_custom_panic_hook();
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_string(ptr, len);
@@ -120,17 +126,14 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let absolute_project_dir = split.get(2).map(|s| Path::new(s));
 
 	let results = compile(source_file, output_dir, absolute_project_dir);
-	if let Err(diagnostics) = results {
-		// Output diagnostics as a stringified JSON array
-		let json = serde_json::to_string(&diagnostics).unwrap();
-
-		string_to_combined_ptr(json)
-	} else {
+	if results.is_err() {
 		WASM_RETURN_ERROR
+	} else {
+		string_to_combined_ptr("winged it!".to_string())
 	}
 }
 
-pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
+pub fn parse(source_path: &Path) -> Scope {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
@@ -138,9 +141,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 	let source = match fs::read(&source_path) {
 		Ok(source) => source,
 		Err(err) => {
-			let mut diagnostics = Diagnostics::new();
-
-			diagnostics.push(Diagnostic {
+			report_diagnostic(Diagnostic {
 				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
 				span: None,
 			});
@@ -151,7 +152,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 				env: RefCell::new(None),
 				span: Default::default(),
 			};
-			return (empty_scope, diagnostics);
+			return empty_scope;
 		}
 	};
 
@@ -164,17 +165,10 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 
 	let wing_parser = Parser::new(&source[..], source_path.to_str().unwrap().to_string());
 
-	let scope = wing_parser.wingit(&tree.root_node());
-
-	(scope, wing_parser.diagnostics.into_inner())
+	wing_parser.wingit(&tree.root_node())
 }
 
-pub fn type_check(
-	scope: &mut Scope,
-	types: &mut Types,
-	source_path: &Path,
-	jsii_types: &mut TypeSystem,
-) -> Diagnostics {
+pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii_types: &mut TypeSystem) {
 	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
@@ -254,8 +248,6 @@ pub fn type_check(
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
-
-	tc.diagnostics.into_inner()
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
@@ -278,33 +270,32 @@ pub fn compile(
 	source_path: &Path,
 	out_dir: Option<&Path>,
 	absolute_project_root: Option<&Path>,
-) -> Result<CompilerOutput, Diagnostics> {
+) -> Result<CompilerOutput, ()> {
 	if !source_path.exists() {
-		return Err(vec![Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
 			span: None,
-		}]);
+		});
+		return Err(());
 	}
 
 	if !source_path.is_file() {
-		return Err(vec![Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: format!(
 				"Source path must be a file (not a directory or symlink): {}",
 				source_path.display()
 			),
 			span: None,
-		}]);
+		});
+		return Err(());
 	}
 
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
-	// Setup a custom panic hook to report panics as complitation diagnostics
-	set_custom_panic_hook();
-
 	// -- PARSING PHASE --
-	let (scope, parse_diagnostics) = parse(&source_path);
+	let scope = parse(&source_path);
 
 	// -- DESUGARING PHASE --
 
@@ -319,19 +310,15 @@ pub fn compile(
 	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
+	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
 
 	// Validate that every Expr in the final tree has been type checked
 	let mut tc_assert = TypeCheckAssert::new(&types);
 	tc_assert.check(&scope);
 
-	// Collect all diagnostics
-	let mut diagnostics = parse_diagnostics;
-	diagnostics.extend(type_check_diagnostics);
-
 	// bail out now (before jsification) if there are errors (no point in jsifying)
-	if diagnostics.len() > 0 {
-		return Err(diagnostics);
+	if found_errors() {
+		return Err(());
 	}
 
 	// -- JSIFICATION PHASE --
@@ -343,22 +330,22 @@ pub fn compile(
 
 	// Verify that the project dir is absolute
 	if !is_project_dir_absolute(&project_dir) {
-		diagnostics.push(Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: format!("Project directory must be absolute: {}", project_dir.display()),
 			span: None,
 		});
-		return Err(diagnostics);
+		return Err(());
 	}
 
 	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
 	jsifier.jsify(&scope);
 	jsifier.emit_files(&out_dir);
 
-	if jsifier.diagnostics.len() > 0 {
-		return Err(jsifier.diagnostics);
+	if found_errors() {
+		return Err(());
 	}
 
-	return Ok(CompilerOutput { diagnostics });
+	return Ok(CompilerOutput {});
 }
 
 fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
