@@ -360,7 +360,7 @@ A `Json` value can be logged using `log()`, in which case it will be pretty-form
 ```TS
 log("my object is: ${jsonObj}");
 // is equivalent to
-log("my object is: ${Json.stringify(jsonObj, indent: 2)}");
+log("my object is: ${Json.stringify(jsonObj)}");
 ```
 
 This will output:
@@ -369,12 +369,6 @@ This will output:
 my object is: {
   boom: 123
 }
-```
-
-It is also legal to just log a json object:
-
-```TS
-log(jsonMutObj);
 ```
 
 [`▲ top`][top]
@@ -404,109 +398,41 @@ assert(threeHours.minutes == 180);
 
 Duration objects are immutable and can be referenced across inflight context.
 
-#### 1.1.6 `Datetime`
-
-The `Datetime` (alias `datetime`) type represents a single moment in time in a platform-independent
-format.
-
-`Datetime` objects are immutable and can be referenced across inflight context.
-
-Here is the initial API for the `Datetime` type:
-
-```TS
-struct DatetimeComponents {
-  year: num;
-  month: num;
-  day: num;
-  hour: num;
-  min: num;
-  sec: num;
-  ms: num;
-  tz: num; // timezone offset in minutes from UTC
-}
-
-class Datetime {
-  static utcNow(): Datetime;             // returns the current time in UTC timezone
-  static systemNow(): Datetime;          // returns the current time in system timezone
-  static fromIso(iso: str): Datetime;    // creates an instance from an ISO-8601 string
-  static fromComponents(c: DatetimeComponents): Datetime;
-
-  timestamp: num;     // Date.valueOf()/1000 (non-leap seconds since epoch)
-  timestampMs: num;  // Date.valueOf() (non-leap milliseconds since epoch)
-
-  hours: num;         // Date.getHours()
-  min: num;           // Date.getMinutes()
-  sec: num;           // Date.getSeconds()
-  ms: num;            // Date.getMilliseconds()
-  day: num;           // Date.getDay()
-  month: num;         // Date.getMonth()
-  year: num;          // Date.getFullYear()
-
-  timezone: num;      // Date.getTimezoneOffset() (offset in minutes from UTC)
-  utc: Datetime;      // returns the same time in UTC timezone
-
-  toIso(): str;      // returns ISO-8601 string
-}
-```
-
-A few examples:
-
-```TS
-let now = Datetime.utcNow();
-log("It is now ${now.month}/${now.day}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
-assert(now.timezone == 0); // UTC
-
-let t1 = DateTime.fromIso("2023-02-09T06:20:17.573Z");
-log("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
-log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
-```
-
-[`▲ top`][top]
-
----
-
-
 ### 1.2 Utility Functions
 
 | Name     | Extra information                                        |
 | -------- | -------------------------------------------------------- |
-| `log`    | logs anything serializable.                              |
+| `log`    | logs str                                                 |
 | `throw`  | creates and throws an instance of an exception           |
 | `panic`  | exits with a serializable, dumps the trace + a core dump |
 | `assert` | checks a condition and _panics_ if evaluated to false    |
-
-Wing is a statically typed language, so attempting to redefine any of the above
-functions, just like any other "symbol" will result in a compile-time error. 
-
-The above functions can accept variadic arguments of any type except `throw` which
-only accepts one argument and that is the message to be contained in the error.
 
 `panic` is a fatal call by design. If the intention is error handling, panic is the
 last resort. Exceptions are non fatal and should be used instead for effectively
 communicating errors to the user.
 
 > ```TS
-> log(23, "Hello", true, { "a": 1, "b": 2 });
+> log("Hello ${name}");
 > throw("a recoverable error occurred");
-> panic("a fatal error encountered", [1,2]);
-> assert(x > 0, x < 10);
+> panic("a fatal error encountered");
+> assert(x > 0);
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
-> console.log(23, "Hello", true, Object.freeze(new Map([["a", 1], ["b", 2]])));
+> console.log("Hello ${name}");
 > // throws
 > throw new Error("a recoverable error occurred");
 > // calling panic in wing is fatal
 > (() => {
->   console.error("Something went wrong", [1,2]);
+>   console.error("Something went wrong");
 >   // generate core dump
 >   // show stack trace
 >   process.exit(1);
 > })();
-> // multiple assertions
-> (() => { assert.ok(x > 0); assert.ok(x < 10); })();
+> // assertion
+> (() => { assert.ok(x > 0); })();
 > ```
 
 </details>
@@ -567,7 +493,7 @@ For example (continuing the `Bucket` example above):
 let bucket = new Bucket();
 // OK! We are calling a preflight method from a preflight context
 bucket.allowPublicAccess();
-// ERROR: cannot call inflight methods from preflight context
+// ERROR: Cannot call into inflight phase while preflight
 bucket.put("file.txt", "hello");
 
 let handler = inflight () => {
@@ -585,7 +511,7 @@ class Bar {}
 new Bar(); // OK! Bar is a preflight class
 
 let handler2 = inflight() => {
-  new Bar(); // ERROR: cannot instantiate a preflight class from an inflight context
+  new Bar(); // ERROR: Cannot create preflight class "Bar" in inflight phase
 }
 ```
 
@@ -618,9 +544,6 @@ A declaration for a static member is a member declaration whose declaration
 specifiers contain the keyword static. The keyword static must appear before
 other specifiers. More details in the [classes](#32-classes) section.
 
-The name of any static data member and static member function must be different
-from the name of the containing class regardless of the casing.
-
 Code samples for `static` are not shown here. They are shown in the relevant
 sections below.
 
@@ -628,26 +551,7 @@ To avoid confusion, it is invalid to have a static and a non-static with the
 same name. Overloading a static is allowed however.  
 Accessing static is done via the type name and the `.` operator.
 
-[`▲ top`][top]
-
----
-
-### 1.5 Access Modifiers
-
-Visibility inference is done with the following rules:
-
-- Default visibility is `private` for all members. If modifiers are missing, the
-  symbol is assumed private by the compiler and not exported.
-- `public` is to declare a symbol that is visible for and exported publicly.
-- `protected` is to declare a symbol that is visible for and exported publicly
-  but only for the class and its subclasses.
-- `internal` is to declare a symbol that is visible for and exported publicly
-  but only for the current compilation unit.
-
-Accessing fields, members, or structured data is done with `.`.
-
-Visibility modifiers can be applied to members of classes.
-Mixing `protected` and `internal` is not allowed.
+Static class fields are not supported yet, see https://github.com/winglang/wing/issues/1668
 
 [`▲ top`][top]
 
@@ -682,9 +586,9 @@ to an argument definition you can make a re-assignable function argument:
 let f = (arg1: num, var arg2: num) => {
   if (arg2 > 100) {
     // We can reassign a value to arg2 since it's marked `var`
-    args2 = 100;
+    arg2 = 100;
   }
-}
+};
 ```
 
 [`▲ top`][top]
@@ -710,14 +614,7 @@ Here's a quick summary of how optionality works in Wing:
   block only if `x` has a value. Otherwise, the `else` block will be executed.
 * The `x?.y?.z` notation can be used to access fields only if they have a value. The type of this
   expression is `Z?` (an optional based on the type of the last component).
-* The `x ?? y ?? z` notation will return the value in `x` if there is one, `y` otherwise or `z`. The
-  last expression in a `??` chain (e.g. `z`) must be of type `T` (not `T?`).
-* The default value notation (`= y`) in declarations of struct fields or function arguments will use
-  this value if a value is not provided, and implies type is `T` (not `T?`).
-* The `x ??= y` notation returns `x` if it has a value or assigns `x` with `y` and returns the value
-  of `y`.
-* The `x ?? throw(message)` and `x ?? return val` are special cases of `??` which can be used for
-  unwrapping (if a value exists) or early bailout.
+* The `x ?? y` notation will return the value in `x` if there is one, `y` otherwise.
 * The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
   value. It cannot be used to test if an optional has a value or not.
 
@@ -743,39 +640,6 @@ let jonathan = Person { name: "jonathan", address: "earth" };
 assert(david.address? == false);
 assert(jonathan.address? == true);
 ```
-
-The *default value notation* (`=`) can also be used in struct declarations. If provided, the field
-is also not required in a struct literal definition, and the default value will be implied. It also
-means that the type of the field must be `T` and not `T?`, because we can ensure it has a value (in
-the example below the field `radix` as a type of `num`).
-
-```TS
-struct FormatOpts {
-  radix: num = 10;
-  someOptional: str?;
-}
-
-let opts = FormatOpts {};
-assert(opts.radix == 10);
-assert(opts.someOptional? == false); // <-- no value inside `someOptional`
-```
-
-A value can be omitted from a struct literal if the field is optional _or_ if it has a default value
-in the struct declaration. If an optional field doesn't have a default value, its type must be `T?`
-(`someOptional` above). If it has a default value it's type must be `T` (`radix` above).
-
-This is a compilation error:
-
-```TS
-struct Test {
-  hello: str? = "hello";
-//       ^^^^ type should be `str` since a default value is provided
-}
-```
-
-> NOTE: Default values can only be serializable values (immutable primitives, collections of
-> primitives or other serializable structs). This limitation exists because we will evaluate the
-> expression of the default value only upon struct initialization (it is stored in the type system).
 
 ##### 1.7.1.2 Variables
 
@@ -829,20 +693,10 @@ assert(increment(88) == 89);
 assert(increment(88, 2) == 90);
 ```
 
-Alternatively, using the default value notation can be used to allow a parameter not to be assigned
-when calling the function. Using a default value in the function declaration ensures that `by`
-always has a value so there is no need to unwrap it (this is why its type is `num` and not `num?`):
-
-```TS
-let increment = (x: num, by: num = 1): num {
-  return x + by;
-}
-```
-
 Non-optional arguments can only be used before all optional arguments:
 
 ```TS
-let myFun = (a: str, x?: num, y: str): void = { /* ... */ };
+let myFun = (a: str, x: num?, y: str): void => { /* ... */ };
 //-----------------------------^^^^^^ ERROR: cannot declare a non-optional argument after an optional
 ```
 
