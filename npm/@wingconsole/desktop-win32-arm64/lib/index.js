@@ -1,9 +1,3 @@
-import { URL, fileURLToPath } from "node:url";
-
-import open from "open";
-
-const url = new URL("../release/Wing Console.exe", import.meta.url);
-
-export const openWingConsole = async () => {
-  await open(fileURLToPath(url), { wait: true });
-};
+export const releaseDir = new URL("../release/", import.meta.url);
+export const binFile = new URL("Wing Console.exe", releaseDir);
+export const tarballFile = new URL("app.tar.gz", releaseDir);

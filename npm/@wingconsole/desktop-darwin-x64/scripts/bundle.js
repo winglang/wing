@@ -3,7 +3,10 @@ import { fileURLToPath } from "node:url";
 
 import tar from "tar";
 
-const releaseDir = new URL("../release", import.meta.url);
+import { releaseDir, tarballFile } from "../lib/index.js";
+
+import { platform } from "./platform.js";
+
 await rm(releaseDir, {
   recursive: true,
   force: true,
@@ -11,15 +14,14 @@ await rm(releaseDir, {
 await mkdir(releaseDir, { recursive: true });
 
 const sourceDir = new URL(
-  "../../../../console/desktop/release/mac",
+  `../../../../console/desktop/release/${platform}`,
   import.meta.url,
 );
-const targetFile = new URL("../release/app.tar.gz", import.meta.url);
 
 await tar.c(
   {
     gzip: true,
-    file: fileURLToPath(targetFile),
+    file: fileURLToPath(tarballFile),
     cwd: fileURLToPath(sourceDir),
   },
   ["."],

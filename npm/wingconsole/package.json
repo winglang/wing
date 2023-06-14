@@ -8,11 +8,15 @@
   "files": [
     "bin",
     "lib",
-    "scripts/postinstall.js"
+    "scripts"
   ],
   "exports": "./lib/index.js",
   "bin": {
     "wingconsole": "./bin/index.js"
+  },
+  "scripts": {
+    "prepack": "node scripts/prepack.js",
+    "postpack": "node scripts/postpack.js"
   },
   "preferUnplugged": true,
   "engines": {
@@ -30,5 +34,9 @@
   },
   "devDependencies": {
     "@wingconsole/eslint-plugin": "workspace:^"
+  },
+  "dependencies": {
+    "open": "^9.1.0",
+    "tar": "^6.1.15"
   }
 }

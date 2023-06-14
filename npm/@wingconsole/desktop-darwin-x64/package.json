@@ -7,8 +7,7 @@
   "type": "module",
   "files": [
     "lib",
-    "release",
-    "scripts/postinstall.js"
+    "release"
   ],
   "exports": "./lib/index.js",
   "engines": {
@@ -28,10 +27,7 @@
   },
   "devDependencies": {
     "@wingconsole/desktop": "workspace:^",
-    "@wingconsole/eslint-plugin": "workspace:^"
-  },
-  "dependencies": {
-    "open": "^9.1.0",
+    "@wingconsole/eslint-plugin": "workspace:^",
     "tar": "^6.1.15"
   }
 }

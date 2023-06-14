@@ -24,8 +24,23 @@ try {
   await rm("release", { force: true, recursive: true });
   await build({
     publish: process.env.ELECTRON_BUNDLER_PUBLISH ?? "never",
-    mac: ["dir:arm64", "dir:x64", "dmg:arm64", "dmg:x64"],
-    win: ["dir:arm64", "dir:ia32", "dir:x64", "nsis:arm64", "nsis:x64"],
+    mac: [
+      "dir:arm64",
+      "dir:x64",
+      "dmg:arm64",
+      "dmg:x64",
+      "zip:arm64",
+      "zip:x64",
+    ],
+    win: [
+      "dir:arm64",
+      "dir:ia32",
+      "dir:x64",
+      "nsis:arm64",
+      "nsis:x64",
+      "zip:arm64",
+      "zip:x64",
+    ],
     linux: ["dir:arm", "dir:arm64", "dir:x64"],
     config: {
       appId: "co.monada.WingConsole",

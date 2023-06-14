@@ -7,8 +7,7 @@
   "type": "module",
   "files": [
     "lib",
-    "release",
-    "scripts/postinstall.js"
+    "release"
   ],
   "exports": "./lib/index.js",
   "engines": {
@@ -21,17 +20,12 @@
     "arm64"
   ],
   "scripts": {
-    "prepack": "node scripts/prepack.js",
-    "postpack": "node scripts/postpack.js",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
     "bundle": "node scripts/bundle.js"
   },
-  "dependencies": {
-    "open": "^9.1.0",
-    "tar": "^6.1.15"
-  },
   "devDependencies": {
     "@wingconsole/desktop": "workspace:^",
-    "@wingconsole/eslint-plugin": "workspace:^"
+    "@wingconsole/eslint-plugin": "workspace:^",
+    "tar": "^6.1.15"
   }
 }
