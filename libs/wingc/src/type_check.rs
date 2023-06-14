@@ -1352,40 +1352,39 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env);
-				let (class_env, class_symbol) =
-					match &*type_ {
-						Type::Class(ref class) => {
-							if class.phase == Phase::Independent || env.phase == class.phase {
-								(&class.env, &class.name)
-							} else {
-								self.spanned_error(
-									exp,
-									format!(
-										"Cannot create {} class \"{}\" in {} phase",
-										class.phase, class.name, env.phase
-									),
-								);
-								return self.types.error();
-							}
+				let (class_env, class_symbol) = match &*type_ {
+					Type::Class(ref class) => {
+						if class.phase == Phase::Independent || env.phase == class.phase {
+							(&class.env, &class.name)
+						} else {
+							self.spanned_error(
+								exp,
+								format!(
+									"Cannot create {} class \"{}\" in {} phase",
+									class.phase, class.name, env.phase
+								),
+							);
+							return self.types.error();
 						}
-						t => {
-							if matches!(t, Type::Anything) {
-								return self.types.anything();
-							} else if matches!(t, Type::Struct(_)) {
-								self.spanned_error(
+					}
+					t => {
+						if matches!(t, Type::Anything) {
+							return self.types.anything();
+						} else if matches!(t, Type::Struct(_)) {
+							self.spanned_error(
 								class,
 								format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", type_),
 							);
-								return self.types.error();
-							} else {
-								self.spanned_error(
-									class,
-									format!("Cannot instantiate type \"{}\" because it is not a class", type_),
-								);
-								return self.types.error();
-							}
+							return self.types.error();
+						} else {
+							self.spanned_error(
+								class,
+								format!("Cannot instantiate type \"{}\" because it is not a class", type_),
+							);
+							return self.types.error();
 						}
-					};
+					}
+				};
 
 				// Type check args against constructor
 				let init_method_name = if env.phase == Phase::Preflight {

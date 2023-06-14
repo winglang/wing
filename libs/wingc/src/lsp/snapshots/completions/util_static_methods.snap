@@ -1,9 +1,18 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: IPredicateHandler
+  kind: 8
+  detail: ""
+- label: IPredicateHandlerClient
+  kind: 8
+  detail: ""
 - label: Util
   kind: 7
   detail: independent class
+- label: WaitProps
+  kind: 22
+  detail: ""
 - label: env
   kind: 2
   detail: "(name: str): str"
@@ -24,6 +33,14 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   detail: "(name: str): str?"
   insertText: tryEnv($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: wait
+  kind: 2
+  detail: "(predicate: inflight (): bool, props: WaitProps?): bool"
+  insertText: wait($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

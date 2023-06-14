@@ -11,12 +11,11 @@ export interface WaitProps {
    */
   readonly timeout?: Duration;
   /**
-   * Interval between predicate retries 
+   * Interval between predicate retries
    * @default 0.1s
    */
   readonly interval?: Duration;
 }
-
 
 /**
  * Represents a predicate with an inflight "handle" method that can be passed to
@@ -30,7 +29,7 @@ export interface IPredicateHandler extends IResource {}
  */
 export interface IPredicateHandlerClient {
   /**
-   * The Predicate function that is called 
+   * The Predicate function that is called
    * @inflight
    */
   handle(): Promise<boolean>;
@@ -72,18 +71,24 @@ export class Util {
 
   /**
    * Waits until predicate is true or return false
-   * @param predicate
+   * @param predicate The function that will be evaluated
+   * @param props Timeout and interval values, default to one 1m timeout and 0.1sec interval
    * @inflight
    */
-  public static async wait(predicate: IPredicateHandler, props: WaitProps = {}): Promise<boolean> {
+  public static async wait(
+    predicate: IPredicateHandler,
+    props: WaitProps = {}
+  ): Promise<boolean> {
     const timeout = props.timeout ?? Duration.fromMinutes(1);
     const interval = props.interval ?? Duration.fromSeconds(0.1);
-    const f = (predicate as any);
+    const f = predicate as any;
     let elapsed = 0;
-    while (elapsed < timeout.seconds ) {
+    while (elapsed < timeout.seconds) {
       if (await f()) {
-          return true;
+        return true;
       }
+      // not taking account the real elapsed time just the sum of intervals till timeout
+      // it might be that predicate takes a long time and it is not considered inside timeout
       elapsed += interval.seconds;
       await this.sleep(interval);
     }
