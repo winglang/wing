@@ -32,7 +32,7 @@ Come say hi, hang out, geek out, help friends and share your experience ❤️
 [Wing Community Slack]: https://t.winglang.io/slack
 
 TL;DR: if you can't be bothered with all the philosophical blabber, feel free to
-jump right in and [get started](./getting-started).
+jump right in and [get started](./).
 
 ## What is a cloud-oriented language?
 

@@ -16,7 +16,7 @@ simulator works with any Wing application made with the standard library's `clou
 To use the simulator, you will need to provide a Wing simulator file -- this is
 a file with a `.wsim` extension that is output when you compile your Wing program
 with the `--target sim` option. Check out the [Wing Getting Started
-Guide](/getting-started) for more information on how to write your
+Guide](/) for more information on how to write your
 first Wing program.
 
 ## Using the simulator API (in Wing)

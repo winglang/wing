@@ -1,9 +1,9 @@
-# Contributing to WingLang
+# Contributing to Winglang
 
 Thank you for wanting to contribute to Wing Language! This will guide you through everything you need to know to make changes 
 and submit pull requests to the GitHub repository.
 
-- [Contributing to WingLang](#contributing-to-winglang)
+- [Contributing to Winglang](#contributing-to-winglang)
   - [Opening Issues](#opening-issues)
   - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)

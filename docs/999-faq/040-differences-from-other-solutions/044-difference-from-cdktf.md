@@ -10,7 +10,7 @@ Wing is a general purpose programming language, designed to develop entire cloud
 The main differences between the two are:
 1. Wing code is cloud-portable, so you can write the code once and then compile to any cloud. CDKTF is not cloud-portable. Although it supports all clouds, you need to write specific code for each one.
 2. Since the Wing compiler sees both the infra and application code, it can automatically generate much of the infrastructure definitions that you have to define manually in CDKTF (IAM policies, network topologies, etc).
-3. Wing provides local simulation and visualization [tools](https://docs.winglang.io/getting-started/console) that let you develop locally with instant hot reloading. With the CDKTF, you must deploy to the cloud in order to interact with your application, which can take several minutes.
+3. Wing provides local simulation and visualization [tools](https://docs.winglang.io/start-here/local) that let you develop locally with instant hot reloading. With the CDKTF, you must deploy to the cloud in order to interact with your application, which can take several minutes.
 
 ## Code samples
 
