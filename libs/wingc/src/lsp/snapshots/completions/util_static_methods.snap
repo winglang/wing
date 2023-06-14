@@ -14,7 +14,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: sleep
   kind: 2
-  detail: "(duration: duration): void"
+  detail: "(delay: duration): void"
   insertText: sleep($0)
   insertTextFormat: 2
   command:

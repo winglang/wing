@@ -32,9 +32,7 @@ export class Util {
    * @inflight
    */
   public static async sleep(delay: Duration): Promise<void> {
-    return new Promise((resolve) =>
-      setTimeout(resolve, delay.seconds * 1000)
-    );
+    return new Promise((resolve) => setTimeout(resolve, delay.seconds * 1000));
   }
 
   /**

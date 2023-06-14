@@ -15,8 +15,8 @@ module.exports = function({ oneHundredMiliseconds, JSHelper, util_Util }) {
       const start = (await JSHelper.getTime());
       (await util_Util.sleep(oneHundredMiliseconds));
       const end = (await JSHelper.getTime());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((end - start) > 80)'`)})(((end - start) > 80))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((end - start) < 120)'`)})(((end - start) < 120))};
+      const delta = (end - start);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((delta > 80) && (delta < 220))'`)})(((delta > 80) && (delta < 220)))};
     }
   }
   return $Closure1;
@@ -63,7 +63,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:sleep a second\",\"${aws_lambda_function.root_testsleepasecond_Handler_FA70B9B3.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:sleep 100 mili seconds\",\"${aws_lambda_function.root_testsleep100miliseconds_Handler_5D7D050F.arn}\"]]"
     }
   },
   "provider": {
@@ -73,61 +73,61 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testsleepasecond_Handler_IamRole_678A5F7E": {
+      "root_testsleep100miliseconds_Handler_IamRole_3BDDD1D2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sleep a second/Handler/IamRole",
-            "uniqueId": "root_testsleepasecond_Handler_IamRole_678A5F7E"
+            "path": "root/Default/Default/test:sleep 100 mili seconds/Handler/IamRole",
+            "uniqueId": "root_testsleep100miliseconds_Handler_IamRole_3BDDD1D2"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testsleepasecond_Handler_IamRolePolicy_D5914762": {
+      "root_testsleep100miliseconds_Handler_IamRolePolicy_8ED6C551": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sleep a second/Handler/IamRolePolicy",
-            "uniqueId": "root_testsleepasecond_Handler_IamRolePolicy_D5914762"
+            "path": "root/Default/Default/test:sleep 100 mili seconds/Handler/IamRolePolicy",
+            "uniqueId": "root_testsleep100miliseconds_Handler_IamRolePolicy_8ED6C551"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testsleepasecond_Handler_IamRole_678A5F7E.name}"
+        "role": "${aws_iam_role.root_testsleep100miliseconds_Handler_IamRole_3BDDD1D2.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testsleepasecond_Handler_IamRolePolicyAttachment_0F68F6D7": {
+      "root_testsleep100miliseconds_Handler_IamRolePolicyAttachment_E097E154": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sleep a second/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testsleepasecond_Handler_IamRolePolicyAttachment_0F68F6D7"
+            "path": "root/Default/Default/test:sleep 100 mili seconds/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testsleep100miliseconds_Handler_IamRolePolicyAttachment_E097E154"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testsleepasecond_Handler_IamRole_678A5F7E.name}"
+        "role": "${aws_iam_role.root_testsleep100miliseconds_Handler_IamRole_3BDDD1D2.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testsleepasecond_Handler_FA70B9B3": {
+      "root_testsleep100miliseconds_Handler_5D7D050F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sleep a second/Handler/Default",
-            "uniqueId": "root_testsleepasecond_Handler_FA70B9B3"
+            "path": "root/Default/Default/test:sleep 100 mili seconds/Handler/Default",
+            "uniqueId": "root_testsleep100miliseconds_Handler_5D7D050F"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c85ac078",
+            "WING_FUNCTION_NAME": "Handler-c8e32fa2",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c85ac078",
+        "function_name": "Handler-c8e32fa2",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testsleepasecond_Handler_IamRole_678A5F7E.arn}",
+        "role": "${aws_iam_role.root_testsleep100miliseconds_Handler_IamRole_3BDDD1D2.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testsleepasecond_Handler_S3Object_9ECEE30B.key}",
+        "s3_key": "${aws_s3_object.root_testsleep100miliseconds_Handler_S3Object_B5CB97FB.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -147,11 +147,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_testsleepasecond_Handler_S3Object_9ECEE30B": {
+      "root_testsleep100miliseconds_Handler_S3Object_B5CB97FB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:sleep a second/Handler/S3Object",
-            "uniqueId": "root_testsleepasecond_Handler_S3Object_9ECEE30B"
+            "path": "root/Default/Default/test:sleep 100 mili seconds/Handler/S3Object",
+            "uniqueId": "root_testsleep100miliseconds_Handler_S3Object_B5CB97FB"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -251,7 +251,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const oneHundredMiliseconds = $stdlib.std.Duration.fromSeconds(0.1);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:sleep a second",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:sleep 100 mili seconds",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ sleep.wsim » root/env0/test:sleep a second
+pass ─ sleep.wsim » root/env0/test:sleep 100 mili seconds
  
 
 
