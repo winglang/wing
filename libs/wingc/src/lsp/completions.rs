@@ -150,27 +150,26 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
 						} else {
 							// this is probably a namespace, let's look it up
-							let namespace = root_env
+							if let Some(namespace) = root_env
 								.lookup_nested_str(&udt.full_path_str(), scope_visitor.found_stmt_index)
-								.ok();
-							if let Some((namespace, _)) = namespace {
-								if let SymbolKind::Namespace(namespace) = namespace {
-									let completions = get_completions_from_namespace(namespace, Some(found_env.phase));
-									//for namespaces - return only classes and namespaces
-									if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
-										return completions
-											.iter()
-											.filter(|c| {
-												matches!(
-													c.kind,
-													Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
-												)
-											})
-											.cloned()
-											.collect();
-									} else {
-										return completions;
-									}
+								.ok()
+								.and_then(|n| n.0.as_namespace_ref())
+							{
+								let completions = get_completions_from_namespace(&namespace, Some(found_env.phase));
+								//for namespaces - return only classes and namespaces
+								if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
+									return completions
+										.iter()
+										.filter(|c| {
+											matches!(
+												c.kind,
+												Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
+											)
+										})
+										.cloned()
+										.collect();
+								} else {
+									return completions;
 								}
 							}
 
@@ -331,14 +330,13 @@ fn get_completions_from_namespace(
 		LookupResult::DefinedLater => vec![],
 		LookupResult::ExpectedNamespace(_) => vec![],
 	};
-	let l: Vec<CompletionItem> = namespace
+	namespace
 		.env
 		.symbol_map
 		.iter()
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
 		.chain(util_completions.into_iter())
-		.collect();
-	l
+		.collect()
 }
 
 /// Gets accessible properties on a class as a list of CompletionItems

@@ -120,7 +120,7 @@ impl SymbolKind {
 		}
 	}
 
-	fn as_namespace_ref(&self) -> Option<NamespaceRef> {
+	pub fn as_namespace_ref(&self) -> Option<NamespaceRef> {
 		match self {
 			SymbolKind::Namespace(ns) => Some(*ns),
 			_ => None,
