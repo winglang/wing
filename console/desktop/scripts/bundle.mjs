@@ -57,6 +57,7 @@ try {
         buildResources: "electron/resources",
       },
       files: ["dist/vite"],
+      asar: false,
       dmg: {
         sign: true,
         icon: "electron/resources/icon.icns",
