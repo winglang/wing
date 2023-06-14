@@ -6,9 +6,13 @@ const turbo = (arguments_: string[], dryRun: boolean) => {
   if (dryRun) {
     console.log(colors.green("✔"), `running turbo ${arguments_.join(" ")}`);
   } else {
-    spawnSync("pnpm", ["exec", "turbo", ...arguments_], {
+    const { status } = spawnSync("pnpm", ["exec", "turbo", ...arguments_], {
       stdio: "inherit",
     });
+    if (status && status !== 0) {
+      // eslint-disable-next-line unicorn/no-process-exit
+      process.exit(status);
+    }
   }
 };
 
