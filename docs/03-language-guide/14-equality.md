@@ -18,10 +18,12 @@ The following is a set of rules for checking equality:
 ## Basic types
 
 1. Two `str` values are equal if they have the same characters in the same order.
-2. Two `num` values are equal if they have the same floating-point value. `NaN` is not equal to any value, including itself.
+2. Two `num` values are equal if they have the same floating-point value. The [IEEE 754] standard is used for storing numbers, which means that for example `-0 == +0`. `NaN` is not equal to any value, including itself.
 3. Two `bool` values are equal if they are both `true` or both `false`.
 4. Two `duration` values are equal if they have the same number of milliseconds.
 5. Two `T?` types (optional `T` values) are equal if they are both empty (`nil`) or both non-empty, and if they are both non-empty, their inner values are equal. A value of type `T?` is never equal to a value of type `T`.
+
+[IEEE 754]: https://en.wikipedia.org/wiki/IEEE_754
 
 ## Collection types
 
