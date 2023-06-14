@@ -774,17 +774,25 @@ impl<'a> JsiiImporter<'a> {
 
 	/// Imports all types within a given submodule
 	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
-		let assembly = self.jsii_types.find_assembly(&self.jsii_spec.assembly_name).unwrap();
-		let start_string = format!("{}.{}", assembly.name, submodule);
-		for type_fqn in assembly
+		let sub_string = Some(submodule.to_string());
+		let match_namespace = |jsii_type: &jsii::Type| match jsii_type {
+			jsii::Type::ClassType(c) => c.namespace == sub_string,
+			jsii::Type::EnumType(e) => e.namespace == sub_string,
+			jsii::Type::InterfaceType(i) => i.namespace == sub_string,
+		};
+
+		for entry in self
+			.jsii_types
+			.find_assembly(&self.jsii_spec.assembly_name)
+			.unwrap()
 			.types
 			.as_ref()
 			.unwrap()
-			.keys()
-			.skip_while(|fqn| !fqn.starts_with(&start_string))
+			.iter()
+			.skip_while(|e| !match_namespace(e.1))
 		{
-			if type_fqn.starts_with(&start_string) {
-				self.import_type(&FQN::from(type_fqn.as_str()));
+			if match_namespace(entry.1) {
+				self.import_type(&FQN::from(entry.0.as_str()));
 			} else {
 				// the types should be well ordered, so we can break early
 				break;

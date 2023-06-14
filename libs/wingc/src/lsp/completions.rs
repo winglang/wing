@@ -149,10 +149,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						if let Ok(type_lookup) = type_lookup {
 							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
 						} else {
-							// this is probably a namespace
-							// `resolve_user_defined_type` will fail for namespaces, let's just look it up instead
+							// this is probably a namespace, let's look it up
 							let namespace = root_env
-								.lookup_nested_str(&udt.root.name, scope_visitor.found_stmt_index)
+								.lookup_nested_str(&udt.full_path_str(), scope_visitor.found_stmt_index)
 								.ok();
 							if let Some((namespace, _)) = namespace {
 								if let SymbolKind::Namespace(namespace) = namespace {
