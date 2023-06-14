@@ -148,10 +148,11 @@ impl<'a> JsiiImporter<'a> {
 		let type_str = type_fqn.as_str();
 
 		// check if type is already imported
-		if matches!(
-			self.wing_types.libraries.lookup_nested_str(type_str, None),
-			LookupResult::Found(..)
-		) {
+		if let LookupResult::Found(sym, ..) = self.wing_types.libraries.lookup_nested_str(type_str, None) {
+			if let SymbolKind::Namespace(n) = sym {
+				// We are trying to import a namespace directly, so let's eagerly load all of its types
+				self.deep_import_submodule_to_env(n.name.clone().as_str());
+			}
 			return true;
 		}
 
@@ -756,27 +757,56 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
+		let mut param_type = self.type_ref_to_wing_type(&parameter.type_);
+
 		if parameter.variadic.unwrap_or(false) {
-			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/winglang/wing/issues/397");
+			// TODO properly thought out variadic parameter support https://github.com/winglang/wing/issues/397
+			param_type = self.wing_types.add_type(Type::Array(param_type));
+			param_type = self.wing_types.add_type(Type::Optional(param_type));
 		}
 
-		let param_type = self.type_ref_to_wing_type(&parameter.type_);
 		if parameter.optional.unwrap_or(false) {
-			self.wing_types.add_type(Type::Optional(param_type))
-		} else {
-			param_type
+			param_type = self.wing_types.add_type(Type::Optional(param_type));
 		}
+
+		param_type
 	}
 
 	/// Imports all types within a given submodule
 	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
 		let assembly = self.jsii_types.find_assembly(&self.jsii_spec.assembly_name).unwrap();
 		let start_string = format!("{}.{}", assembly.name, submodule);
-		assembly.types.as_ref().unwrap().keys().for_each(|type_fqn| {
-			if type_fqn.as_str().starts_with(&start_string) {
+		for type_fqn in assembly
+			.types
+			.as_ref()
+			.unwrap()
+			.keys()
+			.skip_while(|fqn| !fqn.starts_with(&start_string))
+		{
+			if type_fqn.starts_with(&start_string) {
 				self.import_type(&FQN::from(type_fqn.as_str()));
+			} else {
+				// the types should be well ordered, so we can break early
+				break;
 			}
-		});
+		}
+	}
+
+	/// Import all top-level types that are not in a submodule
+	pub fn import_root_types(&mut self) {
+		let assembly = self.jsii_types.find_assembly(&self.jsii_spec.assembly_name).unwrap();
+		for entry in assembly.types.as_ref().unwrap().iter() {
+			if match entry.1 {
+				jsii::Type::ClassType(c) => c.namespace.is_none(),
+				jsii::Type::EnumType(e) => e.namespace.is_none(),
+				jsii::Type::InterfaceType(i) => i.namespace.is_none(),
+			} {
+				self.import_type(&FQN::from(entry.0.as_str()));
+			} else {
+				// the types should be well ordered, so we can break early
+				break;
+			}
+		}
 	}
 
 	/// Imports submodules of the assembly, preparing each as an available namespace
