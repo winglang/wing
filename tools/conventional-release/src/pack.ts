@@ -1,10 +1,9 @@
-import { spawnSync } from "node:child_process";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import { filterPackages } from "./filter-packages.js";
+import { spawn } from "./spawn.js";
 
-// const dir = resolve(__dirname, "../../../dist/packages");
 const dir = resolve("dist/packages");
 
 export const pack = async () => {
@@ -15,9 +14,8 @@ export const pack = async () => {
     skipPrivate: true,
   })) {
     console.log(`Packing ${name}...`);
-    spawnSync("pnpm", ["pack", "--pack-destination", dir], {
+    spawn("pnpm", ["pack", "--pack-destination", dir], {
       cwd: path,
-      stdio: "inherit",
     });
   }
 };

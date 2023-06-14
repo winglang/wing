@@ -20,8 +20,6 @@
     "x64"
   ],
   "scripts": {
-    "prepack": "node scripts/prepack.js",
-    "postpack": "node scripts/postpack.js",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
     "bundle": "node scripts/bundle.js"
   },

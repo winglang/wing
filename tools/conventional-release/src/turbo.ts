@@ -1,18 +1,12 @@
-import { spawnSync } from "node:child_process";
-
 import * as colors from "yoctocolors";
+
+import { spawn } from "./spawn.js";
 
 const turbo = (arguments_: string[], dryRun: boolean) => {
   if (dryRun) {
     console.log(colors.green("✔"), `running turbo ${arguments_.join(" ")}`);
   } else {
-    const { status } = spawnSync("pnpm", ["exec", "turbo", ...arguments_], {
-      stdio: "inherit",
-    });
-    if (status && status !== 0) {
-      // eslint-disable-next-line unicorn/no-process-exit
-      process.exit(status);
-    }
+    spawn("pnpm", ["exec", "turbo", ...arguments_]);
   }
 };
 
