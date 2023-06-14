@@ -168,6 +168,7 @@ where
 			}),
 			finally_statements: finally_statements.map(|statements| f.fold_scope(statements)),
 		},
+		StmtKind::CompilerDebugEnv => StmtKind::CompilerDebugEnv,
 	};
 	Stmt {
 		kind,

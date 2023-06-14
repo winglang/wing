@@ -393,6 +393,7 @@ pub enum StmtKind {
 		catch_block: Option<CatchBlock>,
 		finally_statements: Option<Scope>,
 	},
+	CompilerDebugEnv,
 }
 
 #[derive(Debug)]
