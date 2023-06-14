@@ -1277,13 +1277,16 @@ impl<'a> TypeChecker<'a> {
 						} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
 							self.types.string()
 						} else {
-							self.spanned_error(
-								exp,
-								format!(
-									"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
-									ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
-								),
-							);
+							// If any of the types are unresolved (error) then don't report this assuming the error has already been reported
+							if !ltype.is_error() && !rtype.is_error() {
+								self.spanned_error(
+									exp,
+									format!(
+										"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
+										ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
+									),
+								);
+							}
 							self.types.error()
 						}
 					}
@@ -1378,22 +1381,23 @@ impl<'a> TypeChecker<'a> {
 							return self.types.error();
 						}
 					}
-					t => {
-						if matches!(t, Type::Anything) {
-							return self.types.anything();
-						} else if matches!(t, Type::Struct(_)) {
-							self.spanned_error(
-								class,
-								format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", type_),
-							);
-							return self.types.error();
-						} else {
-							self.spanned_error(
-								class,
-								format!("Cannot instantiate type \"{}\" because it is not a class", type_),
-							);
-							return self.types.error();
-						}
+					// If type is anything we have to assume it's ok to initialize it
+					Type::Anything => return self.types.anything(),
+					// If type is error, we assume the error was already reported and evauate the new expression to error as well
+					Type::Error => return self.types.error(),
+					Type::Struct(_) => {
+						self.spanned_error(
+							class,
+							format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", type_),
+						);
+						return self.types.error();
+					}
+					_ => {
+						self.spanned_error(
+							class,
+							format!("Cannot instantiate type \"{}\" because it is not a class", type_),
+						);
+						return self.types.error();
 					}
 				};
 
