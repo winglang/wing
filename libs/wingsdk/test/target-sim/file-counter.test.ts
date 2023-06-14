@@ -36,7 +36,7 @@ test("can create sequential files in a bucket", async () => {
           },
         }
       );
-      queue.addConsumer(processor);
+      queue.setConsumer(processor);
     }
   }
 

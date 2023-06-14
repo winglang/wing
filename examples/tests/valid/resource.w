@@ -111,7 +111,7 @@ class BigPublisher {
       this.b.put("foo1.txt", "bar");
     });
 
-    this.q.addConsumer(inflight () => {
+    this.q.setConsumer(inflight () => {
       this.b.put("foo2.txt", "bar");
     });
 

@@ -7,6 +7,7 @@ import { ConstructTree } from "../core";
 import { readJsonSync } from "../shared/misc";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
+import { isToken } from "../target-sim/tokens";
 
 /**
  * Props for `Simulator`.
@@ -445,10 +446,6 @@ export class Simulator {
 
     return obj;
   }
-}
-
-function isToken(value: string): boolean {
-  return value.startsWith("${") && value.endsWith("}");
 }
 
 /**

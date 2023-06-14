@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "Does this string start with the given searchString?\n\n### Parameters\n - *searchString* - substring to search for.\n\n### Returns\ntrue if string starts with searchString."
+range:
+  start:
+    line: 1
+    character: 0
+  end:
+    line: 1
+    character: 18
+

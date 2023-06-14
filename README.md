@@ -53,7 +53,7 @@ let queue = new cloud.Queue();
 let counter = new cloud.Counter();
 let bucket = new cloud.Bucket();
 
-queue.addConsumer(inflight (message: str) => {
+queue.setConsumer(inflight (message: str) => {
   let i = counter.inc();
   bucket.put("file-${i}.txt", message);
 });
@@ -62,7 +62,7 @@ queue.addConsumer(inflight (message: str) => {
 `cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*.
 They represent cloud infrastructure resources. 
 When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
-of these resources. The `queue.addConsumer()` method is a *preflight method* that configures the infrastructure to
+of these resources. The `queue.setConsumer()` method is a *preflight method* that configures the infrastructure to
 invoke a particular *inflight function* for each message in the queue.
 
 **Now comes the cool part:** the code that runs inside the inflight function interacts with the `counter` and the `bucket` objects
