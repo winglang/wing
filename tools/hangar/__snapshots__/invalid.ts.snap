@@ -1320,8 +1320,13 @@ Duration <DURATION>
 `;
 
 exports[`panic.w 1`] = `
-"RuntimeError: unreachable
-Internal error: An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.
+"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+  --> ../../../examples/tests/invalid/panic.w:6:1
+  |
+6 | 😱;
+  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+
+
  
 
 
@@ -1332,10 +1337,7 @@ Duration <DURATION>
 "
 `;
 
-exports[`panic.w 2`] = `
-"Compiler bug when type-checking ../../../examples/tests/invalid/panic.w:6:1 | panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL
-Please report this bug at https://docs.winglang.io/contributors/bugs"
-`;
+exports[`panic.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
 exports[`preflight_from_inflight.w 1`] = `
 "error: Cannot call into preflight phase while inflight

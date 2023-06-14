@@ -9,7 +9,7 @@ use crate::ast::{
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::{
 	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON,
@@ -20,7 +20,6 @@ use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
-use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
@@ -1167,8 +1166,6 @@ pub struct TypeChecker<'a> {
 	/// The JSII type system
 	jsii_types: &'a mut TypeSystem,
 
-	pub diagnostics: RefCell<Diagnostics>,
-
 	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
 	in_json: u64,
 
@@ -1183,7 +1180,6 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			jsii_types,
 			source_path,
-			diagnostics: RefCell::new(Diagnostics::new()),
 			jsii_imports: vec![],
 			in_json: 0,
 			statement_idx: 0,
@@ -1201,14 +1197,14 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn spanned_error<S: Into<String>>(&self, spanned: &impl Spanned, message: S) {
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: Some(spanned.span()),
 		});
 	}
 
 	fn unspanned_error<S: Into<String>>(&self, message: S) {
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: None,
 		});
@@ -1216,7 +1212,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_error(&self, type_error: TypeError) -> TypeRef {
 		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		report_diagnostic(Diagnostic {
 			message,
 			span: Some(span),
 		});
@@ -1951,7 +1947,7 @@ impl<'a> TypeChecker<'a> {
 				message, expected_types[0]
 			);
 		}
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		report_diagnostic(Diagnostic {
 			message,
 			span: Some(span.span()),
 		});
@@ -2180,7 +2176,7 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(value, env);
 
 				if !cond_type.is_option() {
-					self.diagnostics.borrow_mut().push(Diagnostic {
+					report_diagnostic(Diagnostic {
 						message: format!("Expected type to be optional, but got \"{}\" instead", cond_type),
 						span: Some(value.span()),
 					});
@@ -3630,7 +3626,7 @@ impl<'a> TypeChecker<'a> {
 			if parent_class.phase == phase {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
-				self.diagnostics.borrow_mut().push(Diagnostic {
+				report_diagnostic(Diagnostic {
 					message: format!(
 						"{} class {} cannot extend {} class \"{}\"",
 						phase, name, parent_class.phase, parent_class.name
@@ -3640,7 +3636,7 @@ impl<'a> TypeChecker<'a> {
 				(None, None)
 			}
 		} else {
-			self.diagnostics.borrow_mut().push(Diagnostic {
+			report_diagnostic(Diagnostic {
 				message: format!("Base class \"{}\" is not a class", parent_type),
 				span: Some(parent_udt.span.clone()),
 			});
