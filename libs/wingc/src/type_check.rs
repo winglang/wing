@@ -1367,40 +1367,39 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env);
-				let (class_env, class_symbol) =
-					match &*type_ {
-						Type::Class(ref class) => {
-							if class.phase == Phase::Independent || env.phase == class.phase {
-								(&class.env, &class.name)
-							} else {
-								self.spanned_error(
-									exp,
-									format!(
-										"Cannot create {} class \"{}\" in {} phase",
-										class.phase, class.name, env.phase
-									),
-								);
-								return self.types.error();
-							}
+				let (class_env, class_symbol) = match &*type_ {
+					Type::Class(ref class) => {
+						if class.phase == Phase::Independent || env.phase == class.phase {
+							(&class.env, &class.name)
+						} else {
+							self.spanned_error(
+								exp,
+								format!(
+									"Cannot create {} class \"{}\" in {} phase",
+									class.phase, class.name, env.phase
+								),
+							);
+							return self.types.error();
 						}
-						t => {
-							if matches!(t, Type::Anything) {
-								return self.types.anything();
-							} else if matches!(t, Type::Struct(_)) {
-								self.spanned_error(
+					}
+					t => {
+						if matches!(t, Type::Anything) {
+							return self.types.anything();
+						} else if matches!(t, Type::Struct(_)) {
+							self.spanned_error(
 								class,
 								format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", type_),
 							);
-								return self.types.error();
-							} else {
-								self.spanned_error(
-									class,
-									format!("Cannot instantiate type \"{}\" because it is not a class", type_),
-								);
-								return self.types.error();
-							}
+							return self.types.error();
+						} else {
+							self.spanned_error(
+								class,
+								format!("Cannot instantiate type \"{}\" because it is not a class", type_),
+							);
+							return self.types.error();
 						}
-					};
+					}
+				};
 
 				// Type check args against constructor
 				let init_method_name = if env.phase == Phase::Preflight {
@@ -1519,9 +1518,9 @@ impl<'a> TypeChecker<'a> {
 
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
-				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
-				if matches!(*func_type, Type::Anything) {
-					return self.types.anything();
+				// If the callee's signature type is unknown, just evaluate the entire call expression as an error
+				if func_type.is_error() {
+					return self.types.error();
 				}
 
 				// Make sure this is a function signature type
@@ -1543,7 +1542,7 @@ impl<'a> TypeChecker<'a> {
 						return self.types.error();
 					}
 				} else {
-					self.spanned_error(callee, "Expected a function or method");
+					self.spanned_error(callee, format!("Expected a function or method got {}", func_type));
 					return self.types.error();
 				};
 
@@ -1920,8 +1919,14 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the actual type is an error (a type we failed to resolve) then we silently ignore it assuming
-		// the error was already been reported.
+		// the error was already reported.
 		if actual_type.is_error() {
+			return actual_type;
+		}
+
+		// If any of the expected types are errors (types we failed to resolve) then we silently ignore it
+		// assuming the error was already reported.
+		if expected_types.iter().any(|t| t.is_error()) {
 			return actual_type;
 		}
 
@@ -2264,7 +2269,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Assignment { variable, value } => {
 				let exp_type = self.type_check_exp(value, env);
 				let var_info = self.resolve_reference(variable, env);
-				if !var_info.reassignable {
+				if !var_info.type_.is_error() && !var_info.reassignable {
 					self.spanned_error(stmt, format!("Variable {} is not reassignable ", variable));
 				}
 				self.validate_type(exp_type, var_info.type_, value);
@@ -3293,11 +3298,10 @@ impl<'a> TypeChecker<'a> {
 					// Give a specific error message if someone tries to write "print" instead of "log"
 					if symbol.name == "print" {
 						self.spanned_error(symbol, "Unknown symbol \"print\", did you mean to use \"log\"?");
-						self.make_error_variable_info(false)
 					} else {
 						self.type_error(lookup_result_to_type_error(lookup_res, symbol));
-						self.make_error_variable_info(false)
 					}
+					self.make_error_variable_info(false)
 				}
 			}
 			Reference::InstanceMember {
@@ -3343,6 +3347,10 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				let instance_type = self.type_check_exp(object, env);
+				// If resolving the object's type failed, we can't resolve the property either
+				if instance_type.is_error() {
+					return self.make_error_variable_info(false);
+				}
 				let res = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// Check if the object is an optional type. If it is ensure the use of optional chaining.

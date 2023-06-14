@@ -20,11 +20,11 @@ impl<'a> TypeCheckAssert<'a> {
 
 impl<'a> Visit<'_> for TypeCheckAssert<'a> {
 	fn visit_expr(&mut self, expr: &Expr) {
-		assert!(
-			self.types.get_expr_type(expr).is_some(),
-			"Expr was not type checked: {:?}",
-			expr,
-		);
+		if let Some(t) = self.types.get_expr_type(expr) {
+			assert!(!t.is_error(), "Expr's type was not resolved: {:?}", expr);
+		} else {
+			panic!("Expr was not type checked: {:?}", expr)
+		}
 		visit::visit_expr(self, expr);
 	}
 }
