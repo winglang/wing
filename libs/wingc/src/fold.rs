@@ -77,7 +77,7 @@ where
 	F: Fold + ?Sized,
 {
 	let kind = match node.kind {
-		StmtKind::Super { arg_list } => StmtKind::Super {
+		StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
 			arg_list: Some(f.fold_args(arg_list.unwrap())),
 		},
 		StmtKind::Bring {

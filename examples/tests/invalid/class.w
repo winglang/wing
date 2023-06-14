@@ -78,3 +78,33 @@ class C8 extends S1 {
 class C11 extends C11 {
                 //^^^ Class cannot extend itself
 }
+
+class Student {
+  name: str;
+  major: str;
+  init(name: str, major: str) {
+    super();
+//  ^^^^^^^^ Calls to super constructor can only be made from derived classes
+    this.name = name;
+    this.major = major;
+  }
+}
+
+class PaidStudent extends Student {
+  hrlyWage: num;
+  
+  init(name: str, major: str, hrlyWage: num) {
+    this.hrlyWage = hrlyWage;
+    super(name, major);
+//  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
+  }
+
+  something() {
+    super("cool", "blue");
+//  ^^^^^^^^^^^^^^^^^^^^^^ Calls to super constructor can only be done from within class constructor
+  }
+}
+
+   super();
+// ^^^^^^^^ Calls to super constructor can only be done from within a class constructor
+let s = new PaidStudent("x", "y", 3);

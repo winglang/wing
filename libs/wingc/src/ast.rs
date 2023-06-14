@@ -337,7 +337,7 @@ pub enum StmtKind {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
-	Super {
+	SuperConstructor {
 		arg_list: Option<ArgList>,
 	},
 	Let {
