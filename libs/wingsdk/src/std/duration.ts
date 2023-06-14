@@ -12,13 +12,33 @@ export class Duration {
   }
 
   /**
-   * Create a Duration representing an amount of minutes
+   * Create a Duration representing an amount of years
    *
-   * @param amount the amount of Minutes the `Duration` will represent.
-   * @returns a new `Duration` representing `amount` Minutes.
+   * @param amount the amount of Years the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` Years.
    */
-  public static fromMinutes(amount: number): Duration {
-    return new Duration(amount * 60);
+  public static fromYears(amount: number): Duration {
+    return new Duration(amount * 60 * 60 * 24 * 365);
+  }
+
+  /**
+   * Create a Duration representing an amount of months
+   *
+   * @param amount the amount of Months the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` Months.
+   */
+  public static fromMonths(amount: number): Duration {
+    return new Duration((amount * 60 * 60 * 24 * 365) / 12);
+  }
+
+  /**
+   * Create a Duration representing an amount of days
+   *
+   * @param amount the amount of Days the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` Days.
+   */
+  public static fromDays(amount: number): Duration {
+    return new Duration(amount * 60 * 60 * 24);
   }
 
   /**
@@ -32,6 +52,16 @@ export class Duration {
   }
 
   /**
+   * Create a Duration representing an amount of minutes
+   *
+   * @param amount the amount of Minutes the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` Minutes.
+   */
+  public static fromMinutes(amount: number): Duration {
+    return new Duration(amount * 60);
+  }
+
+  /**
    * Create a Duration representing an amount of seconds
    *
    * @param amount the amount of Seconds the `Duration` will represent.
@@ -39,6 +69,16 @@ export class Duration {
    */
   public static fromSeconds(amount: number): Duration {
     return new Duration(amount);
+  }
+
+  /**
+   * Create a Duration representing an amount of milliseconds
+   *
+   * @param amount the amount of Milliseconds the `Duration` will represent.
+   * @returns a new `Duration` representing `amount` Milliseconds.
+   */
+  public static fromMilliseconds(amount: number): Duration {
+    return new Duration(amount / 1000);
   }
 
   /**

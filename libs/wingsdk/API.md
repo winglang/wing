@@ -3277,9 +3277,31 @@ Represents a length of time.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.Duration.fromDays">fromDays</a></code> | Create a Duration representing an amount of days. |
 | <code><a href="#@winglang/sdk.std.Duration.fromHours">fromHours</a></code> | Create a Duration representing an amount of hours. |
+| <code><a href="#@winglang/sdk.std.Duration.fromMilliseconds">fromMilliseconds</a></code> | Create a Duration representing an amount of milliseconds. |
 | <code><a href="#@winglang/sdk.std.Duration.fromMinutes">fromMinutes</a></code> | Create a Duration representing an amount of minutes. |
+| <code><a href="#@winglang/sdk.std.Duration.fromMonths">fromMonths</a></code> | Create a Duration representing an amount of months. |
 | <code><a href="#@winglang/sdk.std.Duration.fromSeconds">fromSeconds</a></code> | Create a Duration representing an amount of seconds. |
+| <code><a href="#@winglang/sdk.std.Duration.fromYears">fromYears</a></code> | Create a Duration representing an amount of years. |
+
+---
+
+##### `fromDays` <a name="fromDays" id="@winglang/sdk.std.Duration.fromDays"></a>
+
+```wing
+bring std;
+
+std.Duration.fromDays(amount: num)
+```
+
+Create a Duration representing an amount of days.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromDays.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of Days the `Duration` will represent.
 
 ---
 
@@ -3301,6 +3323,24 @@ the amount of Hours the `Duration` will represent.
 
 ---
 
+##### `fromMilliseconds` <a name="fromMilliseconds" id="@winglang/sdk.std.Duration.fromMilliseconds"></a>
+
+```wing
+bring std;
+
+std.Duration.fromMilliseconds(amount: num)
+```
+
+Create a Duration representing an amount of milliseconds.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromMilliseconds.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of Milliseconds the `Duration` will represent.
+
+---
+
 ##### `fromMinutes` <a name="fromMinutes" id="@winglang/sdk.std.Duration.fromMinutes"></a>
 
 ```wing
@@ -3319,6 +3359,24 @@ the amount of Minutes the `Duration` will represent.
 
 ---
 
+##### `fromMonths` <a name="fromMonths" id="@winglang/sdk.std.Duration.fromMonths"></a>
+
+```wing
+bring std;
+
+std.Duration.fromMonths(amount: num)
+```
+
+Create a Duration representing an amount of months.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromMonths.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of Months the `Duration` will represent.
+
+---
+
 ##### `fromSeconds` <a name="fromSeconds" id="@winglang/sdk.std.Duration.fromSeconds"></a>
 
 ```wing
@@ -3334,6 +3392,24 @@ Create a Duration representing an amount of seconds.
 - *Type:* num
 
 the amount of Seconds the `Duration` will represent.
+
+---
+
+##### `fromYears` <a name="fromYears" id="@winglang/sdk.std.Duration.fromYears"></a>
+
+```wing
+bring std;
+
+std.Duration.fromYears(amount: num)
+```
+
+Create a Duration representing an amount of years.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromYears.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of Years the `Duration` will represent.
 
 ---
 
