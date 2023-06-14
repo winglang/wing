@@ -3417,9 +3417,25 @@ the amount of Years the `Duration` will represent.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Duration.property.days">days</a></code> | <code>num</code> | Return the total number of days in this Duration. |
 | <code><a href="#@winglang/sdk.std.Duration.property.hours">hours</a></code> | <code>num</code> | Return the total number of hours in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.milliseconds">milliseconds</a></code> | <code>num</code> | Return the total number of milliseconds in this Duration. |
 | <code><a href="#@winglang/sdk.std.Duration.property.minutes">minutes</a></code> | <code>num</code> | Return the total number of minutes in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.months">months</a></code> | <code>num</code> | Return the total number of months in this Duration. |
 | <code><a href="#@winglang/sdk.std.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of seconds in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.years">years</a></code> | <code>num</code> | Return the total number of years in this Duration. |
+
+---
+
+##### `days`<sup>Required</sup> <a name="days" id="@winglang/sdk.std.Duration.property.days"></a>
+
+```wing
+days: num;
+```
+
+- *Type:* num
+
+Return the total number of days in this Duration.
 
 ---
 
@@ -3435,6 +3451,18 @@ Return the total number of hours in this Duration.
 
 ---
 
+##### `milliseconds`<sup>Required</sup> <a name="milliseconds" id="@winglang/sdk.std.Duration.property.milliseconds"></a>
+
+```wing
+milliseconds: num;
+```
+
+- *Type:* num
+
+Return the total number of milliseconds in this Duration.
+
+---
+
 ##### `minutes`<sup>Required</sup> <a name="minutes" id="@winglang/sdk.std.Duration.property.minutes"></a>
 
 ```wing
@@ -3447,6 +3475,18 @@ Return the total number of minutes in this Duration.
 
 ---
 
+##### `months`<sup>Required</sup> <a name="months" id="@winglang/sdk.std.Duration.property.months"></a>
+
+```wing
+months: num;
+```
+
+- *Type:* num
+
+Return the total number of months in this Duration.
+
+---
+
 ##### `seconds`<sup>Required</sup> <a name="seconds" id="@winglang/sdk.std.Duration.property.seconds"></a>
 
 ```wing
@@ -3456,6 +3496,18 @@ seconds: num;
 - *Type:* num
 
 Return the total number of seconds in this Duration.
+
+---
+
+##### `years`<sup>Required</sup> <a name="years" id="@winglang/sdk.std.Duration.property.years"></a>
+
+```wing
+years: num;
+```
+
+- *Type:* num
+
+Return the total number of years in this Duration.
 
 ---
 

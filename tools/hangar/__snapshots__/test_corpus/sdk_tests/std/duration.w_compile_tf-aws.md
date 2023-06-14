@@ -56,6 +56,12 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromDays(10)).seconds === $stdlib.std.Duration.fromSeconds(864000).seconds)'`)})(((std.Duration.fromDays(10)).seconds === $stdlib.std.Duration.fromSeconds(864000).seconds))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromMonths(10)).seconds === $stdlib.std.Duration.fromSeconds(26280000).seconds)'`)})(((std.Duration.fromMonths(10)).seconds === $stdlib.std.Duration.fromSeconds(26280000).seconds))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromYears(10)).seconds === $stdlib.std.Duration.fromSeconds(315360000).seconds)'`)})(((std.Duration.fromYears(10)).seconds === $stdlib.std.Duration.fromSeconds(315360000).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).milliseconds === 1000)'`)})(($stdlib.std.Duration.fromSeconds(1).milliseconds === 1000))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).minutes === (1 / 60))'`)})(($stdlib.std.Duration.fromSeconds(1).minutes === (1 / 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).hours === (1 / (60 * 60)))'`)})(($stdlib.std.Duration.fromSeconds(1).hours === (1 / (60 * 60))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).days === (1 / ((60 * 60) * 24)))'`)})(($stdlib.std.Duration.fromSeconds(1).days === (1 / ((60 * 60) * 24))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).months === (1 / ((((60 * 60) * 24) * 365) / 12)))'`)})(($stdlib.std.Duration.fromSeconds(1).months === (1 / ((((60 * 60) * 24) * 365) / 12))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).years === (1 / (((60 * 60) * 24) * 365)))'`)})(($stdlib.std.Duration.fromSeconds(1).years === (1 / (((60 * 60) * 24) * 365))))};
   }
 }
 class $App extends $AppBase {
