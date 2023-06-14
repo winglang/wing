@@ -1294,10 +1294,14 @@ program's entrypoint), it will be a *preflight class*. If a class is declared wi
 scope, it will be implicitly an inflight class.
 
 A method that has the name **init** is considered to be a class
-constructor (or initializer, or allocator).
+constructor (or initializer).
 
 ```TS
 inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
+  // class fields
+  _field1: num;
+  _field2: str;
+  
   init() {
     // constructor implementation
     // order is up to user
@@ -1305,35 +1309,17 @@ inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
     this._field2 = "sample";
   }
 
-  // class fields (private by due to having leading underscore)
-  _field1: num;
-  _field2: str;
-
   // static method (access with Name.staticMethod(...))
-  public static staticMethod(arg: type, arg: type, ...) { /* impl */ }
-  // private method
-  private _privateMethod(arg: type, arg: type, ...): type { /* impl */ }
+  static staticMethod(arg: type, arg: type, ...) { /* impl */ }
   // visible to outside the instance
-  public publicMethod(arg:type, arg:type, ...) { /* impl */ }
-  // visible to children only
-  protected protectedMethod(type:arg, type:arg, ...) { /* impl */ }
-  // public in current compilation unit only
-  internal _internalMethod3(type:arg, type:arg, ...): type { /* impl */ }
+  publicMethod(arg:type, arg:type, ...) { /* impl */ }
 }
 ```
+If no `init()` is defined, the class will have a default constructor that does nothing.
 
-Default initialization does not exist in Wing. All member fields must be
+Implicit default field initialization does not exist in Wing. All member fields must be
 initialized in the constructor. Absent initialization is a compile error. All
-field types, including the optional types must be initialized. Optionals are
-initialized to `nil` if omitted, unless the type is `nil?`, which in that case,
-absent initialization is a compile error.
-
-Member function and field access in constructor with the "this" keyword before
-all fields are initialized is invalid and would throw a compile error.
-
-In other words, the `this` keyword is immutable to its field access operator `.`
-before all the member fields are properly initialized. The behavior is similar
-to JavaScript and TypeScript in their "strict" mode.
+field types, including the optional types must be initialized.
 
 ```TS
 class Foo {
@@ -1344,18 +1330,16 @@ class Bar {
   y: num;
   z: Foo;
   init() {
-    // this.log() // is compile error here
     this.y = 1;
-    // this.log() // is also compile error here
     this.z = new Foo();
     this.log(); // OK to call here
   }
   public log() {
-    log(this.y);
+    log("${this.y}");
   }
 }
 let a = new Bar();
-a.log(); // logs 20.
+a.log(); // logs 1
 ```
 
 Overloading methods is allowed. This means functions can be overloaded with many
@@ -1380,15 +1364,11 @@ class Boo extends Foo {
     super();
     this.x = 10; // OK
   }
-  public override method() {
-    // override implementation
-  }
 }
 ```
 
 Classes can inherit and extend other classes using the `extends` keyword.  
 Classes can implement interfaces iff the interfaces do not contain `inflight`.
-You can use the keyword `final` to stop the inheritance chain.
 
 ```TS
 class Foo {
@@ -1396,26 +1376,15 @@ class Foo {
   init() { this.x = 0; }
   public method() { }
 }
-final class Boo extends Foo {
+class Boo extends Foo {
   init() { super(); this.x = 10; }
-  public override method() {
-    // override implementation
-  }
 }
-// compile error
-// class FinalBoo extends Boo {}
-```
 
-By default all methods are virtual. But if you are about to override a method,
-you need to explicitly provide the keyword **override**.  
-Static, private, and internal methods cannot be and are not virtual.  
+```
 
 Statics are not inherited. As a result, statics can be overridden mid hierarchy
 chain. Access to statics is through the class name that originally defined it: 
 `<class name>.Foo`.  
-
-Child class must not introduce additional signatures (overloads) for overridden
-(virtual) methods.
 
 Multiple inheritance is invalid and forbidden.  
 Multiple implementations of various interfaces is allowed.  
