@@ -705,8 +705,6 @@ arguments before, it also has to be declared as optional.
 
 ```TS
 let parseInt = (x: str, radix: num?, opts?: ParseOpts): num { /* ... */ };
-// or
-let parseInt = (x: str, radix: num = 10, opts: ParseOpts = ParseOpts {}): num { /* ... */ };
 ```
 
 The optionality of keyword arguments is determined by the struct field's optionality:
@@ -715,14 +713,12 @@ The optionality of keyword arguments is determined by the struct field's optiona
 struct Options {
   myRequired: str;
   myOptional: num?;
-  implicitOptional: bool = false;
 }
 
-let f = (opts: Options) => { }
+let f = (opts: Options) => { };
 
 f(myRequired: "hello");
 f(myOptional: 12, myRequired: "dang");
-f(myRequired: "dude", implicitOptional: true);
 ```
 
 ##### 1.7.1.5 Function return types
@@ -731,20 +727,23 @@ If a function returns an optional type, use the `return nil;` statement to indic
 is not defined.
 
 ```TS
-struct Name { first: str, last: str };
+struct Name { 
+  first: str;
+  last: str;
+}
 
 let tryParseName = (fullName: str): Name? => {
   let parts = fullName.split(" ");
-  if parts.len < 2 {
+  if parts.length < 2 {
     return nil;
   }
 
   return Name { first: parts.at(0), last: parts.at(1) };
-}
+};
 
 // since result is optional, it needs to be unwrapped in order to be used
 if let name = tryParseName("Neo Matrix") {
-  print("Hello, ${name.first}!");
+  log("Hello, ${name.first}!");
 }
 ```
 
@@ -754,6 +753,13 @@ To test if an optional has a value or not, you can either use `x == nil` or `x !
 special syntax `x?`.
 
 ```TS
+struct MyPerson {
+  name: str;
+  address: str?;
+}
+let myPerson = MyPerson {name: "John", address: nil};
+
+
 let isAddressDefined = myPerson.address?; // type is `bool`
 let isAddressReallyDefined = myPerson.address != nil; // equivalent
 
@@ -768,7 +774,7 @@ if !myPerson.address? {
 }
 
 if myPerson.address == nil {
-  log("no address")
+  log("no address");
 }
 ```
 
@@ -779,8 +785,8 @@ non-optional variable defined inside the block:
 
 ```TS
 if let address = myPerson.address {
-  print(address.len);
-  print(address); // address is type `str`
+  log(address.len);
+  log(address); // type of address is `str`
 }
 ```
 
@@ -797,15 +803,6 @@ can safely be used.
 let address: str = myPerson.address ?? "Planet Earth";
 ```
 
-`??` can be chained:
-
-```TS
-let address = myPerson.address ?? yourPerson.address ?? "No address";
-//            <----- str? ---->    <----- str? ------>    <-- str --->
-```
-
-The last element in a `??` chain must be a non-optional type `T`.
-
 #### 1.7.5 Optional chaining using `?.`
 
 The `?.` syntax can be used for optional chaining. Optional chaining returns a value of type `T?`
@@ -815,19 +812,9 @@ which must be unwrapped in order to be used.
 let ipAddress: str? = options.networking?.ipAddress;
 
 if let ip = ipAddress {
-  print("the ip address is defined and it is: ${ip}");
+  log("the ip address is defined and it is: ${ip}");
 }
 ```
-
-#### 1.7.6 Roadmap
-
-In the future we will consider the following additional sugar syntax:
-
-* `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
-* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy
-  evaluation/memoization (inspired by [Nullish coalescing
-  assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
-* Support `??` for different types if they have a common ancestor (and also think of interfaces).
 
 [`▲ top`][top]
 
@@ -845,16 +832,15 @@ r-value refers to the right hand side of an assignment here.
 All defined symbols are immutable (constant) by default.  
 Type casting is generally not allowed unless otherwise specified.
 
-Function arguments and their return type is always required. Function argument
-type is inferred iff a default value is provided.
+Function arguments and their return type is always required.
 
 > ```TS
 > let i = 5;
 > let m = i;
-> let arrOpt? = MutArray<num>[];
+> let arrOpt: MutArray<num>? = MutArray<num> [];
 > let arr = Array<num>[];
 > let copy = arr;
-> let i1? = nil;
+> let i1: num? = nil;
 > let i2: num? = i;
 > ```
 
@@ -863,11 +849,11 @@ type is inferred iff a default value is provided.
 > ```TS
 > const i: number = 5;
 > const m: number = i;
-> const arrOpt: number[]? = [];
-> const arr: number[] = Object.freeze([]);
-> const copy: number[] = Object.freeze([...arr]);
-> const i1: any = undefined;
-> const i2: number? = i;
+> const arrOpt: number[] | undefined = [];
+> const arr: readonly number[] = Object.freeze([]);
+> const copy: readonly number[] = Object.freeze([...arr]);
+> const i1: number | undefined = undefined;
+> const i2: number | undefined = i;
 > ```
 
 </details>
@@ -888,7 +874,7 @@ In the presence of `catch` the variable holding the exception (`e` in the exampl
 `throw` is meant to be recoverable error handling.
 
 An uncaught exception is considered user error but a panic call is not. Compiler
-must guarantee exception safety by throwing a compile error if an exception is
+guarantees exception safety by throwing a compile error if an exception is
 expected from a call and it is not being caught.
 
 > ```TS
@@ -906,7 +892,7 @@ expected from a call and it is not being caught.
 
 > ```TS
 > try {
->   let x: number? = 1;
+>   let x: number | undefined = 1;
 >   throw new Error("hello exception");
 > } catch (e) {
 >   console.log(e);
@@ -926,8 +912,8 @@ expected from a call and it is not being caught.
 Wing recommends the following formatting and naming conventions:
 
 - Interface names should start with capital letter "I".
-- Class, struct, and interface names should be TitleCased.
-- Members of classes, and interfaces cannot share the same TitleCased
+- Class, struct, and interface names should be PascalCased.
+- Members of classes, and interfaces cannot share the same PascalCased
   representation as the declaring expression itself.
 - Parentheses are optional in expressions. Any Wing expression can be surrounded
   by parentheses to enforce precedence, which implies that the expression inside
@@ -999,22 +985,13 @@ Main concepts to understand:
 - `preflight` implies synchronous execution.
 - `inflight` implies asynchronous execution.
 
-Contrary to JavaScript, any call to an async function is implicitly awaited in Wing. As
-a result, `await` in Wing is a rarely used keyword, since its use is implied by
-the `inflight` keyword. `await` is only used when you want a `defer`ed `Promise`
-to be fulfilled before execution flow continues.
-
-The Wing compiler emits `await`s when encountering `Promise<T>` types as r-values
-in expressions. Use the `defer` keyword to defer the resolution of a promise and
-obtain a `Promise<T>` type instead (a.k.a un`await` what the compiler does).
-
-The `Promise<T>` type is not allowed to hold nested promises in `T`.
+Contrary to JavaScript, any call to an async function is implicitly awaited in Wing.
 
 ## 2. Statements
 
 ### 2.1 bring
 
-**bring** statement can be used to import and reuse code from other Wing files or
+**bring** statement can be used to import and reuse code from
 other JSII supported languages. The statement is detailed in its own section in
 this document: [Module System](#4-module-system).
 
@@ -1024,15 +1001,15 @@ this document: [Module System](#4-module-system).
 
 ### 2.2 break
 
-**break** statement allows to end execution of a cycle. This includes for and
-while loops currently.
+**break** statement allows to end execution of a cycle. This includes `for` and
+`while` loops.
 
 > ```TS
-> for let i in 1..10 {
+> for i in 1..10 {
 >   if i > 5 {
 >     break;
 >   }
->   log(i);
+>   log("${i}");
 > }
 > ```
 
@@ -1059,11 +1036,11 @@ while loops currently.
 includes for and while loops currently.
 
 > ```TS
-> for let i in 1..10 {
+> for i in 1..10 {
 >   if i > 5 {
 >     continue;
 >   }
->   log(i);
+>   log("${i}");
 > }
 > ```
 
@@ -1090,10 +1067,10 @@ includes for and while loops currently.
 
 > ```TS
 > class MyClass {
->   public myPublicMethod() {}
->   private _myPrivateMethod(): void {}
->   protected myProtectedMethod(): nil { return nil; }
->   internal _myInternalMethod(): str { return "hi!"; }
+>   myMethod() {}
+>   myMethod2(): void {}
+>   myMethod3(): void { return; }
+>   myMethod4(): str { return "hi!"; }
 > }
 > ```
 
@@ -1101,60 +1078,12 @@ includes for and while loops currently.
 
 > ```TS
 > class MyClass {
->   public myPublicMethod(): void {}
->   private myPrivateMethod(): undefined {}
->   protected myProtectedMethod(): undefined { return undefined; }
->   // specific compiled instruction is up to implementation of the compiler
->   public __wing_InternalMyInternalMethod(): string { return "hi!"; }
+>   public myMethod(): void {}
+>   public myMethod2(): void {}
+>   public myMethod3(): void { return; }
+>   public myMethod4(): string { return "hi!"; }
 > }
 > ```
-  
-</details>
-
-[`▲ top`][top]
-
----
-
-### 2.5 defer/await
-
-> Read [Asynchronous Model](#114-asynchronous-model) section as a prerequisite.
-
-You mostly do not need to use **defer** and **await** keywords in Wing.  
-"defer" prevents the compiler from awaiting a promise and grabs a reference.  
-"await" and "Promise" are semantically similar to JavaScript's promises.  
-"await" statement is only valid in `inflight` function declarations.  
-Awaiting non promises in Wing is a no-op just like in JavaScript.
-
-> ```TS
-> // Wing program:
-> class MyClass {
->   inflight foo(): num {
->     let w = defer somePromise();
->     let x = await w;
->     return x;
->   }
->   inflight boo(): num {
->     let x = somePromise();
->     return x;
->   }
-> }
-> ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> class MyClass {
->   async foo(): Promise<number> {
->     const w = somePromise();
->     const x = Object.freeze(await w);
->     return x;
->   }
->   async boo(): Promise<number> {
->     const x = Object.freeze(await somePromise());
->     return x;
->   }
-> }
->  ```
   
 </details>
 
@@ -1203,7 +1132,6 @@ The **if** statement is optionally followed by **elif** and **else**.
 ### 2.7 for
 
 `for..in` statement is used to iterate over an array or a set.  
-Type annotation after an iteratee (left hand side of **in**) is optional.  
 The loop invariant in for loops is implicitly re-assignable (`var`).
 
 > ```TS
@@ -1211,20 +1139,20 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 > let arr = [1, 2, 3];
 > let set = {1, 2, 3};
 > for item in arr {
->   log(item);
+>   log("${item}");
 > }
 > for item: num in set {
->   log(item);
+>   log("${item}");
 > }
 > for item in 0..100 {
->   log(item);
+>   log("${item}");
 > }
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
-> const arr: number[] = Object.freeze([1, 2, 3]);
+> const arr: readonly number[] = Object.freeze([1, 2, 3]);
 > const set: Set<number> = Object.freeze(new Set([1, 2, 3]));
 > for (const item of arr) {
 >   console.log(item);
@@ -1233,7 +1161,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 >   console.log(item);
 > }
 > // calling 0..100 does not allocate, just returns an iterator
-> function* iterator(start, end) {
+> function* iterator(start: number, end: number) {
 >   let i = start;
 >   while (i < end) yield i++;
 >   while (i > end) yield i--;
@@ -1294,11 +1222,11 @@ Structs can inherit from multiple other structs.
 > struct MyDataModel1 {
 >   field1: num;
 >   field2: str;
-> };
+> }
 > struct MyDataModel2 {
 >   field3: num;
 >   field4: bool?;
-> };
+> }
 > struct MyDataModel3 extends MyDataModel1, MyDataModel2 {
 >   field5: str;
 > }
@@ -1318,16 +1246,16 @@ Structs can inherit from multiple other structs.
 
 > ```TS
 > interface MyDataModel1 {
->   public readonly field1: number;
->   public readonly field2: string;
+>   readonly field1: number;
+>   readonly field2: string;
 > }
 > interface MyDataModel2 {
->   public readonly field3: number;
->   public readonly field4?: boolean;
+>   readonly field3: number;
+>   readonly field4?: boolean;
 > }
 > interface MyDataModel3 extends MyDataModel1, MyDataModel2 {
->   public readonly field5: string;
->   public readonly field6: number;
+>   readonly field5: string;
+>   readonly field6: number;
 > }
 > const s1: MyDataModel1 = { field1: 1, field2: "sample" };
 > const s2: MyDataModel2 = { field3: 1, field4: true };
