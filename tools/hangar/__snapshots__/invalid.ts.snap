@@ -211,7 +211,35 @@ Duration <DURATION>
 `;
 
 exports[`class.w 1`] = `
-"error: Expected block
+"error: Calls to super constructor can only be made from derived classes
+   --> ../../../examples/tests/invalid/class.w:86:5
+   |
+86 |     super();
+   |     ^^^^^^^^ Calls to super constructor can only be made from derived classes
+
+
+error: Calls to super constructor to be first statement in constructor
+   --> ../../../examples/tests/invalid/class.w:98:5
+   |
+98 |     super(name, major);
+   |     ^^^^^^^^^^^^^^^^^^^ Calls to super constructor to be first statement in constructor
+
+
+error: Calls to super constructor can only be done from within class constructor
+    --> ../../../examples/tests/invalid/class.w:103:5
+    |
+103 |     super(\\"cool\\", \\"blue\\");
+    |     ^^^^^^^^^^^^^^^^^^^^^^ Calls to super constructor can only be done from within class constructor
+
+
+error: Calls to super constructor can only be done from within a class constructor
+    --> ../../../examples/tests/invalid/class.w:108:4
+    |
+108 |    super();
+    |    ^^^^^^^^ Calls to super constructor can only be done from within a class constructor
+
+
+error: Expected block
    --> ../../../examples/tests/invalid/class.w:17:17
    |
 17 |   init(foo: str)

@@ -1488,40 +1488,51 @@ impl<'s> Parser<'s> {
 
 	fn build_super_statement(&self, statement_node: &Node, phase: Phase, idx: usize) -> Result<StmtKind, ()> {
 		// Super constructors can only occur in specific scenarios:
-    // 1. We are in a class constructor
-    // 2. The statement is the first statement in the block
-    // 3. We are in a derived class
-    let parent_block = statement_node.parent();
-    if let Some(p) = parent_block {
-      let parent_block_context = p.parent();
-      if let Some(context) = parent_block_context {
-        match context.kind() {
-          "initializer" | "inflight_initializer" => {
-            // Check that call to super constructor was first in statement block
-            if idx != 0 {
-              self.add_error("Calls to super constructor to be first statement in constructor", statement_node)?;
-            };
+		// 1. We are in a class constructor
+		// 2. The statement is the first statement in the block
+		// 3. We are in a derived class
+		let parent_block = statement_node.parent();
+		if let Some(p) = parent_block {
+			let parent_block_context = p.parent();
+			if let Some(context) = parent_block_context {
+				match context.kind() {
+					"initializer" | "inflight_initializer" => {
+						// Check that call to super constructor was first in statement block
+						if idx != 0 {
+							self.add_error(
+								"Calls to super constructor to be first statement in constructor",
+								statement_node,
+							)?;
+						};
 
-            // Check that the class has a parent
-            let class_node = context.parent().unwrap().parent().unwrap();
-            let parent_class = class_node.child_by_field_name("parent");
+						// Check that the class has a parent
+						let class_node = context.parent().unwrap().parent().unwrap();
+						let parent_class = class_node.child_by_field_name("parent");
 
-            if let None = parent_class {
-              self.add_error("Calls to super constructor can only be made from derived classes", statement_node)?;
-            }
-            
-          } 
-          _ => {
-            self.add_error("Calls to super constructor can only be done from within class constructor", statement_node)?;
-          }
-        }
-      } else {
-        // This probably means super() call was found in top level statements
-        _ = self.add_error::<()>("Calls to super constructor can only be done from within a class constructor", statement_node);
-      }
-    }
+						if let None = parent_class {
+							self.add_error(
+								"Calls to super constructor can only be made from derived classes",
+								statement_node,
+							)?;
+						}
+					}
+					_ => {
+						self.add_error(
+							"Calls to super constructor can only be done from within class constructor",
+							statement_node,
+						)?;
+					}
+				}
+			} else {
+				// This probably means super() call was found in top level statements
+				_ = self.add_error::<()>(
+					"Calls to super constructor can only be done from within a class constructor",
+					statement_node,
+				);
+			}
+		}
 
-    let arg_node = statement_node.child_by_field_name("args").unwrap();
+		let arg_node = statement_node.child_by_field_name("args").unwrap();
 		let arg_list = self.build_arg_list(&arg_node, phase)?;
 
 		Ok(StmtKind::SuperConstructor {
