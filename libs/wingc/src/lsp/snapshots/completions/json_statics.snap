@@ -1,0 +1,68 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: deepCopyMut
+  kind: 2
+  detail: "(json: Json): MutJson"
+  insertText: deepCopyMut($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: delete
+  kind: 2
+  detail: "(json: Json, key: str): void"
+  insertText: delete($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: has
+  kind: 2
+  detail: "(json: Json, key: str): bool"
+  insertText: has($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: keys
+  kind: 2
+  detail: "(json: Json): Array<str>"
+  insertText: keys($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: parse
+  kind: 2
+  detail: "(str: str): Json"
+  insertText: parse($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: stringify
+  kind: 2
+  detail: "(json: Json, indent: num?): str"
+  insertText: stringify($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryParse
+  kind: 2
+  detail: "(str: str): Json?"
+  insertText: tryParse($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: values
+  kind: 2
+  detail: "(json: Json): Array<Json>"
+  insertText: values($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+

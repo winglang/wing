@@ -39,18 +39,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       log,
     });
   } catch (error) {
-    if (error instanceof wingCompiler.InternalError) {
-      const message = [];
-      message.push(error.causedBy);
-      message.push();
-      message.push();
-      message.push(
-        chalk.bold.red("Internal error:") +
-          " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
-      );
-
-      throw new Error(message.join("\n"));
-    } else if (error instanceof wingCompiler.CompileError) {
+    if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
       const errors = error.diagnostics;
       const result = [];
@@ -77,7 +66,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
           });
         }
 
-        const diagnosticText = await emitDiagnostic(
+        const diagnosticText = emitDiagnostic(
           files,
           {
             message,
@@ -162,10 +151,9 @@ function byteOffsetFromLineAndColumn(source: string, line: number, column: numbe
   for (let i = 0; i < line; i++) {
     offset += lines[i].length + 1;
   }
-  offset += column;
 
   // Convert char offset to byte offset
   const encoder = new TextEncoder();
   const srouce_bytes = encoder.encode(source.substring(0, offset));
-  return srouce_bytes.length;
+  return srouce_bytes.length + column;
 }
