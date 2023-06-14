@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to the Wing Language! :wave:</h1>
 <p align="center">
-  <a href="https://docs.winglang.io/getting-started">Quick Start</a>
+  <a href="https://docs.winglang.io/">Quick Start</a>
   ▪︎
   <a href="http://t.winglang.io/slack">Join Slack</a>
   ▪︎
@@ -85,7 +85,7 @@ It includes an assembly of different features that serve that purpose:
 * [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
 * [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
 * Automatic generation of IAM policies and other cloud mechanics based on intent.
-* Local functional simulator with a visualization and interaction [console](https://docs.winglang.io/getting-started/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
+* Local functional simulator with a visualization and interaction [console](https://docs.winglang.io/start-here/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
 * [Native JSON](https://docs.winglang.io/reference/spec#114-json-type) and schema validation support.
 * [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
 * [Implicit async](https://docs.winglang.io/reference/spec#113-asynchronous-model), explicit defer.
@@ -100,12 +100,12 @@ For a more in-depth look at Wing's features and benefits, check out our [documen
 
 You can install Wing in a few simple steps:
 
-1. Check out the [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites).
-2. Install the [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli).
-3. Get the [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension) for your favorite editor.
-4. Launch the [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console) and take it for a spin!
+1. Check out the [Prerequisites](https://docs.winglang.io/start-here/installation#prerequisites).
+2. Install the [Wing CLI](https://docs.winglang.io/start-here/installation#wing-cli).
+3. Get the [Wing IDE Extension](https://docs.winglang.io/start-here/installation#wing-ide-extension) for your favorite editor.
+4. Launch the [Wing Console](https://docs.winglang.io/start-here/installation#wing-console) and take it for a spin!
 
-For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/getting-started) guide.
+For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/) guide.
 It's a once-in-a-lifetime adventure into the Wing rabbit hole!
 
 ## FAQs ❓

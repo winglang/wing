@@ -9,7 +9,7 @@ use crate::ast::{
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{Diagnostic, Diagnostics, TypeError, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::{
 	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON,
@@ -20,7 +20,6 @@ use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
-use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
@@ -121,7 +120,7 @@ impl SymbolKind {
 		}
 	}
 
-	fn as_namespace_ref(&self) -> Option<NamespaceRef> {
+	pub fn as_namespace_ref(&self) -> Option<NamespaceRef> {
 		match self {
 			SymbolKind::Namespace(ns) => Some(*ns),
 			_ => None,
@@ -1156,8 +1155,6 @@ pub struct TypeChecker<'a> {
 	/// The JSII type system
 	jsii_types: &'a mut TypeSystem,
 
-	pub diagnostics: RefCell<Diagnostics>,
-
 	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
 	in_json: u64,
 
@@ -1172,7 +1169,6 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			jsii_types,
 			source_path,
-			diagnostics: RefCell::new(Diagnostics::new()),
 			jsii_imports: vec![],
 			in_json: 0,
 			statement_idx: 0,
@@ -1190,14 +1186,14 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn spanned_error<S: Into<String>>(&self, spanned: &impl Spanned, message: S) {
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: Some(spanned.span()),
 		});
 	}
 
 	fn unspanned_error<S: Into<String>>(&self, message: S) {
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		report_diagnostic(Diagnostic {
 			message: message.into(),
 			span: None,
 		});
@@ -1205,7 +1201,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_error(&self, type_error: TypeError) -> TypeRef {
 		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		report_diagnostic(Diagnostic {
 			message,
 			span: Some(span),
 		});
@@ -1374,6 +1370,12 @@ impl<'a> TypeChecker<'a> {
 					t => {
 						if matches!(t, Type::Anything) {
 							return self.types.anything();
+						} else if matches!(t, Type::Struct(_)) {
+							self.spanned_error(
+								class,
+								format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", type_),
+							);
+							return self.types.error();
 						} else {
 							self.spanned_error(
 								class,
@@ -1601,6 +1603,14 @@ impl<'a> TypeChecker<'a> {
 				// Verify passed positional arguments match the function's parameter types
 				for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
 					self.validate_type(*arg_type, param.typeref, arg_expr);
+				}
+
+				// If the function is "wingc_env", then print out the current environment
+				if let ExprKind::Reference(Reference::Identifier(ident)) = &callee.kind {
+					if ident.name == "wingc_env" {
+						println!("[symbol environment at {}]", exp.span().to_string());
+						println!("{}", env.to_string());
+					}
 				}
 
 				func_sig.return_type
@@ -1900,7 +1910,7 @@ impl<'a> TypeChecker<'a> {
 				.iter()
 				.any(|expected| actual_type.is_subtype_of(&expected))
 		{
-			self.diagnostics.borrow_mut().push(Diagnostic {
+			report_diagnostic(Diagnostic {
 				message: if expected_types.len() > 1 {
 					let expected_types_list = expected_types
 						.iter()
@@ -2152,7 +2162,7 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(value, env);
 
 				if !cond_type.is_option() {
-					self.diagnostics.borrow_mut().push(Diagnostic {
+					report_diagnostic(Diagnostic {
 						message: format!("Expected type to be optional, but got \"{}\" instead", cond_type),
 						span: Some(value.span()),
 					});
@@ -2704,6 +2714,10 @@ impl<'a> TypeChecker<'a> {
 					self.inner_scopes.push(finally_statements);
 				}
 			}
+			StmtKind::CompilerDebugEnv => {
+				println!("[symbol environment at {}]", stmt.span);
+				println!("{}", env);
+			}
 		}
 	}
 
@@ -2920,13 +2934,13 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
-			// if we're importing from the the wing sdk, eagerly import all the types within it
-			// because they're critical to a typical dx when using wing
-			// TODO: Improve lazy loading for types in the LSP https://github.com/winglang/wing/issues/2639
+			// If we're importing from the the wing sdk, eagerly import all the types within it
+			// The wing sdk is special because it's currently the only jsii module we import with a specific target namespace
 			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
 				importer.deep_import_submodule_to_env(&jsii.alias.name);
 			}
 
+			importer.import_root_types();
 			importer.import_submodules_to_env(env);
 		}
 	}
@@ -3165,91 +3179,94 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	/// Check if this expression is actually a reference to a type. The parser doesn't distinguish between a `some_expression.field` and `SomeType.field`.
-	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
-	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv) -> Option<UserDefinedType> {
+	fn reference_to_udt(&mut self, reference: &Reference) -> Option<UserDefinedType> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
 		// https://github.com/winglang/wing/issues/1006
 		let mut path = vec![];
-		let mut curr_expr = expr;
+		let mut current_reference = reference;
 		loop {
-			match &curr_expr.kind {
-				ExprKind::Reference(reference) => match reference {
-					Reference::Identifier(symbol) => {
-						if let Some(stdlib_symbol) = self.get_stdlib_symbol(symbol) {
-							path.push(stdlib_symbol);
-							path.push(Symbol {
-								name: WINGSDK_STD_MODULE.to_string(),
-								span: symbol.span.clone(),
-							});
-						} else {
-							path.push(symbol.clone());
-						}
-						break;
+			match &current_reference {
+				Reference::Identifier(symbol) => {
+					if let Some(stdlib_symbol) = self.get_stdlib_symbol(symbol) {
+						path.push(stdlib_symbol);
+						path.push(Symbol {
+							name: WINGSDK_STD_MODULE.to_string(),
+							span: symbol.span.clone(),
+						});
+					} else {
+						path.push(symbol.clone());
 					}
-					Reference::InstanceMember {
-						object,
-						property,
-						optional_accessor: _,
-					} => {
-						path.push(property.clone());
-						curr_expr = &object;
+					break;
+				}
+				Reference::InstanceMember {
+					object,
+					property,
+					optional_accessor: _,
+				} => {
+					path.push(property.clone());
+					current_reference = match &object.kind {
+						ExprKind::Reference(r) => r,
+						_ => return None,
 					}
-					Reference::TypeMember { type_, .. } => {
-						assert_eq!(
-							path.len(),
-							0,
-							"Type property references cannot be a type name because they have a property"
-						);
+				}
+				Reference::TypeMember { type_, .. } => {
+					if path.is_empty() {
 						return Some(type_.clone());
+					} else {
+						// Type property references cannot be a type name because they have a property
+						return None;
 					}
-				},
-				_ => return None,
-			}
-		}
-
-		// rewrite "namespace.foo()" to "namespace.Util.foo()" (e.g. `util.env()`). we do this by
-		// looking up the symbol path within the current environment and if it resolves to a namespace,
-		// then resolve a class named "Util" within it. This will basically be equivalent to the
-		// `foo.Bar.baz()` case (where `baz()`) is a static method of class `Bar`.
-		if !path.is_empty() {
-			let result = env.lookup_nested(&path.iter().collect_vec(), Some(self.statement_idx));
-			if let LookupResult::Found(symbol_kind, _) = result {
-				if let SymbolKind::Namespace(_) = symbol_kind {
-					// resolve "Util" as a user defined class within the namespace
-					let root = path.pop().unwrap();
-					path.reverse();
-					path.push(Symbol {
-						name: "Util".to_string(),
-						span: root.span.clone(),
-					});
-
-					let ut = UserDefinedType {
-						root,
-						fields: path,
-						span: WingSpan::default(),
-					};
-
-					return self
-						.resolve_user_defined_type(&ut, env, self.statement_idx)
-						.ok()
-						.map(|_| ut);
 				}
 			}
 		}
 
 		let root = path.pop().unwrap();
 		path.reverse();
-		let user_type_annotation = UserDefinedType {
+		Some(UserDefinedType {
 			root,
 			fields: path,
 			span: WingSpan::default(),
+		})
+	}
+
+	/// Check if this expression is actually a reference to a type. The parser doesn't distinguish between a `some_expression.field` and `SomeType.field`.
+	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
+	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv) -> Option<UserDefinedType> {
+		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
+		// https://github.com/winglang/wing/issues/1006
+
+		let base_udt = if let ExprKind::Reference(reference) = &expr.kind {
+			self.reference_to_udt(reference)?
+		} else {
+			return None;
 		};
 
+		// rewrite "namespace.foo()" to "namespace.Util.foo()" (e.g. `util.env()`). we do this by
+		// looking up the symbol path within the current environment and if it resolves to a namespace,
+		// then resolve a class named "Util" within it. This will basically be equivalent to the
+		// `foo.Bar.baz()` case (where `baz()`) is a static method of class `Bar`.
+		if base_udt.fields.is_empty() {
+			let result = env.lookup_nested_str(&base_udt.full_path_str(), Some(self.statement_idx));
+			if let LookupResult::Found(symbol_kind, _) = result {
+				if let SymbolKind::Namespace(_) = symbol_kind {
+					let mut new_udt = base_udt.clone();
+					new_udt.fields.push(Symbol {
+						name: "Util".to_string(),
+						span: base_udt.span.clone(),
+					});
+
+					return self
+						.resolve_user_defined_type(&new_udt, env, self.statement_idx)
+						.ok()
+						.map(|_| new_udt);
+				}
+			}
+		}
+
 		self
-			.resolve_user_defined_type(&user_type_annotation, env, self.statement_idx)
+			.resolve_user_defined_type(&base_udt, env, self.statement_idx)
 			.ok()
-			.map(|_| user_type_annotation)
+			.map(|_| base_udt)
 	}
 
 	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv) -> VariableInfo {
@@ -3312,7 +3329,7 @@ impl<'a> TypeChecker<'a> {
 				if let ExprKind::Reference(Reference::Identifier(symb)) = &object.kind {
 					if symb.name == "this" {
 						if let LookupResult::Found(kind, info) = env.lookup_ext(&symb, Some(self.statement_idx)) {
-							// `this` resreved symbol should always be a variable
+							// `this` reserved symbol should always be a variable
 							assert!(matches!(kind, SymbolKind::Variable(_)));
 							force_reassignable = info.init;
 						}
@@ -3320,6 +3337,20 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				let instance_type = self.type_check_exp(object, env);
+
+				// TODO Use error type instead of "anything" here https://github.com/winglang/wing/issues/884
+				if instance_type.is_anything() {
+					// Check to see if this reference is actually an invalid usage of a namespace
+					if let Some(ref_udt) = self.reference_to_udt(reference) {
+						let lookup = self.resolve_user_defined_type(&ref_udt, env, self.statement_idx);
+						if let Err(t) = lookup {
+							if t.message.ends_with("to be a type but it's a namespace") {
+								return self.make_error_variable_info(false);
+							}
+						}
+					}
+				}
+
 				let res = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// Check if the object is an optional type. If it is ensure the use of optional chaining.
@@ -3599,7 +3630,7 @@ impl<'a> TypeChecker<'a> {
 			if parent_class.phase == phase {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
-				self.diagnostics.borrow_mut().push(Diagnostic {
+				report_diagnostic(Diagnostic {
 					message: format!(
 						"{} class {} cannot extend {} class \"{}\"",
 						phase, name, parent_class.phase, parent_class.name
@@ -3609,7 +3640,7 @@ impl<'a> TypeChecker<'a> {
 				(None, None)
 			}
 		} else {
-			self.diagnostics.borrow_mut().push(Diagnostic {
+			report_diagnostic(Diagnostic {
 				message: format!("Base class \"{}\" is not a class", parent_type),
 				span: Some(parent_udt.span.clone()),
 			});
