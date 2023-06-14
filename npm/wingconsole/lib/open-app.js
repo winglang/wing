@@ -10,7 +10,7 @@ import openExternal from "open";
 export const openApp = async (app) => {
   const path = fileURLToPath(app);
   if (platform() === "linux") {
-    execSync(path, { cwd: "inherit" });
+    execSync(path, { stdio: "inherit" });
   } else {
     await openExternal(path, { wait: true });
   }
