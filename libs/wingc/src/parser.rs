@@ -13,14 +13,13 @@ use crate::ast::{
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
-	pub diagnostics: RefCell<Diagnostics>,
 	is_in_loop: RefCell<bool>,
 }
 
@@ -45,7 +44,6 @@ impl<'s> Parser<'s> {
 			source,
 			source_name,
 			error_nodes: RefCell::new(HashSet::new()),
-			diagnostics: RefCell::new(Diagnostics::new()),
 			is_in_loop: RefCell::new(false),
 		}
 	}
@@ -70,8 +68,7 @@ impl<'s> Parser<'s> {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
 		};
-		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().push(diag);
+		report_diagnostic(diag);
 
 		// Track that we have produced a diagnostic for this node
 		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
@@ -501,7 +498,7 @@ impl<'s> Parser<'s> {
 				"class_field" => {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
-						self.diagnostics.borrow_mut().push(Diagnostic {
+						report_diagnostic(Diagnostic {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),

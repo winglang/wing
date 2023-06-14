@@ -20,7 +20,7 @@ export interface WingCompilerLoadOptions {
   /**
    * Additional imports to pass to the WASI instance. Imports objects/functions that WASM code can invoke.
    *
-   * @default `{ wasi_snapshot_preview1: wasi.wasiImport, env: { send_notification: () => {} }`
+   * @default `{ wasi_snapshot_preview1: wasi.wasiImport, env: { send_diagnostic: () => {} }`
    */
   imports?: Record<string, any>;
 
@@ -176,7 +176,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_notification: () => {},
+      send_diagnostic: () => { },
     },
     ...(options.imports ?? {}),
   } as any;
@@ -192,6 +192,10 @@ export async function load(options: WingCompilerLoadOptions) {
 
   log?.("starting wingc WASM module");
   wasi.start(instance);
+
+  // Initialize the wingc module
+  const exports = instance.exports as any;
+  exports.wingc_init();
 
   return instance;
 }
@@ -230,6 +234,8 @@ export interface WingDiagnostic {
  * 2. The string will be UTF-8 encoded
  * 3. The string will be less than 2^32 bytes long  (4GB)
  * 4. The WASI instance has already been initialized
+ * 5. The returned value is a pointer to a UTF-8 string and a length encoded in a single
+ *    64 bit value or 0 (indicating no return value or error).
  */
 export function invoke(
   instance: WebAssembly.Instance,
