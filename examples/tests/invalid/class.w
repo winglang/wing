@@ -108,3 +108,53 @@ class PaidStudent extends Student {
    super();
 // ^^^^^^^^ Calls to super constructor can only be done from within a class constructor
 let s = new PaidStudent("x", "y", 3);
+
+// Typechecking super calls
+class One {
+  someNum: num;
+  init(someNum: num) {
+    this.someNum = someNum;
+  }
+}
+
+class Two extends One {
+  someStr: str;
+  init(someNum: num, someStr: str) {
+    super(someStr);
+//        ^^^^^^^ Expected type to be "num", but got "str" instead
+    this.someStr = someStr;
+  }
+}
+
+class Three extends One {
+  someStr: str;
+  init(someNum: num, someStr: str) {
+    super();
+//  ^^^^^^^^ Expected 1 positional argument(s) but got 0
+    this.someStr = someStr;
+  }
+}
+
+class Four extends One {
+  someStr: str;
+  init(someNum: num, someStr: str) {
+    super(someNum, someStr);
+//  ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 arguments but got 2
+    this.someStr = someStr;
+  }
+}
+
+// Super inflight
+inflight class Plane {
+  year: num;
+  init(year: num) {
+    this.year = year;
+  }
+}
+
+inflight class Jet extends Plane{
+  init(year: num) {
+    super();
+//  ^^^^^^^^ Expected 1 positional argument(s) but got 0
+  }
+}

@@ -1533,7 +1533,7 @@ impl<'s> Parser<'s> {
 		let arg_list = self.build_arg_list(&arg_node, phase)?;
 
 		Ok(StmtKind::SuperConstructor {
-			arg_list: Some(arg_list),
+			arg_list,
 		})
 	}
 

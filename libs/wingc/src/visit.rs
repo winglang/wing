@@ -102,9 +102,7 @@ where
 {
 	match &node.kind {
 		StmtKind::SuperConstructor { arg_list } => {
-			if let Some(args) = arg_list {
-				v.visit_args(args)
-			}
+      v.visit_args(arg_list)
 		}
 		StmtKind::Bring {
 			module_name,

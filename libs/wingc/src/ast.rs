@@ -338,7 +338,7 @@ pub enum StmtKind {
 		identifier: Option<Symbol>,
 	},
 	SuperConstructor {
-		arg_list: Option<ArgList>,
+		arg_list: ArgList,
 	},
 	Let {
 		reassignable: bool,

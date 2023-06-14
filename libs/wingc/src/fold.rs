@@ -78,7 +78,7 @@ where
 {
 	let kind = match node.kind {
 		StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
-			arg_list: Some(f.fold_args(arg_list.unwrap())),
+			arg_list: f.fold_args(arg_list),
 		},
 		StmtKind::Bring {
 			module_name,

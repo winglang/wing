@@ -530,11 +530,11 @@ impl<'a> JSifier<'a> {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
 			StmtKind::SuperConstructor { arg_list } => {
-				let mut args = "".to_string();
-				if let Some(a) = arg_list {
-					args = self.jsify_arg_list(&a, None, None, ctx);
-				}
-				CodeMaker::one_line(format!("super(scope,id,{});", args))
+        let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+        match ctx.phase {
+          Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
+          _ => CodeMaker::one_line(format!("super({});", args)),
+        }
 			}
 			StmtKind::Bring {
 				module_name,

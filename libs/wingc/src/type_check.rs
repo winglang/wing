@@ -1538,71 +1538,8 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
-				// Verify arity
-				let pos_args_count = arg_list.pos_args.len();
-				let min_args = func_sig.min_parameters();
-				if pos_args_count < min_args {
-					let err_text = format!(
-						"Expected {} positional argument(s) but got {}",
-						min_args, pos_args_count
-					);
-					self.spanned_error(exp, err_text);
-					return self.types.error();
-				}
-
-				if !arg_list.named_args.is_empty() {
-					let last_arg = match func_sig.parameters.last() {
-						Some(arg) => arg.typeref.maybe_unwrap_option(),
-						None => {
-							self.spanned_error(
-								exp,
-								format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
-							);
-							return self.types.error();
-						}
-					};
-
-					if !last_arg.is_struct() {
-						self.spanned_error(exp, "No named arguments expected");
-						return self.types.error();
-					}
-
-					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
-				}
-
-				// Count number of optional parameters from the end of the function's params
-				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
-				let num_optionals = func_sig
-					.parameters
-					.iter()
-					.rev()
-					.take_while(|arg| arg.typeref.is_option())
-					.count();
-
-				// Verify arity
-				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = func_sig.parameters.len() - num_optionals;
-				let max_args = func_sig.parameters.len();
-				if arg_count < min_args || arg_count > max_args {
-					let err_text = if min_args == max_args {
-						format!("Expected {} arguments but got {}", min_args, arg_count)
-					} else {
-						format!(
-							"Expected between {} and {} arguments but got {}",
-							min_args, max_args, arg_count
-						)
-					};
-					self.spanned_error(exp, err_text);
-				}
-
-				let params = func_sig
-					.parameters
-					.iter()
-					.take(func_sig.parameters.len() - num_optionals);
-
-				// Verify passed positional arguments match the function's parameter types
-				for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
-					self.validate_type(*arg_type, param.typeref, arg_expr);
+				if let Some(value) = self.type_check_arg_list_against_function_sig(arg_list, &func_sig, exp, arg_list_types) {
+					return value;
 				}
 
 				// If the function is "wingc_env", then print out the current environment
@@ -1783,6 +1720,81 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	fn type_check_arg_list_against_function_sig(
+		&mut self,
+		arg_list: &ArgList,
+		func_sig: &FunctionSignature,
+		exp: &impl Spanned,
+		arg_list_types: ArgListTypes,
+	) -> Option<UnsafeRef<Type>> {
+		// Verify arity
+		let pos_args_count = arg_list.pos_args.len();
+		let min_args = func_sig.min_parameters();
+		if pos_args_count < min_args {
+			let err_text = format!(
+				"Expected {} positional argument(s) but got {}",
+				min_args, pos_args_count
+			);
+			self.spanned_error(exp, err_text);
+			return Some(self.types.error());
+		}
+
+		if !arg_list.named_args.is_empty() {
+			let last_arg = match func_sig.parameters.last() {
+				Some(arg) => arg.typeref.maybe_unwrap_option(),
+				None => {
+					self.spanned_error(
+						exp,
+						format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
+					);
+					return Some(self.types.error());
+				}
+			};
+
+			if !last_arg.is_struct() {
+				self.spanned_error(exp, "No named arguments expected");
+				return Some(self.types.error());
+			}
+
+			self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
+		}
+
+		// Count number of optional parameters from the end of the function's params
+		// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
+		let num_optionals = func_sig
+			.parameters
+			.iter()
+			.rev()
+			.take_while(|arg| arg.typeref.is_option())
+			.count();
+
+		// Verify arity
+		let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+		let min_args = func_sig.parameters.len() - num_optionals;
+		let max_args = func_sig.parameters.len();
+		if arg_count < min_args || arg_count > max_args {
+			let err_text = if min_args == max_args {
+				format!("Expected {} arguments but got {}", min_args, arg_count)
+			} else {
+				format!(
+					"Expected between {} and {} arguments but got {}",
+					min_args, max_args, arg_count
+				)
+			};
+			self.spanned_error(exp, err_text);
+		}
+		let params = func_sig
+			.parameters
+			.iter()
+			.take(func_sig.parameters.len() - num_optionals);
+
+		// Verify passed positional arguments match the function's parameter types
+		for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
+			self.validate_type(*arg_type, param.typeref, arg_expr);
+		}
+		None
+	}
+
 	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// https://github.com/winglang/wing/issues/457
@@ -1818,7 +1830,7 @@ impl<'a> TypeChecker<'a> {
 		object: &IndexMap<Symbol, Expr>,
 		object_types: &IndexMap<Symbol, TypeRef>,
 		expected_type: &TypeRef,
-		value: &Expr,
+		value: &impl Spanned,
 	) {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
 			expected_struct
@@ -2054,12 +2066,10 @@ impl<'a> TypeChecker<'a> {
 		// not overwriting the current statement index because `type_check_statement` is never
 		// recursively called (we use a breadth-first traversal of the AST statements).
 		self.statement_idx = stmt.idx;
-    
+
 		match &stmt.kind {
 			StmtKind::SuperConstructor { arg_list } => {
-				if let Some(args) = arg_list {
-					self.type_check_arg_list(args, env);
-				}
+				self.type_check_arg_list(arg_list, env);
 			}
 			StmtKind::Let {
 				reassignable,
@@ -2461,7 +2471,30 @@ impl<'a> TypeChecker<'a> {
 
 				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
 					self.check_class_field_initialization(&scope, fields, Phase::Inflight);
-				}
+					if &scope.statements.len() >= &1 {
+						match &scope.statements[0].kind {
+							StmtKind::SuperConstructor { arg_list } => {
+								if let Some(parent_initializer) = &class_type.as_class().unwrap().parent {
+									let initializer = parent_initializer
+										.as_class()
+										.unwrap()
+										.methods(false)
+										.filter(|(name, _type)| name == CLASS_INFLIGHT_INIT_NAME)
+										.collect_vec()[0]
+										.1;
+									let arg_list_types = self.type_check_arg_list(&arg_list, &class_env);
+									self.type_check_arg_list_against_function_sig(
+										&arg_list,
+										initializer.as_function_sig().unwrap(),
+										&scope.statements[0],
+										arg_list_types,
+									);
+								}
+							}
+							_ => {} // No super no problem
+						}
+					}
+				};
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class().unwrap().env = class_env;
@@ -2476,29 +2509,29 @@ impl<'a> TypeChecker<'a> {
 					FunctionBody::External(_) => panic!("init cannot be extern"),
 				};
 
-        // match &init_statements.statements[0].kind {
-        //   StmtKind::SuperConstructor { arg_list } => {
-        //     dbg!("Found super in typechecker");
-        //     let class = class_type.as_class();
-        //     if let Some(c) = &class {
-        //       let parent = c.parent;
-              
-        //       if let Some(parent) = parent {
-                
-        //         let methods = &parent.as_class().unwrap();
-        //         let (_, parent_initializer) = &methods.methods(false).filter(|(name, _type)| name == "init").collect_vec()[0];
-        //         let params = &parent_initializer.as_function_sig().unwrap().parameters;
-
-        //         let arg_count = if let Some(x) = arg_list { x.pos_args.len() } else { 0 };
-        //         // dbg!(arg_count, params.len());
-        //         if params.len() != arg_count {
-        //           // self.spanned_error(&init_statements.statements[0], format!("Expected {} args but received {}", params.len(), arg_count));
-        //         }
-        //       }
-        //     }
-        //   }
-        //   _ => {}
-        // }
+				if &init_statements.statements.len() >= &1 {
+					match &init_statements.statements[0].kind {
+						StmtKind::SuperConstructor { arg_list } => {
+							if let Some(parent_initializer) = &class_type.as_class().unwrap().parent {
+								let inflight_super_class_methods = parent_initializer
+									.as_class()
+									.unwrap()
+									.methods(false)
+									.filter(|(name, _type)| name == CLASS_INIT_NAME)
+									.collect_vec();
+								let initializer = inflight_super_class_methods[0].1;
+								let arg_list_types = self.type_check_arg_list(&arg_list, &class_env);
+								self.type_check_arg_list_against_function_sig(
+									&arg_list,
+									initializer.as_function_sig().unwrap(),
+									&init_statements.statements[0],
+									arg_list_types,
+								);
+							}
+						}
+						_ => {} // No super no problem
+					}
+				}
 
 				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
 
