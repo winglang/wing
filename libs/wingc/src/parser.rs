@@ -200,6 +200,7 @@ impl<'s> Parser<'s> {
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
+			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -1435,7 +1436,6 @@ impl<'s> Parser<'s> {
 				dbg_panic!();
 				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
 			}
-			"compiler_dbg_env" => Ok(Expr::new(ExprKind::CompilerDebugEnv, expression_span)),
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
 	}

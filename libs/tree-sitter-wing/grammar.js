@@ -112,7 +112,8 @@ module.exports = grammar({
         $.if_let_statement,
         $.struct_definition,
         $.enum_definition,
-        $.try_catch_statement
+        $.try_catch_statement,
+        $.compiler_dbg_env,
       ),
 
     short_import_statement: ($) =>
@@ -320,7 +321,6 @@ module.exports = grammar({
         $.struct_literal,
         $.optional_test,
         $.compiler_dbg_panic,
-        $.compiler_dbg_env,
       ),
 
     // Primitives
@@ -371,7 +371,7 @@ module.exports = grammar({
       prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
 
     compiler_dbg_panic: ($) => "😱",
-    compiler_dbg_env: ($) => "🗺️",
+    compiler_dbg_env: ($) => seq("🗺️", optional(";")),
 
     _callable_expression: ($) =>
       choice(

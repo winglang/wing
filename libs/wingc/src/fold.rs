@@ -168,6 +168,7 @@ where
 			}),
 			finally_statements: finally_statements.map(|statements| f.fold_scope(statements)),
 		},
+		StmtKind::CompilerDebugEnv => StmtKind::CompilerDebugEnv,
 	};
 	Stmt {
 		kind,
@@ -309,7 +310,6 @@ where
 			dbg_panic!(); // Handle the debug panic expression (during folding)
 			ExprKind::CompilerDebugPanic
 		}
-		ExprKind::CompilerDebugEnv => ExprKind::CompilerDebugEnv,
 	};
 	Expr {
 		id: node.id,

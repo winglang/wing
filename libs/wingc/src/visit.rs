@@ -222,6 +222,7 @@ where
 				v.visit_scope(finally_statements);
 			}
 		}
+		StmtKind::CompilerDebugEnv => {}
 	}
 }
 
@@ -365,7 +366,6 @@ where
 			// Handle the debug panic expression (during visiting)
 			dbg_panic!();
 		}
-		ExprKind::CompilerDebugEnv => {}
 	}
 }
 

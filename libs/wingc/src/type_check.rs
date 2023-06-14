@@ -1781,11 +1781,6 @@ impl<'a> TypeChecker<'a> {
 					span: exp.span.clone(),
 				})
 			}
-			ExprKind::CompilerDebugEnv => {
-				println!("[symbol environment at {}]", exp.span);
-				println!("{}", env);
-				self.types.anything()
-			}
 		}
 	}
 
@@ -2719,6 +2714,10 @@ impl<'a> TypeChecker<'a> {
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
+			}
+			StmtKind::CompilerDebugEnv => {
+				println!("[symbol environment at {}]", stmt.span);
+				println!("{}", env);
 			}
 		}
 	}

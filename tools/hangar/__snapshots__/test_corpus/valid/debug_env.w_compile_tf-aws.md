@@ -64,7 +64,6 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         const __parent_this = this;
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-        ;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.A.js";

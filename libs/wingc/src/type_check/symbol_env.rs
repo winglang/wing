@@ -1,3 +1,4 @@
+use colored::Colorize;
 use derivative::Derivative;
 use duplicate::duplicate_item;
 
@@ -39,9 +40,9 @@ impl Display for SymbolEnv {
 			let mut items = vec![];
 			for (name, (_, kind)) in &env.symbol_map {
 				let repr = match kind {
-					SymbolKind::Type(t) => format!("{} [type]", t),
-					SymbolKind::Variable(v) => format!("{}", v.type_),
-					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name),
+					SymbolKind::Type(t) => format!("{} [type]", t).red(),
+					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
+					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
 				};
 				items.push(format!("{} => {}", name, repr));
 			}

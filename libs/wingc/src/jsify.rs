@@ -523,9 +523,6 @@ impl<'a> JSifier<'a> {
 				dbg_panic!();
 				"".to_string()
 			},
-			ExprKind::CompilerDebugEnv => {
-				"".to_string()
-			}
 		}
 	}
 
@@ -746,6 +743,7 @@ impl<'a> JSifier<'a> {
 
 				code
 			}
+			StmtKind::CompilerDebugEnv => CodeMaker::default(),
 		}
 	}
 
