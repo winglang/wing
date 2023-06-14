@@ -2054,7 +2054,7 @@ impl<'a> TypeChecker<'a> {
 		// not overwriting the current statement index because `type_check_statement` is never
 		// recursively called (we use a breadth-first traversal of the AST statements).
 		self.statement_idx = stmt.idx;
-
+    
 		match &stmt.kind {
 			StmtKind::SuperConstructor { arg_list } => {
 				if let Some(args) = arg_list {
@@ -2475,6 +2475,30 @@ impl<'a> TypeChecker<'a> {
 					FunctionBody::Statements(s) => s,
 					FunctionBody::External(_) => panic!("init cannot be extern"),
 				};
+
+        // match &init_statements.statements[0].kind {
+        //   StmtKind::SuperConstructor { arg_list } => {
+        //     dbg!("Found super in typechecker");
+        //     let class = class_type.as_class();
+        //     if let Some(c) = &class {
+        //       let parent = c.parent;
+              
+        //       if let Some(parent) = parent {
+                
+        //         let methods = &parent.as_class().unwrap();
+        //         let (_, parent_initializer) = &methods.methods(false).filter(|(name, _type)| name == "init").collect_vec()[0];
+        //         let params = &parent_initializer.as_function_sig().unwrap().parameters;
+
+        //         let arg_count = if let Some(x) = arg_list { x.pos_args.len() } else { 0 };
+        //         // dbg!(arg_count, params.len());
+        //         if params.len() != arg_count {
+        //           // self.spanned_error(&init_statements.statements[0], format!("Expected {} args but received {}", params.len(), arg_count));
+        //         }
+        //       }
+        //     }
+        //   }
+        //   _ => {}
+        // }
 
 				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
 

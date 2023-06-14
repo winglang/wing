@@ -1485,10 +1485,9 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_super_statement(&self, statement_node: &Node, phase: Phase, idx: usize) -> Result<StmtKind, ()> {
-		// Super constructors can only occur in specific scenarios:
-		// 1. We are in a class constructor
+		// Calls to super constructor can only occur in specific scenario:
+		// 1. We are in a derived class' constructor
 		// 2. The statement is the first statement in the block
-		// 3. We are in a derived class
 		let parent_block = statement_node.parent();
 		if let Some(p) = parent_block {
 			let parent_block_context = p.parent();
