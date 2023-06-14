@@ -1532,9 +1532,7 @@ impl<'s> Parser<'s> {
 		let arg_node = statement_node.child_by_field_name("args").unwrap();
 		let arg_list = self.build_arg_list(&arg_node, phase)?;
 
-		Ok(StmtKind::SuperConstructor {
-			arg_list,
-		})
+		Ok(StmtKind::SuperConstructor { arg_list })
 	}
 
 	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {

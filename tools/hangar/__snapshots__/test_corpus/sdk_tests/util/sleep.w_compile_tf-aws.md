@@ -31,7 +31,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     static async getTime()  {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
@@ -178,7 +177,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("getTime");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.JSHelper.js";
