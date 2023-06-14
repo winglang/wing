@@ -3566,6 +3566,8 @@ impl<'a> TypeChecker<'a> {
 				};
 				udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
 
+				dbg!(&udt_string);
+
 				if importer.import_type(&FQN::from(udt_string.as_str())) {
 					return resolve_user_defined_type(user_defined_type, env, statement_idx);
 				} else {

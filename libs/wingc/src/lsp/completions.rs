@@ -144,7 +144,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			if parent.kind() == "custom_type" {
 				if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
 					if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
-						if udt.fields.is_empty() {
+						let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap());
+
+						if let Ok(type_lookup) = type_lookup {
+							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
+						} else {
 							// this is probably a namespace
 							// `resolve_user_defined_type` will fail for namespaces, let's just look it up instead
 							let namespace = root_env
@@ -153,11 +157,16 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							if let Some((namespace, _)) = namespace {
 								if let SymbolKind::Namespace(namespace) = namespace {
 									let completions = get_completions_from_namespace(namespace, Some(found_env.phase));
-									//for namespaces - return only classes
+									//for namespaces - return only classes and namespaces
 									if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
 										return completions
 											.iter()
-											.filter(|c| matches!(c.kind, Some(CompletionItemKind::CLASS)))
+											.filter(|c| {
+												matches!(
+													c.kind,
+													Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
+												)
+											})
 											.cloned()
 											.collect();
 									} else {
@@ -165,15 +174,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 									}
 								}
 							}
-						}
-						let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap());
 
-						if let Ok(type_lookup) = type_lookup {
-							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
-						} else {
-							// No lookup found, let's not provide any completions
-							// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
-
+							// This is not a known type or namespace
 							return vec![];
 						}
 					}
@@ -330,13 +332,14 @@ fn get_completions_from_namespace(
 		LookupResult::DefinedLater => vec![],
 		LookupResult::ExpectedNamespace(_) => vec![],
 	};
-	namespace
+	let l: Vec<CompletionItem> = namespace
 		.env
 		.symbol_map
 		.iter()
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
 		.chain(util_completions.into_iter())
-		.collect()
+		.collect();
+	l
 }
 
 /// Gets accessible properties on a class as a list of CompletionItems
