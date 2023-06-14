@@ -35,7 +35,6 @@ export interface IPredicateHandlerClient {
   handle(): Promise<boolean>;
 }
 
-
 /**
  * Utility functions.
  */
