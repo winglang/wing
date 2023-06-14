@@ -1,9 +1,10 @@
 use itertools::Itertools;
 use lsp_types::{ParameterInformation, ParameterLabel, Position, SignatureHelp, SignatureInformation};
 
-use crate::ast::{Expr, ExprKind};
+use crate::ast::{Expr, ExprKind, Symbol};
 use crate::lsp::sync::FILES;
 
+use crate::type_check::CLASS_INIT_NAME;
 use crate::visit::{visit_expr, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -31,88 +32,98 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 
 		let mut scope_visitor = ScopeVisitor::new(params.text_document_position_params.position);
 		scope_visitor.visit_scope(root_scope);
+		let expr = scope_visitor.call_expr?;
 
-		if let Some(expr) = scope_visitor.call_expr {
-			if let ExprKind::Call {
-				callee,
-				arg_list: provided_args,
-			} = &expr.kind
-			{
-				let t = file_data.types.get_expr_type(callee);
+		let sig_data = match &expr.kind {
+			ExprKind::New { arg_list, .. } => {
+				let t = file_data.types.get_expr_type(expr);
 				let t = t.as_ref()?;
-				let sig = t.as_function_sig()?;
+				let init_lookup = t.as_class().unwrap().env.lookup(
+					&Symbol {
+						name: CLASS_INIT_NAME.into(),
+						span: Default::default(),
+					},
+					None,
+				);
+				(init_lookup?.as_variable()?.type_, arg_list)
+			}
+			ExprKind::Call { callee, arg_list } => {
+				let t = file_data.types.get_expr_type(callee);
+				(*t.as_ref()?, arg_list)
+			}
+			_ => return None,
+		};
 
-				let positional_arg_pos = provided_args
-					.pos_args
-					.iter()
-					.enumerate()
-					.filter(|(_, arg)| params.text_document_position_params.position <= arg.span.end.into())
-					.count();
-				let named_arg_pos = provided_args
-					.named_args
-					.iter()
-					.find(|arg| arg.1.span.contains(&params.text_document_position_params.position));
+		let sig = sig_data.0.as_function_sig()?;
+		let provided_args = sig_data.1;
 
-				let active_parameter = if named_arg_pos.is_some() {
-					sig.parameters.len() - 1
-				} else {
-					provided_args.pos_args.len() - positional_arg_pos
-				};
+		let positional_arg_pos = provided_args
+			.pos_args
+			.iter()
+			.enumerate()
+			.filter(|(_, arg)| params.text_document_position_params.position <= arg.span.end.into())
+			.count();
+		let named_arg_pos = provided_args
+			.named_args
+			.iter()
+			.find(|arg| arg.1.span.contains(&params.text_document_position_params.position));
 
-				let param_data = sig
+		let active_parameter = if named_arg_pos.is_some() {
+			sig.parameters.len() - 1
+		} else {
+			provided_args.pos_args.len() - positional_arg_pos
+		};
+
+		let param_data = sig
+			.parameters
+			.iter()
+			.map(|p| format!("{}: {}", p.name, p.typeref))
+			.collect_vec();
+
+		let param_text = param_data.join(", ");
+		let label = format!("({}): {}", param_text, sig.return_type);
+
+		let signature_info = SignatureInformation {
+			label,
+			documentation: None,
+			parameters: Some(
+				sig
 					.parameters
 					.iter()
-					.map(|p| format!("{}: {}", p.name, p.typeref))
-					.collect_vec();
+					.enumerate()
+					.map(|p| ParameterInformation {
+						label: ParameterLabel::Simple(
+							param_data
+								.get(p.0)
+								.unwrap_or(&format!("{}: {}", p.0, p.1.typeref))
+								.clone(),
+						),
+						documentation: if let Some(structy) = p.1.typeref.maybe_unwrap_option().as_struct() {
+							// print all fields
+							let fields = structy
+								.env
+								.iter(true)
+								.map(|f| format!("  {}: {};", f.0, f.1.as_variable().unwrap().type_))
+								.join("\n");
+							Some(lsp_types::Documentation::MarkupContent(lsp_types::MarkupContent {
+								kind: lsp_types::MarkupKind::Markdown,
+								value: format!("```wing\nstruct {} {{ \n{}\n}}\n```", structy.name.name, fields),
+							}))
+						} else {
+							None
+						},
+					})
+					.collect(),
+			),
 
-				let param_text = param_data.join(", ");
-				let label = format!("({}): {}", param_text, sig.return_type);
+			active_parameter: Some(active_parameter as u32),
+		};
 
-				let signature_info = SignatureInformation {
-					label,
-					documentation: None,
-					parameters: Some(
-						sig
-							.parameters
-							.iter()
-							.enumerate()
-							.map(|p| ParameterInformation {
-								label: ParameterLabel::Simple(
-									param_data
-										.get(p.0)
-										.unwrap_or(&format!("{}: {}", p.0, p.1.typeref))
-										.clone(),
-								),
-								documentation: if let Some(structy) = p.1.typeref.maybe_unwrap_option().as_struct() {
-									// print all fields
-									let fields = structy
-										.env
-										.iter(true)
-										.map(|f| format!("  {}: {};", f.0, f.1.as_variable().unwrap().type_))
-										.join("\n");
-									Some(lsp_types::Documentation::MarkupContent(lsp_types::MarkupContent {
-										kind: lsp_types::MarkupKind::Markdown,
-										value: format!("```wing\nstruct {} {{ \n{}\n}}\n```", structy.name.name, fields),
-									}))
-								} else {
-									None
-								},
-							})
-							.collect(),
-					),
-
-					active_parameter: Some(active_parameter as u32),
-				};
-
-				return Some(SignatureHelp {
-					signatures: vec![signature_info],
-					active_signature: None,
-					active_parameter: None,
-				});
-			}
-		}
-
-		None
+		Some(SignatureHelp {
+			signatures: vec![signature_info],
+			active_signature: None,
+			active_parameter: None,
+		})
 	})
 }
 
@@ -221,5 +232,13 @@ bucket.onEvent(inflight () => {
 	bucket.delete("", );
                  //^
 });"#,
+	);
+
+	test_signature!(
+		constructor_arg,
+		r#"
+bring cloud;
+let bucket = new cloud.Bucket( );
+                            //^"#,
 	);
 }

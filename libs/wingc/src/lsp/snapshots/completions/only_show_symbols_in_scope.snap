@@ -3,12 +3,16 @@ source: libs/wingc/src/lsp/completions.rs
 ---
 - label: a
   kind: 6
-  detail: num
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight a: num\n```\n---"
   insertText: a
   insertTextFormat: 2
 - label: assert
   kind: 3
-  detail: "(condition: bool): void"
+  documentation:
+    kind: markdown
+    value: "```wing\n assert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n\n### Parameters\n - *condition* - The condition to assert"
   insertText: assert($0)
   insertTextFormat: 2
   command:
@@ -16,12 +20,16 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: b
   kind: 6
-  detail: any
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight b: any\n```\n---"
   insertText: b
   insertTextFormat: 2
 - label: log
   kind: 3
-  detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\n log: (message: str): void\n```\n---\nLogs a message\n\n### Parameters\n - *message* - The message to log"
   insertText: log($0)
   insertTextFormat: 2
   command:
@@ -29,7 +37,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: panic
   kind: 3
-  detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\n panic: (message: str): void\n```\n---\npanics with an error\n\n### Parameters\n - *message* - The message to panic with"
   insertText: panic($0)
   insertTextFormat: 2
   command:
@@ -37,7 +47,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: throw
   kind: 3
-  detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\n throw: (message: str): void\n```\n---\nthrows an error\n\n### Parameters\n - *message* - The message to throw"
   insertText: throw($0)
   insertTextFormat: 2
   command:

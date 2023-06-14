@@ -1,11 +1,15 @@
 use std::cmp::max;
 
-use lsp_types::{Command, CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
+use lsp_types::{
+	Command, CompletionItem, CompletionItemKind, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
+	MarkupKind,
+};
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
+use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
@@ -166,7 +170,19 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 												Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
 											)
 										})
-										.cloned()
+										.map(|c| {
+											let mut c = c.clone();
+											if c.kind == Some(CompletionItemKind::CLASS) {
+												c.insert_text = Some(format!("{}($0)", c.label));
+												c.insert_text_format = Some(InsertTextFormat::SNIPPET);
+												c.command = Some(Command {
+													title: "triggerParameterHints".to_string(),
+													command: "editor.action.triggerParameterHints".to_string(),
+													arguments: None,
+												});
+											}
+											c
+										})
 										.collect();
 								} else {
 									return completions;
@@ -383,7 +399,10 @@ fn get_completions_from_class(
 					Some(symbol_data.0.to_string())
 				},
 				label: symbol_data.0,
-				detail: Some(variable.type_.to_string()),
+				documentation: Some(Documentation::MarkupContent(MarkupContent {
+					kind: MarkupKind::Markdown,
+					value: symbol_data.1.render_docs(),
+				})),
 				kind,
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				command: if is_method {
@@ -406,9 +425,16 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 	if should_exclude_symbol(name) {
 		return None;
 	}
+
+	let documentation = Some(Documentation::MarkupContent(MarkupContent {
+		kind: MarkupKind::Markdown,
+		value: symbol_kind.render_docs(),
+	}));
+
 	Some(match symbol_kind {
 		SymbolKind::Type(t) => CompletionItem {
 			label: name.to_string(),
+			documentation,
 			kind: Some(match **t {
 				Type::Array(_)
 				| Type::MutArray(_)
@@ -432,11 +458,6 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(if let Some(c) = t.as_class() {
-				format!("{} class", c.phase).to_string()
-			} else {
-				String::default()
-			}),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
@@ -449,12 +470,12 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 
 			CompletionItem {
 				label: name.to_string(),
+				documentation,
 				insert_text: if is_method {
 					Some(format!("{name}($0)"))
 				} else {
 					Some(name.to_string())
 				},
-				detail: Some(v.type_.to_string()),
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
 				command: if is_method {
@@ -469,9 +490,9 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				..Default::default()
 			}
 		}
-		SymbolKind::Namespace(n) => CompletionItem {
+		SymbolKind::Namespace(..) => CompletionItem {
 			label: name.to_string(),
-			detail: Some(format!("bring {}", n.name)),
+			documentation,
 			kind: Some(CompletionItemKind::MODULE),
 			..Default::default()
 		},

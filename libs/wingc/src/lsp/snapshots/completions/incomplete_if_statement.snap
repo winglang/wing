@@ -3,7 +3,9 @@ source: libs/wingc/src/lsp/completions.rs
 ---
 - label: clear
   kind: 2
-  detail: "(): void"
+  documentation:
+    kind: markdown
+    value: "```wing\n clear: (): void\n```\n---\nRemoves all elements."
   insertText: clear($0)
   insertTextFormat: 2
   command:
@@ -11,7 +13,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: copy
   kind: 2
-  detail: "(): ImmutableMap"
+  documentation:
+    kind: markdown
+    value: "```wing\n copy: (): ImmutableMap\n```\n---\nCreate an immutable shallow copy of this map.\n\n### Returns\nan ImmutableMap with the same values as this map"
   insertText: copy($0)
   insertTextFormat: 2
   command:
@@ -19,7 +23,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: delete
   kind: 2
-  detail: "(key: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\n delete: (key: str): bool\n```\n---\nRemoves the specified element from a map.\n\n### Parameters\n - *key* - The key.\n\n### Returns\ntrue if the given key is no longer present"
   insertText: delete($0)
   insertTextFormat: 2
   command:
@@ -27,7 +33,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: get
   kind: 2
-  detail: "(key: str): T1"
+  documentation:
+    kind: markdown
+    value: "```wing\n get: (key: str): T1\n```\n---\nReturns a specified element from the map.\n\n### Parameters\n - *key* - The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found\n\n### Remarks\nIf the value that is associated to the provided key is an object, then you will get a reference\nto that object and any change made to that object will effectively modify it inside the map."
   insertText: get($0)
   insertTextFormat: 2
   command:
@@ -35,7 +43,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: has
   kind: 2
-  detail: "(key: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\n has: (key: str): bool\n```\n---\nReturns a boolean indicating whether an element with the specified key exists or not.\n\n### Parameters\n - *key* - The key of the element to test for presence.\n\n### Returns\ntrue if an element with the specified key exists in the map; otherwise false."
   insertText: has($0)
   insertTextFormat: 2
   command:
@@ -43,7 +53,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: keys
   kind: 2
-  detail: "(): Array<str>"
+  documentation:
+    kind: markdown
+    value: "```wing\n keys: (): Array<str>\n```\n---\nReturns the keys of this map.\n\n### Returns\nan array containing the keys of this map"
   insertText: keys($0)
   insertTextFormat: 2
   command:
@@ -51,7 +63,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: set
   kind: 2
-  detail: "(key: str, value: T1): void"
+  documentation:
+    kind: markdown
+    value: "```wing\n set: (key: str, value: T1): void\n```\n---\nAdds or updates an entry in a Map object with a specified key and a value.\n\n### Parameters\n - *key* - The key of the element to add.\n - *value* - The value of the element to add.\n\n### Remarks\nTODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659"
   insertText: set($0)
   insertTextFormat: 2
   command:
@@ -59,7 +73,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: size
   kind: 2
-  detail: "(): num"
+  documentation:
+    kind: markdown
+    value: "```wing\n size: (): num\n```\n---\nReturns the number of elements in the map.\n\n### Returns\nThe number of elements in map\n\n### Remarks\nTODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658"
   insertText: size($0)
   insertTextFormat: 2
   command:
@@ -67,7 +83,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: values
   kind: 2
-  detail: "(): ImmutableArray"
+  documentation:
+    kind: markdown
+    value: "```wing\n values: (): ImmutableArray\n```\n---\nReturns the values of this map.\n\n### Returns\nan array containing of type T the values of this map"
   insertText: values($0)
   insertTextFormat: 2
   command:

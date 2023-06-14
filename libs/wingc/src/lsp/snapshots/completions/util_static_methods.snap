@@ -3,10 +3,14 @@ source: libs/wingc/src/lsp/completions.rs
 ---
 - label: Util
   kind: 7
-  detail: independent class
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Util\n```\n---\nUtility functions."
 - label: env
   kind: 2
-  detail: "(name: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic env: (name: str): str\n```\n---\nReturns the value of an environment variable.\n\n### Parameters\n - *name* - The name of the environment variable.\n\n### Remarks\nThrows if not found or empty."
   insertText: env($0)
   insertTextFormat: 2
   command:
@@ -14,7 +18,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: sleep
   kind: 2
-  detail: "(delay: duration): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic sleep: (delay: duration): void\n```\n---\nSuspends execution for a given duration.\n\n### Parameters\n - *delay* - The time to suspend execution."
   insertText: sleep($0)
   insertTextFormat: 2
   command:
@@ -22,7 +28,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: tryEnv
   kind: 2
-  detail: "(name: str): str?"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic tryEnv: (name: str): str?\n```\n---\nReturns the value of an environment variable.\n\n### Parameters\n - *name* - The name of the environment variable.\n\n### Returns\nThe value of the environment variable or `nil`.\n\n### Remarks\nReturns `nil` if not found or empty."
   insertText: tryEnv($0)
   insertTextFormat: 2
   command:

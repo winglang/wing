@@ -3,7 +3,9 @@ source: libs/wingc/src/lsp/completions.rs
 ---
 - label: hello
   kind: 2
-  detail: "preflight (): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic preflight hello: preflight (): void\n```\n---"
   insertText: hello($0)
   insertTextFormat: 2
   command:
@@ -11,7 +13,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: addConnection
   kind: 2
-  detail: "preflight (props: AddConnectionProps): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic preflight addConnection: preflight (props: AddConnectionProps): void\n```\n---\nAdds a connection between two resources.\n\n### Remarks\nA connection is a piece of\nmetadata describing how one resource is related to another resource. This\nmetadata is recorded in the tree.json file."
   insertText: addConnection($0)
   insertTextFormat: 2
   command:
@@ -19,7 +23,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: isConstruct
   kind: 2
-  detail: "preflight (x: any): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic preflight isConstruct: preflight (x: any): bool\n```\n---\nChecks if `x` is a construct.\n\n### Parameters\n - *x* - Any object.\n\n### Returns\ntrue if `x` is an object created from a class which extends `Construct`.\n\n### Remarks\nUse this method instead of `instanceof` to properly detect `Construct`\ninstances, even when the construct library is symlinked.\n\nExplanation: in JavaScript, multiple copies of the `constructs` library on\ndisk are seen as independent, completely different libraries. As a\nconsequence, the class `Construct` in each copy of the `constructs` library\nis seen as a different class, and an instance of one class will not test as\n`instanceof` the other class. `npm install` will not create installations\nlike this, but users may manually symlink construct libraries together or\nuse a monorepo tool: in those cases, multiple copies of the `constructs`\nlibrary can be accidentally installed, and `instanceof` will behave\nunpredictably. It is safest to avoid using `instanceof`, and using\nthis type-testing method instead."
   insertText: isConstruct($0)
   insertTextFormat: 2
   command:

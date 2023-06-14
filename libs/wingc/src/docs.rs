@@ -53,7 +53,7 @@ impl Documented for SymbolKind {
 
 impl Documented for Namespace {
 	fn render_docs(&self) -> String {
-		format!("Module '{}'", self.name).to_string()
+		format!("Module `{}`", self.name).to_string()
 	}
 }
 

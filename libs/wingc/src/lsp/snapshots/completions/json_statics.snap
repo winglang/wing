@@ -3,7 +3,9 @@ source: libs/wingc/src/lsp/completions.rs
 ---
 - label: deepCopyMut
   kind: 2
-  detail: "(json: Json): MutJson"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic deepCopyMut: (json: Json): MutJson\n```\n---\nCreates a mutable deep copy of the Json.\n\n### Parameters\n - *json* - to copy.\n\n### Returns\nthe mutable copy of the Json"
   insertText: deepCopyMut($0)
   insertTextFormat: 2
   command:
@@ -11,7 +13,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: delete
   kind: 2
-  detail: "(json: Json, key: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic delete: (json: Json, key: str): void\n```\n---\nDeletes a key in a given Json.\n\n### Parameters\n - *json* - to delete key from.\n - *key* - the key to delete."
   insertText: delete($0)
   insertTextFormat: 2
   command:
@@ -19,7 +23,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: has
   kind: 2
-  detail: "(json: Json, key: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic has: (json: Json, key: str): bool\n```\n---\nChecks if a Json object has a given key.\n\n### Parameters\n - *json* - The json object to inspect.\n - *key* - The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
   insertText: has($0)
   insertTextFormat: 2
   command:
@@ -27,7 +33,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: keys
   kind: 2
-  detail: "(json: Json): Array<str>"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic keys: (json: Json): Array<str>\n```\n---\nReturns the keys from the Json object.\n\n### Parameters\n - *json* - to get keys from.\n\n### Returns\nthe keys from the Json object as string array"
   insertText: keys($0)
   insertTextFormat: 2
   command:
@@ -35,7 +43,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: parse
   kind: 2
-  detail: "(str: str): Json"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic parse: (str: str): Json\n```\n---\nParse a string into a Json.\n\n### Parameters\n - *str* - to parse as Json.\n\n### Returns\nJson representation of the string"
   insertText: parse($0)
   insertTextFormat: 2
   command:
@@ -43,7 +53,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: stringify
   kind: 2
-  detail: "(json: Json, indent: num?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic stringify: (json: Json, indent: num?): str\n```\n---\nFormats Json as string.\n\n### Parameters\n - *json* - to format as string.\n - *indent*\n\n### Returns\nstring representation of the Json\n\n### Remarks\n(JSON.stringify($args$))"
   insertText: stringify($0)
   insertTextFormat: 2
   command:
@@ -51,7 +63,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: tryParse
   kind: 2
-  detail: "(str: str): Json?"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic tryParse: (str: str): Json?\n```\n---\nTry to parse a string into a Json.\n\n### Parameters\n - *str* - to parse as Json.\n\n### Returns\nJson representation of the string or undefined if string is not parsable"
   insertText: tryParse($0)
   insertTextFormat: 2
   command:
@@ -59,7 +73,9 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: values
   kind: 2
-  detail: "(json: Json): Array<Json>"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic values: (json: Json): Array<Json>\n```\n---\nReturns the values from the Json.\n\n### Parameters\n - *json* - to get values from.\n\n### Returns\nthe values from the Json as array of Json"
   insertText: values($0)
   insertTextFormat: 2
   command:

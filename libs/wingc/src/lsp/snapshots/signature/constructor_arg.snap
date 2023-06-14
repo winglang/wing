@@ -1,0 +1,12 @@
+---
+source: libs/wingc/src/lsp/signature.rs
+---
+signatures:
+  - label: "(props: BucketProps?): Bucket"
+    parameters:
+      - label: "props: BucketProps?"
+        documentation:
+          kind: markdown
+          value: "```wing\nstruct BucketProps { \n  public: bool?;\n}\n```"
+    activeParameter: 0
+
