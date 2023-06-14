@@ -22,7 +22,7 @@ use crate::{
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
-	diagnostic::{Diagnostic, Diagnostics, WingSpan},
+	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
@@ -61,7 +61,6 @@ pub struct JSifyContext {
 
 pub struct JSifier<'a> {
 	pub types: &'a Types,
-	pub diagnostics: Diagnostics,
 	/// Stores all generated JS files in memory.
 	files: Files,
 	/// Root of the project, used for resolving extern modules
@@ -82,7 +81,6 @@ impl<'a> JSifier<'a> {
 	pub fn new(types: &'a Types, app_name: &'a str, absolute_project_root: &'a Path, shim: bool) -> Self {
 		Self {
 			types,
-			diagnostics: Diagnostics::new(),
 			files: Files::new(),
 			shim,
 			app_name,
@@ -183,7 +181,7 @@ impl<'a> JSifier<'a> {
 
 		match self.files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
 			Ok(()) => {}
-			Err(err) => self.diagnostics.push(err.into()),
+			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 
@@ -191,7 +189,7 @@ impl<'a> JSifier<'a> {
 	pub fn emit_files(&mut self, out_dir: &Path) {
 		match self.files.emit_files(out_dir) {
 			Ok(()) => {}
-			Err(err) => self.diagnostics.push(err.into()),
+			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 
@@ -807,7 +805,7 @@ impl<'a> JSifier<'a> {
 							.expect("Converting extern path to string")
 							.replace("\\", "/"),
 						Err(err) => {
-							self.diagnostics.push(Diagnostic {
+							report_diagnostic(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
 								span: Some(func_def.span.clone()),
 							});
@@ -1174,7 +1172,6 @@ impl<'a> JSifier<'a> {
 
 				types.extend(visitor.captured_types);
 				vars.extend(visitor.captured_vars);
-				self.diagnostics.extend(visitor.diagnostics);
 			}
 		}
 		// Remove myself from the list of referenced preflight types because I don't need to import myself
@@ -1296,7 +1293,7 @@ impl<'a> JSifier<'a> {
 
 		match self.files.add_file(inflight_filename(class), code.to_string()) {
 			Ok(()) => {}
-			Err(err) => self.diagnostics.push(err.into()),
+			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 
@@ -1317,9 +1314,7 @@ impl<'a> JSifier<'a> {
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
 			let visitor = FieldReferenceVisitor::new(self.types, &function_def, free_vars);
-			let (refs, find_diags) = visitor.find_refs();
-
-			self.diagnostics.extend(find_diags);
+			let refs = visitor.find_refs();
 
 			// add the references to the result
 			result.insert(method_name.name.clone(), refs);
@@ -1327,9 +1322,7 @@ impl<'a> JSifier<'a> {
 
 		// Also add field rerferences from the inflight initializer
 		let visitor = FieldReferenceVisitor::new(self.types, &resource_class.inflight_initializer, free_vars);
-		let (refs, find_diags) = visitor.find_refs();
-
-		self.diagnostics.extend(find_diags);
+		let refs = visitor.find_refs();
 
 		result.insert(CLASS_INFLIGHT_INIT_NAME.to_string(), refs);
 
@@ -1470,8 +1463,6 @@ struct FieldReferenceVisitor<'a> {
 
 	/// The current statement index
 	statement_index: usize,
-
-	diagnostics: Diagnostics,
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
@@ -1480,18 +1471,17 @@ impl<'a> FieldReferenceVisitor<'a> {
 			types,
 			references: BTreeMap::new(),
 			function_def,
-			diagnostics: Diagnostics::new(),
 			env: None,
 			free_vars,
 			statement_index: 0,
 		}
 	}
 
-	pub fn find_refs(mut self) -> (BTreeMap<String, BTreeSet<String>>, Diagnostics) {
+	pub fn find_refs(mut self) -> BTreeMap<String, BTreeSet<String>> {
 		if let FunctionBody::Statements(statements) = &self.function_def.body {
 			self.visit_scope(statements);
 		}
-		(self.references, self.diagnostics)
+		self.references
 	}
 }
 
@@ -1561,7 +1551,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 
 					// if the variable is reassignable, bail out
 					if variable.reassignable {
-						self.diagnostics.push(Diagnostic {
+						report_diagnostic(Diagnostic {
 							message: format!("Cannot capture reassignable field '{curr}'"),
 							span: Some(curr.span.clone()),
 						});
@@ -1571,7 +1561,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 
 					// if this type is not capturable, bail out
 					if !variable.type_.is_capturable() {
-						self.diagnostics.push(Diagnostic {
+						report_diagnostic(Diagnostic {
 							message: format!(
 								"Cannot capture field '{curr}' with non-capturable type '{}'",
 								variable.type_
@@ -1588,7 +1578,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 					// qualify the capture.
 					if let Some(inner_type) = variable.type_.collection_item_type() {
 						if inner_type.is_preflight_class() {
-							self.diagnostics.push(Diagnostic {
+							report_diagnostic(Diagnostic {
 								message: format!(
 									"Capturing collection of preflight classes is not supported yet (type is '{}')",
 									variable.type_,
@@ -1636,7 +1626,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 				// if our last captured component is a non-handler preflight object and we don't have a
 				// qualification for it, it's currently an error.
 				if last.type_.is_preflight_class() && !last.type_.is_handler_preflight_class() && qualification.len() == 0 {
-					self.diagnostics.push(Diagnostic {
+					report_diagnostic(Diagnostic {
 						message: format!(
 							"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
 							render_key(capture, is_field_reference),
@@ -1849,9 +1839,6 @@ struct CaptureScanner<'a> {
 
 	/// The index of the last visited statement.
 	current_index: usize,
-
-	/// Compilation errors emitted by the visitor
-	diagnostics: Diagnostics,
 }
 
 impl<'a> CaptureScanner<'a> {
@@ -1864,7 +1851,6 @@ impl<'a> CaptureScanner<'a> {
 			method_env: env,
 			current_env: env,
 			current_index: 0,
-			diagnostics: Diagnostics::new(),
 		}
 	}
 
@@ -1884,7 +1870,7 @@ impl<'a> CaptureScanner<'a> {
 		if let LookupResult::DefinedLater = lookup {
 			let sym = path.first().unwrap();
 
-			self.diagnostics.push(Diagnostic {
+			report_diagnostic(Diagnostic {
 				span: Some(sym.span.clone()),
 				message: format!(
 					"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"

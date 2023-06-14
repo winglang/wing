@@ -14,7 +14,7 @@ use crate::type_check::{
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
-use crate::WINGSDK_STD_MODULE;
+use crate::{WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE};
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
@@ -75,6 +75,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		});
 		scope_visitor.visit_scope(root_scope);
 
+		let found_env = scope_visitor.found_scope.unwrap();
+		let found_env = found_env.env.borrow();
+		let found_env = found_env.as_ref().unwrap();
+
 		let parent = node_to_complete.parent();
 
 		if node_to_complete.kind() == "." {
@@ -94,53 +98,46 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
 							true,
 						);
-					} else {
-						if let ExprKind::Reference(_) = &nearest_expr.kind {
-							// This is probably a type of some kind
-							// just get the entire reference and try to resolve it
-							let wing_source = file_data.contents.as_bytes();
-							let mut reference_text = parent
-								.utf8_text(wing_source)
-								.expect("The referenced text should be available")
-								.to_string();
-							if reference_text.ends_with(".") {
-								reference_text.pop();
-							}
+					}
+				}
 
-							let found_env = scope_visitor.found_scope.unwrap();
-							let found_env = found_env.env.borrow();
-							let found_env = found_env.as_ref().unwrap();
-							let lookup_thing = found_env
-								.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
-								.ok();
+				// We're likely in a type reference, so let's use the raw text for a lookup
+				let wing_source = file_data.contents.as_bytes();
+				let mut reference_text = parent
+					.utf8_text(wing_source)
+					.expect("The referenced text should be available")
+					.to_string();
+				if reference_text.ends_with(".") {
+					reference_text.pop();
+				}
 
-							if let Some((lookup_thing, _)) = lookup_thing {
-								match lookup_thing {
-									SymbolKind::Type(t) => {
-										return get_completions_from_type(&t, types, Some(found_env.phase), false);
-									}
-									SymbolKind::Variable(v) => {
-										return get_completions_from_type(
-											&v.type_,
-											types,
-											scope_visitor
-												.found_scope
-												.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
-											false,
-										)
-									}
-									SymbolKind::Namespace(n) => {
-										return get_completions_from_namespace(n);
-									}
-								}
-							} else {
-								// No lookup found, let's not provide any completions
-								// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
+				reference_text = add_std_namespace(&reference_text);
 
-								return vec![];
-							}
+				let lookup_thing = found_env
+					.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
+					.ok();
+
+				if let Some((lookup_thing, _)) = lookup_thing {
+					match lookup_thing {
+						SymbolKind::Type(t) => {
+							return get_completions_from_type(&t, types, Some(found_env.phase), false);
+						}
+						SymbolKind::Variable(v) => {
+							return get_completions_from_type(
+								&v.type_,
+								types,
+								scope_visitor
+									.found_scope
+									.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
+								false,
+							)
+						}
+						SymbolKind::Namespace(n) => {
+							return get_completions_from_namespace(&n, Some(found_env.phase));
 						}
 					}
+				} else {
+					return vec![];
 				}
 			}
 
@@ -155,7 +152,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								.ok();
 							if let Some((namespace, _)) = namespace {
 								if let SymbolKind::Namespace(namespace) = namespace {
-									let completions = get_completions_from_namespace(namespace);
+									let completions = get_completions_from_namespace(namespace, Some(found_env.phase));
 									//for namespaces - return only classes
 									if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
 										return completions
@@ -169,9 +166,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								}
 							}
 						}
-						let found_env = scope_visitor.found_scope.unwrap();
-						let found_env = found_env.env.borrow();
-						let found_env = found_env.as_ref().unwrap();
 						let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap());
 
 						if let Ok(type_lookup) = type_lookup {
@@ -189,9 +183,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		// we are somewhere but not entirely sure
 		// for now, lets just get all the symbols within the current scope
-		let found_scope = scope_visitor.found_scope.unwrap_or(root_scope);
-		let found_env = found_scope.env.borrow();
-		let found_env = found_env.as_ref().expect("Scope should have an env");
 		let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
 
 		let mut completions = vec![];
@@ -261,37 +252,23 @@ fn get_completions_from_type(
 		| Type::MutMap(_)
 		| Type::Set(_)
 		| Type::MutSet(_) => {
-			// This section of the code is hacky
-			// This is needed because our builtin types have no API
-			// So we have to get the API from the std lib
-			// But the std lib sometimes doesn't have the same names as the builtin types
-			// https://github.com/winglang/wing/issues/1780
-
-			// Additionally, this doesn't handle for generics
 			let type_name = type_.to_string();
-			let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
-				prefix
-			} else {
-				&type_name
-			};
-			let type_name = match type_name {
-				"Set" => "ImmutableSet",
-				"Map" => "ImmutableMap",
-				"Array" => "ImmutableArray",
-				"MutSet" => "MutableSet",
-				"MutMap" => "MutableMap",
-				"MutArray" => "MutableArray",
+			let mut type_name = type_name.as_str();
+
+			// Certain primitive type names differ from how they actually appear in the std namespace
+			// These are unique when used as a type definition, rather than as a type reference when calling a static method
+			type_name = match type_name {
 				"str" => "String",
 				"duration" => "Duration",
-				"json" => "Json",
 				"bool" => "Boolean",
 				"num" => "Number",
 				_ => type_name,
 			};
-			if let LookupResult::Found(std_type, _) = types
-				.libraries
-				.lookup_nested_str(format!("@winglang/sdk.std.{}", type_name).as_str(), None)
-			{
+			let final_type_name = add_std_namespace(type_name);
+			let final_type_name = final_type_name.as_str();
+
+			let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{final_type_name}");
+			if let LookupResult::Found(std_type, _) = types.libraries.lookup_nested_str(fqn.as_str(), None) {
 				return get_completions_from_type(&std_type.as_type().expect("is type"), types, current_phase, is_instance);
 			} else {
 				vec![]
@@ -300,12 +277,65 @@ fn get_completions_from_type(
 	}
 }
 
-fn get_completions_from_namespace(namespace: &UnsafeRef<Namespace>) -> Vec<CompletionItem> {
+/// If the given type is from the std namespace, add the implicit `std.` to it
+fn add_std_namespace(type_: &str) -> std::string::String {
+	// This section of the code is hacky
+	// This is needed because our builtin types have no API
+	// So we have to get the API from the std lib
+	// But the std lib sometimes doesn't have the same names as the builtin types
+	// https://github.com/winglang/wing/issues/1780
+
+	// Additionally, this doesn't handle for generics
+	let type_name = type_.to_string();
+	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
+		prefix
+	} else {
+		&type_name
+	};
+	let type_name = match type_name {
+		"Set" => "ImmutableSet",
+		"Map" => "ImmutableMap",
+		"Array" => "ImmutableArray",
+		"MutSet" => "MutableSet",
+		"MutMap" => "MutableMap",
+		"MutArray" => "MutableArray",
+		"Json" | "MutableArray" | "MutableMap" | "MutableSet" | "ImmutableArray" | "ImmutableMap" | "ImmutableSet"
+		| "String" | "Duration" | "Boolean" | "Number" => type_name,
+		_ => return type_name.to_string(),
+	};
+
+	format!("{WINGSDK_STD_MODULE}.{type_name}")
+}
+
+fn get_completions_from_namespace(
+	namespace: &UnsafeRef<Namespace>,
+	current_phase: Option<Phase>,
+) -> Vec<CompletionItem> {
+	// If a namespace has a class named "Util", then its members can be accessed directly from
+	// the namespace as a syntactic sugar. e.g. "foo.bar()" is equivalent to "foo.Util.bar()"
+	let util_completions = match namespace.env.lookup_nested_str("Util", None) {
+		LookupResult::Found(kind, _) => match kind {
+			SymbolKind::Type(typeref) => {
+				let util_class = typeref.as_class();
+				if let Some(util_class) = util_class {
+					get_completions_from_class(util_class, current_phase, false)
+				} else {
+					vec![]
+				}
+			}
+			SymbolKind::Variable(_) => vec![],
+			SymbolKind::Namespace(_) => vec![],
+		},
+		LookupResult::NotFound(_) => vec![],
+		LookupResult::DefinedLater => vec![],
+		LookupResult::ExpectedNamespace(_) => vec![],
+	};
 	namespace
 		.env
 		.symbol_map
 		.iter()
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
+		.chain(util_completions.into_iter())
 		.collect()
 }
 
@@ -420,7 +450,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 			CompletionItem {
 				label: name.to_string(),
 				insert_text: if is_method {
-					Some(format!("{}($0)", name))
+					Some(format!("{name}($0)"))
 				} else {
 					Some(name.to_string())
 				},
@@ -642,6 +672,14 @@ if a.
 	);
 
 	test_completion_list!(
+		json_statics,
+		r#"
+Json. 
+   //^"#,
+		assert!(!json_statics.is_empty())
+	);
+
+	test_completion_list!(
 		undeclared_var,
 		r#"
 let x = 2;
@@ -663,5 +701,17 @@ test "test" {
 }
 "#,
 		assert!(!capture_in_test.is_empty())
+	);
+
+	test_completion_list!(
+		util_static_methods,
+		r#"
+bring util;
+
+util.
+   //^"#,
+		assert!(!util_static_methods.is_empty())
+
+		assert!(util_static_methods.iter().filter(|c| c.label == "env").count() == 1)
 	);
 }
