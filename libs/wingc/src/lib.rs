@@ -313,7 +313,7 @@ pub fn compile(
 	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
 
 	// Validate that every Expr in the final tree has been type checked
-	let mut tc_assert = TypeCheckAssert::new(&types);
+	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 	tc_assert.check(&scope);
 
 	// bail out now (before jsification) if there are errors (no point in jsifying)
