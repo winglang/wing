@@ -90,7 +90,7 @@ Two `Json` values are equal if they contain the same structure and values. The f
 6. Two `Json` values are equal if they are both `Map` values and are equal.
 
 ```js
-assert(Json.null == Json.null); // TODO: https://github.com/winglang/wing/issues/1819
+assert(Json nil == Json nil); // TODO: https://github.com/winglang/wing/issues/1819
 assert(Json true == Json true);
 assert(Json false == Json false);
 assert(Json 1 == Json 1);
