@@ -33,7 +33,7 @@ export class Util {
    */
   public static async sleep(delay: Duration): Promise<void> {
     return new Promise((resolve) =>
-      setTimeout(resolve, duration.seconds * 1000)
+      setTimeout(resolve, delay.seconds * 1000)
     );
   }
 
