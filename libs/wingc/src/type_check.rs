@@ -2056,7 +2056,7 @@ impl<'a> TypeChecker<'a> {
 		self.statement_idx = stmt.idx;
 
 		match &stmt.kind {
-			StmtKind::Super { arg_list } => {
+			StmtKind::SuperConstructor { arg_list } => {
 				if let Some(args) = arg_list {
 					self.type_check_arg_list(args, env);
 				}
