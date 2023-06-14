@@ -2,7 +2,7 @@
 title: Equality
 id: equality
 description: A reference guide to equality in Wing.
-keywords: [Winglang equality, Wing equality, equals, identity]
+keywords: [equality, equals, identity]
 ---
 
 Checking for equality is performed with the `==` operator in Wing. It returns `true` if the two values are equal, and `false` otherwise.
