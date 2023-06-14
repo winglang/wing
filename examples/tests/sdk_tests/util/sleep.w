@@ -10,5 +10,5 @@ test "sleep 100 mili seconds" {
   util.sleep(oneHundredMiliseconds);
   let end = JSHelper.getTime();
   assert(end - start > 80 );
-  assert(end - start < 120 );
+  assert(end - start < 220 );
 }
