@@ -47,25 +47,11 @@ error: Unknown symbol \\"this\\"
   |     ^^^^ Unknown symbol \\"this\\"
 
 
-error: Variable this.instanceField is not reassignable 
-  --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
-  |
-7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |     ^^^^^^^^^^^^^^^^^^^^^^^ Variable this.instanceField is not reassignable 
-
-
 error: Unknown symbol \\"this\\"
   --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
   |     ^^^^ Unknown symbol \\"this\\"
-
-
-error: Variable this.f is not reassignable 
-  --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
-  |
-8 |     this.f = 1; // Can't access static fields through \`this\`
-  |     ^^^^^^^^^^^ Variable this.f is not reassignable 
 
 
  
@@ -1443,11 +1429,11 @@ Duration <DURATION>
 `;
 
 exports[`resource_access_field_as_method.w 1`] = `
-"error: Expected a function or method
+"error: Expected a function or method got str
   --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:1
   |
 9 | x.name();
-  | ^^^^^^ Expected a function or method
+  | ^^^^^^ Expected a function or method got str
 
 
  
