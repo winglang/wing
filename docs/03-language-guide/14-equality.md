@@ -5,7 +5,7 @@ description: A reference guide to equality in Wing.
 keywords: [equality, equals, identity]
 ---
 
-Checking for equality is performed with the `==` operator in Wing. It returns `true` if the two values are equal, and `false` otherwise.
+Checking for equality is performed with the `==` operator. It returns `true` if the two values are equal, and `false` otherwise.
 
 The main difference between equality in JavaScript and Wing is that `==` in Wing is not allowed to compare values of different types. For example, `1 == "1"` is not allowed in Wing, and will result in a compile-time error.
 
