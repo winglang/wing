@@ -1498,8 +1498,8 @@ of methods with different phases is not allowed as well.
 
 Interfaces represent a contract that a class must fulfill.
 Interfaces are defined with the `interface` keyword.
-Both preflight and inflight signatures are allowed.
-If the `inflight` modifier is used in the interface declaration, all methods will be automatically considered inflight methods. `impl` keyword is used to implement an interface or multiple interfaces that are
+Currently, preflight interfaces are allowed, while inflight interfaces are not supported yet (see [`inflight interface`: cannot reference interfaces instances from an inflight context](https://github.com/winglang/wing/issues/1961)).
+`impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
 All methods of an interface are implicitly public and cannot be of any other
@@ -1513,18 +1513,17 @@ Interface fields are not supported.
 > interface IMyInterface1 {
 >   method1(x: num): str;
 >   inflight method3(): void;
-> };
+> }
 >
-> inflight interface IMyInterface2 {
->   method2(): str; // <-- "inflight" is implied
-> };
+> interface IMyInterface2 {
+>   method2(): str; 
+> }
 >
 > class MyResource impl IMyInterface1, IMyInterface2 {
 >   field1: num;
 >   field2: str;
 >
->   inflight init(x: num) {
->     // inflight client initialization
+>   init(x: num) {
 >     this.field1 = x;
 >     this.field2 = "sample";
 >   }
@@ -1532,22 +1531,22 @@ Interface fields are not supported.
 >     return "sample: ${x}";
 >   }
 >   inflight method3(): void { }
->   inflight method2(): str {
+>   method2(): str {
 >     return this.field2;
 >   }
-> };
+> }
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
 > interface IMyInterface1 {
->   public readonly field1: number;
->   public method1(x: number): string;
+>   readonly field1: number;
+>   method1(x: number): string;
 > }
 > interface IMyInterface2 {
->   public readonly __inflight__field2: string;
->   public __inflight__method2(): string;
+>   readonly __inflight__field2: string;
+>   __inflight__method2(): string;
 > }
 > // this is only shown as a hypothetical sample
 > class MyResource extends constructs.Construct
@@ -1579,7 +1578,7 @@ Interface fields are not supported.
 > Let let be let. (Elad B. 2022)
 
 ```pre
-let <name>[: <type>] = <value>;
+let [var] <name>[: <type>] = [<type>] <value>;
 ```
 
 Assignment operator is `=`.  
@@ -1615,40 +1614,15 @@ However, it is possible to create anonymous closures and assign to variables
 
 > ```TS
 > // preflight closure:
-> let f1 = (a: num, b: num) => { log(a + b); }
+> let f1 = (a: num, b: num) => { log("${a + b}"); };
 > // inflight closure:
-> let f2 = inflight (a: num, b: num) => { log(a + b); }
+> let f2 = inflight (a: num, b: num) => { log("${a + b}"); };
 > // OR:
 > // preflight closure:
-> let f4 = (a: num, b: num): void => { log(a + b); }
+> let f4 = (a: num, b: num): void => { log("${a + b}"); };
 > // inflight closure:
-> let f5 = inflight (a: num, b: num): void => { log(a + b); }
+> let f5 = inflight (a: num, b: num): void => { log("${a + b}"); };
 > ```
-
-[`▲ top`][top]
-
----
-
-#### 3.6.2 Promises
-
-Promises in Wing are defined with `Promise<T>` syntax.  
-All `inflight` functions implicitly wrap their return type in `Promise<T>`.
-
-> ```TS
-> let schema = inflight (): Struct => {
->   return someCallForSchema();
-> }
-> ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const schema = async (): Promise<Struct> => {
->   return await someCallForSchema();
-> }
-> ```
-  
-</details>
 
 [`▲ top`][top]
 
@@ -1672,32 +1646,13 @@ is safe to omit optional struct fields, or have order of arguments mixed.
 struct MyStruct {
   field1: num;
   field2: num;
-};
-let f = (x: num, y: num, z: MyStruct) => {
-  log(x + y + z.field1 + z.field2);
 }
+let f = (x: num, y: num, z: MyStruct) => {
+  log("${x + y + z.field1 + z.field2}");
+};
 // last arguments are expanded into their struct
 f(1, 2, field1: 3, field2: 4);
 // f(1, 2, field1: 3); // can't do this, partial expansion is not allowed
-```
-
-[`▲ top`][top]
-
----
-
-#### 3.6.4 Variadic Arguments
-
-If the last argument of a function type is the `...args` keyword followed by an
-`Array` type, then the function accepts typed variadic arguments. Expansion of
-variadic arguments is not supported currently and the container of variadic
-arguments is accessible with the `args` key like a normal array instance.
-
-```TS
-let f = (x: num, ...args: Array<num>) => {
-  log(x + y + args.len);
-}
-// last arguments are expanded into their array
-f(1, 2, 3, 4, 5, 6, 34..100);
 ```
 
 [`▲ top`][top]
