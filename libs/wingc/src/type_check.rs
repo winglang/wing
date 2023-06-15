@@ -3367,17 +3367,9 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				let instance_type = self.type_check_exp(object, env);
-
+				// If resolving the object's type failed, we can't resolve the property either
 				if instance_type.is_error() {
-					// Check to see if this reference is actually an invalid usage of a namespace
-					if let Some(ref_udt) = self.reference_to_udt(reference) {
-						let lookup = self.resolve_user_defined_type(&ref_udt, env, self.statement_idx);
-						if let Err(t) = lookup {
-							if t.message.ends_with("to be a type but it's a namespace") {
-								return self.make_error_variable_info(false);
-							}
-						}
-					}
+					return self.make_error_variable_info(false);
 				}
 
 				let res = self.resolve_variable_from_instance_type(instance_type, property, env, object);
