@@ -7,15 +7,21 @@ keywords: [equality, equals, identity]
 
 Checking for equality is performed with the `==` operator. It returns `true` if the two values are equal, and `false` otherwise.
 
-The main difference between equality in JavaScript and Wing is that `==` in Wing is not allowed to compare values of different types. For example, `1 == "1"` is not allowed in Wing, and will result in a compile-time error.
+> The main difference between equality in JavaScript and Wing is that `==` in Wing is not allowed to compare values of different types. For example, `1 == "1"` is not allowed in Wing, and will result in a compile-time error.
+
+Equality in Wing is a symmetric and transitive relationship - that is, (1) if `a == b`, then `b == a`, and (2) if `a == b` and `b == c`, then `a == c`.
 
 The execution phase ([preflight or inflight](../02-core-concepts/01-preflight-and-inflight.md)) that a value was created in does not affect its equality. For example, a value created in preflight can be equal to a value created in inflight.
 
-Equality in Wing is a symmetric and transitive relationship - that is, (1) if `a == b`, then `b == a`, and (2) if `a == b` and `b == c`, then `a == c`.
+Some types are compared *by value*, which means that two values are equal if their contents are equivalent. For example, two `str` values are equal if they have the same characters in the same order, even if they are stored in different places in memory.
+
+Other types are compared *by reference*, which means that two values are equal if they point to the same object in memory. For example, two functions are equal if they are the same object, even if they have the same code.
 
 The following is a set of rules for checking equality:
 
 ## Basic types
+
+Basic types are compared *by value*.
 
 1. Two `str` values are equal if they have the same characters in the same order.
 2. Two `num` values are equal if they have the same floating-point value. The [IEEE 754] standard is used for storing numbers, which means that for example `-0 == +0`. `NaN` is not equal to any value, including itself.
@@ -27,28 +33,37 @@ The following is a set of rules for checking equality:
 
 ## Collection types
 
-Wing contains six collection types: `Array`, `MutArray`, `Map`, `MutMap`, `Set`, and `MutSet`.The following rules apply to all of them:
+Wing contains six collection types: `Array`, `MutArray`, `Map`, `MutMap`, `Set`, and `MutSet`. The following rules apply to all of them:
 
-1. Two collections are equal if they have the same number of elements, and if each element in the first collection is equal to the corresponding element in the second collection. (The order of elements only matters for `Array` and `MutArray`.)
+1. Two collections are equal if they have the same number of elements, and if each element in the first collection is equal to the corresponding element in the second collection (according to the rules of equality of that type). The order of elements only matters for `Array` and `MutArray`.
 2. The mutability of a collection does not affect its equality. In other words, a `MutArray` is equal to an `Array` with the same elements, and a `MutMap` is equal to a `Map` with the same keys and values.
 3. Only collections of the same "kind" can be equal. For example, an `Array` cannot be equal to a `Map`, and a `MutArray` cannot be equal to a `MutMap`.
 
 ## Function types
 
-Two functions are equal if they are both the same function. This means that two functions that have the same code are not necessarily equal, since they may have been defined in different places.
+Two functions are equal if they are both the same object (by reference). This means that two functions that have the same code are not necessarily equal, since they may have been defined in different places.
 
 ```js
-let f1 = (x: num): num => x + 1;
-let f2 = (x: num): num => x + 1;
+let f1 = (x: num): num => { return x + 1; };
+let f2 = (x: num): num => { return x + 1; };
 let f3 = f1;
 
 assert(f1 != f2);
 assert(f1 == f3);
 ```
 
+Functions can only be compared if they have the same signature (including its execution phase). For example, a function defined in preflight cannot be compared to a function defined in inflight, even if they have the same code.
+
+```js
+let f1 = (x: num): num => { return x + 1; }; // (preflight)
+let f2 = inflight (x: num): num => { return x + 1; };
+
+assert(f1 != f2); // compile error (can't compare different types)
+```
+
 ## Enums
 
-Two enum values are equal if they refer to the same enum case.
+Two enum values are equal if they refer to the same case.
 
 ```js
 enum PizzaTopping {
@@ -56,13 +71,17 @@ enum PizzaTopping {
   PINEAPPLE,
 }
 
-assert(PizzaTopping.CHEESE == PizzaTopping.CHEESE);
-assert(PizzaTopping.CHEESE != PizzaTopping.PINEAPPLE);
+let topping1 = PizzaTopping.CHEESE;
+let topping2 = PizzaTopping.CHEESE;
+let topping3 = PizzaTopping.PINEAPPLE;
+
+assert(topping1 == topping2);
+assert(topping1 != topping3);
 ```
 
 ## Classes and interfaces
 
-Two class instances or interface-satisfying objects are equal if they are the same instance. This means that two class instances, or interface-satisfying objects that have the same data are not necessarily equal, since they may have been created in different places.
+Two class instances or interface-satisfying objects are equal if they are the same instance (by reference). This means that two class instances, or interface-satisfying objects that have the same data are not necessarily equal, since they may have been created in different places.
 
 ```js
 class Shop {
@@ -82,7 +101,7 @@ assert(shop1 == shop3);
 
 ## `Json`
 
-Two `Json` values are equal if they contain the same structure and values. The following rules apply:
+Two `Json` values are equal if they contain the same structure and values. Another way to think about it is the two `Json` values are equal if their stringified representation is equal. The following rules apply:
 
 1. Two `Json` values are equal if they are both `null`.
 2. Two `Json` values are equal if they are both `bool` values and are equal.
@@ -104,30 +123,24 @@ assert(Json { "foo": 1, "bar": 2 } == Json { "foo": 1, "bar": 2 });
 
 ## Structs
 
-Two struct values are equal if they have the same type and all of their fields are equal. The order in which fields are defined does not matter.
+Two structs are equal if they have the same type and all of their fields are equal (based on rules of equality of their type).
 
 ```js
-struct Node {
-  left: Node?;
-  right: Node?
+struct Cat {
+  name: str;
+  age: num;
+}
+struct Dog {
+  name: str;
+  age: num;
 }
 
-let tree1 = Node {
-  left: Node { left: nil, right: nil },
-  right: Node { left: nil, right: nil },
-};
+let cat1 = Cat { name: "Mittens", age: 3 };
+let cat2 = Cat { name: "Mittens", age: 3 };
+let cat3 = Cat { name: "Mittens", age: 4 };
+let dog = Dog { name: "Mittens", age: 3 };
 
-let tree2 = Node {
-  right: Node { left: nil, right: nil },
-  left: Node { left: nil, right: nil },
-};
-
-assert(tree1 == tree2);
-
-let tree3 = Node {
-  left: nil,
-  right: nil,
-};
-
-assert(tree1 != tree3);
+assert(cat1 == cat2); // fields and types match
+assert(cat1 != cat3); // field "age" does not match
+assert(cat1 != dog); // fields match, but types do not match
 ```
