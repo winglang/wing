@@ -1,0 +1,62 @@
+---
+title: Hello World
+id: hello-world
+keywords: [Wing example, simulator, Wing simulator Reference]
+---
+
+import lightImg from './01.png';
+import darkImg from './01-dark.png';
+import ThemedImage from '@theme/ThemedImage';
+import CodeBlock from '@theme/CodeBlock';
+import {CODE} from './example.jsx';
+
+
+# Hello World
+
+In the example the code is creating a bucket and a queue object using a cloud service or library, and setting up a consumer function for the queue that stores a file in the bucket with a modified message.
+
+
+```js playground
+bring cloud;
+bring util;
+
+let bucket = new cloud.Bucket();
+let queue = new cloud.Queue();
+
+queue.setConsumer(inflight (message: str) => {
+  bucket.put("wing.txt", "Hello, ${message}");
+});
+```
+
+```js playground
+bring cloud;
+
+let store = new cloud.Bucket() as "Origin";
+let backup = new cloud.Bucket() as "Backup";
+
+store.onCreate(inflight (key: str) => {
+  if !key.endsWith(".log") {
+    let data = store.get(key);
+    backup.put(key, data);
+    log("adding ${key} into copies");
+  } else {
+    log("skipping ${key}");
+  }
+});
+
+store.onDelete(inflight (key: str) => {
+  backup.delete(key);
+  log("Deleted ${key}");
+});
+
+
+new cloud.Function(inflight () => {
+  log("uploading file1.txt");
+  store.put("file1.txt", "This should be copied");
+  log("uploading file2.txt");
+  store.put("file2.txt", "This should be copied");
+  log("uploading some.log");
+  store.put("some.log", "This should not be copied");
+}) as "Upload Files";
+
+```
