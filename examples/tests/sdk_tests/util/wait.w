@@ -4,6 +4,7 @@ bring util;
 class JSHelper { 
   extern "./sleep-helper.js" static inflight getTime(): num;
 }
+
 let oneHundredMiliseconds = 0.1s;
 
 test "returns true immediately" {
