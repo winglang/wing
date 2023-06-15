@@ -2,9 +2,9 @@ import { Code, InflightClient } from "../core";
 import { Duration, IResource } from "../std";
 
 /**
- * Properties for `util.wait`.
+ * Properties for `util.waitUntil`.
  */
-export interface WaitProps {
+export interface WaitUntilProps {
   /**
    * The timeout for keep trying predicate
    * @default 1m
@@ -75,9 +75,9 @@ export class Util {
    * @param props Timeout and interval values, default to one 1m timeout and 0.1sec interval
    * @inflight
    */
-  public static async wait(
+  public static async waitUntil(
     predicate: IPredicateHandler,
-    props: WaitProps = {}
+    props: WaitUntilProps = {}
   ): Promise<boolean> {
     const timeout = props.timeout ?? Duration.fromMinutes(1);
     const interval = props.interval ?? Duration.fromSeconds(0.1);
