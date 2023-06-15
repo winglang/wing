@@ -2068,9 +2068,6 @@ impl<'a> TypeChecker<'a> {
 		self.statement_idx = stmt.idx;
 
 		match &stmt.kind {
-			StmtKind::SuperConstructor { arg_list } => {
-				self.type_check_arg_list(arg_list, env);
-			}
 			StmtKind::Let {
 				reassignable,
 				var_name,
@@ -2471,29 +2468,7 @@ impl<'a> TypeChecker<'a> {
 
 				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
 					self.check_class_field_initialization(&scope, fields, Phase::Inflight);
-					if &scope.statements.len() >= &1 {
-						match &scope.statements[0].kind {
-							StmtKind::SuperConstructor { arg_list } => {
-								if let Some(parent_initializer) = &class_type.as_class().unwrap().parent {
-									let initializer = parent_initializer
-										.as_class()
-										.unwrap()
-										.methods(false)
-										.filter(|(name, _type)| name == CLASS_INFLIGHT_INIT_NAME)
-										.collect_vec()[0]
-										.1;
-									let arg_list_types = self.type_check_arg_list(&arg_list, &class_env);
-									self.type_check_arg_list_against_function_sig(
-										&arg_list,
-										initializer.as_function_sig().unwrap(),
-										&scope.statements[0],
-										arg_list_types,
-									);
-								}
-							}
-							_ => {} // No super no problem
-						}
-					}
+					self.type_check_super_constructor_against_parent_initializer(scope, class_type, &class_env, CLASS_INFLIGHT_INIT_NAME);
 				};
 
 				// Replace the dummy class environment with the real one before type checking the methods
@@ -2508,31 +2483,8 @@ impl<'a> TypeChecker<'a> {
 					FunctionBody::Statements(s) => s,
 					FunctionBody::External(_) => panic!("init cannot be extern"),
 				};
-
-				if &init_statements.statements.len() >= &1 {
-					match &init_statements.statements[0].kind {
-						StmtKind::SuperConstructor { arg_list } => {
-							if let Some(parent_initializer) = &class_type.as_class().unwrap().parent {
-								let inflight_super_class_methods = parent_initializer
-									.as_class()
-									.unwrap()
-									.methods(false)
-									.filter(|(name, _type)| name == CLASS_INIT_NAME)
-									.collect_vec();
-								let initializer = inflight_super_class_methods[0].1;
-								let arg_list_types = self.type_check_arg_list(&arg_list, &class_env);
-								self.type_check_arg_list_against_function_sig(
-									&arg_list,
-									initializer.as_function_sig().unwrap(),
-									&init_statements.statements[0],
-									arg_list_types,
-								);
-							}
-						}
-						_ => {} // No super no problem
-					}
-				}
-
+        self.type_check_super_constructor_against_parent_initializer(init_statements, class_type, &class_env, CLASS_INIT_NAME);
+				
 				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
 
 				// Type check the inflight initializer
@@ -2780,7 +2732,36 @@ impl<'a> TypeChecker<'a> {
 				println!("[symbol environment at {}]", stmt.span);
 				println!("{}", env);
 			}
+			StmtKind::SuperConstructor { arg_list } => {
+				self.type_check_arg_list(arg_list, env);
+			}
 		}
+	}
+
+	fn type_check_super_constructor_against_parent_initializer(&mut self, scope: &Scope, class_type: UnsafeRef<Type>, class_env: &SymbolEnv, init_name: &str) {
+		if &scope.statements.len() >= &1 {
+			match &scope.statements[0].kind {
+				StmtKind::SuperConstructor { arg_list } => {
+					if let Some(parent_initializer) = &class_type.as_class().unwrap().parent {
+						let initializer = parent_initializer
+							.as_class()
+							.unwrap()
+							.methods(false)
+							.filter(|(name, _type)| name == init_name)
+							.collect_vec()[0]
+							.1;
+						let arg_list_types = self.type_check_arg_list(&arg_list, class_env);
+						self.type_check_arg_list_against_function_sig(
+							&arg_list,
+							initializer.as_function_sig().unwrap(),
+							&scope.statements[0],
+							arg_list_types,
+						);
+					}
+				}
+				_ => {} // No super no problem
+			}
+		};
 	}
 
 	/// Validate if the fields of a class are initialized in the constructor (init) according to the given phase.

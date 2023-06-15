@@ -100,3 +100,23 @@ let ta = new TeacherAid("John", "Rock'n Roll", 50);
 test "devived class init body happens after super" {
   assert(ta.hrlyWage == 10);
 }
+
+// Inflight inheritence
+inflight class A {
+  sound: str;
+
+  inflight init(sound: str) {
+    this.sound = sound;
+  }
+}
+
+inflight class B extends A {
+  inflight init(sound: str) {
+    super(sound);
+  }
+}
+
+test "inflight super constructor" {
+  let b = new B("ba");
+  assert(b.sound == "ba");
+}

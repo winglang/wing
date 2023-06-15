@@ -77,9 +77,6 @@ where
 	F: Fold + ?Sized,
 {
 	let kind = match node.kind {
-		StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
-			arg_list: f.fold_args(arg_list),
-		},
 		StmtKind::Bring {
 			module_name,
 			identifier,
@@ -172,6 +169,9 @@ where
 			finally_statements: finally_statements.map(|statements| f.fold_scope(statements)),
 		},
 		StmtKind::CompilerDebugEnv => StmtKind::CompilerDebugEnv,
+    StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
+			arg_list: f.fold_args(arg_list),
+		},
 	};
 	Stmt {
 		kind,

@@ -153,8 +153,8 @@ impl Fold for ClosureTransformer {
 
 				let mut new_func_def = if self.inside_scope_with_this {
 					// If we are inside a class, we transform inflight closures with an extra
-					// `let __parent_this = this;` statement before the class definition, and replace references
-					// to `this` with `__parent_this` so that they can access the parent class's fields.
+					// `let __parent_this_${CLOSURE_COUNT} = this;` statement before the class definition, and replace references
+					// to `this` with `__parent_this_${CLOSURE_COUNT}` so that they can access the parent class's fields.
 					let parent_this = format!("{}_{}", PARENT_THIS_NAME, self.closure_counter);
 					let mut this_transform = RenameThisTransformer {
 						from: "this",
@@ -197,7 +197,7 @@ impl Fold for ClosureTransformer {
 					span: WingSpan::default(),
 				}];
 
-				// If we are inside a scope with "this", add define `let __parent_this_${closure_count} = this` which can be
+				// If we are inside a scope with "this", add define `let __parent_this_${CLOSURE_COUNT} = this` which can be
 				// used by the newly-created preflight classes
 				if self.inside_scope_with_this {
 					let parent_this_name = Symbol::new(
