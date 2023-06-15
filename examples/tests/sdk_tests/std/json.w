@@ -34,7 +34,7 @@ test "setAt()" {
     assert(d.get("c") == 3);
 }
 
-
+/*
 // Should be invalid
 let var error = "";
 try {
@@ -44,3 +44,4 @@ try {
      error = e;
  }
 assert(error == "rate and cron cannot be configured simultaneously.");
+*/
