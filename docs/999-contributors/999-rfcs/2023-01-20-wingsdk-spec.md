@@ -448,7 +448,7 @@ resource Queue {
   /**
    * Run an inflight in a cloud function whenever a message is pushed to the queue.
    */
-  setConsumer(fn: inflight (message: Json) => void, opts: QueueAddConsumerProps?): void;
+  setConsumer(fn: inflight (message: Json) => void, opts: QueueSetConsumerProps?): void;
 
   /**
    * Return the approximate message count of the queue.
@@ -471,7 +471,7 @@ resource Queue {
   inflight purge(): void;
 }
 
-struct QueueAddConsumerProps { /* elided */ }
+struct QueueSetConsumerProps { /* elided */ }
 ```
 
 Future extensions:

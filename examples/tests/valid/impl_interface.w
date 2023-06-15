@@ -1,12 +1,12 @@
 bring cloud;
 
-class A impl cloud.IQueueAddConsumerHandler {
+class A impl cloud.IQueueSetConsumerHandler {
   inflight handle(msg: str) {
     return;
   }
 }
 
-let x: cloud.IQueueAddConsumerHandler = new A();
+let x: cloud.IQueueSetConsumerHandler = new A();
 
 let y = inflight () => {
   x.handle("hello world!");
