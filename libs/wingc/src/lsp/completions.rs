@@ -1,9 +1,8 @@
-use std::cmp::max;
-
 use lsp_types::{
 	Command, CompletionItem, CompletionItemKind, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
 	MarkupKind,
 };
+use std::cmp::max;
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
@@ -35,7 +34,7 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {
-	CompletionResponse::Array(FILES.with(|files| {
+	let mut final_completions = FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position.text_document.uri;
 		let file_data = files.get(&uri).expect("File must be open to get completions");
@@ -226,8 +225,62 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 		}
 
+		// lets also add some fun snippets
+		completions.push(CompletionItem {
+			label: "inflight () => {}".to_string(),
+			insert_text: Some("inflight ($1) => {$2}".to_string()),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			kind: Some(CompletionItemKind::SNIPPET),
+			..Default::default()
+		});
+
+		completions.push(CompletionItem {
+			label: "test \"\" { }".to_string(),
+			insert_text: Some("test \"$1\" {\n\t$2\n}".to_string()),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			kind: Some(CompletionItemKind::SNIPPET),
+			..Default::default()
+		});
+
 		completions
-	}))
+	});
+
+	final_completions = final_completions
+		.iter()
+		.map(|item| {
+			let mut new_item = item.clone();
+			new_item.sort_text = Some(completion_sort_text(&new_item));
+			new_item
+		})
+		.collect();
+
+	CompletionResponse::Array(final_completions)
+}
+
+/// LSP sorts completions items alphabetically
+/// This function returns a string that can be used to sort the completion items in a more logical order
+fn completion_sort_text(completion_item: &CompletionItem) -> String {
+	let completion_kind = completion_item.kind;
+	let letter = if let Some(kind) = completion_kind {
+		match kind {
+			CompletionItemKind::ENUM_MEMBER => "aa",
+			CompletionItemKind::VARIABLE => "bb",
+			CompletionItemKind::FUNCTION => "cc",
+			CompletionItemKind::PROPERTY => "dd",
+			CompletionItemKind::FIELD => "ee",
+			CompletionItemKind::METHOD => "ff",
+			CompletionItemKind::CLASS => "gg",
+			CompletionItemKind::STRUCT => "hh",
+			CompletionItemKind::INTERFACE => "ii",
+			CompletionItemKind::ENUM => "jj",
+			CompletionItemKind::MODULE => "kk",
+			CompletionItemKind::SNIPPET => "ll",
+			_ => "z",
+		}
+	} else {
+		"z"
+	};
+	format!("{}|{}", letter, completion_item.label)
 }
 
 /// Gets accessible properties on a type as a list of CompletionItems
