@@ -1523,6 +1523,11 @@ impl<'a> TypeChecker<'a> {
 					return self.types.error();
 				}
 
+				// If the caller's signature is `any`, then just evaluate the entire call expression as `any`
+				if func_type.is_anything() {
+					return self.types.anything();
+				}
+
 				// Make sure this is a function signature type
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig.clone()
