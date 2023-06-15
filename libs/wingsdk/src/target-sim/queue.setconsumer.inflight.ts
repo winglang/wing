@@ -1,10 +1,10 @@
 import type {
   IFunctionHandlerClient,
-  IQueueAddConsumerHandlerClient,
+  IQueueSetConsumerHandlerClient,
 } from "../cloud";
 
-export class QueueAddConsumerHandlerClient
-  implements IQueueAddConsumerHandlerClient
+export class QueueSetConsumerHandlerClient
+  implements IQueueSetConsumerHandlerClient
 {
   private readonly handler: IFunctionHandlerClient;
   constructor({ handler }: { handler: IFunctionHandlerClient }) {
