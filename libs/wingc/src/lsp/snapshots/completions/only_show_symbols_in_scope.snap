@@ -6,6 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\npreflight a: num\n```\n---"
+  sortText: bb|a
   insertText: a
   insertTextFormat: 2
 - label: assert
@@ -13,6 +14,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\n assert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n\n### Parameters\n - *condition* - The condition to assert"
+  sortText: cc|assert
   insertText: assert($0)
   insertTextFormat: 2
   command:
@@ -23,6 +25,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\npreflight b: any\n```\n---"
+  sortText: bb|b
   insertText: b
   insertTextFormat: 2
 - label: log
@@ -30,6 +33,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\n log: (message: str): void\n```\n---\nLogs a message\n\n### Parameters\n - *message* - The message to log"
+  sortText: cc|log
   insertText: log($0)
   insertTextFormat: 2
   command:
@@ -40,6 +44,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\n panic: (message: str): void\n```\n---\npanics with an error\n\n### Parameters\n - *message* - The message to panic with"
+  sortText: cc|panic
   insertText: panic($0)
   insertTextFormat: 2
   command:
@@ -50,9 +55,20 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\n throw: (message: str): void\n```\n---\nthrows an error\n\n### Parameters\n - *message* - The message to throw"
+  sortText: cc|throw
   insertText: throw($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: "inflight () => {}"
+  kind: 15
+  sortText: "ll|inflight () => {}"
+  insertText: "inflight ($1) => {$2}"
+  insertTextFormat: 2
+- label: "test \"\" { }"
+  kind: 15
+  sortText: "ll|test \"\" { }"
+  insertText: "test \"$1\" {\n\t$2\n}"
+  insertTextFormat: 2
 

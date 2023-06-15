@@ -107,10 +107,15 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 					.enumerate()
 					.map(|p| {
 						let p_type = p.1.typeref;
-						let p_docs = Some(Documentation::MarkupContent(MarkupContent {
-							kind: MarkupKind::Markdown,
-							value: p_type.render_docs(),
-						}));
+						let p_docs = p_type.render_docs();
+						let p_docs = if p_docs.is_empty() {
+							None
+						} else {
+							Some(Documentation::MarkupContent(MarkupContent {
+								kind: MarkupKind::Markdown,
+								value: p_docs,
+							}))
+						};
 						ParameterInformation {
 							label: ParameterLabel::Simple(param_data.get(p.0).unwrap_or(&format!("{}: {}", p.0, p_type)).clone()),
 							documentation: if let Some(structy) = p_type.maybe_unwrap_option().as_struct() {

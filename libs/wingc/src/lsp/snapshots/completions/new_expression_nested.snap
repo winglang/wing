@@ -6,6 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Api\n```\n---\nFunctionality shared between all `Api` implementations."
+  sortText: gg|Api
   insertText: Api($0)
   insertTextFormat: 2
   command:
@@ -16,6 +17,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
+  sortText: gg|Bucket
   insertText: Bucket($0)
   insertTextFormat: 2
   command:
@@ -26,6 +28,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Counter\n```\n---\nRepresents a distributed atomic counter."
+  sortText: gg|Counter
   insertText: Counter($0)
   insertTextFormat: 2
   command:
@@ -36,6 +39,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Function impl IInflightHost\n```\n---\nRepresents a function."
+  sortText: gg|Function
   insertText: Function($0)
   insertTextFormat: 2
   command:
@@ -46,6 +50,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Queue\n```\n---\nRepresents a queue."
+  sortText: gg|Queue
   insertText: Queue($0)
   insertTextFormat: 2
   command:
@@ -56,6 +61,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Schedule\n```\n---\nRepresents a schedule."
+  sortText: gg|Schedule
   insertText: Schedule($0)
   insertTextFormat: 2
   command:
@@ -66,6 +72,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Secret\n```\n---\nRepresents a cloud secret."
+  sortText: gg|Secret
   insertText: Secret($0)
   insertTextFormat: 2
   command:
@@ -76,6 +83,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Service\n```\n---\nRepresents a service."
+  sortText: gg|Service
   insertText: Service($0)
   insertTextFormat: 2
   command:
@@ -86,6 +94,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Table\n```\n---\nRepresents a NoSQL database table that can be used to store and query data."
+  sortText: gg|Table
   insertText: Table($0)
   insertTextFormat: 2
   command:
@@ -96,6 +105,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass TestRunner\n```\n---\nRepresents a test engine."
+  sortText: gg|TestRunner
   insertText: TestRunner($0)
   insertTextFormat: 2
   command:
@@ -106,6 +116,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Topic\n```\n---\nRepresents a topic."
+  sortText: gg|Topic
   insertText: Topic($0)
   insertTextFormat: 2
   command:
@@ -116,6 +127,7 @@ source: libs/wingc/src/lsp/completions.rs
   documentation:
     kind: markdown
     value: "```wing\nclass Website\n```\n---\nRepresents a cloud static website."
+  sortText: gg|Website
   insertText: Website($0)
   insertTextFormat: 2
   command:
