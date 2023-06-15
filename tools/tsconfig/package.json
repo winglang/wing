@@ -1,16 +1,13 @@
 {
-  "name": "@wingconsole/tsconfig",
-  "version": "0.0.0",
-  "private": true,
-  "exports": "./tsconfig.json",
-  "sideEffects": false,
-  "files": [
-    "dist"
-  ],
-  "peerDependencies": {
-    "typescript": "^4.9.4"
-  },
-  "devDependencies": {
-    "typescript": "^5.1.3"
-  }
+	"name": "@wingconsole/tsconfig",
+	"version": "0.0.0",
+	"private": true,
+	"exports": "./tsconfig.json",
+	"sideEffects": false,
+	"peerDependencies": {
+		"typescript": "^4.9.4"
+	},
+	"devDependencies": {
+		"typescript": "^5.0.4"
+	}
 }

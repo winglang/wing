@@ -7,16 +7,15 @@ import { LayoutType } from "./layout/layout-provider.js";
 import { trpc } from "./services/trpc.js";
 
 export const Console = ({
-  trpcUrl,
-  wsUrl,
+  port,
   layout = LayoutType.Vscode,
   title,
 }: {
-  trpcUrl: string;
-  wsUrl: string;
+  port?: number;
   title?: string;
   layout?: LayoutType;
 }) => {
+  const url = `http://localhost:${port}`;
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -30,7 +29,7 @@ export const Console = ({
     },
   });
   const wsClient = createWSClient({
-    url: wsUrl,
+    url: `ws://localhost:${port}`,
   });
   const trpcClient = trpc.createClient({
     links: [
@@ -42,7 +41,7 @@ export const Console = ({
           client: wsClient,
         }),
         false: httpLink({
-          url: trpcUrl,
+          url,
         }),
       }),
     ],

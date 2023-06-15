@@ -7,9 +7,6 @@
   },
   "exports": null,
   "sideEffects": false,
-  "files": [
-    "dist"
-  ],
   "type": "module",
   "scripts": {
     "tsc": "tsc --build",
@@ -19,7 +16,7 @@
     "@types/standard-version": "^7.0.1",
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
-    "typescript": "^5.1.3"
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "npm-which": "^3.0.1",

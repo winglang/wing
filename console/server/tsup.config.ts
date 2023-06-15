@@ -2,7 +2,6 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: ["src/index.ts"],
-  external: ["fsevents", "@winglang/sdk"],
+  external: ["fsevents", "esbuild-wasm"],
   format: ["cjs", "esm"],
-  splitting: false,
 });

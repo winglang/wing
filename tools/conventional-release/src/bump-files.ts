@@ -1,3 +1,4 @@
+import { execSync, spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import * as path from "node:path";
 
@@ -41,19 +42,24 @@ export const bumpFiles = async ({
   changelogFile,
   dryRun,
 }: BumpFilesOptions) => {
+  console.log("getLatestTag");
   const { latestVersion } = getLatestTag();
+  console.log({ latestVersion });
 
+  console.log("write", versionFile);
   await mkdir(path.dirname(versionFile), { recursive: true });
   await writeFile(
     versionFile,
     JSON.stringify({ version: latestVersion }, undefined, 2),
   );
+  console.log("standardVersion");
   await standardVersion({
     dryRun,
     packageFiles: [versionFile],
+    // bumpFiles: [versionFile],
     bumpFiles: [
       versionFile,
-      ...filterPackages({ filter: undefined }).map((package_) =>
+      ...filterPackages({ filter }).map((package_) =>
         path.relative(process.cwd(), `${package_.path}/package.json`),
       ),
     ],

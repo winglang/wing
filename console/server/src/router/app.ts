@@ -440,7 +440,7 @@ function createExplorerItemFromConstructTreeNode(
   };
 }
 
-export interface MapNode {
+interface MapNode {
   id: string;
   data: {
     label?: string;
@@ -482,7 +482,7 @@ function createMapNodeFromConstructTreeNode(
   };
 }
 
-export interface MapEdge {
+interface MapEdge {
   id: string;
   source: string;
   target: string;

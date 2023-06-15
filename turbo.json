@@ -5,24 +5,13 @@
       "dependsOn": ["^compile"],
       "outputs": ["dist/**"]
     },
-    "bundle": {
-      "dependsOn": ["compile", "^bundle"],
-      "cache": false
-    },
-    "preview": {
-      "dependsOn": ["^compile"],
-      "cache": false
-    },
     "dev": {
-      "dependsOn": ["^compile"],
-      "persistent": true,
       "cache": false
     },
     "eslint": {
       "outputs": []
     },
     "tsc": {
-      "dependsOn": ["compile"],
       "outputs": []
     },
     "vitest": {

@@ -28,7 +28,7 @@ const highlightJson = (value: string, theme: Theme) => {
 
   return `${formatted
     .slice(0, CHAR_LIMIT)
-    .replaceAll(
+    .replace(
       /("(\\u[\dA-Za-z]{4}|\\[^u]|[^"\\])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[Ee][+\-]?\d+)?)/g,
       (match) => {
         let className = palette.number;

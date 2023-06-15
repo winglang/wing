@@ -6,7 +6,7 @@ import { TableSchema, ITableClient, Json } from "../wingsdk.js";
 
 type ColumnType = "string" | "number" | "boolean" | "date" | "json";
 
-export interface Column {
+interface Column {
   name: string;
   type: ColumnType;
 }

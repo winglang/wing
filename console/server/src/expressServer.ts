@@ -32,7 +32,6 @@ export interface CreateExpressServerOptions {
   requestedPort?: number;
   appState(): State;
   hostUtils?: HostUtils;
-  onExpressCreated?: (app: express.Express) => void;
 }
 
 export const createExpressServer = async ({
@@ -46,12 +45,9 @@ export const createExpressServer = async ({
   requestedPort,
   appState,
   hostUtils,
-  onExpressCreated,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
-
-  onExpressCreated?.(app);
 
   const { router } = mergeAllRouters();
   const createContext = (): RouterContext => {
@@ -76,7 +72,7 @@ export const createExpressServer = async ({
     };
   };
   app.use(
-    "/trpc",
+    "/",
     trpcExpress.createExpressMiddleware({
       router,
       batching: { enabled: false },

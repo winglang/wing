@@ -10,7 +10,7 @@ type RouterOutput = inferRouterOutputs<Router>;
 
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
-  return test.replaceAll("test:", "");
+  return test.replace(/test:/g, "");
 };
 
 export const useTests = () => {

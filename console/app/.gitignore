@@ -1,2 +1,7 @@
+/.env
 /coverage
-/demo/target
+/dist
+/release
+/target
+/test-results
+/playwright-report

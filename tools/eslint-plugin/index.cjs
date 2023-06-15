@@ -29,7 +29,6 @@ const base = {
     "unicorn/prefer-module": ["off"],
     "unicorn/no-useless-undefined": ["error", { checkArguments: false }],
     "unicorn/filename-case": ["off"],
-    "unicorn/prefer-event-target": ["off"],
     "import/order": [
       "error",
       {
