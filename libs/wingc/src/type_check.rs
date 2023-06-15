@@ -2468,7 +2468,12 @@ impl<'a> TypeChecker<'a> {
 
 				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
 					self.check_class_field_initialization(&scope, fields, Phase::Inflight);
-					self.type_check_super_constructor_against_parent_initializer(scope, class_type, &class_env, CLASS_INFLIGHT_INIT_NAME);
+					self.type_check_super_constructor_against_parent_initializer(
+						scope,
+						class_type,
+						&class_env,
+						CLASS_INFLIGHT_INIT_NAME,
+					);
 				};
 
 				// Replace the dummy class environment with the real one before type checking the methods
@@ -2483,8 +2488,13 @@ impl<'a> TypeChecker<'a> {
 					FunctionBody::Statements(s) => s,
 					FunctionBody::External(_) => panic!("init cannot be extern"),
 				};
-        self.type_check_super_constructor_against_parent_initializer(init_statements, class_type, &class_env, CLASS_INIT_NAME);
-				
+				self.type_check_super_constructor_against_parent_initializer(
+					init_statements,
+					class_type,
+					&class_env,
+					CLASS_INIT_NAME,
+				);
+
 				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
 
 				// Type check the inflight initializer
@@ -2738,7 +2748,13 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_super_constructor_against_parent_initializer(&mut self, scope: &Scope, class_type: UnsafeRef<Type>, class_env: &SymbolEnv, init_name: &str) {
+	fn type_check_super_constructor_against_parent_initializer(
+		&mut self,
+		scope: &Scope,
+		class_type: UnsafeRef<Type>,
+		class_env: &SymbolEnv,
+		init_name: &str,
+	) {
 		if &scope.statements.len() >= &1 {
 			match &scope.statements[0].kind {
 				StmtKind::SuperConstructor { arg_list } => {

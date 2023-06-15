@@ -1491,7 +1491,7 @@ impl<'s> Parser<'s> {
 		let parent_block = statement_node.parent();
 		if let Some(p) = parent_block {
 			let parent_block_context = p.parent();
-      
+
 			if let Some(context) = parent_block_context {
 				match context.kind() {
 					"initializer" | "inflight_initializer" => {
@@ -1515,10 +1515,10 @@ impl<'s> Parser<'s> {
 						}
 					}
 					_ => {
-            // super constructor used outside of an initializer IE:
-            // class B extends A {
-            //   someMethod() {super()};
-            // }
+						// super constructor used outside of an initializer IE:
+						// class B extends A {
+						//   someMethod() {super()};
+						// }
 						self.add_error(
 							"Call to super constructor can only be done from within class constructor",
 							statement_node,
