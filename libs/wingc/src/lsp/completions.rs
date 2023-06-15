@@ -144,36 +144,36 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			if parent.kind() == "custom_type" {
 				if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
 					if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
-						if udt.fields.is_empty() {
-							// this is probably a namespace
-							// `resolve_user_defined_type` will fail for namespaces, let's just look it up instead
-							let namespace = root_env
-								.lookup_nested_str(&udt.root.name, scope_visitor.found_stmt_index)
-								.ok();
-							if let Some((namespace, _)) = namespace {
-								if let SymbolKind::Namespace(namespace) = namespace {
-									let completions = get_completions_from_namespace(namespace, Some(found_env.phase));
-									//for namespaces - return only classes
-									if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
-										return completions
-											.iter()
-											.filter(|c| matches!(c.kind, Some(CompletionItemKind::CLASS)))
-											.cloned()
-											.collect();
-									} else {
-										return completions;
-									}
-								}
-							}
-						}
 						let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap());
 
 						if let Ok(type_lookup) = type_lookup {
 							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
 						} else {
-							// No lookup found, let's not provide any completions
-							// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
+							// this is probably a namespace, let's look it up
+							if let Some(namespace) = root_env
+								.lookup_nested_str(&udt.full_path_str(), scope_visitor.found_stmt_index)
+								.ok()
+								.and_then(|n| n.0.as_namespace_ref())
+							{
+								let completions = get_completions_from_namespace(&namespace, Some(found_env.phase));
+								//for namespaces - return only classes and namespaces
+								if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
+									return completions
+										.iter()
+										.filter(|c| {
+											matches!(
+												c.kind,
+												Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
+											)
+										})
+										.cloned()
+										.collect();
+								} else {
+									return completions;
+								}
+							}
 
+							// This is not a known type or namespace
 							return vec![];
 						}
 					}
