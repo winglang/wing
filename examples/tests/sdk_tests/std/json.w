@@ -34,13 +34,17 @@ test "setAt()" {
 }
 
 /*
-// Should be invalid
+Will add test later:
+test "setWithNonMutJsonObject()" {
 let var error = "";
 try {
     let f = MutJson { e: 4 };
-    f.set("f", new cloud.Bucket());
+    f.set("f", 9);
  } catch e {
      error = e;
  }
-assert(error == "rate and cron cannot be configured simultaneously.");
+
+ log(error);
+ assert(error == "");
+}
 */
