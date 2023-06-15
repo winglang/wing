@@ -177,7 +177,7 @@ the log message `Hello, cloud!`.
 Now that you've written your first Wing program, what's next? Here are some
 resources to help you get started:
 
-- [Wing Language Specification](https://docs.winglang.io/reference/spec)
+- [Wing Language Specification](https://docs.winglang.io/contributors/rfcs/language-spec)
 - [Wing SDK Reference](https://docs.winglang.io/contributors/rfcs/2023-01-20-wingsdk-spec)
 
 ## Staying up to date

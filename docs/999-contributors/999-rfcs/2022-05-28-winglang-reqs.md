@@ -6,7 +6,7 @@ description: The original requirements documents for the wing language experienc
 - **Author(s):**: @eladb
 - **Submission Date**: {2022-05-28}
 - **Stage**: Approved
-- **Implementation**: [Language Specification](https://docs.winglang.io/reference/spec)
+- **Implementation**: [Language Specification](https://docs.winglang.io/contributors/rfcs/language-spec)
 
 ## About this Document
 
