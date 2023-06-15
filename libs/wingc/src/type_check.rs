@@ -1413,61 +1413,9 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
-				// Verify arity
-				let pos_args_count = arg_list.pos_args.len();
-				let min_args = constructor_sig.min_parameters();
-				if pos_args_count < min_args {
-					let err_text = format!(
-						"Expected {} positional argument(s) but got {}",
-						min_args, pos_args_count
-					);
-					self.spanned_error(exp, err_text);
-					return self.types.error();
-				}
+				self.type_check_arg_list_against_function_sig(&arg_list, &constructor_sig, exp, arg_list_types);
 
-				if !arg_list.named_args.is_empty() {
-					let last_arg = match constructor_sig.parameters.last() {
-						Some(arg) => arg.typeref.maybe_unwrap_option(),
-						None => {
-							self.spanned_error(exp, "Expected 0 named argument(s)");
-							return self.types.error();
-						}
-					};
-
-					if !last_arg.is_struct() {
-						self.spanned_error(
-							exp,
-							format!("class {} does not expect any named argument", class_symbol.name),
-						);
-						return self.types.error();
-					}
-
-					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
-				}
-
-				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let max_args = constructor_sig.max_parameters();
-				if arg_count < min_args || arg_count > max_args {
-					let err_text = if min_args == max_args {
-						format!("Expected {} argument(s) but got {}", min_args, arg_count)
-					} else {
-						format!(
-							"Expected between {} and {} arguments but got {}",
-							min_args, max_args, arg_count
-						)
-					};
-					self.spanned_error(exp, err_text);
-				}
-
-				// Verify passed positional arguments match the constructor
-				for (arg_expr, arg_type, param) in izip!(
-					arg_list.pos_args.iter(),
-					arg_list_types.pos_args.iter(),
-					constructor_sig.parameters.iter()
-				) {
-					self.validate_type(*arg_type, param.typeref, arg_expr);
-				}
-
+				
 				// If this is a preflight class then create a new type for this resource object
 				if type_.is_preflight_class() {
 					// Get reference to resource object's scope
