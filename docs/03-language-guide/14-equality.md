@@ -31,6 +31,8 @@ Basic types are compared *by value*.
 
 [IEEE 754]: https://en.wikipedia.org/wiki/IEEE_754
 
+> *Note*: Equality checking for `duration` is not fully implemented. See [#2941](https://github.com/winglang/wing/issues/2941).
+
 ## Collection types
 
 Wing contains six collection types: `Array`, `MutArray`, `Map`, `MutMap`, `Set`, and `MutSet`. The following rules apply to all of them:
@@ -38,6 +40,21 @@ Wing contains six collection types: `Array`, `MutArray`, `Map`, `MutMap`, `Set`,
 1. Two collections are equal if they have the same number of elements, and if each element in the first collection is equal to the corresponding element in the second collection (according to the rules of equality of that type). The order of elements only matters for `Array` and `MutArray`.
 2. The mutability of a collection does not affect its equality. In other words, a `MutArray` is equal to an `Array` with the same elements, and a `MutMap` is equal to a `Map` with the same keys and values.
 3. Only collections of the same "kind" can be equal. For example, an `Array` cannot be equal to a `Map`, and a `MutArray` cannot be equal to a `MutMap`.
+
+```js
+assert(Array<num>[1, 2, 3] == Array<num>[1, 2, 3]);
+assert(Array<num>[1, 2, 3] != Array<num>[3, 2, 1]);
+assert(MutArray<num>[1, 2, 3] == Array<num>[1, 2, 3]);
+
+assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"a": "1", "b": "2"});
+assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"b": "2", "a": "1"});
+
+assert(Set<num>{1, 2, 3} == Set<num>{1, 2, 3});
+assert(Set<num>{1, 2, 3} == Set<num>{3, 2, 1});
+```
+
+> *Note*: Collection type equality checking is not fully implemented. See [#2867](https://github.com/winglang/wing/issues/2867), [#2940](https://github.com/winglang/wing/issues/2940).
+
 
 ## Function types
 
@@ -91,8 +108,8 @@ class Shop {
   }
 }
 
-let shop1 = new Shop(1);
-let shop2 = new Shop(1);
+let shop1 = new Shop(1) as "Shop1";
+let shop2 = new Shop(1) as "Shop2";
 let shop3 = shop1;
 
 assert(shop1 != shop2);
@@ -121,6 +138,8 @@ assert(Json [1, 2, 3] == Json [1, 2, 3]);
 assert(Json { "foo": 1, "bar": 2 } == Json { "foo": 1, "bar": 2 });
 ```
 
+> *Note*: `Json` equality is not fully implemented. See [#2938](https://github.com/winglang/wing/issues/2938), [#2937](https://github.com/winglang/wing/issues/2937).
+
 ## Structs
 
 Two structs are equal if they have the same type and all of their fields are equal (based on rules of equality of their type).
@@ -142,5 +161,7 @@ let dog = Dog { name: "Mittens", age: 3 };
 
 assert(cat1 == cat2); // fields and types match
 assert(cat1 != cat3); // field "age" does not match
-assert(cat1 != dog); // fields match, but types do not match
+assert(cat1 != dog); // compile time error (can't compare different types)
 ```
+
+> *Note*: Struct equality is not fully implemented. See [#2939](https://github.com/winglang/wing/issues/2939).
