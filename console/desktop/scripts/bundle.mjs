@@ -56,14 +56,15 @@ try {
   };
   await build({
     ...buildOptions,
-    mac: ["default:arm64", "default:x64"],
+    mac: ["default:arm64"],
+  });
+  await build({
+    ...buildOptions,
+    mac: ["default:x64"],
   });
   await build({
     ...buildOptions,
     win: ["default:arm64", "default:x64", "default:ia32"],
-  });
-  await build({
-    ...buildOptions,
     linux: ["dir:arm", "dir:arm64", "dir:x64"],
   });
 } finally {
