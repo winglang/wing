@@ -1,11 +1,24 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: IPredicateHandler
+  kind: 8
+  detail: ""
+- label: IPredicateHandlerClient
+  kind: 8
+  detail: ""
 - label: Util
   kind: 7
+<<<<<<< HEAD
   documentation:
     kind: markdown
     value: "```wing\nclass Util\n```\n---\nUtility functions."
+=======
+  detail: independent class
+- label: WaitUntilProps
+  kind: 22
+  detail: ""
+>>>>>>> bb87cfe289dea501843ba42e2ff89c5bccc674b9
 - label: env
   kind: 2
   documentation:
@@ -32,6 +45,14 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic tryEnv: (name: str): str?\n```\n---\nReturns the value of an environment variable.\n\n### Parameters\n - *name* - The name of the environment variable.\n\n### Returns\nThe value of the environment variable or `nil`.\n\n### Remarks\nReturns `nil` if not found or empty."
   insertText: tryEnv($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: waitUntil
+  kind: 2
+  detail: "(predicate: inflight (): bool, props: WaitUntilProps?): bool"
+  insertText: waitUntil($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
