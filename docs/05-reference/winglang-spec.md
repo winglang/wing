@@ -1406,35 +1406,50 @@ For example:
 ```TS
 // Wing Code:
 class Foo {
-  init() { /* initialize preflight fields */ } // preflight constructor
-  inflight init() {} // optional client initializer
-
-  // inflight members
-  inflight foo(arg: num): num { return arg; }
-  inflight boo(): num { return 32; }
-
-  // inflight fields
-  inflight field1: num;
-  inflight field2: str;
-  inflight field3: bool;
-
-  // preflight members
-  foo(arg: num): num { return arg; }
-  boo(): num { return 32; }
-  
   // preflight fields
-  field4: num;
-  field5: str;
-  field6: bool;
+  field1: num;
+  field2: str;
+  field3: bool;
 
-  // re-assignable class fields, read about them in the mutability section
+  // re-assignable class fields (preflight, in this case), read about them in the mutability section
   var field4: num;
   var field5: str;
+
+  // inflight fields
+  inflight field6: num;
+  inflight field7: str;
+  inflight field8: bool;
+
+  // preflight constructor
+  init(field1: num, field2: str, field3: bool, field4: num, field5: str) { 
+    /* initialize preflight fields */
+    this.field1 = field1;
+    this.field2 = field2;
+    this.field3 = field3;
+    this.field4 = field4;
+    this.field5 = field5;
+  } 
+
+  // inflight constructor
+  inflight init() { 
+    /* initialize inflight fields */
+    this.field6 = 123;
+    this.field7 = "hello";
+    this.field8 = true;
+  }
+  
+  // preflight methods
+  foo1(arg: num): num { return arg; }
+  boo1(): num { return 32; }
+
+  // inflight methods
+  inflight foo2(arg: num): num { return arg; }
+  inflight boo2(): num { return 32; }
 }
 ```
 
 Preflight objects all have a scope and a unique ID. Compiler provides an implicit scope
-and ID for each object, both overrideable by user-defined ones in constructor.
+and ID for each object.
 
 The default for scope is `this`, which means the scope in which the object was
 defined (instantiated). The implicit ID is the type name of the class iff the type
@@ -1446,35 +1461,34 @@ Preflight objects instantiated at block scope root level of entrypoint are assig
 root app as their default implicit scope.
 
 Preflight object instantiation syntax uses the `let` keyword the same way variables are declared in
-Wing. The `as` and `in` keywords can be used to customize the scope and identifier assigned to this
+Wing. The `as` keyword can be used to customize the identifier assigned to this
 preflight object.
 
+It is currently impossible to override the default scope of a preflight object (see [Support specifying scopes for preflight objects](https://github.com/winglang/wing/issues/2386)).
+
 ```pre
-let <name>[: <type>] = new <Type>(<args>) [as <id>] [in <scope>];
+let <name>[: <type>] = new <Type>(<args>) [as <id>];
 ```
 
 ```TS
 // Wing Code:
-let a = Foo(); // with default scope and id
-let a = Foo() in scope; // with user-defined scope
-let a = new Foo() as "custom-id" in scope; // with user-defined scope and id
-let a = new Foo(...) as "custom-id2" in scope; // with constructor arguments
+let a = new Foo(); // with default scope and id
+let a = new Foo() as "custom-id"; // with user-defined id
+let a = new Foo(...) as "custom-id2"; // with constructor arguments
 ```
 
-"id" must be of type string. It can also be a string literal with substitution
-support (normal strings as well as shell strings).  
-"scope" must be an expression that resolves to a preflight object.
+"id" must be of type string. It currently cannot be a string literal with substitution
+support (see [new resource as name, name only accepts a string literal and not a statement that returns a string](https://github.com/winglang/wing/issues/1739)).  
 
 Preflight objects can be captured into inflight scopes and once that happens, inside
 the capture block only the inflight members are available.
 
 Preflight classes can extend other preflight classes (but not [structs](#31-structs)) and implement
-[interfaces](#34-interfaces). If a class implements an interface marked `inflight interface`, then
-all of the implemented methods must be `inflight`.
+[interfaces](#34-interfaces).
 
-Declaration of fields of the same name with different phases is not allowed due to requirement of
-having inflight fields of same name being implicitly initialized by the compiler. But declaration 
-of methods with different phases is allowed.
+Declaration of fields of the same name with different phases is not allowed due to the requirement of
+having inflight fields of same name being implicitly initialized by the compiler. Declaration 
+of methods with different phases is not allowed as well.
 
 [`▲ top`][top]
 
