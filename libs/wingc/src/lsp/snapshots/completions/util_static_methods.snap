@@ -10,7 +10,7 @@ source: libs/wingc/src/lsp/completions.rs
 - label: Util
   kind: 7
   detail: independent class
-- label: WaitProps
+- label: WaitUntilProps
   kind: 22
   detail: ""
 - label: env
@@ -37,10 +37,10 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: wait
+- label: waitUntil
   kind: 2
-  detail: "(predicate: inflight (): bool, props: WaitProps?): bool"
-  insertText: wait($0)
+  detail: "(predicate: inflight (): bool, props: WaitUntilProps?): bool"
+  insertText: waitUntil($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

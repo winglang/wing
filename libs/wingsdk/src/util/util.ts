@@ -62,7 +62,7 @@ export class Util {
 
   /**
    * Suspends execution for a given duration.
-   * @param delay The time to suspend execution
+   * @param delay The time to suspend execution.
    * @inflight
    */
   public static async sleep(delay: Duration): Promise<void> {
@@ -70,9 +70,11 @@ export class Util {
   }
 
   /**
-   * Run a predicate repeatedly, waiting until it returns true or until the timeout elapses
-   * @param predicate The function that will be evaluated
-   * @param props Timeout and interval values, default to one 1m timeout and 0.1sec interval
+   * Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
+   * @param predicate The function that will be evaluated.
+   * @param props Timeout and interval values, default to one 1m timeout and 0.1sec interval.
+   * @throws Will throw if the given predicate throws.
+   * @returns True if predicate is truthful within timeout.
    * @inflight
    */
   public static async waitUntil(
