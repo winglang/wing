@@ -70,7 +70,7 @@ export class Util {
   }
 
   /**
-   * Waits until predicate is true or return false
+   * Run a predicate repeatedly, waiting until it returns true or until the timeout elapses
    * @param predicate The function that will be evaluated
    * @param props Timeout and interval values, default to one 1m timeout and 0.1sec interval
    * @inflight
