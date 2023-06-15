@@ -25,7 +25,7 @@ $ wing <command> <options>
 ## Run: `wing run` / `wing it`
 
 You can use the `run` command (or `it`) when you want to interact with your Wing program in the
-[Wing Console](/getting-started/console).
+[Wing Console](/start-here/local).
 
 Usage:
 
@@ -70,8 +70,7 @@ $ wing compile --target sim ENTRYPOINT.w
 
 The output will be under `target/ENTRYPOINT.wsim` and can be opened in one two ways:
 
-* Interactively using [Wing Console](/getting-started/console) using `wing it target/hello.wsim`.
-* Programmatically using the `Simulator` class ([instructions](/getting-started/simulator)).
+* Interactively using [Wing Console](/start-here/local) using `wing it target/hello.wsim`.
 
 
 ### `tf-aws` Target
@@ -87,7 +86,7 @@ $ wing compile --target tf-aws ENTRYPOINT.w
 The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
 JavaScript bundles that include inflight code that executes on compute platform such as AWS Lambda.
 
-You can deploy your stack to AWS using Terraform ([instructions](/getting-started/aws)).
+You can deploy your stack to AWS using Terraform ([instructions](/start-here/aws)).
 
 
 ### `tf-azure` Target
@@ -109,8 +108,6 @@ The output includes both a Terraform configuration file (under `target/cdktf.out
 JavaScript bundles that include inflight code that executes on compute platform such as Azure
 Functions.
 
-You can deploy your stack to Azure using Terraform ([example](/getting-started/aws)).
-
 ### `tf-gcp` Target
 
 Compiles your program for Terraform and run on Google Cloud Platform.
@@ -131,7 +128,6 @@ the project ID of your stack.
 The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
 JavaScript bundles that include inflight code that executes on compute platform such as Google Cloud Functions.
 
-You can deploy your stack to GCP using Terraform ([example](/getting-started/aws)).
 
 ### `awscdk` Target
 
