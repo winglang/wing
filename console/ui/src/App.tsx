@@ -2,7 +2,9 @@ import {
   DefaultTheme,
   ThemeProvider,
   NotificationsProvider,
+  Mode,
 } from "@wingconsole/design-system";
+import { useCallback, useEffect } from "react";
 
 import { LayoutProvider, LayoutType } from "./layout/layout-provider.js";
 import { trpc } from "./services/trpc.js";
@@ -30,6 +32,23 @@ export const App = ({ layout }: AppProps) => {
   const appDetails = trpc["app.details"].useQuery();
   const appState = trpc["app.state"].useQuery();
   const themeMode = trpc["config.getThemeMode"].useQuery();
+
+  // TODO: Needed to be able to change the theme mode from the Learn / playground sites
+  //       This should be removed once we have a better way to handle this
+  const setThemeMode = trpc["config.setThemeMode"].useMutation();
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === "theme") {
+        setThemeMode.mutate({
+          mode: event.data.theme,
+        });
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, [setThemeMode]);
 
   return (
     <ThemeProvider mode={themeMode?.data?.mode} theme={DefaultTheme}>

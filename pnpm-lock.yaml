@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -316,8 +316,8 @@ importers:
         specifier: ^0.21.1
         version: 0.21.1(constructs@10.2.51)
       '@winglang/sdk':
-        specifier: ^0.21.1
-        version: 0.21.1(constructs@10.2.51)
+        specifier: ^0.21.7
+        version: 0.21.7(constructs@10.2.51)
       codespan-wasm:
         specifier: ^0.4.0
         version: 0.4.0
@@ -396,7 +396,7 @@ importers:
         version: 5.1.3
       vitest:
         specifier: ^0.31.4
-        version: 0.31.4(happy-dom@9.20.3)
+        version: 0.31.4
       ws:
         specifier: ^8.13.0
         version: 8.13.0
@@ -6268,7 +6268,7 @@ packages:
       magic-string: 0.27.0
       react-docgen-typescript: 2.2.2(typescript@5.1.3)
       typescript: 5.1.3
-      vite: 4.3.9
+      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
     dev: true
 
   /@jridgewell/gen-mapping@0.3.3:
@@ -6983,7 +6983,7 @@ packages:
       remark-slug: 6.1.0
       rollup: 3.25.1
       typescript: 5.1.3
-      vite: 4.3.9
+      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -7356,7 +7356,7 @@ packages:
       react: 18.2.0
       react-docgen: 6.0.0-alpha.3
       react-dom: 18.2.0(react@18.2.0)
-      vite: 4.3.9
+      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
     transitivePeerDependencies:
       - '@preact/preset-vite'
       - supports-color
@@ -8251,7 +8251,7 @@ packages:
       vite: ^4
     dependencies:
       '@swc/core': 1.3.63
-      vite: 4.3.9
+      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
     transitivePeerDependencies:
       - '@swc/helpers'
     dev: true
@@ -8267,7 +8267,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.22.5)
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.3.9
+      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8282,7 +8282,7 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.22.5(@babel/core@7.22.5)
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.22.5)
       react-refresh: 0.14.0
-      vite: 4.3.9(@types/node@18.16.18)(sass@1.63.3)
+      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8297,7 +8297,7 @@ packages:
       magic-string: 0.30.0
       picocolors: 1.0.0
       std-env: 3.3.3
-      vitest: 0.31.4(sass@1.63.3)
+      vitest: 0.31.4
     dev: true
 
   /@vitest/expect@0.31.4:
@@ -8458,10 +8458,7 @@ packages:
       '@winglang/sdk': 0.21.1(constructs@10.2.51)
       wasi-js: 1.7.3
     transitivePeerDependencies:
-      - '@aws-sdk/signature-v4-crt'
-      - aws-crt
       - constructs
-      - encoding
       - supports-color
     dev: false
     bundledDependencies:
@@ -8498,11 +8495,40 @@ packages:
       safe-stable-stringify: 1.1.1
       tar: 6.1.15
       uuid: 8.3.2
-    transitivePeerDependencies:
-      - '@aws-sdk/signature-v4-crt'
-      - aws-crt
-      - encoding
-      - supports-color
+    dev: false
+    bundledDependencies:
+      - '@aws-sdk/client-cloudwatch-logs'
+      - '@aws-sdk/client-dynamodb'
+      - '@aws-sdk/client-elasticache'
+      - '@aws-sdk/client-lambda'
+      - '@aws-sdk/client-s3'
+      - '@aws-sdk/client-secrets-manager'
+      - '@aws-sdk/client-sns'
+      - '@aws-sdk/client-sqs'
+      - '@aws-sdk/types'
+      - '@aws-sdk/util-dynamodb'
+      - '@aws-sdk/util-stream-node'
+      - '@aws-sdk/util-utf8-node'
+      - '@azure/core-paging'
+      - '@azure/identity'
+      - '@azure/storage-blob'
+      - cdktf
+      - cron-parser
+      - esbuild-wasm
+      - express
+      - ioredis
+      - mime-types
+      - safe-stable-stringify
+      - tar
+      - uuid
+
+  /@winglang/sdk@0.21.7(constructs@10.2.51):
+    resolution: {integrity: sha512-rTO3FNMaqyI4m1qexnfZNuecOk7T3rGnQlc+daTTf/QO1M7/3ZzKdBkaYKyf/vBVFD9pH+W50bG7cAsHESQ1pQ==}
+    engines: {node: '>= 16.16.0'}
+    peerDependencies:
+      constructs: ~10.1.228
+    dependencies:
+      constructs: 10.2.51
     dev: false
     bundledDependencies:
       - '@aws-sdk/client-cloudwatch-logs'
@@ -16462,38 +16488,6 @@ packages:
       - debug
     dev: true
 
-  /vite@4.3.9:
-    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': '>= 14'
-      less: '*'
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.17.19
-      postcss: 8.4.24
-      rollup: 3.25.1
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
   /vite@4.3.9(@types/node@18.16.18)(sass@1.63.3):
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -16595,6 +16589,71 @@ packages:
       fsevents: 2.3.2
     dev: true
 
+  /vitest@0.31.4:
+    resolution: {integrity: sha512-GoV0VQPmWrUFOZSg3RpQAPN+LPmHg2/gxlMNJlyxJihkz6qReHDV6b0pPDcqFLNEPya4tWJ1pgwUNP9MLmUfvQ==}
+    engines: {node: '>=v14.18.0'}
+    hasBin: true
+    peerDependencies:
+      '@edge-runtime/vm': '*'
+      '@vitest/browser': '*'
+      '@vitest/ui': '*'
+      happy-dom: '*'
+      jsdom: '*'
+      playwright: '*'
+      safaridriver: '*'
+      webdriverio: '*'
+    peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
+      '@vitest/browser':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+      playwright:
+        optional: true
+      safaridriver:
+        optional: true
+      webdriverio:
+        optional: true
+    dependencies:
+      '@types/chai': 4.3.5
+      '@types/chai-subset': 1.3.3
+      '@types/node': 20.3.1
+      '@vitest/expect': 0.31.4
+      '@vitest/runner': 0.31.4
+      '@vitest/snapshot': 0.31.4
+      '@vitest/spy': 0.31.4
+      '@vitest/utils': 0.31.4
+      acorn: 8.8.2
+      acorn-walk: 8.2.0
+      cac: 6.7.14
+      chai: 4.3.7
+      concordance: 5.0.4
+      debug: 4.3.4
+      local-pkg: 0.4.3
+      magic-string: 0.30.0
+      pathe: 1.1.1
+      picocolors: 1.0.0
+      std-env: 3.3.3
+      strip-literal: 1.0.1
+      tinybench: 2.5.0
+      tinypool: 0.5.0
+      vite: 4.3.9(@types/node@20.3.1)
+      vite-node: 0.31.4(@types/node@20.3.1)
+      why-is-node-running: 2.2.2
+    transitivePeerDependencies:
+      - less
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: true
+
   /vitest@0.31.4(happy-dom@9.20.3):
     resolution: {integrity: sha512-GoV0VQPmWrUFOZSg3RpQAPN+LPmHg2/gxlMNJlyxJihkz6qReHDV6b0pPDcqFLNEPya4tWJ1pgwUNP9MLmUfvQ==}
     engines: {node: '>=v14.18.0'}
@@ -16649,8 +16708,8 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.5.0
-      vite: 4.3.9(@types/node@20.3.1)
-      vite-node: 0.31.4(@types/node@20.3.1)
+      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
+      vite-node: 0.31.4(@types/node@20.3.1)(sass@1.63.3)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
