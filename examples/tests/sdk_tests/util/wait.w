@@ -32,7 +32,7 @@ test "returns after some time waiting" {
   };
   if util.wait(returnTrueAfter30Seconds) {
     let diff = JSHelper.getTime() - start;
-      assert( diff > 30 * 1000 && diff < 40 * 1000);
+    assert( diff > 30 * 1000 && diff < 40 * 1000);
   } else {
     assert(false);
   }
