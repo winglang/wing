@@ -1,6 +1,7 @@
 //-----------------------------------------------------------------------------
 // TODO: https://github.com/winglang/wing/issues/2785
 //-----------------------------------------------------------------------------
+bring cloud;
 
 // set & get()
 let a = MutJson { a: 1 };
@@ -35,5 +36,11 @@ test "setAt()" {
 
 
 // Should be invalid
-//let f = MutJson { e: 4 };
-//f.set("f", new cloud.Bucket());
+let var error = "";
+try {
+    let f = MutJson { e: 4 };
+    f.set("f", new cloud.Bucket());
+ } catch e {
+     error = e;
+ }
+assert(error == "rate and cron cannot be configured simultaneously.");
