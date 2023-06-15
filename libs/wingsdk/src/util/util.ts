@@ -1,4 +1,5 @@
 import { Code, InflightClient } from "../core";
+import { Duration } from "../std";
 
 /**
  * Utility functions.
@@ -23,6 +24,15 @@ export class Util {
    */
   public static tryEnv(name: string): string | undefined {
     return process.env[name];
+  }
+
+  /**
+   * Suspends execution for a given duration.
+   * @param delay The time to suspend execution
+   * @inflight
+   */
+  public static async sleep(delay: Duration): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, delay.seconds * 1000));
   }
 
   /**
