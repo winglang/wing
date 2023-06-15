@@ -1,6 +1,7 @@
 import { inferRouterInputs } from "@trpc/server";
 import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
 import Emittery from "emittery";
+import type { Application as ExpressApplication } from "express";
 
 import { Config } from "./config.js";
 import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
@@ -30,6 +31,7 @@ export interface CreateConsoleServerOptions {
   config: Config;
   requestedPort?: number;
   hostUtils?: HostUtils;
+  onExpressCreated?: (app: ExpressApplication) => void;
 }
 
 export const createConsoleServer = async ({
@@ -39,6 +41,7 @@ export const createConsoleServer = async ({
   config,
   requestedPort,
   hostUtils,
+  onExpressCreated,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -158,6 +161,7 @@ export const createConsoleServer = async ({
       return appState;
     },
     hostUtils,
+    onExpressCreated,
   });
 
   const close = async () => {

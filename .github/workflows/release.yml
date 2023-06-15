@@ -8,8 +8,8 @@ on:
 jobs:
   release:
     name: Release
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    runs-on: ghcr.io/cirruslabs/macos-ventura-xcode:latest
     permissions:
       contents: write
       issues: write
@@ -44,8 +44,34 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Add certificate to the keychain
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        run: |-
+          echo $CSC_LINK | base64 --decode > $HOME/certificate.p12
+          security create-keychain -p $CSC_KEY_PASSWORD build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p $CSC_KEY_PASSWORD build.keychain
+          security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CSC_KEY_PASSWORD build.keychain
+
       - name: Release
         run: pnpm run release "[HEAD^1]"
+        env:
+          ELECTRON_BUNDLER_PUBLISH: always
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Release Console for Desktop to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.RELEASE_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.RELEASE_AWS_SECRET_ACCESS_KEY }}
+        run: pnpm exec tsx scripts/releaseToS3.mts
+        working-directory: console/desktop
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -90,14 +116,17 @@ jobs:
           name: dist
 
       - name: Pack the Console for the Playground
-        run: tar cvf playground-console.tgz console
+        run: |
+          rm -rf console/app
+          mv console/desktop console/app
+          tar cvf playground-console.tgz console
 
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.ref }}
-        run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF playground-console.tgz 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
+        run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF dist/packages/*.tgz playground-console.tgz 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
 
       - name: Extract version
         id: extract-version
@@ -114,68 +143,32 @@ jobs:
           title: Publishing ${{ steps.extract-version.outputs.VERSION }} to GitHub Releases failed
           body: See https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-  publish_console_for_desktop:
-    name: Publish Console for Desktop
-    timeout-minutes: 15
+  publish_to_npm:
+    name: Publish to NPM
+    timeout-minutes: 5
     needs: release
-    runs-on: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
     if: needs.release.outputs.latest_commit == github.sha
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: dist
 
-      - name: Add certificate to the keychain
-        env:
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-        run: |-
-          echo $CSC_LINK | base64 --decode > $HOME/certificate.p12
-          security create-keychain -p $CSC_KEY_PASSWORD build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p $CSC_KEY_PASSWORD build.keychain
-          security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CSC_KEY_PASSWORD build.keychain
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-      - name: Bundle Console for Desktop
-        run: pnpm run bundle
-        working-directory: console/app
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Login to NPM registry
+        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
-      - name: Release to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.RELEASE_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.RELEASE_AWS_SECRET_ACCESS_KEY }}
-        run: pnpm exec tsx scripts/releaseToS3.mts
-        working-directory: console/app
+      - name: Publish
+        run: for file in *.tgz ; do npm publish "$file" --access public ; done
+        working-directory: dist/packages
 
       - name: Extract version
         id: extract-version
@@ -189,5 +182,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           labels: failed-release
-          title: Publishing Wing Console for Desktop ${{ steps.extract-version.outputs.VERSION }} failed
+          title: Publishing ${{ steps.extract-version.outputs.VERSION }} to GitHub Releases failed
           body: See https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

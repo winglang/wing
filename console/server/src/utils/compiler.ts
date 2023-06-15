@@ -1,11 +1,10 @@
-import fs from "node:child_process";
 import path from "node:path";
-import util from "node:util";
 
+import * as wing from "@winglang/compiler";
 import chokidar from "chokidar";
 import Emittery from "emittery";
 
-const exec = util.promisify(fs.exec);
+import { formatWingError } from "./format-wing-error.js";
 
 export interface CompilerEvents {
   compiling: undefined;
@@ -33,7 +32,7 @@ export const createCompiler = (wingfile: string): Compiler => {
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
   let shouldCompileAgain = false;
-  const compile = async () => {
+  const recompile = async () => {
     if (isCompiling) {
       shouldCompileAgain = true;
       return;
@@ -42,7 +41,9 @@ export const createCompiler = (wingfile: string): Compiler => {
     try {
       isCompiling = true;
       await events.emit("compiling");
-      await exec(`wing compile ${wingfile} -t sim`);
+      const outdir = await wing.compile(wingfile, {
+        target: wing.Target.SIM,
+      });
       await events.emit("compiled", { simfile });
     } catch (error) {
       // There's no point in showing errors if we're going to recompile anyway.
@@ -52,14 +53,16 @@ export const createCompiler = (wingfile: string): Compiler => {
 
       await events.emit(
         "error",
-        new Error(`Failed to compile.\n\n${error}`, { cause: error }),
+        new Error(`Failed to compile.\n\n${await formatWingError(error)}`, {
+          cause: error,
+        }),
       );
     } finally {
       isCompiling = false;
 
       if (shouldCompileAgain) {
         shouldCompileAgain = false;
-        await compile();
+        await recompile();
       }
     }
   };
@@ -69,18 +72,18 @@ export const createCompiler = (wingfile: string): Compiler => {
   const watcher = chokidar.watch(dirname, {
     ignored: ignoreList,
   });
-  watcher.on("change", compile);
-  watcher.on("add", compile);
+  watcher.on("change", recompile);
+  watcher.on("add", recompile);
   watcher.on("unlink", async (path: string) => {
     if (path === wingfile) {
       await events.emit("error", new Error("Wing file deleted"));
     }
-    void compile();
+    void recompile();
   });
 
   return {
     async start() {
-      await compile();
+      await recompile();
     },
     async stop() {
       await watcher.close();

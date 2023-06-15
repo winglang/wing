@@ -29,13 +29,13 @@ export const formatAbsolutePaths = (
   expanded: boolean = false,
 ) => {
   return error
-    .replace(
+    .replaceAll(
       /\B((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
       (match, path, line, column) => {
         return `<a class="${className}" onclick="event.stopPropagation()" href="vscode://file/${path}:${line}:${column}">${match}</a>`;
       },
     )
-    .replace(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
+    .replaceAll(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
 };
 
 const LogEntryRow = ({

@@ -7,7 +7,7 @@ import { ITestRunnerClient, Simulator } from "../wingsdk.js";
 
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
-  return test.replace(/test:/g, "");
+  return test.replaceAll("test:", "");
 };
 
 const listTests = (simulator: Simulator): Promise<string[]> => {
@@ -67,7 +67,7 @@ const runTest = async (
   return result;
 };
 
-interface InternalTestResult extends TestResult {
+export interface InternalTestResult extends TestResult {
   response: string;
   time: number;
 }

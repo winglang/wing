@@ -15,33 +15,33 @@ jobs:
       self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
     env:
       CI: "true"
-      SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
-      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
+      - name: Set git identity
+        run: |-
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install Wing CLI
-        run: pnpm i -g winglang
-
-      - run: wing --version
+      - name: Install Playwright Browsers
+        run: pnpx playwright install chromium --with-deps
 
       - name: Build
         run: pnpm run build
@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: playwright-report
-          path: console/app/playwright-report/
+          path: console/desktop/playwright-report/
 
       - name: Find mutations
         id: self_mutation
