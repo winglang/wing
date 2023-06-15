@@ -48,7 +48,8 @@ test "setting props" {
     invokeCounter.inc();
     return false;
   };
-  if util.wait(returnFalse, interval: oneSecond, timeout: tenSeconds ) {
+
+  if util.wait(returnFalse, interval: oneSecond, timeout: tenSeconds) {
     assert(false);
   } else {
     // making sure that the predicate was invoked almost 10 times
