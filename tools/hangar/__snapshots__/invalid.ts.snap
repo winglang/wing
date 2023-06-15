@@ -694,17 +694,17 @@ Duration <DURATION>
 `;
 
 exports[`impl_interface.w 1`] = `
-"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:7
   |
-3 | class A impl cloud.IQueueAddConsumerHandler {
-  |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+3 | class A impl cloud.IQueueSetConsumerHandler {
+  |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
 
 
 error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:7:7
   |
-7 | class B impl cloud.IQueueAddConsumerHandler {
+7 | class B impl cloud.IQueueSetConsumerHandler {
   |       ^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
 
 
