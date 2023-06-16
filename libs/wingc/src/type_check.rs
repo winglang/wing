@@ -1929,7 +1929,7 @@ impl<'a> TypeChecker<'a> {
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
 		assert!(expected_types.len() > 0);
 
-		// If the actuall type is anything or any of the expected types then we're good
+		// If the actual type is anything or any of the expected types then we're good
 		if actual_type.is_anything() || expected_types.iter().any(|t| actual_type.is_subtype_of(t)) {
 			return actual_type;
 		}
