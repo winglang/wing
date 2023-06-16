@@ -14,6 +14,7 @@ import { createCompiler } from "./utils/compiler.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 
+export type { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
 export type { ExplorerItem } from "./router/app.js";
@@ -33,6 +34,7 @@ export interface CreateConsoleServerOptions {
   config: Config;
   requestedPort?: number;
   hostUtils?: HostUtils;
+  onTrace?: (trace: Trace) => void;
   onExpressCreated?: (app: ExpressApplication) => void;
 }
 
@@ -43,6 +45,7 @@ export const createConsoleServer = async ({
   config,
   requestedPort,
   hostUtils,
+  onTrace,
   onExpressCreated,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
@@ -73,6 +76,9 @@ export const createConsoleServer = async ({
 
   const compiler = createCompiler(wingfile);
   const simulator = createSimulator();
+  if (onTrace) {
+    simulator.on("trace", onTrace);
+  }
   compiler.on("compiled", ({ simfile }) => {
     simulator.start(simfile);
   });
