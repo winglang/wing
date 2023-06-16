@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\naddObject: preflight (str, str): void\n```"
+  value: "```wing\npreflight addObject: preflight (key: str, body: str): void\n```\n---\nAdd a file to the bucket that is uploaded when the app is deployed.\n\n### Remarks\nTODO: In the future this will support uploading any `Blob` type or\nreferencing a file from the local filesystem."
 range:
   start:
     line: 4

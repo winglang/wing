@@ -28,6 +28,35 @@ module.exports = function({ counter }) {
 
 ```
 
+## inflight.$Closure2.js
+```js
+module.exports = function({ counter }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const key = "my-key";
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 0)'`)})(((await counter.peek(key)) === 0))};
+      (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 1)'`)})(((await counter.peek(key)) === 1))};
+      (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 2)'`)})(((await counter.peek(key)) === 2))};
+      (await counter.inc(10,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 12)'`)})(((await counter.peek(key)) === 12))};
+      (await counter.set(88,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 88)'`)})(((await counter.peek(key)) === 88))};
+    }
+  }
+  return $Closure2;
+}
+
+```
+
 ## main.tf.json
 ```json
 {
@@ -49,7 +78,7 @@ module.exports = function({ counter }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:set\",\"${aws_lambda_function.root_testset_Handler_9EAD6DA1.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:set\",\"${aws_lambda_function.root_testset_Handler_9EAD6DA1.arn}\"],[\"root/Default/Default/test:key set\",\"${aws_lambda_function.root_testkeyset_Handler_7C558C81.arn}\"]]"
     }
   },
   "provider": {
@@ -78,6 +107,15 @@ module.exports = function({ counter }) {
       }
     },
     "aws_iam_role": {
+      "root_testkeyset_Handler_IamRole_37ABA2D8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:key set/Handler/IamRole",
+            "uniqueId": "root_testkeyset_Handler_IamRole_37ABA2D8"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
       "root_testset_Handler_IamRole_5149788C": {
         "//": {
           "metadata": {
@@ -89,6 +127,16 @@ module.exports = function({ counter }) {
       }
     },
     "aws_iam_role_policy": {
+      "root_testkeyset_Handler_IamRolePolicy_8DB492FB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:key set/Handler/IamRolePolicy",
+            "uniqueId": "root_testkeyset_Handler_IamRolePolicy_8DB492FB"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testkeyset_Handler_IamRole_37ABA2D8.name}"
+      },
       "root_testset_Handler_IamRolePolicy_D78C23B7": {
         "//": {
           "metadata": {
@@ -101,6 +149,16 @@ module.exports = function({ counter }) {
       }
     },
     "aws_iam_role_policy_attachment": {
+      "root_testkeyset_Handler_IamRolePolicyAttachment_7C689A24": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:key set/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testkeyset_Handler_IamRolePolicyAttachment_7C689A24"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testkeyset_Handler_IamRole_37ABA2D8.name}"
+      },
       "root_testset_Handler_IamRolePolicyAttachment_3D12A4BB": {
         "//": {
           "metadata": {
@@ -113,6 +171,33 @@ module.exports = function({ counter }) {
       }
     },
     "aws_lambda_function": {
+      "root_testkeyset_Handler_7C558C81": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:key set/Handler/Default",
+            "uniqueId": "root_testkeyset_Handler_7C558C81"
+          }
+        },
+        "environment": {
+          "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "WING_FUNCTION_NAME": "Handler-c87cc733",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c87cc733",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testkeyset_Handler_IamRole_37ABA2D8.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testkeyset_Handler_S3Object_51C16B91.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
       "root_testset_Handler_9EAD6DA1": {
         "//": {
           "metadata": {
@@ -153,6 +238,17 @@ module.exports = function({ counter }) {
       }
     },
     "aws_s3_object": {
+      "root_testkeyset_Handler_S3Object_51C16B91": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:key set/Handler/S3Object",
+            "uniqueId": "root_testkeyset_Handler_S3Object_51C16B91"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
       "root_testset_Handler_S3Object_445B1FA3": {
         "//": {
           "metadata": {
@@ -216,8 +312,45 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Closure2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure2.js";
+        const counter_client = context._lift(counter);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            counter: ${counter_client},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          $Closure2._registerBindObject(counter, host, []);
+        }
+        if (ops.includes("handle")) {
+          $Closure2._registerBindObject(counter, host, ["inc", "peek", "set"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 0 });
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:key set",new $Closure2(this,"$Closure2"));
   }
 }
 class $App extends $AppBase {

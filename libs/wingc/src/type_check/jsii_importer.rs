@@ -2,12 +2,12 @@ use crate::{
 	ast::{Phase, Symbol},
 	debug,
 	diagnostic::{WingLocation, WingSpan},
+	docs::Docs,
 	type_check::{
-		self, symbol_env::StatementIdx, Class, FunctionSignature, Interface, Struct, SymbolKind, Type, TypeRef, Types,
-		CLASS_INIT_NAME,
+		self, symbol_env::StatementIdx, Class, FunctionParameter, FunctionSignature, Interface, Struct, SymbolKind, Type,
+		TypeRef, Types, CLASS_INIT_NAME,
 	},
-	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_JSON, WINGSDK_MUT_JSON,
-	WINGSDK_RESOURCE,
+	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use wingii::{
@@ -94,15 +94,7 @@ impl<'a> JsiiImporter<'a> {
 			},
 			TypeReference::NamedTypeReference(named_ref) => {
 				let type_fqn = &named_ref.fqn;
-				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_INFLIGHT) {
-					self.wing_types.add_type(Type::Function(FunctionSignature {
-						this_type: Some(self.wing_types.anything()),
-						parameters: vec![self.wing_types.anything()],
-						return_type: self.wing_types.anything(),
-						phase: Phase::Inflight,
-						js_override: None,
-					}))
-				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
+				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
 					self.wing_types.duration()
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_JSON) {
 					self.wing_types.json()
@@ -153,15 +145,14 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	pub fn import_type(&mut self, type_fqn: &FQN) -> bool {
-		self.setup_namespaces_for(&type_fqn);
-
 		let type_str = type_fqn.as_str();
 
 		// check if type is already imported
-		if matches!(
-			self.wing_types.libraries.lookup_nested_str(type_str, None),
-			LookupResult::Found(..)
-		) {
+		if let LookupResult::Found(sym, ..) = self.wing_types.libraries.lookup_nested_str(type_str, None) {
+			if let SymbolKind::Namespace(n) = sym {
+				// We are trying to import a namespace directly, so let's eagerly load all of its types
+				self.deep_import_submodule_to_env(n.name.clone().as_str());
+			}
 			return true;
 		}
 
@@ -250,13 +241,7 @@ impl<'a> JsiiImporter<'a> {
 			} else {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					env: SymbolEnv::new(
-						Some(parent_ns.env.get_ref()),
-						self.wing_types.void(),
-						false,
-						Phase::Preflight,
-						0,
-					),
+					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
 				});
 				parent_ns
 					.env
@@ -444,7 +429,8 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void()
 				};
 
-				let mut param_types = vec![];
+				let mut fn_params = vec![];
+
 				// Define the rest of the arguments and create the method signature
 				if let Some(params) = &m.parameters {
 					if self.has_variadic_parameters(params) {
@@ -458,13 +444,18 @@ impl<'a> JsiiImporter<'a> {
 					}
 
 					for param in params {
-						param_types.push(self.parameter_to_wing_type(&param));
+						fn_params.push(FunctionParameter {
+							name: param.name.clone(),
+							typeref: self.parameter_to_wing_type(&param),
+							docs: Docs::from(&param.docs),
+						});
 					}
 				}
 				let this_type = if is_static { None } else { Some(wing_type) };
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
+					docs: Docs::from(&m.docs),
 					this_type,
-					parameters: param_types,
+					parameters: fn_params,
 					return_type,
 					phase: member_phase,
 					js_override: m
@@ -473,10 +464,11 @@ impl<'a> JsiiImporter<'a> {
 						.and_then(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
 						.flatten(),
 				}));
+				let sym = Self::jsii_name_to_symbol(&m.name, &m.location_in_module);
 				class_env
 					.define(
-						&Self::jsii_name_to_symbol(&m.name, &m.location_in_module),
-						SymbolKind::make_variable(method_sig, false, is_static, member_phase),
+						&sym,
+						SymbolKind::make_member_variable(sym.clone(), method_sig, false, is_static, member_phase),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -503,10 +495,17 @@ impl<'a> JsiiImporter<'a> {
 					base_wing_type
 				};
 
+				let sym = Self::jsii_name_to_symbol(&p.name, &p.location_in_module);
 				class_env
 					.define(
-						&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
-						SymbolKind::make_variable(wing_type, !matches!(p.immutable, Some(true)), is_static, member_phase),
+						&sym,
+						SymbolKind::make_member_variable(
+							sym.clone(),
+							wing_type,
+							!matches!(p.immutable, Some(true)),
+							is_static,
+							member_phase,
+						),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -540,7 +539,7 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn import_class(&mut self, jsii_class: &'a wingii::jsii::ClassType) {
-		let mut class_phase = if is_construct_base(&FQN::from(jsii_class.fqn.as_str())) {
+		let mut class_phase = if is_construct_base(&jsii_class.fqn) {
 			Phase::Preflight
 		} else {
 			Phase::Independent
@@ -651,6 +650,7 @@ impl<'a> JsiiImporter<'a> {
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
 			phase: class_phase,
+			docs: Docs::from(&jsii_class.docs),
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);
@@ -662,7 +662,7 @@ impl<'a> JsiiImporter<'a> {
 		let jsii_initializer = jsii_class.initializer.as_ref();
 
 		if let Some(initializer) = jsii_initializer {
-			let mut arg_types: Vec<TypeRef> = vec![];
+			let mut fn_params = vec![];
 			if let Some(params) = &initializer.parameters {
 				for (i, param) in params.iter().enumerate() {
 					// If this is a resource then skip scope and id arguments
@@ -677,19 +677,25 @@ impl<'a> JsiiImporter<'a> {
 							continue;
 						}
 					}
-					arg_types.push(self.parameter_to_wing_type(&param));
+					fn_params.push(FunctionParameter {
+						name: param.name.clone(),
+						typeref: self.parameter_to_wing_type(&param),
+						docs: Docs::from(&param.docs),
+					});
 				}
 			}
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
 				this_type: None, // Initializers are considered static so they have no `this_type`
-				parameters: arg_types,
+				parameters: fn_params,
 				return_type: new_type,
 				phase: member_phase,
 				js_override: None,
+				docs: Docs::from(&initializer.docs),
 			}));
+			let sym = Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module);
 			if let Err(e) = class_env.define(
-				&Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module),
-				SymbolKind::make_variable(method_sig, false, true, member_phase),
+				&sym,
+				SymbolKind::make_member_variable(sym.clone(), method_sig, false, true, member_phase),
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)
@@ -751,27 +757,64 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
+		let mut param_type = self.type_ref_to_wing_type(&parameter.type_);
+
+		// TODO variadic parameter support https://github.com/winglang/wing/issues/397
 		if parameter.variadic.unwrap_or(false) {
-			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/winglang/wing/issues/397");
+			param_type = self.wing_types.add_type(Type::Array(param_type));
+			param_type = self.wing_types.add_type(Type::Optional(param_type));
 		}
 
-		let param_type = self.type_ref_to_wing_type(&parameter.type_);
 		if parameter.optional.unwrap_or(false) {
-			self.wing_types.add_type(Type::Optional(param_type))
-		} else {
-			param_type
+			param_type = self.wing_types.add_type(Type::Optional(param_type));
 		}
+
+		param_type
 	}
 
 	/// Imports all types within a given submodule
 	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
-		let assembly = self.jsii_types.find_assembly(&self.jsii_spec.assembly_name).unwrap();
-		let start_string = format!("{}.{}", assembly.name, submodule);
-		assembly.types.as_ref().unwrap().keys().for_each(|type_fqn| {
-			if type_fqn.as_str().starts_with(&start_string) {
-				self.import_type(&FQN::from(type_fqn.as_str()));
+		let sub_string = Some(submodule.to_string());
+		let match_namespace = |jsii_type: &jsii::Type| match jsii_type {
+			jsii::Type::ClassType(c) => c.namespace == sub_string,
+			jsii::Type::EnumType(e) => e.namespace == sub_string,
+			jsii::Type::InterfaceType(i) => i.namespace == sub_string,
+		};
+
+		for entry in self
+			.jsii_types
+			.find_assembly(&self.jsii_spec.assembly_name)
+			.unwrap()
+			.types
+			.as_ref()
+			.unwrap()
+			.iter()
+			.skip_while(|e| !match_namespace(e.1))
+		{
+			if match_namespace(entry.1) {
+				self.import_type(&FQN::from(entry.0.as_str()));
+			} else {
+				// the types should be well ordered, so we can break early
+				break;
 			}
-		});
+		}
+	}
+
+	/// Import all top-level types that are not in a submodule
+	pub fn import_root_types(&mut self) {
+		let assembly = self.jsii_types.find_assembly(&self.jsii_spec.assembly_name).unwrap();
+		for entry in assembly.types.as_ref().unwrap().iter() {
+			if match entry.1 {
+				jsii::Type::ClassType(c) => c.namespace.is_none(),
+				jsii::Type::EnumType(e) => e.namespace.is_none(),
+				jsii::Type::InterfaceType(i) => i.namespace.is_none(),
+			} {
+				self.import_type(&FQN::from(entry.0.as_str()));
+			} else {
+				// the types should be well ordered, so we can break early
+				break;
+			}
+		}
 	}
 
 	/// Imports submodules of the assembly, preparing each as an available namespace
@@ -860,6 +903,9 @@ impl<'a> JsiiImporter<'a> {
 			return;
 		}
 
+		// make sure we have a namespace for this type
+		self.setup_namespaces_for(&fqn);
+
 		let mut ns = self
 			.wing_types
 			.libraries
@@ -886,23 +932,44 @@ fn extract_docstring_tag<'a>(docs: &'a Option<jsii::Docs>, arg: &str) -> Option<
 /// Returns true if the FQN represents a "construct base class".
 ///
 /// TODO: this is a temporary hack until we support interfaces.
-pub fn is_construct_base(fqn: &FQN) -> bool {
+pub fn is_construct_base(fqn: &str) -> bool {
 	// We treat both CONSTRUCT_BASE_CLASS and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
 	// from `construct.Construct` and stuff derived `std.Resource` (which itself is derived from `constructs.Construct`).
 	// But since we don't support interfaces yet we can't import `std.Resource` so we just treat it as a base class.
 	// I'm also not sure we should ever import `std.Resource` because we might want to keep its internals hidden to the user:
 	// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
-	fqn.as_str() == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn.as_str() == CONSTRUCT_BASE_CLASS
+	fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn == CONSTRUCT_BASE_CLASS
+}
+
+impl From<&Option<jsii::Docs>> for Docs {
+	fn from(value: &Option<jsii::Docs>) -> Self {
+		let Some(docs) = value else {
+			return Docs::default()
+		};
+
+		let docs = docs.clone();
+
+		Docs {
+			custom: docs.custom.unwrap_or_default(),
+			remarks: docs.remarks,
+			summary: docs.summary,
+			default: docs.default,
+			deprecated: docs.deprecated,
+			example: docs.example,
+			see: docs.see,
+			returns: docs.returns,
+			stability: docs.stability,
+			subclassable: docs.subclassable,
+		}
+	}
 }
 
 #[test]
 fn test_fqn_is_construct_base() {
-	assert_eq!(is_construct_base(&FQN::from(CONSTRUCT_BASE_CLASS)), true);
+	assert_eq!(is_construct_base(CONSTRUCT_BASE_CLASS), true);
 	assert_eq!(
-		is_construct_base(&FQN::from(
-			format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE).as_str()
-		)),
+		is_construct_base(format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE).as_str()),
 		true
 	);
-	assert_eq!(is_construct_base(&FQN::from("@winglang/sdk.cloud.Bucket")), false);
+	assert_eq!(is_construct_base("@winglang/sdk.cloud.Bucket"), false);
 }

@@ -8,19 +8,18 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString, InterpolatedStringPart,
-	Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UnaryOperator, UserDefinedType,
+	FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
+	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
-	pub diagnostics: RefCell<Diagnostics>,
 	is_in_loop: RefCell<bool>,
 }
 
@@ -45,7 +44,6 @@ impl<'s> Parser<'s> {
 			source,
 			source_name,
 			error_nodes: RefCell::new(HashSet::new()),
-			diagnostics: RefCell::new(Diagnostics::new()),
 			is_in_loop: RefCell::new(false),
 		}
 	}
@@ -70,8 +68,7 @@ impl<'s> Parser<'s> {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
 		};
-		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().push(diag);
+		report_diagnostic(diag);
 
 		// Track that we have produced a diagnostic for this node
 		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
@@ -203,6 +200,7 @@ impl<'s> Parser<'s> {
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
+			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -501,7 +499,7 @@ impl<'s> Parser<'s> {
 				"class_field" => {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
-						self.diagnostics.borrow_mut().push(Diagnostic {
+						report_diagnostic(Diagnostic {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
@@ -551,14 +549,14 @@ impl<'s> Parser<'s> {
 							.err();
 					}
 
-					let return_type = Some(Box::new(TypeAnnotation {
+					let return_type = Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 							span: name.span.clone(),
 						}),
 						span: self.node_span(&class_element),
-					}));
+					});
 
 					if is_inflight {
 						inflight_initializer = Some(FunctionDefinition {
@@ -605,19 +603,19 @@ impl<'s> Parser<'s> {
 			None => FunctionDefinition {
 				signature: FunctionSignature {
 					parameters: vec![],
-					return_type: Some(Box::new(TypeAnnotation {
+					return_type: Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 							span: WingSpan::default(),
 						}),
 						span: WingSpan::default(),
-					})),
+					}),
 					phase: Phase::Preflight,
 				},
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
-				span: name.span.clone(),
+				span: WingSpan::default(),
 			},
 		};
 
@@ -628,19 +626,19 @@ impl<'s> Parser<'s> {
 			None => FunctionDefinition {
 				signature: FunctionSignature {
 					parameters: vec![],
-					return_type: Some(Box::new(TypeAnnotation {
+					return_type: Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 							span: WingSpan::default(),
 						}),
 						span: WingSpan::default(),
-					})),
+					}),
 					phase: Phase::Inflight,
 				},
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
-				span: name.span.clone(),
+				span: WingSpan::default(),
 			},
 		};
 
@@ -777,24 +775,23 @@ impl<'s> Parser<'s> {
 		let name = interface_element.child_by_field_name("name").unwrap();
 		let method_name = self.node_symbol(&name)?;
 		let func_sig = self.build_function_signature(&interface_element, phase)?;
-		match func_sig.return_type {
-			Some(_) => Ok((method_name, func_sig)),
-			None => {
-				self.add_error::<(Symbol, FunctionSignature)>("Expected method return type".to_string(), &interface_element)
-			}
-		}
+		Ok((method_name, func_sig))
 	}
 
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
 		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap(), phase)?;
 		let return_type = if let Some(rt) = func_sig_node.child_by_field_name("type") {
-			Some(Box::new(self.build_type_annotation(&rt, phase)?))
+			self.build_type_annotation(&rt, phase)?
 		} else {
-			None
+			TypeAnnotation {
+				kind: TypeAnnotationKind::Void,
+				span: Default::default(),
+			}
 		};
+
 		Ok(FunctionSignature {
 			parameters,
-			return_type,
+			return_type: Box::new(return_type),
 			phase,
 		})
 	}
@@ -890,14 +887,22 @@ impl<'s> Parser<'s> {
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
-				let param_types = param_type_list_node
-					.named_children(&mut cursor)
-					.filter_map(|param_type| self.build_type_annotation(&param_type, phase).ok())
-					.collect::<Vec<TypeAnnotation>>();
+
+				let mut parameters = vec![];
+				for param_type in param_type_list_node.named_children(&mut cursor) {
+					let t = self.build_type_annotation(&param_type, phase)?;
+
+					parameters.push(FunctionParameter {
+						name: "".into(),
+						type_annotation: t,
+						reassignable: false,
+					})
+				}
+
 				match type_node.child_by_field_name("return_type") {
 					Some(return_type) => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Function(FunctionTypeAnnotation {
-							param_types,
+						kind: TypeAnnotationKind::Function(FunctionSignature {
+							parameters,
 							return_type: Box::new(self.build_type_annotation(&return_type, phase)?),
 							phase: if type_node.child_by_field_name("inflight").is_some() {
 								Phase::Inflight
@@ -1491,7 +1496,10 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(statements),
 				signature: FunctionSignature {
 					parameters: vec![],
-					return_type: None,
+					return_type: Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::Void,
+						span: Default::default(),
+					}),
 					phase: Phase::Inflight,
 				},
 				is_static: true,

@@ -9,11 +9,14 @@ assert(k.length == 2);
 let v = Json.values(x);
 assert(v.at(0) == 123);
 
-// Mutable Clone
-let m = Json.cloneMut(x);
+// Mutable Deep Copy
+let m = Json.deepCopyMut(x);
 m.set("a", 321);
 assert(m.get("a") == 321);
 
+// Immutable Deep Copy
+let n = MutJson.deepCopy(m);
+assert(m != n);
 
 // Deleting keys
 let var k2 = Json.keys(m);
@@ -50,4 +53,11 @@ assert(bool.fromJson(jsonOfMany.get("c")));
 test "Access Json static inflight" {
   let ss = Json.stringify(jj);
   assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
+}
+
+// Check whether some key exists in a json
+test "has key or not" {
+  let hasCheck = Json {a: "hello", b: "wing"};
+  assert(Json.has(hasCheck, "a") == true);
+  assert(Json.has(hasCheck, "c") == false);
 }

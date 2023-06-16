@@ -92,8 +92,8 @@ exports[`messages are not requeued if the function fails after retention timeout
 
 exports[`messages are not requeued if the function fails after retention timeout 2`] = `
 {
-  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+  ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -123,10 +123,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue-AddConsumer-e645076f",
+        "path": "root/my_queue-SetConsumer-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
+          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -147,7 +147,7 @@ async handle(message) {
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -167,7 +167,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -206,7 +206,7 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "consumer",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -237,7 +237,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-AddConsumer-e645076f": {
+        "my_queue-SetConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -262,10 +262,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-AddConsumer-e645076f",
-          "path": "root/my_queue-AddConsumer-e645076f",
+          "id": "my_queue-SetConsumer-e645076f",
+          "path": "root/my_queue-SetConsumer-e645076f",
         },
-        "my_queue-AddConsumerHandler-e645076f": {
+        "my_queue-SetConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
           },
@@ -276,8 +276,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-AddConsumerHandler-e645076f",
-          "path": "root/my_queue-AddConsumerHandler-e645076f",
+          "id": "my_queue-SetConsumerHandler-e645076f",
+          "path": "root/my_queue-SetConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -312,8 +312,8 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
 
 exports[`messages are not requeued if the function fails before timeout 2`] = `
 {
-  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+  ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -343,10 +343,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue-AddConsumer-e645076f",
+        "path": "root/my_queue-SetConsumer-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
+          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -367,7 +367,7 @@ async handle(message) {
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -387,7 +387,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -426,7 +426,7 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "consumer",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -457,7 +457,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-AddConsumer-e645076f": {
+        "my_queue-SetConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -482,10 +482,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-AddConsumer-e645076f",
-          "path": "root/my_queue-AddConsumer-e645076f",
+          "id": "my_queue-SetConsumer-e645076f",
+          "path": "root/my_queue-SetConsumer-e645076f",
         },
-        "my_queue-AddConsumerHandler-e645076f": {
+        "my_queue-SetConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
           },
@@ -496,8 +496,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-AddConsumerHandler-e645076f",
-          "path": "root/my_queue-AddConsumerHandler-e645076f",
+          "id": "my_queue-SetConsumerHandler-e645076f",
+          "path": "root/my_queue-SetConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -536,8 +536,8 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
 
 exports[`messages are requeued if the function fails after timeout 2`] = `
 {
-  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+  ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -567,10 +567,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue-AddConsumer-e645076f",
+        "path": "root/my_queue-SetConsumer-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
+          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -591,7 +591,7 @@ async handle(message) {
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -611,7 +611,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -650,7 +650,7 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "consumer",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -681,7 +681,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-AddConsumer-e645076f": {
+        "my_queue-SetConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -706,10 +706,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-AddConsumer-e645076f",
-          "path": "root/my_queue-AddConsumer-e645076f",
+          "id": "my_queue-SetConsumer-e645076f",
+          "path": "root/my_queue-SetConsumer-e645076f",
         },
-        "my_queue-AddConsumerHandler-e645076f": {
+        "my_queue-SetConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
           },
@@ -720,8 +720,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-AddConsumerHandler-e645076f",
-          "path": "root/my_queue-AddConsumerHandler-e645076f",
+          "id": "my_queue-SetConsumerHandler-e645076f",
+          "path": "root/my_queue-SetConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -839,8 +839,8 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
 
 exports[`queue with one subscriber, batch size of 5 2`] = `
 {
-  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+  ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -870,10 +870,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue-AddConsumer-e645076f",
+        "path": "root/my_queue-SetConsumer-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
+          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -901,7 +901,7 @@ async handle(message) {
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 5,
           },
@@ -921,7 +921,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -960,7 +960,7 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "consumer",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -991,7 +991,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-AddConsumer-e645076f": {
+        "my_queue-SetConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -1016,10 +1016,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-AddConsumer-e645076f",
-          "path": "root/my_queue-AddConsumer-e645076f",
+          "id": "my_queue-SetConsumer-e645076f",
+          "path": "root/my_queue-SetConsumer-e645076f",
         },
-        "my_queue-AddConsumerHandler-e645076f": {
+        "my_queue-SetConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
           },
@@ -1030,8 +1030,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-AddConsumerHandler-e645076f",
-          "path": "root/my_queue-AddConsumerHandler-e645076f",
+          "id": "my_queue-SetConsumerHandler-e645076f",
+          "path": "root/my_queue-SetConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -1065,8 +1065,8 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
 
 exports[`queue with one subscriber, default batch size of 1 2`] = `
 {
-  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+  ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js": "exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1096,10 +1096,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue-AddConsumer-e645076f",
+        "path": "root/my_queue-SetConsumer-e645076f",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
+          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8e4d8fe.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1120,7 +1120,7 @@ async handle(message) {
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${root/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -1140,7 +1140,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -1179,7 +1179,7 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "consumer",
-                "resource": "root/my_queue-AddConsumer-e645076f",
+                "resource": "root/my_queue-SetConsumer-e645076f",
               },
             ],
           },
@@ -1210,7 +1210,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-AddConsumer-e645076f": {
+        "my_queue-SetConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -1235,10 +1235,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-AddConsumer-e645076f",
-          "path": "root/my_queue-AddConsumer-e645076f",
+          "id": "my_queue-SetConsumer-e645076f",
+          "path": "root/my_queue-SetConsumer-e645076f",
         },
-        "my_queue-AddConsumerHandler-e645076f": {
+        "my_queue-SetConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
           },
@@ -1249,8 +1249,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-AddConsumerHandler-e645076f",
-          "path": "root/my_queue-AddConsumerHandler-e645076f",
+          "id": "my_queue-SetConsumerHandler-e645076f",
+          "path": "root/my_queue-SetConsumerHandler-e645076f",
         },
       },
       "constructInfo": {

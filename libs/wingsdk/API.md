@@ -737,27 +737,27 @@ new cloud.Queue(props?: QueueProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.addConsumer">addConsumer</a></code> | Create a function to consume messages from this queue. |
+| <code><a href="#@winglang/sdk.cloud.Queue.setConsumer">setConsumer</a></code> | Create a function to consume messages from this queue. |
 
 ---
 
-##### `addConsumer` <a name="addConsumer" id="@winglang/sdk.cloud.Queue.addConsumer"></a>
+##### `setConsumer` <a name="setConsumer" id="@winglang/sdk.cloud.Queue.setConsumer"></a>
 
 ```wing
-addConsumer(handler: IQueueAddConsumerHandler, props?: QueueAddConsumerProps): Function
+setConsumer(handler: IQueueSetConsumerHandler, props?: QueueSetConsumerProps): Function
 ```
 
 Create a function to consume messages from this queue.
 
-###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.addConsumer.parameter.handler"></a>
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.handler"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
 
 ---
 
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.addConsumer.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.QueueAddConsumerProps">QueueAddConsumerProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.QueueSetConsumerProps">QueueSetConsumerProps</a>
 
 ---
 
@@ -2293,81 +2293,6 @@ Whether to cache the value.
 
 ---
 
-### QueueAddConsumerProps <a name="QueueAddConsumerProps" id="@winglang/sdk.cloud.QueueAddConsumerProps"></a>
-
-Options for Queue.addConsumer.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueAddConsumerProps.Initializer"></a>
-
-```wing
-bring cloud;
-
-let QueueAddConsumerProps = cloud.QueueAddConsumerProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
-| <code><a href="#@winglang/sdk.cloud.QueueAddConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
-
----
-
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.QueueAddConsumerProps.property.env"></a>
-
-```wing
-env: MutMap<str>;
-```
-
-- *Type:* MutMap&lt;str&gt;
-- *Default:* No environment variables.
-
-Environment variables to pass to the function.
-
----
-
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.QueueAddConsumerProps.property.memory"></a>
-
-```wing
-memory: num;
-```
-
-- *Type:* num
-- *Default:* 128
-
-The amount of memory to allocate to the function, in MB.
-
----
-
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueAddConsumerProps.property.timeout"></a>
-
-```wing
-timeout: Duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* 1m
-
-The maximum amount of time the function can run.
-
----
-
-##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@winglang/sdk.cloud.QueueAddConsumerProps.property.batchSize"></a>
-
-```wing
-batchSize: num;
-```
-
-- *Type:* num
-- *Default:* 1
-
-The maximum number of messages to send to subscribers at once.
-
----
-
 ### QueueProps <a name="QueueProps" id="@winglang/sdk.cloud.QueueProps"></a>
 
 Properties for `Queue`.
@@ -2426,6 +2351,81 @@ timeout: Duration;
 - *Default:* undefined
 
 How long a queue's consumers have to process a message.
+
+---
+
+### QueueSetConsumerProps <a name="QueueSetConsumerProps" id="@winglang/sdk.cloud.QueueSetConsumerProps"></a>
+
+Options for Queue.setConsumer.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueSetConsumerProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 128
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
+
+##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize"></a>
+
+```wing
+batchSize: num;
+```
+
+- *Type:* num
+- *Default:* 1
+
+The maximum number of messages to send to subscribers at once.
 
 ---
 
@@ -3084,6 +3084,53 @@ type: TraceType;
 - *Type:* <a href="#@winglang/sdk.cloud.TraceType">TraceType</a>
 
 The type of a trace.
+
+---
+
+### WaitUntilProps <a name="WaitUntilProps" id="@winglang/sdk.util.WaitUntilProps"></a>
+
+Properties for `util.waitUntil`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.WaitUntilProps.Initializer"></a>
+
+```wing
+bring util;
+
+let WaitUntilProps = util.WaitUntilProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Interval between predicate retries. |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The timeout for keep trying predicate. |
+
+---
+
+##### `interval`<sup>Optional</sup> <a name="interval" id="@winglang/sdk.util.WaitUntilProps.property.interval"></a>
+
+```wing
+interval: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* 0.1s
+
+Interval between predicate retries.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.util.WaitUntilProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* 1m
+
+The timeout for keep trying predicate.
 
 ---
 
@@ -3778,9 +3825,9 @@ The index of the element in the Json Array to return.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
-| <code><a href="#@winglang/sdk.std.Json.cloneMut">cloneMut</a></code> | Creates a mutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
@@ -3789,39 +3836,21 @@ The index of the element in the Json Array to return.
 
 ---
 
-##### `clone` <a name="clone" id="@winglang/sdk.std.Json.clone"></a>
+##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.Json.deepCopyMut"></a>
 
 ```wing
 bring std;
 
-std.Json.clone(json: Json)
+std.Json.deepCopyMut(json: Json)
 ```
 
-Creates a immutable deep clone of the Json.
+Creates a mutable deep copy of the Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.clone.parameter.json"></a>
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopyMut.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to clone.
-
----
-
-##### `cloneMut` <a name="cloneMut" id="@winglang/sdk.std.Json.cloneMut"></a>
-
-```wing
-bring std;
-
-std.Json.cloneMut(json: Json)
-```
-
-Creates a mutable deep clone of the Json.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.cloneMut.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to clone.
+to copy.
 
 ---
 
@@ -3848,6 +3877,32 @@ to delete key from.
 - *Type:* str
 
 the key to delete.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
+
+```wing
+bring std;
+
+std.Json.has(json: Json, key: str)
+```
+
+Checks if a Json object has a given key.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.has.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+The json object to inspect.
+
+---
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.has.parameter.key"></a>
+
+- *Type:* str
+
+The key to check.
 
 ---
 
@@ -4511,6 +4566,31 @@ The value of the element to set.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutJson.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
+
+---
+
+##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.MutJson.deepCopy"></a>
+
+```wing
+bring std;
+
+std.MutJson.deepCopy(json: MutJson)
+```
+
+Creates an immutable deep copy of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.deepCopy.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
+
+to copy.
+
+---
 
 
 
@@ -4862,6 +4942,125 @@ new std.T1()
 ---
 
 
+
+
+
+### Util <a name="Util" id="@winglang/sdk.util.Util"></a>
+
+Utility functions.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.util.Util.Initializer"></a>
+
+```wing
+bring util;
+
+new util.Util()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.util.Util.env">env</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
+| <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.waitUntil">waitUntil</a></code> | Run a predicate repeatedly, waiting until it returns true or until the timeout elapses. |
+
+---
+
+##### `env` <a name="env" id="@winglang/sdk.util.Util.env"></a>
+
+```wing
+bring util;
+
+util.Util.env(name: str)
+```
+
+Returns the value of an environment variable.
+
+Throws if not found or empty.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.env.parameter.name"></a>
+
+- *Type:* str
+
+The name of the environment variable.
+
+---
+
+##### `sleep` <a name="sleep" id="@winglang/sdk.util.Util.sleep"></a>
+
+```wing
+bring util;
+
+util.Util.sleep(delay: Duration)
+```
+
+**Inflight client:** [true](#true)
+
+Suspends execution for a given duration.
+
+###### `delay`<sup>Required</sup> <a name="delay" id="@winglang/sdk.util.Util.sleep.parameter.delay"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+
+The time to suspend execution.
+
+---
+
+##### `tryEnv` <a name="tryEnv" id="@winglang/sdk.util.Util.tryEnv"></a>
+
+```wing
+bring util;
+
+util.Util.tryEnv(name: str)
+```
+
+Returns the value of an environment variable.
+
+Returns `nil` if not found or empty.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.tryEnv.parameter.name"></a>
+
+- *Type:* str
+
+The name of the environment variable.
+
+---
+
+##### `waitUntil` <a name="waitUntil" id="@winglang/sdk.util.Util.waitUntil"></a>
+
+```wing
+bring util;
+
+util.Util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps)
+```
+
+**Inflight client:** [true](#true)
+
+Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
+
+###### `predicate`<sup>Required</sup> <a name="predicate" id="@winglang/sdk.util.Util.waitUntil.parameter.predicate"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
+
+The function that will be evaluated.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.util.Util.waitUntil.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.WaitUntilProps">WaitUntilProps</a>
+
+Timeout and interval values, default to one 1m timeout and 0.1sec interval.
+
+---
 
 
 
@@ -5296,7 +5495,7 @@ Inflight interface for `Counter`.
 ##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
 
 ```wing
-dec(amount?: num): num
+dec(amount?: num, key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5311,10 +5510,18 @@ amount to decrement (default is 1).
 
 ---
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be decremented.
+
+---
+
 ##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
 
 ```wing
-inc(amount?: num): num
+inc(amount?: num, key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5329,10 +5536,18 @@ amount to increment (default is 1).
 
 ---
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.inc.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be incremented.
+
+---
+
 ##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
 
 ```wing
-peek(): num
+peek(key?: str): num
 ```
 
 **Inflight client:** [true](#true)
@@ -5342,10 +5557,18 @@ Get the current value of the counter.
 Using this API may introduce race conditions since the value can change between
 the time it is read and the time it is used in your code.
 
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.peek.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be retrieved.
+
+---
+
 ##### `set` <a name="set" id="@winglang/sdk.cloud.ICounterClient.set"></a>
 
 ```wing
-set(value: num): void
+set(value: num, key?: str): void
 ```
 
 **Inflight client:** [true](#true)
@@ -5357,6 +5580,14 @@ Set a counter to a given value.
 - *Type:* num
 
 new value.
+
+---
+
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.set.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be set.
 
 ---
 
@@ -5509,27 +5740,27 @@ Information on how to display a resource in the UI.
 
 ---
 
-### IQueueAddConsumerHandler <a name="IQueueAddConsumerHandler" id="@winglang/sdk.cloud.IQueueAddConsumerHandler"></a>
+### IPredicateHandler <a name="IPredicateHandler" id="@winglang/sdk.util.IPredicateHandler"></a>
 
 - *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>
+- *Implemented By:* <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
 
-**Inflight client:** [@winglang/sdk.cloud.IQueueAddConsumerHandlerClient](#@winglang/sdk.cloud.IQueueAddConsumerHandlerClient)
+**Inflight client:** [@winglang/sdk.util.IPredicateHandlerClient](#@winglang/sdk.util.IPredicateHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Queue.addConsumer`.
+Represents a predicate with an inflight "handle" method that can be passed to `util.busyWait`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.util.IPredicateHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.util.IPredicateHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IQueueAddConsumerHandler.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.util.IPredicateHandler.property.node"></a>
 
 ```wing
 node: Node;
@@ -5541,7 +5772,7 @@ The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IQueueAddConsumerHandler.property.display"></a>
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.util.IPredicateHandler.property.display"></a>
 
 ```wing
 display: Display;
@@ -5553,35 +5784,29 @@ Information on how to display a resource in the UI.
 
 ---
 
-### IQueueAddConsumerHandlerClient <a name="IQueueAddConsumerHandlerClient" id="@winglang/sdk.cloud.IQueueAddConsumerHandlerClient"></a>
+### IPredicateHandlerClient <a name="IPredicateHandlerClient" id="@winglang/sdk.util.IPredicateHandlerClient"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandlerClient">IQueueAddConsumerHandlerClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.util.IPredicateHandlerClient">IPredicateHandlerClient</a>
 
-Inflight client for `IQueueAddConsumerHandler`.
+Inflight client for `IPredicateHandler`.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueAddConsumerHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the queue. |
+| <code><a href="#@winglang/sdk.util.IPredicateHandlerClient.handle">handle</a></code> | The Predicate function that is called. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueAddConsumerHandlerClient.handle"></a>
+##### `handle` <a name="handle" id="@winglang/sdk.util.IPredicateHandlerClient.handle"></a>
 
 ```wing
-handle(message: str): void
+handle(): bool
 ```
 
 **Inflight client:** [true](#true)
 
-Function that will be called when a message is received from the queue.
-
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueAddConsumerHandlerClient.handle.parameter.message"></a>
-
-- *Type:* str
-
----
+The Predicate function that is called.
 
 
 ### IQueueClient <a name="IQueueClient" id="@winglang/sdk.cloud.IQueueClient"></a>
@@ -5650,11 +5875,86 @@ Payload to send to the queue.
 ---
 
 
+### IQueueSetConsumerHandler <a name="IQueueSetConsumerHandler" id="@winglang/sdk.cloud.IQueueSetConsumerHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
+
+**Inflight client:** [@winglang/sdk.cloud.IQueueSetConsumerHandlerClient](#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient)
+
+Represents a resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IQueueSetConsumerHandler.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+### IQueueSetConsumerHandlerClient <a name="IQueueSetConsumerHandlerClient" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient">IQueueSetConsumerHandlerClient</a>
+
+Inflight client for `IQueueSetConsumerHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the queue. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle"></a>
+
+```wing
+handle(message: str): void
+```
+
+**Inflight client:** [true](#true)
+
+Function that will be called when a message is received from the queue.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle.parameter.message"></a>
+
+- *Type:* str
+
+---
+
+
 ### IResource <a name="IResource" id="@winglang/sdk.std.IResource"></a>
 
 - *Extends:* <a href="#@winglang/sdk.core.IInspectable">IInspectable</a>, constructs.IConstruct
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Service">Service</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.std.Test">Test</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>, <a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Service">Service</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.std.Test">Test</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>, <a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a>, <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
 
 Abstract interface for `Resource`.
 

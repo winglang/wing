@@ -5,10 +5,12 @@ use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
-use crate::lsp::notifications::send_diagnostics;
+use crate::closure_transform::ClosureTransformer;
+use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
+use crate::fold::Fold;
 use crate::parser::Parser;
 use crate::type_check;
-use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
+use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
 pub struct FileData {
@@ -17,7 +19,7 @@ pub struct FileData {
 	/// tree-sitter tree
 	pub tree: Tree,
 	/// The diagnostics returned by wingc
-	pub diagnostics: Diagnostics,
+	pub diagnostics: Vec<Diagnostic>,
 	/// The top scope of the file
 	pub scope: Box<Scope>,
 	/// The universal type collection for the scope. This is saved to ensure references live long enough.
@@ -49,7 +51,6 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 			let path = uri_path.to_str().unwrap();
 
 			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut jsii_types.borrow_mut());
-			send_diagnostics(&uri, &result.diagnostics);
 			files.borrow_mut().insert(uri, result);
 		});
 	});
@@ -76,7 +77,6 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 				params.content_changes[0].text.as_bytes(),
 				&mut jsii_types.borrow_mut(),
 			);
-			send_diagnostics(&uri, &result.diagnostics);
 			files.borrow_mut().insert(uri, result);
 		});
 	})
@@ -84,6 +84,9 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
 fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) -> FileData {
+	// Reset diagnostics before new compilation (`partial_compile` can be called multiple)
+	reset_diagnostics();
+
 	let mut types = type_check::Types::new();
 
 	let language = tree_sitter_wing::language();
@@ -99,20 +102,24 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 
 	let wing_parser = Parser::new(text, source_file.to_string());
 
+	let scope = wing_parser.wingit(&tree.root_node());
+
+	// -- DESUGARING PHASE --
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = ClosureTransformer::new();
 	// Note: The scope is intentionally boxed here to force heap allocation
-	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
-	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
+	// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
+	let mut scope = Box::new(inflight_transformer.fold_scope(scope));
 
-	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
+	// -- TYPECHECKING PHASE --
 
-	let mut diagnostics = Diagnostics::new();
-	diagnostics.extend(wing_parser.diagnostics.into_inner());
-	diagnostics.extend(type_diag);
+	type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
 		tree,
-		diagnostics,
+		diagnostics: get_diagnostics(),
 		scope,
 		types,
 	};
