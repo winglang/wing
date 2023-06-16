@@ -15,6 +15,7 @@
       }
     },
     "test": {
+      "dependsOn": ["^build", "build"],
       "options": {
         "commands": ["npm run post-compile", "npm run test"],
         "cwd": "libs/wingsdk",
