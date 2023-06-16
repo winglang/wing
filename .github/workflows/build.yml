@@ -265,7 +265,7 @@ jobs:
         working-directory: tools/hangar
         run: |
           npm run test:generate
-          npm run test --shard=${{ matrix.shard }}
+          npm run test -- --shard=${{ matrix.shard }}
 
   quality-gate:
     name: Quality Gate
