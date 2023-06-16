@@ -4,6 +4,9 @@ use crate::{
 	visit::{self, Visit},
 };
 
+/// This visitor validates:
+/// 1. All expressions in the AST were resolved to some type.
+/// 2. If any were resolved to `Unresolved` then we should have generated some error diagnostics.
 pub struct TypeCheckAssert<'a> {
 	types: &'a Types,
 	tc_found_errors: bool,
@@ -23,7 +26,7 @@ impl<'a> Visit<'_> for TypeCheckAssert<'a> {
 	fn visit_expr(&mut self, expr: &Expr) {
 		if let Some(t) = self.types.get_expr_type(expr) {
 			assert!(
-				self.tc_found_errors || !t.is_error(),
+				self.tc_found_errors || !t.is_unresolved(),
 				"Expr's type was not resolved: {:?}",
 				expr
 			);

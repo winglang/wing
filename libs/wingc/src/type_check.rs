@@ -160,7 +160,7 @@ pub enum Type {
 	Json,
 	MutJson,
 	Nil,
-	Error,
+	Unresolved,
 	Optional(TypeRef),
 	Array(TypeRef),
 	MutArray(TypeRef),
@@ -689,7 +689,7 @@ impl Display for Type {
 			Type::Json => write!(f, "Json"),
 			Type::MutJson => write!(f, "MutJson"),
 			Type::Nil => write!(f, "nil"),
-			Type::Error => write!(f, "error"),
+			Type::Unresolved => write!(f, "error"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
@@ -806,8 +806,8 @@ impl TypeRef {
 		matches!(**self, Type::Anything)
 	}
 
-	pub fn is_error(&self) -> bool {
-		matches!(**self, Type::Error)
+	pub fn is_unresolved(&self) -> bool {
+		matches!(**self, Type::Unresolved)
 	}
 
 	pub fn is_preflight_class(&self) -> bool {
@@ -892,7 +892,7 @@ impl TypeRef {
 			Type::Struct(_) => true,
 			Type::Optional(v) => v.is_capturable(),
 			Type::Anything => false,
-			Type::Error => false,
+			Type::Unresolved => false,
 			Type::Void => false,
 			Type::MutJson => false,
 			Type::MutArray(_) => false,
@@ -1010,7 +1010,7 @@ impl Types {
 		let mut_json_idx = types.len() - 1;
 		types.push(Box::new(Type::Nil));
 		let nil_idx = types.len() - 1;
-		types.push(Box::new(Type::Error));
+		types.push(Box::new(Type::Unresolved));
 		let err_idx = types.len() - 1;
 
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
@@ -1278,7 +1278,7 @@ impl<'a> TypeChecker<'a> {
 							self.types.string()
 						} else {
 							// If any of the types are unresolved (error) then don't report this assuming the error has already been reported
-							if !ltype.is_error() && !rtype.is_error() {
+							if !ltype.is_unresolved() && !rtype.is_unresolved() {
 								self.spanned_error(
 									exp,
 									format!(
@@ -1384,7 +1384,7 @@ impl<'a> TypeChecker<'a> {
 					// If type is anything we have to assume it's ok to initialize it
 					Type::Anything => return self.types.anything(),
 					// If type is error, we assume the error was already reported and evauate the new expression to error as well
-					Type::Error => return self.types.error(),
+					Type::Unresolved => return self.types.error(),
 					Type::Struct(_) => {
 						self.spanned_error(
 							class,
@@ -1519,7 +1519,7 @@ impl<'a> TypeChecker<'a> {
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
 				// If the callee's signature type is unknown, just evaluate the entire call expression as an error
-				if func_type.is_error() {
+				if func_type.is_unresolved() {
 					return self.types.error();
 				}
 
@@ -1547,7 +1547,10 @@ impl<'a> TypeChecker<'a> {
 						return self.types.error();
 					}
 				} else {
-					self.spanned_error(callee, format!("Expected a function or method, found \"{}\"", func_type));
+					self.spanned_error(
+						callee,
+						format!("Expected a function or method, found \"{}\"", func_type),
+					);
 					return self.types.error();
 				};
 
@@ -1933,13 +1936,13 @@ impl<'a> TypeChecker<'a> {
 
 		// If the actual type is an error (a type we failed to resolve) then we silently ignore it assuming
 		// the error was already reported.
-		if actual_type.is_error() {
+		if actual_type.is_unresolved() {
 			return actual_type;
 		}
 
 		// If any of the expected types are errors (types we failed to resolve) then we silently ignore it
 		// assuming the error was already reported.
-		if expected_types.iter().any(|t| t.is_error()) {
+		if expected_types.iter().any(|t| t.is_unresolved()) {
 			return actual_type;
 		}
 
@@ -2282,7 +2285,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Assignment { variable, value } => {
 				let exp_type = self.type_check_exp(value, env);
 				let var_info = self.resolve_reference(variable, env);
-				if !var_info.type_.is_error() && !var_info.reassignable {
+				if !var_info.type_.is_unresolved() && !var_info.reassignable {
 					self.spanned_error(stmt, format!("Variable {} is not reassignable ", variable));
 				}
 				self.validate_type(exp_type, var_info.type_, value);
@@ -2579,7 +2582,7 @@ impl<'a> TypeChecker<'a> {
 							Some(t)
 						} else {
 							// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
-							if !t.is_error() {
+							if !t.is_unresolved() {
 								self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
 							}
 							None
@@ -3368,7 +3371,7 @@ impl<'a> TypeChecker<'a> {
 
 				let instance_type = self.type_check_exp(object, env);
 				// If resolving the object's type failed, we can't resolve the property either
-				if instance_type.is_error() {
+				if instance_type.is_unresolved() {
 					return self.make_error_variable_info(false);
 				}
 

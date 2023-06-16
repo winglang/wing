@@ -89,7 +89,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					let nearest_expr_type = types.get_expr_type(nearest_expr).unwrap();
 
 					// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
-					if !nearest_expr_type.is_anything() && !nearest_expr_type.is_error() {
+					if !nearest_expr_type.is_anything() && !nearest_expr_type.is_unresolved() {
 						return get_completions_from_type(
 							&nearest_expr_type,
 							types,
@@ -238,7 +238,7 @@ fn get_completions_from_type(
 				.collect()
 		}
 		Type::Optional(t) => get_completions_from_type(t, types, current_phase, is_instance),
-		Type::Void | Type::Function(_) | Type::Anything | Type::Error => vec![],
+		Type::Void | Type::Function(_) | Type::Anything | Type::Unresolved => vec![],
 		Type::Number
 		| Type::String
 		| Type::Duration
@@ -426,7 +426,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				| Type::Json
 				| Type::MutJson
 				| Type::Nil
-				| Type::Error
+				| Type::Unresolved
 				| Type::Optional(_) => CompletionItemKind::CONSTANT,
 				Type::Function(_) => CompletionItemKind::FUNCTION,
 				Type::Struct(_) => CompletionItemKind::STRUCT,

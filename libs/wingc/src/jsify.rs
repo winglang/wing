@@ -1776,7 +1776,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					.as_variable()
 					.unwrap(),
 			)),
-			Type::Error => panic!("Encountered error type during jsification"),
+			Type::Unresolved => panic!("Encountered error type during jsification"),
 		}
 	}
 }

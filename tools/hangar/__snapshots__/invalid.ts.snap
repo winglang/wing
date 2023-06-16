@@ -1429,11 +1429,11 @@ Duration <DURATION>
 `;
 
 exports[`resource_access_field_as_method.w 1`] = `
-"error: Expected a function or method got str
+"error: Expected a function or method, found \\"str\\"
   --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:1
   |
 9 | x.name();
-  | ^^^^^^ Expected a function or method got str
+  | ^^^^^^ Expected a function or method, found \\"str\\"
 
 
  

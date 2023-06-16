@@ -312,7 +312,7 @@ pub fn compile(
 	// Type check everything and build typed symbol environment
 	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
 
-	// Validate that every Expr in the final tree has been type checked
+	// Validate the type checker didn't miss anything see `TypeCheckAssert` for details
 	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 	tc_assert.check(&scope);
 
