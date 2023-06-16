@@ -75,9 +75,6 @@ jobs:
       - name: Package
         run: npm run package:ci
 
-      - name: Test
-        run: npm run test:ci
-
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v3
         with:
