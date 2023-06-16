@@ -1547,7 +1547,7 @@ impl<'a> TypeChecker<'a> {
 						return self.types.error();
 					}
 				} else {
-					self.spanned_error(callee, format!("Expected a function or method got {}", func_type));
+					self.spanned_error(callee, format!("Expected a function or method, found \"{}\"", func_type));
 					return self.types.error();
 				};
 
