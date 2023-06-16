@@ -36,8 +36,8 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   public setConsumer(
-    inflight: cloud.IQueueAddConsumerHandler,
-    props: cloud.QueueAddConsumerProps = {}
+    inflight: cloud.IQueueSetConsumerHandler,
+    props: cloud.QueueSetConsumerProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
 
@@ -48,7 +48,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      * wrapper code. In Wing psuedocode, this looks like:
      *
      * resource Handler impl cloud.IFunctionHandler {
-     *   init(handler: cloud.IQueueAddConsumerHandler) {
+     *   init(handler: cloud.IQueueSetConsumerHandler) {
      *     this.handler = handler;
      *   }
      *   inflight handle(event: string) {
@@ -65,15 +65,15 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      */
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-AddConsumerHandler-${hash}`,
+      `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
-      join(__dirname, "queue.addconsumer.inflight.js"),
-      "QueueAddConsumerHandlerClient"
+      join(__dirname, "queue.setconsumer.inflight.js"),
+      "QueueSetConsumerHandlerClient"
     );
 
     const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-AddConsumer-${hash}`,
+      `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
       props
     );
