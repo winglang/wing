@@ -1,11 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { relative } from "node:path";
 
-import {
-  CompileError,
-  InternalError,
-  PreflightError,
-} from "@winglang/compiler";
+import { CompileError, PreflightError } from "@winglang/compiler";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 
 function annotatePreflightError(error: Error): Error {
@@ -39,17 +35,6 @@ function offsetFromLineAndColumn(source: string, line: number, column: number) {
 
 export const formatWingError = async (error: unknown) => {
   try {
-    if (error instanceof InternalError) {
-      const message: string[] = [];
-      message.push(
-        `${error.causedBy}`,
-        "",
-        "",
-        "Internal error:" +
-          " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.",
-      );
-      return message.join("\n");
-    }
     if (error instanceof CompileError) {
       console.log(error.diagnostics);
       // This is a bug in the user's code. Print the compiler diagnostics.
@@ -150,7 +135,15 @@ export const formatWingError = async (error: unknown) => {
       return output.join("\n");
     }
     if (error instanceof Error) {
-      return error.message;
+      const message: string[] = [];
+      message.push(
+        `${error.message}`,
+        "",
+        "",
+        "Internal error:" +
+          " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.",
+      );
+      return message.join("\n");
     }
     return `Unknown error: ${error}`;
   } catch (error) {

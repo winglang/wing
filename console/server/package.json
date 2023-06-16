@@ -1,9 +1,11 @@
 {
   "name": "@wingconsole/server",
-  "private": true,
+  "description": "The Wing Console server.",
+  "repository": "https://github.com/winglang/console",
+  "license": "SEE LICENSE IN LICENSE.md",
   "version": "0.0.0",
-  "exports": "./dist/index.js",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -15,8 +17,8 @@
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
   },
   "dependencies": {
-    "@winglang/compiler": "^0.21.1",
-    "@winglang/sdk": "^0.21.7",
+    "@winglang/compiler": "^0.21.10",
+    "@winglang/sdk": "^0.21.10",
     "codespan-wasm": "^0.4.0",
     "debug": "^4.3.4",
     "ms": "^2.1.3"

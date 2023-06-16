@@ -1,29 +1,38 @@
 import {
   createConsoleServer,
   CreateConsoleServerOptions,
+  LogInterface,
+  Updater,
+  Config,
+  HostUtils,
 } from "@wingconsole/server";
 import express from "express";
 
+export type {
+  LogInterface,
+  Updater,
+  Config,
+  HostUtils,
+  UpdaterStatus,
+} from "@wingconsole/server";
+
 export interface CreateConsoleAppOptions {
   wingfile: string;
-  log?: CreateConsoleServerOptions["log"];
-  updater?: CreateConsoleServerOptions["updater"];
-  config?: CreateConsoleServerOptions["config"];
+  log?: LogInterface;
+  updater?: Updater;
+  config?: Config;
   requestedPort?: number;
-  hostUtils?: CreateConsoleServerOptions["hostUtils"];
+  hostUtils?: HostUtils;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
 }
+
+const staticDir = `${__dirname}/vite`;
 
 export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
   const server = await createConsoleServer({
     ...options,
     onExpressCreated(app) {
-      // const files =
-      //   process.env.NODE_ENV === "production"
-      //     ? `${__dirname}/vite`
-      //     : `${__dirname}/../dist/vite`;
-      // app.use(express.static(files));
-      app.use(express.static(`${__dirname}/vite`));
+      app.use(express.static(staticDir));
       options.onExpressCreated?.(app);
     },
     log: options.log ?? {

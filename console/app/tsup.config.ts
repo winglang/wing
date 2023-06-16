@@ -5,10 +5,9 @@ import * as vite from "vite";
 export default defineConfig({
   entry: ["src/index.ts"],
   external: ["fsevents"],
-  format: [
-    "cjs",
-    // "esm"
-  ],
+  format: ["cjs"],
+  dts: true,
+  clean: true,
   async onSuccess() {
     console.log("Build succeeded");
 

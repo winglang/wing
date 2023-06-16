@@ -1,19 +1,20 @@
-import { inferRouterInputs } from "@trpc/server";
-import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
+import type { inferRouterInputs } from "@trpc/server";
+import type { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
 import Emittery from "emittery";
 import type { Application as ExpressApplication } from "express";
 
-import { Config } from "./config.js";
-import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
+import type { Config } from "./config.js";
+import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
-import { HostUtils } from "./hostUtils.js";
-import { Router } from "./router/index.js";
-import { State } from "./types.js";
-import { Updater } from "./updater.js";
+import type { HostUtils } from "./hostUtils.js";
+import type { Router } from "./router/index.js";
+import type { State } from "./types.js";
+import type { Updater } from "./updater.js";
 import { createCompiler } from "./utils/compiler.js";
-import { LogInterface } from "./utils/LogInterface.js";
+import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 
+export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
 export type { ExplorerItem } from "./router/app.js";
 export type { State } from "./types.js";
@@ -21,6 +22,7 @@ export type { WingSimulatorSchema, BaseResourceSchema } from "./wingsdk.js";
 export type { Updater, UpdaterStatus } from "./updater.js";
 export type { Config } from "./config.js";
 export type { Router } from "./router/index.js";
+export type { HostUtils } from "./hostUtils.js";
 
 type RouteNames = keyof inferRouterInputs<Router> | undefined;
 

@@ -1,8 +1,8 @@
 # Wing Console
 
-The Wing Console is graphical user interface that can be used to interact with [Wing](https://www.winglang.io/) applications on the local machine.
+> ⚠️ This package is meant to be used internally by the Wing Console.
 
-This package provides a way to start a server that compiles and runs Wing applications, and a graphical user interface that can be used to interact with them.
+Creates a server that watches and compiles a wingfile, and provides a web interface to interact with the application.
 
 ## Installation
 
@@ -15,9 +15,9 @@ npm i @wingconsole/app
 ```ts
 import { createConsoleApp } from "@wingconsole/app";
 
-const { port } = await createConsoleApp({
+const server = await createConsoleApp({
   wingfile: "path/to/wingfile.w",
 });
 
-console.log(`Wing Console is running on http://localhost:${port}.`);
+console.log(`Server is running on http://localhost:${server.port}.`);
 ```
