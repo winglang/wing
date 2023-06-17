@@ -84,7 +84,7 @@ const project = new cdk.JsiiProject({
     "patch-package",
     "vitest",
     "@types/uuid",
-    "@vitest/coverage-c8",
+    "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
   ],
   jest: false,
