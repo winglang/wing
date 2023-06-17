@@ -1662,21 +1662,21 @@ f(1, 2, field1: 3, field2: 4);
 ### 3.7 Arrays
 
 `Array`s are dynamically sized in Wing and are defined with the `[]` syntax.  
-Individual array items are also accessed with the `[]` syntax.  
+Individual array items are accessed using the `.at(index: num)` method.  
 Arrays are similar to dynamically sized arrays or vectors in other languages.
 
 > ```TS
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
 > let arr3 = MutArray<str>["a1", "b2", "c3"];
-> let l = arr1.len + arr2.len + arr3.len + arr1[0];
+> let l = arr1.length + arr2.length + arr3.length + arr1.at(0);
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
-> const arr1: number[] = Object.freeze([1, 2, 3]);
-> const arr2: string[] = Object.freeze(["a", "b", "c"]);
+> const arr1: readonly number[] = Object.freeze([1, 2, 3]);
+> const arr2: readonly string[] = Object.freeze(["a", "b", "c"]);
 > const arr3: string[] = ["a1", "b2", "c3"];
 > const l = arr1.length + arr2.length + arr3.length + arr1[0];
 > ```
@@ -1691,17 +1691,16 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 
 Enumeration type (`enum`) is a type that groups a list of named constant members.
 Enumeration is defined by writing **enum**, followed by enumeration name and a
-list of comma-separated constants in a {}. Last comma is optional in single line
-definitions but required in multi line definitions.  
+list of comma-separated constants in a {}. 
 Naming convention for enums is to use "TitleCase" for name and ALL_CAPS for members.
 
 > ```TS
-> enum SomeEnum { ONE, TWO, THREE };
+> enum SomeEnum { ONE, TWO, THREE }
 > enum MyFoo {
 >   A,
 >   B,
 >   C,
-> };
+> }
 > let x = MyFoo.B;
 > let y = x; // type is MyFoo
 > ```
@@ -1721,106 +1720,9 @@ Naming convention for enums is to use "TitleCase" for name and ALL_CAPS for memb
   
 </details>
 
-`nameof` operator is used to get the name of a constant member at compile time.
-For example `nameof(MyEnum.MEMBER)` resolves to `"MEMBER"` at compile time.
-
-This allows painless conditionals when enums are serialized and deserialized
-over the wire without littering the source with strings everywhere. Compare:
-
-```TS
-// Wing Code:
-enum SomeEnum { ONE, TWO, THREE };
-let someVal: str = "ONE";
-if someVal == nameof(SomeEnum.ONE) {
-  // whatever1
-} elif someVal == nameof(SomeEnum.TWO) {
-  // whatever2
-}
-```
-
-Which is functionally equivalent to:
-
-```TS
-// Wing Code:
-enum SomeEnum { ONE, TWO, THREE };
-let someVal: str = getEnumSerializedFromNetwork();
-if someVal == "ONE" {
-  // whatever1
-} elif someVal == "TWO" {
-  // whatever2
-}
-```
-
 [`▲ top`][top]
 
 ---
-
-### 3.9 Computed Properties
-
-You may use the following syntax to define computed properties.  
-Computed properties are syntactic sugar for getters and setters which themselves
-are syntactic sugar for methods, therefore omitting either one is acceptable.  
-
-"Read block" must always return a value of the same type as the property.
-
-Keyword `new` can be used inside the write block to access the incoming r-value
-of the assignment (write) operation. `new` is always the same type as the type
-of the property itself.  
-
-Both preflight and inflight computed properties are allowed.  
-Keyword `var` behind computed properties is not allowed.
-`inflight` computed properties are also allowed.
-
-```TS
-// Wing Code:
-struct Vec2 {
-  x: num;
-  y: num;
-}
-
-class Rect {
-  var size: Vec2;
-  var origin: Vec2;
-
-  center: Vec2 {
-    read {
-      let centerX = origin.x + (size.width / 2);
-      let centerY = origin.y + (size.height / 2);
-      return Vec2(x: centerX, y: centerY);
-    }
-    write {
-      origin.x = new.x - (size.width / 2);
-      origin.y = new.y - (size.height / 2);
-    }
-  };
-
-  inflight prop: num { /* ... */ }
-}
-```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-```TS
-interface Vec2 { x: number; y: number; }
-class Rect {
-  size: Vec2;
-  origin: Vec2;
-  // computed property with a getter and setter block
-  get center(): Vec2 {
-    let centerX = origin.x + (size.width / 2);
-    let centerY = origin.y + (size.height / 2);
-    return Vec2(x: centerX, y: centerY);
-  }
-  set center(_new: Vec2) {
-    origin.x = _new.x - (size.width / 2);
-    origin.y = _new.y - (size.height / 2);
-  }
-}
-```
-  
-</details>
-
-[`▲ top`][top]
 
 ### 3.10 Unit tests
 
@@ -1854,17 +1756,14 @@ code. Comments before the first bring expression are valid.
 
 ### 4.1 Imports
 
-To import a JSII / Wing package under a named import, you may use the following
+To import a JSII package under a named import, you may use the following
 syntax:
 
 ```TS
-bring std; // from std bring * as std;
+bring util; // from util bring * as util;
 bring cloud; // from cloud bring * as cloud;
-bring "path/to/what.js" as what; // from "path/to/what.js" bring * as what;
+bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 ```
-
-Currently, "bringing" other Wing files is treated as a preprocessor step and it
-acts like C `#include`s. Symbols collision is fatal in this style of imports.
 
 [`▲ top`][top]
 
@@ -1872,16 +1771,7 @@ acts like C `#include`s. Symbols collision is fatal in this style of imports.
 
 ### 4.2 Exports
 
-In preflight, anything with `public` at block scope level is importable.
-This includes functions, classes, structs and interfaces.
-In inflight, all of the above excluding preflight classes are importable.
-Variables are not exportable.
-
-Preflight classes cannot be instantiated in inflight functions. There is no synthesizer inside
-and no deployment system in the inflight body to provision.
-
-"Bringing" other Wing files currently ignores exports, but bringing JSII modules
-respect the visibility of JSII module exports.
+Wing currently does not not support exporting symbols from a module.
 
 [`▲ top`][top]
 
