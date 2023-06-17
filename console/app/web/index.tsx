@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.querySelector("#root")!).render(
       trpcUrl="/trpc"
       wsUrl={`ws://${location.host}`}
       layout={Number(query.get("layout"))}
-      themeMode={query.get("theme") as any}
+      theme={query.get("theme") as any}
     />
   </React.StrictMode>,
 );
