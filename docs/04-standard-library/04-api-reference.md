@@ -4530,7 +4530,7 @@ The index of the element in the MutJson Array to return.
 ##### `set` <a name="set" id="@winglang/sdk.std.MutJson.set"></a>
 
 ```wing
-set(key: str, value: any): void
+set(key: str, value: MutJson): void
 ```
 
 Adds or updates an element in MutJson with a specific key and value.
@@ -4545,7 +4545,7 @@ The key of the element to add.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutJson.set.parameter.value"></a>
 
-- *Type:* any
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
 
 The value of the element to add.
 
@@ -4554,7 +4554,7 @@ The value of the element to add.
 ##### `setAt` <a name="setAt" id="@winglang/sdk.std.MutJson.setAt"></a>
 
 ```wing
-setAt(index: num, value: any): void
+setAt(index: num, value: MutJson): void
 ```
 
 Set element in MutJson Array with a specific key and value.
@@ -4567,7 +4567,7 @@ Set element in MutJson Array with a specific key and value.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutJson.setAt.parameter.value"></a>
 
-- *Type:* any
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
 
 The value of the element to set.
 
