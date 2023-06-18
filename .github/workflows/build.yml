@@ -26,11 +26,9 @@ env:
 jobs:
   build:
     name: "Build"
-    timeout-minutes: 45
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
-      # Testing runs out of memory without this
-      NODE_OPTIONS: "--max-old-space-size=4096"
       CARGO_TERM_COLOR: always
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
@@ -76,9 +74,6 @@ jobs:
 
       - name: Package
         run: npm run package:ci
-
-      - name: Test
-        run: npm run test:ci
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v3
@@ -130,6 +125,46 @@ jobs:
           working-directory: apps/wing-playground/dist
           github-comment: false
           vercel-args: "--prod "
+
+  unit-tests:
+    name: "Unit Tests"
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      # Testing runs out of memory without this
+      NODE_OPTIONS: "--max-old-space-size=4096"
+      CARGO_TERM_COLOR: always
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup NPM
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          targets: |
+            x86_64-unknown-linux-gnu
+            wasm32-wasi
+          components: rustfmt,clippy,rust-std
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Test
+        run: npm run test:ci
 
   benchmarks:
     name: E2E Benchmarks
@@ -184,7 +219,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        runner: [ubuntu, macos, windows]
+        runner: [windows, macos, ubuntu]
         # Note: Node 19.7.0 is pinned due to regressions in later versions
         # See https://github.com/nodejs/node/issues/47096
         node: ["18", "19.7.0"]
@@ -230,7 +265,7 @@ jobs:
         working-directory: tools/hangar
         run: |
           npm run test:generate
-          npm run test --shard=${{ matrix.shard }}
+          npm run test -- --shard=${{ matrix.shard }}
 
   quality-gate:
     name: Quality Gate
@@ -239,6 +274,7 @@ jobs:
       - build
       - e2e
       - benchmarks
+      - unit-tests
     steps:
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
