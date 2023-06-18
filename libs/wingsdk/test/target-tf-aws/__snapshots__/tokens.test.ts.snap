@@ -13,9 +13,9 @@ return class Handler {
   }
 };
 })())({
-str: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_7\\"]),
-num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591386E_298\\"]),
-list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_9\\"])
+str: JSON.parse(process.env[\\"WING_TOKEN_AWS_API_GATEWAY_STAGE_ROOT_API_API_STAGE_3E2E462A_INVOKE_URL\\"]),
+num: JSON.parse(process.env[\\"WING_TOKEN_VAR_ROOT_NUMBER_F3C25933\\"]),
+list: JSON.parse(process.env[\\"WING_TOKEN_VAR_ROOT_LIST_6887BE0A\\"])
 })"
 `;
 
@@ -78,9 +78,9 @@ exports[`captures tokens 2`] = `
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Api-OnRequest-c5395e41-c8f26cae\\",
-            \\"WING_TOKEN_8_109562212591386E_298\\": \\"\${jsonencode(var.root_Number_F3C25933)}\\",
-            \\"WING_TOKEN_TFTOKEN_TOKEN_7\\": \\"\${jsonencode(aws_api_gateway_stage.root_Api_api_stage_3E2E462A.invoke_url)}\\",
-            \\"WING_TOKEN_TFTOKEN_TOKEN_9\\": \\"\${jsonencode(var.root_List_6887BE0A)}\\"
+            \\"WING_TOKEN_AWS_API_GATEWAY_STAGE_ROOT_API_API_STAGE_3E2E462A_INVOKE_URL\\": \\"\${jsonencode(aws_api_gateway_stage.root_Api_api_stage_3E2E462A.invoke_url)}\\",
+            \\"WING_TOKEN_VAR_ROOT_LIST_6887BE0A\\": \\"\${jsonencode(var.root_List_6887BE0A)}\\",
+            \\"WING_TOKEN_VAR_ROOT_NUMBER_F3C25933\\": \\"\${jsonencode(var.root_Number_F3C25933)}\\"
           }
         },
         \\"function_name\\": \\"Api-OnRequest-c5395e41-c8f26cae\\",

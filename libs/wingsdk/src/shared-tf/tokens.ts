@@ -1,8 +1,14 @@
-import { DefaultTokenResolver, Fn, StringConcat, Token, Tokenization } from "cdktf";
+import {
+  DefaultTokenResolver,
+  Fn,
+  StringConcat,
+  Token,
+  Tokenization,
+} from "cdktf";
+import { IConstruct } from "constructs";
 import { Function } from "../cloud";
 import { Tokens } from "../core/tokens";
 import { IInflightHost } from "../std";
-import { IConstruct } from "constructs";
 
 /**
  * Represents values that can only be resolved after the app is synthesized.
@@ -46,8 +52,10 @@ export class CdkTfTokens extends Tokens {
   }
 
   private envNameForToken(value: any) {
-    const resolved = Tokenization.resolve(value, { scope: this.stack, resolver: new DefaultTokenResolver(new StringConcat()) });
+    const resolved = Tokenization.resolve(value, {
+      scope: this.stack,
+      resolver: new DefaultTokenResolver(new StringConcat()),
+    });
     return this.envName(resolved);
   }
 }
-
