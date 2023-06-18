@@ -2,14 +2,13 @@
 
 ## stdout.log
 ```log
-Error setting up Redis resource simulation (Error: spawn docker ENOENT)
-      - Make sure you have docker installed and running
+pass ─ redis.wsim » root/env0/test:test
  
 
 
 
 
-Tests 1 failed (1) 
+Tests 1 passed (1) 
 Duration <DURATION>
 
 ```
