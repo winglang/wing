@@ -10,5 +10,6 @@ test "sleep 100 mili seconds" {
   util.sleep(oneHundredMiliseconds);
   let end = JSHelper.getTime();
   let delta = end - start;
+  log("slept for ${delta} ms");
   assert(delta > 80 && delta < 220);
 }
