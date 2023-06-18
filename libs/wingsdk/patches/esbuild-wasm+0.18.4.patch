@@ -1,0 +1,22 @@
+diff --git a/node_modules/esbuild-wasm/lib/main.js b/node_modules/esbuild-wasm/lib/main.js
+index 2ac392f..7b4483f 100644
+--- a/node_modules/esbuild-wasm/lib/main.js
++++ b/node_modules/esbuild-wasm/lib/main.js
+@@ -1926,7 +1926,7 @@ var ensureServiceIsRunning = () => {
+   let [command, args] = esbuildCommandAndArgs();
+   let child = child_process.spawn(command, args.concat(`--service=${"0.18.4"}`, "--ping"), {
+     windowsHide: true,
+-    stdio: ["pipe", "pipe", "inherit"],
++    stdio: ["pipe", "pipe", "pipe"],
+     cwd: defaultWD
+   });
+   let { readFromStdout, afterClose, service } = createChannel({
+@@ -2092,7 +2092,7 @@ error: ${text}`);
+       throw new Error(`Internal error: Expected id ${id} but got id ${id2}`);
+     if (reject) {
+       applyProperties(reject, properties);
+-      throw reject;
++      return fakeBuildError(reject);
+     }
+     return resolve;
+   };
