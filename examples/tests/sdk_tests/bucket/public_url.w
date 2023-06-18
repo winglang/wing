@@ -1,7 +1,6 @@
 bring cloud;
 
-let bucketProps = cloud.BucketProps{public: true};
-let publicBucket = new cloud.Bucket(bucketProps) as "publicBucket";
+let publicBucket = new cloud.Bucket(public: true) as "publicBucket";
 let privateBucket = new cloud.Bucket() as "privateBucket";
 
 test "publicUrl" {

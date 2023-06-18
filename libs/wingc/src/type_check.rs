@@ -90,6 +90,29 @@ pub struct VariableInfo {
 	pub is_static: bool,
 }
 
+impl Display for VariableInfo {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut modifiers = vec![];
+		if self.is_member {
+			if self.is_static {
+				modifiers.push("static");
+			}
+		}
+
+		if self.reassignable {
+			modifiers.push("reassignable");
+		}
+
+		match self.phase {
+			Phase::Inflight => modifiers.push("inflight"),
+			Phase::Preflight => modifiers.push("preflight"),
+			Phase::Independent => modifiers.push("independent"),
+		}
+
+		write!(f, "{} {}: {}", modifiers.join(" "), self.name, self.type_)
+	}
+}
+
 impl SymbolKind {
 	pub fn make_member_variable(name: Symbol, type_: TypeRef, reassignable: bool, is_static: bool, phase: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
@@ -1352,40 +1375,39 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env);
-				let (class_env, class_symbol) =
-					match &*type_ {
-						Type::Class(ref class) => {
-							if class.phase == Phase::Independent || env.phase == class.phase {
-								(&class.env, &class.name)
-							} else {
-								self.spanned_error(
-									exp,
-									format!(
-										"Cannot create {} class \"{}\" in {} phase",
-										class.phase, class.name, env.phase
-									),
-								);
-								return self.types.error();
-							}
+				let (class_env, class_symbol) = match &*type_ {
+					Type::Class(ref class) => {
+						if class.phase == Phase::Independent || env.phase == class.phase {
+							(&class.env, &class.name)
+						} else {
+							self.spanned_error(
+								exp,
+								format!(
+									"Cannot create {} class \"{}\" in {} phase",
+									class.phase, class.name, env.phase
+								),
+							);
+							return self.types.error();
 						}
-						t => {
-							if matches!(t, Type::Anything) {
-								return self.types.anything();
-							} else if matches!(t, Type::Struct(_)) {
-								self.spanned_error(
+					}
+					t => {
+						if matches!(t, Type::Anything) {
+							return self.types.anything();
+						} else if matches!(t, Type::Struct(_)) {
+							self.spanned_error(
 								class,
 								format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", type_),
 							);
-								return self.types.error();
-							} else {
-								self.spanned_error(
-									class,
-									format!("Cannot instantiate type \"{}\" because it is not a class", type_),
-								);
-								return self.types.error();
-							}
+							return self.types.error();
+						} else {
+							self.spanned_error(
+								class,
+								format!("Cannot instantiate type \"{}\" because it is not a class", type_),
+							);
+							return self.types.error();
 						}
-					};
+					}
+				};
 
 				// Type check args against constructor
 				let init_method_name = if env.phase == Phase::Preflight {

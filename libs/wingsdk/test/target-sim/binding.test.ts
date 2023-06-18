@@ -8,6 +8,6 @@ test("binding throws if a method is unsupported", () => {
   const handler = Testing.makeHandler(app, "Handler", "async handle() {}");
   const host = Function._newFunction(app, "Function", handler);
   expect(() => handler._registerBind(host, ["foo", "bar"])).toThrow(
-    /Resource root\/Handler does not support inflight operation foo \(requested by root\/Function\)/
+    'Resource "root/Handler" does not support inflight operation "foo" (requested by "root/Function")'
   );
 });

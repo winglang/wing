@@ -1,0 +1,17 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    let x = \"my_string\";\n\n    test \"test\" {\n      log(x);\n    }\n    \"#)"
+---
+
+    let x = "my_string";
+
+    test "test" {
+      log(x);
+    }
+    
+======================================================
+Class: $Closure1
+Variables:
+  handle():
+    x => []
+

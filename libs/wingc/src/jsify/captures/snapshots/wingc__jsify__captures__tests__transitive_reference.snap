@@ -1,0 +1,42 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    bring cloud;\n    \n\t\tclass MyType {\n      b: cloud.Bucket;\n\n      init() { \n        this.b = new cloud.Bucket();\n      }\n\n      inflight isEmpty(): bool {\n        return this.b.list().length == 0;\n      }\n\n      inflight checkIfEmpty() {\n        if this.isEmpty() {\n          log(\"empty!\");\n        }\n      }\n    }\n\n    let t = new MyType();\n    test \"test\" {\n      t.checkIfEmpty();\n    }\n\t\t\"#)"
+---
+
+    bring cloud;
+    
+    class MyType {
+      b: cloud.Bucket;
+
+      init() { 
+        this.b = new cloud.Bucket();
+      }
+
+      inflight isEmpty(): bool {
+        return this.b.list().length == 0;
+      }
+
+      inflight checkIfEmpty() {
+        if this.isEmpty() {
+          log("empty!");
+        }
+      }
+    }
+
+    let t = new MyType();
+    test "test" {
+      t.checkIfEmpty();
+    }
+    
+======================================================
+Class: MyType
+Variables:
+  isEmpty():
+    this.b => [list]
+
+======================================================
+Class: $Closure1
+Variables:
+  handle():
+    t => [checkIfEmpty]
+

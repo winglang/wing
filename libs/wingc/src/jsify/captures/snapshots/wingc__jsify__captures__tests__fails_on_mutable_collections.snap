@@ -1,0 +1,16 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_fail(r#\"\n    let x = MutArray<str>[\"hello\", \"world\"];\n\n    test \"test\" {\n      assert(x.at(0) == \"hello\");\n    }\n    \"#)"
+---
+
+    let x = MutArray<str>["hello", "world"];
+
+    test "test" {
+      assert(x.at(0) == "hello");
+    }
+    
+======================================================
+Class: $Closure1
+
+Errors:
+ - at 4:13 | Cannot capture field 'x' with non-capturable type 'MutArray<str>'

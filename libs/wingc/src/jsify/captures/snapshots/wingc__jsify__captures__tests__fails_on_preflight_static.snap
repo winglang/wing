@@ -1,0 +1,15 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_fail(r#\"\n    class MyType {\n      static staticMethod(): str {}\n    }\n\n    test \"test\" {\n      log(MyType.staticMethod());\n    }\n    \"#)"
+---
+
+    class MyType {
+      static staticMethod(): str {}
+    }
+
+    test "test" {
+      log(MyType.staticMethod());
+    }
+    
+Errors:
+ - at 6:10 | Cannot call into preflight phase while inflight

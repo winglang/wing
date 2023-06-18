@@ -1,0 +1,19 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    let s = \"hello\";\n\n    class MyType {\n      static inflight staticMethod(): str {\n        return s;\n      }\n    }\n    \"#)"
+---
+
+    let s = "hello";
+
+    class MyType {
+      static inflight staticMethod(): str {
+        return s;
+      }
+    }
+    
+======================================================
+Class: MyType
+Variables:
+  staticMethod():
+    s => []
+

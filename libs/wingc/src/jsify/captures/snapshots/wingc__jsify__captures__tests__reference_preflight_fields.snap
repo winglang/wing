@@ -1,0 +1,36 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    bring cloud;\n    \n\t\tclass MyType {\n      s: str;\n      b: cloud.Bucket;\n\n      init() { \n        this.s = \"hello\"; \n        this.b = new cloud.Bucket();\n      }\n\n      inflight boom() {\n        assert(this.s.length > 0);\n        assert(this.b.list().length > 0);\n      }\n\n      inflight bam() {\n        this.b.put(\"hello\", \"world\");\n        this.b.get(\"aaa\");\n      }\n    }\n\t\t\"#)"
+---
+
+    bring cloud;
+    
+    class MyType {
+      s: str;
+      b: cloud.Bucket;
+
+      init() { 
+        this.s = "hello"; 
+        this.b = new cloud.Bucket();
+      }
+
+      inflight boom() {
+        assert(this.s.length > 0);
+        assert(this.b.list().length > 0);
+      }
+
+      inflight bam() {
+        this.b.put("hello", "world");
+        this.b.get("aaa");
+      }
+    }
+    
+======================================================
+Class: MyType
+Variables:
+  bam():
+    this.b => [get,put]
+  boom():
+    this.b => [list]
+    this.s => []
+

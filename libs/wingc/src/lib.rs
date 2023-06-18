@@ -247,6 +247,10 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii
 	let mut tc = TypeChecker::new(types, source_path, jsii_types);
 	tc.add_globals(scope);
 
+	if found_errors() {
+		return;
+	}
+
 	tc.type_check_scope(scope);
 }
 
@@ -266,6 +270,37 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.expect("Failed to add builtin");
 }
 
+/// Performs all compilation steps prior to JSification: parse, desugar, and type check.
+pub fn partial_compile(source_path: &Path) -> (Box<Scope>, Types) {
+	let scope = parse(&source_path);
+
+	// -- DESUGARING PHASE --
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = ClosureTransformer::new();
+	let mut scope = Box::new(inflight_transformer.fold_scope(scope));
+
+	// -- TYPECHECKING PHASE --
+
+	// Create universal types collection (need to keep this alive during entire compilation)
+	let mut types = Types::new();
+	let mut jsii_types = TypeSystem::new();
+
+	// Type check everything and build typed symbol environment
+	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
+
+	// bail out if there were errors
+	if found_errors() {
+		return (scope, types);
+	}
+
+	// Validate that every Expr in the final tree has been type checked
+	let mut tc_assert = TypeCheckAssert::new(&types);
+	tc_assert.check(&scope);
+
+	return (scope, types);
+}
+
 pub fn compile(
 	source_path: &Path,
 	out_dir: Option<&Path>,
@@ -276,6 +311,7 @@ pub fn compile(
 			message: format!("Source file cannot be found: {}", source_path.display()),
 			span: None,
 		});
+
 		return Err(());
 	}
 
@@ -290,38 +326,19 @@ pub fn compile(
 		return Err(());
 	}
 
-	let file_name = source_path.file_name().unwrap().to_str().unwrap();
-	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
-	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
+	// -- COMPILE --
 
-	// -- PARSING PHASE --
-	let scope = parse(&source_path);
+	let (scope, types) = partial_compile(source_path);
 
-	// -- DESUGARING PHASE --
-
-	// Transform all inflight closures defined in preflight into single-method resources
-	let mut inflight_transformer = ClosureTransformer::new();
-	let mut scope = inflight_transformer.fold_scope(scope);
-
-	// -- TYPECHECKING PHASE --
-
-	// Create universal types collection (need to keep this alive during entire compilation)
-	let mut types = Types::new();
-	let mut jsii_types = TypeSystem::new();
-
-	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
-
-	// Validate that every Expr in the final tree has been type checked
-	let mut tc_assert = TypeCheckAssert::new(&types);
-	tc_assert.check(&scope);
-
-	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if found_errors() {
 		return Err(());
 	}
 
-	// -- JSIFICATION PHASE --
+	// -- JSIFY --
+
+	let file_name = source_path.file_name().unwrap().to_str().unwrap();
+	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
+	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
 	let project_dir = absolute_project_root

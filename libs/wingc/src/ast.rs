@@ -161,6 +161,10 @@ impl UserDefinedType {
 		path
 	}
 
+	pub fn full_path_str_vec(&self) -> Vec<String> {
+		return self.full_path().iter().map(|f| f.name.clone()).collect_vec();
+	}
+
 	pub fn full_path_str(&self) -> String {
 		self.full_path().iter().join(".")
 	}

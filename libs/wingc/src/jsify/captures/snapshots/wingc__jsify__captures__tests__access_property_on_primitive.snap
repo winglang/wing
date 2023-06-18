@@ -1,0 +1,17 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    let s = \"hello\";\n\n    test \"test\" {\n      assert(s.length == 5);\n    }\n    \"#)"
+---
+
+    let s = "hello";
+
+    test "test" {
+      assert(s.length == 5);
+    }
+    
+======================================================
+Class: $Closure1
+Variables:
+  handle():
+    s => []
+

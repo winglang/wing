@@ -1,0 +1,16 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_fail(r#\"\n    let var x = \"my_string\";\n\n    test \"test\" {\n      log(x);\n    }\n    \"#)"
+---
+
+    let var x = "my_string";
+
+    test "test" {
+      log(x);
+    }
+    
+======================================================
+Class: $Closure1
+
+Errors:
+ - at 4:10 | Cannot capture reassignable object 'x'

@@ -1,0 +1,16 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    enum MyEnum { B, C }\n\n    test \"test\" {\n      assert(MyEnum.B != MyEnum.C);\n    }\n    \"#)"
+---
+
+    enum MyEnum { B, C }
+
+    test "test" {
+      assert(MyEnum.B != MyEnum.C);
+    }
+    
+======================================================
+Class: $Closure1
+Types:
+  MyEnum = MyEnum
+

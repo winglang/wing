@@ -3,7 +3,7 @@ import { Duration } from "./duration";
 import { App } from "../core";
 import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
-import { serializeImmutableData } from "../core/internal";
+import { isObject, serializeImmutableData } from "../core/internal";
 import { IInspectable, TreeInspector } from "../core/tree";
 import { log } from "../shared/log";
 
@@ -207,12 +207,18 @@ export abstract class Resource extends Construct implements IResource {
 
         // if this is a struct or a construct, recursively register its members
         if (obj.constructor.name === "Object" || Construct.isConstruct(obj)) {
+          // for structs, we allow `props` to be empty, in which case we serialize all properties.
+          if (ops.length === 0 && isObject(obj)) {
+            ops = Object.keys(obj);
+          }
+
           for (const op of ops) {
             const value = (obj as any)[op];
             this._registerBindObject(value, host, []);
           }
           return;
         }
+
         break;
 
       case "function":
@@ -281,7 +287,8 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${
+        host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
@@ -294,7 +301,7 @@ export abstract class Resource extends Construct implements IResource {
 
       if (!this.inflightOps.includes(op)) {
         throw new Error(
-          `Resource "${this.node.path}" does not support inflight operation "${op}" (requested by "${host.node.path})"`
+          `Resource "${this.node.path}" does not support inflight operation "${op}" (requested by "${host.node.path}")`
         );
       }
     }

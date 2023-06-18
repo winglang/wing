@@ -1,0 +1,18 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    class MyType {\n      inflight s: str;\n      inflight init() {\n        this.s = \"hey there!\";\n      }\n      inflight foo() {\n        log(this.s);\n      }\n    }\n    \"#)"
+---
+
+    class MyType {
+      inflight s: str;
+      inflight init() {
+        this.s = "hey there!";
+      }
+      inflight foo() {
+        log(this.s);
+      }
+    }
+    
+======================================================
+Class: MyType
+

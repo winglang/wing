@@ -1,0 +1,19 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    bring cloud;\n    let b = new cloud.Bucket();\n\n    test \"test\" {\n      b.put(\"hello\", \"world\");\n      b.list();\n    }\n    \"#)"
+---
+
+    bring cloud;
+    let b = new cloud.Bucket();
+
+    test "test" {
+      b.put("hello", "world");
+      b.list();
+    }
+    
+======================================================
+Class: $Closure1
+Variables:
+  handle():
+    b => [list,put]
+

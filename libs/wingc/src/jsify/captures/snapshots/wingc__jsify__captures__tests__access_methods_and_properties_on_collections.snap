@@ -1,0 +1,20 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    let x = [1,2,3];\n    let y = [\"hello\"];\n\n    test \"test\" {\n      assert(x.length == 3);\n      assert(y.at(0) == \"hello\");\n    }\n    \"#)"
+---
+
+    let x = [1,2,3];
+    let y = ["hello"];
+
+    test "test" {
+      assert(x.length == 3);
+      assert(y.at(0) == "hello");
+    }
+    
+======================================================
+Class: $Closure1
+Variables:
+  handle():
+    x => []
+    y => []
+

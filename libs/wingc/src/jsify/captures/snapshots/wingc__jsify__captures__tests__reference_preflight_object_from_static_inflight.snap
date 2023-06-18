@@ -1,0 +1,21 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    bring cloud;\n\n    let q = new cloud.Queue();\n\n    class MyType {\n      static inflight addToQueue(m: str) {\n        q.push(m);\n      }\n    }\n    \"#)"
+---
+
+    bring cloud;
+
+    let q = new cloud.Queue();
+
+    class MyType {
+      static inflight addToQueue(m: str) {
+        q.push(m);
+      }
+    }
+    
+======================================================
+Class: MyType
+Variables:
+  addToQueue():
+    q => [push]
+

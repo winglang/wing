@@ -1,0 +1,16 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    test \"test\" {\n      log(str.fromJson(\"hello\"));\n      assert(Json.values(Json {}).length == 0);\n    }\n    \"#)"
+---
+
+    test "test" {
+      log(str.fromJson("hello"));
+      assert(Json.values(Json {}).length == 0);
+    }
+    
+======================================================
+Class: $Closure1
+Types:
+  std.String = String
+  std.Json = Json
+

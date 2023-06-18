@@ -1,0 +1,28 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    class MyType {\n      name: str;\n      init() {\n        this.name = \"hello\";\n      }\n    }\n\n    let t = new MyType();\n\n    test \"test\" {\n      log(t.name);\n      assert(t.name.length > 0);\n    }\n    \"#)"
+---
+
+    class MyType {
+      name: str;
+      init() {
+        this.name = "hello";
+      }
+    }
+
+    let t = new MyType();
+
+    test "test" {
+      log(t.name);
+      assert(t.name.length > 0);
+    }
+    
+======================================================
+Class: MyType
+
+======================================================
+Class: $Closure1
+Variables:
+  handle():
+    t => [name]
+
