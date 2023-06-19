@@ -3163,6 +3163,10 @@ impl<'a> TypeChecker<'a> {
 		// e.g. wing::str -> stdlib::String | wing::Array -> stdlib::ImmutableArray
 		match symbol.name.as_str() {
 			"Json" => Some(symbol.clone()),
+			"duration" => Some(Symbol {
+				name: "Duration".to_string(),
+				span: symbol.span.clone(),
+			}),
 			"str" => Some(Symbol {
 				name: "String".to_string(),
 				span: symbol.span.clone(),
