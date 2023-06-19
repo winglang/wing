@@ -283,8 +283,8 @@ jobs:
           npm run test -- --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
 
       - name: Create git patch
-        # we only care about the diff in linux
-        if: matrix.runner == 'ubuntu' && matrix.node == '20'
+        # we only care about the diff in our standard dev env
+        if: matrix.runner == 'ubuntu' && matrix.node == '18'
         id: diff
         env:
           RAW_SHARD: ${{ matrix.shard }}
@@ -299,7 +299,7 @@ jobs:
             echo "::set-output name=diff_name::$DIFF_NAME"
           fi
       - name: Upload Diff
-        if: matrix.runner == 'ubuntu' && matrix.node == '20' && steps.diff.outputs.diff == 'true'
+        if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.diff.outputs.diff_name }}
