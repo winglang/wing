@@ -54,7 +54,7 @@ Knowing this, it's clear to see how targets represent both the provisioning engi
 
 ## Target-specific code
 
-There might be times when you need to write code that is specific to a compiler target. For instance, you may want to activate a verbose logging service only when testing locally to save on CloudWatch log storage costs.
+There might be times when you need to write code that is specific to a compiler target. For instance, you may want to activate a verbose logging service only when testing locally to save on cloud log storage costs.
 
 With the Wing `util` library, you can access environment variables. The `WING_TARGET` environment variable contains the current compiler target, which you can use with an if statement to write target-specific code. See the example below:
 
