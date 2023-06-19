@@ -32,7 +32,9 @@ These targets contain a combination of provisioning engine and cloud environment
 
 ## Portability
 
-One of Wing's standout features is its portability. You can write code once and deploy it to any cloud environment that Wing supports. Moreover, Wing is agnostic to the provisioning engine used. Here's an example of a portable Wing code snippet:
+Wing's [cloud library](../04-standard-library/01-cloud) has several classes representing abstracted cloud resources, whose APIs are not specific to a single cloud provider. This allows you to write code that can be deployed to any supported cloud environment or provisioning engine.
+
+Here's an example of a portable code snippet:
 
 ```js
 bring cloud;
