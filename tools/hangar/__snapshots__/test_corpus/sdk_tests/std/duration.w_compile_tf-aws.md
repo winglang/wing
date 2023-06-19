@@ -12,8 +12,26 @@ module.exports = function({ std_Duration }) {
     async $inflight_init()  {
     }
     async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(0.012)).seconds === (12 / 1000))'`)})(((await std_Duration.fromSeconds(0.012)).seconds === (12 / 1000)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(12)).seconds === 12)'`)})(((await std_Duration.fromSeconds(12)).seconds === 12))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(720)).seconds === (12 * 60))'`)})(((await std_Duration.fromSeconds(720)).seconds === (12 * 60)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromMinutes(12)).seconds === (12 * 60))'`)})(((await std_Duration.fromMinutes(12)).seconds === (12 * 60)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(43200)).seconds === ((12 * 60) * 60))'`)})(((await std_Duration.fromSeconds(43200)).seconds === ((12 * 60) * 60)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1036800)).seconds === (((12 * 60) * 60) * 24))'`)})(((await std_Duration.fromSeconds(1036800)).seconds === (((12 * 60) * 60) * 24)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(31536000)).seconds === (((((12 * 60) * 60) * 24) * 365) / 12))'`)})(((await std_Duration.fromSeconds(31536000)).seconds === (((((12 * 60) * 60) * 24) * 365) / 12)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(378432000)).seconds === ((((12 * 60) * 60) * 24) * 365))'`)})(((await std_Duration.fromSeconds(378432000)).seconds === ((((12 * 60) * 60) * 24) * 365)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromMilliseconds(10)).seconds === (await std_Duration.fromSeconds(0.01)).seconds)'`)})(((await std_Duration.fromMilliseconds(10)).seconds === (await std_Duration.fromSeconds(0.01)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromMinutes(10)).seconds === (await std_Duration.fromSeconds(600)).seconds)'`)})(((await std_Duration.fromMinutes(10)).seconds === (await std_Duration.fromSeconds(600)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(10)).seconds === (await std_Duration.fromSeconds(10)).seconds)'`)})(((await std_Duration.fromSeconds(10)).seconds === (await std_Duration.fromSeconds(10)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromHours(10)).seconds === (await std_Duration.fromSeconds(36000)).seconds)'`)})(((await std_Duration.fromHours(10)).seconds === (await std_Duration.fromSeconds(36000)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromDays(10)).seconds === (await std_Duration.fromSeconds(864000)).seconds)'`)})(((await std_Duration.fromDays(10)).seconds === (await std_Duration.fromSeconds(864000)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromMonths(10)).seconds === (await std_Duration.fromSeconds(26280000)).seconds)'`)})(((await std_Duration.fromMonths(10)).seconds === (await std_Duration.fromSeconds(26280000)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromYears(10)).seconds === (await std_Duration.fromSeconds(315360000)).seconds)'`)})(((await std_Duration.fromYears(10)).seconds === (await std_Duration.fromSeconds(315360000)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).milliseconds === 1000)'`)})(((await std_Duration.fromSeconds(1)).milliseconds === 1000))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).minutes === (1 / 60))'`)})(((await std_Duration.fromSeconds(1)).minutes === (1 / 60)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).hours === (1 / (60 * 60)))'`)})(((await std_Duration.fromSeconds(1)).hours === (1 / (60 * 60))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24)))'`)})(((await std_Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12)))'`)})(((await std_Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365)))'`)})(((await std_Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365))))};
     }
   }
   return $Closure1;
@@ -186,8 +204,26 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(0.012)).seconds === (12 / 1000))'`)})(((std.Duration.fromSeconds(0.012)).seconds === (12 / 1000)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(12)).seconds === 12)'`)})(((std.Duration.fromSeconds(12)).seconds === 12))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(720)).seconds === (12 * 60))'`)})(((std.Duration.fromSeconds(720)).seconds === (12 * 60)))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromMinutes(12)).seconds === (12 * 60))'`)})(((std.Duration.fromMinutes(12)).seconds === (12 * 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(43200)).seconds === ((12 * 60) * 60))'`)})(((std.Duration.fromSeconds(43200)).seconds === ((12 * 60) * 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(1036800)).seconds === (((12 * 60) * 60) * 24))'`)})(((std.Duration.fromSeconds(1036800)).seconds === (((12 * 60) * 60) * 24)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(31536000)).seconds === (((((12 * 60) * 60) * 24) * 365) / 12))'`)})(((std.Duration.fromSeconds(31536000)).seconds === (((((12 * 60) * 60) * 24) * 365) / 12)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(378432000)).seconds === ((((12 * 60) * 60) * 24) * 365))'`)})(((std.Duration.fromSeconds(378432000)).seconds === ((((12 * 60) * 60) * 24) * 365)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromMilliseconds(10)).seconds === (std.Duration.fromSeconds(0.01)).seconds)'`)})(((std.Duration.fromMilliseconds(10)).seconds === (std.Duration.fromSeconds(0.01)).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromMinutes(10)).seconds === (std.Duration.fromSeconds(600)).seconds)'`)})(((std.Duration.fromMinutes(10)).seconds === (std.Duration.fromSeconds(600)).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(10)).seconds === (std.Duration.fromSeconds(10)).seconds)'`)})(((std.Duration.fromSeconds(10)).seconds === (std.Duration.fromSeconds(10)).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromHours(10)).seconds === (std.Duration.fromSeconds(36000)).seconds)'`)})(((std.Duration.fromHours(10)).seconds === (std.Duration.fromSeconds(36000)).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromDays(10)).seconds === (std.Duration.fromSeconds(864000)).seconds)'`)})(((std.Duration.fromDays(10)).seconds === (std.Duration.fromSeconds(864000)).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromMonths(10)).seconds === (std.Duration.fromSeconds(26280000)).seconds)'`)})(((std.Duration.fromMonths(10)).seconds === (std.Duration.fromSeconds(26280000)).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromYears(10)).seconds === (std.Duration.fromSeconds(315360000)).seconds)'`)})(((std.Duration.fromYears(10)).seconds === (std.Duration.fromSeconds(315360000)).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(1)).milliseconds === 1000)'`)})(((std.Duration.fromSeconds(1)).milliseconds === 1000))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(1)).minutes === (1 / 60))'`)})(((std.Duration.fromSeconds(1)).minutes === (1 / 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(1)).hours === (1 / (60 * 60)))'`)})(((std.Duration.fromSeconds(1)).hours === (1 / (60 * 60))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24)))'`)})(((std.Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12)))'`)})(((std.Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365)))'`)})(((std.Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:duration",new $Closure1(this,"$Closure1"));
   }
 }

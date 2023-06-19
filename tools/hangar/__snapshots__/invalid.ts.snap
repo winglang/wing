@@ -508,6 +508,24 @@ Duration <DURATION>
 "
 `;
 
+exports[`diags_with_multibyte_chars.w 1`] = `
+"error: Unknown symbol \\"asdf\\"
+  --> ../../../examples/tests/invalid/diags_with_multibyte_chars.w:4:1
+  |
+4 | asdf;
+  | ^^^^ Unknown symbol \\"asdf\\"
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`enums.w 1`] = `
 "error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
   --> ../../../examples/tests/invalid/enums.w:5:21
@@ -620,17 +638,17 @@ Duration <DURATION>
 `;
 
 exports[`impl_interface.w 1`] = `
-"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:7
   |
-3 | class A impl cloud.IQueueAddConsumerHandler {
-  |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+3 | class A impl cloud.IQueueSetConsumerHandler {
+  |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
 
 
 error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:7:7
   |
-7 | class B impl cloud.IQueueAddConsumerHandler {
+7 | class B impl cloud.IQueueSetConsumerHandler {
   |       ^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
 
 
@@ -1302,8 +1320,13 @@ Duration <DURATION>
 `;
 
 exports[`panic.w 1`] = `
-"RuntimeError: unreachable
-Internal error: An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.
+"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+  --> ../../../examples/tests/invalid/panic.w:6:1
+  |
+6 | 😱;
+  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+
+
  
 
 
@@ -1314,10 +1337,7 @@ Duration <DURATION>
 "
 `;
 
-exports[`panic.w 2`] = `
-"Compiler bug when type-checking ../../../examples/tests/invalid/panic.w:6:1 | panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL
-Please report this bug at https://docs.winglang.io/contributors/bugs"
-`;
+exports[`panic.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
 exports[`preflight_from_inflight.w 1`] = `
 "error: Cannot call into preflight phase while inflight
@@ -1775,11 +1795,11 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
    |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
 
 
-error: Cannot instantiate type \\"BucketProps\\" because it is not a class
+error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
    --> ../../../examples/tests/invalid/structs.w:47:13
    |
 47 | let x = new cloud.BucketProps(1);
-   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is not a class
+   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
  

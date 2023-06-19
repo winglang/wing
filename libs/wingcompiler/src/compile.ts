@@ -8,7 +8,7 @@ import * as wingCompiler from "./wingc";
 import { copyDir, normalPath } from "./util";
 import { existsSync } from "fs";
 import { Target } from "./constants";
-import { CompileError, InternalError, PreflightError } from "./errors";
+import { CompileError, PreflightError } from "./errors";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -120,20 +120,41 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       // TODO: Use an option?
       // CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
+    imports: {
+      env: {
+        send_diagnostic,
+      }
+    }
   });
+
+  const errors: wingCompiler.WingDiagnostic[] = [];
+
+  function send_diagnostic(
+    data_ptr: number,
+    data_len: number
+  ) {
+    const data_buf = Buffer.from(
+      (wingc.exports.memory as WebAssembly.Memory).buffer,
+      data_ptr,
+      data_len
+    );
+    const data_str = new TextDecoder().decode(data_buf);
+    errors.push(JSON.parse(data_str));
+  }
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(resolve(wingDir))}`;
   log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  let compileResult: string | number;
+  let compileSuccess: boolean;
   try {
-    compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+    compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
   } catch (error) {
-    throw new InternalError(error as any);
+    // This is a bug in the compiler, indicate a compilation failure. 
+    // The bug details should be part of the diagnostics handling below.
+    compileSuccess = false;
   }
-  if (compileResult !== 0) {
+  if (!compileSuccess) {
     // This is a bug in the user's code. Print the compiler diagnostics.
-    const errors: wingCompiler.WingDiagnostic[] = JSON.parse(compileResult.toString());
-    throw new CompileError(compileResult.toString(), errors);
+    throw new CompileError(errors);
   }
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);

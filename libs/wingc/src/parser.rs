@@ -13,14 +13,13 @@ use crate::ast::{
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
-	pub diagnostics: RefCell<Diagnostics>,
 	is_in_loop: RefCell<bool>,
 }
 
@@ -45,7 +44,6 @@ impl<'s> Parser<'s> {
 			source,
 			source_name,
 			error_nodes: RefCell::new(HashSet::new()),
-			diagnostics: RefCell::new(Diagnostics::new()),
 			is_in_loop: RefCell::new(false),
 		}
 	}
@@ -70,8 +68,7 @@ impl<'s> Parser<'s> {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
 		};
-		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().push(diag);
+		report_diagnostic(diag);
 
 		// Track that we have produced a diagnostic for this node
 		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
@@ -139,33 +136,34 @@ impl<'s> Parser<'s> {
 			.expect("Duration string");
 
 		let seconds = match value.kind() {
+			"milliseconds" => value_literal / 1000_f64,
 			"seconds" => value_literal,
 			"minutes" => value_literal * 60_f64,
 			"hours" => value_literal * 3600_f64,
+			"days" => value_literal * 86400_f64,
+			"months" => value_literal * 2628000_f64,
+			"years" => value_literal * 31536000_f64,
 			"ERROR" => self.add_error("Expected duration type", &node)?,
 			other => self.report_unimplemented_grammar(other, "duration type", node)?,
 		};
 		let span = self.node_span(node);
-		// represent duration literals as the AST equivalent of `std.Duration.fromSeconds(value)`
+		// represent duration literals as the AST equivalent of `duration.fromSeconds(value)`
 		Ok(Expr::new(
 			ExprKind::Call {
 				callee: Box::new(Expr::new(
-					ExprKind::Reference(Reference::TypeMember {
-						type_: UserDefinedType {
-							root: Symbol {
-								name: WINGSDK_STD_MODULE.to_string(),
+					ExprKind::Reference(Reference::InstanceMember {
+						object: Box::new(Expr::new(
+							ExprKind::Reference(Reference::Identifier(Symbol {
+								name: "duration".to_string(),
 								span: span.clone(),
-							},
-							fields: vec![Symbol {
-								name: "Duration".to_string(),
-								span: span.clone(),
-							}],
-							span: span.clone(),
-						},
+							})),
+							span.clone(),
+						)),
 						property: Symbol {
 							name: "fromSeconds".to_string(),
 							span: span.clone(),
 						},
+						optional_accessor: false,
 					}),
 					span.clone(),
 				)),
@@ -232,6 +230,7 @@ impl<'s> Parser<'s> {
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
+			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -530,7 +529,7 @@ impl<'s> Parser<'s> {
 				"class_field" => {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
-						self.diagnostics.borrow_mut().push(Diagnostic {
+						report_diagnostic(Diagnostic {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),

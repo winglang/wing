@@ -71,11 +71,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_cloudQueueAddConsumer86898773_IamRole_FEB664AA": {
+      "root_cloudQueueSetConsumer86898773_IamRole_F8B0511B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-86898773/IamRole",
-            "uniqueId": "root_cloudQueueAddConsumer86898773_IamRole_FEB664AA"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-86898773/IamRole",
+            "uniqueId": "root_cloudQueueSetConsumer86898773_IamRole_F8B0511B"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -91,15 +91,15 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy": {
-      "root_cloudQueueAddConsumer86898773_IamRolePolicy_3A406C62": {
+      "root_cloudQueueSetConsumer86898773_IamRolePolicy_CAD478C5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-86898773/IamRolePolicy",
-            "uniqueId": "root_cloudQueueAddConsumer86898773_IamRolePolicy_3A406C62"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-86898773/IamRolePolicy",
+            "uniqueId": "root_cloudQueueSetConsumer86898773_IamRolePolicy_CAD478C5"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_cloudQueueAddConsumer86898773_IamRole_FEB664AA.name}"
+        "role": "${aws_iam_role.root_cloudQueueSetConsumer86898773_IamRole_F8B0511B.name}"
       },
       "root_cloudTopicOnMessagecdafee6e_IamRolePolicy_CA04DBA9": {
         "//": {
@@ -113,15 +113,15 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudQueueAddConsumer86898773_IamRolePolicyAttachment_89F130DC": {
+      "root_cloudQueueSetConsumer86898773_IamRolePolicyAttachment_62EC0A23": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-86898773/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudQueueAddConsumer86898773_IamRolePolicyAttachment_89F130DC"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-86898773/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudQueueSetConsumer86898773_IamRolePolicyAttachment_62EC0A23"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudQueueAddConsumer86898773_IamRole_FEB664AA.name}"
+        "role": "${aws_iam_role.root_cloudQueueSetConsumer86898773_IamRole_F8B0511B.name}"
       },
       "root_cloudTopicOnMessagecdafee6e_IamRolePolicyAttachment_1F650C7D": {
         "//": {
@@ -144,30 +144,30 @@ module.exports = function({  }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
-        "function_name": "${aws_lambda_function.root_cloudQueueAddConsumer86898773_8BE517DC.function_name}"
+        "function_name": "${aws_lambda_function.root_cloudQueueSetConsumer86898773_E4585B49.function_name}"
       }
     },
     "aws_lambda_function": {
-      "root_cloudQueueAddConsumer86898773_8BE517DC": {
+      "root_cloudQueueSetConsumer86898773_E4585B49": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-86898773/Default",
-            "uniqueId": "root_cloudQueueAddConsumer86898773_8BE517DC"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-86898773/Default",
+            "uniqueId": "root_cloudQueueSetConsumer86898773_E4585B49"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-86898773-c85c04ee",
+            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-86898773-c8cecfb3",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Queue-AddConsumer-86898773-c85c04ee",
+        "function_name": "cloud-Queue-SetConsumer-86898773-c8cecfb3",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudQueueAddConsumer86898773_IamRole_FEB664AA.arn}",
+        "role": "${aws_iam_role.root_cloudQueueSetConsumer86898773_IamRole_F8B0511B.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudQueueAddConsumer86898773_S3Object_816F62BF.key}",
+        "s3_key": "${aws_s3_object.root_cloudQueueSetConsumer86898773_S3Object_F2EAA6E5.key}",
         "timeout": 180,
         "vpc_config": {
           "security_group_ids": [],
@@ -227,11 +227,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_cloudQueueAddConsumer86898773_S3Object_816F62BF": {
+      "root_cloudQueueSetConsumer86898773_S3Object_F2EAA6E5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-AddConsumer-86898773/S3Object",
-            "uniqueId": "root_cloudQueueAddConsumer86898773_S3Object_816F62BF"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-86898773/S3Object",
+            "uniqueId": "root_cloudQueueSetConsumer86898773_S3Object_F2EAA6E5"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -364,12 +364,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic").onMessage(new $Closure1(this,"$Closure1"),{
-    "timeout": (std.Duration.fromSeconds(180)),}
-    ));
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue").setConsumer(new $Closure2(this,"$Closure2"),{
-    "timeout": (std.Duration.fromSeconds(180)),}
-    ));
+    (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic").onMessage(new $Closure1(this,"$Closure1"),{ timeout: (std.Duration.fromSeconds(180)) }));
+    (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue").setConsumer(new $Closure2(this,"$Closure2"),{ timeout: (std.Duration.fromSeconds(180)) }));
   }
 }
 class $App extends $AppBase {
