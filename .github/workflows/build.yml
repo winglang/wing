@@ -170,7 +170,7 @@ jobs:
         id: diff
         run: |
           git add .
-          git diff --cached --binary --no-color HEAD > build.diff
+          git diff --cached HEAD > build.diff
           if [ -s build.diff ]
           then
             echo "::set-output name=diff::true"
@@ -292,7 +292,7 @@ jobs:
           SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
           DIFF_NAME="e2e-$SHARD.diff"
           git add .
-          git diff --cached --binary HEAD > $DIFF_NAME
+          git diff --cached HEAD > $DIFF_NAME
           if [ -s $DIFF_NAME ]
           then
             echo "::set-output name=diff::true"
