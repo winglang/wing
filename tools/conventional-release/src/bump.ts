@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 
 export interface SetPackageVersionOptions {
@@ -52,7 +52,7 @@ export async function setPackageVersion(options: SetPackageVersionOptions) {
 
   await writeFile(
     packageJsonPath,
-    JSON.stringify(packageJson, undefined, 2) + "\n"
+    JSON.stringify(packageJson, undefined, 2)
   );
 
   return originals;

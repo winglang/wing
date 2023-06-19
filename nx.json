@@ -63,7 +63,8 @@
       "dependsOn": ["^build", "build"],
       "inputs": [
         "default-build",
-        "^default-build"
+        "^default-build",
+        "{workspaceRoot}/tools/conventional-release/**"
       ]
     },
     "dev": {

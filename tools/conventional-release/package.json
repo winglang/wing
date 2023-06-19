@@ -13,6 +13,7 @@
   "type": "module",
   "scripts": {},
   "devDependencies": {
+    "@types/node": "^18.16.18",
     "@types/semver": "^7.5.0",
     "typescript": "^5.1.3"
   },

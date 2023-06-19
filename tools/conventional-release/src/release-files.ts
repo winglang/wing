@@ -1,6 +1,6 @@
 import * as changelogen from "changelogen";
 import * as semver from "semver";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 export async function getReleaseData() {
   // If we want to generate a version, skip changelogen logic
