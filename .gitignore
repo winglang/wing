@@ -4,6 +4,7 @@ node_modules/
 *.tfstate
 *.tfstate.*
 .history
+*.vsix
 
 # WASI SDK (insalled by "npm install")
 .cargo/wasi-sdk-*/
