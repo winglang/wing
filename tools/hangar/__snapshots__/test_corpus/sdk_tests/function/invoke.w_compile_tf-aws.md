@@ -9,12 +9,12 @@ module.exports = function({ util_Util }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(input)  {
       const target = (await util_Util.tryEnv("WING_TARGET"));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((target) != null)'`)})(((target) != null))};
       return `${input}-response`;
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -31,11 +31,11 @@ module.exports = function({ f }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       const x = (await f.invoke("hello"));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "hello-response")'`)})((x === "hello-response"))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -246,7 +246,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -268,18 +268,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -302,7 +295,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(f, host, []);
+          $Closure2._registerBindObject(f, host, ["invoke"]);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(f, host, ["invoke"]);

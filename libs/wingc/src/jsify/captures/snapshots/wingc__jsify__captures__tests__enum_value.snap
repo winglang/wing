@@ -2,6 +2,34 @@
 source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    enum MyEnum { B, C }\n\n    test \"test\" {\n      assert(MyEnum.B != MyEnum.C);\n    }\n    \"#)"
 ---
+======================================================
+Captured by $Closure1:
+Types:
+  MyEnum = MyEnum
+
+======================================================
+Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ MyEnum }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(MyEnum.B !== MyEnum.C)'`)})((MyEnum.B !== MyEnum.C))};
+    }
+    async $inflight_init()  {
+    }
+  }
+  return $Closure1;
+}
+
+main.w
+------------------------------------------------------
 
     enum MyEnum { B, C }
 
@@ -9,8 +37,46 @@ expression: "capture_ok(r#\"\n    enum MyEnum { B, C }\n\n    test \"test\" {\n 
       assert(MyEnum.B != MyEnum.C);
     }
     
-======================================================
-Class: $Closure1
-Types:
-  MyEnum = MyEnum
+preflight.js
+------------------------------------------------------
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle", "$inflight_init");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    const MyEnumClient = $stdlib.core.NodeJsCode.fromInline(`
+      Object.freeze((function (tmp) {
+        tmp[tmp["B"] = 0] = "B";
+        tmp[tmp["C"] = 1] = "C";
+        return tmp;
+      })({}))
+    `);
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({
+        MyEnum: ${MyEnumClient.text},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const $Closure1Client = ${$Closure1._toInflightType(this).text};
+        const client = new $Closure1Client({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+const MyEnum = 
+  Object.freeze((function (tmp) {
+    tmp[tmp["B"] = 0] = "B";
+    tmp[tmp["C"] = 1] = "C";
+    return tmp;
+  })({}))
+;
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
 

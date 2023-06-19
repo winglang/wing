@@ -2,6 +2,16 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Types:
+  util.Util = Util
+Variables:
+  handle():
+    NIL => []
+    RANDOM => []
+
 pass ─ env.wsim » root/env0/test:use util from inflight
  
 

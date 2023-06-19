@@ -2,6 +2,14 @@
 
 ## stdout.log
 ```log
+captures: 
+captures: Types:
+  Foo = Foo
+
+captures: Variables:
+  handle():
+    getBar => []
+
 pass ─ inflight_class_as_struct_members.wsim » root/env0/test:test
  
 

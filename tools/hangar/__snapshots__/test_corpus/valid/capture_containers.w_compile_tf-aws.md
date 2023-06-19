@@ -2,14 +2,12 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
+module.exports = function({ arr, arrOfMap, j, myMap, mySet }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
     }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await arr.at(0)) === "hello")'`)})(((await arr.at(0)) === "hello"))};
@@ -21,6 +19,8 @@ module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(myMap).length === 2)'`)})((Object.keys(myMap).length === 2))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("bang" in ((await arrOfMap.at(0))))'`)})(("bang" in ((await arrOfMap.at(0)))))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((j)["b"] === "world")'`)})(((j)["b"] === "world"))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -163,17 +163,17 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            arr: ${context._lift(arr, ["at", "length"])},
-            mySet: ${context._lift(mySet, ["has", "size"])},
-            myMap: ${context._lift(myMap, ["has", "size"])},
-            arrOfMap: ${context._lift(arrOfMap, ["at"])},
+            arr: ${context._lift(arr, [])},
+            arrOfMap: ${context._lift(arrOfMap, [])},
             j: ${context._lift(j, [])},
+            myMap: ${context._lift(myMap, [])},
+            mySet: ${context._lift(mySet, [])},
           })
         `);
       }
@@ -189,19 +189,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
+        if (ops.includes("handle")) {
           $Closure1._registerBindObject(arr, host, []);
           $Closure1._registerBindObject(arrOfMap, host, []);
           $Closure1._registerBindObject(j, host, []);
           $Closure1._registerBindObject(myMap, host, []);
           $Closure1._registerBindObject(mySet, host, []);
-        }
-        if (ops.includes("handle")) {
-          $Closure1._registerBindObject(arr, host, ["at", "length"]);
-          $Closure1._registerBindObject(arrOfMap, host, ["at"]);
-          $Closure1._registerBindObject(j, host, []);
-          $Closure1._registerBindObject(myMap, host, ["has", "size"]);
-          $Closure1._registerBindObject(mySet, host, ["has", "size"]);
         }
         super._registerBind(host, ops);
       }

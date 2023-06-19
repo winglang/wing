@@ -2,14 +2,12 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ q, js }) {
+module.exports = function({ js, q }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
     }
     async handle()  {
       (await q.push("foo"));
@@ -43,6 +41,8 @@ module.exports = function({ q, js }) {
       }
       )))};
     }
+    async $inflight_init()  {
+    }
   }
   return $Closure1;
 }
@@ -55,11 +55,11 @@ module.exports = function({  }) {
   class TestHelper {
     constructor({  }) {
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return TestHelper;
@@ -214,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
     class TestHelper extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("sleep");
+        this._addInflightOps("sleep", "$inflight_init");
         const __parent_this = this;
       }
       static _toInflightType(context) {
@@ -234,25 +234,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("sleep")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            q: ${context._lift(q, ["approxSize", "purge", "push"])},
             js: ${context._lift(js, ["sleep"])},
+            q: ${context._lift(q, ["approxSize", "purge", "push"])},
           })
         `);
       }
@@ -269,8 +262,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(js, host, []);
-          $Closure1._registerBindObject(q, host, []);
+          $Closure1._registerBindObject(js, host, ["sleep"]);
+          $Closure1._registerBindObject(q, host, ["approxSize", "purge", "push"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(js, host, ["sleep"]);

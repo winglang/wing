@@ -2,14 +2,39 @@
 
 ## stdout.log
 ```log
-pass ─ inflight_class_inside_inflight_closure.wsim » root/env0/test:it works                                           
-pass ─ inflight_class_inside_inflight_closure.wsim » root/env1/test:inflight class inside closure captures from closure
+captures: Types:
+  InflightClass = InflightClass
+Variables:
+  $inflight_init():
+    __parent_this => [b.put]
+  handle():
+    __parent_this => [b.put]
+
+captures: 
+captures: Variables:
+  $inflight_init():
+    f => [invoke]
+  handle():
+    f => [invoke]
+
+captures: Types:
+  Foo = Foo
+
+ERROR: Resource "root/env0/PreflightClass" does not support inflight operation "b.put" (requested by "root/env0/PreflightClass/cloud.Function")
+
+../../../../examples/tests/valid/target/test/inflight_class_inside_inflight_closure.wsim.285872.tmp/.wing/preflight.js:46
+             _registerBind(host, ops) {
+               if (ops.includes("$inflight_init")) {
+>>               $Closure1._registerBindObject(__parent_this, host, ["b.put"]);
+               }
+               if (ops.includes("handle")) {
+
  
 
 
 
 
-Tests 1 passed (1) 
+Tests 1 failed (1) 
 Duration <DURATION>
 
 ```

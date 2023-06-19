@@ -2,14 +2,12 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ publicBucket, privateBucket }) {
+module.exports = function({ privateBucket, publicBucket }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
     }
     async handle()  {
       let error = "";
@@ -24,6 +22,8 @@ module.exports = function({ publicBucket, privateBucket }) {
         error = e;
       }
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Cannot provide public url for a non-public bucket")'`)})((error === "Cannot provide public url for a non-public bucket"))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -264,14 +264,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            publicBucket: ${context._lift(publicBucket, ["publicUrl", "put"])},
             privateBucket: ${context._lift(privateBucket, ["publicUrl", "put"])},
+            publicBucket: ${context._lift(publicBucket, ["publicUrl", "put"])},
           })
         `);
       }
@@ -288,8 +288,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(privateBucket, host, []);
-          $Closure1._registerBindObject(publicBucket, host, []);
+          $Closure1._registerBindObject(privateBucket, host, ["publicUrl", "put"]);
+          $Closure1._registerBindObject(publicBucket, host, ["publicUrl", "put"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(privateBucket, host, ["publicUrl", "put"]);
@@ -298,10 +298,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const bucketProps = {
-    "public": true,}
-    ;
-    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",bucketProps);
+    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",{ public: true });
     const privateBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"privateBucket");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:publicUrl",new $Closure1(this,"$Closure1"));
   }

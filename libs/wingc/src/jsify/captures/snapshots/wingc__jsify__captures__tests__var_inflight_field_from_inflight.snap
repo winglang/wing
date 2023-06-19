@@ -2,6 +2,14 @@
 source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    class MyType {\n      inflight var s: str;\n      inflight init() {\n        this.s = \"hey there!\";\n      }\n      inflight foo() {\n        log(this.s);\n        this.s = \"hello!\";\n      }\n    }\n    \"#)"
 ---
+======================================================
+Captured by MyType:
+
+======================================================
+Files:
+
+main.w
+------------------------------------------------------
 
     class MyType {
       inflight var s: str;
@@ -14,6 +22,49 @@ expression: "capture_ok(r#\"\n    class MyType {\n      inflight var s: str;\n  
       }
     }
     
-======================================================
-Class: MyType
+preflight.js
+------------------------------------------------------
+class MyType extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("foo", "$inflight_init", "s");
+    const __parent_this = this;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.MyType.js")({
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const MyTypeClient = ${MyType._toInflightType(this).text};
+        const client = new MyTypeClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class MyType {
+    constructor({  }) {
+    }
+    async foo()  {
+      const __parent_this = this;
+      {console.log(this.s)};
+      this.s = "hello!";
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+      this.s = "hey there!";
+    }
+  }
+  return MyType;
+}
 

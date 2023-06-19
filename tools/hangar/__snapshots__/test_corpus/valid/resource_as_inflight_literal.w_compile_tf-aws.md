@@ -9,10 +9,10 @@ module.exports = function({ fn }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -29,12 +29,12 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     async handle(message)  {
       const __parent_this = this;
       return "hello world!";
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return Foo;
@@ -244,7 +244,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         const __parent_this = this;
       }
       static _toInflightType(context) {
@@ -264,18 +264,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -298,7 +291,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(fn, host, []);
+          $Closure1._registerBindObject(fn, host, ["invoke"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(fn, host, ["invoke"]);

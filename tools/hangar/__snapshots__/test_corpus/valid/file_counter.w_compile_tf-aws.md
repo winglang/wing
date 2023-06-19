@@ -2,19 +2,19 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ counter, bucket }) {
+module.exports = function({ bucket, counter }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(body)  {
       const next = (await counter.inc());
       const key = `myfile-${"hi"}.txt`;
       (await bucket.put(key,body));
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -247,14 +247,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            counter: ${context._lift(counter, ["inc"])},
             bucket: ${context._lift(bucket, ["put"])},
+            counter: ${context._lift(counter, ["inc"])},
           })
         `);
       }
@@ -271,8 +271,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(bucket, host, []);
-          $Closure1._registerBindObject(counter, host, []);
+          $Closure1._registerBindObject(bucket, host, ["put"]);
+          $Closure1._registerBindObject(counter, host, ["inc"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(bucket, host, ["put"]);

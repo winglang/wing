@@ -2,6 +2,28 @@
 
 ## stdout.log
 ```log
+captures: Variables:
+  $inflight_init():
+    this.func => [handle]
+  invoke():
+    this.func => [handle]
+
+captures: 
+captures: Types:
+  std.Number = Number
+  std.Json = Json
+Variables:
+  handle():
+    handler => []
+
+captures: 
+captures: 
+captures: Variables:
+  $inflight_init():
+    f => [invoke]
+  handle():
+    f => [invoke]
+
 pass ─ doubler.wsim » root/env0/test:f(2) == 8
  
 

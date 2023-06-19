@@ -4,12 +4,12 @@
 ```js
 module.exports = function({  }) {
   class C {
+    async method()  {
+      const __parent_this = this;
+    }
      constructor()  {
       const __parent_this = this;
       this.field = 12;
-    }
-    async method()  {
-      const __parent_this = this;
     }
   }
   return C;
@@ -62,7 +62,7 @@ class $Root extends $stdlib.std.Resource {
     class C extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method", "field");
+        this._addInflightOps("method", "constructor", "field");
         const __parent_this = this;
       }
       static _toInflightType(context) {
@@ -81,13 +81,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("method")) {
-        }
-        super._registerBind(host, ops);
       }
     }
   }

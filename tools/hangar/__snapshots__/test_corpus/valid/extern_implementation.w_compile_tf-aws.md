@@ -9,10 +9,10 @@ module.exports = function({ f }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       (await f.call());
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -29,10 +29,10 @@ module.exports = function({ f }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       (await f.print("hey there"));
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -45,9 +45,6 @@ module.exports = function({ f }) {
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
-    }
-    async $inflight_init()  {
-      const __parent_this = this;
     }
     static async regexInflight(pattern, text)  {
       return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
@@ -67,6 +64,9 @@ module.exports = function({  }) {
       const uuid = (await Foo.getUuid());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.getData()) === "Cool data!")'`)})(((await Foo.getData()) === "Cool data!"))};
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return Foo;
@@ -275,7 +275,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call");
+        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call", "$inflight_init");
         const __parent_this = this;
       }
       static getGreeting(name)  {
@@ -301,30 +301,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("call")) {
-          Foo._registerBindObject(Foo, host, ["getData", "getUuid", "regexInflight"]);
-        }
-        if (ops.includes("print")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("getData")) {
-        }
-        if (ops.includes("getUuid")) {
-        }
-        if (ops.includes("regexInflight")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -347,7 +328,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(f, host, []);
+          $Closure1._registerBindObject(f, host, ["call"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(f, host, ["call"]);
@@ -358,7 +339,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -381,7 +362,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(f, host, []);
+          $Closure2._registerBindObject(f, host, ["print"]);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(f, host, ["print"]);

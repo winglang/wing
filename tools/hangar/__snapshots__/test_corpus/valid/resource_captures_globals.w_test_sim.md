@@ -2,29 +2,59 @@
 
 ## stdout.log
 ```log
-pass ─ resource_captures_globals.wsim » root/env1/test:access cloud resource through static methods only
-fail ┌ resource_captures_globals.wsim » root/env0/test:test                                             
-     │ Error: assertion failed: '((globalMapOfNum)["a"] === (-5))'
-     │     at /var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-E7YGGv/index.js:73:23
-     │     at MyResource.myPut (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-E7YGGv/index.js:74:15)
-     │     at async $Closure1.handle (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-E7YGGv/index.js:19:11)
-     │     at async exports.handler (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-E7YGGv/index.js:162:10)
-     │     at async Object.withTrace (/Users/eladb/code/wing/libs/wingsdk/lib/testing/simulator.js:72:38)
-     │     at async TestRunnerClient.runTest (/Users/eladb/code/wing/libs/wingsdk/lib/target-sim/test-runner.inflight.js:31:13)
-     │     at async testSimulator (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:199:22)
-     │     at async testOne (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:114:20)
-     └     at async test (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:55:29)
+captures: 
+captures: Variables:
+  $inflight_init():
+    globalCounter => [inc,peek]
+  myMethod():
+    globalCounter => [inc,peek]
+  myStaticMethod():
+    globalCounter => [peek]
 
-Error: assertion failed: '((globalMapOfNum)["a"] === (-5))'
-    at /var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-E7YGGv/index.js:73:23
-    at MyResource.myPut (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-E7YGGv/index.js:74:15)
-    at async $Closure1.handle (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-E7YGGv/index.js:19:11)
-    at async exports.handler (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-E7YGGv/index.js:162:10)
-    at async Object.withTrace (/Users/eladb/code/wing/libs/wingsdk/lib/testing/simulator.js:72:38)
-    at async TestRunnerClient.runTest (/Users/eladb/code/wing/libs/wingsdk/lib/target-sim/test-runner.inflight.js:31:13)
-    at async testSimulator (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:199:22)
-    at async testOne (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:114:20)
-    at async test (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:55:29)
+captures: Variables:
+  $inflight_init():
+    $parentThis => [localCounter.inc]
+    globalCounter => [inc]
+  handle():
+    $parentThis => [localCounter.inc]
+    globalCounter => [inc]
+
+captures: Types:
+  Another = Another
+Variables:
+  $inflight_init():
+    globalAnother => [first.myResource.put,myField,myMethod]
+    globalBucket => [put]
+    this.localTopic => [publish]
+  myPut():
+    globalAnother => [first.myResource.put,myField,myMethod]
+    globalArrayOfStr => []
+    globalBool => []
+    globalBucket => [put]
+    globalMapOfNum => []
+    globalNum => []
+    globalSetOfStr => []
+    globalStr => []
+    this.localTopic => [publish]
+
+captures: Variables:
+  $inflight_init():
+    res => [myPut]
+  handle():
+    res => [myPut]
+
+captures: Types:
+  Another = Another
+
+ERROR: Resource "root/env0/Another" does not support inflight operation "first.myResource.put" (requested by "root/env0/MyResource/cloud.Topic-OnMessage-bdb05a8d")
+
+../../../../examples/tests/valid/target/test/resource_captures_globals.wsim.284646.tmp/.wing/preflight.js:67
+             Another._registerBindObject(globalCounter, host, ["inc", "peek"]);
+           }
+>>         super._registerBind(host, ops);
+         }
+         static _registerTypeBind(host, ops) {
+
  
 
 

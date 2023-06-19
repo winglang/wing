@@ -2,11 +2,16 @@ use super::ClassCaptures;
 use crate::{
 	ast::{Class, Scope},
 	diagnostic::{found_errors, get_diagnostics},
+	jsify::JSifier,
 	partial_compile,
 	visit::{self, Visit},
 };
 use insta::assert_snapshot;
-use std::{env, fs::File, io::Write};
+use std::{
+	env,
+	fs::{self, File},
+	io::Write,
+};
 
 // -----------------------------------------------------------------------------
 
@@ -224,7 +229,7 @@ fn fails_on_preflight_static() {
 }
 
 #[test]
-fn reference_inflight_static() {
+fn reference_static_inflight() {
 	assert_snapshot!(capture_ok(
 		r#"
     class MyType {
@@ -271,6 +276,19 @@ fn reference_preflight_object_from_static_inflight() {
 }
 
 #[test]
+fn new_inflight_object() {
+	assert_snapshot!(capture_ok(
+		r#"
+    inflight class Foo {}
+
+    test "test" {
+      new Foo();
+    }
+    "#,
+	));
+}
+
+#[test]
 fn reference_preflight_fields() {
 	assert_snapshot!(capture_ok(
 		r#"
@@ -308,7 +326,7 @@ fn transitive_reference() {
 		class MyType {
       b: cloud.Bucket;
 
-      init() { 
+      init() {
         this.b = new cloud.Bucket();
       }
 
@@ -331,8 +349,48 @@ fn transitive_reference() {
 	));
 }
 
+#[test]
+fn reference_inflight_class() {
+	assert_snapshot!(capture_ok(
+		r#"
+    inflight class Foo {
+      static a(): str { return "a"; }
+    }
+
+    test "test" {
+      log(Foo.a());
+    }
+    "#
+	));
+}
+
+#[test]
+fn temp() {
+	assert_snapshot!(capture_ok(
+		r#"
+    let jsonObj1 = Json { key1: "value1" };
+ 
+    test "test" {
+      log(Json.stringify(jsonObj1));
+    }  
+    "#
+	));
+}
+
 // -----------------------------------------------------------------------------
 // test utility functions
+
+fn capture_ok(code: &str) -> String {
+	let snap = capture_report(code);
+	assert!(!found_errors());
+	snap
+}
+
+fn capture_fail(code: &str) -> String {
+	let snap = capture_report(code);
+	assert!(found_errors());
+	snap
+}
 
 /// Compiles `code` and returns the capture scanner results as a string that can be snapshotted
 fn capture_report(code: &str) -> String {
@@ -353,19 +411,18 @@ fn capture_report(code: &str) -> String {
 
 	let mut snap = vec![];
 
-	snap.push(code.to_string());
-
 	if !found_errors() {
 		let classes = find_classes(&scope);
 		for class in classes {
 			snap.push("======================================================".into());
-			snap.push(format!("Class: {}", class.name.name));
+			snap.push(format!("Captured by {}:", class.name.name));
 			let captures = ClassCaptures::scan(&types, &class);
 			snap.push(captures.to_string());
 		}
 	}
 
 	if found_errors() {
+		snap.push("======================================================".into());
 		snap.push("Errors:".into());
 		for diag in get_diagnostics() {
 			let span = diag
@@ -376,19 +433,28 @@ fn capture_report(code: &str) -> String {
 		}
 	}
 
+	let mut jsify = JSifier::new(&types, "default", &workdir.path(), false);
+	jsify.jsify(&scope);
+	jsify.emit_files(workdir.path());
+
+	snap.push("======================================================".into());
+	snap.push("Files:".into());
+	snap.push("".into());
+
+	for entry in fs::read_dir(workdir.path()).unwrap() {
+		let Ok(entry) = entry else {
+      continue;
+    };
+
+		let contents = fs::read_to_string(entry.path()).unwrap();
+		let x = entry.file_name().as_os_str().to_string_lossy().to_string();
+
+		snap.push(x);
+		snap.push("------------------------------------------------------".into());
+		snap.push(contents);
+	}
+
 	return snap.join("\n");
-}
-
-fn capture_ok(code: &str) -> String {
-	let snap = capture_report(code);
-	assert!(!found_errors());
-	snap
-}
-
-fn capture_fail(code: &str) -> String {
-	let snap = capture_report(code);
-	assert!(found_errors());
-	snap
 }
 
 fn find_classes<'a>(scope: &'a Scope) -> Vec<&'a Class> {

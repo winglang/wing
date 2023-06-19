@@ -2,19 +2,19 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ RANDOM, NIL, util_Util }) {
+module.exports = function({ NIL, RANDOM, util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await util_Util.env("WING_TARGET")).length > 0)'`)})(((await util_Util.env("WING_TARGET")).length > 0))};
       const noValue = ((await util_Util.tryEnv(RANDOM)) ?? NIL);
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(noValue === NIL)'`)})((noValue === NIL))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -157,15 +157,15 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            RANDOM: ${context._lift(RANDOM, [])},
-            NIL: ${context._lift(NIL, [])},
+            NIL: ${context._lift(NIL, [""])},
+            RANDOM: ${context._lift(RANDOM, [""])},
             util_Util: ${util_UtilClient.text},
           })
         `);
@@ -183,12 +183,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(NIL, host, []);
-          $Closure1._registerBindObject(RANDOM, host, []);
+          $Closure1._registerBindObject(NIL, host, [""]);
+          $Closure1._registerBindObject(RANDOM, host, [""]);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(NIL, host, []);
-          $Closure1._registerBindObject(RANDOM, host, []);
+          $Closure1._registerBindObject(NIL, host, [""]);
+          $Closure1._registerBindObject(RANDOM, host, [""]);
         }
         super._registerBind(host, ops);
       }

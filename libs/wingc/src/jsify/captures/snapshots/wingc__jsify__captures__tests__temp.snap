@@ -1,0 +1,80 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    let jsonObj1 = Json { key1: \"value1\" };\n \n    test \"test\" {\n      log(Json.stringify(jsonObj1));\n    }  \n    \"#)"
+---
+======================================================
+Captured by $Closure1:
+Types:
+  std.Json = Json
+Variables:
+  handle():
+    jsonObj1 => []
+
+======================================================
+Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ jsonObj1, std_Json }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle()  {
+      {console.log(((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))};
+    }
+    async $inflight_init()  {
+    }
+  }
+  return $Closure1;
+}
+
+main.w
+------------------------------------------------------
+
+    let jsonObj1 = Json { key1: "value1" };
+ 
+    test "test" {
+      log(Json.stringify(jsonObj1));
+    }  
+    
+preflight.js
+------------------------------------------------------
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle", "$inflight_init");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    const std_JsonClient = std.Json._toInflightType(context);
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({
+        jsonObj1: ${context._lift(jsonObj1, [])},
+        std_Json: ${std_JsonClient.text},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const $Closure1Client = ${$Closure1._toInflightType(this).text};
+        const client = new $Closure1Client({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(jsonObj1, host, []);
+    }
+    super._registerBind(host, ops);
+  }
+}
+const jsonObj1 = Object.freeze({"key1":"value1"});
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+

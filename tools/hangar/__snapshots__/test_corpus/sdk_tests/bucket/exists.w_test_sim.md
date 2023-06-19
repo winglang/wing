@@ -2,6 +2,13 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    b => [delete,exists,put]
+
 pass ─ exists.wsim » root/env0/test:exists
  
 

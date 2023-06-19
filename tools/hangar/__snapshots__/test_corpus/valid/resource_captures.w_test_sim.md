@@ -2,28 +2,55 @@
 
 ## stdout.log
 ```log
-fail ┌ resource_captures.wsim » root/env0/test:test
-     │ array.len=3
-     │ Error: assertion failed: '((this.mapOfNum)["k1"] === 11)'
-     │     at /var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-gQWVOz/index.js:101:23
-     │     at MyResource.testCaptureCollectionsOfData (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-gQWVOz/index.js:102:15)
-     │     at async $Closure1.handle (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-gQWVOz/index.js:20:11)
-     │     at async exports.handler (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-gQWVOz/index.js:311:10)
-     │     at async Object.withTrace (/Users/eladb/code/wing/libs/wingsdk/lib/testing/simulator.js:72:38)
-     │     at async TestRunnerClient.runTest (/Users/eladb/code/wing/libs/wingsdk/lib/target-sim/test-runner.inflight.js:31:13)
-     │     at async testSimulator (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:199:22)
-     │     at async testOne (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:114:20)
-     └     at async test (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:55:29)
-Error: assertion failed: '((this.mapOfNum)["k1"] === 11)'
-    at /var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-gQWVOz/index.js:101:23
-    at MyResource.testCaptureCollectionsOfData (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-gQWVOz/index.js:102:15)
-    at async $Closure1.handle (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-gQWVOz/index.js:20:11)
-    at async exports.handler (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-gQWVOz/index.js:311:10)
-    at async Object.withTrace (/Users/eladb/code/wing/libs/wingsdk/lib/testing/simulator.js:72:38)
-    at async TestRunnerClient.runTest (/Users/eladb/code/wing/libs/wingsdk/lib/target-sim/test-runner.inflight.js:31:13)
-    at async testSimulator (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:199:22)
-    at async testOne (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:114:20)
-    at async test (/Users/eladb/code/wing/apps/wing/dist/commands/test.js:55:29)
+captures: 
+captures: 
+captures: Variables:
+  $inflight_init():
+    this.another => [anotherFunc,first.myResource.get,first.myResource.list,first.myResource.put,meaningOfLife,myField]
+    this.extBucket => [list]
+    this.myQueue => [push]
+    this.myResource => [get,list,put]
+  testCaptureCollectionsOfData():
+    this.arrayOfStr => []
+    this.mapOfNum => []
+    this.setOfStr => []
+  testCaptureOptional():
+    this.myOptStr => []
+  testCapturePrimitives():
+    this.myBool => []
+    this.myNum => []
+    this.myStr => []
+  testCaptureResource():
+    this.myResource => [get,list,put]
+  testExpressionRecursive():
+    this.myQueue => [push]
+    this.myStr => []
+  testExternal():
+    this.extBucket => [list]
+    this.extNum => []
+  testNestedInflightField():
+    this.another => [myField]
+  testNestedResource():
+    this.another => [first.myResource.get,first.myResource.list,first.myResource.put]
+    this.myStr => []
+  testUserDefinedResource():
+    this.another => [anotherFunc,meaningOfLife]
+
+captures: Variables:
+  $inflight_init():
+    r => [testCaptureCollectionsOfData,testCaptureOptional,testCapturePrimitives,testCaptureResource,testExpressionRecursive,testExternal,testInflightField,testNestedInflightField,testNestedResource,testNoCapture,testUserDefinedResource]
+  handle():
+    r => [testCaptureCollectionsOfData,testCaptureOptional,testCapturePrimitives,testCaptureResource,testExpressionRecursive,testExternal,testInflightField,testNestedInflightField,testNestedResource,testNoCapture,testUserDefinedResource]
+
+ERROR: Resource "root/env0/MyResource/Another" does not support inflight operation "first.myResource.get" (requested by "root/env0/test:test/Handler")
+
+../../../../examples/tests/valid/target/test/resource_captures.wsim.281588.tmp/.wing/preflight.js:114
+         _registerBind(host, ops) {
+           if (ops.includes("$inflight_init")) {
+>>           MyResource._registerBindObject(this.another, host, ["anotherFunc", "first.myResource.get", "first.myResource.list", "first.myResource.put", "meaningOfLife", "myField"]);
+             MyResource._registerBindObject(this.extBucket, host, ["list"]);
+             MyResource._registerBindObject(this.myQueue, host, ["push"]);
+
  
 
 

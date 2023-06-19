@@ -107,14 +107,17 @@ impl ClassCaptures {
 		self.types.insert(name, t);
 	}
 
-	pub fn capture_var(&mut self, method_name: &str, var: &str, op: String) {
-		self
+	pub fn capture_var(&mut self, method_name: &str, var: &str, op: Option<String>) {
+		let entry = self
 			.vars
 			.entry(method_name.to_string())
 			.or_default()
 			.entry(var.to_string())
-			.or_default()
-			.insert(op);
+			.or_default();
+
+		if let Some(op) = op {
+			entry.insert(op);
+		}
 	}
 
 	pub fn remove_type(&mut self, name: &[String]) {
@@ -365,6 +368,26 @@ impl<'a> CaptureScanner<'a> {
 			Type::Struct(st) => Some(lookup(&st.env, property)),
 		}
 	}
+
+	fn split_phases(&self, parts: &[Component]) -> (Vec<Component>, Vec<Component>) {
+		let mut pref = vec![];
+		let mut inf = vec![];
+
+		for p in parts {
+			match &p.kind {
+				ComponentKind::Member(vi, _) => match vi.phase {
+					Phase::Preflight => pref.push(p.clone()),
+					Phase::Inflight => inf.push(p.clone()),
+					Phase::Independent => pref.push(p.clone()),
+				},
+				ComponentKind::ClassType(_) => {
+					pref.push(p.clone());
+				}
+			}
+		}
+
+		(pref, inf)
+	}
 }
 
 impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
@@ -398,10 +421,13 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 
 	fn visit_reference(&mut self, node: &'ast Reference) {
 		let parts = self.analyze_ref(node);
+		println!("{}", parts.iter().map(|f| f.text.clone()).join("."));
 		if parts.is_empty() {
 			visit::visit_reference(self, node);
 			return;
 		}
+
+		// let (pref, inf) = self.split_phases(&parts);
 
 		// determine if this is a reference to a field (through "this.")
 		let mut captured_object_index = 0;
@@ -452,22 +478,19 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 					.capture_type(captured_object.text.split(".").map(|f| f.to_string()).collect_vec(), *t);
 			}
 			ComponentKind::Member(variable, _) => {
-				// skip macro functions (like "log" and "assert")
-				if let Type::Function(f) = &*variable.type_ {
-					if f.js_override.is_some() {
-						return;
-					}
-				}
-
 				// ignore functions that have a js override macro (like `log()`, `assert()`).
+				let mut is_function = false;
+
 				if let Type::Function(f) = &*variable.type_ {
+					is_function = true;
+
 					if f.js_override.is_some() {
 						return;
 					}
 				}
 
 				// if the varaible's phase is inflight, skip it
-				if variable.phase == Phase::Inflight {
+				if variable.phase == Phase::Inflight && !is_function {
 					// special-handling for inflight methods?
 					return;
 				}
@@ -517,11 +540,13 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 					}
 				}
 
-				self.captures.capture_var(
-					self.method_name,
-					captured_object_ref,
-					qualification.iter().map(|f| f.text.clone()).collect_vec().join("."),
-				);
+				let op = if !qualification.is_empty() {
+					Some(qualification.iter().map(|f| f.text.clone()).collect_vec().join("."))
+				} else {
+					None
+				};
+
+				self.captures.capture_var(self.method_name, captured_object_ref, op);
 
 				return;
 			}

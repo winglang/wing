@@ -4,8 +4,7 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor({ SumStr }) {
-      this.SumStr = SumStr;
+    constructor({  }) {
     }
     async $inflight_init()  {
       const __parent_this = this;
@@ -61,6 +60,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
         const __parent_this = this;
         this.SumStr = "wow!";
       }
@@ -75,18 +75,11 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              SumStr: ${this._lift(this.SumStr, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.SumStr, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     const jsonNumber = 123;

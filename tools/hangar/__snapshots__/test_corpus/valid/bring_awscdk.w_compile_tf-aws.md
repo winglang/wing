@@ -4,8 +4,7 @@
 ```js
 module.exports = function({  }) {
   class CdkDockerImageFunction {
-    constructor({ function }) {
-      this.function = function;
+    constructor({  }) {
     }
     async $inflight_init()  {
       const __parent_this = this;
@@ -62,6 +61,7 @@ class $Root extends $stdlib.std.Resource {
     class CdkDockerImageFunction extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
         const __parent_this = this;
         this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",{
         "code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts")),}
@@ -78,18 +78,11 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const CdkDockerImageFunctionClient = ${CdkDockerImageFunction._toInflightType(this).text};
             const client = new CdkDockerImageFunctionClient({
-              function: ${this._lift(this.function, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          CdkDockerImageFunction._registerBindObject(this.function, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
   }

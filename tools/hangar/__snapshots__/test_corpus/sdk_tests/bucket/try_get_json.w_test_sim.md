@@ -2,6 +2,15 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Types:
+  std.Json = Json
+Variables:
+  handle():
+    b => [delete,putJson,tryGetJson]
+
 pass ─ try_get_json.wsim » root/env0/test:tryGetJson
  
 

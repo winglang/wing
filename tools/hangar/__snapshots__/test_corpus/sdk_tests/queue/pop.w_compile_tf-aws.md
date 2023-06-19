@@ -2,14 +2,12 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ q, NIL }) {
+module.exports = function({ NIL, q }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
     }
     async handle()  {
       const msgs = Object.freeze(["Foo", "Bar"]);
@@ -22,6 +20,8 @@ module.exports = function({ q, NIL }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -176,14 +176,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
+            NIL: ${context._lift(NIL, [""])},
             q: ${context._lift(q, ["pop", "push"])},
-            NIL: ${context._lift(NIL, [])},
           })
         `);
       }
@@ -200,11 +200,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(NIL, host, []);
-          $Closure1._registerBindObject(q, host, []);
+          $Closure1._registerBindObject(NIL, host, [""]);
+          $Closure1._registerBindObject(q, host, ["pop", "push"]);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(NIL, host, []);
+          $Closure1._registerBindObject(NIL, host, [""]);
           $Closure1._registerBindObject(q, host, ["pop", "push"]);
         }
         super._registerBind(host, ops);

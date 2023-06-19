@@ -2,6 +2,14 @@
 
 ## stdout.log
 ```log
+captures: Variables:
+  handle():
+    bar => []
+
+captures: Variables:
+  handle():
+    fn => []
+
 pass ─ shadowing.wsim » root/env0/test:capture shadow interaction
  
 

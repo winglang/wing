@@ -9,8 +9,6 @@ module.exports = function({ PARSE_ERROR, std_String }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("World") === "World")'`)})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("World") === "World"))};
       try {
@@ -20,6 +18,8 @@ module.exports = function({ PARSE_ERROR, std_String }) {
         const s = $error_s.message;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === PARSE_ERROR)'`)})((s === PARSE_ERROR))};
       }
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -36,11 +36,11 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("hello".length === 5)'`)})(("hello".length === 5))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("".length === 0)'`)})(("".length === 0))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -57,10 +57,10 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await "boom".at(0)) === "b")'`)})(((await "boom".at(0)) === "b"))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure3;
@@ -334,14 +334,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         const std_StringClient = std.String._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            PARSE_ERROR: ${context._lift(PARSE_ERROR, [])},
+            PARSE_ERROR: ${context._lift(PARSE_ERROR, [""])},
             std_String: ${std_StringClient.text},
           })
         `);
@@ -359,10 +359,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(PARSE_ERROR, host, []);
+          $Closure1._registerBindObject(PARSE_ERROR, host, [""]);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(PARSE_ERROR, host, []);
+          $Closure1._registerBindObject(PARSE_ERROR, host, [""]);
         }
         super._registerBind(host, ops);
       }
@@ -370,7 +370,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -390,18 +390,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -420,13 +413,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const assertThrows =  (expected, block) =>  {

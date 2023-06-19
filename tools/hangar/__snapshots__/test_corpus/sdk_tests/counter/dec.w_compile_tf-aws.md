@@ -9,8 +9,6 @@ module.exports = function({ counter }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
       const dec1 = (await counter.dec());
@@ -19,6 +17,8 @@ module.exports = function({ counter }) {
       const dec2 = (await counter.dec(2));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === (-2))'`)})(((await counter.peek()) === (-2)))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === 0)'`)})((dec2 === 0))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -35,8 +35,6 @@ module.exports = function({ counter }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       const key = "my-key";
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 0)'`)})(((await counter.peek(key)) === 0))};
@@ -46,6 +44,8 @@ module.exports = function({ counter }) {
       const dec2 = (await counter.dec(2,key));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === (-3))'`)})(((await counter.peek(key)) === (-3)))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(dec2 === (-1))'`)})((dec2 === (-1)))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -275,7 +275,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -298,7 +298,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(counter, host, []);
+          $Closure1._registerBindObject(counter, host, ["dec", "peek"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(counter, host, ["dec", "peek"]);
@@ -309,7 +309,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -332,7 +332,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(counter, host, []);
+          $Closure2._registerBindObject(counter, host, ["dec", "peek"]);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(counter, host, ["dec", "peek"]);

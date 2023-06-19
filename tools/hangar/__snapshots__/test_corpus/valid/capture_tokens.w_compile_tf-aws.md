@@ -9,10 +9,10 @@ module.exports = function({ r }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       (await r.foo());
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -22,18 +22,18 @@ module.exports = function({ r }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ url, api, MyResource }) {
+module.exports = function({ MyResource, api, url }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(url))'`)})((await MyResource.isValidUrl(url)))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(api.url))'`)})((await MyResource.isValidUrl(api.url)))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -49,9 +49,6 @@ module.exports = function({  }) {
       this.api = api;
       this.url = url;
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     static async isValidUrl(url)  {
       return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
     }
@@ -59,6 +56,9 @@ module.exports = function({  }) {
       const __parent_this = this;
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.url))'`)})((await MyResource.isValidUrl(this.url)))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.api.url))'`)})((await MyResource.isValidUrl(this.api.url)))};
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return MyResource;
@@ -361,7 +361,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("isValidUrl", "foo");
+        this._addInflightOps("isValidUrl", "foo", "$inflight_init");
         const __parent_this = this;
         this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
         this.url = this.api.url;
@@ -378,7 +378,7 @@ class $Root extends $stdlib.std.Resource {
             const MyResourceClient = ${MyResource._toInflightType(this).text};
             const client = new MyResourceClient({
               api: ${this._lift(this.api, ["url"])},
-              url: ${this._lift(this.url, [])},
+              url: ${this._lift(this.url, [""])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -387,26 +387,20 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyResource._registerBindObject(this.api, host, []);
-          MyResource._registerBindObject(this.url, host, []);
+          MyResource._registerBindObject(this.api, host, ["url"]);
+          MyResource._registerBindObject(this.url, host, [""]);
         }
         if (ops.includes("foo")) {
-          MyResource._registerBindObject(MyResource, host, ["isValidUrl"]);
           MyResource._registerBindObject(this.api, host, ["url"]);
-          MyResource._registerBindObject(this.url, host, []);
+          MyResource._registerBindObject(this.url, host, [""]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("isValidUrl")) {
-        }
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -429,7 +423,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(r, host, []);
+          $Closure1._registerBindObject(r, host, ["foo"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(r, host, ["foo"]);
@@ -440,15 +434,15 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         const MyResourceClient = MyResource._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({
-            url: ${context._lift(url, [])},
             api: ${context._lift(api, ["url"])},
+            url: ${context._lift(url, [""])},
             MyResource: ${MyResourceClient.text},
           })
         `);
@@ -466,13 +460,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api, host, []);
-          $Closure2._registerBindObject(url, host, []);
+          $Closure2._registerBindObject(api, host, ["url"]);
+          $Closure2._registerBindObject(url, host, [""]);
         }
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(MyResource, host, ["isValidUrl"]);
           $Closure2._registerBindObject(api, host, ["url"]);
-          $Closure2._registerBindObject(url, host, []);
+          $Closure2._registerBindObject(url, host, [""]);
         }
         super._registerBind(host, ops);
       }

@@ -9,12 +9,12 @@ module.exports = function({ Foo }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       return {
       "foo": new Foo(),}
       ;
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -31,11 +31,11 @@ module.exports = function({ getBar }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       const bar = (await getBar());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bar.foo.get()) === 42)'`)})(((await bar.foo.get()) === 42))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -47,12 +47,12 @@ module.exports = function({ getBar }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-     constructor()  {
-      const __parent_this = this;
-    }
     async get()  {
       const __parent_this = this;
       return 42;
+    }
+     constructor()  {
+      const __parent_this = this;
     }
   }
   return Foo;
@@ -194,7 +194,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get");
+        this._addInflightOps("get", "constructor");
         const __parent_this = this;
       }
       static _toInflightType(context) {
@@ -214,18 +214,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("get")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -247,24 +240,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({
-            getBar: ${context._lift(getBar, ["handle"])},
+            getBar: ${context._lift(getBar, [])},
           })
         `);
       }
@@ -280,11 +266,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(getBar, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(getBar, host, ["handle"]);
+          $Closure2._registerBindObject(getBar, host, []);
         }
         super._registerBind(host, ops);
       }

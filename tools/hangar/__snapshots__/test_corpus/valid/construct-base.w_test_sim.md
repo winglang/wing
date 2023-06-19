@@ -2,6 +2,10 @@
 
 ## stdout.log
 ```log
+=====================================================================
+WingResource
+---------------------------------------------------------------------
+
 my id is WingResource
 path of sqs.queue: root/env0/aws.sqsQueue.SqsQueue
 path of wing resource: root/env0/WingResource

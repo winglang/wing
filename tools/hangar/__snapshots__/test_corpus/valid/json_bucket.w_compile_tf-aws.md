@@ -9,11 +9,11 @@ module.exports = function({ b, fileName }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(msg)  {
       const x = (await b.getJson(fileName));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -23,18 +23,18 @@ module.exports = function({ b, fileName }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ b, fileName, j, getJson }) {
+module.exports = function({ b, fileName, getJson, j }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       (await b.putJson(fileName,j));
       (await getJson.invoke(""));
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -291,7 +291,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -315,8 +315,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-          $Closure1._registerBindObject(fileName, host, []);
+          $Closure1._registerBindObject(b, host, ["getJson"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["getJson"]);
@@ -328,7 +327,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -336,8 +335,8 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure2.js")({
             b: ${context._lift(b, ["putJson"])},
             fileName: ${context._lift(fileName, [])},
-            j: ${context._lift(j, [])},
             getJson: ${context._lift(getJson, ["invoke"])},
+            j: ${context._lift(j, [])},
           })
         `);
       }
@@ -354,10 +353,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(b, host, []);
-          $Closure2._registerBindObject(fileName, host, []);
-          $Closure2._registerBindObject(getJson, host, []);
-          $Closure2._registerBindObject(j, host, []);
+          $Closure2._registerBindObject(b, host, ["putJson"]);
+          $Closure2._registerBindObject(getJson, host, ["invoke"]);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(b, host, ["putJson"]);

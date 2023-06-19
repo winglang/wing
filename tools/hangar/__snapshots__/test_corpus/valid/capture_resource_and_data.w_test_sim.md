@@ -2,7 +2,36 @@
 
 ## stdout.log
 ```log
-pass ─ capture_resource_and_data.wsim » root/env0/test:resource and data
+=====================================================================
+Static
+---------------------------------------------------------------------
+
+=====================================================================
+Hello
+---------------------------------------------------------------------
+Types:
+  std.String = String
+  Static = Static
+  std.Json = Json
+Variables:
+  bang():
+    this.x => [bar]
+  hello():
+    this.b => [put]
+
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    foo => [baz]
+    hello => [bang]
+
+pass ┌ capture_resource_and_data.wsim » root/env0/test:resource and data
+     │ Hello
+     │ aa
+     │ hello
+     └ 123
  
 
 

@@ -2,6 +2,17 @@
 source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    let s = \"hello\";\n\n    class MyType {\n      static inflight staticMethod(): str {\n        return s;\n      }\n    }\n    \"#)"
 ---
+======================================================
+Captured by MyType:
+Variables:
+  staticMethod():
+    s => []
+
+======================================================
+Files:
+
+main.w
+------------------------------------------------------
 
     let s = "hello";
 
@@ -11,9 +22,54 @@ expression: "capture_ok(r#\"\n    let s = \"hello\";\n\n    class MyType {\n    
       }
     }
     
-======================================================
-Class: MyType
-Variables:
-  staticMethod():
-    s => []
+preflight.js
+------------------------------------------------------
+class MyType extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("staticMethod", "$inflight_init");
+    const __parent_this = this;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.MyType.js")({
+        s: ${context._lift(s, [])},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const MyTypeClient = ${MyType._toInflightType(this).text};
+        const client = new MyTypeClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  static _registerTypeBind(host, ops) {
+    if (ops.includes("staticMethod")) {
+      MyType._registerBindObject(s, host, []);
+    }
+    super._registerTypeBind(host, ops);
+  }
+}
+const s = "hello";
+
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({ s }) {
+  class MyType {
+    constructor({  }) {
+    }
+    static async staticMethod()  {
+      return s;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+  }
+  return MyType;
+}
 

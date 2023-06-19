@@ -9,8 +9,6 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(event)  {
       (await bucket1.put("file.txt","data"));
       (await bucket2.get("file.txt"));
@@ -27,6 +25,8 @@ module.exports = function({ bucket1, bucket2, bucket3 }) {
         const error = $error_error.message;
         {console.log(error)};
       }
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -476,7 +476,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -501,9 +501,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(bucket1, host, []);
-          $Closure1._registerBindObject(bucket2, host, []);
-          $Closure1._registerBindObject(bucket3, host, []);
+          $Closure1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
+          $Closure1._registerBindObject(bucket2, host, ["get", "publicUrl"]);
+          $Closure1._registerBindObject(bucket3, host, ["get"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);

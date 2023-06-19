@@ -2,6 +2,17 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    myBool => []
+    myDur => []
+    myNum => []
+    mySecondBool => []
+    myStr => []
+
 pass ─ capture_primitives.wsim (no tests)
  
 

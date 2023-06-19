@@ -9,9 +9,9 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(x)  {
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -28,9 +28,9 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(x)  {
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -44,13 +44,13 @@ module.exports = function({  }) {
   class C {
     constructor({  }) {
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     async my_method3(x)  {
       const __parent_this = this;
     }
     async my_method4(x)  {
+      const __parent_this = this;
+    }
+    async $inflight_init()  {
       const __parent_this = this;
     }
   }
@@ -104,7 +104,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -124,18 +124,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -155,18 +148,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class C extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("my_method3", "my_method4");
+        this._addInflightOps("my_method3", "my_method4", "$inflight_init");
         const __parent_this = this;
       }
        my_method(x)  {
@@ -191,15 +177,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("my_method3")) {
-        }
-        if (ops.includes("my_method4")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const my_func =  (callback) =>  {

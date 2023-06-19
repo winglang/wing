@@ -913,11 +913,6 @@ impl<'a> JSifier<'a> {
 		// Find all free variables in the class, and return a list of their symbols
 		let mut captures = ClassCaptures::scan(&self.types, class);
 
-		println!("=====================================================================");
-		println!("{}", class.name.name);
-		println!("---------------------------------------------------------------------");
-		println!("{}", captures);
-
 		if let Some(parent) = &class.parent {
 			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
 			captures.capture_type(parent.full_path_str_vec(), parent_type);
@@ -1324,7 +1319,7 @@ impl<'a> JSifier<'a> {
 	fn add_inflight_init_refs(&self, captures: &mut ClassCaptures) {
 		for (var, ops) in captures.vars() {
 			for op in ops {
-				captures.capture_var(CLASS_INFLIGHT_INIT_NAME, &var, op);
+				captures.capture_var(CLASS_INFLIGHT_INIT_NAME, &var, Some(op));
 			}
 		}
 	}

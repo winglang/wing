@@ -2,6 +2,35 @@
 source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_fail(r#\"\n    let var x = \"my_string\";\n\n    test \"test\" {\n      log(x);\n    }\n    \"#)"
 ---
+======================================================
+Captured by $Closure1:
+
+======================================================
+Errors:
+ - at 4:10 | Cannot capture reassignable object 'x'
+======================================================
+Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle()  {
+      {console.log(x)};
+    }
+    async $inflight_init()  {
+    }
+  }
+  return $Closure1;
+}
+
+main.w
+------------------------------------------------------
 
     let var x = "my_string";
 
@@ -9,8 +38,32 @@ expression: "capture_fail(r#\"\n    let var x = \"my_string\";\n\n    test \"tes
       log(x);
     }
     
-======================================================
-Class: $Closure1
+preflight.js
+------------------------------------------------------
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle", "$inflight_init");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const $Closure1Client = ${$Closure1._toInflightType(this).text};
+        const client = new $Closure1Client({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+let x = "my_string";
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
 
-Errors:
- - at 4:10 | Cannot capture reassignable object 'x'

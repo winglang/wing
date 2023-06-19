@@ -2,6 +2,35 @@
 source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    let s = { \"hello\": \"123\" };\n\n    test \"test\" {\n      assert(s.get(\"hello\").length == 3);\n    }\n    \"#)"
 ---
+======================================================
+Captured by $Closure1:
+Variables:
+  handle():
+    s => []
+
+======================================================
+Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ s }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((s)["hello"].length === 3)'`)})(((s)["hello"].length === 3))};
+    }
+    async $inflight_init()  {
+    }
+  }
+  return $Closure1;
+}
+
+main.w
+------------------------------------------------------
 
     let s = { "hello": "123" };
 
@@ -9,9 +38,39 @@ expression: "capture_ok(r#\"\n    let s = { \"hello\": \"123\" };\n\n    test \"
       assert(s.get("hello").length == 3);
     }
     
-======================================================
-Class: $Closure1
-Variables:
-  handle():
-    s => []
+preflight.js
+------------------------------------------------------
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle", "$inflight_init");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({
+        s: ${context._lift(s, [])},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const $Closure1Client = ${$Closure1._toInflightType(this).text};
+        const client = new $Closure1Client({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(s, host, []);
+    }
+    super._registerBind(host, ops);
+  }
+}
+const s = Object.freeze({"hello":"123"});
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
 

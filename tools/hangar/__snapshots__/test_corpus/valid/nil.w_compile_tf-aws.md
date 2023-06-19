@@ -9,11 +9,11 @@ module.exports = function({ foo }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.returnNil(true))) != null) === true)'`)})(((((await foo.returnNil(true))) != null) === true))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.returnNil(false))) != null) === false)'`)})(((((await foo.returnNil(false))) != null) === false))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -30,8 +30,6 @@ module.exports = function({ foo }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === false)'`)})(((((await foo.getOptionalValue())) != null) === false))};
       (await foo.setOptionalValue("hello"));
@@ -40,6 +38,8 @@ module.exports = function({ foo }) {
       (await foo.setOptionalValue(undefined));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === false)'`)})(((((await foo.getOptionalValue())) != null) === false))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.getOptionalValue()) === undefined)'`)})(((await foo.getOptionalValue()) === undefined))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -52,10 +52,6 @@ module.exports = function({ foo }) {
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
-    }
-    async $inflight_init()  {
-      const __parent_this = this;
-      this.optionalVar = undefined;
     }
     async returnNil(t)  {
       const __parent_this = this;
@@ -72,6 +68,10 @@ module.exports = function({  }) {
     async getOptionalValue()  {
       const __parent_this = this;
       return this.optionalVar;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+      this.optionalVar = undefined;
     }
   }
   return Foo;
@@ -280,7 +280,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "optionalVar");
+        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "$inflight_init", "optionalVar");
         const __parent_this = this;
       }
       static _toInflightType(context) {
@@ -300,22 +300,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("getOptionalValue")) {
-        }
-        if (ops.includes("returnNil")) {
-        }
-        if (ops.includes("setOptionalValue")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -338,7 +327,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(foo, host, []);
+          $Closure1._registerBindObject(foo, host, ["returnNil"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(foo, host, ["returnNil"]);
@@ -349,7 +338,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -372,7 +361,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(foo, host, []);
+          $Closure2._registerBindObject(foo, host, ["getOptionalValue", "setOptionalValue"]);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(foo, host, ["getOptionalValue", "setOptionalValue"]);

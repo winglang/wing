@@ -9,15 +9,15 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       const y = [1];
       let i = 10;
-      const Inner = require("./inflight.Inner.js")({y, i});
+      const Inner = require("./inflight.Inner.js")({});
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await new Inner().dang()) === 11)'`)})(((await new Inner().dang()) === 11))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await y.at(1)) === 2)'`)})(((await y.at(1)) === 2))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(i === 10)'`)})((i === 10))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -27,14 +27,14 @@ module.exports = function({  }) {
 
 ## inflight.Inner.js
 ```js
-module.exports = function({ y, i }) {
+module.exports = function({  }) {
   class Inner {
-     constructor()  {
-    }
     async dang()  {
       (await y.push(2));
       i = (i + 1);
       return ((await y.at(0)) + 10);
+    }
+     constructor()  {
     }
   }
   return Inner;
@@ -177,7 +177,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -196,13 +196,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inner inflight class capture immutable",new $Closure1(this,"$Closure1"));

@@ -9,8 +9,6 @@ module.exports = function({ b, c }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       const x1 = b.arn;
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'x1.startsWith("arn:aws:s3")'`)})(x1.startsWith("arn:aws:s3"))};
@@ -21,6 +19,8 @@ module.exports = function({ b, c }) {
       const x3 = (await c.getBucketArn());
       {((cond) => {if (!cond) throw new Error(`assertion failed: 'x3.startsWith("arn:aws:s3")'`)})(x3.startsWith("arn:aws:s3"))};
       {console.log(`c.getBucketArn=${x3}`)};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -35,12 +35,12 @@ module.exports = function({  }) {
     constructor({ b2 }) {
       this.b2 = b2;
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     async getBucketArn()  {
       const __parent_this = this;
       return this.b2.arn;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return MyClass;
@@ -204,7 +204,7 @@ class $Root extends $stdlib.std.Resource {
     class MyClass extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("getBucketArn");
+        this._addInflightOps("getBucketArn", "$inflight_init");
         const __parent_this = this;
         this.b2 = this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"aws.s3Bucket.S3Bucket");
       }
@@ -228,7 +228,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyClass._registerBindObject(this.b2, host, []);
+          MyClass._registerBindObject(this.b2, host, ["arn"]);
         }
         if (ops.includes("getBucketArn")) {
           MyClass._registerBindObject(this.b2, host, ["arn"]);
@@ -239,7 +239,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -263,8 +263,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-          $Closure1._registerBindObject(c, host, []);
+          $Closure1._registerBindObject(b, host, ["arn", "bucketDomainName"]);
+          $Closure1._registerBindObject(c, host, ["getBucketArn"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["arn", "bucketDomainName"]);

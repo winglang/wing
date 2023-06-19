@@ -2,18 +2,18 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ myConst, Foo }) {
+module.exports = function({ Foo, myConst }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       const x = new Foo();
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await x.getValue()) === myConst)'`)})(((await x.getValue()) === myConst))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -25,12 +25,12 @@ module.exports = function({ myConst, Foo }) {
 ```js
 module.exports = function({ myConst }) {
   class Foo {
-     constructor()  {
-      const __parent_this = this;
-    }
     async getValue()  {
       const __parent_this = this;
       return myConst;
+    }
+     constructor()  {
+      const __parent_this = this;
     }
   }
   return Foo;
@@ -173,13 +173,13 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("getValue");
+        this._addInflightOps("getValue", "constructor");
         const __parent_this = this;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.Foo.js")({
-            myConst: ${context._lift(myConst, [])},
+            myConst: ${context._lift(myConst, [""])},
           })
         `);
       }
@@ -196,10 +196,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(myConst, host, []);
+          Foo._registerBindObject(myConst, host, [""]);
         }
         if (ops.includes("getValue")) {
-          Foo._registerBindObject(myConst, host, []);
+          Foo._registerBindObject(myConst, host, [""]);
         }
         super._registerBind(host, ops);
       }
@@ -207,14 +207,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         const FooClient = Foo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            myConst: ${context._lift(myConst, [])},
+            myConst: ${context._lift(myConst, [""])},
             Foo: ${FooClient.text},
           })
         `);
@@ -232,10 +232,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(myConst, host, []);
+          $Closure1._registerBindObject(myConst, host, [""]);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(myConst, host, []);
+          $Closure1._registerBindObject(myConst, host, [""]);
         }
         super._registerBind(host, ops);
       }

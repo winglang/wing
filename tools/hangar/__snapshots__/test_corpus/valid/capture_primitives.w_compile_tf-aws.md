@@ -2,14 +2,12 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
+module.exports = function({ myBool, myDur, myNum, mySecondBool, myStr }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
     }
     async handle(s)  {
       {console.log(myStr)};
@@ -27,6 +25,8 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
       const hr = myDur.hours;
       const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -169,17 +169,17 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            myStr: ${context._lift(myStr, [])},
-            myNum: ${context._lift(myNum, [])},
-            mySecondBool: ${context._lift(mySecondBool, [])},
-            myBool: ${context._lift(myBool, [])},
-            myDur: ${context._lift(myDur, [])},
+            myBool: ${context._lift(myBool, [""])},
+            myDur: ${context._lift(myDur, [""])},
+            myNum: ${context._lift(myNum, [""])},
+            mySecondBool: ${context._lift(mySecondBool, [""])},
+            myStr: ${context._lift(myStr, [""])},
           })
         `);
       }
@@ -196,18 +196,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(myBool, host, []);
-          $Closure1._registerBindObject(myDur, host, []);
-          $Closure1._registerBindObject(myNum, host, []);
-          $Closure1._registerBindObject(mySecondBool, host, []);
-          $Closure1._registerBindObject(myStr, host, []);
+          $Closure1._registerBindObject(myBool, host, [""]);
+          $Closure1._registerBindObject(myDur, host, [""]);
+          $Closure1._registerBindObject(myNum, host, [""]);
+          $Closure1._registerBindObject(mySecondBool, host, [""]);
+          $Closure1._registerBindObject(myStr, host, [""]);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(myBool, host, []);
-          $Closure1._registerBindObject(myDur, host, []);
-          $Closure1._registerBindObject(myNum, host, []);
-          $Closure1._registerBindObject(mySecondBool, host, []);
-          $Closure1._registerBindObject(myStr, host, []);
+          $Closure1._registerBindObject(myBool, host, [""]);
+          $Closure1._registerBindObject(myDur, host, [""]);
+          $Closure1._registerBindObject(myNum, host, [""]);
+          $Closure1._registerBindObject(mySecondBool, host, [""]);
+          $Closure1._registerBindObject(myStr, host, [""]);
         }
         super._registerBind(host, ops);
       }

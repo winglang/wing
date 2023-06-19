@@ -2,13 +2,25 @@
 
 ## stdout.log
 ```log
-pass ─ static_members.wsim » root/env0/test:test
+captures: 
+captures: Types:
+  InflightClass = InflightClass
+
+ERROR: InflightClass is not defined
+
+../../../../examples/tests/valid/target/test/static_members.wsim.279646.tmp/.wing/preflight.js:44
+         }
+         static _toInflightType(context) {
+>>         const InflightClassClient = InflightClass._toInflightType(context);
+           return $stdlib.core.NodeJsCode.fromInline(`
+             require("./inflight.$Closure1.js")({
+
  
 
 
 
 
-Tests 1 passed (1) 
+Tests 1 failed (1) 
 Duration <DURATION>
 
 ```

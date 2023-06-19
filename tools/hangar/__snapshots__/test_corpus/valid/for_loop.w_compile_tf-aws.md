@@ -9,14 +9,14 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(event)  {
       for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(x <= 0)'`)})((x <= 0))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(x > 10)'`)})((x > 10))};
         {console.log(`${x}`)};
       }
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -30,15 +30,15 @@ module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     async hello()  {
       const __parent_this = this;
       for (const p of Object.freeze(["hello"])) {
         const __parent_this = this;
         {console.log(p)};
       }
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return Foo;
@@ -181,7 +181,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -201,18 +201,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("hello");
+        this._addInflightOps("hello", "$inflight_init");
         const __parent_this = this;
       }
       static _toInflightType(context) {
@@ -231,13 +224,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("hello")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const words = Object.freeze(["wing", "lang", "dang"]);

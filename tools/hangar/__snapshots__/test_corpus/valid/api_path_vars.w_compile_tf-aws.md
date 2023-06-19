@@ -9,14 +9,14 @@ module.exports = function({ std_Json }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(req)  {
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
       "headers": Object.freeze({"content-type":"application/json"}),
       "status": 200,}
       ;
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -26,20 +26,20 @@ module.exports = function({ std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ f, api }) {
+module.exports = function({ api, f }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       const username = "tsuf";
       const res = (await f.get(`${api.url}/users/${username}`));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -53,11 +53,11 @@ module.exports = function({  }) {
   class Fetch {
     constructor({  }) {
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     async get(url)  {
       return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return Fetch;
@@ -336,7 +336,7 @@ class $Root extends $stdlib.std.Resource {
     class Fetch extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get");
+        this._addInflightOps("get", "$inflight_init");
         const __parent_this = this;
       }
       static _toInflightType(context) {
@@ -356,18 +356,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("get")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -389,25 +382,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({
-            f: ${context._lift(f, ["get"])},
             api: ${context._lift(api, ["url"])},
+            f: ${context._lift(f, ["get"])},
           })
         `);
       }
@@ -424,8 +410,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api, host, []);
-          $Closure2._registerBindObject(f, host, []);
+          $Closure2._registerBindObject(api, host, ["url"]);
+          $Closure2._registerBindObject(f, host, ["get"]);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api, host, ["url"]);

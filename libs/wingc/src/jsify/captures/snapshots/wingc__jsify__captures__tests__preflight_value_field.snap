@@ -2,6 +2,39 @@
 source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    class MyType {\n      name: str;\n      init() {\n        this.name = \"hello\";\n      }\n    }\n\n    let t = new MyType();\n\n    test \"test\" {\n      log(t.name);\n      assert(t.name.length > 0);\n    }\n    \"#)"
 ---
+======================================================
+Captured by MyType:
+
+======================================================
+Captured by $Closure1:
+Variables:
+  handle():
+    t => [name]
+
+======================================================
+Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ t }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle()  {
+      {console.log(t.name)};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(t.name.length > 0)'`)})((t.name.length > 0))};
+    }
+    async $inflight_init()  {
+    }
+  }
+  return $Closure1;
+}
+
+main.w
+------------------------------------------------------
 
     class MyType {
       name: str;
@@ -17,12 +50,80 @@ expression: "capture_ok(r#\"\n    class MyType {\n      name: str;\n      init()
       assert(t.name.length > 0);
     }
     
-======================================================
-Class: MyType
+preflight.js
+------------------------------------------------------
+class MyType extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("$inflight_init");
+    const __parent_this = this;
+    this.name = "hello";
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.MyType.js")({
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const MyTypeClient = ${MyType._toInflightType(this).text};
+        const client = new MyTypeClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle", "$inflight_init");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({
+        t: ${context._lift(t, ["name"])},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const $Closure1Client = ${$Closure1._toInflightType(this).text};
+        const client = new $Closure1Client({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("$inflight_init")) {
+      $Closure1._registerBindObject(t, host, ["name"]);
+    }
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(t, host, ["name"]);
+    }
+    super._registerBind(host, ops);
+  }
+}
+const t = new MyType(this,"MyType");
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
 
-======================================================
-Class: $Closure1
-Variables:
-  handle():
-    t => [name]
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class MyType {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+  }
+  return MyType;
+}
 

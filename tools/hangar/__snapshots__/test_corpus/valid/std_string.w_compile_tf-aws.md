@@ -9,12 +9,12 @@ module.exports = function({ s1, s2 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {console.log(`index of \"s\" in s1 is ${s1.indexOf("s")}`)};
       {console.log((await (await s1.split(" ")).at(1)))};
       {console.log((await s1.concat(s2)))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -156,14 +156,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            s1: ${context._lift(s1, [])},
-            s2: ${context._lift(s2, [])},
+            s1: ${context._lift(s1, [""])},
+            s2: ${context._lift(s2, [""])},
           })
         `);
       }
@@ -180,12 +180,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(s1, host, []);
-          $Closure1._registerBindObject(s2, host, []);
+          $Closure1._registerBindObject(s1, host, [""]);
+          $Closure1._registerBindObject(s2, host, [""]);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(s1, host, []);
-          $Closure1._registerBindObject(s2, host, []);
+          $Closure1._registerBindObject(s1, host, [""]);
+          $Closure1._registerBindObject(s2, host, [""]);
         }
         super._registerBind(host, ops);
       }

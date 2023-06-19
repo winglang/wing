@@ -9,8 +9,6 @@ module.exports = function({ r, r2 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       const connection = (await r.rawClient());
       (await connection.set("wing","does redis"));
@@ -19,6 +17,8 @@ module.exports = function({ r, r2 }) {
       (await r2.set("wing","does redis again"));
       const value2 = (await r2.get("wing"));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -485,7 +485,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -509,8 +509,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(r, host, []);
-          $Closure1._registerBindObject(r2, host, []);
+          $Closure1._registerBindObject(r, host, ["rawClient"]);
+          $Closure1._registerBindObject(r2, host, ["get", "set"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(r, host, ["rawClient"]);

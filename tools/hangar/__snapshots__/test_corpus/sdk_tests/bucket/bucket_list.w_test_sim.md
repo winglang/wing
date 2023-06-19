@@ -2,6 +2,13 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    b => [list,put,putJson]
+
 pass ─ bucket_list.wsim » root/env0/test:list
  
 

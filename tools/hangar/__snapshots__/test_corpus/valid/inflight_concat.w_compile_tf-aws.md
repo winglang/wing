@@ -7,12 +7,12 @@ module.exports = function({  }) {
     constructor({ s1 }) {
       this.s1 = s1;
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     async foo()  {
       const __parent_this = this;
       {console.log((await this.s1.concat(" world")))};
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return R;
@@ -66,7 +66,7 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo");
+        this._addInflightOps("foo", "$inflight_init");
         const __parent_this = this;
         this.s1 = "hello";
       }
@@ -81,7 +81,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const RClient = ${R._toInflightType(this).text};
             const client = new RClient({
-              s1: ${this._lift(this.s1, [])},
+              s1: ${this._lift(this.s1, [""])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -90,10 +90,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          R._registerBindObject(this.s1, host, []);
+          R._registerBindObject(this.s1, host, [""]);
         }
         if (ops.includes("foo")) {
-          R._registerBindObject(this.s1, host, []);
+          R._registerBindObject(this.s1, host, [""]);
         }
         super._registerBind(host, ops);
       }

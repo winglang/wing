@@ -2,14 +2,64 @@
 
 ## stdout.log
 ```log
-pass ─ inflights_calling_inflights.wsim » root/env0/test:inflights can call other inflights 
-pass ─ inflights_calling_inflights.wsim » root/env1/test:variable can be an inflight closure
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    globalBucket => [put]
+
+=====================================================================
+$Closure2
+---------------------------------------------------------------------
+Variables:
+  handle():
+    storeInBucket => []
+
+=====================================================================
+$Closure3
+---------------------------------------------------------------------
+Variables:
+  handle():
+    func1 => [invoke]
+    globalBucket => [get]
+
+=====================================================================
+MyResource
+---------------------------------------------------------------------
+Variables:
+  foo():
+    this.closure => []
+
+=====================================================================
+$Closure4
+---------------------------------------------------------------------
+Variables:
+  handle():
+    globalBucket => [list]
+
+=====================================================================
+$Closure5
+---------------------------------------------------------------------
+Variables:
+  handle():
+    x => [foo]
+
+ERROR: Resource "root/env0/$Closure1" does not support inflight operation "" (requested by "root/env0/func1")
+
+../../../../examples/tests/valid/target/test/inflights_calling_inflights.wsim.502007.tmp/.wing/preflight.js:40
+             $Closure1._registerBindObject(globalBucket, host, ["put"]);
+           }
+>>         super._registerBind(host, ops);
+         }
+       }
+
  
 
 
 
 
-Tests 1 passed (1) 
+Tests 1 failed (1) 
 Duration <DURATION>
 
 ```

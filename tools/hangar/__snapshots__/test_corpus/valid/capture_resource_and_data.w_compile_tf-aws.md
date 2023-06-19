@@ -2,23 +2,72 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ data, res, queue }) {
+module.exports = function({ foo, hello }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
-      (await res.put("file.txt","world"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await res.get("file.txt")) === "world")'`)})(((await res.get("file.txt")) === "world"))};
-      (await queue.push("spirulina"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.baz.at(1)) === 2)'`)})(((await foo.baz.at(1)) === 2))};
+      (await hello.bang());
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
+}
+
+```
+
+## inflight.Hello.js
+```js
+module.exports = function({ Static, std_Json, std_String }) {
+  class Hello {
+    constructor({ b, x }) {
+      this.b = b;
+      this.x = x;
+    }
+    async hello()  {
+      const __parent_this = this;
+      (await this.b.put("hello","world"));
+    }
+    async bang()  {
+      const __parent_this = this;
+      const localArray = Object.freeze([123, "Hello", "World"]);
+      {console.log(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((await localArray.at(1))))};
+      const local = "hi";
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(local === "hi")'`)})((local === "hi"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(local.length === 2)'`)})((local.length === 2))};
+      {console.log(this.x.bar)};
+      {console.log((await Static.hello()))};
+      {console.log(((args) => { return JSON.stringify(args[0], null, args[1]) })([123]))};
+      (await this.hello());
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+  }
+  return Hello;
+}
+
+```
+
+## inflight.Static.js
+```js
+module.exports = function({  }) {
+  class Static {
+    constructor({  }) {
+    }
+    static async hello()  {
+      return "hello";
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+  }
+  return Static;
 }
 
 ```
@@ -72,7 +121,7 @@ module.exports = function({ data, res, queue }) {
             "uniqueId": "root_testresourceanddata_Handler_IamRolePolicy_6768C3B6"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_Hello_cloudBucket_A1CD7BFB.arn}\",\"${aws_s3_bucket.root_Hello_cloudBucket_A1CD7BFB.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testresourceanddata_Handler_IamRole_4C2C3DAA.name}"
       }
     },
@@ -98,9 +147,8 @@ module.exports = function({ data, res, queue }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
+            "BUCKET_NAME_a8082453": "${aws_s3_bucket.root_Hello_cloudBucket_A1CD7BFB.bucket}",
+            "BUCKET_NAME_a8082453_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8872ad1",
             "WING_TARGET": "tf-aws"
           }
@@ -129,41 +177,41 @@ module.exports = function({ data, res, queue }) {
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudBucket_4F3C4F53": {
+      "root_Hello_cloudBucket_A1CD7BFB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "path": "root/Default/Default/Hello/cloud.Bucket/Default",
+            "uniqueId": "root_Hello_cloudBucket_A1CD7BFB"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "cloud-bucket-c8eed6b9-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "root_Hello_cloudBucket_PublicAccessBlock_A68A6B68": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "path": "root/Default/Default/Hello/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_Hello_cloudBucket_PublicAccessBlock_A68A6B68"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.root_Hello_cloudBucket_A1CD7BFB.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "root_Hello_cloudBucket_Encryption_36E842FA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "path": "root/Default/Default/Hello/cloud.Bucket/Encryption",
+            "uniqueId": "root_Hello_cloudBucket_Encryption_36E842FA"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.root_Hello_cloudBucket_A1CD7BFB.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -185,17 +233,6 @@ module.exports = function({ data, res, queue }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
-    },
-    "aws_sqs_queue": {
-      "root_cloudQueue_E3597F7A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "root_cloudQueue_E3597F7A"
-          }
-        },
-        "name": "cloud-Queue-c86e03d8"
-      }
     }
   }
 }
@@ -212,18 +249,91 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class Static extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("hello", "$inflight_init");
+        const __parent_this = this;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Static.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const StaticClient = ${Static._toInflightType(this).text};
+            const client = new StaticClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
+    class Hello extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("hello", "bang", "$inflight_init");
+        const __parent_this = this;
+        this.x = {
+        "bar": "aa",
+        "baz": Object.freeze([1]),}
+        ;
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      }
+      static _toInflightType(context) {
+        const StaticClient = Static._toInflightType(context);
+        const std_JsonClient = std.Json._toInflightType(context);
+        const std_StringClient = std.String._toInflightType(context);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Hello.js")({
+            Static: ${StaticClient.text},
+            std_Json: ${std_JsonClient.text},
+            std_String: ${std_StringClient.text},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const HelloClient = ${Hello._toInflightType(this).text};
+            const client = new HelloClient({
+              b: ${this._lift(this.b, ["put"])},
+              x: ${this._lift(this.x, ["bar"])},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Hello._registerBindObject(this.b, host, ["put"]);
+          Hello._registerBindObject(this.x, host, ["bar"]);
+        }
+        if (ops.includes("bang")) {
+          Hello._registerBindObject(this.x, host, ["bar"]);
+        }
+        if (ops.includes("hello")) {
+          Hello._registerBindObject(this.b, host, ["put"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            data: ${context._lift(data, ["size"])},
-            res: ${context._lift(res, ["get", "put"])},
-            queue: ${context._lift(queue, ["push"])},
+            foo: ${context._lift(foo, ["baz"])},
+            hello: ${context._lift(hello, ["bang"])},
           })
         `);
       }
@@ -240,21 +350,21 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(data, host, []);
-          $Closure1._registerBindObject(queue, host, []);
-          $Closure1._registerBindObject(res, host, []);
+          $Closure1._registerBindObject(foo, host, ["baz"]);
+          $Closure1._registerBindObject(hello, host, ["bang"]);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(data, host, ["size"]);
-          $Closure1._registerBindObject(queue, host, ["push"]);
-          $Closure1._registerBindObject(res, host, ["get", "put"]);
+          $Closure1._registerBindObject(foo, host, ["baz"]);
+          $Closure1._registerBindObject(hello, host, ["bang"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const data = Object.freeze(new Set([1, 2, 3]));
-    const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    const foo = {
+    "bar": "hello",
+    "baz": Object.freeze([1, 2, 3]),}
+    ;
+    const hello = new Hello(this,"Hello");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:resource and data",new $Closure1(this,"$Closure1"));
   }
 }

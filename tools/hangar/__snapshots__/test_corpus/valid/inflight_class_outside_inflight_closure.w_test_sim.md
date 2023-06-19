@@ -2,6 +2,16 @@
 
 ## stdout.log
 ```log
+=====================================================================
+BinaryOperation
+---------------------------------------------------------------------
+
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Types:
+  BinaryOperation = BinaryOperation
+
 pass ─ inflight_class_outside_inflight_closure.wsim » root/env0/test:inflight class outside inflight closure
  
 

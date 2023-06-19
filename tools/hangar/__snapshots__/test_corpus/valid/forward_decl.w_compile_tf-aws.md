@@ -4,8 +4,7 @@
 ```js
 module.exports = function({  }) {
   class R {
-    constructor({ f }) {
-      this.f = f;
+    constructor({  }) {
     }
     async $inflight_init()  {
       const __parent_this = this;
@@ -61,6 +60,7 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
         const __parent_this = this;
         this.f = "Hello World!!!";
       }
@@ -84,18 +84,11 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const RClient = ${R._toInflightType(this).text};
             const client = new RClient({
-              f: ${this._lift(this.f, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          R._registerBindObject(this.f, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     const x = "hi";

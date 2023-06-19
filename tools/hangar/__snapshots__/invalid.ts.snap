@@ -26,48 +26,6 @@ exports[`access_static_from_instance.w 1`] = `
   |   ^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
 
 
-error: Cannot access static property \\"f\\" from instance
-   --> ../../../examples/tests/invalid/access_static_from_instance.w:19:5
-   |
-19 | foo.f; // Can't access static fields through instances
-   |     ^ Cannot access static property \\"f\\" from instance
-
-
-error: Cannot access static property \\"m\\" from instance
-   --> ../../../examples/tests/invalid/access_static_from_instance.w:20:5
-   |
-20 | foo.m(); // Can't access static methods through instances
-   |     ^ Cannot access static property \\"m\\" from instance
-
-
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
-  |
-7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |     ^^^^ Unknown symbol \\"this\\"
-
-
-error: Variable this.instanceField is not reassignable 
-  --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
-  |
-7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |     ^^^^^^^^^^^^^^^^^^^^^^^ Variable this.instanceField is not reassignable 
-
-
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
-  |
-8 |     this.f = 1; // Can't access static fields through \`this\`
-  |     ^^^^ Unknown symbol \\"this\\"
-
-
-error: Variable this.f is not reassignable 
-  --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
-  |
-8 |     this.f = 1; // Can't access static fields through \`this\`
-  |     ^^^^^^^^^^^ Variable this.f is not reassignable 
-
-
  
 
 
@@ -136,7 +94,11 @@ Duration <DURATION>
 `;
 
 exports[`capture_mutables.w 1`] = `
-"error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
+"=====================================================================
+$Closure1
+---------------------------------------------------------------------
+
+error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
   --> ../../../examples/tests/invalid/capture_mutables.w:8:10
   |
 8 |   assert(a.length == 1);
@@ -175,11 +137,15 @@ Duration <DURATION>
 `;
 
 exports[`capture_reassignable.w 1`] = `
-"error: Cannot capture reassignable field 'x'
+"=====================================================================
+$Closure1
+---------------------------------------------------------------------
+
+error: Cannot capture reassignable object 'x'
   --> ../../../examples/tests/invalid/capture_reassignable.w:6:15
   |
 6 |     log(\\"x: \${x}\\");
-  |               ^ Cannot capture reassignable field 'x'
+  |               ^ Cannot capture reassignable object 'x'
 
 
  
@@ -193,19 +159,17 @@ Duration <DURATION>
 `;
 
 exports[`capture_redefinition.w 1`] = `
-"error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
-  --> ../../../examples/tests/invalid/capture_redefinition.w:4:7
-  |
-4 |   log(y);
-  |       ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+"=====================================================================
+$Closure1
+---------------------------------------------------------------------
 
-
+pass ─ capture_redefinition.wsim (no tests)
  
 
 
 
 
-Tests 1 failed (1) 
+Tests 1 passed (1) 
 Duration <DURATION>
 "
 `;
@@ -216,125 +180,6 @@ exports[`class.w 1`] = `
    |
 17 |   init(foo: str)
    |                 ^ Expected block
-
-
-error: Preflight field \\"x\\" is not initialized
-  --> ../../../examples/tests/invalid/class.w:4:4
-  |
-4 |    x:num;
-  |    ^ Preflight field \\"x\\" is not initialized
-
-
-error: Expected 0 argument(s) but got 1
-  --> ../../../examples/tests/invalid/class.w:9:1
-  |
-9 | new C2(1);
-  | ^^^^^^^^^ Expected 0 argument(s) but got 1
-
-
-error: Expected 0 named argument(s)
-   --> ../../../examples/tests/invalid/class.w:13:1
-   |
-13 | new C9(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
-
-
-error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/class.w:19:1
-   |
-19 | new C10(); 
-   | ^^^^^^^^^ Expected 1 positional argument(s) but got 0
-
-
-error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/class.w:22:1
-   |
-22 | new C10(foo: \\"bar\\"); 
-   | ^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
-
-
-error: class C10 does not expect any named argument
-   --> ../../../examples/tests/invalid/class.w:25:1
-   |
-25 | new C10(\\"hello\\", foo: \\"bar\\"); 
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ class C10 does not expect any named argument
-
-
-error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:37:16
-   |
-37 |   inflight var x: num;
-   |                ^ Inflight field \\"x\\" is not initialized
-
-
-error: Inflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:39:12
-   |
-39 |   inflight y: str;
-   |            ^ Inflight field \\"y\\" is not initialized
-
-
-error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:44:12
-   |
-44 |   inflight x: num;
-   |            ^ Inflight field \\"x\\" is not initialized
-
-
-error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:50:12
-   |
-50 |   inflight x: num;
-   |            ^ Inflight field \\"x\\" is not initialized
-
-
-error: \\"y\\" cannot be initialized in the inflight initializer
-   --> ../../../examples/tests/invalid/class.w:61:10
-   |
-61 |     this.y = 1;
-   |          ^ \\"y\\" cannot be initialized in the inflight initializer
-
-
-error: \\"x\\" cannot be initialized in the preflight initializer
-   --> ../../../examples/tests/invalid/class.w:56:10
-   |
-56 |     this.x = 1;
-   |          ^ \\"x\\" cannot be initialized in the preflight initializer
-
-
-error: Preflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.w:52:3
-   |
-52 |   y: num;
-   |   ^ Preflight field \\"y\\" is not initialized
-
-
-error: Expected \\"x\\" to be a type but it's a variable
-   --> ../../../examples/tests/invalid/class.w:68:18
-   |
-68 | class C7 extends x {
-   |                  ^ Expected \\"x\\" to be a type but it's a variable
-
-
-error: Base class \\"S1\\" is not a class
-   --> ../../../examples/tests/invalid/class.w:74:18
-   |
-74 | class C8 extends S1 {
-   |                  ^^ Base class \\"S1\\" is not a class
-
-
-error: Class cannot extend itself
-   --> ../../../examples/tests/invalid/class.w:78:19
-   |
-78 | class C11 extends C11 {
-   |                   ^^^ Class cannot extend itself
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.w:31:14
-   |
-31 |     this.x = \\"Hi\\";
-   |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -393,111 +238,6 @@ error: Unknown parser error
    |                                        ^^ Unknown parser error
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/container_types.w:2:28
-  |
-2 | let arr1: Array<num> = [1, \\"2\\", 3];
-  |                            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Expected \\"Set\\" type, found \\"Array<num>\\"
-  --> ../../../examples/tests/invalid/container_types.w:3:12
-  |
-3 | let arr2 = Array<num> {1, 2, 3};
-  |            ^^^^^^^^^^^^^^^^^^^^ Expected \\"Set\\" type, found \\"Array<num>\\"
-
-
-error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
-  --> ../../../examples/tests/invalid/container_types.w:5:24
-  |
-5 | let arr4: Array<num> = arr3;
-  |                        ^^^^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
-
-
-error: Unknown symbol \\"someRandomMethod\\"
-  --> ../../../examples/tests/invalid/container_types.w:6:6
-  |
-6 | arr1.someRandomMethod();
-  |      ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/container_types.w:9:32
-  |
-9 | let m1: Map<num> = {\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3};
-  |                                ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Expected type to be \\"Map<num>\\", but got \\"Array<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:10:20
-   |
-10 | let m2: Map<num> = [\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3];
-   |                    ^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Map<num>\\", but got \\"Array<str>\\" instead
-
-
-error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:12:20
-   |
-12 | let m4: Map<num> = m3;
-   |                    ^^ Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
-
-
-error: Unknown symbol \\"someRandomMethod\\"
-   --> ../../../examples/tests/invalid/container_types.w:13:4
-   |
-13 | m1.someRandomMethod();
-   |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:16:24
-   |
-16 | let s1: Set<num> = {1, \\"2\\", 3};
-   |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Expected \\"Array\\" type, found \\"Set<num>\\"
-   --> ../../../examples/tests/invalid/container_types.w:17:10
-   |
-17 | let s2 = Set<num> [1, \\"2\\", 3];
-   |          ^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"Set<num>\\"
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:18:24
-   |
-18 | let s3: Set<num> = [1, \\"2\\", 3];
-   |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:18:20
-   |
-18 | let s3: Set<num> = [1, \\"2\\", 3];
-   |                    ^^^^^^^^^^^ Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
-
-
-error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:20:20
-   |
-20 | let s5: Set<str> = s4;
-   |                    ^^ Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
-
-
-error: Unknown symbol \\"someRandomMethod\\"
-   --> ../../../examples/tests/invalid/container_types.w:21:4
-   |
-21 | s1.someRandomMethod();
-   |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
-
-
-error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:23:21
-   |
-23 | let a: Array<str> = MutArray<str>[];
-   |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
-
-
  
 
 
@@ -552,7 +292,11 @@ Duration <DURATION>
 `;
 
 exports[`extern.w 1`] = `
-"error: Failed to resolve extern \\"./sad.js\\": Not Found
+"=====================================================================
+Foo
+---------------------------------------------------------------------
+
+error: Failed to resolve extern \\"./sad.js\\": Not Found
   --> ../../../examples/tests/invalid/extern.w:2:3
   |
 2 |   extern \\"./sad.js\\" static getNum(): num;
@@ -691,18 +435,26 @@ Duration <DURATION>
 `;
 
 exports[`inflight_class_capture_mutable.w 1`] = `
-"error: Cannot capture field 'x' with non-capturable type 'MutArray<str>'
+"=====================================================================
+Foo
+---------------------------------------------------------------------
+
+=====================================================================
+Goo
+---------------------------------------------------------------------
+
+error: Cannot capture field 'x' with non-capturable type 'MutArray<str>'
   --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:5:9
   |
 5 |     log(x.at(0));
   |         ^ Cannot capture field 'x' with non-capturable type 'MutArray<str>'
 
 
-error: Cannot capture reassignable field 'foo'
+error: Cannot capture reassignable object 'foo'
    --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:14:12
    |
 14 |     return foo;
-   |            ^^^ Cannot capture reassignable field 'foo'
+   |            ^^^ Cannot capture reassignable object 'foo'
 
 
  
@@ -811,19 +563,53 @@ Duration <DURATION>
 `;
 
 exports[`inflight_ref_explicit_ops.w 1`] = `
-"error: Unable to qualify which operations are performed on 'this.myQueue' of type 'Queue'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:13:12
-   |
-13 |     return this.myQueue;
-   |            ^^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.myQueue' of type 'Queue'. This is not supported yet.
+"=====================================================================
+Another
+---------------------------------------------------------------------
+Variables:
+  inflightReturnsResource():
+    this.myQueue => []
 
+=====================================================================
+Test
+---------------------------------------------------------------------
+Variables:
+  test1():
+    this.b => []
+    this.justBucket => [put]
+    this.justStr => []
+  test2():
+    this.another => [inflightReturnsResource]
+  test4():
+    this.another => [anotherStr]
 
-error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:34:13
-   |
-34 |     let x = this.b;
-   |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    f => [test1]
 
+=====================================================================
+$Closure2
+---------------------------------------------------------------------
+Variables:
+  handle():
+    f => [test2]
+
+=====================================================================
+$Closure3
+---------------------------------------------------------------------
+Variables:
+  handle():
+    f => [test3]
+
+=====================================================================
+$Closure4
+---------------------------------------------------------------------
+Variables:
+  handle():
+    f => [test4]
 
 error: Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:47:18
@@ -843,19 +629,37 @@ Duration <DURATION>
 `;
 
 exports[`inflight_ref_resource_sub_method.w 1`] = `
-"error: Unable to qualify which operations are performed on 'this.myQueue' of type 'Queue'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:13:12
-   |
-13 |     return this.myQueue;
-   |            ^^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.myQueue' of type 'Queue'. This is not supported yet.
+"=====================================================================
+Another
+---------------------------------------------------------------------
+Variables:
+  inflightReturnsResource():
+    this.myQueue => []
+  inflightReturnsResource2():
+    globalQueue => []
 
+=====================================================================
+Test
+---------------------------------------------------------------------
+Variables:
+  test():
+    this.another => [inflightReturnsResource,inflightReturnsResource2]
 
-error: Unable to qualify which operations are performed on 'globalQueue' of type 'Queue'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:18:12
-   |
-18 |     return globalQueue;
-   |            ^^^^^^^^^^^ Unable to qualify which operations are performed on 'globalQueue' of type 'Queue'. This is not supported yet.
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    f => [test]
 
+ERROR: Resource \\"root/env0/cloud.Queue\\" does not support inflight operation \\"\\" (requested by \\"root/env0/test:test/Handler\\")
+
+../../../examples/tests/invalid/target/test/inflight_ref_resource_sub_method.wsim.526928.tmp/.wing/preflight.js:37
+         _registerBind(host, ops) {
+           if (ops.includes(\\"$inflight_init\\")) {
+>>           Another._registerBindObject(globalQueue, host, [\\"\\"]);
+             Another._registerBindObject(this.myQueue, host, [\\"\\"]);
+           }
 
  
 
@@ -868,19 +672,29 @@ Duration <DURATION>
 `;
 
 exports[`inflight_ref_unknown_op.w 1`] = `
-"error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:13:13
-   |
-13 |     let x = this.b;
-   |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+"=====================================================================
+Test
+---------------------------------------------------------------------
+Variables:
+  test():
+    globalB => []
+    this.b => []
 
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    f => [test]
 
-error: Unable to qualify which operations are performed on 'globalB' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:17:13
-   |
-17 |     let y = globalB;
-   |             ^^^^^^^ Unable to qualify which operations are performed on 'globalB' of type 'Bucket'. This is not supported yet.
+ERROR: Resource \\"root/env0/cloud.Bucket\\" does not support inflight operation \\"\\" (requested by \\"root/env0/test:test/Handler\\")
 
+../../../examples/tests/invalid/target/test/inflight_ref_unknown_op.wsim.528940.tmp/.wing/preflight.js:37
+         _registerBind(host, ops) {
+           if (ops.includes(\\"$inflight_init\\")) {
+>>           Test._registerBindObject(globalB, host, [\\"\\"]);
+             Test._registerBindObject(this.b, host, [\\"\\"]);
+           }
 
  
 
@@ -900,41 +714,6 @@ exports[`interface.w 1`] = `
    |   ^^^^^^^^^ Properties are not supported in interfaces
 
 
-error: Unknown symbol \\"IB\\"
-  --> ../../../examples/tests/invalid/interface.w:2:22
-  |
-2 | interface IA extends IB {
-  |                      ^^ Unknown symbol \\"IB\\"
-
-
-error: Unknown symbol \\"IDontExist\\"
-   --> ../../../examples/tests/invalid/interface.w:10:26
-   |
-10 | interface IExist extends IDontExist {
-   |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
-
-
-error: Expected an interface, instead found type \\"ISomeClass\\"
-   --> ../../../examples/tests/invalid/interface.w:16:34
-   |
-16 | interface ISomeInterface extends ISomeClass {
-   |                                  ^^^^^^^^^^ Expected an interface, instead found type \\"ISomeClass\\"
-
-
-error: Symbol \\"foo\\" already defined in this scope
-   --> ../../../examples/tests/invalid/interface.w:23:5
-   |
-23 |     foo(): void;
-   |     ^^^ Symbol \\"foo\\" already defined in this scope
-
-
-error: Symbol \\"foo\\" already defined in this scope
-   --> ../../../examples/tests/invalid/interface.w:25:5
-   |
-25 |     foo(): num;
-   |     ^^^ Symbol \\"foo\\" already defined in this scope
-
-
  
 
 
@@ -951,69 +730,6 @@ exports[`json.w 1`] = `
    |
 30 | let jsonIncomplete = Json;
    |                          ^ Json literal must have an element
-
-
-error: Expected type to be \\"str\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:5:14
-  |
-5 | let s: str = j;
-  |              ^ Expected type to be \\"str\\", but got \\"Json\\" instead
-
-
-error: Expected type to be \\"num\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:7:14
-  |
-7 | let n: num = j;
-  |              ^ Expected type to be \\"num\\", but got \\"Json\\" instead
-
-
-error: Expected type to be \\"bool\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:9:15
-  |
-9 | let b: bool = j;
-  |               ^ Expected type to be \\"bool\\", but got \\"Json\\" instead
-
-
-error: Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:11:19
-   |
-11 | let m: Map<str> = j;
-   |                   ^ Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
-
-
-error: Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:13:20
-   |
-13 | let s2: Set<str> = j;
-   |                    ^ Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
-
-
-error: Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:15:21
-   |
-15 | let a: Array<str> = j;
-   |                     ^ Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
-
-
-error: Unknown symbol \\"set\\"
-   --> ../../../examples/tests/invalid/json.w:20:13
-   |
-20 | foreverJson.set(\\"a\\", \\"world!\\");
-   |             ^^^ Unknown symbol \\"set\\"
-
-
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-   --> ../../../examples/tests/invalid/json.w:24:18
-   |
-24 | let jArr = Json [bkt];
-   |                  ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-
-
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-   --> ../../../examples/tests/invalid/json.w:27:28
-   |
-27 | let jsonObj = Json { boom: bkt };
-   |                            ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
 
 
  
@@ -1365,27 +1081,6 @@ exports[`primitives.w 1`] = `
   |     ^^^^ Unexpected reference \\"structured_access_expression\\"
 
 
-error: Unknown symbol \\"blabla\\"
-  --> ../../../examples/tests/invalid/primitives.w:9:16
-  |
-9 | let join = arr.blabla(\\",\\");
-  |                ^^^^^^ Unknown symbol \\"blabla\\"
-
-
-error: Unknown symbol \\"push\\"
-   --> ../../../examples/tests/invalid/primitives.w:11:5
-   |
-11 | arr.push(4);
-   |     ^^^^ Unknown symbol \\"push\\"
-
-
-error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/primitives.w:13:14
-   |
-13 | let n: str = arr.at(0);
-   |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
-
-
  
 
 
@@ -1461,11 +1156,18 @@ Duration <DURATION>
 `;
 
 exports[`resource_captures.w 1`] = `
-"error: Cannot capture reassignable field 'reassignable'
+"=====================================================================
+Foo
+---------------------------------------------------------------------
+Variables:
+  test():
+    this.bucket => []
+
+error: Cannot capture reassignable object 'reassignable'
    --> ../../../examples/tests/invalid/resource_captures.w:18:17
    |
 18 |     log(\\"\${this.reassignable}\\");
-   |                 ^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
+   |                 ^^^^^^^^^^^^ Cannot capture reassignable object 'reassignable'
 
 
 error: Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
@@ -1473,20 +1175,6 @@ error: Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
    |
 20 |     log(this.mutArray.at(0));
    |              ^^^^^^^^ Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
-
-
-error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/resource_captures.w:23:13
-   |
-23 |     let b = this.bucket;
-   |             ^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
-
-
-error: Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
-   --> ../../../examples/tests/invalid/resource_captures.w:27:10
-   |
-27 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
-   |          ^^^^^^^^^^^^^^^^^^^^^ Capturing collection of preflight classes is not supported yet (type is 'Array<Bucket>')
 
 
  
@@ -1642,20 +1330,6 @@ exports[`statements_if.w 1`] = `
   | ^^^ Unexpected unary operator \\"--\\"
 
 
-error: Expected type to be \\"bool\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/statements_if.w:5:5
-  |
-5 | if !n {}
-  |     ^ Expected type to be \\"bool\\", but got \\"num\\" instead
-
-
-error: Expected type to be \\"bool\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/statements_if.w:8:5
-  |
-8 | if !n || true {}
-  |     ^ Expected type to be \\"bool\\", but got \\"num\\" instead
-
-
  
 
 
@@ -1690,56 +1364,6 @@ exports[`struct_expansion.w 1`] = `
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
    |               ^^^^^^^^^^^^^^^^ Unexpected 'keyword_argument'
-
-
-error: \\"bublic\\" is not a field of \\"BucketProps\\"
-  --> ../../../examples/tests/invalid/struct_expansion.w:3:15
-  |
-3 | let bucket1 = new cloud.Bucket(bublic: false, public: true);
-  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \\"bublic\\" is not a field of \\"BucketProps\\"
-
-
-error: Expected between 0 and 1 arguments but got 2
-  --> ../../../examples/tests/invalid/struct_expansion.w:7:15
-  |
-7 | let bucket2 = new cloud.Bucket(2, public: true);
-  |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2
-
-
-error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/struct_expansion.w:7:32
-  |
-7 | let bucket2 = new cloud.Bucket(2, public: true);
-  |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
-
-
-error: \\"status\\" is not initialized
-   --> ../../../examples/tests/invalid/struct_expansion.w:15:9
-   |  
-15 |   let x = cloud.ApiResponse {
-   | /---------^
-16 | |   body: \\"Hello, world!\\",
-17 | | };
-   | \\\\-^ \\"status\\" is not initialized
-
-
-error: \\"notAField\\" is not a field of \\"ApiResponse\\"
-   --> ../../../examples/tests/invalid/struct_expansion.w:20:9
-   |  
-20 |   let y = cloud.ApiResponse {
-   | /---------^
-21 | |   status: 200,
-22 | |   notAField: 500,
-23 | | // ^^^^^^^^^^^ \\"notAField\\" is not a field of \\"ApiResponse\\"
-24 | | };
-   | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
-
-
-error: Expected 2 positional argument(s) but got 1
-   --> ../../../examples/tests/invalid/struct_expansion.w:11:3
-   |
-11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
 
 
  

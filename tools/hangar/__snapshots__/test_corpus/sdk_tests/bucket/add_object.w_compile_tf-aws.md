@@ -9,12 +9,12 @@ module.exports = function({ b, jsonObj1, std_Json }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 2)'`)})(((await b.list()).length === 2))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file2.txt")) === "Bar")'`)})(((await b.get("file2.txt")) === "Bar"))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -224,7 +224,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -250,8 +250,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-          $Closure1._registerBindObject(jsonObj1, host, []);
+          $Closure1._registerBindObject(b, host, ["get", "getJson", "list"]);
         }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["get", "getJson", "list"]);

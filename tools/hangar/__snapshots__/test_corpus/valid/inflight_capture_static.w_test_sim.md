@@ -2,17 +2,35 @@
 
 ## stdout.log
 ```log
-pass ─ inflight_capture_static.wsim » root/env0/test:call static method of preflight              
-pass ─ inflight_capture_static.wsim » root/env1/test:call static method of an outer inflight class
-pass ─ inflight_capture_static.wsim » root/env2/test:call static method of an inner inflight class
-pass ┌ inflight_capture_static.wsim » root/env3/test:call static method of a namespaced type      
-     └ WING_TARGET=sim
+captures: 
+captures: 
+captures: Types:
+  Preflight = Preflight
+
+captures: Types:
+  OuterInflight = OuterInflight
+
+captures: Types:
+  InnerInflight = InnerInflight
+
+captures: Types:
+  util.Util = Util
+
+ERROR: InnerInflight is not defined
+
+../../../../examples/tests/valid/target/test/inflight_capture_static.wsim.276645.tmp/.wing/preflight.js:116
+         }
+         static _toInflightType(context) {
+>>         const InnerInflightClient = InnerInflight._toInflightType(context);
+           return $stdlib.core.NodeJsCode.fromInline(`
+             require("./inflight.$Closure3.js")({
+
  
 
 
 
 
-Tests 1 passed (1) 
+Tests 1 failed (1) 
 Duration <DURATION>
 
 ```

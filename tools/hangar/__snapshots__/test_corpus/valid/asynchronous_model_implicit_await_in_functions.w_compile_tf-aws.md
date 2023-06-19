@@ -9,9 +9,9 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(s)  {
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure1;
@@ -28,11 +28,11 @@ module.exports = function({ strToStr }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
     async handle(s)  {
       (await strToStr.invoke("one"));
       {console.log((await strToStr.invoke("two")))};
+    }
+    async $inflight_init()  {
     }
   }
   return $Closure2;
@@ -253,7 +253,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -273,18 +273,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
@@ -307,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(strToStr, host, []);
+          $Closure2._registerBindObject(strToStr, host, ["invoke"]);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(strToStr, host, ["invoke"]);

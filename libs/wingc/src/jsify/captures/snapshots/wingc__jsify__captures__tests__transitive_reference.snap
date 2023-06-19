@@ -1,14 +1,51 @@
 ---
 source: libs/wingc/src/jsify/captures/tests.rs
-expression: "capture_ok(r#\"\n    bring cloud;\n    \n\t\tclass MyType {\n      b: cloud.Bucket;\n\n      init() { \n        this.b = new cloud.Bucket();\n      }\n\n      inflight isEmpty(): bool {\n        return this.b.list().length == 0;\n      }\n\n      inflight checkIfEmpty() {\n        if this.isEmpty() {\n          log(\"empty!\");\n        }\n      }\n    }\n\n    let t = new MyType();\n    test \"test\" {\n      t.checkIfEmpty();\n    }\n\t\t\"#)"
+expression: "capture_ok(r#\"\n    bring cloud;\n    \n\t\tclass MyType {\n      b: cloud.Bucket;\n\n      init() {\n        this.b = new cloud.Bucket();\n      }\n\n      inflight isEmpty(): bool {\n        return this.b.list().length == 0;\n      }\n\n      inflight checkIfEmpty() {\n        if this.isEmpty() {\n          log(\"empty!\");\n        }\n      }\n    }\n\n    let t = new MyType();\n    test \"test\" {\n      t.checkIfEmpty();\n    }\n\t\t\"#)"
 ---
+======================================================
+Captured by MyType:
+Variables:
+  checkIfEmpty():
+    this.isEmpty => []
+  isEmpty():
+    this.b => [list]
+
+======================================================
+Captured by $Closure1:
+Variables:
+  handle():
+    t => [checkIfEmpty]
+
+======================================================
+Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ t }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle()  {
+      (await t.checkIfEmpty());
+    }
+    async $inflight_init()  {
+    }
+  }
+  return $Closure1;
+}
+
+main.w
+------------------------------------------------------
 
     bring cloud;
     
     class MyType {
       b: cloud.Bucket;
 
-      init() { 
+      init() {
         this.b = new cloud.Bucket();
       }
 
@@ -28,15 +65,108 @@ expression: "capture_ok(r#\"\n    bring cloud;\n    \n\t\tclass MyType {\n      
       t.checkIfEmpty();
     }
     
-======================================================
-Class: MyType
-Variables:
-  isEmpty():
-    this.b => [list]
+preflight.js
+------------------------------------------------------
+const cloud = require('@winglang/sdk').cloud;
+class MyType extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("isEmpty", "checkIfEmpty", "$inflight_init");
+    const __parent_this = this;
+    this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.MyType.js")({
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const MyTypeClient = ${MyType._toInflightType(this).text};
+        const client = new MyTypeClient({
+          b: ${this._lift(this.b, ["list"])},
+          isEmpty: ${this._lift(this.isEmpty, [])},
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("$inflight_init")) {
+      MyType._registerBindObject(this.b, host, ["list"]);
+    }
+    if (ops.includes("checkIfEmpty")) {
+      MyType._registerBindObject(this.isEmpty, host, []);
+    }
+    if (ops.includes("isEmpty")) {
+      MyType._registerBindObject(this.b, host, ["list"]);
+    }
+    super._registerBind(host, ops);
+  }
+}
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle", "$inflight_init");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({
+        t: ${context._lift(t, ["checkIfEmpty"])},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const $Closure1Client = ${$Closure1._toInflightType(this).text};
+        const client = new $Closure1Client({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("$inflight_init")) {
+      $Closure1._registerBindObject(t, host, ["checkIfEmpty"]);
+    }
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(t, host, ["checkIfEmpty"]);
+    }
+    super._registerBind(host, ops);
+  }
+}
+const t = new MyType(this,"MyType");
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
 
-======================================================
-Class: $Closure1
-Variables:
-  handle():
-    t => [checkIfEmpty]
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class MyType {
+    constructor({ b, isEmpty }) {
+      this.b = b;
+      this.isEmpty = isEmpty;
+    }
+    async isEmpty()  {
+      const __parent_this = this;
+      return ((await this.b.list()).length === 0);
+    }
+    async checkIfEmpty()  {
+      const __parent_this = this;
+      if ((await this.isEmpty())) {
+        const __parent_this = this;
+        {console.log("empty!")};
+      }
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+  }
+  return MyType;
+}
 

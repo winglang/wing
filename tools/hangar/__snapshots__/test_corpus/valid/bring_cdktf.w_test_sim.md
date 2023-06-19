@@ -2,11 +2,26 @@
 
 ## stdout.log
 ```log
+=====================================================================
+MyClass
+---------------------------------------------------------------------
+Variables:
+  getBucketArn():
+    this.b2 => [arn]
+
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    b => [arn,bucketDomainName]
+    c => [getBucketArn]
+
 ERROR: No stack could be identified for the construct at path 'root/env0/aws.s3Bucket.S3Bucket'
 
-../../../../examples/tests/valid/target/test/bring_cdktf.wsim.852559.tmp/.wing/preflight.js:75
-           }
-           if (ops.includes("handle")) {
+../../../../examples/tests/valid/target/test/bring_cdktf.wsim.528331.tmp/.wing/preflight.js:71
+         _registerBind(host, ops) {
+           if (ops.includes("$inflight_init")) {
 >>           $Closure1._registerBindObject(b, host, ["arn", "bucketDomainName"]);
              $Closure1._registerBindObject(c, host, ["getBucketArn"]);
            }

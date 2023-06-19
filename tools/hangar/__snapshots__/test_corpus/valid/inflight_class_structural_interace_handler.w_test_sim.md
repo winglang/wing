@@ -2,13 +2,26 @@
 
 ## stdout.log
 ```log
-pass ─ inflight_class_structural_interace_handler.wsim » root/env0/test:structure interface types for 'handle'
+captures: 
+captures: Types:
+  YesGoo = YesGoo
+  NotGoo = NotGoo
+
+ERROR: YesGoo is not defined
+
+../../../../examples/tests/valid/target/test/inflight_class_structural_interace_handler.wsim.274923.tmp/.wing/preflight.js:41
+         static _toInflightType(context) {
+           const NotGooClient = NotGoo._toInflightType(context);
+>>         const YesGooClient = YesGoo._toInflightType(context);
+           return $stdlib.core.NodeJsCode.fromInline(`
+             require("./inflight.$Closure1.js")({
+
  
 
 
 
 
-Tests 1 passed (1) 
+Tests 1 failed (1) 
 Duration <DURATION>
 
 ```

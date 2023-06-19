@@ -2,6 +2,36 @@
 source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    bring cloud;\n    let b = new cloud.Bucket();\n\n    test \"test\" {\n      b.put(\"hello\", \"world\");\n      b.list();\n    }\n    \"#)"
 ---
+======================================================
+Captured by $Closure1:
+Variables:
+  handle():
+    b => [list,put]
+
+======================================================
+Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ b }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle()  {
+      (await b.put("hello","world"));
+      (await b.list());
+    }
+    async $inflight_init()  {
+    }
+  }
+  return $Closure1;
+}
+
+main.w
+------------------------------------------------------
 
     bring cloud;
     let b = new cloud.Bucket();
@@ -11,9 +41,43 @@ expression: "capture_ok(r#\"\n    bring cloud;\n    let b = new cloud.Bucket();\
       b.list();
     }
     
-======================================================
-Class: $Closure1
-Variables:
-  handle():
-    b => [list,put]
+preflight.js
+------------------------------------------------------
+const cloud = require('@winglang/sdk').cloud;
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle", "$inflight_init");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({
+        b: ${context._lift(b, ["list", "put"])},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const $Closure1Client = ${$Closure1._toInflightType(this).text};
+        const client = new $Closure1Client({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("$inflight_init")) {
+      $Closure1._registerBindObject(b, host, ["list", "put"]);
+    }
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(b, host, ["list", "put"]);
+    }
+    super._registerBind(host, ops);
+  }
+}
+const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
 

@@ -2,6 +2,14 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    privateBucket => [publicUrl,put]
+    publicBucket => [publicUrl,put]
+
 pass ─ public_url.wsim » root/env0/test:publicUrl
  
 

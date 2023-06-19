@@ -2,6 +2,15 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Types:
+  std.String = String
+Variables:
+  handle():
+    table => [insert,list]
+
 pass ─ list.wsim » root/env0/test:list
  
 

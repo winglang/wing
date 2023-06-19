@@ -2,6 +2,13 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    b => [delete,put,tryGet]
+
 pass ─ try_get.wsim » root/env0/test:tryGet
  
 

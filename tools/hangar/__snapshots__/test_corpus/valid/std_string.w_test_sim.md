@@ -2,6 +2,14 @@
 
 ## stdout.log
 ```log
+=====================================================================
+$Closure1
+---------------------------------------------------------------------
+Variables:
+  handle():
+    s1 => []
+    s2 => []
+
 pass ┌ std_string.wsim » root/env0/test:string
      │ index of "s" in s1 is 0
      │ string

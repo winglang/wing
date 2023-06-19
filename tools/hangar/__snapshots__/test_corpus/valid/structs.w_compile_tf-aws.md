@@ -7,12 +7,12 @@ module.exports = function({  }) {
     constructor({ data }) {
       this.data = data;
     }
-    async $inflight_init()  {
-      const __parent_this = this;
-    }
     async getStuff()  {
       const __parent_this = this;
       return this.data.field0;
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
     }
   }
   return Foo;
@@ -65,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, b) {
         super(scope, id);
-        this._addInflightOps("getStuff");
+        this._addInflightOps("getStuff", "$inflight_init");
         const __parent_this = this;
         this.data = b;
       }
@@ -89,7 +89,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.data, host, []);
+          Foo._registerBindObject(this.data, host, ["field0"]);
         }
         if (ops.includes("getStuff")) {
           Foo._registerBindObject(this.data, host, ["field0"]);
