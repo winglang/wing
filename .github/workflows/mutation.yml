@@ -1,0 +1,71 @@
+name: "PR Mutator"
+on:
+  workflow_run:
+    branches-ignore:
+      - main
+    workflows:
+      - "Build"
+    types:
+      completed
+concurrency:
+  group: "mutation-${{ github.event.workflow_run.head_branch }}"
+  cancel-in-progress: true
+permissions:
+  contents: write
+jobs:
+  mutate:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'failure'
+    steps:
+    - id: token-check
+      name: Check if mutation token is set
+      working-directory: ${{ github.workspace }}
+      run: echo "HAS_TOKEN=${{ secrets.MUTATION_TOKEN && 'true' || 'false' }}" >> $GITHUB_OUTPUT
+    - name: Token notice
+      if: steps.token-check.outputs.HAS_TOKEN == 'false'
+      working-directory: ${{ github.workspace }}
+      run: |
+        echo "Add a MUTATION_TOKEN repository secret with a personal access token to enable self mutation.
+        It requires read/write repo permissions." >> $GITHUB_STEP_SUMMARY
+        exit 1
+    - name: Download artifacts
+      id: download-artifacts
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{secrets.MUTATION_TOKEN}}
+        run_id: ${{ github.event.workflow_run.id }}
+        name: __.+\.patch$
+        name_is_regexp: true
+        if_no_artifact_found: ignore
+    - name: Checkout Workflow Branch
+      if: steps.download-artifacts.outputs.found_artifact == 'true'
+      uses: actions/checkout@v3
+      with:
+        token: ${{secrets.MUTATION_TOKEN}}
+        ref: ${{ github.event.workflow_run.head_branch }}
+        path: ${{ github.event.workflow_run.head_branch }}
+    - id: self_mutation
+      if: steps.download-artifacts.outputs.found_artifact == 'true'
+      name: Apply downloaded pathes
+      run: |
+        for f in $(find ./*.diff/*.diff); do
+          echo "Applying $f"
+          git apply $f
+          if [ $? -eq 0 ]; then
+            echo "Patch applied successfully"
+            rm $f
+          else
+            echo "Patch failed to apply"
+            cat $f
+            exit 1
+          fi
+        done
+    - name: Push changes
+      if: steps.download-artifacts.outputs.found_artifact == 'true' && steps.self_mutation.outputs.self_mutation_happened
+      env:
+        HEAD_REF: ${{ github.event.workflow_run.head_branch }}
+      run: |
+        git config user.name "monada-bot[bot]"
+        git config user.email "monabot@monada.co"
+        git commit -s -m "chore: self mutation"
+        git push origin HEAD:$HEAD_REF

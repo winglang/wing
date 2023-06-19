@@ -166,6 +166,23 @@ jobs:
       - name: Test
         run: npm run test:ci
 
+      - name: Create git patch
+        id: diff
+        run: |
+          git add .
+          git diff --cached --binary --no-color HEAD > build.diff
+          if [ -s build.diff ]
+          then
+            echo "::set-output name=diff::true"
+          fi
+      - name: Upload Diff
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: diff
+          path: build.diff
+
+
   benchmarks:
     name: E2E Benchmarks
     runs-on: ubuntu-latest
@@ -263,7 +280,25 @@ jobs:
         working-directory: tools/hangar
         run: |
           npm run test:generate
-          npm run test -- --shard=${{ matrix.shard }}
+          npm run test -- --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
+
+      - name: Create git patch
+        # we only care about the diff in linux
+        if: matrix.runner == 'ubuntu' && matrix.node == '20'
+        id: diff
+        run: |
+          git add .
+          git diff --cached --binary HEAD > e2e.diff
+          if [ -s e2e.diff ]
+          then
+            echo "::set-output name=diff::true"
+          fi
+      - name: Upload Diff
+        if: matrix.runner == 'ubuntu' && matrix.node == '20' && steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: diff
+          path: e2e.diff
 
   quality-gate:
     name: Quality Gate
@@ -274,6 +309,18 @@ jobs:
       - benchmarks
       - unit-tests
     steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+      - name: Check Patches
+        run: |
+          if [ -d ./*.diff ]
+          then
+            echo "There are patches!"
+            for f in $(find ./*.diff/*.diff); do
+              cat $f
+            done
+            exit 1
+          fi
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
 
