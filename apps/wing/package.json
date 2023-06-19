@@ -24,8 +24,7 @@
     "watch": "tsc --watch",
     "test": "vitest run",
     "dev": "npm run build && ./bin/wing",
-    "bump": "node version.js",
-    "unbump": "node unversion.js"
+    "package": "conventional-release -b"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -48,7 +47,8 @@
     "@types/update-notifier": "^6.0.1",
     "esbuild": "^0.17.19",
     "typescript": "^4.9.4",
-    "vitest": "^0.30.1"
+    "vitest": "^0.30.1",
+    "@winglang/conventional-release": "file:../../tools/conventional-release"
   },
   "volta": {
     "node": "18.12.1",

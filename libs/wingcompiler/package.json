@@ -21,8 +21,7 @@
     "build": "tsup-node",
     "watch": "tsup-node --watch",
     "test": "vitest run --passWithNoTests",
-    "bump": "node version.js",
-    "unbump": "node unversion.js"
+    "package": "conventional-release -b"
   },
   "dependencies": {
     "wasi-js": "^1.7.3",
@@ -34,7 +33,8 @@
     "tsup": "^6.7.0",
     "patch-package": "^6.5.1",
     "typescript": "^4.9.4",
-    "vitest": "^0.30.1"
+    "vitest": "^0.30.1",
+    "@winglang/conventional-release": "file:../../tools/conventional-release"
   },
   "bundledDependencies": [
     "wasi-js"
