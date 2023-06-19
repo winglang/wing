@@ -19,7 +19,7 @@ jobs:
           - macos-latest
         node:
           - 18
-          - 19
+          - 20
         install_command:
           - npm install -g winglang
     runs-on: ${{ matrix.runner }}

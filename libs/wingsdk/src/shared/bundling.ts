@@ -1,7 +1,7 @@
-import { spawnSync } from "child_process";
 import * as crypto from "crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join, resolve } from "path";
+import { buildSync } from "esbuild-wasm";
 import { normalPath } from "./misc";
 
 export interface Bundle {
@@ -21,31 +21,22 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   mkdirSync(outdir, { recursive: true });
   const outfile = join(outdir, "index.js");
 
-  // if the user has specified a node_modules directory to resolve from
-  const nodePathString = process.env.WING_NODE_MODULES
-    ? `nodePaths: [\"${normalPath(process.env.WING_NODE_MODULES as string)}\"],`
-    : "";
-
-  // We would invoke esbuild directly here, but there is a bug where esbuild
-  // mangles the stdout/stderr of the process that invokes it.
-  // https://github.com/evanw/esbuild/issues/2927
-  // To workaround the issue, spawn a new process and invoke esbuild inside it.
-
-  let esbuildScript = [
-    `const esbuild = require("esbuild-wasm");`,
-    `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
-      resolve(entrypoint)
-    )}"], outfile: "${normalPath(outfile)}", ${nodePathString}
-    minify: false, platform: "node", target: "node16", external: ["aws-sdk"],
-   });`,
-  ].join("\n");
-  let result = spawnSync(process.argv[0], ["-e", esbuildScript], {
-    cwd: __dirname,
+  let esbuild = buildSync({
+    bundle: true,
+    entryPoints: [normalPath(resolve(entrypoint))],
+    outfile: normalPath(outfile),
+    // if the user has specified a node_modules directory to resolve from
+    nodePaths: process.env.WING_NODE_MODULES
+      ? [normalPath(process.env.WING_NODE_MODULES as string)]
+      : undefined,
+    minify: false,
+    platform: "node",
+    target: "node16",
+    external: ["aws-sdk"],
   });
-  if (result.status !== 0) {
-    throw new Error(
-      `Failed to bundle function: ${result.stderr.toString("utf-8")}`
-    );
+
+  if (esbuild.errors.length > 0) {
+    throw new Error(`Failed to bundle function: ${esbuild.errors.join("\n")}`);
   }
 
   // the bundled contains line comments with file paths, which are not useful for us, especially
