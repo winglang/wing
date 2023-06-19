@@ -1,6 +1,6 @@
-import packageJson from "../../package.json" assert { type: "json" };
+import packageJson from "@winglang/compiler/package.json" assert { type: "json" };
 
-const version = packageJson.dependencies["@winglang/compiler"].slice(1);
+const version = packageJson.version;
 
 export const getWingVersion = async (): Promise<string> => {
   console.log({ version });
