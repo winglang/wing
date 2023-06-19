@@ -42,6 +42,9 @@ bring cloud;
 let bucket = new cloud.Bucket();
 ```
 
+Each resource needs a dedicated implementation to work on a given compiler target.
+A catalog of which resources are supported on each cloud can be found [here](../04-standard-library/03-winglang-support-matrix).
+
 ### Provisioning engines
 
 When compiling your Wing code for deployment into the cloud, it's crucial to select the right provisioning engine. Provisioning is the process of setting up and creating infrastructure, and the provisioning engine is the driver behind this deployment. Common engines used in the Wing compilation process include Terraform and AWS CDK, with more on the horizon.
