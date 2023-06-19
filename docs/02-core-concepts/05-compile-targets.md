@@ -50,7 +50,7 @@ A catalog of which resources are supported on each cloud can be found [here](../
 
 Provisioning is the process of setting up and creating infrastructure, and the provisioning engine is the driver behind this deployment. Common engines used in the Wing compilation process include Terraform and AWS CDK, with support for more planned ([tracking issue](https://github.com/winglang/wing/issues/2066)).
 
-Knowing this, it's clear to see how targets represent both the provisioning engine and the cloud destination. For instance, `tf-aws` signifies the use of Terraform for AWS deployment, while `tf-gcp` indicates Terraform for Google Cloud.
+Since a cloud provider may support more than one provisioning engine, a Wing target represents both the provisioning engine and the cloud destination. For instance, `tf-aws` signifies the use of Terraform for AWS deployment, while `tf-gcp` indicates Terraform for Google Cloud deployment.
 
 ## Target-specific code
 
