@@ -72,7 +72,7 @@ queue.setConsumer(inflight (msg: str) => {
 });
 
 // only create this verbose logger if our Wing target is sim
-if (util.env("WING_TARGET") == "sim") {
+if util.env("WING_TARGET") == "sim" {
   let verboseLogger = new cloud.Service(
     onStart: inflight() => {
       // Continuously log the files in the bucket every 10 seconds
