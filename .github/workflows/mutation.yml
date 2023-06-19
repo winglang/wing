@@ -1,4 +1,5 @@
-name: "PR Mutator"
+name: "Pull Request Mutation"
+
 on:
   workflow_run:
     branches-ignore:
@@ -6,12 +7,15 @@ on:
     workflows:
       - "Build"
     types:
-      completed
+      - completed
+
 concurrency:
   group: "mutation-${{ github.event.workflow_run.head_branch }}"
   cancel-in-progress: true
+
 permissions:
   contents: write
+
 jobs:
   mutate:
     runs-on: ubuntu-latest
