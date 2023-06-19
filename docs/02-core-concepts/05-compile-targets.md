@@ -5,7 +5,7 @@ description: Wing compiler targets and provisioning engines
 keywords: [Wing compiler targets, provisioning engines, multi-cloud]
 ---
 
-When working with the Wing programming language, an integral part of the compilation process is the use of compiler targets. In essence, compiler targets dictate the destination and the means for the compiled code. They determine both the cloud environment and the provisioning engine that the code will be deployed to.
+When working with the Wing programming language, an integral part of the compilation process is the use of compiler targets. In essence, compiler targets specify how and where your application is deployed. They determine both the cloud environment and the provisioning engine that the code will be deployed to.
 
 ## Targets
 
