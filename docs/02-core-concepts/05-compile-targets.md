@@ -9,10 +9,10 @@ When working with the Wing programming language, an integral part of the compila
 
 ## Targets
 
-You can view the list of available compiler targets with the `wing compile -h` command. Here is an example of the output:
+You can view the list of available compiler targets with the `wing compile --help` command. Here is an example of the output:
 
 ```sh
-wing compile -h
+wing compile --help
 Usage: wing compile [options] <entrypoint>
 
 Compiles a Wing program
