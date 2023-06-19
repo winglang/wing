@@ -42,7 +42,26 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(0.012).seconds === (12 / 1000))'`)})(($stdlib.std.Duration.fromSeconds(0.012).seconds === (12 / 1000)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(12).seconds === 12)'`)})(($stdlib.std.Duration.fromSeconds(12).seconds === 12))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(720).seconds === (12 * 60))'`)})(($stdlib.std.Duration.fromSeconds(720).seconds === (12 * 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(43200).seconds === ((12 * 60) * 60))'`)})(($stdlib.std.Duration.fromSeconds(43200).seconds === ((12 * 60) * 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1036800).seconds === (((12 * 60) * 60) * 24))'`)})(($stdlib.std.Duration.fromSeconds(1036800).seconds === (((12 * 60) * 60) * 24)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(31536000).seconds === (((((12 * 60) * 60) * 24) * 365) / 12))'`)})(($stdlib.std.Duration.fromSeconds(31536000).seconds === (((((12 * 60) * 60) * 24) * 365) / 12)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(378432000).seconds === ((((12 * 60) * 60) * 24) * 365))'`)})(($stdlib.std.Duration.fromSeconds(378432000).seconds === ((((12 * 60) * 60) * 24) * 365)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromMilliseconds(10)).seconds === $stdlib.std.Duration.fromSeconds(0.01).seconds)'`)})(((std.Duration.fromMilliseconds(10)).seconds === $stdlib.std.Duration.fromSeconds(0.01).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(10)).seconds === $stdlib.std.Duration.fromSeconds(10).seconds)'`)})(((std.Duration.fromSeconds(10)).seconds === $stdlib.std.Duration.fromSeconds(10).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromMinutes(10)).seconds === $stdlib.std.Duration.fromSeconds(600).seconds)'`)})(((std.Duration.fromMinutes(10)).seconds === $stdlib.std.Duration.fromSeconds(600).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromHours(10)).seconds === $stdlib.std.Duration.fromSeconds(36000).seconds)'`)})(((std.Duration.fromHours(10)).seconds === $stdlib.std.Duration.fromSeconds(36000).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromDays(10)).seconds === $stdlib.std.Duration.fromSeconds(864000).seconds)'`)})(((std.Duration.fromDays(10)).seconds === $stdlib.std.Duration.fromSeconds(864000).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromMonths(10)).seconds === $stdlib.std.Duration.fromSeconds(26280000).seconds)'`)})(((std.Duration.fromMonths(10)).seconds === $stdlib.std.Duration.fromSeconds(26280000).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromYears(10)).seconds === $stdlib.std.Duration.fromSeconds(315360000).seconds)'`)})(((std.Duration.fromYears(10)).seconds === $stdlib.std.Duration.fromSeconds(315360000).seconds))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).milliseconds === 1000)'`)})(($stdlib.std.Duration.fromSeconds(1).milliseconds === 1000))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).minutes === (1 / 60))'`)})(($stdlib.std.Duration.fromSeconds(1).minutes === (1 / 60)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).hours === (1 / (60 * 60)))'`)})(($stdlib.std.Duration.fromSeconds(1).hours === (1 / (60 * 60))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).days === (1 / ((60 * 60) * 24)))'`)})(($stdlib.std.Duration.fromSeconds(1).days === (1 / ((60 * 60) * 24))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).months === (1 / ((((60 * 60) * 24) * 365) / 12)))'`)})(($stdlib.std.Duration.fromSeconds(1).months === (1 / ((((60 * 60) * 24) * 365) / 12))))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '($stdlib.std.Duration.fromSeconds(1).years === (1 / (((60 * 60) * 24) * 365)))'`)})(($stdlib.std.Duration.fromSeconds(1).years === (1 / (((60 * 60) * 24) * 365))))};
   }
 }
 class $App extends $AppBase {

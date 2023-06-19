@@ -133,6 +133,9 @@ impl<'s> Parser<'s> {
 		let value_text = self.node_text(&self.get_child_field(&value, "value")?);
 
 		match value.kind() {
+			"milliseconds" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") / 1000_f64,
+			)),
 			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
 			"minutes" => Ok(Literal::Duration(
 				// Specific "Minutes" duration needed here
@@ -140,6 +143,15 @@ impl<'s> Parser<'s> {
 			)),
 			"hours" => Ok(Literal::Duration(
 				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
+			)),
+			"days" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") * 86400_f64,
+			)),
+			"months" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") * 2628000_f64,
+			)),
+			"years" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") * 31536000_f64,
 			)),
 			"ERROR" => self.add_error("Expected duration type", &node),
 			other => self.report_unimplemented_grammar(other, "duration type", node),
