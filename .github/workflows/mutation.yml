@@ -1,5 +1,7 @@
 name: "Pull Request Mutation"
 
+run-name: "Pull Request Mutation: ${{ github.event.workflow_run.head_branch }}"
+
 on:
   workflow_run:
     branches-ignore:
