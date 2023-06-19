@@ -134,7 +134,6 @@ impl<'s> Parser<'s> {
 
 		match value.kind() {
 			"milliseconds" => Ok(Literal::Duration(
-				// Specific "Minutes" duration needed here
 				value_text.parse::<f64>().expect("Duration string") / 1000_f64,
 			)),
 			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
