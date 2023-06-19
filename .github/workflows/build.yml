@@ -318,12 +318,13 @@ jobs:
         uses: actions/download-artifact@v3
       - name: Check Patches
         run: |
-          if [ -d ./*.diff ]
-          then
-            echo "There are patches!"
-            for f in $(find ./*.diff/*.diff); do
-              cat $f
-            done
+          PATCH_COUNT=0
+          for f in $(find ./*.diff/*.diff); do
+            PATCH_COUNT=$((PATCH_COUNT + 1))
+            cat $f
+          done
+          if [ $PATCH_COUNT -gt 0 ]; then
+            echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
             exit 1
           fi
       - name: All good
