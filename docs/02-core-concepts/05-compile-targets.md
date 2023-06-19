@@ -28,7 +28,7 @@ Options:
 
 In the Options section, there are several choices for `--target`, such as `tf-aws`, `tf-azure`, `sim`, `awscdk` etc.
 
-It's important to note that these targets contain a combination of provisioning engine and cloud environment in their names. The only exception is `sim`, which is a special target for testing Wing applications locally with the Wing simulator.
+These targets contain a combination of provisioning engine and cloud environment in their names. The only exception is `sim`, which is a special target for testing and simulation applications locally.
 
 ## Portability
 
