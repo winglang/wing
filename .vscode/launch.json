@@ -4,14 +4,6 @@
 // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 {
   "version": "0.2.0",
-  "inputs": [
-    {
-      "id": "wingSource",
-      "type": "promptString",
-      "description": "Wing source path",
-      "default": "${workspaceFolder}/examples/tests/valid/hello.w"
-    }
-  ],
   "configurations": [
     {
       "command": "npx nx wing -- compile -t tf-aws ..${pathSeparator}..${pathSeparator}${relativeFile}",
@@ -70,7 +62,7 @@
         ]
       },
       "args": [
-        "${input:wingSource}"
+        "${file}"
       ],
       "sourceLanguages": [
         "rust"
