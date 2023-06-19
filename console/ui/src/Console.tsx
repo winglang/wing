@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 import { Mode } from "@wingconsole/design-system";
+import { Trace } from "@wingconsole/server";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
@@ -13,12 +14,14 @@ export const Console = ({
   layout = LayoutType.Vscode,
   title,
   theme,
+  onTrace,
 }: {
   trpcUrl: string;
   wsUrl: string;
   title?: string;
   layout?: LayoutType;
   theme?: Mode;
+  onTrace?: (trace: Trace) => void;
 }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -59,7 +62,7 @@ export const Console = ({
     <AppContext.Provider value={{ appMode, title: windowTitle }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          <App layout={layout} theme={theme} />
+          <App layout={layout} theme={theme} onTrace={onTrace} />
         </QueryClientProvider>
       </trpc.Provider>
     </AppContext.Provider>

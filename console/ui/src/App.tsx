@@ -2,8 +2,9 @@ import {
   DefaultTheme,
   ThemeProvider,
   NotificationsProvider,
-  Mode,
+  type Mode,
 } from "@wingconsole/design-system";
+import type { Trace } from "@wingconsole/server";
 
 import { LayoutProvider, LayoutType } from "./layout/layout-provider.js";
 import { trpc } from "./services/trpc.js";
@@ -12,9 +13,10 @@ import { TestsContextProvider } from "./tests-context.js";
 export interface AppProps {
   layout?: LayoutType;
   theme?: Mode;
+  onTrace?: (trace: Trace) => void;
 }
 
-export const App = ({ layout, theme }: AppProps) => {
+export const App = ({ layout, theme, onTrace }: AppProps) => {
   const trpcContext = trpc.useContext();
 
   trpc["app.invalidateQuery"].useSubscription(undefined, {
@@ -26,6 +28,12 @@ export const App = ({ layout, theme }: AppProps) => {
       } else {
         await trpcContext.invalidate();
       }
+    },
+  });
+
+  trpc["app.traces"].useSubscription(undefined, {
+    onData(data) {
+      onTrace?.(data as Trace);
     },
   });
 

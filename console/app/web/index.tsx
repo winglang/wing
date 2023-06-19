@@ -11,6 +11,10 @@ ReactDOM.createRoot(document.querySelector("#root")!).render(
       wsUrl={`ws://${location.host}`}
       layout={Number(query.get("layout"))}
       theme={query.get("theme") as any}
+      onTrace={(trace) => {
+        // Playground and Learn need to be able to listen to all traces.
+        window.parent.postMessage({ trace }, "*");
+      }}
     />
   </React.StrictMode>,
 );
