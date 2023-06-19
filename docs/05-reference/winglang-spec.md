@@ -1131,7 +1131,8 @@ The **if** statement is optionally followed by **elif** and **else**.
 
 ### 2.7 for
 
-`for..in` statement is used to iterate over an array or a set.  
+`for..in` statement is used to iterate over an array, a set or a range. 
+Range is inclusive of the start value and exclusive of the end value.
 The loop invariant in for loops is implicitly re-assignable (`var`).
 
 > ```TS
@@ -1145,7 +1146,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 >   log("${item}");
 > }
 > for item in 0..100 {
->   log("${item}");
+>   log("${item}"); // prints 0 to 99
 > }
 > ```
 
@@ -1788,16 +1789,11 @@ JSII type manifest shows that the JSII module is a construct. Wing is a consumer
 of JSII modules currently.
 
 ```TS
-bring "aws-cdk-lib" as cdk;
-let bucket = cdk.awsS3.Bucket(
-  publicAccess: true,
+bring "aws-cdk-lib" as awscdk;
+let bucket = new awscdk.aws_s3.Bucket(
+  blockPublicAccess: awscdk.aws_s3.BlockPublicAccess.BLOCK_ALL,
 );
 ```
-
-### 5.1.2 Internal Libraries
-
-Wing libraries themselves are JSII modules. They can be used in all other JSII
-supported languages.
 
 ## 5.2 JavaScript
 
@@ -1810,40 +1806,40 @@ in `helper.js`:
 // task-list.w
 class TaskList {
   // ...
-
+  
   inflight addTask(title: str) {
-    let id = TaskList.makeId(); // or TaskList.v6();
-    this.bucket.put(id, title);
+    let id1 = TaskList.makeId();
+    let id2 = TaskList.v4();
+    log(id1);
+    log(id2);
+    // ...
   }
 
+  // Load js helper file
   extern "./helpers.js" static inflight makeId(): str;
 
   // Alternatively, you can use a module name
-  extern "uuid" static inflight v6(): str;
+  extern "uuid" static inflight v4(): str;
 } 
 
 // helpers.js
 const uuid = require("uuid");
 
-exports.makeId = function() {
-  return uuid.v6();
+exports.makeId = function () {
+  return uuid.v4();
 };
 ```
 
 Given a method of name X, the compiler will map the method to the JavaScript export with the 
 matching name (without any case conversion).
 
-Initially we only support specifying `extern` for static methods (either inflight or preflight),
-but we will consider adding support for instance methods in the future. In those cases the first
-argument to the method will implicitly be `this`.
+We currently only support specifying `extern` for static methods (either inflight or preflight).
 
 ### 5.2.1 TypeScript
 
-It is possible to use TypeScript to write helpers, but at the moment this will not be
+It is possible to use TypeScript to write helpers, but at the moment this is not
 directly supported by Wing. This means that you will need to setup the TypeScript toolchain
 to compile your code to JavaScript and then use `extern` against the JavaScript file.
-
-In the future we will consider adding direct support for `extern "./helpers.ts"`.
 
 ### 5.2.2 Type model
 
@@ -1866,7 +1862,6 @@ If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 | `MutSet<T>`            | `Set<T>`                                                              |         |
 | `MutMap<T>`            | `{ [key: string]: T }`                                                |         |
 | `MutArray<T>`          | `T[]`                                                                 |         |
-| `Promise<T>`           | `Promise<T>`                                                          |         |
 | `Json`                 | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` | Yes     |
 | `MutJson`              | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` |         |
 
@@ -1899,12 +1894,12 @@ The string inside the double quotes is processed, and all notations of form
 `${<expression>}` are substituted from their respective scopes. The behavior is
 similar to `` `text ${sub.prop}` `` notation in JavaScript.  
 Processing unicode escape sequences happens in these strings.  
-`"` and `$` can be escaped with backslash `\` inside string substitutions.
+`"` can be escaped with backslash `\` inside string substitutions.
 
 > ```TS
 > let name = "World";
 > let s = "Hello, ${name}!";
-> let l = s.len;
+> let l = s.length;
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
@@ -1921,33 +1916,10 @@ Processing unicode escape sequences happens in these strings.
 
 ---
 
-#### 6.1.2 Shell strings \`...\`
-
-If string is enclosed with backticks, the contents of that string will be
-interpreted as a shell command and its output will be used as a string. `` `echo
-"Hello"` `` is equal to `"Hello"` for example.  
-
-Shell strings are invalid in the bring expression.
-
-> ```TS
-> let name = `echo "World"`;
-> let s = "Hello, ${name}!";
-> ```
-
-Shell strings are executed in an instance of the BusyBox shell, compiled to run
-in WebAssembly to guarantee portability, in runtime. The stdout is returned as a
-string, interleaved with stderr. If BusyBox exits with a non-zero exit code, the
-stderr is thrown as an exception.
-
-[`▲ top`][top]
-
----
-
 ### 6.2 Comments
 
 Single line comments start with a `//` and continue to the end of the line.  
 Multi-line comments are supported with the `/* ... */` syntax.  
-Commenting in Wing has a style that's described earlier in this document. 
 
 > ```TS
 > // comment
@@ -2056,7 +2028,7 @@ Using a `nil?` type is also ambiguous and results in a compile error.
 
 ```TS
 let x: num? = 1;
-if x {
+if x? {
   // ...
 }
 ```
@@ -2094,133 +2066,23 @@ for immutable data (on top of nominal typing).
 
 ---
 
-### 6.4 Kitchen Sink
-
-This is an example with almost every feature of the Wing, showing you a whole
-picture of what the syntax feels like.
-
-```TS
-bring cloud;
-bring fs;
-
-struct DenyListRule {
-  packageName: str;
-  version: str?;
-  reason: str;
-}
-
-struct DenyListProps {
-  rules: MutArray<DenyListRule>[];
-}
-
-class DenyList {
-  _bucket: cloud.Bucket;
-  _objectKey: str;
-
-  init(props: DenyListProps) {
-    this._bucket = cloud.Bucket();
-    this._objectKey = "deny-list.json";
-
-    let rulesDir = this._writeToFile(props.rules, this._objectKey);
-    this._bucket.upload("${rulesDir}/*/**", prune: true, retainOnDelete: true);
-  }
-
-  _writeToFile(list: MutArray<DenyListRule>[],  filename: str): str {
-    let tmpdir = fs.mkdtemp();
-    let filepath = "${tmpdir}/${filename}";
-    let map = MutMap<DenyListRule>{}; 
-    for rule in list {
-      let suffix = DenyList._maybeSuffix(rule.version);
-      let path = "${rule.packageName}${suffix}";
-      map[path] = rule;
-    }
-    fs.writeJson(filepath, map);
-    return tmpdir;
-  }
-
-  inflight rules: MutMap<DenyListRule>{}?; 
-
-  inflight init() {
-    // this._bucket is already initialized by the capture mechanic!
-    this.rules = this._bucket.get(this._objectKey) ?? MutMap<DenyListRule>{}; 
-  }
-
-  public inflight lookup(name: str, version: str): DenyListRule? {
-    return this.rules[name] ?? this.rules["${name}/v${version}"];
-  }
-
-  static _maybeSuffix(version: str?): str {
-    if version {
-      return "/v${version}";
-    } else {
-      return "";
-    }
-  }
-}
-
-let denyList = DenyList();
-let filterFn = inflight (event: cloud.QueueEvent) => {
-  let packageName = event.data["packageName"];
-  let version = event.data["version"];
-  let reason = event.data["reason"];
-  if denyList.lookup(packageName, version) {
-    log("Package rejected: ${packageName}");
-  } else {
-    log("Package accepted: ${packageName}");
-  }
-};
-
-queue = cloud.Queue();
-filter = cloud.Function(filterFn);
-queue.addConsumer(filter);
-```
-
-[`▲ top`][top]
-
----
-
-### 6.5 Roadmap
-
-- [ ] Asynchronous Execution Safety Model.
-- [ ] Make the language `async` by default.
-- [x] Make inflight functions `async` by default.
-- [ ] First class support for `regx`, `glob`, and `cron` types.
-- [ ] Support of math operations over `date` and `duration` types.
-- [x] Add `time`, `date`, and `durations` as first class types with syntax.
-- [ ] More useful enums: Support for Enum Classes and Swift style enums.
-- [ ] Reflection: add an extended `typeof` operator to get type information.
-- [ ] Advanced OOP: Support for `abstract` and `private` implementations.
-- [ ] Enforce naming conventions on public APIs (required by JSII).
-- [ ] Develop a conformance test suite for ISO certification.
-- [ ] Launch a formal spec site with ECMA standards.
-- [ ] Built-in automatic formatter and linter.
-- [ ] Distributed concurrency primitives.
-- [ ] Distributed data structures.
-
-[`▲ top`][top]
-
----
-
 ### 6.6 Credits
 
 * **Contributors (A-Z):**
   * Chris R. ([@Chriscbr](https://github.com/Chriscbr))
+  * Cristian P. ([@skyrpex](https://github.com/skyrpex))
   * Elad B. ([@eladb](https://github.com/eladb))
   * Eyal K. ([@ekeren](https://github.com/ekeren))
+  * Hasan AR. ([@hasanaburayyan](https://github.com/hasanaburayyan))
   * Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
+  * Pol A. ([@polamoros](https://github.com/polamoros))  
+  * Revital B. ([@revitalbarletz](https://github.com/revitalbarletz))  
   * Sepehr L. ([@3p3r](https://github.com/3p3r))  
+  * Shai A. ([@ainvoner](https://github.com/ainvoner))
   * Shai B. ([@ShaiBer](https://github.com/ShaiBer))
+  * Tsuf C. ([@tsuf239](https://github.com/tsuf239))
   * Uri B. ([@staycoolcall911](https://github.com/staycoolcall911))
   * Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))  
-
-Inspiration:
-  
-- <https://github.com/WheretIB/nullc>
-- <https://github.com/chaos-lang/chaos>
-- <https://github.com/BlazifyOrg/blazex>
-- <https://github.com/YorickPeterse/inko>
-- <https://github.com/thesephist/ink>
-- <https://github.com/vlang/v>
 
 [top]: #0-preface
 
