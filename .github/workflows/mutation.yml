@@ -41,18 +41,20 @@ jobs:
         name: .+\.diff$
         name_is_regexp: true
         if_no_artifact_found: ignore
+        path: patches
     - name: Checkout Workflow Branch
       if: steps.download-artifacts.outputs.found_artifact == 'true'
       uses: actions/checkout@v3
       with:
         token: ${{secrets.MUTATION_TOKEN}}
         ref: ${{ github.event.workflow_run.head_branch }}
-        path: ${{ github.event.workflow_run.head_branch }}
+        path: repo
     - id: self_mutation
       if: steps.download-artifacts.outputs.found_artifact == 'true'
       name: Apply downloaded pathes
+      working-directory: repo
       run: |
-        for f in $(find ./*.diff/*.diff); do
+        for f in $(find ../patches/*.diff/*.diff); do
           echo "Applying $f"
           git apply $f
           if [ $? -eq 0 ]; then
