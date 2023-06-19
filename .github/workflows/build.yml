@@ -280,25 +280,30 @@ jobs:
         working-directory: tools/hangar
         run: |
           npm run test:generate
-          npm run test -- --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
+          npm run test -- --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
 
       - name: Create git patch
         # we only care about the diff in linux
         if: matrix.runner == 'ubuntu' && matrix.node == '20'
         id: diff
+        env:
+          RAW_SHARD: ${{ matrix.shard }}
         run: |
+          SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
+          DIFF_NAME="e2e-$SHARD.diff"
           git add .
-          git diff --cached --binary HEAD > e2e.diff
+          git diff --cached --binary HEAD > $DIFF_NAME
           if [ -s e2e.diff ]
           then
             echo "::set-output name=diff::true"
+            echo "::set-output name=diff_name::$DIFF_NAME"
           fi
       - name: Upload Diff
         if: matrix.runner == 'ubuntu' && matrix.node == '20' && steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
         with:
-          name: diff
-          path: e2e.diff
+          name: ${{ steps.diff.outputs.diff_name }}
+          path: ${{ steps.diff.outputs.diff_name }}
 
   quality-gate:
     name: Quality Gate
