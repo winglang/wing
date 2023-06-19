@@ -52,7 +52,7 @@ When compiling your Wing code for deployment into the cloud, it's crucial to sel
 
 Knowing this, it's clear to see how targets represent both the provisioning engine and the cloud destination. For instance, `tf-aws` signifies the use of Terraform for AWS deployment, while `tf-gcp` indicates Terraform for Google Cloud.
 
-## Code to a specific target
+## Target-specific code
 
 There might be times when you need to write code that is specific to a compiler target. For instance, you may want to activate a verbose logging service only when testing locally to save on CloudWatch log storage costs.
 
