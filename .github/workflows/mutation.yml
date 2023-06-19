@@ -38,7 +38,7 @@ jobs:
       with:
         github_token: ${{secrets.MUTATION_TOKEN}}
         run_id: ${{ github.event.workflow_run.id }}
-        name: .+\.patch$
+        name: .+\.diff$
         name_is_regexp: true
         if_no_artifact_found: ignore
     - name: Checkout Workflow Branch
