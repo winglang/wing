@@ -27,6 +27,7 @@ Options:
 ```
 
 In the Options section, there are several choices for `--target`, such as `tf-aws`, `tf-azure`, `sim`, `awscdk` etc.
+The differences between the compiler targets are described in the [CLI user manual].
 
 These targets contain a combination of provisioning engine and cloud environment in their names. The only exception is `sim`, which is a special target for testing and simulation applications locally.
 
