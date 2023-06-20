@@ -2314,7 +2314,6 @@ impl<'a> TypeChecker<'a> {
 				if env.phase == Phase::Inflight && *phase == Phase::Preflight {
 					self.spanned_error(stmt, format!("Cannot declare a {} class in {} scope", phase, env.phase));
 				}
-
 				// Verify parent is a known class and get their env
 				let (parent_class, parent_class_env) = self.extract_parent_class(parent.as_ref(), *phase, name, env, stmt);
 
@@ -2415,7 +2414,6 @@ impl<'a> TypeChecker<'a> {
 
 				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
 					self.check_class_field_initialization(&scope, fields, Phase::Inflight);
-
 					self.type_check_super_constructor_against_parent_initializer(
 						scope,
 						class_type,
@@ -2716,13 +2714,7 @@ impl<'a> TypeChecker<'a> {
 							.collect_vec()[0]
 							.1;
 
-						let class_initializer = &class_type
-							.as_class()
-							.unwrap()
-							.methods(false)
-							.filter(|(name, _type)| name == init_name)
-							.collect_vec()[0]
-							.1;
+						let class_methods = &class_type.as_class().unwrap().methods(true).collect_vec();
 
 						// Create a temp init environment to use for typechecking args
 						let mut init_env = SymbolEnv::new(
@@ -2733,22 +2725,31 @@ impl<'a> TypeChecker<'a> {
 							scope.statements[0].idx,
 						);
 
-						// add the initializer args to the init_env
-						for arg in class_initializer.as_function_sig().unwrap().parameters.iter() {
-							let sym = Symbol {
-								name: arg.name.clone(),
-								span: scope.statements[0].span.clone(),
-							};
-							match init_env.define(
-								&sym,
-								SymbolKind::make_free_variable(sym.clone(), arg.typeref, false, init_env.phase),
-								StatementIdx::Top,
-							) {
-								Err(type_error) => {
-									self.type_error(type_error);
-								}
-								_ => {}
-							};
+						dbg!(class_methods);
+
+						if class_methods.len() > 0 {
+							let class_initializer = class_methods
+								.iter()
+								.filter(|(name, _type)| name == init_name)
+								.collect_vec()[0]
+								.1;
+							// add the initializer args to the init_env
+							for arg in class_initializer.as_function_sig().unwrap().parameters.iter() {
+								let sym = Symbol {
+									name: arg.name.clone(),
+									span: scope.statements[0].span.clone(),
+								};
+								match init_env.define(
+									&sym,
+									SymbolKind::make_free_variable(sym.clone(), arg.typeref, false, init_env.phase),
+									StatementIdx::Top,
+								) {
+									Err(type_error) => {
+										self.type_error(type_error);
+									}
+									_ => {}
+								};
+							}
 						}
 
 						let arg_list_types = self.type_check_arg_list(&arg_list, &init_env);
