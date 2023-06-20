@@ -16,7 +16,7 @@ defaults:
     working-directory: libs/wingsdk
 
 env:
-  NODE_VERSION: "18.12.1"
+  NODE_VERSION: "18.16.0"
   NPM_VERSION: "8.19.3"
 
 jobs:

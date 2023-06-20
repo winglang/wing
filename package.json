@@ -34,7 +34,7 @@
     "postinstall": "run-p -l --max-parallel 3 'install:*'"
   },
   "volta": {
-    "node": "18.12.1",
+    "node": "18.16.0",
     "npm": "8.19.3"
   }
 }
