@@ -19,9 +19,8 @@
     },
     "package": {
       "options": {
-        "commands": ["npm run bump", "npm pack", "npm run unbump"],
-        "cwd": "apps/wing",
-        "parallel": false
+        "command": "npm run package",
+        "cwd": "apps/wing"
       }
     },
     "wing": {
