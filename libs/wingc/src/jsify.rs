@@ -278,7 +278,9 @@ impl<'a> JSifier<'a> {
 				let expression_type = self.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
 
-				let class_type = expression_type.as_class().expect("type to be a class");
+				let class_type = if let Some(class_type) = expression_type.as_class() { class_type } else {
+					return "".to_string();
+				};
 				let is_abstract = class_type.is_abstract;
 
 				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
@@ -353,10 +355,6 @@ impl<'a> JSifier<'a> {
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = self.get_expr_type(callee);
 				let function_sig = function_type.as_function_sig();
-				assert!(
-					function_sig.is_some() || function_type.is_anything() || function_type.is_handler_preflight_class(),
-					"Expected expression to be callable"
-				);
 
 				let expr_string = match &callee.kind {
 					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
@@ -1078,7 +1076,14 @@ impl<'a> JSifier<'a> {
 					code.add_code(self.jsify_enum(&e.values));
 					code.close("`),");
 				}
-				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
+				_ => {
+					for sym in n {
+						report_diagnostic(Diagnostic {
+							message: format!("Unexpected type \"{t}\" referenced inflight"),
+							span: Some(sym.span.clone()),
+						});
+					}
+				}
 			}
 		}
 
@@ -1139,8 +1144,9 @@ impl<'a> JSifier<'a> {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut lifted_by_parent = vec![];
 		if let Some(parent) = &class.parent {
-			let parent_type = resolve_user_defined_type(parent, env, 0).unwrap();
-			lifted_by_parent.extend(self.get_lifted_fields(parent_type));
+			if let Ok(parent_type) = resolve_user_defined_type(parent, env, 0) {
+				lifted_by_parent.extend(self.get_lifted_fields(parent_type));
+			}
 		}
 
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
