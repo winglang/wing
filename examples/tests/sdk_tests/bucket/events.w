@@ -14,9 +14,9 @@ let table = new cloud.Table(
   }
 );
 
-  class Util {
-    extern "../external/sleep.js" static inflight sleep(milli: num);
-  }
+class Util {
+  extern "../external/sleep.js" static inflight sleep(milli: num);
+}
 
 // the source of onDelete, onUpdate, onCreate are marked as: 1, and for onEvent it's marked as source 2.
 let logHistory = inflight (key: str, operation: str, source: num) => {
