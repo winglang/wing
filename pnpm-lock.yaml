@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -491,6 +491,9 @@ importers:
       '@wingconsole/tsconfig':
         specifier: workspace:^
         version: link:../../tools/tsconfig
+      '@wingconsole/use-loading':
+        specifier: workspace:^
+        version: link:../../packages/use-loading
       classnames:
         specifier: ^2.3.2
         version: 2.3.2
@@ -703,6 +706,21 @@ importers:
 
   packages/error-message:
     devDependencies:
+      '@wingconsole/eslint-plugin':
+        specifier: workspace:^
+        version: link:../../tools/eslint-plugin
+      '@wingconsole/tsconfig':
+        specifier: workspace:^
+        version: link:../../tools/tsconfig
+      typescript:
+        specifier: ^5.1.3
+        version: 5.1.3
+
+  packages/use-loading:
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.12
+        version: 18.2.12
       '@wingconsole/eslint-plugin':
         specifier: workspace:^
         version: link:../../tools/eslint-plugin
@@ -6269,7 +6287,7 @@ packages:
       magic-string: 0.27.0
       react-docgen-typescript: 2.2.2(typescript@5.1.3)
       typescript: 5.1.3
-      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
+      vite: 4.3.9
     dev: true
 
   /@jridgewell/gen-mapping@0.3.3:
@@ -6984,7 +7002,7 @@ packages:
       remark-slug: 6.1.0
       rollup: 3.25.1
       typescript: 5.1.3
-      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
+      vite: 4.3.9
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -7357,7 +7375,7 @@ packages:
       react: 18.2.0
       react-docgen: 6.0.0-alpha.3
       react-dom: 18.2.0(react@18.2.0)
-      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
+      vite: 4.3.9
     transitivePeerDependencies:
       - '@preact/preset-vite'
       - supports-color
@@ -8252,7 +8270,7 @@ packages:
       vite: ^4
     dependencies:
       '@swc/core': 1.3.63
-      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
+      vite: 4.3.9
     transitivePeerDependencies:
       - '@swc/helpers'
     dev: true
@@ -8268,7 +8286,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.22.5)
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
+      vite: 4.3.9
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8283,7 +8301,7 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.22.5(@babel/core@7.22.5)
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.22.5)
       react-refresh: 0.14.0
-      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
+      vite: 4.3.9
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8298,7 +8316,7 @@ packages:
       magic-string: 0.30.0
       picocolors: 1.0.0
       std-env: 3.3.3
-      vitest: 0.31.4(happy-dom@9.20.3)
+      vitest: 0.31.4
     dev: true
 
   /@vitest/expect@0.31.4:
@@ -16407,6 +16425,27 @@ packages:
       extsprintf: 1.4.1
     dev: true
 
+  /vite-node@0.31.4(@types/node@20.3.1):
+    resolution: {integrity: sha512-uzL377GjJtTbuc5KQxVbDu2xfU/x0wVjUtXQR2ihS21q/NK6ROr4oG0rsSkBBddZUVCwzfx22in76/0ZZHXgkQ==}
+    engines: {node: '>=v14.18.0'}
+    hasBin: true
+    dependencies:
+      cac: 6.7.14
+      debug: 4.3.4
+      mlly: 1.3.0
+      pathe: 1.1.1
+      picocolors: 1.0.0
+      vite: 4.3.9(@types/node@20.3.1)
+    transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: true
+
   /vite-node@0.31.4(@types/node@20.3.1)(sass@1.63.3):
     resolution: {integrity: sha512-uzL377GjJtTbuc5KQxVbDu2xfU/x0wVjUtXQR2ihS21q/NK6ROr4oG0rsSkBBddZUVCwzfx22in76/0ZZHXgkQ==}
     engines: {node: '>=v14.18.0'}
@@ -16440,6 +16479,38 @@ packages:
       vite: 4.3.9(@types/node@18.16.18)(sass@1.63.3)
     transitivePeerDependencies:
       - debug
+    dev: true
+
+  /vite@4.3.9:
+    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.17.19
+      postcss: 8.4.24
+      rollup: 3.25.1
+    optionalDependencies:
+      fsevents: 2.3.2
     dev: true
 
   /vite@4.3.9(@types/node@18.16.18)(sass@1.63.3):
@@ -16476,6 +16547,39 @@ packages:
       fsevents: 2.3.2
     dev: true
 
+  /vite@4.3.9(@types/node@20.3.1):
+    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 20.3.1
+      esbuild: 0.17.19
+      postcss: 8.4.24
+      rollup: 3.25.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /vite@4.3.9(@types/node@20.3.1)(sass@1.63.3):
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -16508,6 +16612,71 @@ packages:
       sass: 1.63.3
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
+
+  /vitest@0.31.4:
+    resolution: {integrity: sha512-GoV0VQPmWrUFOZSg3RpQAPN+LPmHg2/gxlMNJlyxJihkz6qReHDV6b0pPDcqFLNEPya4tWJ1pgwUNP9MLmUfvQ==}
+    engines: {node: '>=v14.18.0'}
+    hasBin: true
+    peerDependencies:
+      '@edge-runtime/vm': '*'
+      '@vitest/browser': '*'
+      '@vitest/ui': '*'
+      happy-dom: '*'
+      jsdom: '*'
+      playwright: '*'
+      safaridriver: '*'
+      webdriverio: '*'
+    peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
+      '@vitest/browser':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+      playwright:
+        optional: true
+      safaridriver:
+        optional: true
+      webdriverio:
+        optional: true
+    dependencies:
+      '@types/chai': 4.3.5
+      '@types/chai-subset': 1.3.3
+      '@types/node': 20.3.1
+      '@vitest/expect': 0.31.4
+      '@vitest/runner': 0.31.4
+      '@vitest/snapshot': 0.31.4
+      '@vitest/spy': 0.31.4
+      '@vitest/utils': 0.31.4
+      acorn: 8.8.2
+      acorn-walk: 8.2.0
+      cac: 6.7.14
+      chai: 4.3.7
+      concordance: 5.0.4
+      debug: 4.3.4
+      local-pkg: 0.4.3
+      magic-string: 0.30.0
+      pathe: 1.1.1
+      picocolors: 1.0.0
+      std-env: 3.3.3
+      strip-literal: 1.0.1
+      tinybench: 2.5.0
+      tinypool: 0.5.0
+      vite: 4.3.9(@types/node@20.3.1)
+      vite-node: 0.31.4(@types/node@20.3.1)
+      why-is-node-running: 2.2.2
+    transitivePeerDependencies:
+      - less
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
     dev: true
 
   /vitest@0.31.4(happy-dom@9.20.3):
@@ -16564,8 +16733,8 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.5.0
-      vite: 4.3.9(@types/node@20.3.1)(sass@1.63.3)
-      vite-node: 0.31.4(@types/node@20.3.1)(sass@1.63.3)
+      vite: 4.3.9(@types/node@20.3.1)
+      vite-node: 0.31.4(@types/node@20.3.1)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less

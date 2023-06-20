@@ -1,5 +1,6 @@
 import { useTheme } from "@wingconsole/design-system";
 import { LogEntry, LogLevel, State } from "@wingconsole/server";
+import { useLoading } from "@wingconsole/use-loading";
 import { useEffect, useState, useContext, useRef, useMemo } from "react";
 
 import { trpc } from "../services/trpc.js";
@@ -77,13 +78,18 @@ export const useLayout = ({
     },
   );
 
-  const loading = useMemo(() => {
-    return (
+  const { loading, setLoading } = useLoading({
+    duration: 200,
+  });
+
+  useEffect(() => {
+    setLoading(
       cloudAppState === "loadingSimulator" ||
-      cloudAppState === "compiling" ||
-      items.length === 0
-    );
-  }, [cloudAppState, items.length]);
+        cloudAppState === "compiling" ||
+        items.length === 0,
+    ),
+      [cloudAppState, items.length];
+  });
 
   const onResourceClick = (log: LogEntry) => {
     const path = log.ctx?.sourcePath;
