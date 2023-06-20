@@ -433,7 +433,7 @@ class $Root extends $stdlib.std.Resource {
     const indexFile = (Util.readFile("./website/website/index.html"));
     const otherFile = (Util.readFile("./website/website/inner-folder/other.html"));
     (w.addJson("config.json",config));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 'w.path.endsWith("sdk_tests/website/website")'`)})(w.path.endsWith("sdk_tests/website/website"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_tests\\website\\website"))'`)})((w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_tests\\website\\website")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access files on the website",new $Closure1(this,"$Closure1"));
   }
 }
