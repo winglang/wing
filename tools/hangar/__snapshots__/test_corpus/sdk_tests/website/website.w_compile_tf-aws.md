@@ -1,9 +1,9 @@
-# [website.w](../../../../../examples/tests/valid/website.w) | compile | tf-aws
+# [website.w](../../../../../../examples/tests/sdk_tests/website/website.w) | compile | tf-aws
 
-## clients/$Inflight1.inflight.js
+## inflight.$Closure1.js
 ```js
-module.exports = function({ w, indexFile, otherFile, config, Util }) {
-  class $Inflight1 {
+module.exports = function({ w, indexFile, otherFile, config, std_Json, Util }) {
+  class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -17,12 +17,12 @@ module.exports = function({ w, indexFile, otherFile, config, Util }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http((w.url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([config])]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http((w.url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([config])])))};
     }
   }
-  return $Inflight1;
+  return $Closure1;
 }
 
 ```
 
-## clients/Util.inflight.js
+## inflight.Util.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -61,7 +61,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:access files on the website\",\"${aws_lambda_function.root_testaccessfilesonthewebsite_Handler_C97B2B6F.arn}\"]]"
     }
   },
   "provider": {
@@ -121,60 +121,62 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/test:access files on the website/Handler/IamRole",
+            "uniqueId": "root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_testaccessfilesonthewebsite_Handler_IamRolePolicy_2BFFD84E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/test:access files on the website/Handler/IamRolePolicy",
+            "uniqueId": "root_testaccessfilesonthewebsite_Handler_IamRolePolicy_2BFFD84E"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_testaccessfilesonthewebsite_Handler_IamRolePolicyAttachment_2FF11015": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/test:access files on the website/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testaccessfilesonthewebsite_Handler_IamRolePolicyAttachment_2FF11015"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testtest_Handler_046C3415": {
+      "root_testaccessfilesonthewebsite_Handler_C97B2B6F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/test:access files on the website/Handler/Default",
+            "uniqueId": "root_testaccessfilesonthewebsite_Handler_C97B2B6F"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1"
+            "WING_FUNCTION_NAME": "Handler-c867c4e0",
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_11": "${jsonencode(aws_cloudfront_distribution.root_cloudWebsite_Distribution_6BC863F8.domain_name)}"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "Handler-c867c4e0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_testaccessfilesonthewebsite_Handler_S3Object_63750589.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -308,11 +310,11 @@ module.exports = function({  }) {
         "key": "/inner-folder/other.html",
         "source": "<SOURCE>"
       },
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_testaccessfilesonthewebsite_Handler_S3Object_63750589": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/test:access files on the website/Handler/S3Object",
+            "uniqueId": "root_testaccessfilesonthewebsite_Handler_S3Object_63750589"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -345,7 +347,7 @@ class $Root extends $stdlib.std.Resource {
         return (require("<ABSOLUTE_PATH>/fs.js")["readFile"])(path)
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/Util.inflight.js";
+        const self_client_path = "././inflight.Util.js";
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
           })
@@ -373,18 +375,19 @@ class $Root extends $stdlib.std.Resource {
         super._registerTypeBind(host, ops);
       }
     }
-    class $Inflight1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "./clients/$Inflight1.inflight.js";
+        const self_client_path = "././inflight.$Closure1.js";
         const w_client = context._lift(w);
         const indexFile_client = context._lift(indexFile);
         const otherFile_client = context._lift(otherFile);
         const config_client = context._lift(config);
+        const std_JsonClient = std.Json._toInflightType(context);
         const UtilClient = Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
@@ -392,6 +395,7 @@ class $Root extends $stdlib.std.Resource {
             indexFile: ${indexFile_client},
             otherFile: ${otherFile_client},
             config: ${config_client},
+            std_Json: ${std_JsonClient.text},
             Util: ${UtilClient.text},
           })
         `);
@@ -399,8 +403,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Inflight1Client = ${$Inflight1._toInflightType(this).text};
-            const client = new $Inflight1Client({
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -409,17 +413,17 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Inflight1._registerBindObject(config, host, []);
-          $Inflight1._registerBindObject(indexFile, host, []);
-          $Inflight1._registerBindObject(otherFile, host, []);
-          $Inflight1._registerBindObject(w, host, []);
+          $Closure1._registerBindObject(config, host, []);
+          $Closure1._registerBindObject(indexFile, host, []);
+          $Closure1._registerBindObject(otherFile, host, []);
+          $Closure1._registerBindObject(w, host, []);
         }
         if (ops.includes("handle")) {
-          $Inflight1._registerBindObject(Util, host, ["http"]);
-          $Inflight1._registerBindObject(config, host, []);
-          $Inflight1._registerBindObject(indexFile, host, []);
-          $Inflight1._registerBindObject(otherFile, host, []);
-          $Inflight1._registerBindObject(w.url, host, []);
+          $Closure1._registerBindObject(Util, host, ["http"]);
+          $Closure1._registerBindObject(config, host, []);
+          $Closure1._registerBindObject(indexFile, host, []);
+          $Closure1._registerBindObject(otherFile, host, []);
+          $Closure1._registerBindObject(w.url, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -430,7 +434,7 @@ class $Root extends $stdlib.std.Resource {
     const otherFile = (Util.readFile("./website/website/inner-folder/other.html"));
     (w.addJson("config.json",config));
     {((cond) => {if (!cond) throw new Error(`assertion failed: 'w.path.endsWith("sdk_tests/website/website")'`)})(w.path.endsWith("sdk_tests/website/website"))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Inflight1(this,"$Inflight1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access files on the website",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
