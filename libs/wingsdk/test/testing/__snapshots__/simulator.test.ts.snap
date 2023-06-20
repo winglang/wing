@@ -149,7 +149,7 @@ exports[`run single test > test failure 1`] = `
 <sanitized>
 <sanitized>
     at Script.runInContext (node:vm:141:12)
-    at Object.runInContext (node:vm:291:6)
+    at Object.runInContext (node:vm:297:6)
 <sanitized>
     at new Promise (<anonymous>)
 <sanitized>
