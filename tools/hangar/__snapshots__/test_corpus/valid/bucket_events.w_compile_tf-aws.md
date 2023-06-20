@@ -62,7 +62,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ other, std_Json }) {
+module.exports = function({ other }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -71,9 +71,8 @@ module.exports = function({ other, std_Json }) {
     }
     async $inflight_init()  {
     }
-    async handle(key)  {
-      {console.log(`last key ${key}`)};
-      (await other.put("last_operation_key",((args) => { return JSON.stringify(args[0], null, args[1]) })([key])));
+    async handle(key, event)  {
+      (await other.put(`last_${event}_key`,key));
     }
   }
   return $Closure4;
@@ -146,7 +145,7 @@ module.exports = function({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:putting and deleting from a bucket to trigger bucket events\",\"${aws_lambda_function.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_A868D55D.arn}\"]]"
     }
   },
   "provider": {
@@ -237,11 +236,11 @@ module.exports = function({ b }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRole",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -338,15 +337,15 @@ module.exports = function({ b }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_other_otheronupdateOnMessage5290616b_IamRole_2068DED5.name}"
       },
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicy_D5A50C10": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRolePolicy",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicy_D5A50C10"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -440,15 +439,15 @@ module.exports = function({ b }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_other_otheronupdateOnMessage5290616b_IamRole_2068DED5.name}"
       },
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicyAttachment_EE8F3112": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicyAttachment_EE8F3112"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E.name}"
       }
     },
     "aws_lambda_function": {
@@ -692,28 +691,28 @@ module.exports = function({ b }) {
           "subnet_ids": []
         }
       },
-      "root_testtest_Handler_046C3415": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_A868D55D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/Default",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_A868D55D"
           }
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.root_b_6D0D1E6D.bucket}",
             "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_FUNCTION_NAME": "Handler-c8457446",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "Handler-c8457446",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_93E2AFB9.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -1100,11 +1099,11 @@ module.exports = function({ b }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_93E2AFB9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/S3Object",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_93E2AFB9"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -1451,11 +1450,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure4.js";
         const other_client = context._lift(other);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             other: ${other_client},
-            std_Json: ${std_JsonClient.text},
           })
         `);
       }
@@ -1555,7 +1552,7 @@ class $Root extends $stdlib.std.Resource {
     (b.onCreate(new $Closure3(this,"$Closure3")));
     (b.onEvent(new $Closure4(this,"$Closure4")));
     (other.onEvent(new $Closure5(this,"$Closure5")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure6(this,"$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:putting and deleting from a bucket to trigger bucket events",new $Closure6(this,"$Closure6"));
   }
 }
 class $App extends $AppBase {

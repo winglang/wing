@@ -86,7 +86,7 @@ exports[`queue with a consumer function 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b56909df17f31ba7c1a733e45fe9be27c767ef4b12ac65a6c6c2bbbaa3f8f418.zip",
+          "S3Key": "a028d8321beb7aea3bd17a266a795b276daefdce58f7b21e35e64db6463e08bc.zip",
         },
         "Handler": "index.handler",
         "Role": {
