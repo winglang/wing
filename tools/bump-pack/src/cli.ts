@@ -19,7 +19,6 @@ const parsedArgs = parseArgs({
 });
 
 const packageDir = parsedArgs.values.bumpPackage ? process.cwd() : undefined;
-const releaseData = await getReleaseData();
 const dryRun = parsedArgs.values.dryRun ?? false;
 
 if (packageDir !== undefined) {
@@ -27,8 +26,7 @@ if (packageDir !== undefined) {
   const originalVersions = await setPackageVersion({
     packageDir,
     dryRun,
-    version: releaseData.newVersion,
-    devBuild: releaseData.sameVersion,
+    version: process.env.PROJEN_BUMP_VERSION,
   });
 
   try {
@@ -45,6 +43,7 @@ if (packageDir !== undefined) {
   }
 } else {
   // We just want to output the useful release data
+  const releaseData = await getReleaseData();
   console.log(releaseData);
 
   if (!!process.env.GITHUB_ACTIONS) {
