@@ -1,7 +1,7 @@
 import { Code, InflightClient } from "../core";
 
 /**
- * RequestCache- 
+ * RequestCache-
  * The cache read-only property that contains the cache mode of the request.
  * It controls how the request will interact with the browser's HTTP cache.
 
@@ -85,11 +85,11 @@ export interface RequestOptions {
   /**
    * The request method, e.g., GET, POST. The default is GET.
    */
-  readonly method: HttpMethods;
+  readonly method?: HttpMethods;
   /**
    * Any headers you want to add to your request.
    */
-  readonly headers: Record<string, string>;
+  readonly headers?: Record<string, string>;
   /**
    * Any body that you want to add to your request.
    * Note that a request using the GET or HEAD method cannot have a body.
@@ -98,11 +98,11 @@ export interface RequestOptions {
   /**
    * The cache mode you want to use for the request.
    */
-  readonly cache: RequestCache;
+  readonly cache?: RequestCache;
   /**
    * he redirect mode to use: follow, error. The default is follow.
    */
-  readonly redirect: RequestRedirect;
+  readonly redirect?: RequestRedirect;
   /**
    * A string specifying "no-referrer", client, or a URL. The default is "about:client".
    */
@@ -147,7 +147,13 @@ const defaultOptions: RequestOptions = {
  *  as well as testing public accessible resources
  * @inflight
  */
-export class Http {
+export class Util {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
   /**
    * Sends an http request of any method.
    * @param url
@@ -249,12 +255,5 @@ export class Http {
       headers: headers,
       body: await response.text(),
     };
-  }
-
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, this.name);
   }
 }

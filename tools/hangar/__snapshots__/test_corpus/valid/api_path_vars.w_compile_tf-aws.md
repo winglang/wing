@@ -14,7 +14,7 @@ module.exports = function({ std_Json }) {
     async handle(req)  {
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
-      "headers": Object.freeze({"content-type":"application/json"}),
+      "headers": Object.freeze({"content-type":"text/plain"}),
       "status": 200,}
       ;
     }
@@ -26,7 +26,7 @@ module.exports = function({ std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, util_Http, std_Json }) {
+module.exports = function({ api, http_Util, std_Json }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -37,7 +37,7 @@ module.exports = function({ api, util_Http, std_Json }) {
     }
     async handle()  {
       const username = "tsuf";
-      const res = (await util_Http.get(`${api.url}/users/${username}`));
+      const res = (await http_Util.get(`${api.url}/users/${username}`));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.status === 200)'`)})((res.status === 200))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(((JSON.parse(res.body)))["user"] === username)'`)})((((JSON.parse(res.body)))["user"] === username))};
     }
@@ -313,7 +313,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-const util = require('@winglang/sdk').util;
+const http = require('@winglang/sdk').http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -360,12 +360,12 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
         const api_client = context._lift(api);
-        const util_HttpClient = util.Http._toInflightType(context);
+        const http_UtilClient = http.Util._toInflightType(context);
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             api: ${api_client},
-            util_Http: ${util_HttpClient.text},
+            http_Util: ${http_UtilClient.text},
             std_Json: ${std_JsonClient.text},
           })
         `);
