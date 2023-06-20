@@ -18,15 +18,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
+env:
+  RUST_VERSION: "1.67.1"
+  NODE_VERSION: "18.12.1"
+  NPM_VERSION: "8.19.3"
+
 jobs:
   build:
     name: "Build"
-    timeout-minutes: 45
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
-      # Testing runs out of memory without this
-      NODE_OPTIONS: "--max-old-space-size=4096"
-      RUST_VERSION: "1.67.1"
       CARGO_TERM_COLOR: always
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
@@ -38,15 +40,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Reads versions from root package.json "volta" section
-      - name: Setup Node/NPM with pinned Volta version
-        uses: volta-cli/action@v4.0.0
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-      # Forces volta to load node and npm upfront, reducing conflict when running in parallel later
-      - name: Preload Node/NPM
-        run: |
-          node -v
-          npm -v
+      - name: Setup NPM
+        run: npm install -g npm@${{ env.NPM_VERSION }}
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -75,9 +75,6 @@ jobs:
       - name: Package
         run: npm run package:ci
 
-      - name: Test
-        run: npm run test:ci
-
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v3
         with:
@@ -89,6 +86,12 @@ jobs:
         with:
           name: wingsdk
           path: libs/wingsdk/*.tgz
+
+      - name: Upload WingCompiler
+        uses: actions/upload-artifact@v3
+        with:
+          name: wingcompiler
+          path: libs/wingcompiler/*.tgz
 
       - name: Upload WingC WASM
         uses: actions/upload-artifact@v3
@@ -123,6 +126,46 @@ jobs:
           github-comment: false
           vercel-args: "--prod "
 
+  unit-tests:
+    name: "Unit Tests"
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      # Testing runs out of memory without this
+      NODE_OPTIONS: "--max-old-space-size=4096"
+      CARGO_TERM_COLOR: always
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup NPM
+        run: npm install -g npm@${{ env.NPM_VERSION }}
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          targets: |
+            x86_64-unknown-linux-gnu
+            wasm32-wasi
+          components: rustfmt,clippy,rust-std
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Test
+        run: npm run test:ci
+
   benchmarks:
     name: E2E Benchmarks
     runs-on: ubuntu-latest
@@ -130,6 +173,7 @@ jobs:
       - build
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
       - name: Checkout
@@ -138,15 +182,13 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
-      # Reads versions from root package.json "volta" section
-      - name: Setup Node/NPM with pinned Volta version
-        uses: volta-cli/action@v4.0.0
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-      # Forces volta to load node and npm upfront, reducing conflict when running in parallel later
-      - name: Preload Node/NPM
-        run: |
-          node -v
-          npm -v
+      - name: Setup NPM
+        run: npm install -g npm@${{ env.NPM_VERSION }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -177,10 +219,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        runner: [ubuntu, macos, windows]
-        # Note: Node 19.7.0 is pinned due to regressions in later versions
-        # See https://github.com/nodejs/node/issues/47096
-        node: ["18", "19.7.0"]
+        runner: [windows, macos, ubuntu]
+        node: ["18", "20"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
@@ -191,11 +231,12 @@ jobs:
           - runner: windows
             full_run: false
           - runner: ubuntu
-            node: "19.7.0"
+            node: "20"
             full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
       - name: Checkout
@@ -222,15 +263,16 @@ jobs:
         working-directory: tools/hangar
         run: |
           npm run test:generate
-          npm run test --shard=${{ matrix.shard }}
+          npm run test -- --shard=${{ matrix.shard }}
 
   quality-gate:
     name: Quality Gate
     runs-on: ubuntu-latest
-    needs: 
-     - build
-     - e2e
-     - benchmarks
+    needs:
+      - build
+      - e2e
+      - benchmarks
+      - unit-tests
     steps:
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
@@ -275,6 +317,15 @@ jobs:
       - name: Publish Wing SDK
         if: ${{ steps.wingsdk-version.outputs.version != needs.build.outputs.version }}
         working-directory: wingsdk
+        run: npm publish *.tgz --access public
+
+      - name: Check published Wing Compiler version
+        id: wingcompiler-version
+        run: echo "version=$(npm view @winglang/compiler version)" >> $GITHUB_OUTPUT
+
+      - name: Publish Wing Compiler
+        if: ${{ steps.wingcompiler-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wingcompiler
         run: npm publish *.tgz --access public
 
       - name: Check published Wing version

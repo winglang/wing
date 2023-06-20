@@ -12,6 +12,19 @@ export class Json {
   }
 
   /**
+   * Creates a mutable deep copy of the Json.
+   *
+   * @macro (JSON.parse(JSON.stringify($args$)))
+   *
+   * @param json to copy
+   * @returns the mutable copy of the Json
+   */
+  public static deepCopyMut(json: Json): MutJson {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
    * Returns the keys from the Json object.
    *
    * @macro (Object.keys($args$))
@@ -33,32 +46,6 @@ export class Json {
    * @returns the values from the Json as array of Json
    */
   public static values(json: Json): Json[] {
-    json;
-    throw new Error("Macro");
-  }
-
-  /**
-   * Creates a mutable deep clone of the Json.
-   *
-   * @macro (JSON.parse(JSON.stringify($args$)))
-   *
-   * @param json to clone
-   * @returns the mutable clone of the Json
-   */
-  public static cloneMut(json: Json): MutJson {
-    json;
-    throw new Error("Macro");
-  }
-
-  /**
-   * Creates a immutable deep clone of the Json.
-   *
-   * @macro (JSON.parse(JSON.stringify($args$)))
-   *
-   * @param json to clone
-   * @returns the immutable clone of the Json
-   */
-  public static clone(json: Json): Json {
     json;
     throw new Error("Macro");
   }
@@ -120,6 +107,21 @@ export class Json {
   }
 
   /**
+   * Checks if a Json object has a given key
+   *
+   * @macro ((args) => { return args[0].hasOwnProperty(args[1]); })([$args$])
+   *
+   * @param json The json object to inspect
+   * @param key The key to check
+   * @returns Boolean value corresponding to whether the key exists
+   */
+  public static has(json: Json, key: string): boolean {
+    json;
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
    * Returns a specified element from the Json.
    *
    * @macro ($self$)[$args$]
@@ -158,6 +160,19 @@ export class MutJson {
   }
 
   /**
+   * Creates an immutable deep copy of the Json.
+   *
+   * @macro Object.freeze(JSON.parse(JSON.stringify($args$)))
+   *
+   * @param json to copy
+   * @returns the immutable copy of the Json
+   */
+  public static deepCopy(json: MutJson): Json {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
    * Returns a specified element from the Json.
    *
    * @macro ($self$)[$args$]
@@ -191,7 +206,7 @@ export class MutJson {
    * @param key The key of the element to add
    * @param value The value of the element to add
    */
-  public set(key: string, value: any): void {
+  public set(key: string, value: MutJson): void {
     key;
     value;
     throw new Error("Macro");
@@ -204,7 +219,7 @@ export class MutJson {
    *
    * @param value The value of the element to set
    */
-  public setAt(index: number, value: any): void {
+  public setAt(index: number, value: MutJson): void {
     index;
     value;
     throw new Error("Macro");

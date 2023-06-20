@@ -10,4 +10,4 @@ let handler = inflight (body: str /* string arg */): str => {
   bucket.put(key, body);
 };
 
-queue.addConsumer(handler);
+queue.setConsumer(handler);

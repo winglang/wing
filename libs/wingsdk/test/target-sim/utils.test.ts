@@ -6,7 +6,7 @@ describe("convertDurationToCronExpression", () => {
   test("converts a duration from minutes", () => {
     // GIVEN
     const dur = Duration.fromMinutes(10);
-    const expectedCron = "*/10 * * * *";
+    const expectedCron = "*/10 * * * ?";
 
     // WHEN
     const cron = convertDurationToCronExpression(dur);
@@ -17,7 +17,7 @@ describe("convertDurationToCronExpression", () => {
 
   test("converts a duration from hours", () => {
     const dur = Duration.fromHours(2);
-    const expectedCron = "* */2 * * *";
+    const expectedCron = "* */2 * * ?";
 
     // WHEN
     const cron = convertDurationToCronExpression(dur);
@@ -29,7 +29,7 @@ describe("convertDurationToCronExpression", () => {
   test("converts durations with fractional hours", () => {
     // GIVEN
     const dur = Duration.fromHours(2.5);
-    const expectedCron = "*/30 */2 * * *";
+    const expectedCron = "*/30 */2 * * ?";
 
     // WHEN
     const cron = convertDurationToCronExpression(dur);

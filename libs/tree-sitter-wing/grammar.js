@@ -112,7 +112,8 @@ module.exports = grammar({
         $.if_let_statement,
         $.struct_definition,
         $.enum_definition,
-        $.try_catch_statement
+        $.try_catch_statement,
+        $.compiler_dbg_env,
       ),
 
     short_import_statement: ($) =>
@@ -318,7 +319,8 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.json_literal,
         $.struct_literal,
-        $.optional_test
+        $.optional_test,
+        $.compiler_dbg_panic,
       ),
 
     // Primitives
@@ -331,10 +333,14 @@ module.exports = grammar({
 
     bool: ($) => choice("true", "false"),
 
-    duration: ($) => choice($.seconds, $.minutes, $.hours),
+    duration: ($) => choice($.milliseconds, $.seconds, $.minutes, $.hours, $.days, $.months, $.years),
+    milliseconds: ($) => seq(field("value", $.number), "ms"),
     seconds: ($) => seq(field("value", $.number), "s"),
     minutes: ($) => seq(field("value", $.number), "m"),
     hours: ($) => seq(field("value", $.number), "h"),
+    days: ($) => seq(field("value", $.number), "d"),
+    months: ($) => seq(field("value", $.number), "mo"),
+    years: ($) => seq(field("value", $.number), "y"),
     nil_value: ($) => "nil",
     string: ($) =>
       seq(
@@ -367,6 +373,9 @@ module.exports = grammar({
 
     optional_test: ($) =>
       prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
+
+    compiler_dbg_panic: ($) => "😱",
+    compiler_dbg_env: ($) => seq("🗺️", optional(";")),
 
     _callable_expression: ($) =>
       choice(

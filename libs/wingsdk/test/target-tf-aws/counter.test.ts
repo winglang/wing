@@ -141,20 +141,20 @@ test("peek() policy statement", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("reset() policy statement", () => {
+test("set() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const counter = cloud.Counter._newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) {
-  const val = await this.my_counter.reset();
+  const val = await this.my_counter.set();
   console.log(val);
 }`,
     {
       my_counter: {
         obj: counter,
-        ops: [cloud.CounterInflightMethods.RESET],
+        ops: [cloud.CounterInflightMethods.SET],
       },
     }
   );
