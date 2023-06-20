@@ -76,7 +76,7 @@ exports[`can add object in preflight 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -92,7 +92,7 @@ exports[`can add object in preflight 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -104,7 +104,7 @@ exports[`can add object in preflight 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -148,7 +148,7 @@ exports[`create a bucket 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -164,7 +164,7 @@ exports[`create a bucket 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -176,7 +176,7 @@ exports[`create a bucket 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -230,7 +230,7 @@ exports[`get invalid object throws an error 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -246,7 +246,7 @@ exports[`get invalid object throws an error 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -258,7 +258,7 @@ exports[`get invalid object throws an error 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -348,7 +348,7 @@ exports[`put and get Json object from bucket 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -364,7 +364,7 @@ exports[`put and get Json object from bucket 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -376,7 +376,7 @@ exports[`put and get Json object from bucket 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
