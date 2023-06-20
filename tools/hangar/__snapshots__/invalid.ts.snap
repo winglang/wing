@@ -1954,6 +1954,13 @@ error: Unknown symbol \\"B\\"
    |                 ^ Unknown symbol \\"B\\"
 
 
+error: Unknown symbol \\"unknown\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.w:32:1
+   |
+32 | unknown = 1;
+   | ^^^^^^^ Unknown symbol \\"unknown\\"
+
+
 error: Unknown symbol \\"assert\\"
    --> ../../../examples/tests/invalid/unknown_symbol.w:20:17
    |
