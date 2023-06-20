@@ -170,7 +170,10 @@ jobs:
         id: diff
         run: |
           git add --all
-          git diff --staged --patch > build.diff || echo "::set-output name=diff::true"
+          git diff --staged --patch > build.diff
+          if [ -s build.diff ]; then
+            echo "::set-output name=diff::true"
+          fi
       - name: Upload Diff
         if: steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
@@ -290,8 +293,11 @@ jobs:
           SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
           DIFF_NAME="e2e-$SHARD.diff"
           git add --all
-          git diff --staged --patch > $DIFF_NAME || echo "::set-output name=diff::true"
-          echo "::set-output name=diff_name::$DIFF_NAME"
+          git diff --staged --patch > $DIFF_NAME
+          if [ -s $DIFF_NAME ]; then
+            echo "::set-output name=diff::true"
+            echo "::set-output name=diff_name::$DIFF_NAME"
+          fi
       - name: Upload mutation
         if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
@@ -333,7 +339,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
