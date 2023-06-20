@@ -1,3 +1,4 @@
+import * as url from "url";
 import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
@@ -545,10 +546,8 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
 
   // THEN
   await s.stop();
-  expect(response).toEqual(
-    // @ts-expect-error (reaching into private property)
-    `${client.fileDir}/${KEY}`
-  );
+  const filePath = `${client.fileDir}/${KEY}`;
+  expect(response).toEqual(url.pathToFileURL(filePath).href);
 });
 
 test("check if an object exists in the bucket", async () => {

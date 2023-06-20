@@ -19,7 +19,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: delete
   kind: 2
-  detail: "(str): bool"
+  detail: "(key: str): bool"
   insertText: delete($0)
   insertTextFormat: 2
   command:
@@ -27,7 +27,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: get
   kind: 2
-  detail: "(str): T1"
+  detail: "(key: str): T1"
   insertText: get($0)
   insertTextFormat: 2
   command:
@@ -35,7 +35,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: has
   kind: 2
-  detail: "(str): bool"
+  detail: "(key: str): bool"
   insertText: has($0)
   insertTextFormat: 2
   command:
@@ -43,7 +43,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: keys
   kind: 2
-  detail: "(): ImmutableArray"
+  detail: "(): Array<str>"
   insertText: keys($0)
   insertTextFormat: 2
   command:
@@ -51,7 +51,7 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: set
   kind: 2
-  detail: "(str, T1): void"
+  detail: "(key: str, value: T1): void"
   insertText: set($0)
   insertTextFormat: 2
   command:

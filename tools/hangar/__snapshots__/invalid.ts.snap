@@ -348,25 +348,17 @@ Duration <DURATION>
 `;
 
 exports[`cloud_function_expects_inflight.w 1`] = `
-"error: Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
+"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |   return \\"Hello \${name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
+  | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
 
 
-error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
-   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
-   |  
- 9 |   q.addConsumer(inflight (x: num) => {
-   | /---------------^
-10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
-11 | |   return;
-12 | | });
-   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"$Closure1\\" instead
+error: Expected type to be \\"inflight (message: str): void\\", but got \\"$Closure1\\" instead
 
 
  
@@ -516,6 +508,24 @@ Duration <DURATION>
 "
 `;
 
+exports[`diags_with_multibyte_chars.w 1`] = `
+"error: Unknown symbol \\"asdf\\"
+  --> ../../../examples/tests/invalid/diags_with_multibyte_chars.w:4:1
+  |
+4 | asdf;
+  | ^^^^ Unknown symbol \\"asdf\\"
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`enums.w 1`] = `
 "error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
   --> ../../../examples/tests/invalid/enums.w:5:21
@@ -599,20 +609,6 @@ error: Expected function return type
   |                            ^^^^^ Expected function return type
 
 
-error: Expected function return type
-  --> ../../../examples/tests/invalid/function_type.w:4:36
-  |
-4 | let my_func2 = (callback: ((num)): (str)) => {  };
-  |                                    ^^^^^ Expected function return type
-
-
-error: Expected method return type
-   --> ../../../examples/tests/invalid/function_type.w:12:3
-   |
-12 |   inflight my_method2(x: num);
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected method return type
-
-
  
 
 
@@ -642,18 +638,18 @@ Duration <DURATION>
 `;
 
 exports[`impl_interface.w 1`] = `
-"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:7
   |
-3 | class A impl cloud.IQueueAddConsumerHandler {
-  |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
+3 | class A impl cloud.IQueueSetConsumerHandler {
+  |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
 
 
-error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
+error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:7:7
   |
-7 | class B impl cloud.IQueueAddConsumerHandler {
-  |       ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
+7 | class B impl cloud.IQueueSetConsumerHandler {
+  |       ^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
 
 
 error: Expected an interface, instead found type \\"Bucket\\"
@@ -1032,10 +1028,10 @@ Duration <DURATION>
 
 exports[`json_static.w 1`] = `
 "error: Unknown symbol \\"set\\"
-  --> ../../../examples/tests/invalid/json_static.w:4:8
+  --> ../../../examples/tests/invalid/json_static.w:4:10
   |
-4 | immutJ.set(\\"a\\", \\"foo\\");
-  |        ^^^ Unknown symbol \\"set\\"
+4 | immutObj.set(\\"a\\", \\"foo\\");
+  |          ^^^ Unknown symbol \\"set\\"
 
 
  
@@ -1322,6 +1318,26 @@ Tests 1 failed (1)
 Duration <DURATION>
 "
 `;
+
+exports[`panic.w 1`] = `
+"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+  --> ../../../examples/tests/invalid/panic.w:6:1
+  |
+6 | 😱;
+  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`panic.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
 exports[`preflight_from_inflight.w 1`] = `
 "error: Cannot call into preflight phase while inflight
@@ -1702,7 +1718,7 @@ error: \\"status\\" is not initialized
    |  
 15 |   let x = cloud.ApiResponse {
    | /---------^
-16 | |   body: Json \\"Hello, world!\\",
+16 | |   body: \\"Hello, world!\\",
 17 | | };
    | \\\\-^ \\"status\\" is not initialized
 
@@ -1779,11 +1795,11 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
    |        ^^^^^^^^ Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
 
 
-error: Cannot instantiate type \\"BucketProps\\" because it is not a class
+error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
    --> ../../../examples/tests/invalid/structs.w:47:13
    |
 47 | let x = new cloud.BucketProps(1);
-   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is not a class
+   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
  
@@ -1875,6 +1891,42 @@ error: expression \\"await_expression\\" is not supported yet see https://github
   |
 4 | let d = await c;
   |         ^^^^^^^ expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`unknown_field.w 1`] = `
+"error: No member \\"a\\" in class \\"String\\"
+  --> ../../../examples/tests/invalid/unknown_field.w:1:12
+  |
+1 | std.String.a.b.c.fromJson();
+  |            ^ No member \\"a\\" in class \\"String\\"
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`unknown_submodule.w 1`] = `
+"error: Expected identifier \\"std\\" to be a variable, but it's a namespace
+  --> ../../../examples/tests/invalid/unknown_submodule.w:1:1
+  |
+1 | std.random.String.fromJson(\\"hello\\");
+  | ^^^ Expected identifier \\"std\\" to be a variable, but it's a namespace
 
 
  

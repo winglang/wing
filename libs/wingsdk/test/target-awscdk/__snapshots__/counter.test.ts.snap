@@ -2,6 +2,11 @@
 
 exports[`counter with initial value 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -81,6 +86,11 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 
 exports[`dec() policy statement 2`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -119,7 +129,7 @@ exports[`dec() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "d67f1ad8d70bdc743141753dd76cf215a976cb60954be5b3780161a5c928fd88.zip",
+          "S3Key": "f489d9467118ff13bff9a0a9d8a506d79bedeee9c5043e4ba3b7e3365ca68528.zip",
         },
         "Environment": {
           "Variables": {
@@ -230,6 +240,11 @@ exports[`dec() policy statement 2`] = `
 
 exports[`default counter behavior 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -309,6 +324,11 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 
 exports[`function with a counter binding 2`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -347,7 +367,7 @@ exports[`function with a counter binding 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "9631c62dc45f49b1227489f95a27865dda3d0d3df6996b64112cd9e9083736b7.zip",
+          "S3Key": "44138659a6c28ea56375de3d93f63ed6c9202a0ab6115abb03f1c9f50ceb37cd.zip",
         },
         "Environment": {
           "Variables": {
@@ -476,6 +496,11 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 
 exports[`inc() policy statement 2`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -514,7 +539,7 @@ exports[`inc() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "9631c62dc45f49b1227489f95a27865dda3d0d3df6996b64112cd9e9083736b7.zip",
+          "S3Key": "44138659a6c28ea56375de3d93f63ed6c9202a0ab6115abb03f1c9f50ceb37cd.zip",
         },
         "Environment": {
           "Variables": {
@@ -643,6 +668,11 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 
 exports[`peek() policy statement 2`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -681,7 +711,7 @@ exports[`peek() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "4f75f2e0b20ec1cfbe64a239806cfaf061e34d45cb85ca8afdfdae79583b1f65.zip",
+          "S3Key": "ce1ca0c6e77d463f34e8ff2d259b6eb0391e5d8afdc4b1487573ddfaa4307ef9.zip",
         },
         "Environment": {
           "Variables": {
@@ -810,6 +840,11 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 
 exports[`set() policy statement 2`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -848,7 +883,7 @@ exports[`set() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "c4746e415c05ffc3a40869598f603b3235d1e0c5d22084ac9273cb7379d0e4bf.zip",
+          "S3Key": "a0617446f293b3e35fe78d4000ae52daeedd4851c7ac2f908ba88a1d8e34b4d9.zip",
         },
         "Environment": {
           "Variables": {

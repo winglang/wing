@@ -78,7 +78,7 @@ export class ImmutableMap {
    *
    * @returns an array containing the keys of this map
    */
-  public keys(): ImmutableArray {
+  public keys(): string[] {
     throw new Error("Macro");
   }
 
@@ -87,7 +87,7 @@ export class ImmutableMap {
    *
    * @macro Object.values($self$)
    *
-   * @returns an array containing the values of this map
+   * @returns an array of type T containing the values of this map
    */
   public values(): ImmutableArray {
     throw new Error("Macro");
@@ -203,7 +203,7 @@ export class MutableMap {
    *
    * @returns an array containing the keys of this map
    */
-  public keys(): ImmutableArray {
+  public keys(): string[] {
     throw new Error("Macro");
   }
 
@@ -212,7 +212,7 @@ export class MutableMap {
    *
    * @macro Object.values($self$)
    *
-   * @returns an array containing the values of this map
+   * @returns an array containing of type T the values of this map
    */
   public values(): ImmutableArray {
     throw new Error("Macro");

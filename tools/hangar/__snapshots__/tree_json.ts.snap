@@ -197,7 +197,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "handle",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                           ],
                         },
@@ -494,7 +494,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "put",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                             {
                               "direction": "inbound",
@@ -548,7 +548,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "outbound",
                               "implicit": false,
                               "relationship": "consumer",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                             {
                               "direction": "inbound",
@@ -593,7 +593,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "id": "cloud.Queue",
                         "path": "root/Default/Default/BigPublisher/cloud.Queue",
                       },
-                      "cloud.Queue-AddConsumer-c50bc9ef": {
+                      "cloud.Queue-SetConsumer-c50bc9ef": {
                         "attributes": {
                           "wing:resource:connections": [
                             {
@@ -623,7 +623,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.15.2",
                             },
                             "id": "Asset",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/Asset",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/Asset",
                           },
                           "Default": {
                             "constructInfo": {
@@ -631,7 +631,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.15.2",
                             },
                             "id": "Default",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/Default",
                           },
                           "IamRole": {
                             "constructInfo": {
@@ -639,7 +639,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.15.2",
                             },
                             "id": "IamRole",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRole",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRole",
                           },
                           "IamRolePolicy": {
                             "constructInfo": {
@@ -647,7 +647,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.15.2",
                             },
                             "id": "IamRolePolicy",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRolePolicy",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicy",
                           },
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
@@ -655,7 +655,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.15.2",
                             },
                             "id": "IamRolePolicyAttachment",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRolePolicyAttachment",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicyAttachment",
                           },
                           "S3Object": {
                             "constructInfo": {
@@ -663,7 +663,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.15.2",
                             },
                             "id": "S3Object",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/S3Object",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/S3Object",
                           },
                         },
                         "constructInfo": {
@@ -674,10 +674,10 @@ exports[`tree.json for an app with many resources 1`] = `
                           "description": "A cloud function (FaaS)",
                           "title": "Function",
                         },
-                        "id": "cloud.Queue-AddConsumer-c50bc9ef",
-                        "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef",
+                        "id": "cloud.Queue-SetConsumer-c50bc9ef",
+                        "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                       },
-                      "cloud.Queue-AddConsumerHandler-c50bc9ef": {
+                      "cloud.Queue-SetConsumerHandler-c50bc9ef": {
                         "attributes": {
                           "wing:resource:connections": [],
                         },
@@ -688,8 +688,8 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "hidden": true,
                         },
-                        "id": "cloud.Queue-AddConsumerHandler-c50bc9ef",
-                        "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumerHandler-c50bc9ef",
+                        "id": "cloud.Queue-SetConsumerHandler-c50bc9ef",
+                        "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumerHandler-c50bc9ef",
                       },
                       "cloud.Topic": {
                         "attributes": {

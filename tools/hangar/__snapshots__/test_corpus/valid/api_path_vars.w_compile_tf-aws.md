@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -13,7 +13,8 @@ module.exports = function({  }) {
     }
     async handle(req)  {
       return {
-      "body": Object.freeze({"user":(req.vars)["name"]}),
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
+      "headers": Object.freeze({"content-type":"application/json"}),
       "status": 200,}
       ;
     }
@@ -250,7 +251,8 @@ module.exports = function({  }) {
           "variables": {
             "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
-            "WING_TARGET": "tf-aws"
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
           }
         },
         "function_name": "Handler-c8f4f2a1",
@@ -372,8 +374,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }

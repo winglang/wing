@@ -1,7 +1,10 @@
-use crate::ast::{
-	ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString, InterpolatedStringPart,
-	Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+use crate::{
+	ast::{
+		ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Reference,
+		Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+	},
+	dbg_panic,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -165,6 +168,7 @@ where
 			}),
 			finally_statements: finally_statements.map(|statements| f.fold_scope(statements)),
 		},
+		StmtKind::CompilerDebugEnv => StmtKind::CompilerDebugEnv,
 	};
 	Stmt {
 		kind,
@@ -302,11 +306,15 @@ where
 			element: Box::new(f.fold_expr(*element)),
 		},
 		ExprKind::FunctionClosure(def) => ExprKind::FunctionClosure(f.fold_function_definition(def)),
+		ExprKind::CompilerDebugPanic => {
+			dbg_panic!(); // Handle the debug panic expression (during folding)
+			ExprKind::CompilerDebugPanic
+		}
 	};
 	Expr {
+		id: node.id,
 		kind,
 		span: node.span,
-		evaluated_type: node.evaluated_type,
 	}
 }
 
@@ -380,7 +388,7 @@ where
 			.into_iter()
 			.map(|param| f.fold_function_parameter(param))
 			.collect(),
-		return_type: node.return_type.map(|type_| Box::new(f.fold_type_annotation(*type_))),
+		return_type: Box::new(f.fold_type_annotation(*node.return_type)),
 		phase: node.phase,
 	}
 }
@@ -429,8 +437,8 @@ where
 		TypeAnnotationKind::MutMap(t) => TypeAnnotationKind::MutMap(Box::new(f.fold_type_annotation(*t))),
 		TypeAnnotationKind::Set(t) => TypeAnnotationKind::Set(Box::new(f.fold_type_annotation(*t))),
 		TypeAnnotationKind::MutSet(t) => TypeAnnotationKind::MutSet(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotationKind::Function(t) => TypeAnnotationKind::Function(FunctionTypeAnnotation {
-			param_types: t.param_types.into_iter().map(|t| f.fold_type_annotation(t)).collect(),
+		TypeAnnotationKind::Function(t) => TypeAnnotationKind::Function(FunctionSignature {
+			parameters: t.parameters.into_iter().map(|p| f.fold_function_parameter(p)).collect(),
 			return_type: Box::new(f.fold_type_annotation(*t.return_type)),
 			phase: t.phase,
 		}),

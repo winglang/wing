@@ -19,7 +19,7 @@ jobs:
           - macos-latest
         node:
           - 18
-          - 19
+          - 20
         install_command:
           - npm install -g winglang
     runs-on: ${{ matrix.runner }}
@@ -42,3 +42,10 @@ jobs:
       - name: Run Test
         run: |
           wing test test_bucket.w
+      - name: Download examples/tests/valid/hello.w
+        run: |
+          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.w > hello.w
+          cat hello.w
+      - name: Run Compile
+        run: |
+          wing compile hello.w -t tf-aws

@@ -125,7 +125,7 @@
         },
         {
           "name": "storage.type.wing",
-          "match": "\\b(class|resource|struct|enum|interface|test)\\b"
+          "match": "\\b(class|struct|enum|interface|test)\\b"
         },
         {
           "name": "support.function.wing",

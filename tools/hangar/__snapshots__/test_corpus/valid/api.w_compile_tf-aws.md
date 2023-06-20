@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ counter }) {
+module.exports = function({ counter, std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -15,7 +15,8 @@ module.exports = function({ counter }) {
       const count = (await counter.inc());
       const bodyResponse = Object.freeze({"count":count});
       const resp = {
-      "body": bodyResponse,
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),
+      "headers": Object.freeze({"content-type":"application/json"}),
       "status": 200,}
       ;
       return resp;
@@ -142,7 +143,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.root_A_cloudApi_api_A554547B.id}",
         "triggers": {
-          "redeployment": "d5ba3b47f1fba34e1d97e6c40f33bef7a66fb682"
+          "redeployment": "66f9e4b69146527e1951e6308dc9128a3ca41abb"
         }
       },
       "root_cloudApi_api_deployment_E29F699A": {
@@ -331,7 +332,8 @@ module.exports = function({  }) {
           "variables": {
             "CLOUD_API_C8B1D888": "${aws_api_gateway_stage.root_A_cloudApi_api_stage_EEF6B12C.invoke_url}",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-73c5308f-c85168bb",
-            "WING_TARGET": "tf-aws"
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_41": "${jsonencode(aws_api_gateway_stage.root_A_cloudApi_api_stage_EEF6B12C.invoke_url)}"
           }
         },
         "function_name": "cloud-Api-OnRequest-73c5308f-c85168bb",
@@ -385,7 +387,8 @@ module.exports = function({  }) {
           "variables": {
             "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8315524",
-            "WING_TARGET": "tf-aws"
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
           }
         },
         "function_name": "Handler-c8315524",
@@ -500,9 +503,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
         const counter_client = context._lift(counter);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             counter: ${counter_client},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }
