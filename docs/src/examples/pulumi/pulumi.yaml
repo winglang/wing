@@ -1,8 +1,0 @@
-name: s3-lambda-pulumi
-runtime: nodejs
-description: A simple example that uploads a file to an S3 bucket using a Lambda function
-template:
-  config:
-    aws:region:
-      description: The AWS region to deploy into
-      default: us-west-2
