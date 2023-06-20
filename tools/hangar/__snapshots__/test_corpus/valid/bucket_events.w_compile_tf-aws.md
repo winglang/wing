@@ -1,141 +1,130 @@
 # [bucket_events.w](../../../../../examples/tests/valid/bucket_events.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log(`deleted ${key}`);
-      }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(`deleted ${key}`)};
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## inflight.$Closure2.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure2 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log(`updated ${key}`);
-      }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(`updated ${key}`)};
     }
   }
   return $Closure2;
-};
+}
+
 ```
 
 ## inflight.$Closure3.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure3 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log(`created ${key}`);
-      }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(`created ${key}`)};
     }
   }
   return $Closure3;
-};
+}
+
 ```
 
 ## inflight.$Closure4.js
-
 ```js
-module.exports = function ({ other, std_Json }) {
+module.exports = function({ other }) {
   class $Closure4 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log(`last key ${key}`);
-      }
-      await other.put(
-        "last_operation_key",
-        ((args) => {
-          return JSON.stringify(args[0], null, args[1]);
-        })([key])
-      );
+    async $inflight_init()  {
+    }
+    async handle(key, event)  {
+      (await other.put(`last_${event}_key`,key));
     }
   }
   return $Closure4;
-};
+}
+
 ```
 
 ## inflight.$Closure5.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure5 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log("other bucket event called!");
-      }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log("other bucket event called!")};
     }
   }
   return $Closure5;
-};
+}
+
 ```
 
 ## inflight.$Closure6.js
-
 ```js
-module.exports = function ({ b }) {
+module.exports = function({ b }) {
   class $Closure6 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      await b.put("a", "1");
-      await b.put("b", "1");
-      await b.put("b", "100");
-      await b.put("c", "1");
-      await b.delete("c");
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("b","100"));
+      (await b.put("c","1"));
+      (await b.delete("c"));
     }
   }
   return $Closure6;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -156,11 +145,13 @@ module.exports = function ({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:putting and deleting from a bucket to trigger bucket events\",\"${aws_lambda_function.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_A868D55D.arn}\"]]"
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -245,11 +236,11 @@ module.exports = function ({ b }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRole",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -346,15 +337,15 @@ module.exports = function ({ b }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_other_otheronupdateOnMessage5290616b_IamRole_2068DED5.name}"
       },
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicy_D5A50C10": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRolePolicy",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicy_D5A50C10"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -448,15 +439,15 @@ module.exports = function ({ b }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_other_otheronupdateOnMessage5290616b_IamRole_2068DED5.name}"
       },
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicyAttachment_EE8F3112": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicyAttachment_EE8F3112"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E.name}"
       }
     },
     "aws_lambda_function": {
@@ -700,28 +691,28 @@ module.exports = function ({ b }) {
           "subnet_ids": []
         }
       },
-      "root_testtest_Handler_046C3415": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_A868D55D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/Default",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_A868D55D"
           }
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.root_b_6D0D1E6D.bucket}",
             "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_FUNCTION_NAME": "Handler-c8457446",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "Handler-c8457446",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_93E2AFB9.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -886,17 +877,23 @@ module.exports = function ({ b }) {
         ],
         "topic": [
           {
-            "events": ["s3:ObjectRemoved:*"],
+            "events": [
+              "s3:ObjectRemoved:*"
+            ],
             "id": "on-delete-notification",
             "topic_arn": "${aws_sns_topic.root_b_bondelete_357A37C8.arn}"
           },
           {
-            "events": ["s3:ObjectCreated:Post"],
+            "events": [
+              "s3:ObjectCreated:Post"
+            ],
             "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.root_b_bonupdate_F11B4439.arn}"
           },
           {
-            "events": ["s3:ObjectCreated:Put"],
+            "events": [
+              "s3:ObjectCreated:Put"
+            ],
             "id": "on-create-notification",
             "topic_arn": "${aws_sns_topic.root_b_boncreate_9124D168.arn}"
           }
@@ -917,17 +914,23 @@ module.exports = function ({ b }) {
         ],
         "topic": [
           {
-            "events": ["s3:ObjectCreated:Put"],
+            "events": [
+              "s3:ObjectCreated:Put"
+            ],
             "id": "on-create-notification",
             "topic_arn": "${aws_sns_topic.root_other_otheroncreate_DCA3D2DD.arn}"
           },
           {
-            "events": ["s3:ObjectCreated:Post"],
+            "events": [
+              "s3:ObjectCreated:Post"
+            ],
             "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.root_other_otheronupdate_3B763057.arn}"
           },
           {
-            "events": ["s3:ObjectRemoved:*"],
+            "events": [
+              "s3:ObjectRemoved:*"
+            ],
             "id": "on-delete-notification",
             "topic_arn": "${aws_sns_topic.root_other_otherondelete_7CCB8682.arn}"
           }
@@ -1096,11 +1099,11 @@ module.exports = function ({ b }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_93E2AFB9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/test:putting and deleting from a bucket to trigger bucket events/Handler/S3Object",
+            "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_S3Object_93E2AFB9"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -1332,19 +1335,18 @@ module.exports = function ({ b }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -1376,7 +1378,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -1408,7 +1410,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -1440,7 +1442,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -1448,11 +1450,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure4.js";
         const other_client = context._lift(other);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             other: ${other_client},
-            std_Json: ${std_JsonClient.text},
           })
         `);
       }
@@ -1478,7 +1478,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -1510,7 +1510,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -1545,38 +1545,19 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const other = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "other"
-    );
-    const b = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "b"
-    );
-    b.onDelete(new $Closure1(this, "$Closure1"));
-    b.onUpdate(new $Closure2(this, "$Closure2"));
-    b.onCreate(new $Closure3(this, "$Closure3"));
-    b.onEvent(new $Closure4(this, "$Closure4"));
-    other.onEvent(new $Closure5(this, "$Closure5"));
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:test",
-      new $Closure6(this, "$Closure6")
-    );
+    const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"other");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b");
+    (b.onDelete(new $Closure1(this,"$Closure1")));
+    (b.onUpdate(new $Closure2(this,"$Closure2")));
+    (b.onCreate(new $Closure3(this,"$Closure3")));
+    (b.onEvent(new $Closure4(this,"$Closure4")));
+    (other.onEvent(new $Closure5(this,"$Closure5")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:putting and deleting from a bucket to trigger bucket events",new $Closure6(this,"$Closure6"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "bucket_events",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "bucket_events", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -1590,4 +1571,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+
