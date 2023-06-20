@@ -87,7 +87,7 @@ console.log(\\"Hello from schedule!\\");
 };
 })())({
 
-}) })).handle(event);
+}), args: {} })).handle(event);
 };",
   "simulator.json": {
     "resources": [
@@ -283,7 +283,7 @@ console.log(\\"Hello from schedule!\\");
 };
 })())({
 
-}) })).handle(event);
+}), args: {} })).handle(event);
 };",
   "simulator.json": {
     "resources": [
@@ -479,7 +479,7 @@ console.log(\\"Hello from schedule!\\");
 };
 })())({
 
-}) })).handle(event);
+}), args: {} })).handle(event);
 };",
   "simulator.json": {
     "resources": [

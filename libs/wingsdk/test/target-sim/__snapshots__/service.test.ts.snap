@@ -17,7 +17,7 @@ async handle(message) {
 };
 })())({
 
-}) })).handle(event);
+}), args: {} })).handle(event);
 };",
   "simulator.json": {
     "resources": [

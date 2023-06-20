@@ -31,7 +31,7 @@ bucket: (function(env) {
         }
         return $simulator.findInstance(handle);
       })(\\"BUCKET_HANDLE_5f2a41c8\\")
-}) })).handle(event);
+}), args: {} })).handle(event);
 };",
   "simulator.json": {
     "resources": [
