@@ -69,7 +69,7 @@ jobs:
           fi
         done
     - name: Push changes
-      if: steps.download-artifacts.outputs.found_artifact == 'true' && steps.self_mutation.outputs.self_mutation_happened == 'true'
+      if: steps.download-artifacts.outputs.found_artifact == 'true'
       env:
         HEAD_REF: ${{ github.event.workflow_run.head_branch }}
       run: |
