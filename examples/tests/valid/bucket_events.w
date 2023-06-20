@@ -23,7 +23,7 @@ other.onEvent(inflight (key: str) => {
     log("other bucket event called!");
 });
 
-test "test" {   
+test "putting and deleting from a bucket to trigger bucket events" {   
     b.put("a", "1");
     b.put("b", "1");
     b.put("b", "100");
