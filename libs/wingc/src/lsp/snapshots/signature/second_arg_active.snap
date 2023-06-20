@@ -3,6 +3,9 @@ source: libs/wingc/src/lsp/signature.rs
 ---
 signatures:
   - label: "(key: str, body: str): void"
+    documentation:
+      kind: markdown
+      value: "Add a file to the bucket that is uploaded when the app is deployed.\n\n### Remarks\nTODO: In the future this will support uploading any `Blob` type or\nreferencing a file from the local filesystem."
     parameters:
       - label: "key: str"
       - label: "body: str"

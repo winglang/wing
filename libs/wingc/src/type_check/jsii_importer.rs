@@ -317,6 +317,7 @@ impl<'a> JsiiImporter<'a> {
 			true => self.wing_types.add_type(Type::Struct(Struct {
 				name: new_type_symbol.clone(),
 				extends: extends.clone(),
+				docs: Docs::from(&jsii_interface.docs),
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
@@ -328,6 +329,7 @@ impl<'a> JsiiImporter<'a> {
 			false => self.wing_types.add_type(Type::Interface(Interface {
 				name: new_type_symbol.clone(),
 				extends: extends.clone(),
+				docs: Docs::from(&jsii_interface.docs),
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
