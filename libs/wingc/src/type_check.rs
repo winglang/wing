@@ -215,6 +215,7 @@ pub struct Class {
 #[derivative(Debug)]
 pub struct Interface {
 	pub name: Symbol,
+	pub docs: Docs,
 	extends: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
@@ -316,6 +317,7 @@ pub struct ArgListTypes {
 #[derivative(Debug)]
 pub struct Struct {
 	pub name: Symbol,
+	pub docs: Docs,
 	extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
@@ -2559,6 +2561,7 @@ impl<'a> TypeChecker<'a> {
 				// Create the interface type and add it to the current environment (so interface implementation can reference itself)
 				let interface_spec = Interface {
 					name: name.clone(),
+					docs: Docs::default(),
 					env: dummy_env,
 					extends: extend_interfaces.clone(),
 				};
@@ -2654,6 +2657,7 @@ impl<'a> TypeChecker<'a> {
 						name: name.clone(),
 						extends: extends_types,
 						env: struct_env,
+						docs: Docs::default(),
 					}))),
 					StatementIdx::Top,
 				) {
@@ -3163,6 +3167,10 @@ impl<'a> TypeChecker<'a> {
 		// e.g. wing::str -> stdlib::String | wing::Array -> stdlib::ImmutableArray
 		match symbol.name.as_str() {
 			"Json" => Some(symbol.clone()),
+			"duration" => Some(Symbol {
+				name: "Duration".to_string(),
+				span: symbol.span.clone(),
+			}),
 			"str" => Some(Symbol {
 				name: "String".to_string(),
 				span: symbol.span.clone(),
