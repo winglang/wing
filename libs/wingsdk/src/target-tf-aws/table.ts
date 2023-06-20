@@ -1,3 +1,4 @@
+import { marshall } from "@aws-sdk/util-dynamodb";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
@@ -6,7 +7,6 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Json, IInflightHost } from "../std";
-import { marshall } from "@aws-sdk/util-dynamodb";
 
 /**
  * Table names must be between 3 and 255 characters.
@@ -43,7 +43,7 @@ export class Table extends cloud.Table {
     const item = { [this.primaryKey]: key, ...row };
     const marshalledItem = marshall(item);
     const stringifiedItem = JSON.stringify(marshalledItem);
-    
+
     new DynamodbTableItem(this, `DynamodbTableItem-${key}`, {
       tableName: this.table.name,
       hashKey: this.table.hashKey,
