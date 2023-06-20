@@ -443,3 +443,48 @@ Debug panic
 (source
   (expression_statement
     (compiler_dbg_panic)))
+
+================================================================================
+Duration
+================================================================================
+
+let ms = 10ms;
+let s = 10s;
+let m = 10m;
+let h = 10h;
+let d = 10d;
+let mo = 10mo;
+
+--------------------------------------------------------------------------------
+
+(source
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (milliseconds
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (seconds
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (minutes
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (hours
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (days
+        value: (number))))
+  (variable_definition_statement
+    name: (identifier)
+    value: (duration
+      (months
+        value: (number)))))

@@ -1,63 +1,109 @@
-/*\
-skip: true
-\*/
+// !!! isn't working on aws due to https://github.com/winglang/wing/issues/2724
 bring cloud;
 
-let b = new cloud.Bucket() as "b";
-let counter = new cloud.Counter();
+enum Source {
+  anyEvent,
+  onEvent
+}
+
+let b = new cloud.Bucket();
+let idsCounter = new cloud.Counter();
+let table = new cloud.Table(
+  name: "key-history",
+  primaryKey: "_id",
+  columns: {
+    _id: cloud.ColumnType.STRING,
+    key: cloud.ColumnType.STRING,
+    operation: cloud.ColumnType.STRING,
+    source: cloud.ColumnType.STRING,
+  }
+);
+
+class Util {
+  extern "../external/sleep.js" static inflight sleep(milli: num);
+}
+
+
+let logHistory = inflight (key: str, operation: str, source: Source) => {
+  table.insert("${idsCounter.inc()}", Json { key: key, operation: operation, source: "${source}"  });
+};
+
 
 
 b.onDelete(inflight (key: str) => {
-    counter.inc();
+  logHistory(key, "DELETE", Source.anyEvent);
 });
 
 b.onUpdate(inflight (key: str) => {
-    counter.inc();
+  logHistory(key, "UPDATE", Source.anyEvent);
 });
 
-b.onCreate(inflight (key:str) => {
-    counter.inc();
+b.onCreate(inflight (key: str) => {
+  logHistory(key, "CREATE", Source.anyEvent);
 });
 
-b.onEvent(inflight (key: str) => {   
-    counter.inc();
+b.onEvent(inflight (key: str, event: cloud.BucketEventType) => { 
+  logHistory(key, "${event}", Source.onEvent);
 });
 
-// "std" is implicitly imported
-new std.Test(inflight () => {
+let wait = inflight (pred: inflight (): bool): bool => {
+  let var i = 0;
+    // waiting for up to 2 minutess, checking every 10 seconds
+  while i < 12 { 
+    if pred() {
+      return true;
+    } 
+  
+    Util.sleep(10000);
 
-    inflight class Predicate {
-        counterVal: num;
-        init(counterVal: num) {
-            this.counterVal = counterVal;
-        }
+    i = i + 1;
+  }
 
-        extern "../external/sleep.js" static inflight sleep(ms: num);
+  return false;
+};
+  
+struct CheckHitCountOptions {
+  key: str;
+  type: str;
+  source: Source;
+  count: num;
+}
 
-        inflight assertion (): bool {
-            return counter.peek() == this.counterVal;
-        }
 
-        inflight testAssertion ()  {
-            let var i = 0;
-            // waiting for up to 2 minutess, checking every 10 seconds
-            while i < 12 {
-                i = i + 1;
-                if this.assertion() {
-                    assert(this.assertion());
-                    return;
-                } 
-                Predicate.sleep(1000 * 10);
-            }
-            assert(this.assertion());
-        }
+let checkHitCount = inflight (opts: CheckHitCountOptions): inflight (): bool => {
+  return inflight (): bool => {
+    let var count = 0;
+    for u in table.list() {
+      
+      if (u.get("key") == opts.key && u.get("operation") == opts.type && u.get("source") == "${opts.source}") {
+        count = count + 1;
+      }
     }
-    
-    b.put("a", "1");
-    b.put("b", "1");
-    b.put("c", "1");
-    b.put("b", "100");
-    b.delete("c");
-    new Predicate(10).testAssertion();
+    return count == opts.count;  
+  };
+};
 
-}, std.TestProps {timeout: 3m}) as "counter is incremented 10 times";
+
+new std.Test(inflight () => {  
+  b.put("a", "1");
+  b.put("b", "1");
+  b.put("c", "1");
+  b.put("b", "100");
+  b.delete("c");
+
+  // assert that onCreate events about the "a", "b", and "c" objects were each produced exactly 1 time
+  assert(wait(checkHitCount(key: "a", type: "CREATE", source: Source.anyEvent, count: 1)));
+  assert(wait(checkHitCount(key: "b", type: "CREATE", source: Source.anyEvent, count: 1)));
+  assert(wait(checkHitCount(key: "c", type: "CREATE", source: Source.anyEvent, count: 1)));
+
+  assert(wait(checkHitCount(key: "a", type: "CREATE", source: Source.onEvent, count: 1)));
+  assert(wait(checkHitCount(key: "b", type: "CREATE", source:  Source.onEvent, count: 1)));
+  assert(wait(checkHitCount(key: "c", type: "CREATE", source:  Source.onEvent, count: 1)));
+
+  assert(wait(checkHitCount(key: "b", type: "UPDATE", source: Source.anyEvent, count: 1)));
+  assert(wait(checkHitCount(key: "c", type: "DELETE", source: Source.anyEvent, count: 1)));
+
+  assert(wait(checkHitCount(key: "b", type: "UPDATE", source: Source.onEvent, count: 1)));
+  assert(wait(checkHitCount(key: "c", type: "DELETE", source: Source.onEvent, count: 1)));
+
+}, std.TestProps { timeout: 8m }) as "hitCount is incremented according to the bucket event";
