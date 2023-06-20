@@ -1,7 +1,7 @@
 bring cloud;
 
 let w = new cloud.Website(path: "./website");
-let config = { json: 1 };
+let config = Json { json: 1 };
 
 class Util {
   extern "../external/http.js" static inflight http(url: str): Json;
