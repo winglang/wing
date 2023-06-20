@@ -2,6 +2,11 @@ import * as changelogen from "changelogen";
 import * as semver from "semver";
 import { execSync } from "node:child_process";
 
+/**
+ * Gets the release data for the current release.
+ * 
+ * This is based on git tags and commit messages in conventional-commit format.
+ */
 export async function getReleaseData() {
   // If we want to generate a version, skip changelogen logic
   if (process.env.GENERATE_VERSION !== "false") {
