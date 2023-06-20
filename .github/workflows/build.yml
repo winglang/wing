@@ -169,12 +169,8 @@ jobs:
       - name: Create git patch
         id: diff
         run: |
-          git add .
-          git diff --cached HEAD > build.diff
-          if [ -s build.diff ]
-          then
-            echo "::set-output name=diff::true"
-          fi
+          git add --all
+          git diff --staged --patch > build.diff || echo "::set-output name=diff::true"
       - name: Upload Diff
         if: steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
@@ -291,13 +287,9 @@ jobs:
         run: |
           SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
           DIFF_NAME="e2e-$SHARD.diff"
-          git add .
-          git diff --cached HEAD > $DIFF_NAME
-          if [ -s $DIFF_NAME ]
-          then
-            echo "::set-output name=diff::true"
-            echo "::set-output name=diff_name::$DIFF_NAME"
-          fi
+          git add --all
+          git diff --staged --patch > $DIFF_NAME || echo "::set-output name=diff::true"
+          echo "::set-output name=diff_name::$DIFF_NAME"
       - name: Upload mutation
         if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
