@@ -76,6 +76,7 @@ new cloud.Test(inflight () => {
   b.put("b", "100");
   b.delete("c");
 
+  // assert that onCreate events about the "a", "b", and "c" objects were each produced exactly 1 time
   assert(wait(checkHitCount("a", "CREATE", 1,  1)));
   assert(wait(checkHitCount("b", "CREATE", 1,  1)));
   assert(wait(checkHitCount("c", "CREATE", 1,  1)));
