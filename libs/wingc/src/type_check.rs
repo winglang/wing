@@ -1415,7 +1415,6 @@ impl<'a> TypeChecker<'a> {
 
 				self.type_check_arg_list_against_function_sig(&arg_list, &constructor_sig, exp, arg_list_types);
 
-				
 				// If this is a preflight class then create a new type for this resource object
 				if type_.is_preflight_class() {
 					// Get reference to resource object's scope
@@ -2416,6 +2415,7 @@ impl<'a> TypeChecker<'a> {
 
 				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
 					self.check_class_field_initialization(&scope, fields, Phase::Inflight);
+
 					self.type_check_super_constructor_against_parent_initializer(
 						scope,
 						class_type,
@@ -2436,14 +2436,15 @@ impl<'a> TypeChecker<'a> {
 					FunctionBody::Statements(s) => s,
 					FunctionBody::External(_) => panic!("init cannot be extern"),
 				};
+
+				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
+
 				self.type_check_super_constructor_against_parent_initializer(
 					init_statements,
 					class_type,
 					&class_env,
 					CLASS_INIT_NAME,
 				);
-
-				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
 
 				// Type check the inflight initializer
 				self.type_check_method(
@@ -2706,18 +2707,54 @@ impl<'a> TypeChecker<'a> {
 		if &scope.statements.len() >= &1 {
 			match &scope.statements[0].kind {
 				StmtKind::SuperConstructor { arg_list } => {
-					if let Some(parent_initializer) = &class_type.as_class().unwrap().parent {
-						let initializer = parent_initializer
+					if let Some(parent_class) = &class_type.as_class().unwrap().parent {
+						let parent_initializer = parent_class
 							.as_class()
 							.unwrap()
 							.methods(false)
 							.filter(|(name, _type)| name == init_name)
 							.collect_vec()[0]
 							.1;
-						let arg_list_types = self.type_check_arg_list(&arg_list, class_env);
+
+						let class_initializer = &class_type
+							.as_class()
+							.unwrap()
+							.methods(false)
+							.filter(|(name, _type)| name == init_name)
+							.collect_vec()[0]
+							.1;
+
+						// Create a temp init environment to use for typechecking args
+						let mut init_env = SymbolEnv::new(
+							Some(class_env.get_ref()),
+							self.types.void(),
+							true,
+							class_env.phase,
+							scope.statements[0].idx,
+						);
+
+						// add the initializer args to the init_env
+						for arg in class_initializer.as_function_sig().unwrap().parameters.iter() {
+							let sym = Symbol {
+								name: arg.name.clone(),
+								span: scope.statements[0].span.clone(),
+							};
+							match init_env.define(
+								&sym,
+								SymbolKind::make_free_variable(sym.clone(), arg.typeref, false, init_env.phase),
+								StatementIdx::Top,
+							) {
+								Err(type_error) => {
+									self.type_error(type_error);
+								}
+								_ => {}
+							};
+						}
+
+						let arg_list_types = self.type_check_arg_list(&arg_list, &init_env);
 						self.type_check_arg_list_against_function_sig(
 							&arg_list,
-							initializer.as_function_sig().unwrap(),
+							parent_initializer.as_function_sig().unwrap(),
 							&scope.statements[0],
 							arg_list_types,
 						);
