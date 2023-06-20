@@ -1,11 +1,14 @@
+use lsp_types::{
+	Command, CompletionItem, CompletionItemKind, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
+	MarkupKind,
+};
 use std::cmp::max;
-
-use lsp_types::{Command, CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
+use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
@@ -31,7 +34,7 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {
-	CompletionResponse::Array(FILES.with(|files| {
+	let mut final_completions = FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position.text_document.uri;
 		let file_data = files.get(&uri).expect("File must be open to get completions");
@@ -166,7 +169,19 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 												Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
 											)
 										})
-										.cloned()
+										.map(|c| {
+											let mut c = c.clone();
+											if c.kind == Some(CompletionItemKind::CLASS) {
+												c.insert_text = Some(format!("{}($0)", c.label));
+												c.insert_text_format = Some(InsertTextFormat::SNIPPET);
+												c.command = Some(Command {
+													title: "triggerParameterHints".to_string(),
+													command: "editor.action.triggerParameterHints".to_string(),
+													arguments: None,
+												});
+											}
+											c
+										})
 										.collect();
 								} else {
 									return completions;
@@ -210,8 +225,62 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 		}
 
+		// lets also add some fun snippets
+		completions.push(CompletionItem {
+			label: "inflight () => {}".to_string(),
+			insert_text: Some("inflight ($1) => {$2}".to_string()),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			kind: Some(CompletionItemKind::SNIPPET),
+			..Default::default()
+		});
+
+		completions.push(CompletionItem {
+			label: "test \"\" { }".to_string(),
+			insert_text: Some("test \"$1\" {\n\t$2\n}".to_string()),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			kind: Some(CompletionItemKind::SNIPPET),
+			..Default::default()
+		});
+
 		completions
-	}))
+	});
+
+	final_completions = final_completions
+		.iter()
+		.map(|item| {
+			let mut new_item = item.clone();
+			new_item.sort_text = Some(completion_sort_text(&new_item));
+			new_item
+		})
+		.collect();
+
+	CompletionResponse::Array(final_completions)
+}
+
+/// LSP sorts completions items alphabetically
+/// This function returns a string that can be used to sort the completion items in a more logical order
+fn completion_sort_text(completion_item: &CompletionItem) -> String {
+	let completion_kind = completion_item.kind;
+	let letter = if let Some(kind) = completion_kind {
+		match kind {
+			CompletionItemKind::ENUM_MEMBER => "aa",
+			CompletionItemKind::VARIABLE => "bb",
+			CompletionItemKind::FUNCTION => "cc",
+			CompletionItemKind::PROPERTY => "dd",
+			CompletionItemKind::FIELD => "ee",
+			CompletionItemKind::METHOD => "ff",
+			CompletionItemKind::CLASS => "gg",
+			CompletionItemKind::STRUCT => "hh",
+			CompletionItemKind::INTERFACE => "ii",
+			CompletionItemKind::ENUM => "jj",
+			CompletionItemKind::MODULE => "kk",
+			CompletionItemKind::SNIPPET => "ll",
+			_ => "z",
+		}
+	} else {
+		"z"
+	};
+	format!("{}|{}", letter, completion_item.label)
 }
 
 /// Gets accessible properties on a type as a list of CompletionItems
@@ -383,7 +452,10 @@ fn get_completions_from_class(
 					Some(symbol_data.0.to_string())
 				},
 				label: symbol_data.0,
-				detail: Some(variable.type_.to_string()),
+				documentation: Some(Documentation::MarkupContent(MarkupContent {
+					kind: MarkupKind::Markdown,
+					value: symbol_data.1.render_docs(),
+				})),
 				kind,
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				command: if is_method {
@@ -406,9 +478,16 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 	if should_exclude_symbol(name) {
 		return None;
 	}
+
+	let documentation = Some(Documentation::MarkupContent(MarkupContent {
+		kind: MarkupKind::Markdown,
+		value: symbol_kind.render_docs(),
+	}));
+
 	Some(match symbol_kind {
 		SymbolKind::Type(t) => CompletionItem {
 			label: name.to_string(),
+			documentation,
 			kind: Some(match **t {
 				Type::Array(_)
 				| Type::MutArray(_)
@@ -432,11 +511,6 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(if let Some(c) = t.as_class() {
-				format!("{} class", c.phase).to_string()
-			} else {
-				String::default()
-			}),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
@@ -449,12 +523,12 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 
 			CompletionItem {
 				label: name.to_string(),
+				documentation,
 				insert_text: if is_method {
 					Some(format!("{name}($0)"))
 				} else {
 					Some(name.to_string())
 				},
-				detail: Some(v.type_.to_string()),
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
 				command: if is_method {
@@ -469,9 +543,9 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				..Default::default()
 			}
 		}
-		SymbolKind::Namespace(n) => CompletionItem {
+		SymbolKind::Namespace(..) => CompletionItem {
 			label: name.to_string(),
-			detail: Some(format!("bring {}", n.name)),
+			documentation,
 			kind: Some(CompletionItemKind::MODULE),
 			..Default::default()
 		},
