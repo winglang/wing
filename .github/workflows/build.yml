@@ -248,15 +248,17 @@ jobs:
             full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:
-      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/target/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/target/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/target/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
+        with:
+          path: target
 
       - name: Setup Node
         uses: actions/setup-node@v3
