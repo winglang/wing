@@ -14,7 +14,7 @@ let otherFile = Util.readFile("./website/website/inner-folder/other.html");
 w.addJson("config.json", config);
 
 // asserting the website path exists and points to the right folder
-assert(w.path.endsWith("sdk_tests/website/website"));
+assert(w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_tests\\website\\website"));
 
 
 test "access files on the website" {
