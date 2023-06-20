@@ -70,6 +70,7 @@ jobs:
         done
     - name: Push changes
       if: steps.download-artifacts.outputs.found_artifact == 'true'
+      working-directory: repo
       env:
         HEAD_REF: ${{ github.event.workflow_run.head_branch }}
       run: |
