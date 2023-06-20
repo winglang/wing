@@ -21,7 +21,7 @@
     "build": "tsup-node",
     "watch": "tsup-node --watch",
     "test": "vitest run --passWithNoTests",
-    "package": "conventional-release -b"
+    "package": "bump-pack -b"
   },
   "dependencies": {
     "wasi-js": "^1.7.3",
@@ -34,7 +34,7 @@
     "patch-package": "^6.5.1",
     "typescript": "^4.9.4",
     "vitest": "^0.30.1",
-    "@winglang/conventional-release": "file:../../tools/conventional-release"
+    "bump-pack": "file:../../tools/bump-pack"
   },
   "bundledDependencies": [
     "wasi-js"

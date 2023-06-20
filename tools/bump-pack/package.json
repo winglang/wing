@@ -1,9 +1,9 @@
 {
-  "name": "@wing/conventional-release",
+  "name": "bump-pack",
   "version": "0.0.0",
   "private": true,
   "bin": {
-    "conventional-release": "./bin/conventional-release.cjs"
+    "bump-pack": "./bin/bump-pack.cjs"
   },
   "exports": null,
   "sideEffects": false,

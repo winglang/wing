@@ -6,7 +6,7 @@
     "npm-run-all": "^4.1.5",
     "nx": "15.7.2",
     "semver": "^7.3.8",
-    "@winglang/conventional-release": "file:./tools/conventional-release"
+    "bump-pack": "file:./tools/bump-pack"
   },
   "scripts": {
     "nx": "nx",
@@ -17,7 +17,7 @@
     "test:ci": "nx run-many --exclude=hangar --target=test --all --configuration=release --output-style=stream --verbose",
     "package:ci": "nx run-many --target=package --all --configuration=release --output-style=stream --verbose",
     "docs": "./scripts/docsite.sh",
-    "changelog": "conventional-release",
+    "changelog": "bump-pack",
     "install:examples-valid": "npm --prefix examples/tests/valid install",
     "install:examples-invalid": "npm --prefix examples/tests/invalid install",
     "install:hangar": "npm --prefix tools/hangar install",
@@ -30,7 +30,7 @@
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
     "install:wing-playground": "npm --prefix apps/wing-playground install",
     "install:winglang": "npm --prefix apps/wing install --ignore-scripts",
-    "install:conventional-release": "npm --prefix tools/conventional-release install",
+    "install:bump-pack": "npm --prefix tools/bump-pack install",
     "postinstall": "run-p -l --max-parallel 3 'install:*'"
   },
   "volta": {

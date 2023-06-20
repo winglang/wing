@@ -64,7 +64,7 @@
       "inputs": [
         "default-build",
         "^default-build",
-        "{workspaceRoot}/tools/conventional-release/**"
+        "{workspaceRoot}/tools/bump-pack/**"
       ]
     },
     "dev": {
