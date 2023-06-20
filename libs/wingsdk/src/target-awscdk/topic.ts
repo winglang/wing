@@ -94,6 +94,11 @@ export class Topic extends cloud.Topic {
     );
   }
 
+  /** @internal */
+  public get _topic(): SNSTopic {
+    return this.topic;
+  }
+
   private envName(): string {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
