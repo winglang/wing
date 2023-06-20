@@ -143,7 +143,7 @@ pub mod test_utils {
 
 	use lsp_types::*;
 
-	use crate::diagnostic::{assert_no_panics};
+	use crate::diagnostic::assert_no_panics;
 
 	use super::on_document_did_open;
 

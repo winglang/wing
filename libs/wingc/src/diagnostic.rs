@@ -207,7 +207,8 @@ pub fn found_errors() -> bool {
 	})
 }
 
-/// Asserts that no panics occurred during compilation
+#[cfg(test)]
+/// Asserts that no panics occurred during compilation. Should only be used for testing
 pub fn assert_no_panics() {
 	let panics = DIAGNOSTICS.with(|diagnostics| {
 		let diagnostics = diagnostics.borrow();

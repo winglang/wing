@@ -365,10 +365,7 @@ fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
 
 #[cfg(test)]
 mod sanity {
-	use crate::{
-		compile,
-		diagnostic::{assert_no_panics},
-	};
+	use crate::{compile, diagnostic::assert_no_panics};
 	use std::{
 		fs,
 		path::{Path, PathBuf},
