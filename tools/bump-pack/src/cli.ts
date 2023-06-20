@@ -24,11 +24,11 @@ const dryRun = parsedArgs.values.dryRun ?? false;
 
 if (packageDir !== undefined) {
   // We want to make sure a package is versioned and is pointing to the correct dep versions
-
   const originalVersions = await setPackageVersion({
     packageDir,
     dryRun,
     version: releaseData.newVersion,
+    devBuild: releaseData.sameVersion,
   });
 
   try {
@@ -40,7 +40,7 @@ if (packageDir !== undefined) {
     await setPackageVersion({
       packageDir,
       dryRun,
-      version: originalVersions,
+      versionMap: originalVersions,
     });
   }
 } else {
