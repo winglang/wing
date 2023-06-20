@@ -12,7 +12,7 @@ let dingFn = fn("ding");
 assert(wingFn());
 assert(!dingFn());
 
-test "inflight test" {
+test "inflight functions can return other inflight functions" {
     let iFn = inflight (s: str): inflight (): bool => {
         return inflight (): bool => { return s == "wing"; };
     };
