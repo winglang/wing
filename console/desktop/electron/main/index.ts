@@ -1,7 +1,7 @@
 import path from "node:path";
 
 import * as Sentry from "@sentry/electron";
-import { createConsoleServer } from "@wingconsole/server";
+import { createConsoleServer, Trace } from "@wingconsole/server";
 import { config } from "dotenv";
 import { app, BrowserWindow, dialog, screen, nativeTheme } from "electron";
 import log from "electron-log";
@@ -38,17 +38,46 @@ log.info("Application entrypoint");
 
 log.transports.console.bind(process.stdout);
 
+let segment: SegmentAnalytics | undefined;
+
 if (
   process.env.SEGMENT_WRITE_KEY &&
   !process.env.CI &&
   !process.env.PLAYWRIGHT_TEST
 ) {
-  const segment = new SegmentAnalytics(process.env.SEGMENT_WRITE_KEY);
+  segment = new SegmentAnalytics(process.env.SEGMENT_WRITE_KEY);
   segment.analytics.track({
     anonymousId: segment.anonymousId,
     event: "Console Application started",
   });
 }
+
+const onTrace = (trace: Trace) => {
+  if (!segment) {
+    log.debug("onTrace: no segment");
+    return;
+  }
+  if (trace.type !== "resource") {
+    return;
+  }
+  const resourceName = trace.sourceType.replace("wingsdk.cloud.", "");
+  if (!trace.data.message.includes("(")) {
+    return;
+  }
+  // extracting the action name.
+  // trace message for resources looks like this:
+  // 'Invoke (payload="{\\"messages\\":[\\"dfd\\"]}").'
+  const action = trace.data.message.slice(
+    0,
+    Math.max(0, trace.data.message.indexOf("(")),
+  );
+  segment.analytics.track({
+    anonymousId: segment.anonymousId,
+    event: `console application: ${resourceName}: ${action} ${JSON.stringify(
+      Object.assign({}, trace, trace.data),
+    )}`,
+  });
+};
 
 const ROOT_PATH = {
   dist: path.join(__dirname, "../.."),
@@ -144,6 +173,7 @@ function createWindowManager() {
         updater,
         config: appConfig,
         hostUtils: new HostUtils(),
+        onTrace,
       });
 
       newWindow = await createWindow({

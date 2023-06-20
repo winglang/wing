@@ -4,7 +4,7 @@
   "private": true,
   "files": [],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --concurrency=20",
     "compile": "turbo run compile",
     "build": "turbo run tsc eslint vitest playwright compile",
     "test": "turbo run tsc eslint vitest playwright",
