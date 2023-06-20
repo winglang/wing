@@ -33,7 +33,7 @@ function mapCloudApiResponseToApigatewayResponse(
 ): APIGatewayProxyResult {
   return {
     statusCode: resp.status,
-    body: resp.body ? JSON.stringify(resp.body) : "",
+    body: resp.body ?? "",
     headers: {
       "Content-Type": "application/json",
       ...resp.headers,
