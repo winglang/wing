@@ -18,6 +18,8 @@ export interface SetPackageVersionOptions {
 
   /**
    * If true, dependencies will be removed from the package.json file.
+   *
+   * @default true if `version` is "0.0.0", false otherwise
    */
   devBuild?: boolean;
 
@@ -45,10 +47,16 @@ export async function setPackageVersion(options: SetPackageVersionOptions) {
   const defaultVersion = "0.0.0";
   const packageJsonPath = path.join(options.packageDir, "package.json");
   const packageJson = await readFile(packageJsonPath, "utf8").then(JSON.parse);
-  const devBuild = options.devBuild ?? false;
   const version = options.version ?? defaultVersion;
+  const devBuild = options.devBuild ?? version === defaultVersion;
 
   const originals: Record<string, string> = {};
+
+  console.log(
+    `Setting version to ${version}${
+      devBuild ? " (DEV)" : ""
+    } in ${packageJsonPath}`
+  );
 
   if (options.dryRun) {
     console.log(`DRYRUN: Set version to ${version} in ${packageJsonPath}`);
