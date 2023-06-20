@@ -14,6 +14,24 @@ export async function setPackageVersion(options: SetPackageVersionOptions) {
 
   const originals: Record<string, string> = {};
 
+  if (typeof options.version === "string") {
+    if (options.dryRun) {
+      console.log(
+        `DRYRUN: Set version to ${options.version} in ${packageJsonPath}`
+      );
+    } else {
+      packageJson.version = options.version;
+    }
+  } else {
+    if (options.dryRun) {
+      console.log(
+        `DRYRUN: Set version to 0.0.0 (default) in ${packageJsonPath}`
+      );
+    } else {
+      packageJson.version = "0.0.0";
+    }
+  }
+
   for (const [packageName, packageVersion] of Object.entries(
     packageJson.dependencies ?? {}
   )) {
@@ -50,10 +68,7 @@ export async function setPackageVersion(options: SetPackageVersionOptions) {
     }
   }
 
-  await writeFile(
-    packageJsonPath,
-    JSON.stringify(packageJson, undefined, 2)
-  );
+  await writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
 
   return originals;
 }
