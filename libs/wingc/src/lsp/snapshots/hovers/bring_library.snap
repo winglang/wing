@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "Module '@winglang/sdk'"
+  value: "Module `@winglang/sdk`"
 range:
   start:
     line: 1
