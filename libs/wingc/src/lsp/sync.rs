@@ -143,7 +143,7 @@ pub mod test_utils {
 
 	use lsp_types::*;
 
-	use crate::diagnostic::get_diagnostics;
+	use crate::diagnostic::{assert_no_panics};
 
 	use super::on_document_did_open;
 
@@ -178,13 +178,7 @@ pub mod test_utils {
 			},
 		});
 
-		let diags = get_diagnostics();
-		// none of these should be panics
-		let panic_diags = diags
-			.iter()
-			.filter(|d| d.message.starts_with("Compiler bug"))
-			.collect::<Vec<_>>();
-		assert_eq!(panic_diags.len(), 0, "Compiler bug detected: {:#?}", panic_diags);
+		assert_no_panics();
 
 		// find the character cursor position by looking for the character above the ^
 		let mut char_pos = 0_i32;

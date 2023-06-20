@@ -365,7 +365,10 @@ fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
 
 #[cfg(test)]
 mod sanity {
-	use crate::{compile, diagnostic::get_diagnostics};
+	use crate::{
+		compile,
+		diagnostic::{assert_no_panics},
+	};
 	use std::{
 		fs,
 		path::{Path, PathBuf},
@@ -411,12 +414,7 @@ mod sanity {
 				);
 
 				// Even if the test fails when we expect it to, none of the failures should be due to a compiler bug
-				let diags = get_diagnostics();
-				let panic_diags = diags
-					.iter()
-					.filter(|d| d.message.starts_with("Compiler bug"))
-					.collect::<Vec<_>>();
-				assert_eq!(panic_diags.len(), 0, "Compiler bug detected: {:#?}", panic_diags);
+				assert_no_panics();
 			} else {
 				assert!(
 					!expect_failure,
