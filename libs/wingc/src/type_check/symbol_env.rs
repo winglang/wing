@@ -1,3 +1,5 @@
+use colored::Colorize;
+use derivative::Derivative;
 use duplicate::duplicate_item;
 
 use crate::{
@@ -5,8 +7,11 @@ use crate::{
 	diagnostic::TypeError,
 	type_check::{SymbolKind, Type, TypeRef},
 };
-use std::collections::{btree_map, BTreeMap, HashSet};
 use std::fmt::Debug;
+use std::{
+	collections::{btree_map, BTreeMap, HashSet},
+	fmt::Display,
+};
 
 use super::{UnsafeRef, VariableInfo};
 
@@ -26,6 +31,45 @@ pub struct SymbolEnv {
 	statement_idx: usize,
 }
 
+impl Display for SymbolEnv {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut level = 0;
+		let mut env = self;
+		loop {
+			write!(f, "level {}: {{ ", level)?;
+			let mut items = vec![];
+			for (name, (_, kind)) in &env.symbol_map {
+				let repr = match kind {
+					SymbolKind::Type(t) => format!("{} [type]", t).red(),
+					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
+					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
+				};
+				items.push(format!("{} => {}", name, repr));
+			}
+			write!(f, "{} }}", items.join(", "))?;
+
+			if let Some(parent) = &env.parent {
+				env = parent;
+				level += 1;
+				writeln!(f)?; // new line
+			} else {
+				break;
+			}
+		}
+
+		Ok(())
+	}
+}
+
+impl Debug for SymbolEnv {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		f.debug_struct("SymbolEnv")
+			.field("symbols", &self.symbol_map.keys())
+			.field("phase", &self.phase)
+			.finish()
+	}
+}
+
 /// The index (position) of the statement where a certain symbol was defined
 /// this is useful to determine if a symbol can be used in a certain
 /// expression or whether it is being used before it's defined.
@@ -36,13 +80,13 @@ pub enum StatementIdx {
 	Top,
 }
 
-#[duplicate_item(
-	LookupResult reference(lifetime, type);
-	[LookupResult] [& 'lifetime type];
-	[LookupResultMut] [& 'lifetime mut type];
-)]
-#[derive(Debug)]
 /// Possible results for a symbol lookup in the environment
+#[derive(Debug)]
+#[duplicate_item(
+	LookupResult reference(lifetime, type) SymbolLookupInfo;
+	[LookupResult] [& 'lifetime type] [SymbolLookupInfo];
+	[LookupResultMut] [& 'lifetime mut type] [SymbolLookupInfoMut];
+)]
 pub enum LookupResult<'a> {
 	/// The kind of symbol and useful metadata associated with its lookup
 	Found(reference([a], [SymbolKind]), SymbolLookupInfo),
@@ -56,15 +100,15 @@ pub enum LookupResult<'a> {
 }
 
 #[duplicate_item(
-	LookupResult reference(lifetime, type);
-	[LookupResult] [& 'lifetime type];
-	[LookupResultMut] [& 'lifetime mut type];
+	LookupResult reference(lifetime, type) SymbolLookupInfo;
+	[LookupResult] [& 'lifetime type] [SymbolLookupInfo];
+	[LookupResultMut] [& 'lifetime mut type] [SymbolLookupInfoMut];
 )]
 impl<'a> LookupResult<'a> {
 	pub fn unwrap(self) -> (reference([a], [SymbolKind]), SymbolLookupInfo) {
 		match self {
 			LookupResult::Found(kind, info) => (kind, info),
-			LookupResult::NotFound(_) => panic!("LookupResult::unwrap() called on LookupResult::NotFound"),
+			LookupResult::NotFound(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
 			LookupResult::DefinedLater => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
 			LookupResult::ExpectedNamespace(symbol) => panic!(
 				"LookupResult::unwrap() called on LookupResult::ExpectedNamespace({:?})",
@@ -88,12 +132,22 @@ impl<'a> LookupResult<'a> {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Derivative)]
+#[derivative(Debug)]
+#[duplicate_item(
+	SymbolLookupInfo SymbolEnvRef;
+	[SymbolLookupInfo] [SymbolEnvRef];
+	[SymbolLookupInfoMut] [()];
+)]
 pub struct SymbolLookupInfo {
 	/// The phase the symbol was defined in
 	pub phase: Phase,
 	/// Whether the symbol was defined in an `init`'s environment
 	pub init: bool,
+
+	/// The environment in which this symbol is defined.
+	#[derivative(Debug = "ignore")]
+	pub env: SymbolEnvRef,
 }
 
 impl SymbolEnv {
@@ -127,6 +181,31 @@ impl SymbolEnv {
 		self.parent.is_none()
 	}
 
+	/// Checks if this environment is a parent of another environment.
+	pub fn is_parent_of(&self, other: &SymbolEnv) -> bool {
+		let Some(parent) = other.parent else {
+			return false;
+		};
+
+		if self.is_same(&parent) {
+			return true;
+		}
+
+		self.is_parent_of(&parent)
+	}
+
+	/**
+	 * Determines if this environment is a child of another environment (i.e. the other
+	 * environment is one of its parents).
+	 */
+	pub fn is_child_of(&self, other: &SymbolEnv) -> bool {
+		other.is_parent_of(self)
+	}
+
+	pub fn is_same(&self, other: &SymbolEnv) -> bool {
+		std::ptr::eq(other, self)
+	}
+
 	pub fn define(&mut self, symbol: &Symbol, kind: SymbolKind, pos: StatementIdx) -> Result<(), TypeError> {
 		if self.symbol_map.contains_key(&symbol.name) {
 			return Err(TypeError {
@@ -142,9 +221,9 @@ impl SymbolEnv {
 
 	#[allow(clippy::needless_arbitrary_self_type)]
 	#[duplicate_item(
-		lookup reference(type) lookup_ext;
-		[lookup] [& type] [lookup_ext];
-		[lookup_mut] [& mut type] [lookup_ext_mut];
+		lookup reference(type) lookup_ext SymbolLookupInfo;
+		[lookup] [& type] [lookup_ext] [SymbolLookupInfo];
+		[lookup_mut] [& mut type] [lookup_ext_mut] [SymbolLookupInfoMut];
 	)]
 	/// Lookup a symbol in the environment, returning the symbol kind if it was found.
 	/// Note that the symbol name cannot be a nested symbol (e.g. `foo.bar`). Use
@@ -162,44 +241,54 @@ impl SymbolEnv {
 
 	#[allow(clippy::needless_arbitrary_self_type)]
 	#[duplicate_item(
-		lookup_ext LookupResult map_get reference(type) ref_annotation(ident);
-		[lookup_ext] [LookupResult] [get] [& type] [ref ident];
-		[lookup_ext_mut] [LookupResultMut] [get_mut] [&mut type] [ref mut ident];
+		lookup_ext LookupResult map_get reference(type) ref_annotation(ident) get_ref SymbolLookupInfo;
+		[lookup_ext] [LookupResult] [get] [& type] [ref ident] [self.get_ref()] [SymbolLookupInfo];
+		[lookup_ext_mut] [LookupResultMut] [get_mut] [&mut type] [ref mut ident] [()] [SymbolLookupInfoMut];
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. Note that the symbol name
 	/// cannot be a nested symbol (e.g. `foo.bar`), use `lookup_nested` for that.
 	/// TODO: perhaps make this private and switch to the nested version in all external calls
 	pub fn lookup_ext(self: reference([Self]), symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> LookupResult {
 		if let Some((definition_idx, kind)) = self.symbol_map.map_get(&symbol.name) {
-			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
-				if let StatementIdx::Index(definition_idx) = definition_idx {
-					if *definition_idx > not_after_stmt_idx {
-						return LookupResult::DefinedLater;
-					}
-				}
+			// if found the symbol and it is defined before the statement index (or statement index is
+			// unspecified, which is likely not something we want to support), we found it
+			let lookup_index = not_after_stmt_idx.unwrap_or(usize::MAX);
+			let definition_idx = match definition_idx {
+				StatementIdx::Top => 0,
+				StatementIdx::Index(idx) => *idx,
+			};
+
+			if lookup_index < definition_idx {
+				return LookupResult::DefinedLater;
 			}
-			LookupResult::Found(
+
+			return LookupResult::Found(
 				kind,
 				SymbolLookupInfo {
 					phase: self.phase,
 					init: self.is_init,
+					env: get_ref,
 				},
-			)
-		} else if let Some(ref_annotation([parent_env])) = self.parent {
-			parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx))
-		} else {
-			LookupResult::NotFound(symbol.clone())
+			);
 		}
+
+		// we couldn't find the symbol in the current environment, let's look up in the parent
+		// environment.
+		if let Some(ref_annotation([parent_env])) = self.parent {
+			return parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx));
+		}
+
+		LookupResult::NotFound(symbol.clone())
 	}
 
 	#[allow(clippy::needless_arbitrary_self_type)]
 	#[duplicate_item(
-		lookup_nested LookupResult lookup_ext as_namespace reference(type);
-		[lookup_nested] [LookupResult] [lookup_ext] [as_namespace] [& type];
-		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type];
+		lookup_nested LookupResult lookup_ext as_namespace reference(type) SymbolLookupInfo;
+		[lookup_nested] [LookupResult] [lookup_ext] [as_namespace] [& type] [SymbolLookupInfo];
+		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type] [SymbolLookupInfoMut];
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
-	/// nested symbol (e.g. `foo.bar`) if `nested_ver` is larger than 1.
+	/// nested symbol (e.g. `foo.bar`) if `nested_vec` is larger than 1.
 	pub fn lookup_nested(self: reference([Self]), nested_vec: &[&Symbol], statement_idx: Option<usize>) -> LookupResult {
 		let mut it = nested_vec.iter();
 
@@ -296,6 +385,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 					SymbolLookupInfo {
 						phase: self.curr_env.phase,
 						init: self.curr_env.is_init,
+						env: self.curr_env.get_ref(),
 					},
 				))
 			}
@@ -340,20 +430,22 @@ mod tests {
 		);
 
 		// Define a globally visible variable in the parent env
+		let sym = Symbol::global("parent_global_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_global_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
 		));
 
 		// Define a positionally visible variable in the parent env before the child scope
+		let sym = Symbol::global("parent_low_pos_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_low_pos_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Index(child_scope_idx - 1),
 			),
 			Ok(())
@@ -361,20 +453,22 @@ mod tests {
 
 		// Define a positionally visible variable in the parent env after the child scope
 		let parent_high_pos_var_idx = child_scope_idx + 1;
+		let sym = Symbol::global("parent_high_pos_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_high_pos_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Index(parent_high_pos_var_idx),
 			),
 			Ok(())
 		));
 
 		// Define a globally visible variable in the child env
+		let sym = Symbol::global("child_global_var");
 		assert!(matches!(
 			child_env.define(
-				&Symbol::global("child_global_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -473,20 +567,22 @@ mod tests {
 		));
 
 		// Define a variable in n2's env
+		let sym = Symbol::global("ns2_var");
 		assert!(matches!(
 			ns2.env.get_ref().define(
-				&Symbol::global("ns2_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
 		));
 
 		// Define a variable in n1's env
+		let sym = Symbol::global("ns1_var");
 		assert!(matches!(
 			ns1.env.get_ref().define(
-				&Symbol::global("ns1_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())

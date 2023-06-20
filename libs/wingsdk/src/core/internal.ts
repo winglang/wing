@@ -1,10 +1,17 @@
-import { Duration } from "../std";
+import { IConstruct } from "constructs";
+import { App } from "./app";
+import { Duration } from "../std/duration";
 import { IResource } from "../std/resource";
 
-export function serializeImmutableData(obj: any): string {
+export function serializeImmutableData(scope: IConstruct, obj: any): string {
   // since typeof(null) is "object", we cover all nullity cases (undefined and null) apriori.
   if (obj == null) {
     return JSON.stringify(obj);
+  }
+
+  const tokens = App.of(scope)._tokens;
+  if (tokens.isToken(obj)) {
+    return tokens.lift(obj);
   }
 
   switch (typeof obj) {
@@ -15,11 +22,13 @@ export function serializeImmutableData(obj: any): string {
 
     case "object":
       if (Array.isArray(obj)) {
-        return `[${obj.map(serializeImmutableData).join(",")}]`;
+        return `[${obj
+          .map((o) => serializeImmutableData(scope, o))
+          .join(",")}]`;
       }
 
       if (obj instanceof Duration) {
-        return serializeImmutableData({
+        return serializeImmutableData(scope, {
           seconds: obj.seconds,
           minutes: obj.minutes,
           hours: obj.hours,
@@ -27,11 +36,11 @@ export function serializeImmutableData(obj: any): string {
       }
 
       if (obj instanceof Set) {
-        return `new Set(${serializeImmutableData(Array.from(obj))})`;
+        return `new Set(${serializeImmutableData(scope, Array.from(obj))})`;
       }
 
       if (obj instanceof Map) {
-        return `new Map(${serializeImmutableData(Array.from(obj))})`;
+        return `new Map(${serializeImmutableData(scope, Array.from(obj))})`;
       }
 
       // if the object is a resource (i.e. has a "_toInflight" method"), we use it to serialize
@@ -45,7 +54,7 @@ export function serializeImmutableData(obj: any): string {
         const lines = [];
         lines.push("{");
         for (const [k, v] of Object.entries(obj)) {
-          lines.push(`${k}: ${serializeImmutableData(v)},`);
+          lines.push(`${k}: ${serializeImmutableData(scope, v)},`);
         }
         lines.push("}");
         return lines.join("");

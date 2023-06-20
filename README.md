@@ -1,7 +1,6 @@
-# Welcome to the Wing Language! :wave:
-
-<p align="left">
-  <a href="https://docs.winglang.io/getting-started">Quick Start</a>
+<h1 align="center">Welcome to the Wing Language! :wave:</h1>
+<p align="center">
+  <a href="https://docs.winglang.io/">Quick Start</a>
   ▪︎
   <a href="http://t.winglang.io/slack">Join Slack</a>
   ▪︎
@@ -18,8 +17,6 @@
   <a href="https://docs.winglang.io/contributors/">Contribute</a>
 </p>
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing/tree/hasan%2Fdev-container)
-
 **Winglang** is a new open-source programming language designed for the cloud (aka "*cloud-oriented*"). 
 Wing enables developers to build distributed systems that leverage cloud services as first-class citizens by combining infrastructure ***and*** application code in a safe and unified programming model (aka "*cloud-oriented*").
 Wing programs can be executed locally (*yes, no internet required*) using a fully-functional simulator, or deployed to any cloud provider (*yes, Wing programs are portable across providers*).
@@ -30,9 +27,9 @@ Developing for the cloud today requires mastering various layers of cloud stack,
 
 We fulfill our mission by reducing cognitive load and increasing iteration speeds. How? by enabling you to work at a higher level of abstraction, letting you focus on business logic instead of cloud mechanics, and write much less code. We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
-<a href="https://youtu.be/vHy1TM2JzUQ" target="_blank" align="left">
-    <img src="./logo/demo.gif" alt="Wing Demo" height="300px">
-</a>
+<p align="center">
+  <img src="./logo/demo.gif" alt="Wing Demo" height="360px">
+</p>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
@@ -56,7 +53,7 @@ let queue = new cloud.Queue();
 let counter = new cloud.Counter();
 let bucket = new cloud.Bucket();
 
-queue.addConsumer(inflight (message: str) => {
+queue.setConsumer(inflight (message: str) => {
   let i = counter.inc();
   bucket.put("file-${i}.txt", message);
 });
@@ -65,7 +62,7 @@ queue.addConsumer(inflight (message: str) => {
 `cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are *preflight objects*.
 They represent cloud infrastructure resources. 
 When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
-of these resources. The `queue.addConsumer()` method is a *preflight method* that configures the infrastructure to
+of these resources. The `queue.setConsumer()` method is a *preflight method* that configures the infrastructure to
 invoke a particular *inflight function* for each message in the queue.
 
 **Now comes the cool part:** the code that runs inside the inflight function interacts with the `counter` and the `bucket` objects
@@ -81,17 +78,17 @@ You are welcome to read more about it [here](https://docs.winglang.io/faq/why-a-
 Wing was built from the ground up to make it an ideal choice for building applications on any cloud.
 It includes an assembly of different features that serve that purpose:
 
-* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
-* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/reference/wingsdk-spec) of cloud resources that lets you write cloud portable code.
+* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/contributors/rfcs/language-spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
+* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/contributors/rfcs/2023-01-20-wingsdk-spec) of cloud resources that lets you write cloud portable code.
 * [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that keep you in control by allowing you to customize the compilation output, such as infrastructure definitions.
 * Use any resource in the Terraform ecosystem as first-class citizen in your app.
-* [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
+* [JavaScript interoperability](https://docs.winglang.io/contributors/rfcs/language-spec#5-interoperability).
 * [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
 * Automatic generation of IAM policies and other cloud mechanics based on intent.
-* Local functional simulator with a visualization and interaction [console](https://docs.winglang.io/getting-started/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
-* [Native JSON](https://docs.winglang.io/reference/spec#114-json-type) and schema validation support.
+* Local functional simulator with a visualization and interaction [console](https://docs.winglang.io/start-here/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
+* [Native JSON](https://docs.winglang.io/contributors/rfcs/language-spec#114-json-type) and schema validation support.
 * [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
-* [Implicit async](https://docs.winglang.io/reference/spec#113-asynchronous-model), explicit defer.
+* [Implicit async](https://docs.winglang.io/contributors/rfcs/language-spec#113-asynchronous-model), explicit defer.
 
 For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/).
 
@@ -103,12 +100,12 @@ For a more in-depth look at Wing's features and benefits, check out our [documen
 
 You can install Wing in a few simple steps:
 
-1. Check out the [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites).
-2. Install the [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli).
-3. Get the [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension) for your favorite editor.
-4. Launch the [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console) and take it for a spin!
+1. Check out the [Prerequisites](https://docs.winglang.io/start-here/installation#prerequisites).
+2. Install the [Wing CLI](https://docs.winglang.io/start-here/installation#wing-cli).
+3. Get the [Wing IDE Extension](https://docs.winglang.io/start-here/installation#wing-ide-extension) for your favorite editor.
+4. Launch the [Wing Console](https://docs.winglang.io/start-here/installation#wing-console) and take it for a spin!
 
-For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/getting-started) guide.
+For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/) guide.
 It's a once-in-a-lifetime adventure into the Wing rabbit hole!
 
 ## FAQs ❓
@@ -129,7 +126,9 @@ Alternatively, post any questions on [GitHub Discussions](https://github.com/win
 
 Want to help Wing take flight?
 Check out our [contribution guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) to learn how to set up a development environment and contribute to the project.
-We appreciate your support and look forward to learning and building together.
+You can also get started by opening the project in GitHub Codespaces.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
 
 We are incredibly grateful to our entire community for contributing bug fixes and improvements:
 

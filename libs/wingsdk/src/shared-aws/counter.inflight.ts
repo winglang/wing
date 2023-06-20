@@ -10,7 +10,7 @@ const AMOUNT_TOKEN = "amount";
 const INITIAL_VALUE_TOKEN = "initial";
 const COUNTER_ID = "counter";
 const VALUE_ATTRIBUTE = "counter_value";
-const RESET_VALUE = "reset_value";
+const SET_VALUE = "set_value";
 
 export class CounterClient implements ICounterClient {
   constructor(
@@ -19,10 +19,10 @@ export class CounterClient implements ICounterClient {
     private readonly client = new DynamoDBClient({})
   ) {}
 
-  public async inc(amount = 1): Promise<number> {
+  public async inc(amount = 1, key = COUNTER_ID): Promise<number> {
     const command = new UpdateItemCommand({
       TableName: this.tableName,
-      Key: { [COUNTER_HASH_KEY]: { S: COUNTER_ID } },
+      Key: { [COUNTER_HASH_KEY]: { S: key } },
       UpdateExpression: `SET ${VALUE_ATTRIBUTE} = if_not_exists(${VALUE_ATTRIBUTE}, :${INITIAL_VALUE_TOKEN}) + :${AMOUNT_TOKEN}`,
       ExpressionAttributeValues: {
         [`:${AMOUNT_TOKEN}`]: { N: `${amount}` },
@@ -41,14 +41,14 @@ export class CounterClient implements ICounterClient {
     return parseInt(newValue) - amount;
   }
 
-  public async dec(amount = 1): Promise<number> {
-    return this.inc(-1 * amount);
+  public async dec(amount = 1, key: string = COUNTER_ID): Promise<number> {
+    return this.inc(-1 * amount, key);
   }
 
-  public async peek(): Promise<number> {
+  public async peek(key: string = COUNTER_ID): Promise<number> {
     const command = new GetItemCommand({
       TableName: this.tableName,
-      Key: { [COUNTER_HASH_KEY]: { S: COUNTER_ID } },
+      Key: { [COUNTER_HASH_KEY]: { S: key } },
     });
 
     const result = await this.client.send(command);
@@ -60,13 +60,13 @@ export class CounterClient implements ICounterClient {
     return parseInt(currentValue);
   }
 
-  public async reset(value?: number): Promise<void> {
+  public async set(value: number, key: string = COUNTER_ID): Promise<void> {
     const command = new UpdateItemCommand({
       TableName: this.tableName,
-      Key: { [COUNTER_HASH_KEY]: { S: COUNTER_ID } },
-      UpdateExpression: `SET ${VALUE_ATTRIBUTE} = :${RESET_VALUE}`,
+      Key: { [COUNTER_HASH_KEY]: { S: key } },
+      UpdateExpression: `SET ${VALUE_ATTRIBUTE} = :${SET_VALUE}`,
       ExpressionAttributeValues: {
-        [`:${RESET_VALUE}`]: { N: `${value}` },
+        [`:${SET_VALUE}`]: { N: `${value}` },
       },
       ReturnValues: "UPDATED_NEW",
     });

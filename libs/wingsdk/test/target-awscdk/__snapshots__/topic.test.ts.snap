@@ -2,6 +2,11 @@
 
 exports[`default topic behavior 1`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -76,6 +81,11 @@ return class Handler {
 
 exports[`topic with multiple subscribers 3`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -96,7 +106,11 @@ exports[`topic with multiple subscribers 3`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
+<<<<<<< HEAD
           "S3Key": "6d837cd7824c8234d564cb30dbe8a2ab6a1c5767df6d27477cd2cd349939aad3.zip",
+=======
+          "S3Key": "70c96f4eb085d5d4284b479242d4d486d9bda405b98f6fc817ece5ead39f2bf2.zip",
+>>>>>>> main
         },
         "Handler": "index.handler",
         "Role": {
@@ -181,7 +195,11 @@ exports[`topic with multiple subscribers 3`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
+<<<<<<< HEAD
           "S3Key": "08fb402cbbef0ffb632b007c2090d7afdf089a3327bf4270a9c9295985085052.zip",
+=======
+          "S3Key": "15c5f36c8226db19dde5bfd00330127a4accccaa3e12cc960aab9c3de7ad1709.zip",
+>>>>>>> main
         },
         "Handler": "index.handler",
         "Role": {
@@ -305,6 +323,11 @@ return class Handler {
 
 exports[`topic with subscriber function 2`] = `
 {
+  "Outputs": {
+    "WingTestRunnerFunctionArns": {
+      "Value": "[]",
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -325,7 +348,11 @@ exports[`topic with subscriber function 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
+<<<<<<< HEAD
           "S3Key": "5aa3106a96e170dae99afc4d3bfb963cf840080fae05b429c19c448448c0d9b7.zip",
+=======
+          "S3Key": "4cb297fb007d66c747b23d2179881c6d2bb17d6f9c074160f22414c1d5c700d0.zip",
+>>>>>>> main
         },
         "Handler": "index.handler",
         "Role": {

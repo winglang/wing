@@ -3,12 +3,12 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nbring cloud\n```"
+  value: "Module `cloud`"
 range:
   start:
-    line: 3
+    line: 2
     character: 4
   end:
-    line: 3
-    character: 9
+    line: 2
+    character: 10
 

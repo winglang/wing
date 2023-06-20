@@ -9,14 +9,14 @@ assert(x ?? 5 == 4);
 let y: num = x ?? 5;
 assert(y == 4);
 
-inflight class Super {
+class Super {
   name: str;
   init() { this.name = "Super"; }
 }
-inflight class Sub extends Super {
+class Sub extends Super {
   init() { this.name = "Sub"; }
 }
-inflight class Sub1 extends Super {
+class Sub1 extends Super {
   init() { this.name = "Sub"; }
 }
 
@@ -147,4 +147,25 @@ assert(notThere == nil);
 
 if let o = tree.left?.left {
   assert(o.value == 1);
+}
+
+
+// Check that we can lift optionals
+bring cloud;
+
+struct Payload {
+    a: str;
+    b: Map<str>?;
+    c: cloud.Bucket?;
+}
+
+let payloadWithoutOptions = Payload {a: "a"};
+let payloadWithBucket = Payload {a: "a", c: new cloud.Bucket() as "orange bucket"};
+
+test "t" {
+  assert(payloadWithoutOptions.b? == false);
+
+  if (payloadWithBucket.c?) {
+    payloadWithBucket.c?.put("x.txt", "something");
+  }
 }

@@ -1,0 +1,16 @@
+---
+source: libs/wingc/src/lsp/signature.rs
+---
+signatures:
+  - label: "(key: str, opts: BucketDeleteOptions?): void"
+    documentation:
+      kind: markdown
+      value: "Delete an existing object using a key from the bucket.\n\n### Parameters\n - *key* - Key of the object.\n - *opts* - Options available for delete an item from a bucket."
+    parameters:
+      - label: "key: str"
+      - label: "opts: BucketDeleteOptions?"
+        documentation:
+          kind: markdown
+          value: "Interface for delete method inside `Bucket`.\n```wing\nmustExist: bool?\n```\n"
+    activeParameter: 1
+

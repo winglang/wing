@@ -96,7 +96,7 @@ exports[`can add object in preflight 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -112,7 +112,7 @@ exports[`can add object in preflight 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -124,7 +124,7 @@ exports[`can add object in preflight 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -168,7 +168,7 @@ exports[`create a bucket 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -184,7 +184,7 @@ exports[`create a bucket 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -196,7 +196,7 @@ exports[`create a bucket 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -250,7 +250,7 @@ exports[`get invalid object throws an error 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -266,7 +266,7 @@ exports[`get invalid object throws an error 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -278,7 +278,7 @@ exports[`get invalid object throws an error 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -323,18 +323,7 @@ exports[`objects can have keys that look like directories 1`] = `
 ]
 `;
 
-exports[`put and get objects from bucket 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Bucket created.",
-  "Put (key=greeting.txt).",
-  "Get (key=greeting.txt).",
-  "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
-]
-`;
-
-exports[`put json objects from bucket 1`] = `
+exports[`put and get Json object from bucket 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Bucket created.",
@@ -345,7 +334,7 @@ exports[`put json objects from bucket 1`] = `
 ]
 `;
 
-exports[`put json objects from bucket 2`] = `
+exports[`put and get Json object from bucket 2`] = `
 {
   "simulator.json": {
     "resources": [
@@ -379,7 +368,7 @@ exports[`put json objects from bucket 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -395,7 +384,7 @@ exports[`put json objects from bucket 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -407,7 +396,7 @@ exports[`put json objects from bucket 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -415,6 +404,17 @@ exports[`put json objects from bucket 2`] = `
     "version": "tree-0.1",
   },
 }
+`;
+
+exports[`put and get objects from bucket 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=greeting.txt).",
+  "Get (key=greeting.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
 `;
 
 exports[`put multiple json objects and list all from bucket 1`] = `

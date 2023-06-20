@@ -3,7 +3,7 @@ bring cloud;
 /** 
  * A queue that can replay all messages 
  */
-resource ReplayableQueue {
+class ReplayableQueue {
   queue: cloud.Queue;
   bucket: cloud.Bucket; 
   counter: cloud.Counter;
@@ -14,8 +14,8 @@ resource ReplayableQueue {
     this.counter = new cloud.Counter();
   }
 
-  add_consumer(fn: inflight (str): str){
-    this.queue.add_consumer(fn);
+  setConsumer(fn: inflight (str): str){
+    this.queue.setConsumer(fn);
   }
   
   inflight push(m: str) {
@@ -32,13 +32,13 @@ resource ReplayableQueue {
 
 
 // how to use the queue
-resource RemoteControl { 
+class RemoteControl { 
   init(q: ReplayableQueue){
     let f = inflight (m: str): str => {
-      log("add_consumer got triggered with ${m}");
+      log("setConsumer got triggered with ${m}");
     };
       
-    q.add_consumer(f);
+    q.setConsumer(f);
     
     new cloud.Function(inflight (m: str) => {
       q.push(m);

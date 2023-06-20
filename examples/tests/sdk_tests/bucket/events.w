@@ -1,3 +1,6 @@
+/*\
+skip: true
+\*/
 bring cloud;
 
 let b = new cloud.Bucket();
@@ -11,7 +14,6 @@ let table = new cloud.Table(
     operation: cloud.ColumnType.STRING,
     source: cloud.ColumnType.NUMBER,
     }
-  }
 );
 
 class Util {
@@ -42,7 +44,7 @@ b.onEvent(inflight (key: str, event: cloud.BucketEventType) => {
 });
 
 
-new cloud.Test(inflight () => {  
+new std.Test(inflight () => {  
   let wait = inflight (pred: inflight (): bool): bool => {
     let var i = 0;
     // waiting for up to 2 minutess, checking every 10 seconds
@@ -91,4 +93,4 @@ new cloud.Test(inflight () => {
   assert(wait(checkHitCount("b", "UPDATE", 2,  1)));
   assert(wait(checkHitCount("c", "DELETE", 2,  1)));
 
-}, cloud.TestProps { timeout: 8m }) as "hitCount is incremented according to the bucket event";
+}, std.TestProps { timeout: 8m }) as "hitCount is incremented according to the bucket event";

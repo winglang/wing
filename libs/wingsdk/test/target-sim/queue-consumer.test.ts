@@ -36,7 +36,7 @@ test("pushing messages through a queue", async () => {
           console.log("Received " + event);
         }`
       );
-      queue.addConsumer(processor);
+      queue.setConsumer(processor);
     }
   }
 
@@ -46,6 +46,12 @@ test("pushing messages through a queue", async () => {
   const s = await app.startSimulator();
 
   const pusher = s.getResource("/HelloWorld/Function") as cloud.IFunctionClient;
+  const consumer = s.getResource(
+    "root/HelloWorld/Queue-SetConsumer-13c4eaf1"
+  ) as cloud.IFunctionClient;
+
+  // warm up the consumer so timing is more predictable
+  await consumer.invoke(JSON.stringify({ messages: [] }));
 
   // WHEN
   await pusher.invoke("foo");
@@ -63,7 +69,7 @@ test("pushing messages through a queue", async () => {
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "root/HelloWorld/Queue-AddConsumer-13c4eaf1",
+      sourcePath: "root/HelloWorld/Queue-SetConsumer-13c4eaf1",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",

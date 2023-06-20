@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "Namespace 'cloud'"
+range:
+  start:
+    line: 1
+    character: 6
+  end:
+    line: 1
+    character: 11
+
