@@ -18,7 +18,7 @@ describe("ApiResponseMapper", () => {
 
     const handlerResponse: ApiResponse = {
       status: 200,
-      body: { key: "value" },
+      body: JSON.stringify({ key: "value" }),
       headers: { "header-1": "value-1" },
     };
     const requestHandlerClient = new ApiOnRequestHandlerClient({
@@ -57,7 +57,7 @@ describe("ApiResponseMapper", () => {
 
     const handlerResponse: ApiResponse = {
       status: 200,
-      body: { key: "value" },
+      body: JSON.stringify({ key: "value" }),
     };
     const requestHandlerClient = new ApiOnRequestHandlerClient({
       handler: {
@@ -130,7 +130,7 @@ describe("ApiResponseMapper", () => {
 
     const handlerResponse: ApiResponse = {
       status: 200,
-      body: { key: "value" },
+      body: JSON.stringify({ key: "value" }),
       headers: {
         "Content-Type": "application/octet-stream",
       },
