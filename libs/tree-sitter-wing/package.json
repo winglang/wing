@@ -30,7 +30,7 @@
     "playground:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run playground:quiet\""
   },
   "volta": {
-    "node": "18.12.1",
+    "node": "18.16.0",
     "npm": "8.19.3"
   }
 }
