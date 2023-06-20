@@ -166,7 +166,8 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
-            "WING_TARGET": "tf-aws"
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_11": "${jsonencode(aws_cloudfront_distribution.root_cloudWebsite_Distribution_6BC863F8.domain_name)}"
           }
         },
         "function_name": "Handler-c867c4e0",
