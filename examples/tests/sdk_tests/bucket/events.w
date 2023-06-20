@@ -2,7 +2,7 @@ bring cloud;
 
 let b = new cloud.Bucket();
 let idsCounter = new cloud.Counter();
-let table = new cloud.Table(cloud.TableProps {
+let table = new cloud.Table(
   name: "key-history",
   primaryKey: "_id",
   columns: {
@@ -11,7 +11,8 @@ let table = new cloud.Table(cloud.TableProps {
     operation: cloud.ColumnType.STRING,
     source: cloud.ColumnType.NUMBER,
     }
-  });
+  }
+);
 
   class Util {
     extern "../external/sleep.js" static inflight sleep(milli: num);
