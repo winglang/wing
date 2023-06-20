@@ -6,6 +6,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Json, IInflightHost } from "../std";
+import { marshall } from "@aws-sdk/util-dynamodb";
 
 /**
  * Table names must be between 3 and 255 characters.
@@ -39,10 +40,14 @@ export class Table extends cloud.Table {
   }
 
   public addRow(key: string, row: Json): void {
+    const item = { [this.primaryKey]: key, ...row };
+    const marshalledItem = marshall(item);
+    const stringifiedItem = JSON.stringify(marshalledItem);
+    
     new DynamodbTableItem(this, `DynamodbTableItem-${key}`, {
       tableName: this.table.name,
-      hashKey: key,
-      item: JSON.stringify(row),
+      hashKey: this.table.hashKey,
+      item: stringifiedItem,
     });
   }
 
