@@ -79,7 +79,7 @@ export const useLayout = ({
   );
 
   const { loading, setLoading } = useLoading({
-    duration: 200,
+    duration: 400,
   });
 
   useEffect(() => {
