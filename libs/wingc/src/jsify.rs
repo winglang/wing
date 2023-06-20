@@ -1083,7 +1083,7 @@ impl<'a> JSifier<'a> {
 				_ => {
 					for sym in n {
 						report_diagnostic(Diagnostic {
-							message: format!("Unexpected type: \"{t}\" referenced inflight"),
+							message: format!("Unexpected type \"{t}\" referenced inflight"),
 							span: Some(sym.span.clone()),
 						});
 					}
