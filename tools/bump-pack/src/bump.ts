@@ -2,13 +2,45 @@ import path from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 
 export interface SetPackageVersionOptions {
+  /**
+   * The directory of an npm package to pack. Must contain a package.json file.
+   */
   packageDir: string;
+
+  /**
+   * The version to set the package to.
+   *
+   * This will also be used for dependencies that are set to "0.0.0" or "file:" if `versionMap` is not provided.
+   *
+   * @default "0.0.0"
+   */
   version?: string;
+
+  /**
+   * If true, dependencies will be removed from the package.json file.
+   */
   devBuild?: boolean;
+
+  /**
+   * A map of dependency package names to versions to set them to.
+   *
+   * @default {} dependencies will be set to `version`
+   */
   versionMap?: Record<string, string>;
+
+  /**
+   * Whether or not to run in dry run mode. If true, to files will be changed.
+   *
+   * @default false
+   */
   dryRun?: boolean;
 }
 
+/**
+ * Sets the version of an npm package and its dependencies.
+ *
+ * @returns A map of dependency package names to their original versions.
+ */
 export async function setPackageVersion(options: SetPackageVersionOptions) {
   const defaultVersion = "0.0.0";
   const packageJsonPath = path.join(options.packageDir, "package.json");
