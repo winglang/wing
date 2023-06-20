@@ -1,11 +1,14 @@
+use lsp_types::{
+	Command, CompletionItem, CompletionItemKind, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
+	MarkupKind,
+};
 use std::cmp::max;
-
-use lsp_types::{Command, CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
+use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
@@ -14,7 +17,7 @@ use crate::type_check::{
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
-use crate::WINGSDK_STD_MODULE;
+use crate::{WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE};
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
@@ -31,7 +34,7 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {
-	CompletionResponse::Array(FILES.with(|files| {
+	let mut final_completions = FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position.text_document.uri;
 		let file_data = files.get(&uri).expect("File must be open to get completions");
@@ -75,6 +78,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		});
 		scope_visitor.visit_scope(root_scope);
 
+		let found_env = scope_visitor.found_scope.unwrap();
+		let found_env = found_env.env.borrow();
+		let found_env = found_env.as_ref().unwrap();
+
 		let parent = node_to_complete.parent();
 
 		if node_to_complete.kind() == "." {
@@ -94,92 +101,94 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
 							true,
 						);
-					} else {
-						if let ExprKind::Reference(_) = &nearest_expr.kind {
-							// This is probably a type of some kind
-							// just get the entire reference and try to resolve it
-							let wing_source = file_data.contents.as_bytes();
-							let mut reference_text = parent
-								.utf8_text(wing_source)
-								.expect("The referenced text should be available")
-								.to_string();
-							if reference_text.ends_with(".") {
-								reference_text.pop();
-							}
+					}
+				}
 
-							let found_env = scope_visitor.found_scope.unwrap();
-							let found_env = found_env.env.borrow();
-							let found_env = found_env.as_ref().unwrap();
-							let lookup_thing = found_env
-								.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
-								.ok();
+				// We're likely in a type reference, so let's use the raw text for a lookup
+				let wing_source = file_data.contents.as_bytes();
+				let mut reference_text = parent
+					.utf8_text(wing_source)
+					.expect("The referenced text should be available")
+					.to_string();
+				if reference_text.ends_with(".") {
+					reference_text.pop();
+				}
 
-							if let Some((lookup_thing, _)) = lookup_thing {
-								match lookup_thing {
-									SymbolKind::Type(t) => {
-										return get_completions_from_type(&t, types, Some(found_env.phase), false);
-									}
-									SymbolKind::Variable(v) => {
-										return get_completions_from_type(
-											&v.type_,
-											types,
-											scope_visitor
-												.found_scope
-												.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
-											false,
-										)
-									}
-									SymbolKind::Namespace(n) => {
-										return get_completions_from_namespace(n);
-									}
-								}
-							} else {
-								// No lookup found, let's not provide any completions
-								// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
+				reference_text = add_std_namespace(&reference_text);
 
-								return vec![];
-							}
+				let lookup_thing = found_env
+					.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
+					.ok();
+
+				if let Some((lookup_thing, _)) = lookup_thing {
+					match lookup_thing {
+						SymbolKind::Type(t) => {
+							return get_completions_from_type(&t, types, Some(found_env.phase), false);
+						}
+						SymbolKind::Variable(v) => {
+							return get_completions_from_type(
+								&v.type_,
+								types,
+								scope_visitor
+									.found_scope
+									.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
+								false,
+							)
+						}
+						SymbolKind::Namespace(n) => {
+							return get_completions_from_namespace(&n, Some(found_env.phase));
 						}
 					}
+				} else {
+					return vec![];
 				}
 			}
 
 			if parent.kind() == "custom_type" {
 				if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
 					if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
-						if udt.fields.is_empty() {
-							// this is probably a namespace
-							// `resolve_user_defined_type` will fail for namespaces, let's just look it up instead
-							let namespace = root_env
-								.lookup_nested_str(&udt.root.name, scope_visitor.found_stmt_index)
-								.ok();
-							if let Some((namespace, _)) = namespace {
-								if let SymbolKind::Namespace(namespace) = namespace {
-									let completions = get_completions_from_namespace(namespace);
-									//for namespaces - return only classes
-									if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
-										return completions
-											.iter()
-											.filter(|c| matches!(c.kind, Some(CompletionItemKind::CLASS)))
-											.cloned()
-											.collect();
-									} else {
-										return completions;
-									}
-								}
-							}
-						}
-						let found_env = scope_visitor.found_scope.unwrap();
-						let found_env = found_env.env.borrow();
-						let found_env = found_env.as_ref().unwrap();
 						let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap());
 
 						if let Ok(type_lookup) = type_lookup {
 							return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
 						} else {
-							// No lookup found, let's not provide any completions
-							// TODO This may be a JSII type that has not been imported yet https://github.com/winglang/wing/issues/2639
+							// this is probably a namespace, let's look it up
+							if let Some(namespace) = root_env
+								.lookup_nested_str(&udt.full_path_str(), scope_visitor.found_stmt_index)
+								.ok()
+								.and_then(|n| n.0.as_namespace_ref())
+							{
+								let completions = get_completions_from_namespace(&namespace, Some(found_env.phase));
+								//for namespaces - return only classes and namespaces
+								if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
+									return completions
+										.iter()
+										.filter(|c| {
+											matches!(
+												c.kind,
+												Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
+											)
+										})
+										.map(|c| {
+											let mut c = c.clone();
+											if c.kind == Some(CompletionItemKind::CLASS) {
+												c.insert_text = Some(format!("{}($0)", c.label));
+												c.insert_text_format = Some(InsertTextFormat::SNIPPET);
+												c.command = Some(Command {
+													title: "triggerParameterHints".to_string(),
+													command: "editor.action.triggerParameterHints".to_string(),
+													arguments: None,
+												});
+											}
+											c
+										})
+										.collect();
+								} else {
+									return completions;
+								}
+							}
 
+							// This is not a known type or namespace
 							return vec![];
 						}
 					}
@@ -189,9 +198,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		// we are somewhere but not entirely sure
 		// for now, lets just get all the symbols within the current scope
-		let found_scope = scope_visitor.found_scope.unwrap_or(root_scope);
-		let found_env = found_scope.env.borrow();
-		let found_env = found_env.as_ref().expect("Scope should have an env");
 		let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
 
 		let mut completions = vec![];
@@ -219,8 +225,62 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 		}
 
+		// lets also add some fun snippets
+		completions.push(CompletionItem {
+			label: "inflight () => {}".to_string(),
+			insert_text: Some("inflight ($1) => {$2}".to_string()),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			kind: Some(CompletionItemKind::SNIPPET),
+			..Default::default()
+		});
+
+		completions.push(CompletionItem {
+			label: "test \"\" { }".to_string(),
+			insert_text: Some("test \"$1\" {\n\t$2\n}".to_string()),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			kind: Some(CompletionItemKind::SNIPPET),
+			..Default::default()
+		});
+
 		completions
-	}))
+	});
+
+	final_completions = final_completions
+		.iter()
+		.map(|item| {
+			let mut new_item = item.clone();
+			new_item.sort_text = Some(completion_sort_text(&new_item));
+			new_item
+		})
+		.collect();
+
+	CompletionResponse::Array(final_completions)
+}
+
+/// LSP sorts completions items alphabetically
+/// This function returns a string that can be used to sort the completion items in a more logical order
+fn completion_sort_text(completion_item: &CompletionItem) -> String {
+	let completion_kind = completion_item.kind;
+	let letter = if let Some(kind) = completion_kind {
+		match kind {
+			CompletionItemKind::ENUM_MEMBER => "aa",
+			CompletionItemKind::VARIABLE => "bb",
+			CompletionItemKind::FUNCTION => "cc",
+			CompletionItemKind::PROPERTY => "dd",
+			CompletionItemKind::FIELD => "ee",
+			CompletionItemKind::METHOD => "ff",
+			CompletionItemKind::CLASS => "gg",
+			CompletionItemKind::STRUCT => "hh",
+			CompletionItemKind::INTERFACE => "ii",
+			CompletionItemKind::ENUM => "jj",
+			CompletionItemKind::MODULE => "kk",
+			CompletionItemKind::SNIPPET => "ll",
+			_ => "z",
+		}
+	} else {
+		"z"
+	};
+	format!("{}|{}", letter, completion_item.label)
 }
 
 /// Gets accessible properties on a type as a list of CompletionItems
@@ -261,37 +321,23 @@ fn get_completions_from_type(
 		| Type::MutMap(_)
 		| Type::Set(_)
 		| Type::MutSet(_) => {
-			// This section of the code is hacky
-			// This is needed because our builtin types have no API
-			// So we have to get the API from the std lib
-			// But the std lib sometimes doesn't have the same names as the builtin types
-			// https://github.com/winglang/wing/issues/1780
-
-			// Additionally, this doesn't handle for generics
 			let type_name = type_.to_string();
-			let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
-				prefix
-			} else {
-				&type_name
-			};
-			let type_name = match type_name {
-				"Set" => "ImmutableSet",
-				"Map" => "ImmutableMap",
-				"Array" => "ImmutableArray",
-				"MutSet" => "MutableSet",
-				"MutMap" => "MutableMap",
-				"MutArray" => "MutableArray",
+			let mut type_name = type_name.as_str();
+
+			// Certain primitive type names differ from how they actually appear in the std namespace
+			// These are unique when used as a type definition, rather than as a type reference when calling a static method
+			type_name = match type_name {
 				"str" => "String",
 				"duration" => "Duration",
-				"json" => "Json",
 				"bool" => "Boolean",
 				"num" => "Number",
 				_ => type_name,
 			};
-			if let LookupResult::Found(std_type, _) = types
-				.libraries
-				.lookup_nested_str(format!("@winglang/sdk.std.{}", type_name).as_str(), None)
-			{
+			let final_type_name = add_std_namespace(type_name);
+			let final_type_name = final_type_name.as_str();
+
+			let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{final_type_name}");
+			if let LookupResult::Found(std_type, _) = types.libraries.lookup_nested_str(fqn.as_str(), None) {
 				return get_completions_from_type(&std_type.as_type().expect("is type"), types, current_phase, is_instance);
 			} else {
 				vec![]
@@ -300,12 +346,65 @@ fn get_completions_from_type(
 	}
 }
 
-fn get_completions_from_namespace(namespace: &UnsafeRef<Namespace>) -> Vec<CompletionItem> {
+/// If the given type is from the std namespace, add the implicit `std.` to it
+fn add_std_namespace(type_: &str) -> std::string::String {
+	// This section of the code is hacky
+	// This is needed because our builtin types have no API
+	// So we have to get the API from the std lib
+	// But the std lib sometimes doesn't have the same names as the builtin types
+	// https://github.com/winglang/wing/issues/1780
+
+	// Additionally, this doesn't handle for generics
+	let type_name = type_.to_string();
+	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
+		prefix
+	} else {
+		&type_name
+	};
+	let type_name = match type_name {
+		"Set" => "ImmutableSet",
+		"Map" => "ImmutableMap",
+		"Array" => "ImmutableArray",
+		"MutSet" => "MutableSet",
+		"MutMap" => "MutableMap",
+		"MutArray" => "MutableArray",
+		"Json" | "MutableArray" | "MutableMap" | "MutableSet" | "ImmutableArray" | "ImmutableMap" | "ImmutableSet"
+		| "String" | "Duration" | "Boolean" | "Number" => type_name,
+		_ => return type_name.to_string(),
+	};
+
+	format!("{WINGSDK_STD_MODULE}.{type_name}")
+}
+
+fn get_completions_from_namespace(
+	namespace: &UnsafeRef<Namespace>,
+	current_phase: Option<Phase>,
+) -> Vec<CompletionItem> {
+	// If a namespace has a class named "Util", then its members can be accessed directly from
+	// the namespace as a syntactic sugar. e.g. "foo.bar()" is equivalent to "foo.Util.bar()"
+	let util_completions = match namespace.env.lookup_nested_str("Util", None) {
+		LookupResult::Found(kind, _) => match kind {
+			SymbolKind::Type(typeref) => {
+				let util_class = typeref.as_class();
+				if let Some(util_class) = util_class {
+					get_completions_from_class(util_class, current_phase, false)
+				} else {
+					vec![]
+				}
+			}
+			SymbolKind::Variable(_) => vec![],
+			SymbolKind::Namespace(_) => vec![],
+		},
+		LookupResult::NotFound(_) => vec![],
+		LookupResult::DefinedLater => vec![],
+		LookupResult::ExpectedNamespace(_) => vec![],
+	};
 	namespace
 		.env
 		.symbol_map
 		.iter()
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
+		.chain(util_completions.into_iter())
 		.collect()
 }
 
@@ -353,7 +452,10 @@ fn get_completions_from_class(
 					Some(symbol_data.0.to_string())
 				},
 				label: symbol_data.0,
-				detail: Some(variable.type_.to_string()),
+				documentation: Some(Documentation::MarkupContent(MarkupContent {
+					kind: MarkupKind::Markdown,
+					value: symbol_data.1.render_docs(),
+				})),
 				kind,
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				command: if is_method {
@@ -376,9 +478,16 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 	if should_exclude_symbol(name) {
 		return None;
 	}
+
+	let documentation = Some(Documentation::MarkupContent(MarkupContent {
+		kind: MarkupKind::Markdown,
+		value: symbol_kind.render_docs(),
+	}));
+
 	Some(match symbol_kind {
 		SymbolKind::Type(t) => CompletionItem {
 			label: name.to_string(),
+			documentation,
 			kind: Some(match **t {
 				Type::Array(_)
 				| Type::MutArray(_)
@@ -402,11 +511,6 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(if let Some(c) = t.as_class() {
-				format!("{} class", c.phase).to_string()
-			} else {
-				String::default()
-			}),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
@@ -419,12 +523,12 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 
 			CompletionItem {
 				label: name.to_string(),
+				documentation,
 				insert_text: if is_method {
-					Some(format!("{}($0)", name))
+					Some(format!("{name}($0)"))
 				} else {
 					Some(name.to_string())
 				},
-				detail: Some(v.type_.to_string()),
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
 				command: if is_method {
@@ -439,9 +543,9 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				..Default::default()
 			}
 		}
-		SymbolKind::Namespace(n) => CompletionItem {
+		SymbolKind::Namespace(..) => CompletionItem {
 			label: name.to_string(),
-			detail: Some(format!("bring {}", n.name)),
+			documentation,
 			kind: Some(CompletionItemKind::MODULE),
 			..Default::default()
 		},
@@ -642,6 +746,14 @@ if a.
 	);
 
 	test_completion_list!(
+		json_statics,
+		r#"
+Json. 
+   //^"#,
+		assert!(!json_statics.is_empty())
+	);
+
+	test_completion_list!(
 		undeclared_var,
 		r#"
 let x = 2;
@@ -663,5 +775,17 @@ test "test" {
 }
 "#,
 		assert!(!capture_in_test.is_empty())
+	);
+
+	test_completion_list!(
+		util_static_methods,
+		r#"
+bring util;
+
+util.
+   //^"#,
+		assert!(!util_static_methods.is_empty())
+
+		assert!(util_static_methods.iter().filter(|c| c.label == "env").count() == 1)
 	);
 }

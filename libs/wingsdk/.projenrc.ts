@@ -43,18 +43,18 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.256.0",
-    "@aws-sdk/client-dynamodb@3.256.0",
-    "@aws-sdk/client-elasticache@3.256.0",
-    "@aws-sdk/util-dynamodb@3.256.0",
-    "@aws-sdk/client-lambda@3.256.0",
-    "@aws-sdk/client-s3@3.256.0",
-    "@aws-sdk/client-secrets-manager@3.256.0",
-    "@aws-sdk/client-sqs@3.256.0",
-    "@aws-sdk/client-sns@3.256.0",
-    "@aws-sdk/types@3.254.0",
-    "@aws-sdk/util-stream-node@3.254.0",
-    "@aws-sdk/util-utf8-node@3.208.0",
+    "@aws-sdk/client-cloudwatch-logs@3.354.0",
+    "@aws-sdk/client-dynamodb@3.354.0",
+    "@aws-sdk/client-elasticache@3.354.0",
+    "@aws-sdk/util-dynamodb@3.354.0",
+    "@aws-sdk/client-lambda@3.354.0",
+    "@aws-sdk/client-s3@3.354.0",
+    "@aws-sdk/client-secrets-manager@3.354.0",
+    "@aws-sdk/client-sqs@3.354.0",
+    "@aws-sdk/client-sns@3.354.0",
+    "@aws-sdk/types@3.347.0",
+    "@aws-sdk/util-stream-node@3.350.0",
+    "@aws-sdk/util-utf8-node@3.259.0",
     "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
@@ -84,7 +84,7 @@ const project = new cdk.JsiiProject({
     "patch-package",
     "vitest",
     "@types/uuid",
-    "@vitest/coverage-c8",
+    "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
   ],
   jest: false,
@@ -188,19 +188,19 @@ project.tasks
 project.preCompileTask.exec("patch-package");
 
 const docsFrontMatter = `---
-title: API Reference
+title: API reference
 id: sdk
-description: Wing SDK API Reference
+description: Wing standard library API reference
 keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 `;
 
-const docsPath = "../../docs/05-reference/wingsdk-api.md";
+const docsPath = "../../docs/04-standard-library/04-api-reference.md";
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
 // copy resource docs from src/cloud to docs
-docgen.exec(`cp -r src/cloud/*.md ../../docs/04-resources/`);
+docgen.exec(`cp -r src/cloud/*.md ../../docs/04-standard-library/01-cloud/`);
 
 docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
@@ -255,5 +255,6 @@ project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
 // We use symlinks between several projects but we do not use workspaces
 project.npmrc.addConfig("install-links", "false");
+project.npmrc.addConfig("fund", "false");
 
 project.synth();

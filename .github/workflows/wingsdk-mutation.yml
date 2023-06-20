@@ -16,7 +16,8 @@ defaults:
     working-directory: libs/wingsdk
 
 env:
-  CI: "true"
+  NODE_VERSION: "18.16.0"
+  NPM_VERSION: "8.19.3"
 
 jobs:
   mutate:
@@ -39,9 +40,12 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.MUTATION_TOKEN }}
-      # Reads versions from root package.json "volta" section
-      - name: Setup Node/NPM with pinned Volta version
-        uses: volta-cli/action@v4.0.0
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Setup NPM
+        run: npm install -g npm@${{ env.NPM_VERSION }}
       - name: Install dependencies
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npm ci

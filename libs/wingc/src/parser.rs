@@ -13,14 +13,13 @@ use crate::ast::{
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
-	pub diagnostics: RefCell<Diagnostics>,
 	is_in_loop: RefCell<bool>,
 }
 
@@ -45,7 +44,6 @@ impl<'s> Parser<'s> {
 			source,
 			source_name,
 			error_nodes: RefCell::new(HashSet::new()),
-			diagnostics: RefCell::new(Diagnostics::new()),
 			is_in_loop: RefCell::new(false),
 		}
 	}
@@ -70,8 +68,7 @@ impl<'s> Parser<'s> {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
 		};
-		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().push(diag);
+		report_diagnostic(diag);
 
 		// Track that we have produced a diagnostic for this node
 		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
@@ -136,6 +133,9 @@ impl<'s> Parser<'s> {
 		let value_text = self.node_text(&self.get_child_field(&value, "value")?);
 
 		match value.kind() {
+			"milliseconds" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") / 1000_f64,
+			)),
 			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
 			"minutes" => Ok(Literal::Duration(
 				// Specific "Minutes" duration needed here
@@ -143,6 +143,15 @@ impl<'s> Parser<'s> {
 			)),
 			"hours" => Ok(Literal::Duration(
 				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
+			)),
+			"days" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") * 86400_f64,
+			)),
+			"months" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") * 2628000_f64,
+			)),
+			"years" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") * 31536000_f64,
 			)),
 			"ERROR" => self.add_error("Expected duration type", &node),
 			other => self.report_unimplemented_grammar(other, "duration type", node),
@@ -203,6 +212,7 @@ impl<'s> Parser<'s> {
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
+			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -501,7 +511,7 @@ impl<'s> Parser<'s> {
 				"class_field" => {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
-						self.diagnostics.borrow_mut().push(Diagnostic {
+						report_diagnostic(Diagnostic {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),

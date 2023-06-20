@@ -1,0 +1,72 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: IPredicateHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIPredicateHandler\n```\n---\nRepresents a predicate with an inflight \"handle\" method that can be passed to `util.busyWait`."
+  sortText: ii|IPredicateHandler
+- label: IPredicateHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIPredicateHandlerClient\n```\n---\nInflight client for `IPredicateHandler`."
+  sortText: ii|IPredicateHandlerClient
+- label: Util
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Util\n```\n---\nUtility functions."
+  sortText: gg|Util
+- label: WaitUntilProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nWaitUntilProps\n```\n---\nProperties for `util.waitUntil`."
+  sortText: hh|WaitUntilProps
+- label: env
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic env: (name: str): str\n```\n---\nReturns the value of an environment variable.\n\n### Parameters\n - *name* - The name of the environment variable.\n\n### Remarks\nThrows if not found or empty."
+  sortText: ff|env
+  insertText: env($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: sleep
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic sleep: (delay: duration): void\n```\n---\nSuspends execution for a given duration.\n\n### Parameters\n - *delay* - The time to suspend execution."
+  sortText: ff|sleep
+  insertText: sleep($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryEnv
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic tryEnv: (name: str): str?\n```\n---\nReturns the value of an environment variable.\n\n### Parameters\n - *name* - The name of the environment variable.\n\n### Returns\nThe value of the environment variable or `nil`.\n\n### Remarks\nReturns `nil` if not found or empty."
+  sortText: ff|tryEnv
+  insertText: tryEnv($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: waitUntil
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic waitUntil: (predicate: inflight (): bool, props: WaitUntilProps?): bool\n```\n---\nRun a predicate repeatedly, waiting until it returns true or until the timeout elapses.\n\n### Parameters\n - *predicate* - The function that will be evaluated.\n - *props* - Timeout and interval values, default to one 1m timeout and 0.1sec interval.\n\n### Returns\nTrue if predicate is truthful within timeout.\n\n*@throws* *Will throw if the given predicate throws.*"
+  sortText: ff|waitUntil
+  insertText: waitUntil($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+
