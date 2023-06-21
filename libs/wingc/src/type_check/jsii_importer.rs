@@ -201,6 +201,7 @@ impl<'a> JsiiImporter<'a> {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
 				env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+				loaded: false,
 			});
 			self
 				.wing_types
@@ -242,6 +243,7 @@ impl<'a> JsiiImporter<'a> {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					loaded: false,
 				});
 				parent_ns
 					.env
@@ -798,6 +800,24 @@ impl<'a> JsiiImporter<'a> {
 				break;
 			}
 		}
+
+		// Mark the namespace as loaded after recursively importing all types to its environment
+		let submodule_fqn = format!("{}.{submodule}", self.jsii_spec.assembly_name);
+		self.mark_namespace_as_loaded(&submodule_fqn);
+	}
+
+	fn mark_namespace_as_loaded(&mut self, module_name: &str) {
+		let n = self
+			.wing_types
+			.libraries
+			.lookup_nested_str_mut(&module_name, None)
+			.ok()
+			.expect(&format!("Namespace {} to be in libraries", module_name))
+			.0
+			.as_namespace_mut()
+			.expect(&format!("{} to be a namespace", module_name));
+
+		n.loaded = true;
 	}
 
 	/// Import all top-level types that are not in a submodule
@@ -815,6 +835,10 @@ impl<'a> JsiiImporter<'a> {
 				break;
 			}
 		}
+
+		// Mark the namespace as loaded. Note that its inner submodules might not be marked as
+		// loaded yet. But if they'll be accessed then they'll be marked as well.
+		self.mark_namespace_as_loaded(&self.jsii_spec.assembly_name);
 	}
 
 	/// Imports submodules of the assembly, preparing each as an available namespace
@@ -854,6 +878,7 @@ impl<'a> JsiiImporter<'a> {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: assembly.name.clone(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					loaded: false,
 				});
 				self
 					.wing_types

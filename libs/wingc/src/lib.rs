@@ -13,6 +13,7 @@ use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use fold::Fold;
 use jsify::JSifier;
+use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
@@ -168,7 +169,13 @@ pub fn parse(source_path: &Path) -> Scope {
 	wing_parser.wingit(&tree.root_node())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii_types: &mut TypeSystem) {
+pub fn type_check(
+	scope: &mut Scope,
+	types: &mut Types,
+	source_path: &Path,
+	jsii_types: &mut TypeSystem,
+	jsii_imports: &mut Vec<JsiiImportSpec>,
+) {
 	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
@@ -244,7 +251,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path, jsii_types);
+	let mut tc = TypeChecker::new(types, source_path, jsii_types, jsii_imports);
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
@@ -309,8 +316,11 @@ pub fn compile(
 	let mut types = Types::new();
 	let mut jsii_types = TypeSystem::new();
 
+	// Create a universal JSII import spec (need to keep this alive during entire compilation)
+	let mut jsii_imports = vec![];
+
 	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
+	type_check(&mut scope, &mut types, &source_path, &mut jsii_types, &mut jsii_imports);
 
 	// Validate the type checker didn't miss anything see `TypeCheckAssert` for details
 	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());

@@ -3,18 +3,20 @@ use std::cmp::max;
 use lsp_types::{Command, CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
-use crate::ast::{Expr, ExprKind, Phase, Scope, TypeAnnotation, TypeAnnotationKind};
+use crate::ast::{Expr, ExprKind, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType};
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
-	resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME,
-	CLASS_INIT_NAME,
+	import_udt_from_jsii, resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef,
+	CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use crate::{WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE};
+
+use super::sync::JSII_TYPES;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
@@ -32,9 +34,9 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {
 	CompletionResponse::Array(FILES.with(|files| {
-		let files = files.borrow();
+		let mut files = files.borrow_mut();
 		let uri = params.text_document_position.text_document.uri;
-		let file_data = files.get(&uri).expect("File must be open to get completions");
+		let file_data = files.get_mut(&uri).expect("File must be open to get completions");
 
 		let types = &file_data.types;
 		let root_scope = &file_data.scope;
@@ -133,6 +135,21 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							)
 						}
 						SymbolKind::Namespace(n) => {
+							// If the types in this namespace aren't loaded yet, load them now to get completions
+							if !n.loaded {
+								JSII_TYPES.with(|jsii_types| {
+									let mut jsii_types = jsii_types.borrow_mut();
+									let parts = reference_text.split(".").collect::<Vec<_>>();
+									// Dummy type representing the namespace to be loaded
+									let udt = UserDefinedType {
+										root: Symbol::global(parts[0].to_string()),
+										fields: parts[1..].iter().map(|s| Symbol::global(s.to_string())).collect(),
+										span: WingSpan::default(),
+									};
+									// Import all types in the namespace by trying to load the "dummy type"
+									import_udt_from_jsii(&mut file_data.types, &mut jsii_types, &udt, &file_data.jsii_imports);
+								});
+							}
 							return get_completions_from_namespace(&n, Some(found_env.phase));
 						}
 					}

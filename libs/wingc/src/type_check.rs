@@ -187,6 +187,12 @@ pub struct Namespace {
 
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
+
+	// Indicate whether all the types in this namespace have been loaded, this is part of our
+	// lazy loading mechanism and is used by the lsp's autocomplete in case we need to load
+	// the types after initial compilation.
+	#[derivative(Debug = "ignore")]
+	pub loaded: bool,
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -1161,7 +1167,7 @@ pub struct TypeChecker<'a> {
 
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
-	jsii_imports: Vec<JsiiImportSpec>,
+	jsii_imports: &'a mut Vec<JsiiImportSpec>,
 
 	/// The JSII type system
 	jsii_types: &'a mut TypeSystem,
@@ -1174,13 +1180,18 @@ pub struct TypeChecker<'a> {
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types, source_path: &'a Path, jsii_types: &'a mut TypeSystem) -> Self {
+	pub fn new(
+		types: &'a mut Types,
+		source_path: &'a Path,
+		jsii_types: &'a mut TypeSystem,
+		jsii_imports: &'a mut Vec<JsiiImportSpec>,
+	) -> Self {
 		Self {
 			types,
 			inner_scopes: vec![],
 			jsii_types,
 			source_path,
-			jsii_imports: vec![],
+			jsii_imports,
 			in_json: 0,
 			statement_idx: 0,
 		}
@@ -3590,25 +3601,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the type is not found, attempt to import it from a jsii library
-		for jsii in &*self.jsii_imports {
-			if jsii.alias.name == user_defined_type.root.name {
-				let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
-
-				let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
-					// when importing from the std lib, the "alias" is the submodule
-					format!("{}.{}.", jsii.assembly_name, jsii.alias.name)
-				} else {
-					format!("{}.", jsii.assembly_name)
-				};
-				udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
-
-				if importer.import_type(&FQN::from(udt_string.as_str())) {
-					return resolve_user_defined_type(user_defined_type, env, statement_idx);
-				} else {
-					// if the import failed, don't bother trying to do any more lookups
-					break;
-				}
-			}
+		if import_udt_from_jsii(self.types, self.jsii_types, user_defined_type, &self.jsii_imports) {
+			return resolve_user_defined_type(user_defined_type, env, statement_idx);
 		}
 
 		// If the type is still not found, return the original error
@@ -3825,6 +3819,30 @@ pub fn resolve_user_defined_type(
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
 	}
+}
+
+pub fn import_udt_from_jsii(
+	wing_types: &mut Types,
+	jsii_types: &mut TypeSystem,
+	user_defined_type: &UserDefinedType,
+	jsii_imports: &[JsiiImportSpec],
+) -> bool {
+	for jsii in jsii_imports {
+		if jsii.alias.name == user_defined_type.root.name {
+			let mut importer = JsiiImporter::new(&jsii, wing_types, jsii_types);
+
+			let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
+				// when importing from the std lib, the "alias" is the submodule
+				format!("{}.{}.", jsii.assembly_name, jsii.alias.name)
+			} else {
+				format!("{}.", jsii.assembly_name)
+			};
+			udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
+
+			return importer.import_type(&FQN::from(udt_string.as_str()));
+		}
+	}
+	false
 }
 
 #[cfg(test)]
