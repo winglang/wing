@@ -88,7 +88,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return A;
@@ -433,6 +432,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
         const s = "inResource";
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inResource")'`)})((s === "inResource"))};
+        const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);

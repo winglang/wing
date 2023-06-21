@@ -74,10 +74,8 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async goo()  {
-      const __parent_this = this;
       return "a2";
     }
   }
@@ -91,10 +89,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class B {
      constructor()  {
-      const __parent_this = this;
     }
     async foo()  {
-      const __parent_this = this;
       return "b1";
     }
   }
@@ -126,10 +122,8 @@ module.exports = function({  }) {
       this.inner = inner;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async callInner()  {
-      const __parent_this = this;
       return (await this.inner());
     }
   }
@@ -145,7 +139,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return E;
@@ -158,10 +151,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class F {
      constructor()  {
-      const __parent_this = this;
     }
     async foo()  {
-      const __parent_this = this;
       return "f1";
     }
   }
@@ -305,10 +296,8 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("goo");
-        const __parent_this = this;
       }
        foo()  {
-        const __parent_this = this;
         return "a1";
       }
       static _toInflightType(context) {
@@ -340,7 +329,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("foo");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -402,14 +390,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("callInner");
-        const __parent_this = this;
         class E extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            const __parent_this = this;
           }
            foo()  {
-            const __parent_this = this;
             return "e1";
           }
           static _toInflightType(context) {
@@ -441,7 +426,6 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("foo");
-            const __parent_this = this;
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
@@ -468,6 +452,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
+        const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -504,7 +489,6 @@ class $Root extends $stdlib.std.Resource {
         this.inner = new $Closure2(this,"$Closure2");
       }
        getInner()  {
-        const __parent_this = this;
         return this.inner;
       }
       static _toInflightType(context) {

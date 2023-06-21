@@ -50,23 +50,18 @@ module.exports = function({  }) {
       this.inflight1 = inflight1;
     }
     async makeFn(x)  {
-      const __parent_this = this;
       if ((x === true)) {
-        const __parent_this = this;
         return this.inflight1;
       }
       else {
-        const __parent_this = this;
         return this.inflight2;
       }
     }
     async callFn(x)  {
-      const __parent_this = this;
       const partialFn = (await this.makeFn(x));
       return (await partialFn());
     }
     async callFn2()  {
-      const __parent_this = this;
       const one = (await this.inflight1());
       const two = (await this.inflight2());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(one === 1)'`)})((one === 1))};

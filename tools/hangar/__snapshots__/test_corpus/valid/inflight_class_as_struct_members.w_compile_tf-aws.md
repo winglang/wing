@@ -48,7 +48,6 @@ module.exports = function({ getBar }) {
 module.exports = function({  }) {
   class Foo {
     async get()  {
-      const __parent_this = this;
       return 42;
     }
      constructor()  {

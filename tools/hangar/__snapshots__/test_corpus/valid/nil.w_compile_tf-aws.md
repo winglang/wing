@@ -54,19 +54,15 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async returnNil(t)  {
-      const __parent_this = this;
       if (t) {
-        const __parent_this = this;
         return "hello";
       }
       return undefined;
     }
     async setOptionalValue(msg)  {
-      const __parent_this = this;
       this.optionalVar = msg;
     }
     async getOptionalValue()  {
-      const __parent_this = this;
       return this.optionalVar;
     }
     async $inflight_init()  {

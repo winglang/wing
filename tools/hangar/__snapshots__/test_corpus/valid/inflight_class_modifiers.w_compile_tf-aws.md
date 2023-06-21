@@ -8,7 +8,6 @@ module.exports = function({  }) {
       const __parent_this = this;
     }
      constructor()  {
-      const __parent_this = this;
       this.field = 12;
     }
   }

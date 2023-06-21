@@ -8,7 +8,6 @@ module.exports = function({  }) {
       this.data = data;
     }
     async getStuff()  {
-      const __parent_this = this;
       return this.data.field0;
     }
     async $inflight_init()  {

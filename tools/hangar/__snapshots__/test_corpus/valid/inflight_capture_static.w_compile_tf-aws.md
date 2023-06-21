@@ -110,7 +110,6 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class OuterInflight {
      constructor()  {
-      const __parent_this = this;
     }
     static async staticMethod(b)  {
       return b.length;
@@ -128,7 +127,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     static async staticMethod(a)  {
       return `foo-${a}`;
@@ -473,7 +471,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("staticMethod");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -507,7 +504,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("staticMethod");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

@@ -26,7 +26,6 @@ module.exports = function({ Foo, myConst }) {
 module.exports = function({ myConst }) {
   class Foo {
     async getValue()  {
-      const __parent_this = this;
       return myConst;
     }
      constructor()  {

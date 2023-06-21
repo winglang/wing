@@ -8,7 +8,6 @@ module.exports = function({  }) {
       this.s1 = s1;
     }
     async foo()  {
-      const __parent_this = this;
       {console.log((await this.s1.concat(" world")))};
     }
     async $inflight_init()  {

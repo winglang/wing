@@ -59,7 +59,6 @@ module.exports = function({  }) {
       this.c = c;
     }
     async test()  {
-      const __parent_this = this;
       return ((await this.c.peek()) === 2);
     }
     async $inflight_init()  {

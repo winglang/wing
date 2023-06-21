@@ -30,7 +30,6 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(msg)  {
-      const __parent_this = this;
       return;
     }
     async $inflight_init()  {
@@ -49,7 +48,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async eat()  {
-      const __parent_this = this;
       return;
     }
     async $inflight_init()  {
@@ -68,7 +66,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async method2(x)  {
-      const __parent_this = this;
       return x;
     }
     async $inflight_init()  {
@@ -188,11 +185,9 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
        method1(x)  {
-        const __parent_this = this;
         return x;
       }
        method3(x)  {
-        const __parent_this = this;
         return x;
       }
       static _toInflightType(context) {

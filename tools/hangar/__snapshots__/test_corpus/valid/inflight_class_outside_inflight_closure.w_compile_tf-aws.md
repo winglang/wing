@@ -30,7 +30,6 @@ module.exports = function({  }) {
       return (this.lhs + this.rhs);
     }
      constructor(lhs, rhs)  {
-      const __parent_this = this;
       this.lhs = lhs;
       this.rhs = rhs;
     }

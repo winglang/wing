@@ -31,9 +31,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async hello()  {
-      const __parent_this = this;
       for (const p of Object.freeze(["hello"])) {
-        const __parent_this = this;
         {console.log(p)};
       }
     }

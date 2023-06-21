@@ -25,7 +25,6 @@ module.exports = function({ Foo }) {
 module.exports = function({  }) {
   class Foo {
      constructor()  {
-      const __parent_this = this;
     }
   }
   return Foo;

@@ -7,7 +7,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return R;
@@ -63,13 +62,11 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("$inflight_init");
         const __parent_this = this;
         if (true) {
-          const __parent_this = this;
           this.f = 1;
           this.f1 = 0;
         }
       }
        inc()  {
-        const __parent_this = this;
         this.f = (this.f + 1);
       }
       static _toInflightType(context) {

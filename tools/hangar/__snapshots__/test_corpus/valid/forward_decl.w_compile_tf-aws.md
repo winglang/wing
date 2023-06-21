@@ -7,7 +7,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return R;
@@ -65,13 +64,11 @@ class $Root extends $stdlib.std.Resource {
         this.f = "Hello World!!!";
       }
        method2()  {
-        const __parent_this = this;
         (this.method1());
         {console.log(`${this.f}`)};
         (this.method2());
       }
        method1()  {
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

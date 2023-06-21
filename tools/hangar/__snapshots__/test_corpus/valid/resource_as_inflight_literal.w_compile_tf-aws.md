@@ -30,7 +30,6 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(message)  {
-      const __parent_this = this;
       return "hello world!";
     }
     async $inflight_init()  {

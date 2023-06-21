@@ -53,7 +53,6 @@ module.exports = function({  }) {
       return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
     }
     async foo()  {
-      const __parent_this = this;
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.url))'`)})((await MyResource.isValidUrl(this.url)))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.api.url))'`)})((await MyResource.isValidUrl(this.api.url)))};
     }

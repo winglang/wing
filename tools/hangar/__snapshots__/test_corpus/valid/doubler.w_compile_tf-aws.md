@@ -92,7 +92,6 @@ module.exports = function({  }) {
       this.func = func;
     }
     async invoke(message)  {
-      const __parent_this = this;
       (await this.func.handle(message));
       (await this.func.handle(message));
     }
@@ -112,7 +111,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Doubler2;
@@ -385,7 +383,7 @@ class $Root extends $stdlib.std.Resource {
         const __parent_this = this;
       }
        makeFunc(handler)  {
-        const __parent_this = this;
+        const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
