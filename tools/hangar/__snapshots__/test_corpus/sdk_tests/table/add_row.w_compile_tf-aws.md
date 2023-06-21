@@ -78,8 +78,8 @@ module.exports = function({ table, marioInfo, peachInfo, std_Json }) {
             "uniqueId": "root_cloudTable_DynamodbTableItemmario_B5126782"
           }
         },
-        "hash_key": "mario",
-        "item": "{\"gender\":\"male\",\"role\":\"plumber\"}",
+        "hash_key": "${aws_dynamodb_table.root_cloudTable_323D7643.hash_key}",
+        "item": "{\"name\":{\"S\":\"mario\"},\"gender\":{\"S\":\"male\"},\"role\":{\"S\":\"plumber\"}}",
         "table_name": "${aws_dynamodb_table.root_cloudTable_323D7643.name}"
       },
       "root_cloudTable_DynamodbTableItempeach_63A97BD4": {
@@ -89,8 +89,8 @@ module.exports = function({ table, marioInfo, peachInfo, std_Json }) {
             "uniqueId": "root_cloudTable_DynamodbTableItempeach_63A97BD4"
           }
         },
-        "hash_key": "peach",
-        "item": "{\"gender\":\"female\",\"role\":\"princess\"}",
+        "hash_key": "${aws_dynamodb_table.root_cloudTable_323D7643.hash_key}",
+        "item": "{\"name\":{\"S\":\"peach\"},\"gender\":{\"S\":\"female\"},\"role\":{\"S\":\"princess\"}}",
         "table_name": "${aws_dynamodb_table.root_cloudTable_323D7643.name}"
       }
     },
