@@ -23,6 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'failure'
     steps:
+    - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
+      with:
+        github_token: ${{secrets.MUTATION_TOKEN}}
     - id: token-check
       name: Check if mutation token is set
       working-directory: ${{ github.workspace }}
