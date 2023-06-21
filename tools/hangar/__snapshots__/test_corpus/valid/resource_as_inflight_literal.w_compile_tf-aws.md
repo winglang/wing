@@ -30,10 +30,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async handle(message)  {
-      const __parent_this = this;
       return "hello world!";
     }
   }
@@ -245,7 +243,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Foo.js";

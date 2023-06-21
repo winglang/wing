@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"lib": ["ESNext"],
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": false,
+		"resolveJsonModule": true,
+		"noUncheckedIndexedAccess": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"noEmit": true,
+		"isolatedModules": true
+	},
+	"exclude": ["**/node_modules/**", "**/dist/**"]
+}

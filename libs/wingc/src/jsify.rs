@@ -291,7 +291,9 @@ impl<'a> JSifier<'a> {
 				let expression_type = self.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
 
-				let class_type = expression_type.as_class().expect("type to be a class");
+				let class_type = if let Some(class_type) = expression_type.as_class() { class_type } else {
+					return "".to_string();
+				};
 				let is_abstract = class_type.is_abstract;
 
 				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
@@ -368,10 +370,6 @@ impl<'a> JSifier<'a> {
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = self.get_expr_type(callee);
 				let function_sig = function_type.as_function_sig();
-				assert!(
-					function_sig.is_some() || function_type.is_anything() || function_type.is_handler_preflight_class(),
-					"Expected expression to be callable"
-				);
 
 				let expr_string = match &callee.kind {
 					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
@@ -529,6 +527,13 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
+			StmtKind::SuperConstructor { arg_list } => {
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				match ctx.phase {
+					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
+					_ => CodeMaker::one_line(format!("super({});", args)),
+				}
+			}
 			StmtKind::Bring {
 				module_name,
 				identifier,
@@ -905,7 +910,12 @@ impl<'a> JSifier<'a> {
 		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
 
 		// Find all free variables in the class, and return a list of their symbols
-		let (captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+
+		if let Some(parent) = &class.parent {
+			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
+			captured_types.insert(parent.full_path(), parent_type);
+		}
 
 		// Get all references between inflight methods and preflight values
 		let mut refs = self.find_inflight_references(class, &captured_vars);
@@ -1082,7 +1092,14 @@ impl<'a> JSifier<'a> {
 					code.add_code(self.jsify_enum(&e.values));
 					code.close("`);");
 				}
-				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
+				_ => {
+					for sym in n {
+						report_diagnostic(Diagnostic {
+							message: format!("Unexpected type \"{t}\" referenced inflight"),
+							span: Some(sym.span.clone()),
+						});
+					}
+				}
 			}
 		}
 
@@ -1185,8 +1202,9 @@ impl<'a> JSifier<'a> {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut lifted_by_parent = vec![];
 		if let Some(parent) = &class.parent {
-			let parent_type = resolve_user_defined_type(parent, env, 0).unwrap();
-			lifted_by_parent.extend(self.get_lifted_fields(parent_type));
+			if let Ok(parent_type) = resolve_user_defined_type(parent, env, 0) {
+				lifted_by_parent.extend(self.get_lifted_fields(parent_type));
+			}
 		}
 
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
@@ -1221,7 +1239,7 @@ impl<'a> JSifier<'a> {
 
 			if class.parent.is_some() {
 				class_code.line(format!(
-					"super({});",
+					"super({{{}}});",
 					lifted_by_parent
 						.iter()
 						.map(|name| name.clone())
@@ -1323,18 +1341,20 @@ impl<'a> JSifier<'a> {
 
 	// Get the type and capture info for fields that are captured in the client of the given resource
 	fn get_lifted_fields(&self, resource_type: TypeRef) -> Vec<String> {
-		resource_type
-			.as_class()
-			.unwrap()
-			.env
-			.iter(true)
-			.filter(|(_, kind, _)| {
-				let var = kind.as_variable().unwrap();
-				// We capture preflight non-reassignable fields
-				var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
-			})
-			.map(|(name, ..)| name)
-			.collect_vec()
+		if let Some(resource_class) = resource_type.as_class() {
+			resource_class
+				.env
+				.iter(true)
+				.filter(|(_, kind, _)| {
+					let var = kind.as_variable().unwrap();
+					// We capture preflight non-reassignable fields
+					var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
+				})
+				.map(|(name, ..)| name)
+				.collect_vec()
+		} else {
+			vec![]
+		}
 	}
 
 	fn jsify_register_bind_method(
@@ -1569,7 +1589,13 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 					capture.push(curr);
 					index = index + 1;
 				}
-				ComponentKind::Unsupported => panic!("all components should be valid at this point"),
+				ComponentKind::Unsupported => {
+					report_diagnostic(Diagnostic {
+						message: format!("Unsupported component \"{}\"", curr.text),
+						span: Some(curr.span.clone()),
+					});
+					return;
+				}
 			}
 		}
 
@@ -1663,7 +1689,11 @@ impl<'a> FieldReferenceVisitor<'a> {
 				}
 
 				let LookupResult::Found(kind, _) = lookup else {
-					panic!("reference to undefined symbol");
+					return vec![Component {
+						text: x.name.clone(),
+						span: x.span.clone(),
+						kind: ComponentKind::Unsupported,
+					}];
 				};
 
 				let var = kind.as_variable().expect("variable");
@@ -1702,8 +1732,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let env = self.env.unwrap();
 
 				// Get the type we're accessing a member of
-				let t = resolve_user_defined_type(type_, &env, self.statement_index).expect("covered by type checking");
-
+				let Ok(t) = resolve_user_defined_type(type_, &env, self.statement_index) else {
+					return vec![];
+				};
 				// If the type we're referencing isn't a preflight class then skip it
 				let Some(class) = t.as_preflight_class() else {
 					return vec![];
@@ -1753,29 +1784,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 			Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
 				Some(ComponentKind::Unsupported)
 			}
-			Type::Class(cls) => Some(ComponentKind::Member(
-				cls
-					.env
-					.lookup(&property, None)
-					.expect("covered by type checking")
-					.as_variable()
-					.unwrap(),
-			)),
-			Type::Interface(iface) => Some(ComponentKind::Member(
-				iface
-					.env
-					.lookup(&property, None)
-					.expect("covered by type checking")
-					.as_variable()
-					.unwrap(),
-			)),
-			Type::Struct(st) => Some(ComponentKind::Member(
-				st.env
-					.lookup(&property, None)
-					.expect("covered by type checking")
-					.as_variable()
-					.unwrap(),
-			)),
+			Type::Class(cls) => Some(ComponentKind::Member(cls.env.lookup(&property, None)?.as_variable()?)),
+			Type::Interface(iface) => Some(ComponentKind::Member(iface.env.lookup(&property, None)?.as_variable()?)),
+			Type::Struct(st) => Some(ComponentKind::Member(st.env.lookup(&property, None)?.as_variable()?)),
 		}
 	}
 }
@@ -1841,9 +1852,9 @@ impl<'a> CaptureScanner<'a> {
 			return;
 		}
 
-		// any other lookup failure is likely a bug in the compiler
+		// any other lookup failure is likely a an invalid reference so we can skip it
 		let LookupResult::Found(kind, symbol_info) = lookup else {
-			panic!("unable to find symbol in current environment");
+			return;
 		};
 
 		// now, we need to determine if the environment this symbol is defined in is a parent of the

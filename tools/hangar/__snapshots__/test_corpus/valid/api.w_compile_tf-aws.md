@@ -50,7 +50,7 @@ module.exports = function({ api }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ __parent_this }) {
+module.exports = function({ __parent_this_3 }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -60,7 +60,7 @@ module.exports = function({ __parent_this }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      const text = `${__parent_this.api.url}/endpoint2`;
+      const text = `${__parent_this_3.api.url}/endpoint2`;
       return {
       "status": 200,
       "body": text,}
@@ -80,7 +80,6 @@ module.exports = function({  }) {
       this.api = api;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return A;
@@ -571,8 +570,8 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+        const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -581,10 +580,10 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure3.js";
-            const __parent_this_client = context._lift(__parent_this);
+            const __parent_this_3_client = context._lift(__parent_this_3);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+                __parent_this_3: ${__parent_this_3_client},
               })
             `);
           }
@@ -601,10 +600,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Closure3._registerBindObject(__parent_this, host, []);
+              $Closure3._registerBindObject(__parent_this_3, host, []);
             }
             if (ops.includes("handle")) {
-              $Closure3._registerBindObject(__parent_this.api.url, host, []);
+              $Closure3._registerBindObject(__parent_this_3.api.url, host, []);
             }
             super._registerBind(host, ops);
           }

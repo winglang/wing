@@ -8,10 +8,8 @@ module.exports = function({  }) {
       this.data = data;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async getStuff()  {
-      const __parent_this = this;
       return this.data.field0;
     }
   }
@@ -66,7 +64,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, b) {
         super(scope, id);
         this._addInflightOps("getStuff");
-        const __parent_this = this;
         this.data = b;
       }
       static _toInflightType(context) {

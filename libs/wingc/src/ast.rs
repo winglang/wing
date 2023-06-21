@@ -337,6 +337,9 @@ pub enum StmtKind {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
+	SuperConstructor {
+		arg_list: ArgList,
+	},
 	Let {
 		reassignable: bool,
 		var_name: Symbol,

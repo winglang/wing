@@ -20,7 +20,7 @@ concurrency:
 
 env:
   RUST_VERSION: "1.67.1"
-  NODE_VERSION: "18.12.1"
+  NODE_VERSION: "18.16.0"
   NPM_VERSION: "8.19.3"
 
 jobs:
@@ -80,6 +80,18 @@ jobs:
         with:
           name: wing
           path: apps/wing/*.tgz
+
+      - name: Upload Wing Console Server
+        uses: actions/upload-artifact@v3
+        with:
+          name: wingconsoleserver
+          path: apps/wing-console/console/server/*.tgz
+
+      - name: Upload Wing Console App
+        uses: actions/upload-artifact@v3
+        with:
+          name: wingconsoleapp
+          path: apps/wing-console/console/app/*.tgz
 
       - name: Upload WingSDK
         uses: actions/upload-artifact@v3
@@ -379,6 +391,24 @@ jobs:
       - name: Publish Wing Compiler
         if: ${{ steps.wingcompiler-version.outputs.version != needs.build.outputs.version }}
         working-directory: wingcompiler
+        run: npm publish *.tgz --access public
+
+      - name: Check published Wing Console Server version
+        id: wingconsoleserver-version
+        run: echo "version=$(npm view @wingconsole/server version)" >> $GITHUB_OUTPUT
+
+      - name: Publish Wing Console Server
+        if: ${{ steps.wingconsoleserver-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wingconsoleserver
+        run: npm publish *.tgz --access public
+
+      - name: Check published Wing Console App version
+        id: wingconsoleapp-version
+        run: echo "version=$(npm view @wingconsole/app version)" >> $GITHUB_OUTPUT
+
+      - name: Publish Wing Console App
+        if: ${{ steps.wingconsoleapp-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wingconsoleapp
         run: npm publish *.tgz --access public
 
       - name: Check published Wing version

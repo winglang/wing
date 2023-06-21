@@ -30,7 +30,7 @@
     },
     "package": {
       "options": {
-        "commands": ["npx patch-package", "npm run bump", "npm pack", "npm run unbump"],
+        "commands": ["npx patch-package", "npm run package"],
         "cwd": "libs/wingcompiler",
         "parallel": false
       }
