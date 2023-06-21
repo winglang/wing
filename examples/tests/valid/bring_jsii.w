@@ -4,6 +4,6 @@ bring "jsii-code-samples" as stuff;
 let hello = new stuff.HelloWorld();
 let greeting = hello.sayHello("wingnuts");
 
-test "sayHello" {
+test "sayHello2" {
   assert(greeting == "Hello, wingnuts");
 }
