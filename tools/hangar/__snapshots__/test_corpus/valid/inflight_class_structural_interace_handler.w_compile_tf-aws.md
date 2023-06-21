@@ -29,10 +29,8 @@ module.exports = function({ NotGoo }) {
 module.exports = function({  }) {
   class NotGoo {
      constructor()  {
-      const __parent_this = this;
     }
     async handle()  {
-      const __parent_this = this;
       return 123;
     }
   }
@@ -195,7 +193,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.NotGoo.js";
