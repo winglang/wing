@@ -190,3 +190,13 @@ if let val = jsonElements.tryGet("strings")?.tryGet("non")?.tryGet("existant")?.
 if let val = jsonElements.tryGet("cant")?.tryGetAt(1000)?.tryGetAt(42) {
   assert(false); // nothing should have been found
 }
+// Json keyword is optional
+let notSpecified = {
+  foo: "bar"
+};
+
+assert(notSpecified.get("foo") == "bar");
+
+// Check that empty {} is a Json
+let empty = {};
+assert(Json.has(empty, "something") == false);
