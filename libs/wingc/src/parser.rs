@@ -1113,10 +1113,11 @@ impl<'s> Parser<'s> {
 					Ok(ArgList::new())
 				};
 
-				let obj_id = expression_node.child_by_field_name("id").map(|n| {
-					let id_str = self.node_text(&n.named_child(0).unwrap());
-					id_str[1..id_str.len() - 1].to_string()
-				});
+				let obj_id = if let Some(id_node) = expression_node.child_by_field_name("id") {
+					Some(Box::new(self.build_expression(&id_node, phase)?))
+				} else {
+					None
+				};
 				let obj_scope = if let Some(scope_expr_node) = expression_node.child_by_field_name("scope") {
 					Some(Box::new(self.build_expression(&scope_expr_node, phase)?))
 				} else {
@@ -1486,7 +1487,13 @@ impl<'s> Parser<'s> {
 	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
 		let name_node = statement_node.child_by_field_name("name").unwrap();
 		let name_text = self.node_text(&name_node);
-		let test_id = format!("test:{}", &name_text[1..name_text.len() - 1]);
+		let test_id = Box::new(Expr::new(
+			ExprKind::Literal(Literal::String(format!(
+				"\"test:{}\"",
+				&name_text[1..name_text.len() - 1]
+			))),
+			self.node_span(&name_node),
+		));
 		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), Phase::Inflight);
 		let statements_span = statements.span.clone();
 		let span = self.node_span(statement_node);

@@ -138,3 +138,23 @@ test "dependency cycles" {
   let count = bigOlPublisher.getObjectCount();
   // assert(count == 2); TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
 }
+
+// Scope and ID tests
+class Dummy {}
+class ScopeAndIdTestClass {
+  init() {
+    // Create a TestClass in my scope
+    let d1 = new Dummy();
+    assert(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"));
+    // Create a test class in someone else's scope
+    let d2 = new Dummy() in d1;
+    assert(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"));
+    // Generate multiple TestClasses with different id's
+    for i in 0..3 {
+      let x = new Dummy() as "tc${i}";
+      let expected_path = "/ScopeAndIdTestClass/tc${i}";
+      assert(x.node.path.endsWith(expected_path));
+    }
+  }
+}
+new ScopeAndIdTestClass();

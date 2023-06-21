@@ -164,11 +164,9 @@ new A() as "b" in c;
       class: (custom_type
         object: (type_identifier))
       args: (argument_list)
-      id: (new_object_id
-        (string))
-      scope: (new_object_scope
-        (reference
-          (reference_identifier))))))
+      id: (string)
+      scope: (reference
+        (reference_identifier)))))
 
 ================================================================================
 preflight anonymous closure
