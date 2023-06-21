@@ -1,7 +1,7 @@
 ---
 title: Language Reference
-id: spec
-description: The Wing Language Specification
+id: language-reference
+description: The Wing Language Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
@@ -309,13 +309,14 @@ let foo = MutJson "hello";
 // ok what now?
 ```
 
-Use the `Json.clone()` and `Json.cloneMut()` methods to get a *deep clone* of the object:
+Use the `Json.deepCopyMut(MutJson json)` method to get an mutable *deep copy* of a `Json` object.
+Use the `MutJson.deepCopy(Json json)` method to get an immutable *deep copy* of a `MutJson` object:
 
 ```TS
-let mutJson = MutJson { hello: 123 };
-let immut = Json.clone(mutJson);
-mutJson.hello = 999;
-assert(immut.hello == 123);
+let mutObj = MutJson { hello: 123 };
+let immutObj = MutJson.deepCopy(mutObj);
+mutObj.set("hello", 999);
+assert(immutObj.get("hello") == 123);
 ```
 
 To delete a key from an object, use the `Json.delete()` method:
@@ -1881,7 +1882,7 @@ If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 
 ### 6.1 Strings
 
-String reference doc is available [here](https://docs.winglang.io/reference/sdk#string-).
+String reference doc is available [here](https://docs.winglang.io/standard-library/sdk#string-).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 
