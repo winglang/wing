@@ -1345,8 +1345,8 @@ impl<'s> Parser<'s> {
 					},
 					expression_span,
 				))
-			}
-			"map_literal" => {
+			},
+			"map_literal" | "json_map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type_annotation(&type_node, phase)?)
 				} else {
@@ -1394,13 +1394,15 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"json_literal" => {
-				let type_node = expression_node
-					.child_by_field_name("type")
-					.expect("Json literal should always have type node");
-				let is_mut = match self.node_text(&type_node) {
-					"MutJson" => true,
-					_ => false,
-				};
+				let type_node = expression_node.child_by_field_name("type");
+        let mut is_mut = false;
+
+        if let Some(type_node) = type_node {
+          is_mut = match self.node_text(&type_node) {
+            "MutJson" => true,
+            _ => false,
+          };
+        }
 
 				let element_node = expression_node
 					.child_by_field_name("element")

@@ -52,7 +52,7 @@ someJson.set("x", 111);
 assert(someJson.get("x") == 111);
 
 // assign Map to Json
-let x: Json = {cool: "beans"};
+let x: Json = {cool => "beans"};
 
 // Nested Gets and Sets
 let nestedJson = MutJson {

@@ -30,10 +30,10 @@ assert(s3.has(bucket2));
 //Map tests
 let m1 = MutMap<str>{"hello": "world"};
 let m2: MutMap<num> = MutMap<num>{"hello": 123};
-let m3 = MutMap<cloud.Bucket>{"b1": bucket1, "b2": bucket2};
+let m3 = MutMap<cloud.Bucket>{"b1" => bucket1, "b2" => bucket2};
 let m4: MutMap<str> = m1;
-let m5 = MutMap<str>{"goodbye": "world"};
-let m6 = MutMap<MutMap<str>>{"a": m1, "b": m5};
+let m5 = MutMap<str>{"goodbye" => "world"};
+let m6 = MutMap<MutMap<str>>{"a" => m1, "b" => m5};
 assert(m1.has("hello"));
 assert(m2.size() == 1);
 assert(m3.get("b1") == bucket1);

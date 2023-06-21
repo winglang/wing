@@ -32,8 +32,8 @@ assert(sSet.size == 2);
 assert(immutSet.size == 3);
 
 
-let sMap = {"one": 1, "two": 2};
-let nestedMap = {"a": {"b": {"c": "hello"}}};
+let sMap = {"one" => 1, "two" => 2};
+let nestedMap = {"a" => {"b" => {"c": "hello"}}};
 let mutMap = sMap.copyMut();
 mutMap.set("five", 5);
 let immutMap = mutMap.copy();
