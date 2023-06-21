@@ -1,0 +1,27 @@
+{
+  "name": "console-server",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": ["compiler", "sdk"],
+  "targets": {
+    "build": {
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "npm run compile",
+        "cwd": "apps/wing-console/console/server"
+      }
+    },
+    "test": {
+      "options": {
+        "command": "npm run vitest",
+        "cwd": "apps/wing-console/console/server"
+      }
+    },
+    "package": {
+      "options": {
+        "commands": ["npm run package"],
+        "cwd": "apps/wing-console/console/server",
+        "parallel": false
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "console-ui",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": ["compiler", "sdk"],
+  "targets": {
+    "build": {
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "npm run compile",
+        "cwd": "apps/wing-console/console/ui"
+      }
+    }
+  }
+}
