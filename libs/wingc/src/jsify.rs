@@ -303,7 +303,7 @@ impl<'a> JSifier<'a> {
 
 				let ctor = self.jsify_type(&class.kind, ctx);
 
-				let scope = if is_preflight_class { 
+				let scope = if is_preflight_class {
 					if let Some(scope) = obj_scope {
 						Some(self.jsify_expression(scope, ctx))
 					} else {
