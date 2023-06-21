@@ -184,6 +184,8 @@ jobs:
           git add --all
           git diff --staged --patch > build.diff
           if [ -s build.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat build.diff
             echo "::set-output name=diff::true"
           fi
       - name: Upload Diff
