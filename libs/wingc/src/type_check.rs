@@ -160,6 +160,7 @@ pub enum Type {
 	Json,
 	MutJson,
 	Nil,
+	Unresolved,
 	Optional(TypeRef),
 	Array(TypeRef),
 	MutArray(TypeRef),
@@ -186,6 +187,12 @@ pub struct Namespace {
 
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
+
+	// Indicate whether all the types in this namespace have been loaded, this is part of our
+	// lazy loading mechanism and is used by the lsp's autocomplete in case we need to load
+	// the types after initial compilation.
+	#[derivative(Debug = "ignore")]
+	pub loaded: bool,
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -646,14 +653,6 @@ impl FunctionSignature {
 
 		self.parameters.len() - num_optionals
 	}
-
-	/// Returns the maximum number of parameters that can be passed to this function.
-	///
-	/// TODO: how to represent unlimited parameters in the case of variadics?
-	/// https://github.com/winglang/wing/issues/125
-	fn max_parameters(&self) -> usize {
-		self.parameters.len()
-	}
 }
 
 impl PartialEq for FunctionSignature {
@@ -690,6 +689,7 @@ impl Display for Type {
 			Type::Json => write!(f, "Json"),
 			Type::MutJson => write!(f, "MutJson"),
 			Type::Nil => write!(f, "nil"),
+			Type::Unresolved => write!(f, "unresolved"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
@@ -806,6 +806,10 @@ impl TypeRef {
 		matches!(**self, Type::Anything)
 	}
 
+	pub fn is_unresolved(&self) -> bool {
+		matches!(**self, Type::Unresolved)
+	}
+
 	pub fn is_preflight_class(&self) -> bool {
 		if let Type::Class(ref class) = **self {
 			return class.phase == Phase::Preflight;
@@ -888,6 +892,7 @@ impl TypeRef {
 			Type::Struct(_) => true,
 			Type::Optional(v) => v.is_capturable(),
 			Type::Anything => false,
+			Type::Unresolved => false,
 			Type::Void => false,
 			Type::MutJson => false,
 			Type::MutArray(_) => false,
@@ -977,6 +982,7 @@ pub struct Types {
 	json_idx: usize,
 	mut_json_idx: usize,
 	nil_idx: usize,
+	err_idx: usize,
 
 	type_for_expr: Vec<Option<TypeRef>>,
 
@@ -1004,6 +1010,8 @@ impl Types {
 		let mut_json_idx = types.len() - 1;
 		types.push(Box::new(Type::Nil));
 		let nil_idx = types.len() - 1;
+		types.push(Box::new(Type::Unresolved));
+		let err_idx = types.len() - 1;
 
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
@@ -1023,6 +1031,7 @@ impl Types {
 			json_idx,
 			mut_json_idx,
 			nil_idx,
+			err_idx,
 			type_for_expr: Vec::new(),
 			resource_base_type: None,
 		}
@@ -1053,7 +1062,7 @@ impl Types {
 	}
 
 	pub fn error(&self) -> TypeRef {
-		self.get_typeref(self.anything_idx)
+		self.get_typeref(self.err_idx)
 	}
 
 	pub fn void(&self) -> TypeRef {
@@ -1152,7 +1161,7 @@ pub struct TypeChecker<'a> {
 
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
-	jsii_imports: Vec<JsiiImportSpec>,
+	jsii_imports: &'a mut Vec<JsiiImportSpec>,
 
 	/// The JSII type system
 	jsii_types: &'a mut TypeSystem,
@@ -1165,13 +1174,18 @@ pub struct TypeChecker<'a> {
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types, source_path: &'a Path, jsii_types: &'a mut TypeSystem) -> Self {
+	pub fn new(
+		types: &'a mut Types,
+		source_path: &'a Path,
+		jsii_types: &'a mut TypeSystem,
+		jsii_imports: &'a mut Vec<JsiiImportSpec>,
+	) -> Self {
 		Self {
 			types,
 			inner_scopes: vec![],
 			jsii_types,
 			source_path,
-			jsii_imports: vec![],
+			jsii_imports,
 			in_json: 0,
 			statement_idx: 0,
 		}
@@ -1268,13 +1282,16 @@ impl<'a> TypeChecker<'a> {
 						} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
 							self.types.string()
 						} else {
-							self.spanned_error(
-								exp,
-								format!(
-									"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
-									ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
-								),
-							);
+							// If any of the types are unresolved (error) then don't report this assuming the error has already been reported
+							if !ltype.is_unresolved() && !rtype.is_unresolved() {
+								self.spanned_error(
+									exp,
+									format!(
+										"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
+										ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
+									),
+								);
+							}
 							self.types.error()
 						}
 					}
@@ -1369,22 +1386,23 @@ impl<'a> TypeChecker<'a> {
 							return self.types.error();
 						}
 					}
-					t => {
-						if matches!(t, Type::Anything) {
-							return self.types.anything();
-						} else if matches!(t, Type::Struct(_)) {
-							self.spanned_error(
-								class,
-								format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", type_),
-							);
-							return self.types.error();
-						} else {
-							self.spanned_error(
-								class,
-								format!("Cannot instantiate type \"{}\" because it is not a class", type_),
-							);
-							return self.types.error();
-						}
+					// If type is anything we have to assume it's ok to initialize it
+					Type::Anything => return self.types.anything(),
+					// If type is error, we assume the error was already reported and evauate the new expression to error as well
+					Type::Unresolved => return self.types.error(),
+					Type::Struct(_) => {
+						self.spanned_error(
+							class,
+							format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", type_),
+						);
+						return self.types.error();
+					}
+					_ => {
+						self.spanned_error(
+							class,
+							format!("Cannot instantiate type \"{}\" because it is not a class", type_),
+						);
+						return self.types.error();
 					}
 				};
 
@@ -1452,8 +1470,13 @@ impl<'a> TypeChecker<'a> {
 
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
-				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
-				if matches!(*func_type, Type::Anything) {
+				// If the callee's signature type is unknown, just evaluate the entire call expression as an error
+				if func_type.is_unresolved() {
+					return self.types.error();
+				}
+
+				// If the caller's signature is `any`, then just evaluate the entire call expression as `any`
+				if func_type.is_anything() {
 					return self.types.anything();
 				}
 
@@ -1476,7 +1499,10 @@ impl<'a> TypeChecker<'a> {
 						return self.types.error();
 					}
 				} else {
-					self.spanned_error(callee, "Expected a function or method");
+					self.spanned_error(
+						callee,
+						format!("Expected a function or method, found \"{}\"", func_type),
+					);
 					return self.types.error();
 				};
 
@@ -1866,41 +1892,52 @@ impl<'a> TypeChecker<'a> {
 	/// Returns the given type on success, otherwise returns one of the expected types.
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
 		assert!(expected_types.len() > 0);
-		if !actual_type.is_anything()
-			&& !expected_types
-				.iter()
-				.any(|expected| actual_type.is_subtype_of(&expected))
-		{
-			report_diagnostic(Diagnostic {
-				message: if expected_types.len() > 1 {
-					let expected_types_list = expected_types
-						.iter()
-						.map(|t| format!("{}", t))
-						.collect::<Vec<String>>()
-						.join(",");
-					format!(
-						"Expected type to be one of \"{}\", but got \"{}\" instead",
-						expected_types_list, actual_type
-					)
-				} else {
-					let mut message = format!(
-						"Expected type to be \"{}\", but got \"{}\" instead",
-						expected_types[0], actual_type
-					);
-					if actual_type.is_nil() {
-						message = format!(
-							"{} (hint: to allow \"nil\" assignment use optional type: \"{}?\")",
-							message, expected_types[0]
-						);
-					}
-					message
-				},
-				span: Some(span.span()),
-			});
-			expected_types[0]
-		} else {
-			actual_type
+
+		// If the actual type is anything or any of the expected types then we're good
+		if actual_type.is_anything() || expected_types.iter().any(|t| actual_type.is_subtype_of(t)) {
+			return actual_type;
 		}
+
+		// If the actual type is an error (a type we failed to resolve) then we silently ignore it assuming
+		// the error was already reported.
+		if actual_type.is_unresolved() {
+			return actual_type;
+		}
+
+		// If any of the expected types are errors (types we failed to resolve) then we silently ignore it
+		// assuming the error was already reported.
+		if expected_types.iter().any(|t| t.is_unresolved()) {
+			return actual_type;
+		}
+
+		let expected_type_str = if expected_types.len() > 1 {
+			let expected_types_list = expected_types
+				.iter()
+				.map(|t| format!("{}", t))
+				.collect::<Vec<String>>()
+				.join(",");
+			format!("one of \"{}\"", expected_types_list)
+		} else {
+			format!("\"{}\"", expected_types[0])
+		};
+
+		let mut message = format!(
+			"Expected type to be {}, but got \"{}\" instead",
+			expected_type_str, actual_type
+		);
+		if actual_type.is_nil() && expected_types.len() == 1 {
+			message = format!(
+				"{} (hint: to allow \"nil\" assignment use optional type: \"{}?\")",
+				message, expected_types[0]
+			);
+		}
+		report_diagnostic(Diagnostic {
+			message,
+			span: Some(span.span()),
+		});
+
+		// Evaluate to one of the expected types
+		expected_types[0]
 	}
 
 	pub fn type_check_scope(&mut self, scope: &Scope) {
@@ -2212,7 +2249,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Assignment { variable, value } => {
 				let exp_type = self.type_check_exp(value, env);
 				let var_info = self.resolve_reference(variable, env);
-				if !var_info.reassignable {
+				if !var_info.type_.is_unresolved() && !var_info.reassignable {
 					self.spanned_error(stmt, format!("Variable {} is not reassignable ", variable));
 				}
 				self.validate_type(exp_type, var_info.type_, value);
@@ -2521,7 +2558,7 @@ impl<'a> TypeChecker<'a> {
 							Some(t)
 						} else {
 							// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
-							if !t.is_anything() {
+							if !t.is_unresolved() {
 								self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
 							}
 							None
@@ -2983,7 +3020,11 @@ impl<'a> TypeChecker<'a> {
 			// If we're importing from the the wing sdk, eagerly import all the types within it
 			// The wing sdk is special because it's currently the only jsii module we import with a specific target namespace
 			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
-				importer.deep_import_submodule_to_env(&jsii.alias.name);
+				importer.deep_import_submodule_to_env(if jsii.namespace_filter.is_empty() {
+					None
+				} else {
+					Some(jsii.namespace_filter.join("."))
+				});
 			}
 
 			importer.import_root_types();
@@ -3337,11 +3378,10 @@ impl<'a> TypeChecker<'a> {
 					// Give a specific error message if someone tries to write "print" instead of "log"
 					if symbol.name == "print" {
 						self.spanned_error(symbol, "Unknown symbol \"print\", did you mean to use \"log\"?");
-						self.make_error_variable_info(false)
 					} else {
 						self.type_error(lookup_result_to_type_error(lookup_res, symbol));
-						self.make_error_variable_info(false)
 					}
+					self.make_error_variable_info(false)
 				}
 			}
 			Reference::InstanceMember {
@@ -3387,18 +3427,9 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				let instance_type = self.type_check_exp(object, env);
-
-				// TODO Use error type instead of "anything" here https://github.com/winglang/wing/issues/884
-				if instance_type.is_anything() {
-					// Check to see if this reference is actually an invalid usage of a namespace
-					if let Some(ref_udt) = self.reference_to_udt(reference) {
-						let lookup = self.resolve_user_defined_type(&ref_udt, env, self.statement_idx);
-						if let Err(t) = lookup {
-							if t.message.ends_with("to be a type but it's a namespace") {
-								return self.make_error_variable_info(false);
-							}
-						}
-					}
+				// If resolving the object's type failed, we can't resolve the property either
+				if instance_type.is_unresolved() {
+					return self.make_error_variable_info(false);
 				}
 
 				let res = self.resolve_variable_from_instance_type(instance_type, property, env, object);
@@ -3616,25 +3647,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the type is not found, attempt to import it from a jsii library
-		for jsii in &*self.jsii_imports {
-			if jsii.alias.name == user_defined_type.root.name {
-				let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
-
-				let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
-					// when importing from the std lib, the "alias" is the submodule
-					format!("{}.{}.", jsii.assembly_name, jsii.alias.name)
-				} else {
-					format!("{}.", jsii.assembly_name)
-				};
-				udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
-
-				if importer.import_type(&FQN::from(udt_string.as_str())) {
-					return resolve_user_defined_type(user_defined_type, env, statement_idx);
-				} else {
-					// if the import failed, don't bother trying to do any more lookups
-					break;
-				}
-			}
+		if import_udt_from_jsii(self.types, self.jsii_types, user_defined_type, &self.jsii_imports) {
+			return resolve_user_defined_type(user_defined_type, env, statement_idx);
 		}
 
 		// If the type is still not found, return the original error
@@ -3851,6 +3865,30 @@ pub fn resolve_user_defined_type(
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
 	}
+}
+
+pub fn import_udt_from_jsii(
+	wing_types: &mut Types,
+	jsii_types: &mut TypeSystem,
+	user_defined_type: &UserDefinedType,
+	jsii_imports: &[JsiiImportSpec],
+) -> bool {
+	for jsii in jsii_imports {
+		if jsii.alias.name == user_defined_type.root.name {
+			let mut importer = JsiiImporter::new(&jsii, wing_types, jsii_types);
+
+			let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
+				// when importing from the std lib, the "alias" is the submodule
+				format!("{}.{}.", jsii.assembly_name, jsii.alias.name)
+			} else {
+				format!("{}.", jsii.assembly_name)
+			};
+			udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
+
+			return importer.import_type(&FQN::from(udt_string.as_str()));
+		}
+	}
+	false
 }
 
 #[cfg(test)]

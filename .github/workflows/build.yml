@@ -85,13 +85,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: wingconsoleserver
-          path: apps/wing-console/server/*.tgz
+          path: apps/wing-console/console/server/*.tgz
 
       - name: Upload Wing Console App
         uses: actions/upload-artifact@v3
         with:
           name: wingconsoleapp
-          path: apps/wing-console/app/*.tgz
+          path: apps/wing-console/console/app/*.tgz
 
       - name: Upload WingSDK
         uses: actions/upload-artifact@v3
