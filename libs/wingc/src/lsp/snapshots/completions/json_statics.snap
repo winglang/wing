@@ -1,6 +1,17 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: deepCopy
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic deepCopy: (json: MutJson): Json\n```\n---\nCreates an immutable deep copy of the Json.\n\n### Parameters\n - *json* - to copy.\n\n### Returns\nthe immutable copy of the Json"
+  sortText: ff|deepCopy
+  insertText: deepCopy($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: deepCopyMut
   kind: 2
   documentation:
@@ -16,7 +27,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\nstatic delete: (json: Json, key: str): void\n```\n---\nDeletes a key in a given Json.\n\n### Parameters\n - *json* - to delete key from.\n - *key* - the key to delete."
+    value: "```wing\nstatic delete: (json: MutJson, key: str): void\n```\n---\nDeletes a key in a given Json.\n\n### Parameters\n - *json* - to delete key from.\n - *key* - the key to delete."
   sortText: ff|delete
   insertText: delete($0)
   insertTextFormat: 2
@@ -27,7 +38,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\nstatic has: (json: Json, key: str): bool\n```\n---\nChecks if a Json object has a given key.\n\n### Parameters\n - *json* - The json object to inspect.\n - *key* - The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
+    value: "```wing\nstatic has: (json: any, key: str): bool\n```\n---\nChecks if a Json object has a given key.\n\n### Parameters\n - *json* - The json object to inspect.\n - *key* - The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
   sortText: ff|has
   insertText: has($0)
   insertTextFormat: 2
@@ -38,7 +49,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\nstatic keys: (json: Json): Array<str>\n```\n---\nReturns the keys from the Json object.\n\n### Parameters\n - *json* - to get keys from.\n\n### Returns\nthe keys from the Json object as string array"
+    value: "```wing\nstatic keys: (json: any): Array<str>\n```\n---\nReturns the keys from the Json object.\n\n### Parameters\n - *json* - to get keys from.\n\n### Returns\nthe keys from the Json object as string array"
   sortText: ff|keys
   insertText: keys($0)
   insertTextFormat: 2
@@ -60,7 +71,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\nstatic stringify: (json: Json, indent: num?): str\n```\n---\nFormats Json as string.\n\n### Parameters\n - *json* - to format as string.\n - *indent*\n\n### Returns\nstring representation of the Json\n\n### Remarks\n(JSON.stringify($args$))"
+    value: "```wing\nstatic stringify: (json: any, indent: num?): str\n```\n---\nFormats Json as string.\n\n### Parameters\n - *json* - to format as string.\n - *indent*\n\n### Returns\nstring representation of the Json\n\n### Remarks\n(JSON.stringify($args$))"
   sortText: ff|stringify
   insertText: stringify($0)
   insertTextFormat: 2

@@ -25,6 +25,20 @@ class BaseJson {
   }
 
   /**
+   * Deletes a key in a given Json
+   *
+   * @macro ((args) => { delete (args[0])[args[1]]; })([$args$])
+   *
+   * @param json to delete key from
+   * @param key the key to delete
+   */
+  public static delete(json: MutJson, key: string): void {
+    json;
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
    * Formats Json as string
    *
    * (JSON.stringify($args$))
@@ -83,69 +97,69 @@ class BaseJson {
 
   /**
    * Convert Json element to string if possible.
-   * 
+   *
    * @macro ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })($self$)
-   * 
+   *
    * @returns a string.
    */
-    public asStr(): string {
-      throw new Error("Macro");
-    }
+  public asStr(): string {
+    throw new Error("Macro");
+  }
 
   /**
    * Convert Json element to string if possible.
-   * 
+   *
    * @macro ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
-   * 
+   *
    * @returns a string.
    */
-    public tryAsStr(): string | undefined {
-      throw new Error("Macro");
-    }
-  
-    /**
-     * Convert Json element to number if possible.
-     * 
-     * @macro ((arg) => { if (typeof arg !== "number") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a number")}; return JSON.parse(JSON.stringify(arg)) })($self$)
-     * 
-     * @returns a string.
-     */
-    public asNum(): number {
-      throw new Error("Macro");
-    }
+  public tryAsStr(): string | undefined {
+    throw new Error("Macro");
+  }
 
-    /**
+  /**
+   * Convert Json element to number if possible.
+   *
+   * @macro ((arg) => { if (typeof arg !== "number") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a number")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   *
+   * @returns a string.
+   */
+  public asNum(): number {
+    throw new Error("Macro");
+  }
+
+  /**
    * Convert Json element to string if possible.
-   * 
+   *
    * @macro ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
-   * 
+   *
    * @returns a string.
    */
-    public tryAsNum(): number | undefined {
-      throw new Error("Macro");
-    }
-  
-    /**
-     * Convert Json element to number if possible.
-     * 
-     * @macro ((arg) => { if (typeof arg !== "boolean") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a boolean")}; return JSON.parse(JSON.stringify(arg)) })($self$)
-     * 
-     * @returns a string.
-     */
-    public asBool(): boolean {
-      throw new Error("Macro");
-    }
+  public tryAsNum(): number | undefined {
+    throw new Error("Macro");
+  }
 
-     /**
-   * Convert Json element to boolean if possible.
-   * 
-   * @macro ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
-   * 
+  /**
+   * Convert Json element to number if possible.
+   *
+   * @macro ((arg) => { if (typeof arg !== "boolean") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a boolean")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   *
    * @returns a string.
    */
-     public tryAsBool(): boolean | undefined {
-      throw new Error("Macro");
-    }
+  public asBool(): boolean {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to boolean if possible.
+   *
+   * @macro ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   *
+   * @returns a string.
+   */
+  public tryAsBool(): boolean | undefined {
+    throw new Error("Macro");
+  }
 }
 
 /**
@@ -234,9 +248,9 @@ export class Json extends BaseJson {
 
   /**
    * Optionally returns an specified element from the Json.
-   * 
+   *
    * @macro ($self$)[$args$]
-   * 
+   *
    * @param key The key of the element to return
    * @returns The element associated with the specified key, or undefined if the key can't be found
    */
@@ -318,9 +332,9 @@ export class MutJson extends BaseJson {
 
   /**
    * Optionally returns an specified element from the Json.
-   * 
+   *
    * @macro ($self$)[$args$]
-   * 
+   *
    * @param key The key of the element to return
    * @returns The element associated with the specified key, or undefined if the key can't be found
    */
