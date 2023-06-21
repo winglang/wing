@@ -1,5 +1,5 @@
 ---
-title: Compiler Targets
+title: Compiler targets
 id: compiler-targets
 description: Wing compiler targets and provisioning engines
 keywords: [Wing compiler targets, provisioning engines, multi-cloud]
