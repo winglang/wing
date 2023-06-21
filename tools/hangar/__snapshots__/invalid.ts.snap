@@ -211,7 +211,35 @@ Duration <DURATION>
 `;
 
 exports[`class.w 1`] = `
-"error: Expected block
+"error: Call to super constructor can only be made from derived classes
+   --> ../../../examples/tests/invalid/class.w:86:5
+   |
+86 |     super();
+   |     ^^^^^^^^ Call to super constructor can only be made from derived classes
+
+
+error: Call to super constructor must be first statement in constructor
+   --> ../../../examples/tests/invalid/class.w:98:5
+   |
+98 |     super(name, major);
+   |     ^^^^^^^^^^^^^^^^^^^ Call to super constructor must be first statement in constructor
+
+
+error: Call to super constructor can only be done from within class constructor
+    --> ../../../examples/tests/invalid/class.w:103:5
+    |
+103 |     super(\\"cool\\", \\"blue\\");
+    |     ^^^^^^^^^^^^^^^^^^^^^^ Call to super constructor can only be done from within class constructor
+
+
+error: Call to super constructor can only be done from within a class constructor
+    --> ../../../examples/tests/invalid/class.w:108:4
+    |
+108 |    super();
+    |    ^^^^^^^^ Call to super constructor can only be done from within a class constructor
+
+
+error: Expected block
    --> ../../../examples/tests/invalid/class.w:17:17
    |
 17 |   init(foo: str)
@@ -225,18 +253,18 @@ error: Preflight field \\"x\\" is not initialized
   |    ^ Preflight field \\"x\\" is not initialized
 
 
-error: Expected 0 argument(s) but got 1
+error: Expected 0 arguments but got 1
   --> ../../../examples/tests/invalid/class.w:9:1
   |
 9 | new C2(1);
-  | ^^^^^^^^^ Expected 0 argument(s) but got 1
+  | ^^^^^^^^^ Expected 0 arguments but got 1
 
 
-error: Expected 0 named argument(s)
+error: Expected 0 named arguments for func at ../../../examples/tests/invalid/class.w:13:1
    --> ../../../examples/tests/invalid/class.w:13:1
    |
 13 | new C9(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^ Expected 0 named argument(s)
+   | ^^^^^^^^^^^^^^^^^^ Expected 0 named arguments for func at ../../../examples/tests/invalid/class.w:13:1
 
 
 error: Expected 1 positional argument(s) but got 0
@@ -253,11 +281,11 @@ error: Expected 1 positional argument(s) but got 0
    | ^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
-error: class C10 does not expect any named argument
+error: No named arguments expected
    --> ../../../examples/tests/invalid/class.w:25:1
    |
 25 | new C10(\\"hello\\", foo: \\"bar\\"); 
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ class C10 does not expect any named argument
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ No named arguments expected
 
 
 error: Inflight field \\"x\\" is not initialized
@@ -328,6 +356,34 @@ error: Class cannot extend itself
    |
 78 | class C11 extends C11 {
    |                   ^^^ Class cannot extend itself
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.w:123:11
+    |
+123 |     super(someStr);
+    |           ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected 1 positional argument(s) but got 0
+    --> ../../../examples/tests/invalid/class.w:132:5
+    |
+132 |     super();
+    |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Expected 1 arguments but got 2
+    --> ../../../examples/tests/invalid/class.w:141:5
+    |
+141 |     super(someNum, someStr);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 arguments but got 2
+
+
+error: Expected 1 positional argument(s) but got 0
+    --> ../../../examples/tests/invalid/class.w:157:5
+    |
+157 |     super();
+    |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1704,13 +1760,6 @@ error: Expected between 0 and 1 arguments but got 2
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2
-
-
-error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/struct_expansion.w:7:32
-  |
-7 | let bucket2 = new cloud.Bucket(2, public: true);
-  |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
 
 
 error: \\"status\\" is not initialized

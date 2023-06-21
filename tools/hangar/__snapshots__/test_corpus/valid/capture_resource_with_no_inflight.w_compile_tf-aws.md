@@ -28,7 +28,6 @@ module.exports = function({  }) {
       this.field = field;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return A;
@@ -171,7 +170,6 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         this.field = "hey";
       }
       static _toInflightType(context) {

@@ -33,7 +33,6 @@ module.exports = function({  }) {
       this.value = value;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Node;
@@ -43,13 +42,12 @@ module.exports = function({  }) {
 
 ## inflight.Sub.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ Super }) {
   class Sub extends Super {
     constructor({ name }) {
-      super(name);
+      super({name});
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Sub;
@@ -59,13 +57,12 @@ module.exports = function({  }) {
 
 ## inflight.Sub1.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ Super }) {
   class Sub1 extends Super {
     constructor({ name }) {
-      super(name);
+      super({name});
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Sub1;
@@ -81,7 +78,6 @@ module.exports = function({  }) {
       this.name = name;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Super;
@@ -269,7 +265,6 @@ class $Root extends $stdlib.std.Resource {
     class Super extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         this.name = "Super";
       }
       static _toInflightType(context) {
@@ -301,13 +296,14 @@ class $Root extends $stdlib.std.Resource {
     }
     class Sub extends Super {
       constructor(scope, id, ) {
-        const __parent_this = this;
         this.name = "Sub";
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Sub.js";
+        const SuperClient = Super._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
+            Super: ${SuperClient.text},
           })
         `);
       }
@@ -333,13 +329,14 @@ class $Root extends $stdlib.std.Resource {
     }
     class Sub1 extends Super {
       constructor(scope, id, ) {
-        const __parent_this = this;
         this.name = "Sub";
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Sub1.js";
+        const SuperClient = Super._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
+            Super: ${SuperClient.text},
           })
         `);
       }
@@ -366,7 +363,6 @@ class $Root extends $stdlib.std.Resource {
     class Node extends $stdlib.std.Resource {
       constructor(scope, id, value, left, right) {
         super(scope, id);
-        const __parent_this = this;
         this.value = value;
         this.left = left;
         this.right = right;
