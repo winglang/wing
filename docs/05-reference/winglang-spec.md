@@ -160,7 +160,8 @@ Return type is optional for closures.
 > let my_func4 = (x: num): void => {  };
 > let my_func5 = inflight (x: num) => {  };
 > let my_func6 = inflight (x: num): void => {  };
-```
+> ```
+
 [`▲ top`][top]
 
 ---
@@ -231,7 +232,7 @@ assert(Json.values(j).equals([ Json 123, Json [ 1, 2, 3 ] ]));
 > NOTE: `values()` returns an array inside a `Json` object because at the moment we
 > cannot represent heterogenous arrays in Wing.
 
-##### 1.1.4.4 Assignment from native types
+##### 1.1.4.3 Assignment from native types
 
 It is also possible to assign the native `str`, `num`, `bool` and `Array<T>` values and they will
 implicitly be casted to `Json`:
@@ -251,7 +252,7 @@ let jsonObj = Json {
 ```
 
 
-##### 1.1.4.5 Assignment to native types
+##### 1.1.4.4 Assignment to native types
 
 We only allow implicit assignment from *safe* to *unsafe* types because otherwise we cannot
 guarantee safety (e.g. from `str` to `Json` but not from `Json` to `str`), so this won't work:
@@ -270,7 +271,7 @@ let myStr = str.fromJson(jsonString);
 let myNumber = num.fromJson(jsonNumber);
 ```
 
-##### 1.1.4.6 Schema validation
+##### 1.1.4.5 Schema validation
 
 All `fromJson()` methods will validate that the runtime type is compatible with the target type in
 order to ensure type safety (at a runtime cost):
@@ -280,7 +281,7 @@ str.fromJson(jsonNumber);      // RUNTIME ERROR: unable to parse number `123` as
 num.fromJson(Json "\"hello\""); // RUNTIME ERROR: unable to parse string "hello" as a number
 ```
 
-##### 1.1.4.8 Mutability
+##### 1.1.4.6 Mutability
 
 To define a mutable JSON container, use the `MutJson` type:
 
@@ -328,7 +329,7 @@ Json.delete(immutObj, "hello");
 //          ^^^^^^^^^ expected `JsonMut`
 ```
 
-##### 1.1.4.9 Serialization
+##### 1.1.4.7 Serialization
 
 The `Json.stringify(j: Json): str` static method can be used to serialize a `Json` as a string
 ([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
@@ -353,7 +354,7 @@ let boom = num.fromJson(j.get("boom"));
 let o = Json.tryParse("xxx") ?? Json [1,2,3];
 ```
 
-##### 1.1.4.11 Logging
+##### 1.1.4.8 Logging
 
 A `Json` value can be logged using `log()`, in which case it will be pretty-formatted:
 
@@ -557,7 +558,7 @@ Static class fields are not supported yet, see https://github.com/winglang/wing/
 
 ---
 
-### 1.6 Reassignability
+### 1.5 Reassignability
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
 
@@ -595,7 +596,7 @@ let f = (arg1: num, var arg2: num) => {
 
 ---
 
-### 1.7 Optionality
+### 1.6 Optionality
 
 Nullity is a primary source of bugs in software. Being able to guarantee that a value will never be
 null makes it easier to write safe code without constantly having to take nullity into account.
@@ -618,9 +619,9 @@ Here's a quick summary of how optionality works in Wing:
 * The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
   value. It cannot be used to test if an optional has a value or not.
 
-#### 1.7.1 Declaration
+#### 1.67.1 Declaration
 
-##### 1.7.1.1 Struct fields
+##### 1.6.1.1 Struct fields
 
 One of the more common use cases for optionals is to use them in struct declarations.
 
@@ -641,7 +642,7 @@ assert(david.address? == false);
 assert(jonathan.address? == true);
 ```
 
-##### 1.7.1.2 Variables
+##### 1.6.1.2 Variables
 
 Use `T?` to indicate that a variable is optional. To initialize it without a value use `= nil`.
 
@@ -659,7 +660,7 @@ x = nil;
 assert(x? == false);
 ```
 
-##### 1.7.1.3 Class fields
+##### 1.6.1.3 Class fields
 
 Similarly to struct fields, fields of classes can be also defined as optional using `T?`:
 
@@ -679,7 +680,7 @@ class Foo {
 }
 ```
 
-##### 1.7.1.4 Function arguments
+##### 1.6.1.4 Function arguments
 
 In the following example, the argument `by` is optional, so it is possible to call `increment()`
 without supplying a value for `by`:
@@ -721,7 +722,7 @@ f(myRequired: "hello");
 f(myOptional: 12, myRequired: "dang");
 ```
 
-##### 1.7.1.5 Function return types
+##### 1.6.1.5 Function return types
 
 If a function returns an optional type, use the `return nil;` statement to indicate that the value
 is not defined.
@@ -747,7 +748,7 @@ if let name = tryParseName("Neo Matrix") {
 }
 ```
 
-#### 1.7.2 Testing using `x?`
+#### 1.6.2 Testing using `x?`
 
 To test if an optional has a value or not, you can either use `x == nil` or `x != nil` or the
 special syntax `x?`.
@@ -778,7 +779,7 @@ if myPerson.address == nil {
 }
 ```
 
-#### 1.7.3 Unwrapping using `if let`
+#### 1.6.3 Unwrapping using `if let`
 
 The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
 non-optional variable defined inside the block:
@@ -794,7 +795,7 @@ if let address = myPerson.address {
 > multiple conditions, or unwrapping multiple optionals. This is something we might consider in the
 > future.
 
-#### 1.7.4 Unwrapping or default value using `??`
+#### 1.6.4 Unwrapping or default value using `??`
 
 The `??` operator can be used to unwrap or provide a default value. This returns a value of `T` that
 can safely be used.
@@ -803,7 +804,7 @@ can safely be used.
 let address: str = myPerson.address ?? "Planet Earth";
 ```
 
-#### 1.7.5 Optional chaining using `?.`
+#### 1.6.5 Optional chaining using `?.`
 
 The `?.` syntax can be used for optional chaining. Optional chaining returns a value of type `T?`
 which must be unwrapped in order to be used.
@@ -820,7 +821,7 @@ if let ip = ipAddress {
 
 ---
 
-### 1.8 Type Inference
+### 1.7 Type Inference
 
 Type can optionally be put between name and the equal sign, using a colon.  
 Partial type inference is allowed while using the `?` keyword immediately after
@@ -862,7 +863,7 @@ Function arguments and their return type is always required.
 
 ---
 
-### 1.9 Error Handling
+### 1.8 Error Handling
 
 Exceptions and `try/catch/finally` are the error mechanism. Mechanics directly
 translate to JavaScript. You can create a new exception with a `throw` call.
@@ -907,7 +908,7 @@ expected from a call and it is not being caught.
 
 ---
 
-### 1.10 Recommended Formatting
+### 1.9 Recommended Formatting
 
 Wing recommends the following formatting and naming conventions:
 
@@ -923,7 +924,7 @@ Wing recommends the following formatting and naming conventions:
 
 ---
 
-### 1.11 Memory Management
+### 1.10 Memory Management
 
 There is no implicit memory de-allocation function, dynamic memory is managed by
 Wing and is garbage collected (relying on JSII target GC for the meantime).
@@ -932,7 +933,7 @@ Wing and is garbage collected (relying on JSII target GC for the meantime).
 
 ---
 
-### 1.12 Execution Model
+### 1.11 Execution Model
 
 Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
@@ -974,7 +975,7 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ---
 
-### 1.13 Asynchronous Model
+### 1.12 Asynchronous Model
 
 Wing builds upon the asynchronous model of JavaScript currently and expands upon
 it with new keywords and concepts. The `async` keyword of JavaScript is replaced
@@ -1091,7 +1092,7 @@ includes for and while loops currently.
 
 ---
 
-### 2.6 if
+### 2.5 if
 
 Flow control can be done with `if/elif/else` statements.  
 The **if** statement is optionally followed by **elif** and **else**.  
@@ -1129,7 +1130,7 @@ The **if** statement is optionally followed by **elif** and **else**.
 
 ---
 
-### 2.7 for
+### 2.6 for
 
 `for..in` statement is used to iterate over an array, a set or a range. 
 Range is inclusive of the start value and exclusive of the end value.
@@ -1179,7 +1180,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 
 ---
 
-### 2.8 while
+### 2.7 while
 
 **while** statement is used to execute a block of code while a condition is true.  
 
@@ -1629,7 +1630,7 @@ However, it is possible to create anonymous closures and assign to variables
 
 ---
 
-#### 3.6.3 Struct Expansion
+#### 3.6.2 Struct Expansion
 
 If the last argument of a function call is a struct, then the struct in the call
 is "expandable" with a special `:` syntax.  
@@ -1725,7 +1726,7 @@ Naming convention for enums is to use "TitleCase" for name and ALL_CAPS for memb
 
 ---
 
-### 3.10 Unit tests
+### 3.9 Unit tests
 
 Unit tests can be defined in Wing using the built-in test statement.
 A test statement expects a name and a block of inflight code to execute.
@@ -2066,7 +2067,7 @@ for immutable data (on top of nominal typing).
 
 ---
 
-### 6.6 Credits
+### 6.4 Credits
 
 * **Contributors (A-Z):**
   * Chris R. ([@Chriscbr](https://github.com/Chriscbr))
@@ -2085,5 +2086,3 @@ for immutable data (on top of nominal typing).
   * Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))  
 
 [top]: #0-preface
-
-
