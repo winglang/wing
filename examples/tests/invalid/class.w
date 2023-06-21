@@ -78,3 +78,83 @@ class C8 extends S1 {
 class C11 extends C11 {
                 //^^^ Class cannot extend itself
 }
+
+class Student {
+  name: str;
+  major: str;
+  init(name: str, major: str) {
+    super();
+//  ^^^^^^^^ Calls to super constructor can only be made from derived classes
+    this.name = name;
+    this.major = major;
+  }
+}
+
+class PaidStudent extends Student {
+  hrlyWage: num;
+  
+  init(name: str, major: str, hrlyWage: num) {
+    this.hrlyWage = hrlyWage;
+    super(name, major);
+//  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
+  }
+
+  something() {
+    super("cool", "blue");
+//  ^^^^^^^^^^^^^^^^^^^^^^ Calls to super constructor can only be done from within class constructor
+  }
+}
+
+   super();
+// ^^^^^^^^ Calls to super constructor can only be done from within a class constructor
+let s = new PaidStudent("x", "y", 3);
+
+// Typechecking super calls
+class One {
+  someNum: num;
+  init(someNum: num) {
+    this.someNum = someNum;
+  }
+}
+
+class Two extends One {
+  someStr: str;
+  init(someNum: num, someStr: str) {
+    super(someStr);
+//        ^^^^^^^ Expected type to be "num", but got "str" instead
+    this.someStr = someStr;
+  }
+}
+
+class Three extends One {
+  someStr: str;
+  init(someNum: num, someStr: str) {
+    super();
+//  ^^^^^^^^ Expected 1 positional argument(s) but got 0
+    this.someStr = someStr;
+  }
+}
+
+class Four extends One {
+  someStr: str;
+  init(someNum: num, someStr: str) {
+    super(someNum, someStr);
+//  ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 arguments but got 2
+    this.someStr = someStr;
+  }
+}
+
+// Super inflight
+inflight class Plane {
+  year: num;
+  init(year: num) {
+    this.year = year;
+  }
+}
+
+inflight class Jet extends Plane{
+  init(year: num) {
+    super();
+//  ^^^^^^^^ Expected 1 positional argument(s) but got 0
+  }
+}

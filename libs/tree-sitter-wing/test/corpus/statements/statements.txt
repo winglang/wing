@@ -360,3 +360,24 @@ Debug symbol env
 
 (source
   (compiler_dbg_env))
+
+================================================================================
+Super constructor
+================================================================================
+
+super(man, was, here);
+
+--------------------------------------------------------------------------------
+
+(source
+  (super_constructor_statement
+    (argument_list
+      (positional_argument
+        (reference
+          (reference_identifier)))
+      (positional_argument
+        (reference
+          (reference_identifier)))
+      (positional_argument
+        (reference
+          (reference_identifier))))))

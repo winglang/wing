@@ -222,6 +222,7 @@ pub struct Class {
 #[derivative(Debug)]
 pub struct Interface {
 	pub name: Symbol,
+	pub docs: Docs,
 	extends: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
@@ -323,6 +324,7 @@ pub struct ArgListTypes {
 #[derivative(Debug)]
 pub struct Struct {
 	pub name: Symbol,
+	pub docs: Docs,
 	extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
@@ -1439,60 +1441,7 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
-				// Verify arity
-				let pos_args_count = arg_list.pos_args.len();
-				let min_args = constructor_sig.min_parameters();
-				if pos_args_count < min_args {
-					let err_text = format!(
-						"Expected {} positional argument(s) but got {}",
-						min_args, pos_args_count
-					);
-					self.spanned_error(exp, err_text);
-					return self.types.error();
-				}
-
-				if !arg_list.named_args.is_empty() {
-					let last_arg = match constructor_sig.parameters.last() {
-						Some(arg) => arg.typeref.maybe_unwrap_option(),
-						None => {
-							self.spanned_error(exp, "Expected 0 named argument(s)");
-							return self.types.error();
-						}
-					};
-
-					if !last_arg.is_struct() {
-						self.spanned_error(
-							exp,
-							format!("class {} does not expect any named argument", class_symbol.name),
-						);
-						return self.types.error();
-					}
-
-					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
-				}
-
-				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let max_args = constructor_sig.max_parameters();
-				if arg_count < min_args || arg_count > max_args {
-					let err_text = if min_args == max_args {
-						format!("Expected {} argument(s) but got {}", min_args, arg_count)
-					} else {
-						format!(
-							"Expected between {} and {} arguments but got {}",
-							min_args, max_args, arg_count
-						)
-					};
-					self.spanned_error(exp, err_text);
-				}
-
-				// Verify passed positional arguments match the constructor
-				for (arg_expr, arg_type, param) in izip!(
-					arg_list.pos_args.iter(),
-					arg_list_types.pos_args.iter(),
-					constructor_sig.parameters.iter()
-				) {
-					self.validate_type(*arg_type, param.typeref, arg_expr);
-				}
+				self.type_check_arg_list_against_function_sig(&arg_list, &constructor_sig, exp, arg_list_types);
 
 				// If this is a preflight class then create a new type for this resource object
 				if type_.is_preflight_class() {
@@ -1572,71 +1521,8 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
-				// Verify arity
-				let pos_args_count = arg_list.pos_args.len();
-				let min_args = func_sig.min_parameters();
-				if pos_args_count < min_args {
-					let err_text = format!(
-						"Expected {} positional argument(s) but got {}",
-						min_args, pos_args_count
-					);
-					self.spanned_error(exp, err_text);
-					return self.types.error();
-				}
-
-				if !arg_list.named_args.is_empty() {
-					let last_arg = match func_sig.parameters.last() {
-						Some(arg) => arg.typeref.maybe_unwrap_option(),
-						None => {
-							self.spanned_error(
-								exp,
-								format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
-							);
-							return self.types.error();
-						}
-					};
-
-					if !last_arg.is_struct() {
-						self.spanned_error(exp, "No named arguments expected");
-						return self.types.error();
-					}
-
-					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
-				}
-
-				// Count number of optional parameters from the end of the function's params
-				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
-				let num_optionals = func_sig
-					.parameters
-					.iter()
-					.rev()
-					.take_while(|arg| arg.typeref.is_option())
-					.count();
-
-				// Verify arity
-				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = func_sig.parameters.len() - num_optionals;
-				let max_args = func_sig.parameters.len();
-				if arg_count < min_args || arg_count > max_args {
-					let err_text = if min_args == max_args {
-						format!("Expected {} arguments but got {}", min_args, arg_count)
-					} else {
-						format!(
-							"Expected between {} and {} arguments but got {}",
-							min_args, max_args, arg_count
-						)
-					};
-					self.spanned_error(exp, err_text);
-				}
-
-				let params = func_sig
-					.parameters
-					.iter()
-					.take(func_sig.parameters.len() - num_optionals);
-
-				// Verify passed positional arguments match the function's parameter types
-				for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
-					self.validate_type(*arg_type, param.typeref, arg_expr);
+				if let Some(value) = self.type_check_arg_list_against_function_sig(arg_list, &func_sig, exp, arg_list_types) {
+					return value;
 				}
 
 				// If the function is "wingc_env", then print out the current environment
@@ -1817,6 +1703,81 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	fn type_check_arg_list_against_function_sig(
+		&mut self,
+		arg_list: &ArgList,
+		func_sig: &FunctionSignature,
+		exp: &impl Spanned,
+		arg_list_types: ArgListTypes,
+	) -> Option<UnsafeRef<Type>> {
+		// Verify arity
+		let pos_args_count = arg_list.pos_args.len();
+		let min_args = func_sig.min_parameters();
+		if pos_args_count < min_args {
+			let err_text = format!(
+				"Expected {} positional argument(s) but got {}",
+				min_args, pos_args_count
+			);
+			self.spanned_error(exp, err_text);
+			return Some(self.types.error());
+		}
+
+		if !arg_list.named_args.is_empty() {
+			let last_arg = match func_sig.parameters.last() {
+				Some(arg) => arg.typeref.maybe_unwrap_option(),
+				None => {
+					self.spanned_error(
+						exp,
+						format!("Expected 0 named arguments for func at {}", exp.span().to_string()),
+					);
+					return Some(self.types.error());
+				}
+			};
+
+			if !last_arg.is_struct() {
+				self.spanned_error(exp, "No named arguments expected");
+				return Some(self.types.error());
+			}
+
+			self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
+		}
+
+		// Count number of optional parameters from the end of the function's params
+		// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
+		let num_optionals = func_sig
+			.parameters
+			.iter()
+			.rev()
+			.take_while(|arg| arg.typeref.is_option())
+			.count();
+
+		// Verify arity
+		let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+		let min_args = func_sig.parameters.len() - num_optionals;
+		let max_args = func_sig.parameters.len();
+		if arg_count < min_args || arg_count > max_args {
+			let err_text = if min_args == max_args {
+				format!("Expected {} arguments but got {}", min_args, arg_count)
+			} else {
+				format!(
+					"Expected between {} and {} arguments but got {}",
+					min_args, max_args, arg_count
+				)
+			};
+			self.spanned_error(exp, err_text);
+		}
+		let params = func_sig
+			.parameters
+			.iter()
+			.take(func_sig.parameters.len() - num_optionals);
+
+		// Verify passed positional arguments match the function's parameter types
+		for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
+			self.validate_type(*arg_type, param.typeref, arg_expr);
+		}
+		None
+	}
+
 	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// https://github.com/winglang/wing/issues/457
@@ -1852,7 +1813,7 @@ impl<'a> TypeChecker<'a> {
 		object: &IndexMap<Symbol, Expr>,
 		object_types: &IndexMap<Symbol, TypeRef>,
 		expected_type: &TypeRef,
-		value: &Expr,
+		value: &impl Spanned,
 	) {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
 			expected_struct
@@ -2400,7 +2361,6 @@ impl<'a> TypeChecker<'a> {
 				if env.phase == Phase::Inflight && *phase == Phase::Preflight {
 					self.spanned_error(stmt, format!("Cannot declare a {} class in {} scope", phase, env.phase));
 				}
-
 				// Verify parent is a known class and get their env
 				let (parent_class, parent_class_env) = self.extract_parent_class(parent.as_ref(), *phase, name, env, stmt);
 
@@ -2499,13 +2459,19 @@ impl<'a> TypeChecker<'a> {
 					&inflight_init_symb,
 				);
 
-				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
-					self.check_class_field_initialization(&scope, fields, Phase::Inflight);
-				}
-
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class().unwrap().env = class_env;
 				let class_env = &class_type.as_class().unwrap().env;
+
+				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
+					self.check_class_field_initialization(&scope, fields, Phase::Inflight);
+					self.type_check_super_constructor_against_parent_initializer(
+						scope,
+						class_type,
+						&class_env,
+						CLASS_INFLIGHT_INIT_NAME,
+					);
+				};
 
 				// Type check constructor
 				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
@@ -2517,6 +2483,13 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				self.check_class_field_initialization(&init_statements, fields, Phase::Preflight);
+
+				self.type_check_super_constructor_against_parent_initializer(
+					init_statements,
+					class_type,
+					&class_env,
+					CLASS_INIT_NAME,
+				);
 
 				// Type check the inflight initializer
 				self.type_check_method(
@@ -2604,6 +2577,7 @@ impl<'a> TypeChecker<'a> {
 				// Create the interface type and add it to the current environment (so interface implementation can reference itself)
 				let interface_spec = Interface {
 					name: name.clone(),
+					docs: Docs::default(),
 					env: dummy_env,
 					extends: extend_interfaces.clone(),
 				};
@@ -2699,6 +2673,7 @@ impl<'a> TypeChecker<'a> {
 						name: name.clone(),
 						extends: extends_types,
 						env: struct_env,
+						docs: Docs::default(),
 					}))),
 					StatementIdx::Top,
 				) {
@@ -2763,7 +2738,78 @@ impl<'a> TypeChecker<'a> {
 				println!("[symbol environment at {}]", stmt.span);
 				println!("{}", env);
 			}
+			StmtKind::SuperConstructor { arg_list } => {
+				self.type_check_arg_list(arg_list, env);
+			}
 		}
+	}
+
+	fn type_check_super_constructor_against_parent_initializer(
+		&mut self,
+		scope: &Scope,
+		class_type: UnsafeRef<Type>,
+		class_env: &SymbolEnv,
+		init_name: &str,
+	) {
+		if &scope.statements.len() >= &1 {
+			match &scope.statements[0].kind {
+				StmtKind::SuperConstructor { arg_list } => {
+					if let Some(parent_class) = &class_type.as_class().unwrap().parent {
+						let parent_initializer = parent_class
+							.as_class()
+							.unwrap()
+							.methods(false)
+							.filter(|(name, _type)| name == init_name)
+							.collect_vec()[0]
+							.1;
+
+						let class_initializer = &class_type
+							.as_class()
+							.unwrap()
+							.methods(true)
+							.filter(|(name, _type)| name == init_name)
+							.collect_vec()[0]
+							.1;
+
+						// Create a temp init environment to use for typechecking args
+						let mut init_env = SymbolEnv::new(
+							Some(class_env.get_ref()),
+							self.types.void(),
+							true,
+							class_env.phase,
+							scope.statements[0].idx,
+						);
+
+						// add the initializer args to the init_env
+						for arg in class_initializer.as_function_sig().unwrap().parameters.iter() {
+							let sym = Symbol {
+								name: arg.name.clone(),
+								span: scope.statements[0].span.clone(),
+							};
+							match init_env.define(
+								&sym,
+								SymbolKind::make_free_variable(sym.clone(), arg.typeref, false, init_env.phase),
+								StatementIdx::Top,
+							) {
+								Err(type_error) => {
+									self.type_error(type_error);
+								}
+								_ => {}
+							};
+						}
+
+						let arg_list_types = self.type_check_arg_list(&arg_list, &init_env);
+						self.type_check_arg_list_against_function_sig(
+							&arg_list,
+							parent_initializer.as_function_sig().unwrap(),
+							&scope.statements[0],
+							arg_list_types,
+						);
+					}
+				}
+				_ => {} // No super no problem
+			}
+		};
 	}
 
 	/// Validate if the fields of a class are initialized in the constructor (init) according to the given phase.
@@ -3208,6 +3254,10 @@ impl<'a> TypeChecker<'a> {
 		// e.g. wing::str -> stdlib::String | wing::Array -> stdlib::ImmutableArray
 		match symbol.name.as_str() {
 			"Json" => Some(symbol.clone()),
+			"duration" => Some(Symbol {
+				name: "Duration".to_string(),
+				span: symbol.span.clone(),
+			}),
 			"str" => Some(Symbol {
 				name: "String".to_string(),
 				span: symbol.span.clone(),

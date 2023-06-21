@@ -8,6 +8,7 @@ use tree_sitter::Tree;
 use crate::closure_transform::ClosureTransformer;
 use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
 use crate::fold::Fold;
+use crate::jsify::JSifier;
 use crate::parser::Parser;
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
@@ -127,6 +128,16 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 		&mut jsii_imports,
 	);
 
+	// -- JSIFICATION PHASE --
+
+	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
+	let source_path = Path::new(source_file);
+	let app_name = source_path.file_stem().expect("Empty filename").to_str().unwrap();
+	let project_dir = source_path.parent().expect("Empty filename");
+
+	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
+	jsifier.jsify(&scope);
+
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
 		tree,
@@ -143,6 +154,8 @@ pub mod test_utils {
 	use uuid::Uuid;
 
 	use lsp_types::*;
+
+	use crate::diagnostic::assert_no_panics;
 
 	use super::on_document_did_open;
 
@@ -176,6 +189,8 @@ pub mod test_utils {
 				text: content.to_string(),
 			},
 		});
+
+		assert_no_panics();
 
 		// find the character cursor position by looking for the character above the ^
 		let mut char_pos = 0_i32;

@@ -6,7 +6,8 @@ use crate::{
 	ast::Phase,
 	jsify::codemaker::CodeMaker,
 	type_check::{
-		jsii_importer::is_construct_base, Class, FunctionSignature, Namespace, SymbolKind, Type, TypeRef, VariableInfo,
+		jsii_importer::is_construct_base, Class, FunctionSignature, Interface, Namespace, Struct, SymbolKind, Type,
+		TypeRef, VariableInfo,
 	},
 };
 
@@ -53,7 +54,7 @@ impl Documented for SymbolKind {
 
 impl Documented for Namespace {
 	fn render_docs(&self) -> String {
-		format!("Module '{}'", self.name).to_string()
+		format!("Module `{}`", self.name).to_string()
 	}
 }
 
@@ -62,6 +63,8 @@ impl Documented for TypeRef {
 		match &**self {
 			Type::Function(f) => render_function(f),
 			Type::Class(c) => render_class(c),
+			Type::Interface(i) => render_interface(i),
+			Type::Struct(s) => render_struct(s),
 			Type::Optional(t) => t.render_docs(),
 
 			// primitive types don't have docs yet
@@ -81,9 +84,7 @@ impl Documented for TypeRef {
 			| Type::MutMap(_)
 			| Type::Set(_)
 			| Type::MutSet(_)
-			// TODO these types may have docs
-			| Type::Interface(_)
-			| Type::Struct(_)
+			// TODO enums may have docs
 			| Type::Enum(_) => "".to_string(),
 		}
 	}
@@ -204,6 +205,40 @@ fn render_function(f: &FunctionSignature) -> String {
 
 fn has_parameters_documentation(f: &FunctionSignature) -> bool {
 	f.parameters.iter().any(|p| p.docs.summary.is_some())
+}
+
+fn render_struct(s: &Struct) -> String {
+	let mut markdown = CodeMaker::default();
+
+	markdown.line("```wing");
+	markdown.line(format!("{}", s.name));
+	markdown.line("```");
+	markdown.line("---");
+
+	if let Some(s) = &s.docs.summary {
+		markdown.line(s);
+	}
+
+	render_docs(&mut markdown, &s.docs);
+
+	markdown.to_string().trim().to_string()
+}
+
+fn render_interface(i: &Interface) -> String {
+	let mut markdown = CodeMaker::default();
+
+	markdown.line("```wing");
+	markdown.line(format!("{}", i.name));
+	markdown.line("```");
+	markdown.line("---");
+
+	if let Some(s) = &i.docs.summary {
+		markdown.line(s);
+	}
+
+	render_docs(&mut markdown, &i.docs);
+
+	markdown.to_string().trim().to_string()
 }
 
 fn render_class(c: &Class) -> String {

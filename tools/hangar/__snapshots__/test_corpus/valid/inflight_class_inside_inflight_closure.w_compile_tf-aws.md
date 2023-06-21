@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ __parent_this }) {
+module.exports = function({ __parent_this_1 }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ __parent_this }) {
     async $inflight_init()  {
     }
     async handle(payload)  {
-      (await __parent_this.b.put("k","v"));
+      (await __parent_this_1.b.put("k","v"));
       const InflightClass = require("./inflight.InflightClass.js")({});
       const c = new InflightClass();
       (await c.method());
@@ -106,7 +106,6 @@ module.exports = function({  }) {
       this.b = b;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return PreflightClass;
@@ -427,11 +426,10 @@ class $Root extends $stdlib.std.Resource {
     class PreflightClass extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
        preflight_method()  {
-        const __parent_this = this;
+        const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -440,10 +438,10 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure1.js";
-            const __parent_this_client = context._lift(__parent_this);
+            const __parent_this_1_client = context._lift(__parent_this_1);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+                __parent_this_1: ${__parent_this_1_client},
               })
             `);
           }
@@ -460,10 +458,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Closure1._registerBindObject(__parent_this, host, []);
+              $Closure1._registerBindObject(__parent_this_1, host, []);
             }
             if (ops.includes("handle")) {
-              $Closure1._registerBindObject(__parent_this.b, host, ["put"]);
+              $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }

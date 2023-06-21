@@ -56,3 +56,67 @@ test "access inflight field" {
   assert(c5.y == 111);
 }
 
+class Person {
+  name: str;
+  init(name: str) {
+    this.name = name;
+  }
+}
+
+class Student extends Person {
+  major: str;
+
+  init(name: str, major: str) {
+    super(name);
+    this.major = major;
+  }
+}
+
+class PaidStudent extends Student {
+  hrlyWage: num;
+  init(name: str, major: str, hrlyWage: num) {
+    super(name, major);
+    this.hrlyWage = hrlyWage;
+  }
+}
+
+let student = new PaidStudent("Tom", "MySpace", 38);
+
+test "check derived class instance variables" {
+  assert(student.name == "Tom");
+  assert(student.major == "MySpace");
+  assert(student.hrlyWage == 38);  
+}
+
+class TeacherAid extends PaidStudent {
+  init(name: str, major: str, hrlyWage: num) {
+    super(name, major, hrlyWage);
+    this.hrlyWage = 10; // should overwrite the super set value
+  }
+}
+
+let ta = new TeacherAid("John", "Rock'n Roll", 50);
+
+test "devived class init body happens after super" {
+  assert(ta.hrlyWage == 10);
+}
+
+// Inflight inheritence
+inflight class A {
+  sound: str;
+
+  inflight init(sound: str) {
+    this.sound = sound;
+  }
+}
+
+inflight class B extends A {
+  inflight init(sound: str) {
+    super(sound);
+  }
+}
+
+test "inflight super constructor" {
+  let b = new B("ba");
+  assert(b.sound == "ba");
+}
