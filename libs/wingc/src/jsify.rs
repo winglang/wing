@@ -1787,6 +1787,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 			Type::Class(cls) => Some(ComponentKind::Member(cls.env.lookup(&property, None)?.as_variable()?)),
 			Type::Interface(iface) => Some(ComponentKind::Member(iface.env.lookup(&property, None)?.as_variable()?)),
 			Type::Struct(st) => Some(ComponentKind::Member(st.env.lookup(&property, None)?.as_variable()?)),
+			Type::Unresolved => panic!("Encountered unresolved type during jsification"),
 		}
 	}
 }

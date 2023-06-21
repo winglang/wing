@@ -11,6 +11,7 @@ use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::parser::Parser;
 use crate::type_check;
+use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
@@ -25,6 +26,9 @@ pub struct FileData {
 	pub scope: Box<Scope>,
 	/// The universal type collection for the scope. This is saved to ensure references live long enough.
 	pub types: Types,
+	/// The JSII imports for the file. This is saved so we can load JSII types (for autotocompletion for example)
+	/// which don't exist explicitly in the source.
+	pub jsii_imports: Vec<JsiiImportSpec>,
 }
 
 thread_local! {
@@ -114,8 +118,15 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 	let mut scope = Box::new(inflight_transformer.fold_scope(scope));
 
 	// -- TYPECHECKING PHASE --
+	let mut jsii_imports = vec![];
 
-	type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
+	type_check(
+		&mut scope,
+		&mut types,
+		&Path::new(source_file),
+		jsii_types,
+		&mut jsii_imports,
+	);
 
 	// -- JSIFICATION PHASE --
 
@@ -133,6 +144,7 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 		diagnostics: get_diagnostics(),
 		scope,
 		types,
+		jsii_imports,
 	};
 }
 

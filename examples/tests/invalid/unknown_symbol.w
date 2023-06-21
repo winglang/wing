@@ -28,3 +28,6 @@ class SomeResource {
 class A extends B {
               //^ Unknown symbol
 }
+
+unknown = 1;
+//^ Unknown symbol
