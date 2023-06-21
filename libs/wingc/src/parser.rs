@@ -20,6 +20,9 @@ pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
+	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
+	in_json: RefCell<u64>,
+	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
 }
 
@@ -45,6 +48,12 @@ impl<'s> Parser<'s> {
 			source_name,
 			error_nodes: RefCell::new(HashSet::new()),
 			is_in_loop: RefCell::new(false),
+			// This is similar to what we do in the type_checker, but we need to know 2 things when
+			// parsing Json. 1) Are we nested in a Json literal? 2) Are we nested in a mutable Json literal?
+			// thus in_json and is_in_mut_json will track the depth of the nesting and whether we should inherit
+			// mutability from the root of the Json literal.
+			in_json: RefCell::new(0),
+			is_in_mut_json: RefCell::new(false),
 		}
 	}
 
@@ -1345,7 +1354,7 @@ impl<'s> Parser<'s> {
 					},
 					expression_span,
 				))
-			},
+			}
 			"map_literal" | "json_map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type_annotation(&type_node, phase)?)
@@ -1395,14 +1404,19 @@ impl<'s> Parser<'s> {
 			}
 			"json_literal" => {
 				let type_node = expression_node.child_by_field_name("type");
-        let mut is_mut = false;
+				*self.in_json.borrow_mut() += 1;
 
-        if let Some(type_node) = type_node {
-          is_mut = match self.node_text(&type_node) {
-            "MutJson" => true,
-            _ => false,
-          };
-        }
+				let mut is_mut = *self.is_in_mut_json.borrow();
+
+				if let Some(type_node) = type_node {
+					is_mut = match self.node_text(&type_node) {
+						"MutJson" => {
+							*self.is_in_mut_json.borrow_mut() = true;
+							true
+						}
+						_ => false,
+					};
+				}
 
 				let element_node = expression_node
 					.child_by_field_name("element")
@@ -1421,6 +1435,13 @@ impl<'s> Parser<'s> {
 				};
 
 				let element = Box::new(exp);
+
+				*self.in_json.borrow_mut() -= 1;
+
+				// Only set mutability back to false if we are no longer parsing nested json
+				if *self.in_json.borrow() == 0 {
+					*self.is_in_mut_json.borrow_mut() = false;
+				}
 
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}

@@ -12,10 +12,10 @@ let table = new cloud.Table(
   name: "key-history",
   primaryKey: "_id",
   columns: {
-    _id: cloud.ColumnType.STRING,
-    key: cloud.ColumnType.STRING,
-    operation: cloud.ColumnType.STRING,
-    source: cloud.ColumnType.STRING,
+    _id => cloud.ColumnType.STRING,
+    key => cloud.ColumnType.STRING,
+    operation => cloud.ColumnType.STRING,
+    source => cloud.ColumnType.STRING,
   }
 );
 

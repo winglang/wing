@@ -949,7 +949,7 @@ impl TypeRef {
 			Type::Number => true,
 			Type::String => true,
 			Type::Boolean => true,
-			Type::Json => true,
+			Type::Json | Type::MutJson => true,
 			Type::Array(v) => v.is_json_legal_value(),
 			Type::Map(v) => v.is_json_legal_value(),
 			Type::Set(v) => v.is_json_legal_value(),

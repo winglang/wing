@@ -15,7 +15,7 @@ let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   let resp = cloud.ApiResponse {
     body: Json.stringify(bodyResponse),
     headers: {
-      "content-type": "application/json"
+      "content-type" => "application/json"
     },
     status: 200,
   };

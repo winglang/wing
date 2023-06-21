@@ -23,7 +23,7 @@ let someNumber: num = 999;
 
 let jj = Json someNumber;
 let jj1 = Json {foo: someNumber};
-let jj2 = Json [ someNumber, {bar: someNumber} ];
+let jj2 = Json [ someNumber, {bar => someNumber} ];
 
 let getStr = (): str => {
   return "hello";

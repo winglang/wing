@@ -28,8 +28,8 @@ assert(s2.has("hello"));
 assert(s3.has(bucket2));
 
 //Map tests
-let m1 = MutMap<str>{"hello": "world"};
-let m2: MutMap<num> = MutMap<num>{"hello": 123};
+let m1 = MutMap<str>{"hello" => "world"};
+let m2: MutMap<num> = MutMap<num>{"hello" => 123};
 let m3 = MutMap<cloud.Bucket>{"b1" => bucket1, "b2" => bucket2};
 let m4: MutMap<str> = m1;
 let m5 = MutMap<str>{"goodbye" => "world"};
@@ -42,7 +42,7 @@ assert(m6.get("a").get("hello") == "world");
 
 // mutate maps
 m1.set("hello", "goodbye");
-m6.set("a", MutMap<str>{"foo": "bar"});
+m6.set("a", MutMap<str>{"foo" => "bar"});
 m2.clear();
 
 assert(m2.size() == 0);

@@ -1,7 +1,7 @@
 bring cloud;
 
 // Get Keys
-let x = Json {a: 123, b: {c: 456, d: 789}};
+let x = Json {a: 123, b: {c => 456, d => 789}};
 let k = Json.keys(x);
 assert(k.length == 2);
 
@@ -36,7 +36,7 @@ let tryParsed = Json.tryParse(invalidJson) ?? Json { key: "value" };
 assert(tryParsed.get("key") == "value");
 
 // Format to string
-let jj = Json {a: 123, b: {c: 456, d: 789}};
+let jj = Json {a: 123, b: {c => 456, d => 789}};
 let ss = Json.stringify(jj);
 assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
 
