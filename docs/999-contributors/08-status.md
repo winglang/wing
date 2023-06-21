@@ -2,6 +2,7 @@
 title: Project Status
 id: status
 keywords: [Wing project status, wing status, project status]
+slug: /status
 ---
 
 :::caution Maturity: Alpha
