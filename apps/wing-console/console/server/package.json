@@ -18,11 +18,11 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
-    "@winglang/compiler": "file:../../../../libs/wingcompiler",
-    "@winglang/sdk": "file:../../../../libs/wingsdk",
     "codespan-wasm": "^0.4.0",
     "debug": "^4.3.4",
     "ms": "^2.1.3",
+    "@winglang/compiler": "file:../../../../libs/wingcompiler",
+    "@winglang/sdk": "file:../../../../libs/wingsdk",
     "bump-pack": "file:../../../../tools/bump-pack"
   },
   "devDependencies": {
