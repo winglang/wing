@@ -211,7 +211,7 @@ Trying to access a non-existent field will fail at runtime. For example:
 
 ```TS
 log(jsonObj.get("boom").get("dude").get("world"));
-// RUNTIME ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'world')
+// RUNTIME ERROR: Cannot read properties of undefined (reading 'world')
 ```
 
 To obtain an array of all the keys within a JSON object use the `Json.keys(o)` method. 
