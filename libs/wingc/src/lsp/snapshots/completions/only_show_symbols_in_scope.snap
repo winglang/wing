@@ -24,7 +24,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 6
   documentation:
     kind: markdown
-    value: "```wing\npreflight b: any\n```\n---"
+    value: "```wing\npreflight b: unresolved\n```\n---"
   sortText: bb|b
   insertText: b
   insertTextFormat: 2

@@ -551,10 +551,12 @@ mod tests {
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
 			env: SymbolEnv::new(None, types.void(), false, Phase::Independent, 0),
+			loaded: false,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
 			env: SymbolEnv::new(Some(ns1.env.get_ref()), types.void(), false, Phase::Independent, 0),
+			loaded: false,
 		});
 
 		// Define ns2 in n1's env

@@ -151,7 +151,7 @@ impl<'a> JsiiImporter<'a> {
 		if let LookupResult::Found(sym, ..) = self.wing_types.libraries.lookup_nested_str(type_str, None) {
 			if let SymbolKind::Namespace(n) = sym {
 				// We are trying to import a namespace directly, so let's eagerly load all of its types
-				self.deep_import_submodule_to_env(n.name.clone().as_str());
+				self.deep_import_submodule_to_env(Some(n.name.clone()));
 			}
 			return true;
 		}
@@ -777,12 +777,11 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	/// Imports all types within a given submodule
-	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
-		let sub_string = Some(submodule.to_string());
+	pub fn deep_import_submodule_to_env(&mut self, submodule: Option<String>) {
 		let match_namespace = |jsii_type: &jsii::Type| match jsii_type {
-			jsii::Type::ClassType(c) => c.namespace == sub_string,
-			jsii::Type::EnumType(e) => e.namespace == sub_string,
-			jsii::Type::InterfaceType(i) => i.namespace == sub_string,
+			jsii::Type::ClassType(c) => c.namespace == submodule,
+			jsii::Type::EnumType(e) => e.namespace == submodule,
+			jsii::Type::InterfaceType(i) => i.namespace == submodule,
 		};
 
 		for entry in self
@@ -804,7 +803,10 @@ impl<'a> JsiiImporter<'a> {
 		}
 
 		// Mark the namespace as loaded after recursively importing all types to its environment
-		let submodule_fqn = format!("{}.{submodule}", self.jsii_spec.assembly_name);
+		let mut submodule_fqn = self.jsii_spec.assembly_name.clone();
+		if let Some(submodule) = submodule {
+			submodule_fqn.push_str(&format!(".{}", submodule));
+		}
 		self.mark_namespace_as_loaded(&submodule_fqn);
 	}
 

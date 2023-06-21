@@ -653,14 +653,6 @@ impl FunctionSignature {
 
 		self.parameters.len() - num_optionals
 	}
-
-	/// Returns the maximum number of parameters that can be passed to this function.
-	///
-	/// TODO: how to represent unlimited parameters in the case of variadics?
-	/// https://github.com/winglang/wing/issues/125
-	fn max_parameters(&self) -> usize {
-		self.parameters.len()
-	}
 }
 
 impl PartialEq for FunctionSignature {
@@ -697,7 +689,7 @@ impl Display for Type {
 			Type::Json => write!(f, "Json"),
 			Type::MutJson => write!(f, "MutJson"),
 			Type::Nil => write!(f, "nil"),
-			Type::Unresolved => write!(f, "error"),
+			Type::Unresolved => write!(f, "unresolved"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
@@ -3028,7 +3020,11 @@ impl<'a> TypeChecker<'a> {
 			// If we're importing from the the wing sdk, eagerly import all the types within it
 			// The wing sdk is special because it's currently the only jsii module we import with a specific target namespace
 			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
-				importer.deep_import_submodule_to_env(&jsii.alias.name);
+				importer.deep_import_submodule_to_env(if jsii.namespace_filter.is_empty() {
+					None
+				} else {
+					Some(jsii.namespace_filter.join("."))
+				});
 			}
 
 			importer.import_root_types();
