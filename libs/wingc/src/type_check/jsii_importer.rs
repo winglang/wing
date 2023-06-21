@@ -835,10 +835,6 @@ impl<'a> JsiiImporter<'a> {
 				break;
 			}
 		}
-
-		// Mark the namespace as loaded. Note that its inner submodules might not be marked as
-		// loaded yet. But if they'll be accessed then they'll be marked as well.
-		self.mark_namespace_as_loaded(&self.jsii_spec.assembly_name);
 	}
 
 	/// Imports submodules of the assembly, preparing each as an available namespace
@@ -891,6 +887,10 @@ impl<'a> JsiiImporter<'a> {
 					.expect("Failed to define jsii root namespace");
 			}
 		}
+
+		// Mark the namespace as loaded. Note that its inner submodules might not be marked as
+		// loaded yet. But if they'll be accessed then they'll be marked as well.
+		self.mark_namespace_as_loaded(&assembly.name);
 
 		// Create a symbol in the environment for the imported module
 		// For example, `bring cloud` will create a symbol named `cloud` in the environment
