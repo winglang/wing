@@ -785,7 +785,7 @@ non-optional variable defined inside the block:
 
 ```TS
 if let address = myPerson.address {
-  log(address.len);
+  log("${address.length}");
   log(address); // type of address is `str`
 }
 ```
