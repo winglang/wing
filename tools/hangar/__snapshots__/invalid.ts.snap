@@ -1556,6 +1556,45 @@ Duration <DURATION>
 "
 `;
 
+exports[`scope_and_id.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/scope_and_id.w:6:25
+  |
+6 | new PreflightClass() as x;
+  |                         ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected scope to be a preflight object, instead found \\"num\\"
+  --> ../../../examples/tests/invalid/scope_and_id.w:8:1
+  |
+8 | new PreflightClass() in x;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected scope to be a preflight object, instead found \\"num\\"
+
+
+error: Inflight classes cannot have an id
+   --> ../../../examples/tests/invalid/scope_and_id.w:15:26
+   |
+15 |   new InflightClass() as \\"hi\\";
+   |                          ^^^^ Inflight classes cannot have an id
+
+
+error: Inflight classes cannot have a scope
+   --> ../../../examples/tests/invalid/scope_and_id.w:17:26
+   |
+17 |   new InflightClass() in pc;
+   |                          ^^ Inflight classes cannot have a scope
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`sorted_errors_no_span.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:1:14
