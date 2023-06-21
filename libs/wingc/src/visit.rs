@@ -101,6 +101,7 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
+		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Bring {
 			module_name,
 			identifier,
