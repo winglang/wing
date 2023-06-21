@@ -21,7 +21,7 @@
     "vite-plugin-node-polyfills": "^0.8.1"
   },
   "volta": {
-    "node": "18.12.1",
+    "node": "18.16.0",
     "npm": "8.19.3"
   }
 }

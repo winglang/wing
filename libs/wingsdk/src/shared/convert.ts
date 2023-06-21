@@ -16,16 +16,19 @@ export function convertBetweenHandlers(
   id: string,
   baseHandler: IResource,
   newHandlerClientPath: string,
-  newHandlerClientClassName: string
+  newHandlerClientClassName: string,
+  args: Record<string, unknown> = {}
 ): IResource {
   class NewHandler extends Resource {
     private readonly handler: IResource;
+    private readonly args: Record<string, unknown> = {};
 
     constructor(theScope: Construct, theId: string, handler: IResource) {
       super(theScope, theId);
       this.handler = handler;
       this.display.hidden = true;
       this._addInflightOps("handle");
+      this.args = args;
     }
 
     public _toInflight(): NodeJsCode {
@@ -33,7 +36,9 @@ export function convertBetweenHandlers(
       return NodeJsCode.fromInline(
         `new (require("${normalPath(
           newHandlerClientPath
-        )}")).${newHandlerClientClassName}({ handler: ${handlerClient.text} })`
+        )}")).${newHandlerClientClassName}({ handler: ${
+          handlerClient.text
+        }, args: ${JSON.stringify(this.args)} })`
       );
     }
 

@@ -3,6 +3,7 @@ title: Which clouds are supported by Wing?
 sidebar_label: Clouds
 id: supported-clouds
 keywords: [faq, supported clouds, winglang, Wing programming language, Wing language, AWS, GCP, Azure]
+description: Build applications on any cloud with Winglang. Fully supported on AWS, partially supported on GCP and Azure. Check our roadmap for future updates!
 ---
 
 Winglang was built from the ground up to make it an ideal choice for building applications on any cloud. Every app has access to the Wing SDK, a set of batteries-included resources that represent cloud services that are common to most major cloud providers for common use cases.
