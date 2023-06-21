@@ -1,0 +1,8 @@
+---
+source: libs/wingc/src/jsify/mangling/tests.rs
+expression: r.to_string()
+---
+keys: MyClass,a,hello
+
+
+

@@ -6,7 +6,7 @@ expression: "capture_ok(r#\"\n    bring cloud;\n\n    let q = new cloud.Queue();
 Captured by MyType:
 Variables:
   addToQueue():
-    q => [push]
+    q => [push()]
 
 ======================================================
 Files:
@@ -36,7 +36,7 @@ class MyType extends $stdlib.std.Resource {
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.MyType.js")({
-        q: ${context._lift(q, ["push"])},
+        q: ${context._lift(q, ["push()"])},
       })
     `);
   }
@@ -53,13 +53,13 @@ class MyType extends $stdlib.std.Resource {
   }
   _registerBind(host, ops) {
     if (ops.includes("$inflight_init")) {
-      MyType._registerBindObject(q, host, ["push"]);
+      MyType._registerBindObject(q, host, ["push()"]);
     }
     super._registerBind(host, ops);
   }
   static _registerTypeBind(host, ops) {
     if (ops.includes("addToQueue")) {
-      MyType._registerBindObject(q, host, ["push"]);
+      MyType._registerBindObject(q, host, ["push()"]);
     }
     super._registerTypeBind(host, ops);
   }

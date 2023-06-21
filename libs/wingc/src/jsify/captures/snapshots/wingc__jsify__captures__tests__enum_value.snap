@@ -46,16 +46,15 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const MyEnumClient = $stdlib.core.NodeJsCode.fromInline(`
-      Object.freeze((function (tmp) {
-        tmp[tmp["B"] = 0] = "B";
-        tmp[tmp["C"] = 1] = "C";
-        return tmp;
-      })({}))
-    `);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({
-        MyEnum: ${MyEnumClient.text},
+        MyEnum: $stdlib.core.NodeJsCode.fromInline(`
+          Object.freeze((function (tmp) {
+            tmp[tmp["B"] = 0] = "B";
+            tmp[tmp["C"] = 1] = "C";
+            return tmp;
+          })({}))
+        `),
       })
     `);
   }

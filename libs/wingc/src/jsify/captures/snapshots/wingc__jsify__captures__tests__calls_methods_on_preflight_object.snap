@@ -6,7 +6,7 @@ expression: "capture_ok(r#\"\n    bring cloud;\n    let b = new cloud.Bucket();\
 Captured by $Closure1:
 Variables:
   handle():
-    b => [list,put]
+    b => [list(),put()]
 
 ======================================================
 Files:
@@ -53,7 +53,7 @@ class $Closure1 extends $stdlib.std.Resource {
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({
-        b: ${context._lift(b, ["list", "put"])},
+        b: ${context._lift(b, ["list()", "put()"])},
       })
     `);
   }
@@ -70,10 +70,10 @@ class $Closure1 extends $stdlib.std.Resource {
   }
   _registerBind(host, ops) {
     if (ops.includes("$inflight_init")) {
-      $Closure1._registerBindObject(b, host, ["list", "put"]);
+      $Closure1._registerBindObject(b, host, ["list()", "put()"]);
     }
     if (ops.includes("handle")) {
-      $Closure1._registerBindObject(b, host, ["list", "put"]);
+      $Closure1._registerBindObject(b, host, ["list()", "put()"]);
     }
     super._registerBind(host, ops);
   }

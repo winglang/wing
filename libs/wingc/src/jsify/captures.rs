@@ -17,6 +17,7 @@ use std::{
 	cell::RefCell,
 	collections::{BTreeMap, BTreeSet},
 	fmt::Display,
+	ops::ControlFlow,
 	vec,
 };
 
@@ -136,22 +137,22 @@ impl ClassCaptures {
 		result
 	}
 
-	pub fn free_vars_and_types(&self) -> BTreeSet<String> {
+	/// Returns all free variables and types.
+	pub fn free(&self) -> BTreeSet<String> {
 		let mut result = BTreeSet::new();
 
-		for (v, _) in self.vars() {
-			if !v.starts_with("this.") {
-				result.insert(v);
-			}
+		for (v, _) in self.free_vars() {
+			result.insert(v);
 		}
 
-		for (t, _) in self.types() {
-			result.insert(t.join("_"));
+		for (t, _) in self.free_types() {
+			result.insert(t);
 		}
 
 		return result;
 	}
 
+	/// Returns all free variables
 	pub fn free_vars(&self) -> BTreeMap<String, BTreeSet<String>> {
 		self
 			.vars()
@@ -161,16 +162,17 @@ impl ClassCaptures {
 			.collect()
 	}
 
-	pub fn types(&self) -> BTreeMap<Vec<String>, TypeRef> {
-		let mut res: BTreeMap<Vec<String>, TypeRef> = BTreeMap::new();
+	/// Returns all (free) types
+	pub fn free_types(&self) -> BTreeMap<String, TypeRef> {
+		let mut res: BTreeMap<String, TypeRef> = BTreeMap::new();
 		for (n, t) in &self.types {
-			res.insert(n.clone(), *t);
+			res.insert(n.join("."), *t);
 		}
 
 		res
 	}
 
-	/// Returns the list of all the fields being captures `this.xxx`
+	/// Returns all the fields `this.xxx`
 	pub fn fields(&self) -> BTreeMap<String, BTreeSet<String>> {
 		self
 			.vars()
@@ -180,6 +182,7 @@ impl ClassCaptures {
 			.collect()
 	}
 
+	/// Returns all the fields, omitting `this.`
 	pub fn fields_without_this(&self) -> IndexMap<String, BTreeSet<String>> {
 		self
 			.fields()
@@ -241,17 +244,17 @@ impl<'a> CaptureScanner<'a> {
 	}
 
 	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
-		let ExprKind::Reference(ref_expr) = &node.kind else {
+		let ExprKind::Reference(expr) = &node.kind else {
 			return vec![];
 		};
 
-		return self.analyze_ref(ref_expr);
+		return self.split_reference(expr);
 	}
 
-	fn analyze_ref(&self, ref_expr: &'a Reference) -> Vec<Component> {
+	fn split_reference(&self, expr: &'a Reference) -> Vec<Component> {
 		let env = self.current_env.borrow();
 
-		match ref_expr {
+		match expr {
 			Reference::Identifier(x) => {
 				let lookup = env.as_ref().unwrap().lookup_ext(&x, Some(self.current_index));
 
@@ -265,11 +268,6 @@ impl<'a> CaptureScanner<'a> {
 				};
 
 				let var = kind.as_variable().expect("variable");
-
-				// // If the reference isn't a preflight (lifted) variable then skip it
-				// if var.phase != Phase::Preflight {
-				// 	return vec![];
-				// }
 
 				return vec![Component {
 					text: x.name.clone(),
@@ -369,25 +367,173 @@ impl<'a> CaptureScanner<'a> {
 		}
 	}
 
-	fn split_phases(&self, parts: &[Component]) -> (Vec<Component>, Vec<Component>) {
-		let mut pref = vec![];
-		let mut inf = vec![];
+	/// Returns `true` if the reference should be futher visited or `false` if we should break
+	fn analyze_reference(&mut self, node: &'a Reference) -> ControlFlow<()> {
+		let parts = self.split_reference(node);
+		println!("{}", parts.iter().map(|f| f.text.clone()).join("."));
 
-		for p in parts {
-			match &p.kind {
-				ComponentKind::Member(vi, _) => match vi.phase {
-					Phase::Preflight => pref.push(p.clone()),
-					Phase::Inflight => inf.push(p.clone()),
-					Phase::Independent => pref.push(p.clone()),
-				},
-				ComponentKind::ClassType(_) => {
-					pref.push(p.clone());
+		if parts.is_empty() {
+			return ControlFlow::Continue(());
+		}
+
+		let first = {
+			let p = &parts[0];
+			if p.text == "this" {
+				if parts.len() == 1 {
+					// this is just "this". we can skip
+					return ControlFlow::Continue(());
 				}
+
+				&parts[1]
+			} else {
+				p
+			}
+		};
+
+		// is this a capture or a local symbol? check if the object's environment is a child or the same
+		// as the environment of the method we are currently scanning.
+		if let ComponentKind::Member(_, object_env) = first.kind {
+			if object_env.is_same(self.method_env.borrow().as_ref().unwrap())
+				|| object_env.is_child_of(self.method_env.borrow().as_ref().unwrap())
+			{
+				return ControlFlow::Break(());
 			}
 		}
 
-		(pref, inf)
+		// if the object is a class type, capture the type
+		if let ComponentKind::ClassType(t) = &first.kind {
+			self
+				.captures
+				.capture_type(first.text.split(".").map(|f| f.to_string()).collect_vec(), *t);
+
+			return ControlFlow::Break(());
+		}
+
+		let mut preflight_object = vec![];
+		let mut inflight = vec![];
+
+		// dissect the expression by collecting all the preflight components into `preflight_object`
+		// and then all the inflight components into `inflight`.
+		for part in &parts {
+			let ComponentKind::Member(variable, _) = &part.kind else {
+				report_diagnostic(Diagnostic { message: format!("Unexpected type for component '{}'", part), span: Some(part.span.clone()) });
+				return ControlFlow::Break(());
+			};
+
+			// accumuate another inflight part into the inflight container
+			if variable.phase != Phase::Preflight {
+				inflight.push(part);
+				continue;
+			}
+
+			// it doesn't make sense to capture a preflight object after we've already taken off.
+			if !inflight.is_empty() {
+				report_diagnostic(Diagnostic {
+					message: format!("Cannot reference a preflight object after takeoff"),
+					span: Some(part.span.clone()),
+				});
+				return ControlFlow::Break(());
+			}
+
+			// the object we are capturing is a preflight object, so we need to lift it into inflight.
+			// we need to make sure that the object is not reassignable and that it has a capturable
+			// type.
+
+			// cannot capture a reassignable object
+			if variable.reassignable {
+				report_diagnostic(Diagnostic {
+					message: format!("Cannot capture reassignable object '{part}'"),
+					span: Some(part.span.clone()),
+				});
+
+				return ControlFlow::Break(());
+			}
+
+			// check that the type is capturable
+			if !variable.type_.is_capturable() {
+				report_diagnostic(Diagnostic {
+					message: format!(
+						"Cannot capture field '{part}' with non-capturable type '{}'",
+						variable.type_
+					),
+					span: Some(part.span.clone()),
+				});
+
+				return ControlFlow::Break(());
+			}
+
+			// okay, so we have a non-reassignable, capturable type.
+			// one more special case is collections. we currently only support
+			// collections which do not include resources because we cannot
+			// qualify the capture.
+			if let Some(inner_type) = variable.type_.collection_item_type() {
+				if inner_type.is_preflight_class() {
+					report_diagnostic(Diagnostic {
+						message: format!(
+							"Capturing collection of preflight classes is not supported yet (type is '{}')",
+							variable.type_,
+						),
+						span: Some(part.span.clone()),
+					});
+
+					return ControlFlow::Break(());
+				}
+			}
+
+			preflight_object.push(part);
+		}
+
+		// trim all macro functions and inflight variables from the end of the inflight list because
+		// those are already available in the inflight environment (we need to capture the inflight
+		// methods because of permissions).
+		let inflight = trim_inflight_variables(inflight);
+
+		let var = preflight_object.iter().map(|f| f.text.clone()).join(".");
+		let op = if inflight.is_empty() {
+			None
+		} else {
+			Some(inflight.iter().map(|f| format_component(f)).join("."))
+		};
+
+		// nothing left to capture (e.g. `assert()`).
+		if inflight.is_empty() && (var.is_empty() || var == "this") {
+			return ControlFlow::Break(());
+		}
+
+		self.captures.capture_var(self.method_name, &var, op);
+
+		return ControlFlow::Break(());
 	}
+}
+
+fn trim_inflight_variables(inflight: Vec<&Component>) -> Vec<&Component> {
+	let mut result = vec![];
+
+	for part in inflight.iter().rev() {
+		if let ComponentKind::Member(variable, _) = &part.kind {
+			let as_function = variable.type_.as_function_sig();
+			if as_function.is_none() || as_function.unwrap().js_override.is_some() {
+				continue; // skip
+			}
+
+			result.push(*part);
+		}
+
+		break;
+	}
+
+	result.reverse();
+	return result;
+}
+
+fn format_component(part: &Component) -> String {
+	if let ComponentKind::Member(v, _) = &part.kind {
+		if let Type::Function(_) = *v.type_ {
+			return format!("{}()", part.text);
+		}
+	}
+
+	return part.text.clone();
 }
 
 impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
@@ -420,139 +566,10 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 	}
 
 	fn visit_reference(&mut self, node: &'ast Reference) {
-		let parts = self.analyze_ref(node);
-		println!("{}", parts.iter().map(|f| f.text.clone()).join("."));
-		if parts.is_empty() {
-			visit::visit_reference(self, node);
-			return;
+		match self.analyze_reference(node) {
+			ControlFlow::Continue(_) => visit::visit_reference(self, node),
+			ControlFlow::Break(_) => {}
 		}
-
-		// let (pref, inf) = self.split_phases(&parts);
-
-		// determine if this is a reference to a field (through "this.")
-		let mut captured_object_index = 0;
-		let captured_object = match parts.first() {
-			Some(first) => {
-				if first.text == "this" {
-					captured_object_index = 1;
-					parts.get(1)
-				} else {
-					Some(first)
-				}
-			}
-			None => None,
-		};
-
-		let Some(captured_object) = captured_object else {
-			return;
-		};
-
-		// if we have no parts left, it means we are referencing "this" and we can skip it
-		if captured_object_index == parts.len() {
-			return;
-		}
-
-		// at this point, the first component in "parts" is the object we are capturing and the rest
-		// is the qualification of the capture. let's split these up.
-		let (captured_object_ref, qualification) = parts.split_at(captured_object_index + 1);
-		let captured_object_ref = &captured_object_ref
-			.iter()
-			.map(|f| f.text.clone())
-			.collect_vec()
-			.join(".");
-
-		// is this a capture or a local symbol? check if the object's environment is a child or the same
-		// as the environment of the method we are currently scanning.
-		if let ComponentKind::Member(_, object_env) = captured_object.kind {
-			if object_env.is_same(self.method_env.borrow().as_ref().unwrap())
-				|| object_env.is_child_of(self.method_env.borrow().as_ref().unwrap())
-			{
-				return;
-			}
-		}
-
-		match &captured_object.kind {
-			ComponentKind::ClassType(t) => {
-				self
-					.captures
-					.capture_type(captured_object.text.split(".").map(|f| f.to_string()).collect_vec(), *t);
-			}
-			ComponentKind::Member(variable, _) => {
-				// ignore functions that have a js override macro (like `log()`, `assert()`).
-				let mut is_function = false;
-
-				if let Type::Function(f) = &*variable.type_ {
-					is_function = true;
-
-					if f.js_override.is_some() {
-						return;
-					}
-				}
-
-				// if the varaible's phase is inflight, skip it
-				if variable.phase == Phase::Inflight && !is_function {
-					// special-handling for inflight methods?
-					return;
-				}
-
-				// the object we are capturing is a preflight object, so we need to lift it into inflight.
-				// we need to make sure that the object is not reassignable and that it has a capturable
-				// type.
-
-				// if the variable is reassignable, bail out
-				if variable.reassignable {
-					report_diagnostic(Diagnostic {
-						message: format!("Cannot capture reassignable object '{captured_object}'"),
-						span: Some(captured_object.span.clone()),
-					});
-
-					return;
-				}
-
-				// if this type is not capturable, bail out
-				if !variable.type_.is_capturable() {
-					report_diagnostic(Diagnostic {
-						message: format!(
-							"Cannot capture field '{captured_object}' with non-capturable type '{}'",
-							variable.type_
-						),
-						span: Some(captured_object.span.clone()),
-					});
-
-					return;
-				}
-
-				// okay, so we have a non-reassignable, capturable type.
-				// one more special case is collections. we currently only support
-				// collections which do not include resources because we cannot
-				// qualify the capture.
-				if let Some(inner_type) = variable.type_.collection_item_type() {
-					if inner_type.is_preflight_class() {
-						report_diagnostic(Diagnostic {
-							message: format!(
-								"Capturing collection of preflight classes is not supported yet (type is '{}')",
-								variable.type_,
-							),
-							span: Some(captured_object.span.clone()),
-						});
-
-						return;
-					}
-				}
-
-				let op = if !qualification.is_empty() {
-					Some(qualification.iter().map(|f| f.text.clone()).collect_vec().join("."))
-				} else {
-					None
-				};
-
-				self.captures.capture_var(self.method_name, captured_object_ref, op);
-
-				return;
-			}
-		}
-
-		visit::visit_reference(self, node);
 	}
 
 	fn visit_scope(&mut self, node: &'ast Scope) {

@@ -1,6 +1,6 @@
 ---
 source: libs/wingc/src/jsify/captures/tests.rs
-expression: "capture_ok(r#\"\n    class MyType {\n      name: str;\n      init() {\n        this.name = \"hello\";\n      }\n    }\n\n    let t = new MyType();\n\n    test \"test\" {\n      log(t.name);\n      assert(t.name.length > 0);\n    }\n    \"#)"
+expression: "capture_ok(r#\"\n    class MyType {\n      name: str;\n      last: str;\n\n      init() {\n        this.name = \"hello\";\n        this.last = \"world\";\n      }\n    }\n\n    let t = new MyType();\n\n    test \"test\" {\n      log(t.name);\n      assert(t.name.length > 0);\n      log(t.last);\n    }\n    \"#)"
 ---
 ======================================================
 Captured by MyType:
@@ -9,14 +9,20 @@ Captured by MyType:
 Captured by $Closure1:
 Variables:
   handle():
-    t => [name]
+    t.last => []
+    t.name => []
 
 ======================================================
 Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ t }) {
+module.exports = function({ t_last, t_name }) {
+  const t = {
+    last: t_last,
+    name: t_name,
+  };
+  
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -26,6 +32,7 @@ module.exports = function({ t }) {
     async handle()  {
       {console.log(t.name)};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(t.name.length > 0)'`)})((t.name.length > 0))};
+      {console.log(t.last)};
     }
     async $inflight_init()  {
     }
@@ -38,8 +45,11 @@ main.w
 
     class MyType {
       name: str;
+      last: str;
+
       init() {
         this.name = "hello";
+        this.last = "world";
       }
     }
 
@@ -48,6 +58,7 @@ main.w
     test "test" {
       log(t.name);
       assert(t.name.length > 0);
+      log(t.last);
     }
     
 preflight.js
@@ -58,6 +69,7 @@ class MyType extends $stdlib.std.Resource {
     this._addInflightOps("$inflight_init");
     const __parent_this = this;
     this.name = "hello";
+    this.last = "world";
   }
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
@@ -86,7 +98,8 @@ class $Closure1 extends $stdlib.std.Resource {
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({
-        t: ${context._lift(t, ["name"])},
+        t_last: ${context._lift(t.last, [])},
+        t_name: ${context._lift(t.name, [])},
       })
     `);
   }
@@ -102,11 +115,9 @@ class $Closure1 extends $stdlib.std.Resource {
     `);
   }
   _registerBind(host, ops) {
-    if (ops.includes("$inflight_init")) {
-      $Closure1._registerBindObject(t, host, ["name"]);
-    }
     if (ops.includes("handle")) {
-      $Closure1._registerBindObject(t, host, ["name"]);
+      $Closure1._registerBindObject(t.last, host, []);
+      $Closure1._registerBindObject(t.name, host, []);
     }
     super._registerBind(host, ops);
   }

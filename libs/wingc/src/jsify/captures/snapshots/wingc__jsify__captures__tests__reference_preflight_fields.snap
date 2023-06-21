@@ -6,9 +6,9 @@ expression: "capture_ok(r#\"\n    bring cloud;\n    \n\t\tclass MyType {\n      
 Captured by MyType:
 Variables:
   bam():
-    this.b => [get,put]
+    this.b => [get(),put()]
   boom():
-    this.b => [list]
+    this.b => [list()]
     this.s => []
 
 ======================================================
@@ -61,8 +61,8 @@ class MyType extends $stdlib.std.Resource {
       (await (async () => {
         const MyTypeClient = ${MyType._toInflightType(this).text};
         const client = new MyTypeClient({
-          b: ${this._lift(this.b, ["get", "list", "put"])},
-          s: ${this._lift(this.s, [])},
+          this_b: ${this._lift(this.b, ["get()", "list()", "put()"])},
+          this_s: ${this._lift(this.s, [])},
         });
         if (client.$inflight_init) { await client.$inflight_init(); }
         return client;
@@ -71,13 +71,13 @@ class MyType extends $stdlib.std.Resource {
   }
   _registerBind(host, ops) {
     if (ops.includes("$inflight_init")) {
-      MyType._registerBindObject(this.b, host, ["get", "list", "put"]);
+      MyType._registerBindObject(this.b, host, ["get()", "list()", "put()"]);
     }
     if (ops.includes("bam")) {
-      MyType._registerBindObject(this.b, host, ["get", "put"]);
+      MyType._registerBindObject(this.b, host, ["get()", "put()"]);
     }
     if (ops.includes("boom")) {
-      MyType._registerBindObject(this.b, host, ["list"]);
+      MyType._registerBindObject(this.b, host, ["list()"]);
       MyType._registerBindObject(this.s, host, []);
     }
     super._registerBind(host, ops);

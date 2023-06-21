@@ -141,8 +141,11 @@ fn preflight_value_field() {
 		r#"
     class MyType {
       name: str;
+      last: str;
+
       init() {
         this.name = "hello";
+        this.last = "world";
       }
     }
 
@@ -151,6 +154,7 @@ fn preflight_value_field() {
     test "test" {
       log(t.name);
       assert(t.name.length > 0);
+      log(t.last);
     }
     "#,
 	));
@@ -344,6 +348,67 @@ fn transitive_reference() {
     let t = new MyType();
     test "test" {
       t.checkIfEmpty();
+    }
+		"#,
+	));
+}
+
+#[test]
+fn ref_std_macro() {
+	assert_snapshot!(capture_ok(
+		r#"
+    let arr = [1,2,3];
+
+    test "test" {
+      assert(arr.length == 3);
+    }
+		"#,
+	));
+}
+
+#[test]
+fn transitive_reference_via_static() {
+	assert_snapshot!(capture_ok(
+		r#"
+    bring cloud;
+
+    let b = new cloud.Bucket();
+    
+		class MyType {
+      static inflight putInBucket() {
+        this.b.put("in", "bucket");
+      }
+    }
+
+    class YourType {
+      inflight putIndirect() {
+        MyType.putInBucket();
+      }
+    }
+
+    let t = new YourType();
+    test "test" {
+      t.putIndirect();
+    }
+		"#,
+	));
+}
+
+#[test]
+fn transitive_reference_via_inflight_class() {
+	assert_snapshot!(capture_ok(
+		r#"
+    bring cloud;
+
+		inflight class MyInflightClass {
+      putInBucket() {
+        this.b.put("in", "bucket");
+      }
+    }
+
+    test "test" {
+      let obj = new MyInflightClass();
+      obj.putInBucket();
     }
 		"#,
 	));

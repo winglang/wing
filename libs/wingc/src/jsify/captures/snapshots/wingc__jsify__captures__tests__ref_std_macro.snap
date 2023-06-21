@@ -1,24 +1,19 @@
 ---
 source: libs/wingc/src/jsify/captures/tests.rs
-expression: "capture_ok(r#\"\n    test \"test\" {\n      log(str.fromJson(\"hello\"));\n      assert(Json.values(Json {}).length == 0);\n    }\n    \"#)"
+expression: "capture_ok(r#\"\n    let arr = [1,2,3];\n\n    test \"test\" {\n      assert(arr.length == 3);\n    }\n\t\t\"#)"
 ---
 ======================================================
 Captured by $Closure1:
-Types:
-  std.String = String
-  std.Json = Json
+Variables:
+  handle():
+    arr => []
 
 ======================================================
 Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ std_Json, std_String }) {
-  const std = {
-    Json: std_Json,
-    String: std_String,
-  };
-  
+module.exports = function({ arr }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -26,8 +21,7 @@ module.exports = function({ std_Json, std_String }) {
       return $obj;
     }
     async handle()  {
-      {console.log(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.values(Object.freeze({}))).length === 0)'`)})(((Object.values(Object.freeze({}))).length === 0))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 3)'`)})((arr.length === 3))};
     }
     async $inflight_init()  {
     }
@@ -38,9 +32,10 @@ module.exports = function({ std_Json, std_String }) {
 main.w
 ------------------------------------------------------
 
+    let arr = [1,2,3];
+
     test "test" {
-      log(str.fromJson("hello"));
-      assert(Json.values(Json {}).length == 0);
+      assert(arr.length == 3);
     }
     
 preflight.js
@@ -54,8 +49,7 @@ class $Closure1 extends $stdlib.std.Resource {
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({
-        std_Json: std.Json._toInflightType(context);
-        std_String: std.String._toInflightType(context);
+        arr: ${context._lift(arr, [])},
       })
     `);
   }
@@ -70,6 +64,13 @@ class $Closure1 extends $stdlib.std.Resource {
       })())
     `);
   }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(arr, host, []);
+    }
+    super._registerBind(host, ops);
+  }
 }
+const arr = Object.freeze([1, 2, 3]);
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
 

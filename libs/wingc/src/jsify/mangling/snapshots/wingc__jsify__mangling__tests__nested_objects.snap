@@ -1,0 +1,15 @@
+---
+source: libs/wingc/src/jsify/mangling/tests.rs
+expression: r.to_string()
+---
+keys: a_b_c,a_b_d,a_b_e
+
+const a = {
+  b: {
+    c: a_b_c,
+    d: a_b_d,
+    e: a_b_e,
+  },
+};
+
+

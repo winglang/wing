@@ -16,6 +16,10 @@ Files:
 inflight.$Closure1.js
 ------------------------------------------------------
 module.exports = function({ jsonObj1, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -49,11 +53,10 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const std_JsonClient = std.Json._toInflightType(context);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({
         jsonObj1: ${context._lift(jsonObj1, [])},
-        std_Json: ${std_JsonClient.text},
+        std_Json: std.Json._toInflightType(context);
       })
     `);
   }

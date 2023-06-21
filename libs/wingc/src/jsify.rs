@@ -1,17 +1,13 @@
 mod captures;
 pub mod codemaker;
 mod files;
+mod mangling;
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
 use indexmap::IndexSet;
 use itertools::Itertools;
 
-use std::{
-	cmp::Ordering,
-	collections::{BTreeMap, BTreeSet},
-	path::Path,
-	vec,
-};
+use std::{cmp::Ordering, path::Path, vec};
 
 use crate::{
 	ast::{
@@ -29,7 +25,12 @@ use crate::{
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
-use self::{captures::ClassCaptures, codemaker::CodeMaker, files::Files};
+use self::{
+	captures::ClassCaptures,
+	codemaker::CodeMaker,
+	files::Files,
+	mangling::{make_lift_args, mangle, mangle_captures},
+};
 
 const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
@@ -266,7 +267,7 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_type(&self, typ: &TypeAnnotationKind, ctx: &JSifyContext) -> String {
 		match typ {
-			TypeAnnotationKind::UserDefined(t) => jsify_type_name(&t.full_path_str_vec(), ctx.phase),
+			TypeAnnotationKind::UserDefined(t) => t.full_path_str(),
 			_ => todo!(),
 		}
 	}
@@ -923,12 +924,13 @@ impl<'a> JSifier<'a> {
 
 		// create a list of all captured symbols (vars and types).
 		let mut all_captures = vec![];
-		for (n, _) in &captures.types() {
-			all_captures.push(jsify_type_name(n, Phase::Inflight).clone());
+
+		for v in &captures.free() {
+			all_captures.push(v.clone());
 		}
 
-		for (f, _) in &captures.fields() {
-			all_captures.push(f.clone());
+		for (f, _) in captures.fields() {
+			all_captures.push(f);
 		}
 
 		// emit the inflight side of the class into a separate file
@@ -940,7 +942,7 @@ impl<'a> JSifier<'a> {
 
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", jsify_type_name(&parent.full_path_str_vec(), ctx.phase))
+				format!(" extends {}", parent.full_path_str())
 			} else {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			};
@@ -990,7 +992,7 @@ impl<'a> JSifier<'a> {
 			code.line(format!(
 				"const {} = require({client})({{{}}});",
 				class.name.name,
-				all_captures.join(", "),
+				all_captures.iter().join(", "),
 			));
 
 			code
@@ -1062,42 +1064,33 @@ impl<'a> JSifier<'a> {
 
 		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
 
-		// create an inflight type for each referenced preflight type
-		for (n, t) in captures.types() {
-			let inflight_name = jsify_type_name(&n, Phase::Inflight);
-			let preflight_name = jsify_type_name(&n, Phase::Preflight);
-
-			match &*t {
-				Type::Class(_) => {
-					code.line(format!(
-						"const {inflight_name}Client = {preflight_name}._toInflightType(context);"
-					));
-				}
-				Type::Enum(e) => {
-					code.open(format!(
-						"const {inflight_name}Client = {STDLIB}.core.NodeJsCode.fromInline(`"
-					));
-					code.add_code(self.jsify_enum(&e.values));
-					code.close("`);");
-				}
-				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
-			}
-		}
-
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
 		code.open(format!("require({client_path})({{"));
 
 		// create a _lift() calls for each referenced preflight object
-		let lifted_objects = make_lift_args(captures.free_vars());
+		let lifts = make_lift_args(captures.free_vars());
 
-		for (var_name, props) in lifted_objects {
-			code.line(format!("{var_name}: ${{context._lift({var_name}, {props})}},"));
+		for args in lifts {
+			code.line(format!(
+				"{}: ${{context._lift({}, {})}},",
+				args.key, args.field, args.ops
+			));
 		}
 
-		for (type_name, _) in captures.types() {
-			let inflight_name = jsify_type_name(&type_name, Phase::Inflight);
-			code.line(format!("{inflight_name}: ${{{inflight_name}Client.text}},"));
+		for (type_name, t) in captures.free_types() {
+			let key = mangle(&type_name);
+			match &*t {
+				Type::Class(_) => {
+					code.line(format!("{key}: {type_name}._toInflightType(context);"));
+				}
+				Type::Enum(e) => {
+					code.open(format!("{key}: {STDLIB}.core.NodeJsCode.fromInline(`"));
+					code.add_code(self.jsify_enum(&e.values));
+					code.close("`),");
+				}
+				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
+			}
 		}
 
 		code.close("})");
@@ -1124,10 +1117,10 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("const client = new {}Client({{", resource_name.name));
 
-		for (field, ops) in make_lift_args(captures.fields()) {
+		for args in make_lift_args(captures.fields()) {
 			// remove the "this." prefix from the field name
-			let key = field.strip_prefix("this.").unwrap_or(&field);
-			code.line(format!("{key}: ${{this._lift({field}, {ops})}},"));
+			// let key = field.strip_prefix("this.").unwrap_or(&field);
+			code.line(format!("{}: ${{this._lift({}, {})}},", args.key, args.field, args.ops));
 		}
 
 		code.close("});");
@@ -1176,7 +1169,7 @@ impl<'a> JSifier<'a> {
 		class_code.open(format!(
 			"class {name}{} {{",
 			if let Some(parent) = &class.parent {
-				format!(" extends {}", jsify_type_name(&parent.full_path_str_vec(), ctx.phase))
+				format!(" extends {}", &parent.full_path_str())
 			} else {
 				"".to_string()
 			}
@@ -1238,8 +1231,17 @@ impl<'a> JSifier<'a> {
 
 		// export the main class from this file
 		let mut code = CodeMaker::default();
-		let inputs = captures.free_vars_and_types().iter().join(", ");
-		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
+		// let inputs = captures.free().iter().join(", ");
+
+		let r = mangle_captures(captures.free());
+
+		code.open(format!("module.exports = function({{ {} }}) {{", r.keys.join(", ")));
+		if !r.javascript.is_empty() {
+			code.line(r.javascript);
+		}
+
+		// destructure captrures into objects that can be referenced cannonically
+
 		code.add_code(class_code);
 		code.line(format!("return {name};"));
 		code.close("}");
@@ -1325,30 +1327,6 @@ impl<'a> JSifier<'a> {
 	}
 }
 
-/// Creates a map from object names to a JavaScript array of operations that are performed on that
-/// object. This is used when generating calls to `_lift(obj, ops)`.
-fn make_lift_args(vars: BTreeMap<String, BTreeSet<String>>) -> BTreeMap<String, String> {
-	let mut result = BTreeMap::new();
-
-	for (v, ops) in vars {
-		let arr = ops.iter().map(|f| format!("\"{f}\"").clone()).collect_vec().join(", ");
-		result.insert(v.clone(), format!("[{arr}]"));
-	}
-
-	return result;
-}
-
 fn inflight_filename(class: &AstClass) -> String {
 	format!("inflight.{}.js", class.name.name)
-}
-
-fn jsify_type_name(t: &Vec<String>, phase: Phase) -> String {
-	// if we are inside an inflight context, we need to mangle the type name so we can capture it
-	let p = t.iter().map(|s| s.clone()).collect_vec();
-
-	if phase == Phase::Inflight {
-		p.join("_")
-	} else {
-		p.join(".")
-	}
 }
