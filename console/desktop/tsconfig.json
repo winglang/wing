@@ -1,8 +1,0 @@
-{
-  "extends": "@wingconsole/tsconfig",
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
-  },
-  "include": ["src/**/*", "electron/**/*", "scripts/**/*", "test/**/*"]
-}

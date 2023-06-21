@@ -1,1 +1,0 @@
-../../console/desktop/electron/resources/license_en.txt
