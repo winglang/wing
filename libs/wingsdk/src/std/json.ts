@@ -1,14 +1,56 @@
 import { Code, InflightClient } from "../core";
 
 /**
- * Immutable Json
+ * Base class for Json
  */
-export class Json {
+class BaseJson {
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
+  }
+
+  /**
+   * Returns the keys from the Json object.
+   *
+   * @macro (Object.keys($args$))
+   *
+   * @param json to get keys from
+   * @returns the keys from the Json object as string array
+   */
+  public static keys(json: Json | MutJson): string[] {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Formats Json as string
+   *
+   * (JSON.stringify($args$))
+   *
+   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]) })([$args$])
+   *
+   * @param json to format as string
+   * @returns string representation of the Json
+   */
+  public static stringify(json: Json | MutJson, indent?: number): string {
+    json;
+    indent;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Creates an immutable deep copy of the Json.
+   *
+   * @macro Object.freeze(JSON.parse(JSON.stringify($args$)))
+   *
+   * @param json to copy
+   * @returns the immutable copy of the Json
+   */
+  public static deepCopy(json: MutJson): Json {
+    json;
+    throw new Error("Macro");
   }
 
   /**
@@ -25,18 +67,91 @@ export class Json {
   }
 
   /**
-   * Returns the keys from the Json object.
+   * Checks if a Json object has a given key
    *
-   * @macro (Object.keys($args$))
+   * @macro ((args) => { return args[0].hasOwnProperty(args[1]); })([$args$])
    *
-   * @param json to get keys from
-   * @returns the keys from the Json object as string array
+   * @param json The json object to inspect
+   * @param key The key to check
+   * @returns Boolean value corresponding to whether the key exists
    */
-  public static keys(json: Json): string[] {
+  public static has(json: Json | MutJson, key: string): boolean {
     json;
+    key;
     throw new Error("Macro");
   }
 
+  /**
+   * Convert Json element to string if possible.
+   * 
+   * @macro ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   * 
+   * @returns a string.
+   */
+    public asStr(): string {
+      throw new Error("Macro");
+    }
+
+  /**
+   * Convert Json element to string if possible.
+   * 
+   * @macro ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   * 
+   * @returns a string.
+   */
+    public tryAsStr(): string | undefined {
+      throw new Error("Macro");
+    }
+  
+    /**
+     * Convert Json element to number if possible.
+     * 
+     * @macro ((arg) => { if (typeof arg !== "number") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a number")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+     * 
+     * @returns a string.
+     */
+    public asNum(): number {
+      throw new Error("Macro");
+    }
+
+    /**
+   * Convert Json element to string if possible.
+   * 
+   * @macro ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   * 
+   * @returns a string.
+   */
+    public tryAsNum(): number | undefined {
+      throw new Error("Macro");
+    }
+  
+    /**
+     * Convert Json element to number if possible.
+     * 
+     * @macro ((arg) => { if (typeof arg !== "boolean") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a boolean")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+     * 
+     * @returns a string.
+     */
+    public asBool(): boolean {
+      throw new Error("Macro");
+    }
+
+     /**
+   * Convert Json element to boolean if possible.
+   * 
+   * @macro ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   * 
+   * @returns a string.
+   */
+     public tryAsBool(): boolean | undefined {
+      throw new Error("Macro");
+    }
+}
+
+/**
+ * Immutable Json
+ */
+export class Json extends BaseJson {
   /**
    * Returns the values from the Json.
    *
@@ -47,36 +162,6 @@ export class Json {
    */
   public static values(json: Json): Json[] {
     json;
-    throw new Error("Macro");
-  }
-
-  /**
-   * Deletes a key in a given Json
-   *
-   * @macro ((args) => { delete (args[0])[args[1]]; })([$args$])
-   *
-   * @param json to delete key from
-   * @param key the key to delete
-   */
-  public static delete(json: Json, key: string): void {
-    json;
-    key;
-    throw new Error("Macro");
-  }
-
-  /**
-   * Formats Json as string
-   *
-   * (JSON.stringify($args$))
-   *
-   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]) })([$args$])
-   *
-   * @param json to format as string
-   * @returns string representation of the Json
-   */
-  public static stringify(json: Json, indent?: number): string {
-    json;
-    indent;
     throw new Error("Macro");
   }
 
@@ -121,8 +206,6 @@ export class Json {
     throw new Error("Macro");
   }
 
-  private constructor() {}
-
   /**
    * Returns a specified element from the Json.
    *
@@ -148,34 +231,38 @@ export class Json {
     index;
     throw new Error("Macro");
   }
+
+  /**
+   * Optionally returns an specified element from the Json.
+   * 
+   * @macro ($self$)[$args$]
+   * 
+   * @param key The key of the element to return
+   * @returns The element associated with the specified key, or undefined if the key can't be found
+   */
+  public tryGet(key: string): Json | undefined {
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Optionally returns a specified element at a given index from Json Array
+   *
+   * @macro ($self$)[$args$]
+   *
+   * @param index The index of the element in the Json Array to return
+   * @returns The element at given index in Json Array, or undefined if index is not valid
+   */
+  public tryGetAt(index: number): Json | undefined {
+    index;
+    throw new Error("Macro");
+  }
 }
 
 /**
  * Mutable Json
  */
-export class MutJson {
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, this.name);
-  }
-
-  /**
-   * Creates an immutable deep copy of the Json.
-   *
-   * @macro Object.freeze(JSON.parse(JSON.stringify($args$)))
-   *
-   * @param json to copy
-   * @returns the immutable copy of the Json
-   */
-  public static deepCopy(json: MutJson): Json {
-    json;
-    throw new Error("Macro");
-  }
-
-  private constructor() {}
-
+export class MutJson extends BaseJson {
   /**
    * Returns a specified element from the Json.
    *
@@ -226,6 +313,32 @@ export class MutJson {
   public setAt(index: number, value: MutJson): void {
     index;
     value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Optionally returns an specified element from the Json.
+   * 
+   * @macro ($self$)[$args$]
+   * 
+   * @param key The key of the element to return
+   * @returns The element associated with the specified key, or undefined if the key can't be found
+   */
+  public tryGet(key: string): MutJson | undefined {
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Optionally returns a specified element at a given index from Json Array
+   *
+   * @macro ($self$)[$args$]
+   *
+   * @param index The index of the element in the Json Array to return
+   * @returns The element at given index in Json Array, or undefined if index is not valid
+   */
+  public tryGetAt(index: number): MutJson | undefined {
+    index;
     throw new Error("Macro");
   }
 }
