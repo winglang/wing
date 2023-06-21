@@ -196,8 +196,8 @@ fn var_inflight_field_from_inflight() {
 }
 
 #[test]
-fn fails_preflight_object_through_property() {
-	assert_snapshot!(capture_fail(
+fn preflight_object_through_property() {
+	assert_snapshot!(capture_ok(
 		r#"
     bring cloud;
 
@@ -367,6 +367,19 @@ fn ref_std_macro() {
 }
 
 #[test]
+fn fails_when_referencing_this_from_static() {
+	assert_snapshot!(capture_fail(
+		r#"
+		class MyType {
+      static inflight hello() {
+        this.print();
+      }
+    }
+		"#,
+	));
+}
+
+#[test]
 fn transitive_reference_via_static() {
 	assert_snapshot!(capture_ok(
 		r#"
@@ -376,7 +389,7 @@ fn transitive_reference_via_static() {
     
 		class MyType {
       static inflight putInBucket() {
-        this.b.put("in", "bucket");
+        b.put("in", "bucket");
       }
     }
 
@@ -395,14 +408,29 @@ fn transitive_reference_via_static() {
 }
 
 #[test]
+fn fails_if_referencing_unknown_field() {
+	assert_snapshot!(capture_fail(
+		r#"
+		class MyInflightClass {
+      inflight putInBucket() {
+        this.b.put("in", "bucket");
+      }
+    }
+		"#,
+	));
+}
+
+#[test]
 fn transitive_reference_via_inflight_class() {
 	assert_snapshot!(capture_ok(
 		r#"
     bring cloud;
 
+    let b = new cloud.Bucket();
+
 		inflight class MyInflightClass {
       putInBucket() {
-        this.b.put("in", "bucket");
+        b.put("in", "bucket");
       }
     }
 

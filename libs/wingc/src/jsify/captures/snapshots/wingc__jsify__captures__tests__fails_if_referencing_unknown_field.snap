@@ -1,0 +1,63 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_fail(r#\"\n\t\tclass MyInflightClass {\n      inflight putInBucket() {\n        this.b.put(\"in\", \"bucket\");\n      }\n    }\n\t\t\"#)"
+---
+======================================================
+Errors:
+ - at 3:13 | Unknown symbol "b"
+======================================================
+Files:
+
+inflight.MyInflightClass.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class MyInflightClass {
+    constructor({  }) {
+    }
+    async putInBucket()  {
+      const __parent_this = this;
+      (await this.b.put("in","bucket"));
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+  }
+  return MyInflightClass;
+}
+
+main.w
+------------------------------------------------------
+
+    class MyInflightClass {
+      inflight putInBucket() {
+        this.b.put("in", "bucket");
+      }
+    }
+    
+preflight.js
+------------------------------------------------------
+class MyInflightClass extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("putInBucket", "$inflight_init");
+    const __parent_this = this;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.MyInflightClass.js")({
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const MyInflightClassClient = ${MyInflightClass._toInflightType(this).text};
+        const client = new MyInflightClassClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+

@@ -264,7 +264,8 @@ impl<'a> CaptureScanner<'a> {
 				}
 
 				let LookupResult::Found(kind, i) = lookup else {
-					panic!("reference to undefined symbol \"{x}\"");
+					report_diagnostic(Diagnostic { message: format!("Symbol {} not found", x), span: Some(x.span.clone()) });
+					return vec![];
 				};
 
 				let var = kind.as_variable().expect("variable");
@@ -336,9 +337,23 @@ impl<'a> CaptureScanner<'a> {
 	}
 
 	fn to_component_kind(&self, obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
-		fn lookup(env: &SymbolEnv, symbol: &Symbol) -> ComponentKind {
-			let (s, i) = env.lookup_ext(&symbol, None).expect("covered by type checking");
-			return ComponentKind::Member(s.as_variable().expect("variable"), i.env);
+		fn lookup(env: &SymbolEnv, symbol: &Symbol) -> Option<ComponentKind> {
+			let result = env.lookup_ext(&symbol, None);
+			match result {
+				LookupResult::Found(s, i) => {
+					return Some(ComponentKind::Member(s.as_variable().expect("variable"), i.env));
+				}
+				LookupResult::NotFound(_) => {
+					report_diagnostic(Diagnostic {
+						message: format!("Symbol {} not found", symbol),
+						span: Some(symbol.span.clone()),
+					});
+
+					return None;
+				}
+				LookupResult::DefinedLater => todo!(),
+				LookupResult::ExpectedNamespace(_) => todo!(),
+			}
 		}
 
 		match &*obj_type {
@@ -361,17 +376,15 @@ impl<'a> CaptureScanner<'a> {
 			| Type::Set(_)
 			| Type::MutSet(_) => None,
 
-			Type::Class(cls) => Some(lookup(&cls.env, property)),
-			Type::Interface(iface) => Some(lookup(&iface.env, property)),
-			Type::Struct(st) => Some(lookup(&st.env, property)),
+			Type::Class(cls) => lookup(&cls.env, property),
+			Type::Interface(iface) => lookup(&iface.env, property),
+			Type::Struct(st) => lookup(&st.env, property),
 		}
 	}
 
 	/// Returns `true` if the reference should be futher visited or `false` if we should break
 	fn analyze_reference(&mut self, node: &'a Reference) -> ControlFlow<()> {
 		let parts = self.split_reference(node);
-		println!("{}", parts.iter().map(|f| f.text.clone()).join("."));
-
 		if parts.is_empty() {
 			return ControlFlow::Continue(());
 		}

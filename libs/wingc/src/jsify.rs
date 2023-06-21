@@ -12,8 +12,7 @@ use std::{cmp::Ordering, path::Path, vec};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
-		UnaryOperator,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, UnaryOperator,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -211,9 +210,7 @@ impl<'a> JSifier<'a> {
 				property,
 				optional_accessor: _,
 			} => self.jsify_expression(object, ctx) + "." + &property.to_string(),
-			Reference::TypeMember { type_, property } => {
-				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone()), ctx) + "." + &property.to_string()
-			}
+			Reference::TypeMember { type_, property } => type_.full_path_str() + "." + &property.to_string(),
 		}
 	}
 
@@ -265,13 +262,6 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &TypeAnnotationKind, ctx: &JSifyContext) -> String {
-		match typ {
-			TypeAnnotationKind::UserDefined(t) => t.full_path_str(),
-			_ => todo!(),
-		}
-	}
-
 	fn jsify_expression(&mut self, expression: &Expr, ctx: &JSifyContext) -> String {
 		CompilationContext::set(CompilationPhase::Jsifying, &expression.span);
 		let auto_await = match ctx.phase {
@@ -295,9 +285,7 @@ impl<'a> JSifier<'a> {
 				// targets and plugins to inject alternative implementations for types. otherwise (e.g.
 				// user-defined types), we simply instantiate the type directly (maybe in the future we will
 				// allow customizations of user-defined types as well, but for now we don't).
-
-				let ctor = self.jsify_type(&class.kind, ctx);
-
+				let ctor = class.kind.to_string();
 				let scope = if is_preflight_class { Some("this") } else { None };
 
 				let id = if is_preflight_class {

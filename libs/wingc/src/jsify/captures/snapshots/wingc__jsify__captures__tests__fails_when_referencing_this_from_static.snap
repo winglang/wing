@@ -1,0 +1,62 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_fail(r#\"\n\t\tclass MyType {\n      static inflight hello() {\n        this.print();\n      }\n    }\n\t\t\"#)"
+---
+======================================================
+Errors:
+ - at 3:8 | Unknown symbol "this"
+======================================================
+Files:
+
+main.w
+------------------------------------------------------
+
+    class MyType {
+      static inflight hello() {
+        this.print();
+      }
+    }
+    
+preflight.js
+------------------------------------------------------
+class MyType extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("hello", "$inflight_init");
+    const __parent_this = this;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.MyType.js")({
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const MyTypeClient = ${MyType._toInflightType(this).text};
+        const client = new MyTypeClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class MyType {
+    constructor({  }) {
+    }
+    static async hello()  {
+      (await this.print());
+    }
+    async $inflight_init()  {
+      const __parent_this = this;
+    }
+  }
+  return MyType;
+}
+
