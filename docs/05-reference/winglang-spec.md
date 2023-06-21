@@ -1345,9 +1345,8 @@ let a = new Bar();
 a.log(); // logs 1
 ```
 
-Overloading methods is allowed. This means functions can be overloaded with many
+Overloading methods is currently not allowed. This means functions cannot be overloaded with many
 signatures only varying in the number of arguments and their unique type order.
-Overloading the constructor is also allowed.  
 Inheritance is allowed with the `extends` keyword. `super` can be used to access
 the base class, immediately up the inheritance chain (parent class).
 
