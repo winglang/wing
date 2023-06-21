@@ -385,7 +385,6 @@ where
 		Literal::Nil => {}
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
-		Literal::Duration(_) => {}
 		Literal::String(_) => {}
 	}
 }

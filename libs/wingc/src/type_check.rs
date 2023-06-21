@@ -1263,7 +1263,6 @@ impl<'a> TypeChecker<'a> {
 					self.types.string()
 				}
 				Literal::Number(_) => self.types.number(),
-				Literal::Duration(_) => self.types.duration(),
 				Literal::Boolean(_) => self.types.bool(),
 			},
 			ExprKind::Binary { op, left, right } => {
