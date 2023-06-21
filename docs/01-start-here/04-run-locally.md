@@ -15,7 +15,7 @@ Make sure you have [installed](./installation#wing-console) the Wing Console on 
 before getting started with this step.
 
 If you are unable to install the Wing Console (e.g. you are running on Linux), you can
-also test your application [programmatically](./simulator) or [deploy it to AWS](./aws).
+also test your application against the [Wing simulator](../concepts/simulator) or [deploy it to AWS](./aws).
 
 :::
 
@@ -25,7 +25,7 @@ We can use the Wing CLI to start the console with our newly created Wing source 
 wing it hello.w
 ```
 
-The Wing Console will now compile hello.w source file to [the simulator target](./simulator#the-simulator-target-sim)
+The Wing Console will now compile hello.w source file to [the simulator target](../concepts/simulator)
 and load the application. 
 
 > The console will "hot reload" your app on each change in the source file parent directory.
