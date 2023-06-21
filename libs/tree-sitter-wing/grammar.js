@@ -426,7 +426,7 @@ module.exports = grammar({
         )
       ),
 
-    new_object_id: ($) => seq("as", $.string),
+    new_object_id: ($) => prec.right(seq("as", $.expression)),
 
     new_object_scope: ($) => prec.right(seq("in", $.expression)),
 
