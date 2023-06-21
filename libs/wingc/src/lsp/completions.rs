@@ -385,8 +385,8 @@ fn add_std_namespace(type_: &str) -> std::string::String {
 		"MutSet" => "MutableSet",
 		"MutMap" => "MutableMap",
 		"MutArray" => "MutableArray",
-		"Json" | "MutJson" | "MutableArray" | "MutableMap" | "MutableSet" | "ImmutableArray" | "ImmutableMap" | "ImmutableSet"
-		| "String" | "Duration" | "Boolean" | "Number" => type_name,
+		"Json" | "MutJson" | "MutableArray" | "MutableMap" | "MutableSet" | "ImmutableArray" | "ImmutableMap"
+		| "ImmutableSet" | "String" | "Duration" | "Boolean" | "Number" => type_name,
 		_ => return type_name.to_string(),
 	};
 
@@ -807,7 +807,7 @@ util.
 		assert!(util_static_methods.iter().filter(|c| c.label == "env").count() == 1)
 	);
 
-  test_completion_list!(
+	test_completion_list!(
 		mut_json_methods,
 		r#"
 let j = MutJson {};
