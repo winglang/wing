@@ -4,7 +4,6 @@
   "implicitDependencies": ["sdk", "console-server"],
   "targets": {
     "build": {
-      "dependsOn": ["^build"],
       "options": {
         "command": "npm run compile",
         "cwd": "apps/wing-console/console/app"
@@ -18,9 +17,8 @@
     },
     "package": {
       "options": {
-        "commands": ["npm run package"],
-        "cwd": "apps/wing-console/console/app",
-        "parallel": false
+        "command": "npm run package",
+        "cwd": "apps/wing-console/console/app"
       }
     }
   }
