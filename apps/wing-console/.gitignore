@@ -1,0 +1,5 @@
+dist/
+node_modules/
+release/
+.history
+tsup.config.bundled*.mjs

@@ -1,8 +1,17 @@
 ---
-title: cloud.Bucket 
+title: cloud.Bucket
 id: bucket
 description: A built-in resource for handling object storage in the cloud.
-keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Object storage, Buckets]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    Object storage,
+    Buckets,
+  ]
 ---
 
 The `cloud.Bucket` resource represents a container for storing data in the cloud.
@@ -64,6 +73,7 @@ inflight () => {
 ### Run code on bucket events
 
 You can use the preflight methods `onCreate`, `onUpdate`, and `onDelete` to define code that should run when an object is uploaded, updated, or removed from the bucket.
+Use the `onEvent` method for responding to any event.
 
 Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
 
@@ -107,6 +117,3 @@ The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](ht
 ## API Reference
 
 The full list of APIs for `cloud.Bucket` is available in the [API Reference](../04-api-reference.md).
-
-
-

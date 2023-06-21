@@ -32,7 +32,7 @@ exports[`create a schedule 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -48,7 +48,7 @@ exports[`create a schedule 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -60,7 +60,7 @@ exports[`create a schedule 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -87,7 +87,7 @@ console.log(\\"Hello from schedule!\\");
 };
 })())({
 
-}) })).handle(event);
+}), args: {} })).handle(event);
 };",
   "simulator.json": {
     "resources": [
@@ -147,7 +147,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "An inflight resource",
@@ -163,7 +163,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -191,7 +191,7 @@ console.log(\\"Hello from schedule!\\");
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "hidden": true,
@@ -202,7 +202,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -230,7 +230,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -245,7 +245,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "hidden": true,
@@ -256,7 +256,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -283,7 +283,7 @@ console.log(\\"Hello from schedule!\\");
 };
 })())({
 
-}) })).handle(event);
+}), args: {} })).handle(event);
 };",
   "simulator.json": {
     "resources": [
@@ -343,7 +343,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "An inflight resource",
@@ -359,7 +359,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -387,7 +387,7 @@ console.log(\\"Hello from schedule!\\");
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "hidden": true,
@@ -398,7 +398,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -426,7 +426,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -441,7 +441,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "hidden": true,
@@ -452,7 +452,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -479,7 +479,7 @@ console.log(\\"Hello from schedule!\\");
 };
 })())({
 
-}) })).handle(event);
+}), args: {} })).handle(event);
 };",
   "simulator.json": {
     "resources": [
@@ -539,7 +539,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "An inflight resource",
@@ -555,7 +555,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -583,7 +583,7 @@ console.log(\\"Hello from schedule!\\");
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.1.314",
               },
               "display": {
                 "hidden": true,
@@ -594,7 +594,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -622,7 +622,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -637,7 +637,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "hidden": true,
@@ -648,7 +648,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
