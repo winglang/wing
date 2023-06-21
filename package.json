@@ -31,6 +31,14 @@
     "install:wing-playground": "npm --prefix apps/wing-playground install",
     "install:winglang": "npm --prefix apps/wing install --ignore-scripts",
     "install:bump-pack": "npm --prefix tools/bump-pack install",
+    "install:wing-console-app": "npm --prefix apps/wing-console/console/app install",
+    "install:wing-console-design-system": "npm --prefix apps/wing-console/console/design-system install",
+    "install:wing-console-server": "npm --prefix apps/wing-console/console/server install",
+    "install:wing-console-ui": "npm --prefix apps/wing-console/console/ui install",
+    "install:wing-console-error-message": "npm --prefix apps/wing-console/packages/error-message install",
+    "install:wing-console-use-loading": "npm --prefix apps/wing-console/packages/use-loading install",
+    "install:wing-console-eslint-plugin": "npm --prefix apps/wing-console/tools/eslint-plugin install",
+    "install:wing-console-tsconfig": "npm --prefix apps/wing-console/tools/tsconfig install",
     "postinstall": "run-p -l --max-parallel 3 'install:*'"
   },
   "volta": {
