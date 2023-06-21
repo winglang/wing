@@ -1479,7 +1479,7 @@ let a = new Foo(...) as "custom-id2"; // with constructor arguments
 ```
 
 "id" must be of type string. It currently cannot be a string literal with substitution
-support (see [new resource as name, name only accepts a string literal and not a statement that returns a string](https://github.com/winglang/wing/issues/1739)).  
+support (see https://github.com/winglang/wing/issues/1739).  
 
 Preflight objects can be captured into inflight scopes and once that happens, inside
 the capture block only the inflight members are available.
