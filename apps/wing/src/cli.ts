@@ -64,6 +64,12 @@ async function main() {
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .default("sim")
     )
+    .hook("preAction", async (cmd) => {
+      const target = cmd.opts().target;
+      if (target != "sim") {
+        process.env.PROGRESS = "1";
+      }
+    })
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .action(actionErrorHandler(compile));
 
@@ -75,9 +81,15 @@ async function main() {
     .argument("<entrypoint...>", "all entrypoints to test")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "sim", "awscdk"])
+        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .default("sim")
     )
+    .hook("preAction", async (cmd) => {
+      const target = cmd.opts().target;
+      if (target != "sim") {
+        process.env.PROGRESS = "1";
+      }
+    })
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .action(actionErrorHandler(test));
 
