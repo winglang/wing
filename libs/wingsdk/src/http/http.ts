@@ -1,10 +1,8 @@
 import { Code, InflightClient } from "../core";
 
 /**
- * RequestCache-
- * The cache read-only property that contains the cache mode of the request.
- * It controls how the request will interact with the browser's HTTP cache.
-
+ * The cache mode of the request.
+ * It controls how a request will interact with the system's HTTP cache.
  */
 export enum RequestCache {
   /**
