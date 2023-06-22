@@ -125,7 +125,7 @@ export interface Response {
    */
   readonly ok: boolean;
   /**
-   * The Headers object associated with the response.
+   * The map of header information associated with the response.
    */
   readonly headers: Record<string, string>;
   /**
