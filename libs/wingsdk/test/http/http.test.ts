@@ -1,14 +1,14 @@
 import { test, describe, beforeEach, vi, Mock, expect } from "vitest";
 import {
   Util as Http,
-  HttpMethods,
+  HttpMethod,
   Response,
   RequestCache,
   RequestRedirect,
 } from "../../src/http/http";
 
 let defaultOptions = {
-  method: HttpMethods.GET,
+  method: HttpMethod.GET,
   headers: {},
   cache: RequestCache.DEFAULT,
   redirect: RequestRedirect.FOLLOW,
@@ -58,7 +58,7 @@ describe("fetch", () => {
       expect(response.headers).toEqual({ "content-type": "application/json" });
     };
 
-    for (let method in HttpMethods) {
+    for (let method in HttpMethod) {
       expectResponse(
         //@ts-expect-error- ts thinks method is a string
         await Http.fetch("url", { method })
@@ -82,7 +82,7 @@ describe("fetch", () => {
       expect(response.headers).toEqual({ "content-type": "application/json" });
     };
 
-    for (let method in HttpMethods) {
+    for (let method in HttpMethod) {
       expectResponse(
         //@ts-expect-error- ts thinks method is a string
         await Http.fetch("url", { method })
@@ -135,11 +135,11 @@ describe("fetch", () => {
 
     let f = vi.spyOn(global, "fetch");
 
-    await Http.put("url", { method: HttpMethods.GET });
+    await Http.put("url", { method: HttpMethod.GET });
 
     expect(f).toBeCalledWith("url", {
       ...defaultOptions,
-      method: HttpMethods.PUT,
+      method: HttpMethod.PUT,
     });
   });
 });

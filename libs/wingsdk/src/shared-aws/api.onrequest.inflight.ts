@@ -69,14 +69,16 @@ function mapApigatewayEventToCloudApiRequest(
  * @param body body
  * @returns JSON body
  */
-function parseBody(request: APIGatewayProxyEvent) {
+function parseBody(request: APIGatewayProxyEvent): string {
   if (!request.body) return "";
 
   const contentType = Object.entries(request.headers).find(
     ([key, _]) => key.toLowerCase() === "content-type"
   )?.[1];
   if (contentType === "application/x-www-form-urlencoded") {
-    return Object.fromEntries(new URLSearchParams(request.body));
+    return JSON.stringify(
+      Object.fromEntries(new URLSearchParams(request.body))
+    );
   }
-  return JSON.parse(request.body);
+  return request.body;
 }

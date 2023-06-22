@@ -56,7 +56,7 @@ export enum RequestRedirect {
 /**
  * The request's method
  */
-export enum HttpMethods {
+export enum HttpMethod {
   /**
    * GET
    */
@@ -87,7 +87,7 @@ export interface RequestOptions {
    * The request method, e.g., GET, POST. The default is GET.
    * @default GET
    */
-  readonly method?: HttpMethods;
+  readonly method?: HttpMethod;
   /**
    * Any headers you want to add to your request.
    */
@@ -142,7 +142,7 @@ export interface Response {
  * default options to attach to any request
  */
 const defaultOptions: RequestOptions = {
-  method: HttpMethods.GET,
+  method: HttpMethod.GET,
   headers: {},
   cache: RequestCache.DEFAULT,
   redirect: RequestRedirect.FOLLOW,
@@ -183,7 +183,7 @@ export class Util {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
-      method: HttpMethods.GET,
+      method: HttpMethod.GET,
     });
   }
   /**
@@ -197,7 +197,7 @@ export class Util {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
-      method: HttpMethods.POST,
+      method: HttpMethod.POST,
     });
   }
   /**
@@ -211,7 +211,7 @@ export class Util {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
-      method: HttpMethods.PUT,
+      method: HttpMethod.PUT,
     });
   }
   /**
@@ -225,7 +225,7 @@ export class Util {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
-      method: HttpMethods.PATCH,
+      method: HttpMethod.PATCH,
     });
   }
 
@@ -243,7 +243,7 @@ export class Util {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
-      method: HttpMethods.DELETE,
+      method: HttpMethod.DELETE,
     });
   }
 
