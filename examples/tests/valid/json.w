@@ -23,7 +23,7 @@ let someNumber: num = 999;
 
 let jj = Json someNumber;
 let jj1 = Json {foo: someNumber};
-let jj2 = Json [ someNumber, {bar => someNumber} ];
+let jj2 = Json [ someNumber, {bar: someNumber} ];
 
 let getStr = (): str => {
   return "hello";
@@ -51,8 +51,7 @@ assert(someJson.get("x") == someNumber);
 someJson.set("x", 111);
 assert(someJson.get("x") == 111);
 
-// assign Map to Json
-let x: Json = {cool => "beans"};
+let x: Json = {cool :"beans"};
 
 // Nested Gets and Sets
 let nestedJson = MutJson {

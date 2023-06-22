@@ -607,9 +607,6 @@ impl Subtype for Type {
 				let r: &Type = r0;
 				self.is_subtype_of(r)
 			}
-			// This allows us for assignment from native types without allowing assignment to native types
-			// e.g. assert("hello" == x.world) but NOT assert(x.world == "hello")
-			(_, Self::Json) | (_, Self::MutJson) => true,
 			(Self::Number, Self::Number) => true,
 			(Self::String, Self::String) => true,
 			(Self::Boolean, Self::Boolean) => true,
@@ -817,6 +814,14 @@ impl TypeRef {
 		matches!(**self, Type::Unresolved)
 	}
 
+  pub fn is_json(&self) -> bool {
+    if let Type::Json | Type::MutJson= **self {
+      return true;
+    } else {
+      false
+    }
+  }
+
 	pub fn is_preflight_class(&self) -> bool {
 		if let Type::Class(ref class) = **self {
 			return class.phase == Phase::Preflight;
@@ -951,8 +956,7 @@ impl TypeRef {
 			Type::Boolean => true,
 			Type::Json | Type::MutJson => true,
 			Type::Array(v) => v.is_json_legal_value(),
-			Type::Map(v) => v.is_json_legal_value(),
-			Type::Set(v) => v.is_json_legal_value(),
+      Type::Optional(v) => v.is_json_legal_value(),
 			_ => false,
 		}
 	}
@@ -1953,6 +1957,13 @@ impl<'a> TypeChecker<'a> {
 		if expected_types.iter().any(|t| t.is_unresolved()) {
 			return actual_type;
 		}
+
+    // If the expected type is Json and the actual type is a Json legal value then we're good
+    if expected_types.iter().any(|t| t.is_json()) {
+      if actual_type.is_json_legal_value() {
+        return actual_type;
+      }
+    }
 
 		let expected_type_str = if expected_types.len() > 1 {
 			let expected_types_list = expected_types

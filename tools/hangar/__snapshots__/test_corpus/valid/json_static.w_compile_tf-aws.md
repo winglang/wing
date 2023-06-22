@@ -313,7 +313,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const x = Object.freeze({"a":123,"b":{"c":456,"d":789}});
+    const x = Object.freeze({"a":123,"b":Object.freeze({"c":456,"d":789})});
     const k = (Object.keys(x));
     {((cond) => {if (!cond) throw new Error("assertion failed: k.length == 2")})((k.length === 2))};
     const v = (Object.values(x));

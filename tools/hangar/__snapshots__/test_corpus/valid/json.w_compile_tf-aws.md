@@ -100,7 +100,7 @@ class $Root extends $stdlib.std.Resource {
     const someNumber = 999;
     const jj = someNumber;
     const jj1 = Object.freeze({"foo":someNumber});
-    const jj2 = [someNumber, {"bar":someNumber}];
+    const jj2 = [someNumber, Object.freeze({"bar":someNumber})];
     const getStr =  () =>  {
       return "hello";
     }
