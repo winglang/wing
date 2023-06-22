@@ -3,6 +3,7 @@ import { debug } from "debug";
 import { resolve } from "path";
 import open from "open";
 import { createConsoleApp } from "@wingconsole/app";
+import { parseNumericString } from "../util";
 
 export async function run(wingfile?: string, options?: { port?: string }) {
   if (!wingfile) {
@@ -22,7 +23,7 @@ export async function run(wingfile?: string, options?: { port?: string }) {
 
   const { port } = await createConsoleApp({
     wingfile,
-    requestedPort: options?.port ? Number(options.port) : undefined,
+    requestedPort: parseNumericString(options?.port),
     hostUtils: {
       async openExternal(url) {
         await open(url);

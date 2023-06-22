@@ -73,3 +73,16 @@ export async function generateTmpDir(sourcePath: string, ...additionalFiles: str
 
   return tempWingFile;
 }
+
+/**
+ * Casts a numeric string to a number.
+ *
+ * Returns `undefined` if the string is not a number.
+ */
+export function parseNumericString(text?: string) {
+  const number = Number(text);
+  if (isNaN(number)) {
+    return undefined;
+  }
+  return number;
+}
