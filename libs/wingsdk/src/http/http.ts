@@ -53,6 +53,7 @@ export enum RequestRedirect {
    */
   ERROR = "error",
 }
+
 /**
  * The request's method
  */
