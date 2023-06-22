@@ -172,7 +172,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Dummy;
@@ -214,7 +213,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return ScopeAndIdTestClass;
@@ -1276,7 +1274,6 @@ class $Root extends $stdlib.std.Resource {
     class Dummy extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Dummy.js";
@@ -1305,13 +1302,11 @@ class $Root extends $stdlib.std.Resource {
     class ScopeAndIdTestClass extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         const d1 = new Dummy(this,"Dummy");
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'd1.node.path.endsWith("/ScopeAndIdTestClass/Dummy")'`)})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
         const d2 = new Dummy(d1,"Dummy");
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'd2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy")'`)})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
         for (const i of $stdlib.std.Range.of(0, 3, false)) {
-          const __parent_this = this;
           const x = new Dummy(this,`tc${i}`);
           const expected_path = `/ScopeAndIdTestClass/tc${i}`;
           {((cond) => {if (!cond) throw new Error(`assertion failed: 'x.node.path.endsWith(expected_path)'`)})(x.node.path.endsWith(expected_path))};
