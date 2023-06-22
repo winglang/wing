@@ -49,8 +49,9 @@ async function main() {
   program
     .command("run")
     .alias("it")
-    .description("Runs a Wing simulator file in the Wing Console")
-    .argument("[simfile]", ".wsim simulator file")
+    .description("Runs a Wing file in the Wing Console")
+    .argument("[wingfile]", ".w (Wing file)")
+    .option("-p, --port <port>", "specify port")
     .action(run);
 
   program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
