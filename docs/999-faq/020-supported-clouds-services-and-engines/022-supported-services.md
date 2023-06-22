@@ -3,6 +3,7 @@ title: Which cloud services are supported by Wing?
 sidebar_label: Cloud Services
 id: supported-services
 keywords: [faq, supported service, winglang, Wing programming language, Wing language, AWS, GCP, Azure, Function, Bucket, Queue, Topic, API]
+description: Build cloud applications with ease using Winglang. Explore the compatibility matrix to see supported services across different cloud providers.
 ---
 
 Winglang was built from the ground up to make it an ideal choice for building applications on any cloud. Every app has access to the Wing SDK, a set of batteries-included resources that represent cloud services that are common to most major cloud providers for common use cases.

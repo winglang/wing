@@ -114,6 +114,7 @@ module.exports = grammar({
         $.enum_definition,
         $.try_catch_statement,
         $.compiler_dbg_env,
+        $.super_constructor_statement
       ),
 
     short_import_statement: ($) =>
@@ -263,6 +264,8 @@ module.exports = grammar({
       seq("while", field("condition", $.expression), field("block", $.block)),
 
     break_statement: ($) => seq("break", $._semicolon),
+    _super: ($) => "super",
+    super_constructor_statement: ($) => seq($._super, field("args", $.argument_list), $._semicolon),
 
     continue_statement: ($) => seq("continue", $._semicolon),
 
@@ -425,14 +428,10 @@ module.exports = grammar({
           field("class", choice($.custom_type, $.mutable_container_type)),
           // While "args" is optional in this grammar, upstream parsing will fail if it is not present
           field("args", optional($.argument_list)),
-          field("id", optional($.new_object_id)),
-          field("scope", optional($.new_object_scope))
+          optional(seq("as", field("id", $.expression))),
+          optional(seq("in", field("scope", $.expression))),
         )
       ),
-
-    new_object_id: ($) => seq("as", $.string),
-
-    new_object_scope: ($) => prec.right(seq("in", $.expression)),
 
     _type: ($) =>
       choice(

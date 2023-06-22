@@ -1,52 +1,80 @@
 # [api_path_vars.w](../../../../../examples/tests/valid/api_path_vars.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
+
 ```js
-module.exports = function({ std_Json }) {
+module.exports = function ({ std_Json }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
+    async $inflight_init() {}
+    async handle(req) {
       return {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
-      "status": 200,}
-      ;
+        body: ((args) => {
+          return JSON.stringify(args[0], null, args[1]);
+        })([Object.freeze({ user: req.vars["name"] })]),
+        status: 200,
+      };
     }
   }
   return $Closure1;
-}
-
+};
 ```
 
 ## inflight.$Closure2.js
+
 ```js
-module.exports = function({ api, http_Util, std_Json }) {
+module.exports = function ({ api, http_Util, std_Json }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async $inflight_init() {}
+    async handle() {
       const username = "tsuf";
-      const res = (await http_Util.get(`${api.url}/users/${username}`));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.status === 200)'`)})((res.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((JSON.parse(res.body)))["user"] === username)'`)})((((JSON.parse(res.body)))["user"] === username))};
+      const res = await http_Util.get(`${api.url}/users/${username}`);
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(`assertion failed: '(res.status === 200)'`);
+        })(res.status === 200);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              `assertion failed: '(((JSON.parse(res.body)))["user"] === username)'`
+            );
+        })(JSON.parse(res.body)["user"] === username);
+      }
     }
   }
   return $Closure2;
-}
+};
+```
 
+## inflight.Fetch.js
+
+```js
+module.exports = function ({}) {
+  class Fetch {
+    constructor({}) {}
+    async $inflight_init() {}
+    async get(url) {
+      return require("<ABSOLUTE_PATH>/api_path_vars.js")["get"](url);
+    }
+  }
+  return Fetch;
+};
 ```
 
 ## main.tf.json
+
 ```json
 {
   "//": {
@@ -83,9 +111,7 @@ module.exports = function({ api, http_Util, std_Json }) {
     }
   },
   "provider": {
-    "aws": [
-      {}
-    ]
+    "aws": [{}]
   },
   "resource": {
     "aws_api_gateway_deployment": {
@@ -305,19 +331,51 @@ module.exports = function({ api, http_Util, std_Json }) {
 ```
 
 ## preflight.js
+
 ```js
-const $stdlib = require('@winglang/sdk');
+const $stdlib = require("@winglang/sdk");
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
+const cloud = require("@winglang/sdk").cloud;
+const http = require("@winglang/sdk").http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class Fetch extends $stdlib.std.Resource {
+      constructor(scope, id) {
+        super(scope, id);
+        this._addInflightOps("get");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Fetch.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const FetchClient = ${Fetch._toInflightType(this).text};
+            const client = new FetchClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("get")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -351,7 +409,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -390,15 +448,30 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const handler = new $Closure1(this,"$Closure1");
-    (api.get("/users/{name}",handler));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure2(this,"$Closure2"));
+    const api = this.node.root.newAbstract(
+      "@winglang/sdk.cloud.Api",
+      this,
+      "cloud.Api"
+    );
+    const handler = new $Closure1(this, "$Closure1");
+    api.get("/users/{name}", handler);
+    this.node.root.new(
+      "@winglang/sdk.std.Test",
+      std.Test,
+      this,
+      "test:test",
+      new $Closure2(this, "$Closure2")
+    );
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "api_path_vars", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({
+      outdir: $outdir,
+      name: "api_path_vars",
+      plugins: $plugins,
+      isTestEnvironment: $wing_is_test,
+    });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -412,6 +485,4 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
 ```
-

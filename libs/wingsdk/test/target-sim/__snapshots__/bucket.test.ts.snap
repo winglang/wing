@@ -1,11 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`bucket on event creates 3 topics  1`] = `
+exports[`bucket on event creates 3 topics, and sends the right event and key in the event handlers  1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Topic created.",
   "wingsdk.cloud.Topic created.",
   "wingsdk.cloud.Topic created.",
+  "wingsdk.cloud.Bucket created.",
   "wingsdk.cloud.Bucket created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.sim.EventMapping created.",
@@ -13,12 +14,31 @@ exports[`bucket on event creates 3 topics  1`] = `
   "wingsdk.sim.EventMapping created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.sim.EventMapping created.",
+  "Publish (message=a).",
+  "Sending message (message=a, subscriber=sim-6).",
+  "Put (key=a).",
+  "Invoke (payload=\\"a\\").",
+  "Put (key=a).",
+  "Get (key=a).",
+  "Publish (message=a).",
+  "Sending message (message=a, subscriber=sim-8).",
+  "Put (key=a).",
+  "Invoke (payload=\\"a\\").",
+  "Put (key=a).",
+  "Get (key=a).",
+  "Publish (message=a).",
+  "Sending message (message=a, subscriber=sim-10).",
+  "Put (key=a).",
+  "Invoke (payload=\\"a\\").",
+  "Delete (key=a).",
+  "Get (key=a).",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Topic deleted.",
@@ -76,7 +96,7 @@ exports[`can add object in preflight 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -92,7 +112,7 @@ exports[`can add object in preflight 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -104,7 +124,7 @@ exports[`can add object in preflight 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -148,7 +168,7 @@ exports[`create a bucket 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -164,7 +184,7 @@ exports[`create a bucket 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -176,7 +196,7 @@ exports[`create a bucket 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -230,7 +250,7 @@ exports[`get invalid object throws an error 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -246,7 +266,7 @@ exports[`get invalid object throws an error 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -258,7 +278,7 @@ exports[`get invalid object throws an error 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -348,7 +368,7 @@ exports[`put and get Json object from bucket 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -364,7 +384,7 @@ exports[`put and get Json object from bucket 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A cloud object store",
@@ -376,7 +396,7 @@ exports[`put and get Json object from bucket 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
