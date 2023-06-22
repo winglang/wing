@@ -72,7 +72,6 @@ class MyType extends $stdlib.std.Resource {
   constructor(scope, id, ) {
     super(scope, id);
     this._addInflightOps("isEmpty", "checkIfEmpty", "$inflight_init");
-    const __parent_this = this;
     this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
   }
   static _toInflightType(context) {
@@ -153,18 +152,14 @@ module.exports = function({ this }) {
       this.b = b;
     }
     async isEmpty()  {
-      const __parent_this = this;
       return ((await this.b.list()).length === 0);
     }
     async checkIfEmpty()  {
-      const __parent_this = this;
       if ((await this.isEmpty())) {
-        const __parent_this = this;
         {console.log("empty!")};
       }
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return MyType;

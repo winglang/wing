@@ -46,7 +46,6 @@ class MyType extends $stdlib.std.Resource {
   constructor(scope, id, ) {
     super(scope, id);
     this._addInflightOps("boom", "bam", "$inflight_init");
-    const __parent_this = this;
     this.s = "hello";
     this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
   }
@@ -93,17 +92,14 @@ module.exports = function({  }) {
       this.s = s;
     }
     async boom()  {
-      const __parent_this = this;
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.s.length > 0)'`)})((this.s.length > 0))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.b.list()).length > 0)'`)})(((await this.b.list()).length > 0))};
     }
     async bam()  {
-      const __parent_this = this;
       (await this.b.put("hello","world"));
       (await this.b.get("aaa"));
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return MyType;

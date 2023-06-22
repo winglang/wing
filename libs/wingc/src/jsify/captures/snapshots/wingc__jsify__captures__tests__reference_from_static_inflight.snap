@@ -28,7 +28,6 @@ class MyType extends $stdlib.std.Resource {
   constructor(scope, id, ) {
     super(scope, id);
     this._addInflightOps("staticMethod", "$inflight_init");
-    const __parent_this = this;
   }
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
@@ -67,7 +66,6 @@ module.exports = function({ s }) {
       return s;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return MyType;

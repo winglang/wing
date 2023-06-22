@@ -29,11 +29,9 @@ module.exports = function({ MyType }) {
     constructor({  }) {
     }
     async putIndirect()  {
-      const __parent_this = this;
       (await MyType.putInBucket());
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return YourType;
@@ -88,7 +86,6 @@ class MyType extends $stdlib.std.Resource {
   constructor(scope, id, ) {
     super(scope, id);
     this._addInflightOps("putInBucket", "$inflight_init");
-    const __parent_this = this;
   }
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
@@ -125,7 +122,6 @@ class YourType extends $stdlib.std.Resource {
   constructor(scope, id, ) {
     super(scope, id);
     this._addInflightOps("putIndirect", "$inflight_init");
-    const __parent_this = this;
   }
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
@@ -194,7 +190,6 @@ module.exports = function({ b }) {
       (await b.put("in","bucket"));
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return MyType;

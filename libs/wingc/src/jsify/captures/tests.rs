@@ -497,7 +497,7 @@ fn capture_report(code: &str) -> String {
 	let code = code.replace("\t", "  ");
 
 	let mut f = File::create(&path).unwrap();
-	f.write(code.as_bytes()).unwrap();
+	f.write_all(code.as_bytes()).unwrap();
 
 	let source_path = path.as_path();
 	let (scope, types) = partial_compile(source_path);
@@ -550,7 +550,7 @@ fn capture_report(code: &str) -> String {
 	return snap.join("\n");
 }
 
-fn find_classes<'a>(scope: &'a Scope) -> Vec<&'a Class> {
+fn find_classes(scope: &Scope) -> Vec<&Class> {
 	// find the "myMethod" scope
 	struct FindClassVisitor<'a> {
 		results: Vec<&'a Class>,

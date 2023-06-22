@@ -187,8 +187,7 @@ impl ClassCaptures {
 		self
 			.fields()
 			.iter()
-			.map(|(f, ops)| f.strip_prefix("this.").map(|f| (f.to_string(), ops.clone())))
-			.flatten()
+			.filter_map(|(f, ops)| f.strip_prefix("this.").map(|f| (f.to_string(), ops.clone())))
 			.collect()
 	}
 
@@ -282,7 +281,7 @@ impl<'a> CaptureScanner<'a> {
 				optional_accessor: _optional_chain,
 			} => {
 				let obj_type = self.types.get_expr_type(object).unwrap();
-				let prop = if let Some(component_kind) = self.to_component_kind(obj_type, property) {
+				let prop = if let Some(component_kind) = Self::to_component_kind(obj_type, property) {
 					vec![Component {
 						text: property.name.clone(),
 						span: property.span.clone(),
@@ -336,7 +335,7 @@ impl<'a> CaptureScanner<'a> {
 		}
 	}
 
-	fn to_component_kind(&self, obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
+	fn to_component_kind(obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
 		fn lookup(env: &SymbolEnv, symbol: &Symbol) -> Option<ComponentKind> {
 			let result = env.lookup_ext(&symbol, None);
 			match result {
@@ -359,7 +358,7 @@ impl<'a> CaptureScanner<'a> {
 		match &*obj_type {
 			Type::Void => unreachable!("cannot reference a member of void"),
 			Type::Function(_) => unreachable!("cannot reference a member of a function"),
-			Type::Optional(t) => self.to_component_kind(*t, property),
+			Type::Optional(t) => Self::to_component_kind(*t, property),
 			Type::String
 			| Type::Number
 			| Type::Duration
@@ -374,7 +373,8 @@ impl<'a> CaptureScanner<'a> {
 			| Type::Map(_)
 			| Type::MutMap(_)
 			| Type::Set(_)
-			| Type::MutSet(_) => None,
+			| Type::MutSet(_)
+			| Type::Unresolved => None,
 
 			Type::Class(cls) => lookup(&cls.env, property),
 			Type::Interface(iface) => lookup(&iface.env, property),
@@ -442,7 +442,7 @@ impl<'a> CaptureScanner<'a> {
 			// it doesn't make sense to capture a preflight object after we've already taken off.
 			if !inflight.is_empty() {
 				report_diagnostic(Diagnostic {
-					message: format!("Cannot reference a preflight object after takeoff"),
+					message: "Cannot reference a preflight object after takeoff".to_string(),
 					span: Some(part.span.clone()),
 				});
 				return ControlFlow::Break(());
@@ -554,7 +554,7 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 		&mut self,
 		node: &'ast Expr,
 		class: &'ast TypeAnnotation,
-		obj_id: &'ast Option<String>,
+		obj_id: &'ast Option<Box<Expr>>,
 		obj_scope: &'ast Option<Box<Expr>>,
 		arg_list: &'ast ArgList,
 	) {

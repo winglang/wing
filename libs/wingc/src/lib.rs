@@ -293,8 +293,11 @@ pub fn partial_compile(source_path: &Path) -> (Box<Scope>, Types) {
 	let mut types = Types::new();
 	let mut jsii_types = TypeSystem::new();
 
+	// Create a universal JSII import spec (need to keep this alive during entire compilation)
+	let mut jsii_imports = vec![];
+
 	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
+	type_check(&mut scope, &mut types, &source_path, &mut jsii_types, &mut jsii_imports);
 
 	// bail out if there were errors
 	if found_errors() {
@@ -302,7 +305,7 @@ pub fn partial_compile(source_path: &Path) -> (Box<Scope>, Types) {
 	}
 
 	// Validate that every Expr in the final tree has been type checked
-	let mut tc_assert = TypeCheckAssert::new(&types);
+	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 	tc_assert.check(&scope);
 
 	return (scope, types);
@@ -336,28 +339,6 @@ pub fn compile(
 	// -- COMPILE --
 
 	let (scope, types) = partial_compile(source_path);
-
-	// -- DESUGARING PHASE --
-
-	// Transform all inflight closures defined in preflight into single-method resources
-	let mut inflight_transformer = ClosureTransformer::new();
-	let mut scope = inflight_transformer.fold_scope(scope);
-
-	// -- TYPECHECKING PHASE --
-
-	// Create universal types collection (need to keep this alive during entire compilation)
-	let mut types = Types::new();
-	let mut jsii_types = TypeSystem::new();
-
-	// Create a universal JSII import spec (need to keep this alive during entire compilation)
-	let mut jsii_imports = vec![];
-
-	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types, &source_path, &mut jsii_types, &mut jsii_imports);
-
-	// Validate the type checker didn't miss anything see `TypeCheckAssert` for details
-	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
-	tc_assert.check(&scope);
 
 	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if found_errors() {
