@@ -14,7 +14,7 @@ export const tmpDir = path.join(hangarDir, "tmp");
 export const npmCacheDir = path.join(tmpDir, ".npm");
 
 export const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
-export const wingBin = path.join(tmpDir, "node_modules/.bin/wing");
+export const wingBin = path.join(repoRoot, "tools", "bootstrapper", "__wing_bin", "_winghangar", "wing");
 
 export const snapshotDir = path.join(hangarDir, "__snapshots__");
 

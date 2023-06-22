@@ -17,6 +17,11 @@
     "tsx": "^3.12.6",
     "vitest": "^0.30.1",
     "yaml": "^2.2.1",
-    "@cdktf/provider-aws": "^12.0.13"
+    "@cdktf/provider-aws": "^12.0.13",
+    "bootstrapper": "file:../bootstrapper"
+  },
+  "volta": {
+    "node": "18.16.0",
+    "npm": "8.19.3"
   }
 }

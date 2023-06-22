@@ -31,6 +31,7 @@
     "install:wing-playground": "npm --prefix apps/wing-playground install",
     "install:winglang": "npm --prefix apps/wing install --ignore-scripts",
     "install:bump-pack": "npm --prefix tools/bump-pack install",
+    "install:bootstrapper": "npm --prefix tools/bootstrapper install",
     "install:wing-console-app": "npm --prefix apps/wing-console/console/app install",
     "install:wing-console-design-system": "npm --prefix apps/wing-console/console/design-system install",
     "install:wing-console-server": "npm --prefix apps/wing-console/console/server install",
