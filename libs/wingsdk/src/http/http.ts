@@ -155,7 +155,8 @@ export class Util {
     return InflightClient.forType(__filename, this.name);
   }
   /**
-   * Sends an http request of any method.
+   * Sends an HTTP request to a URL, returning a fulfilled or failed response.
+   * @throws Only throws if there is a networking error
    * @param url
    * @param options
    * @inflight
