@@ -1,5 +1,5 @@
 ---
-title: cloud.Bucket
+title: Bucket
 id: bucket
 description: A built-in resource for handling object storage in the cloud.
 keywords:

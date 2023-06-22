@@ -1,5 +1,5 @@
 ---
-title: cloud.Topic 
+title: Topic 
 id: topic
 description: A built-in resource for publishing messages to subscribers.
 keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, topics]
