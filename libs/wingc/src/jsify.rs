@@ -346,7 +346,6 @@ impl<'a> JSifier<'a> {
 						.join("")
 				),
 				Literal::Number(n) => format!("{}", n),
-				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {
@@ -527,6 +526,13 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
+			StmtKind::SuperConstructor { arg_list } => {
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				match ctx.phase {
+					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
+					_ => CodeMaker::one_line(format!("super({});", args)),
+				}
+			}
 			StmtKind::Bring {
 				module_name,
 				identifier,
@@ -903,7 +909,12 @@ impl<'a> JSifier<'a> {
 		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
 
 		// Find all free variables in the class, and return a list of their symbols
-		let (captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+
+		if let Some(parent) = &class.parent {
+			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
+			captured_types.insert(parent.full_path(), parent_type);
+		}
 
 		// Get all references between inflight methods and preflight values
 		let mut refs = self.find_inflight_references(class, &captured_vars);
@@ -1227,7 +1238,7 @@ impl<'a> JSifier<'a> {
 
 			if class.parent.is_some() {
 				class_code.line(format!(
-					"super({});",
+					"super({{{}}});",
 					lifted_by_parent
 						.iter()
 						.map(|name| name.clone())
@@ -1775,6 +1786,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 			Type::Class(cls) => Some(ComponentKind::Member(cls.env.lookup(&property, None)?.as_variable()?)),
 			Type::Interface(iface) => Some(ComponentKind::Member(iface.env.lookup(&property, None)?.as_variable()?)),
 			Type::Struct(st) => Some(ComponentKind::Member(st.env.lookup(&property, None)?.as_variable()?)),
+			Type::Unresolved => panic!("Encountered unresolved type during jsification"),
 		}
 	}
 }

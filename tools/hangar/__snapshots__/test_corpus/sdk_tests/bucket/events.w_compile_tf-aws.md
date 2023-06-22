@@ -198,7 +198,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     static async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
@@ -1091,7 +1090,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("sleep");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Util.js";
@@ -1479,7 +1477,7 @@ class $Root extends $stdlib.std.Resource {
     const wait = new $Closure6(this,"$Closure6");
     const checkHitCount = new $Closure7(this,"$Closure7");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"hitCount is incremented according to the bucket event",new $Closure8(this,"$Closure8"),{
-    "timeout": $stdlib.std.Duration.fromSeconds(480),}
+    "timeout": (std.Duration.fromSeconds(480)),}
     );
   }
 }

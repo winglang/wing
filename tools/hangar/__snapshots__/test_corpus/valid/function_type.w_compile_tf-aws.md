@@ -45,13 +45,10 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async my_method3(x)  {
-      const __parent_this = this;
     }
     async my_method4(x)  {
-      const __parent_this = this;
     }
   }
   return C;
@@ -169,13 +166,10 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("my_method3", "my_method4");
-        const __parent_this = this;
       }
        my_method(x)  {
-        const __parent_this = this;
       }
        my_method2(x)  {
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.C.js";
