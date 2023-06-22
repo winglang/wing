@@ -420,7 +420,7 @@ pub struct StructField {
 pub enum ExprKind {
 	New {
 		class: TypeAnnotation,
-		obj_id: Option<String>,
+		obj_id: Option<Box<Expr>>,
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
 	},
@@ -510,7 +510,6 @@ pub enum Literal {
 	String(String),
 	InterpolatedString(InterpolatedString),
 	Number(f64),
-	Duration(f64),
 	Boolean(bool),
 	Nil,
 }

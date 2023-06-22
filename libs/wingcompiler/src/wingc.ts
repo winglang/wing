@@ -99,7 +99,7 @@ export async function load(options: WingCompilerLoadOptions) {
 
     const drives = wmicCommand.stdout
       .split("\r\r\n")
-      .filter((value) => /[A-Za-z]:/.test(value))
+      .filter((value) => /[C-Zc-z]:/.test(value))
       .map((value) => value.trim());
 
     for (const drive of drives) {

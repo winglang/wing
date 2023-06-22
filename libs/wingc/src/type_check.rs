@@ -1263,7 +1263,6 @@ impl<'a> TypeChecker<'a> {
 					self.types.string()
 				}
 				Literal::Number(_) => self.types.number(),
-				Literal::Duration(_) => self.types.duration(),
 				Literal::Boolean(_) => self.types.bool(),
 			},
 			ExprKind::Binary { op, left, right } => {
@@ -1360,12 +1359,10 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env).type_,
 			ExprKind::New {
 				class,
-				obj_id: _, // TODO
+				obj_id,
 				arg_list,
-				obj_scope, // TODO
+				obj_scope,
 			} => {
-				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
-
 				// Type check the arguments
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
@@ -1435,16 +1432,20 @@ impl<'a> TypeChecker<'a> {
 
 				self.type_check_arg_list_against_function_sig(&arg_list, &constructor_sig, exp, arg_list_types);
 
-				// If this is a preflight class then create a new type for this resource object
+				// Type check the scope and id
+				let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env));
+				let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env));
+
+				// If this is a preflight class make sure the object's scope and id are of correct type
 				if type_.is_preflight_class() {
 					// Get reference to resource object's scope
-					let obj_scope_type = if let Some(obj_scope) = obj_scope {
-						Some(self.type_check_exp(obj_scope, env))
-					} else {
+					let obj_scope_type = if obj_scope_type.is_none() {
 						// If this returns None, this means we're instantiating a preflight object in the global scope, which is valid
 						env
 							.lookup(&"this".into(), Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
+					} else {
+						obj_scope_type
 					};
 
 					// Verify the object scope is an actually resource
@@ -1460,7 +1461,18 @@ impl<'a> TypeChecker<'a> {
 						}
 					}
 
-					// TODO: make sure there's no existing object with this scope/id, fail if there is! -> this can only be done in synth because I can't evaluate the scope expression here.. handle this somehow with source mapping
+					// Verify the object id is a string
+					if let Some(obj_id_type) = obj_id_type {
+						self.validate_type(obj_id_type, self.types.string(), obj_id.as_ref().unwrap());
+					}
+				} else {
+					// This is an inflight class, make sure the object scope and id are not set
+					if let Some(obj_scope) = obj_scope {
+						self.spanned_error(obj_scope, "Inflight classes cannot have a scope");
+					}
+					if let Some(obj_id) = obj_id {
+						self.spanned_error(obj_id, "Inflight classes cannot have an id");
+					}
 				}
 				type_
 			}

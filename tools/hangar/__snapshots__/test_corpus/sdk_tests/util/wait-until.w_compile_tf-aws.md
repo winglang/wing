@@ -833,9 +833,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const invokeCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    const oneHundredMiliseconds = $stdlib.std.Duration.fromSeconds(0.1);
-    const oneSecond = $stdlib.std.Duration.fromSeconds(1);
-    const fiveSeconds = $stdlib.std.Duration.fromSeconds(5);
+    const oneHundredMiliseconds = (std.Duration.fromSeconds(0.1));
+    const oneSecond = (std.Duration.fromSeconds(1));
+    const fiveSeconds = (std.Duration.fromSeconds(5));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:returns true immediately",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:returns false goes to timeout",new $Closure2(this,"$Closure2"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:returns after some time waiting",new $Closure3(this,"$Closure3"));
