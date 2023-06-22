@@ -6,38 +6,39 @@ import { Code, InflightClient } from "../core";
  */
 export enum RequestCache {
   /**
-   * The browser looks for a matching request in its HTTP cache.
-   * If there is a match and it is fresh, it will be returned from the cache.
-   * If there is a match but it is stale, the browser will make a conditional request to the remote server.
-   * If the server indicates that the resource has not changed, it will be returned from the cache.
-   * Otherwise the resource will be downloaded from the server and the cache will be updated.
-   * If there is no match, the browser will make a normal request, and will update the cache with the downloaded resource.
+   * The runtime environment looks for a matching request in its HTTP cache.
+   * * If there is a match and it is fresh, it will be returned from the cache.
+   * * If there is a match but it is stale, the runtime environment will make a conditional request to the remote server.
+   * * If the server indicates that the resource has not changed, it will be returned from the cache.
+   * * Otherwise the resource will be downloaded from the server and the cache will be updated.
+   * * If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
    */
   DEFAULT = "default",
   /**
-   * The browser fetches the resource from the remote server without first looking in the cache,
+   * The runtime environment fetches the resource from the remote server without first looking in the cache,
    * and will not update the cache with the downloaded resource.
    */
   NO_STORE = "no-store",
   /**
-   * The browser fetches the resource from the remote server without first looking in the cache,
+   * The runtime environment fetches the resource from the remote server without first looking in the cache,
    * but then will update the cache with the downloaded resource.
    */
   RELOAD = "reload",
   /**
-   * The browser looks for a matching request in its HTTP cache.
-   * If there is a match, fresh or stale, the browser will make a conditional request to the remote server.
-   * If the server indicates that the resource has not changed, it will be returned from the cache. Otherwise the resource will be downloaded from the server and the cache will be updated.
-   * If there is no match, the browser will make a normal request, and will update the cache with the downloaded resource.
+   * The runtime environment looks for a matching request in its HTTP cache.
+   * * If there is a match, fresh or stale, the runtime environment will make a conditional request to the remote server.
+   * * If the server indicates that the resource has not changed, it will be returned from the cache. Otherwise the resource will be downloaded from the server and the cache will be updated.
+   * * If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
    */
   NO_CACHE = "no-cache",
   /**
-   * The browser looks for a matching request in its HTTP cache.
-   * If there is a match, fresh or stale, it will be returned from the cache.
-   * If there is no match, the browser will make a normal request, and will update the cache with the downloaded resource.
+   * The runtime environment looks for a matching request in its HTTP cache.
+   * * If there is a match, fresh or stale, it will be returned from the cache.
+   * * If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
    */
   FORCE_CACHE = "force-cache",
 }
+
 /**
  * The redirect read-only property that contains the mode for how redirects are handled.
  */
@@ -77,12 +78,14 @@ export enum HttpMethods {
    */
   POST = "POST",
 }
+
 /**
  * An object containing any custom settings that you want to apply to the request.
  */
 export interface RequestOptions {
   /**
    * The request method, e.g., GET, POST. The default is GET.
+   * @default GET
    */
   readonly method?: HttpMethods;
   /**
@@ -100,10 +103,12 @@ export interface RequestOptions {
   readonly cache?: RequestCache;
   /**
    * he redirect mode to use: follow, error. The default is follow.
+   * @default follow
    */
   readonly redirect?: RequestRedirect;
   /**
    * A string specifying "no-referrer", client, or a URL. The default is "about:client".
+   * @default  about:client
    */
   readonly referrer?: string;
 }
@@ -132,6 +137,7 @@ export interface Response {
    */
   readonly body: string;
 }
+
 /**
  * default options to attach to any request
  */
@@ -141,6 +147,7 @@ const defaultOptions: RequestOptions = {
   cache: RequestCache.DEFAULT,
   redirect: RequestRedirect.FOLLOW,
 };
+
 /**
  * the Http class is used for calling different HTTP methods and requesting and sending information online,
  *  as well as testing public accessible resources
@@ -245,9 +252,9 @@ export class Util {
   ): Promise<Response> {
     // convert Headers object into a plain JS object
     const headers: Record<string, string> = {};
-    for (const [key, value] of response.headers.entries()) {
+    response.headers?.forEach((val: string, key: string) => {
       headers[key] = val;
-    }
+    });
 
     return {
       status: response.status,
