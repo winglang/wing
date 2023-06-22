@@ -503,7 +503,7 @@ impl<'a> JSifier<'a> {
 					phase: ctx.phase,
 				};
 				let js_out = match &element.kind {
-					ExprKind::MapLiteral { .. } => {
+					ExprKind::JsonMapLiteral { .. } => {
 						if *is_mut {
 							self.jsify_expression(element, json_context)
 						} else {
@@ -514,6 +514,15 @@ impl<'a> JSifier<'a> {
 				};
 				js_out
 			}
+      ExprKind::JsonMapLiteral { fields } => {
+        let f = fields
+					.iter()
+					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, ctx)))
+					.collect::<Vec<String>>()
+					.join(",");
+
+        format!("{{{}}}", f)
+      }
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
