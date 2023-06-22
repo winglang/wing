@@ -669,14 +669,6 @@ impl FunctionSignature {
 
 		self.parameters.len() - num_optionals
 	}
-
-	/// Returns the maximum number of parameters that can be passed to this function.
-	///
-	/// TODO: how to represent unlimited parameters in the case of variadics?
-	/// https://github.com/winglang/wing/issues/125
-	fn max_parameters(&self) -> usize {
-		self.parameters.len()
-	}
 }
 
 impl PartialEq for FunctionSignature {

@@ -1083,14 +1083,7 @@ impl<'a> JSifier<'a> {
 					code.add_code(self.jsify_enum(&e.values));
 					code.close("`),");
 				}
-				_ => {
-					for sym in n {
-						report_diagnostic(Diagnostic {
-							message: format!("Unexpected type \"{t}\" referenced inflight"),
-							span: Some(sym.span.clone()),
-						});
-					}
-				}
+				_ => {}
 			}
 		}
 
