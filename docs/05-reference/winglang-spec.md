@@ -1451,24 +1451,23 @@ Preflight objects instantiated at block scope root level of entrypoint are assig
 root app as their default implicit scope.
 
 Preflight object instantiation syntax uses the `let` keyword the same way variables are declared in
-Wing. The `as` keyword can be used to customize the identifier assigned to this
-preflight object.
-
-It is currently impossible to override the default scope of a preflight object (see [Support specifying scopes for preflight objects](https://github.com/winglang/wing/issues/2386)).
+Wing. The `as` and `in` keywords can be used to customize the identifier and scope assigned to this
+preflight object respectively.
 
 ```pre
-let <name>[: <type>] = new <Type>(<args>) [as <id>];
+let <name>[: <type>] = new <Type>(<args>) [as <id>] [in <scope>];
 ```
 
 ```TS
 // Wing Code:
 let a = new Foo(); // with default scope and id
-let a = new Foo() as "custom-id"; // with user-defined id
-let a = new Foo(...) as "custom-id2"; // with constructor arguments
+let a = new Foo() in scope; // with user-defined scope
+let a = new Foo() as "custom-id" in scope; // with user-defined scope and id
+let a = new Foo(...) as "custom-id2" in scope; // with constructor arguments
 ```
-
-"id" must be of type string. It currently cannot be a string literal with substitution
-support (see https://github.com/winglang/wing/issues/1739).  
+"id" must be of type string. It can also be a string literal with substitution
+support (normal strings as well as shell strings).  
+"scope" must be an expression that resolves to a preflight object.  
 
 Preflight objects can be captured into inflight scopes and once that happens, inside
 the capture block only the inflight members are available.
