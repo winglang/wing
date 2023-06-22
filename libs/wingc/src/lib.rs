@@ -254,10 +254,6 @@ pub fn type_check(
 	let mut tc = TypeChecker::new(types, source_path, jsii_types, jsii_imports);
 	tc.add_globals(scope);
 
-	if found_errors() {
-		return;
-	}
-
 	tc.type_check_scope(scope);
 }
 
