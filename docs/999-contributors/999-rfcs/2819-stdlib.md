@@ -59,7 +59,7 @@ preflight inflight class RegExp {
 preflight inflight regex(pattern: str): RegExp;
 ```
 
-### `fs` module
+## `fs` module
 
 File APIs are phase-independent and at the moment are all implemented using the "sync" node.js `fs` APIs.
 In the future we might separate preflight/inflight versions and the inflight versions will be async.
@@ -95,7 +95,7 @@ inflight preflight absolute(p: str): str;
 // ...
 ```
 
-### `http` module
+## `http` module
 
 Note that the APIs here are inflight-only.
 
