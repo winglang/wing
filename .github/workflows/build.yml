@@ -185,6 +185,8 @@ jobs:
       - build
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
@@ -248,6 +250,8 @@ jobs:
     runs-on: "${{ matrix.runner }}-latest"
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
