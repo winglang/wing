@@ -1073,34 +1073,39 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
-		code.open(format!("require({client_path})({{"));
-
 		// create a _lift() calls for each referenced preflight object
 		let lifts = make_lift_args(captures.free_vars());
+		let free_types = captures.free_types();
 
-		for args in lifts {
-			code.line(format!(
-				"{}: ${{context._lift({}, {})}},",
-				args.key, args.field, args.ops
-			));
-		}
+		if !lifts.is_empty() || !free_types.is_empty() {
+			code.open(format!("require({client_path})({{"));
 
-		for (type_name, t) in captures.free_types() {
-			let key = mangle(&type_name);
-			match &*t {
-				Type::Class(_) => {
-					code.line(format!("{key}: {type_name}._toInflightType(context);"));
-				}
-				Type::Enum(e) => {
-					code.open(format!("{key}: {STDLIB}.core.NodeJsCode.fromInline(`"));
-					code.add_code(self.jsify_enum(&e.values));
-					code.close("`),");
-				}
-				_ => {}
+			for args in lifts {
+				code.line(format!(
+					"{}: ${{context._lift({}, {})}},",
+					args.key, args.field, args.ops
+				));
 			}
-		}
 
-		code.close("})");
+			for (type_name, t) in free_types {
+				let key = mangle(&type_name);
+				match &*t {
+					Type::Class(_) => {
+						code.line(format!("{key}: {type_name}._toInflightType(context);"));
+					}
+					Type::Enum(e) => {
+						code.open(format!("{key}: {STDLIB}.core.NodeJsCode.fromInline(`"));
+						code.add_code(self.jsify_enum(&e.values));
+						code.close("`),");
+					}
+					_ => {}
+				}
+			}
+
+			code.close("})");
+		} else {
+			code.line(format!("require({client_path})({{}})"));
+		}
 
 		code.close("`);");
 
@@ -1112,25 +1117,29 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 
 		code.open("_toInflight() {");
-
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
-
 		code.open("(await (async () => {");
 
-		code.line(format!(
-			"const {}Client = ${{{}._toInflightType(this).text}};",
-			resource_name.name, resource_name.name,
-		));
+		let lift_args = make_lift_args(captures.fields());
 
-		code.open(format!("const client = new {}Client({{", resource_name.name));
+		let new_object = format!(
+			"const client = new (${{{}._toInflightType(this).text}})",
+			resource_name.name
+		);
 
-		for args in make_lift_args(captures.fields()) {
-			// remove the "this." prefix from the field name
-			// let key = field.strip_prefix("this.").unwrap_or(&field);
-			code.line(format!("{}: ${{this._lift({}, {})}},", args.key, args.field, args.ops));
+		if !lift_args.is_empty() {
+			code.open(format!("{new_object}({{",));
+
+			for args in lift_args {
+				// remove the "this." prefix from the field name
+				// let key = field.strip_prefix("this.").unwrap_or(&field);
+				code.line(format!("{}: ${{this._lift({}, {})}},", args.key, args.field, args.ops));
+			}
+
+			code.close("});");
+		} else {
+			code.line(format!("{new_object}({{ }});"));
 		}
-
-		code.close("});");
 
 		code.line(format!(
 			"if (client.{CLASS_INFLIGHT_INIT_NAME}) {{ await client.{CLASS_INFLIGHT_INIT_NAME}(); }}"

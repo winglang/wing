@@ -458,6 +458,28 @@ fn reference_inflight_class() {
 }
 
 #[test]
+fn inline_inflight_class() {
+	assert_snapshot!(capture_ok(
+		r#"
+    bring cloud;
+    class Foo {
+      b: cloud.Bucket;
+      q: cloud.Queue;
+
+      init() {
+        this.b = new cloud.Bucket();
+        this.q = new cloud.Queue();
+
+        this.q.setConsumer(inflight () => {
+          this.b.put("in", "bucket");
+        });
+      }
+    }
+    "#
+	));
+}
+
+#[test]
 fn temp() {
 	assert_snapshot!(capture_ok(
 		r#"

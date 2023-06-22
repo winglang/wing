@@ -56,9 +56,7 @@ class $Closure1 extends $stdlib.std.Resource {
   _toInflight() {
     return $stdlib.core.NodeJsCode.fromInline(`
       (await (async () => {
-        const $Closure1Client = ${$Closure1._toInflightType(this).text};
-        const client = new $Closure1Client({
-        });
+        const client = new (${$Closure1._toInflightType(this).text})({ });
         if (client.$inflight_init) { await client.$inflight_init(); }
         return client;
       })())

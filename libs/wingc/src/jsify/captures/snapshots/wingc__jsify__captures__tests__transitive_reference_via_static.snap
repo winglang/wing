@@ -97,9 +97,7 @@ class MyType extends $stdlib.std.Resource {
   _toInflight() {
     return $stdlib.core.NodeJsCode.fromInline(`
       (await (async () => {
-        const MyTypeClient = ${MyType._toInflightType(this).text};
-        const client = new MyTypeClient({
-        });
+        const client = new (${MyType._toInflightType(this).text})({ });
         if (client.$inflight_init) { await client.$inflight_init(); }
         return client;
       })())
@@ -133,9 +131,7 @@ class YourType extends $stdlib.std.Resource {
   _toInflight() {
     return $stdlib.core.NodeJsCode.fromInline(`
       (await (async () => {
-        const YourTypeClient = ${YourType._toInflightType(this).text};
-        const client = new YourTypeClient({
-        });
+        const client = new (${YourType._toInflightType(this).text})({ });
         if (client.$inflight_init) { await client.$inflight_init(); }
         return client;
       })())
@@ -158,9 +154,7 @@ class $Closure1 extends $stdlib.std.Resource {
   _toInflight() {
     return $stdlib.core.NodeJsCode.fromInline(`
       (await (async () => {
-        const $Closure1Client = ${$Closure1._toInflightType(this).text};
-        const client = new $Closure1Client({
-        });
+        const client = new (${$Closure1._toInflightType(this).text})({ });
         if (client.$inflight_init) { await client.$inflight_init(); }
         return client;
       })())

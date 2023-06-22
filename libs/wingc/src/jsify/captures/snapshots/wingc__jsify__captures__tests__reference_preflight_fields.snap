@@ -51,15 +51,13 @@ class MyType extends $stdlib.std.Resource {
   }
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
-      require("./inflight.MyType.js")({
-      })
+      require("./inflight.MyType.js")({})
     `);
   }
   _toInflight() {
     return $stdlib.core.NodeJsCode.fromInline(`
       (await (async () => {
-        const MyTypeClient = ${MyType._toInflightType(this).text};
-        const client = new MyTypeClient({
+        const client = new (${MyType._toInflightType(this).text})({
           this_b: ${this._lift(this.b, ["get()", "list()", "put()"])},
           this_s: ${this._lift(this.s, [])},
         });

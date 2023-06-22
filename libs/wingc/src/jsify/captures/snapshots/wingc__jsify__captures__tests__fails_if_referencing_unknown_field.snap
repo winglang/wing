@@ -41,16 +41,13 @@ class MyInflightClass extends $stdlib.std.Resource {
   }
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
-      require("./inflight.MyInflightClass.js")({
-      })
+      require("./inflight.MyInflightClass.js")({})
     `);
   }
   _toInflight() {
     return $stdlib.core.NodeJsCode.fromInline(`
       (await (async () => {
-        const MyInflightClassClient = ${MyInflightClass._toInflightType(this).text};
-        const client = new MyInflightClassClient({
-        });
+        const client = new (${MyInflightClass._toInflightType(this).text})({ });
         if (client.$inflight_init) { await client.$inflight_init(); }
         return client;
       })())
