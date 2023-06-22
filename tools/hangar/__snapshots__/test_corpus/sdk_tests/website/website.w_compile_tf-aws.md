@@ -29,7 +29,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     static async http(url)  {
       return (require("<ABSOLUTE_PATH>/http.js")["http"])(url)
@@ -341,7 +340,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("http");
-        const __parent_this = this;
       }
       static readFile(path)  {
         return (require("<ABSOLUTE_PATH>/fs.js")["readFile"])(path)

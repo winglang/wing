@@ -71,28 +71,6 @@ impl Fold for ClosureTransformer {
 	fn fold_scope(&mut self, node: Scope) -> Scope {
 		let mut statements = vec![];
 
-		// If we are inside a scope with "this", add define `let __parent_this = this` which can be
-		// used by the newly-created preflight classes
-		if self.inside_scope_with_this {
-			let parent_this_name = Symbol::new(PARENT_THIS_NAME, WingSpan::default());
-			let this_name = Symbol::new("this", WingSpan::default());
-			let parent_this_def = Stmt {
-				kind: StmtKind::Let {
-					reassignable: false,
-					var_name: parent_this_name,
-					initial_value: Expr::new(
-						ExprKind::Reference(Reference::Identifier(this_name)),
-						WingSpan::default(),
-					),
-					type_: None,
-				},
-				span: WingSpan::default(),
-				idx: 0,
-			};
-
-			statements.push(parent_this_def);
-		}
-
 		for stmt in node.statements {
 			// TODO: can we remove "idx" from Stmt to avoid having to reason about this?
 			// or add a compiler step that updates statement indices after folding?
@@ -175,9 +153,14 @@ impl Fold for ClosureTransformer {
 
 				let mut new_func_def = if self.inside_scope_with_this {
 					// If we are inside a class, we transform inflight closures with an extra
-					// `let __parent_this = this;` statement before the class definition, and replace references
-					// to `this` with `__parent_this` so that they can access the parent class's fields.
-					let mut this_transform = RenameThisTransformer::default();
+					// `let __parent_this_${CLOSURE_COUNT} = this;` statement before the class definition, and replace references
+					// to `this` with `__parent_this_${CLOSURE_COUNT}` so that they can access the parent class's fields.
+					let parent_this = format!("{}_{}", PARENT_THIS_NAME, self.closure_counter);
+					let mut this_transform = RenameThisTransformer {
+						from: "this",
+						to: parent_this.as_str(),
+						inside_class: false,
+					};
 					this_transform.fold_function_definition(func_def)
 				} else {
 					func_def
@@ -213,6 +196,30 @@ impl Fold for ClosureTransformer {
 					},
 					span: WingSpan::default(),
 				}];
+
+				// If we are inside a scope with "this", add define `let __parent_this_${CLOSURE_COUNT} = this` which can be
+				// used by the newly-created preflight classes
+				if self.inside_scope_with_this {
+					let parent_this_name = Symbol::new(
+						format!("{}_{}", PARENT_THIS_NAME, self.closure_counter),
+						WingSpan::default(),
+					);
+					let this_name = Symbol::new("this", WingSpan::default());
+					let parent_this_def = Stmt {
+						kind: StmtKind::Let {
+							reassignable: false,
+							var_name: parent_this_name,
+							initial_value: Expr::new(
+								ExprKind::Reference(Reference::Identifier(this_name)),
+								WingSpan::default(),
+							),
+							type_: None,
+						},
+						span: WingSpan::default(),
+						idx: 0,
+					};
+					self.class_statements.push(parent_this_def);
+				}
 
 				// class_def :=
 				// ```

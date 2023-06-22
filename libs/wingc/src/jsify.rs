@@ -223,8 +223,8 @@ impl<'a> JSifier<'a> {
 	fn jsify_arg_list(
 		&mut self,
 		arg_list: &ArgList,
-		scope: Option<&str>,
-		id: Option<&str>,
+		scope: Option<String>,
+		id: Option<String>,
 		ctx: &JSifyContext,
 	) -> String {
 		let mut args = vec![];
@@ -235,7 +235,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		if let Some(id_str) = id {
-			args.push(format!("\"{}\"", id_str));
+			args.push(id_str);
 		}
 
 		for arg in arg_list.pos_args.iter() {
@@ -286,7 +286,7 @@ impl<'a> JSifier<'a> {
 				class,
 				obj_id,
 				arg_list,
-				obj_scope: _, // TODO
+				obj_scope
 			} => {
 				let expression_type = self.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
@@ -303,10 +303,22 @@ impl<'a> JSifier<'a> {
 
 				let ctor = self.jsify_type(&class.kind, ctx);
 
-				let scope = if is_preflight_class { Some("this") } else { None };
+				let scope = if is_preflight_class {
+					if let Some(scope) = obj_scope {
+						Some(self.jsify_expression(scope, ctx))
+					} else {
+						Some("this".to_string()) 
+					}
+				} else {
+					 None
+					 };
 
 				let id = if is_preflight_class {
-					Some(obj_id.as_ref().unwrap_or(&ctor).as_str())
+					Some(if let Some(id_exp) = obj_id {
+						self.jsify_expression(id_exp, ctx)
+					} else {
+						format!("\"{ctor}\"")
+					})
 				} else {
 					None
 				};
@@ -346,7 +358,6 @@ impl<'a> JSifier<'a> {
 						.join("")
 				),
 				Literal::Number(n) => format!("{}", n),
-				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {
@@ -527,6 +538,13 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
+			StmtKind::SuperConstructor { arg_list } => {
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				match ctx.phase {
+					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
+					_ => CodeMaker::one_line(format!("super({});", args)),
+				}
+			}
 			StmtKind::Bring {
 				module_name,
 				identifier,
@@ -903,7 +921,12 @@ impl<'a> JSifier<'a> {
 		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
 
 		// Find all free variables in the class, and return a list of their symbols
-		let (captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+
+		if let Some(parent) = &class.parent {
+			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
+			captured_types.insert(parent.full_path(), parent_type);
+		}
 
 		// Get all references between inflight methods and preflight values
 		let mut refs = self.find_inflight_references(class, &captured_vars);
@@ -1227,7 +1250,7 @@ impl<'a> JSifier<'a> {
 
 			if class.parent.is_some() {
 				class_code.line(format!(
-					"super({});",
+					"super({{{}}});",
 					lifted_by_parent
 						.iter()
 						.map(|name| name.clone())
@@ -1775,6 +1798,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 			Type::Class(cls) => Some(ComponentKind::Member(cls.env.lookup(&property, None)?.as_variable()?)),
 			Type::Interface(iface) => Some(ComponentKind::Member(iface.env.lookup(&property, None)?.as_variable()?)),
 			Type::Struct(st) => Some(ComponentKind::Member(st.env.lookup(&property, None)?.as_variable()?)),
+			Type::Unresolved => panic!("Encountered unresolved type during jsification"),
 		}
 	}
 }
@@ -1875,7 +1899,7 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 		&mut self,
 		node: &'ast Expr,
 		class: &'ast TypeAnnotation,
-		obj_id: &'ast Option<String>,
+		obj_id: &'ast Option<Box<Expr>>,
 		obj_scope: &'ast Option<Box<Expr>>,
 		arg_list: &'ast ArgList,
 	) {

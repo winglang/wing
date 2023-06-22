@@ -111,10 +111,8 @@ module.exports = function({  }) {
       this.closure = closure;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async foo()  {
-      const __parent_this = this;
       return (await this.closure("anything"));
     }
   }
@@ -553,7 +551,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("foo");
-        const __parent_this = this;
+        const __parent_this_4 = this;
         class $Closure4 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);

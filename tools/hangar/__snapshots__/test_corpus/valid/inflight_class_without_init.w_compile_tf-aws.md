@@ -25,7 +25,6 @@ module.exports = function({ Foo }) {
 module.exports = function({  }) {
   class Foo {
      constructor()  {
-      const __parent_this = this;
     }
   }
   return Foo;
@@ -168,7 +167,6 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Foo.js";
