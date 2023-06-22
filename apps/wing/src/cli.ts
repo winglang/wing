@@ -49,8 +49,8 @@ async function main() {
   program
     .command("run")
     .alias("it")
-    .description("Runs a Wing file in the Wing Console")
-    .argument("[wingfile]", ".w (Wing file)")
+    .description("Runs a Wing program in the Wing Console")
+    .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .action(run);
 
