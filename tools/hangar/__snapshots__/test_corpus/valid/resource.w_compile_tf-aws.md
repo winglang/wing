@@ -165,6 +165,20 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.Dummy.js
+```js
+module.exports = function({  }) {
+  class Dummy {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+    }
+  }
+  return Dummy;
+}
+
+```
+
 ## inflight.Foo.js
 ```js
 module.exports = function({  }) {
@@ -188,6 +202,20 @@ module.exports = function({  }) {
     }
   }
   return Foo;
+}
+
+```
+
+## inflight.ScopeAndIdTestClass.js
+```js
+module.exports = function({  }) {
+  class ScopeAndIdTestClass {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+    }
+  }
+  return ScopeAndIdTestClass;
 }
 
 ```
@@ -1243,6 +1271,71 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class Dummy extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Dummy.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const DummyClient = ${Dummy._toInflightType(this).text};
+            const client = new DummyClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class ScopeAndIdTestClass extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        const d1 = new Dummy(this,"Dummy");
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'd1.node.path.endsWith("/ScopeAndIdTestClass/Dummy")'`)})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
+        const d2 = new Dummy(d1,"Dummy");
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'd2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy")'`)})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
+        for (const i of $stdlib.std.Range.of(0, 3, false)) {
+          const x = new Dummy(this,`tc${i}`);
+          const expected_path = `/ScopeAndIdTestClass/tc${i}`;
+          {((cond) => {if (!cond) throw new Error(`assertion failed: 'x.node.path.endsWith(expected_path)'`)})(x.node.path.endsWith(expected_path))};
+        }
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.ScopeAndIdTestClass.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const ScopeAndIdTestClassClient = ${ScopeAndIdTestClass._toInflightType(this).text};
+            const client = new ScopeAndIdTestClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const MyEnum = 
       Object.freeze((function (tmp) {
         tmp[tmp["A"] = 0] = "A";
@@ -1256,6 +1349,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
     const bigOlPublisher = new BigPublisher(this,"BigPublisher");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:dependency cycles",new $Closure5(this,"$Closure5"));
+    new ScopeAndIdTestClass(this,"ScopeAndIdTestClass");
   }
 }
 class $App extends $AppBase {
