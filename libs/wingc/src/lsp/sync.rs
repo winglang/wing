@@ -138,16 +138,6 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
 	jsifier.jsify(&scope);
 
-	// -- JSIFICATION PHASE --
-
-	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
-	let source_path = Path::new(source_file);
-	let app_name = source_path.file_stem().expect("Empty filename").to_str().unwrap();
-	let project_dir = source_path.parent().expect("Empty filename");
-
-	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
-	jsifier.jsify(&scope);
-
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
 		tree,
