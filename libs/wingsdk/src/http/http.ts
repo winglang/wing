@@ -243,10 +243,11 @@ export class Util {
   private static async _formatResponse(
     response: globalThis.Response
   ): Promise<Response> {
+    // convert Headers object into a plain JS object
     const headers: Record<string, string> = {};
-    response.headers?.forEach((val: string, key: string) => {
+    for (const [key, value] of response.headers.entries()) {
       headers[key] = val;
-    });
+    }
 
     return {
       status: response.status,
