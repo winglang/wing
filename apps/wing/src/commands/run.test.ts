@@ -112,7 +112,7 @@ test("wing it with an invalid file throws exception", async () => {
   }
 });
 
-test.only("wing it with a custom port runs", async () => {
+test("wing it with a custom port runs", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
