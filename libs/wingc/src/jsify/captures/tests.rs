@@ -480,6 +480,22 @@ fn inline_inflight_class() {
 }
 
 #[test]
+fn inflight_field_from_inflight_class() {
+	assert_snapshot!(capture_ok(
+		r#"
+    inflight class MyType {
+      field: str;
+      init() { this.field = "hi"; }
+  
+      getField(): str {
+        return this.field;
+      }
+    }
+  "#
+	));
+}
+
+#[test]
 fn temp() {
 	assert_snapshot!(capture_ok(
 		r#"
@@ -497,7 +513,10 @@ fn temp() {
 
 fn capture_ok(code: &str) -> String {
 	let snap = capture_report(code);
-	assert!(!found_errors());
+	if found_errors() {
+		get_diagnostics().iter().for_each(|d| println!("{}", d));
+		assert!(false, "expected no errors");
+	}
 	snap
 }
 
