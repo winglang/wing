@@ -51,7 +51,9 @@ module.exports = function({  }) {
       return 42;
     }
      constructor()  {
-      const __parent_this = this;
+    }
+    async get()  {
+      return 42;
     }
   }
   return Foo;
@@ -193,8 +195,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get", "constructor");
-        const __parent_this = this;
+        this._addInflightOps("get");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

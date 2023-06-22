@@ -29,7 +29,9 @@ module.exports = function({ myConst }) {
       return myConst;
     }
      constructor()  {
-      const __parent_this = this;
+    }
+    async getValue()  {
+      return myConst;
     }
   }
   return Foo;
@@ -172,8 +174,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("getValue", "constructor");
-        const __parent_this = this;
+        this._addInflightOps("getValue");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

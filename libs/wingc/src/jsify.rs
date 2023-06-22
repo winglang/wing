@@ -217,8 +217,8 @@ impl<'a> JSifier<'a> {
 	fn jsify_arg_list(
 		&mut self,
 		arg_list: &ArgList,
-		scope: Option<&str>,
-		id: Option<&str>,
+		scope: Option<String>,
+		id: Option<String>,
 		ctx: &JSifyContext,
 	) -> String {
 		let mut args = vec![];
@@ -229,7 +229,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		if let Some(id_str) = id {
-			args.push(format!("\"{}\"", id_str));
+			args.push(id_str);
 		}
 
 		for arg in arg_list.pos_args.iter() {
@@ -273,7 +273,7 @@ impl<'a> JSifier<'a> {
 				class,
 				obj_id,
 				arg_list,
-				obj_scope: _, // TODO
+				obj_scope
 			} => {
 				let expression_type = self.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
@@ -287,11 +287,25 @@ impl<'a> JSifier<'a> {
 				// targets and plugins to inject alternative implementations for types. otherwise (e.g.
 				// user-defined types), we simply instantiate the type directly (maybe in the future we will
 				// allow customizations of user-defined types as well, but for now we don't).
+
 				let ctor = class.kind.to_string();
-				let scope = if is_preflight_class { Some("this") } else { None };
+
+				let scope = if is_preflight_class {
+					if let Some(scope) = obj_scope {
+						Some(self.jsify_expression(scope, ctx))
+					} else {
+						Some("this".to_string()) 
+					}
+				} else {
+					 None
+				};
 
 				let id = if is_preflight_class {
-					Some(obj_id.as_ref().unwrap_or(&ctor).as_str())
+					Some(if let Some(id_exp) = obj_id {
+						self.jsify_expression(id_exp, ctx)
+					} else {
+						format!("\"{ctor}\"")
+					})
 				} else {
 					None
 				};
@@ -331,7 +345,6 @@ impl<'a> JSifier<'a> {
 						.join("")
 				),
 				Literal::Number(n) => format!("{}", n),
-				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {

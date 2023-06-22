@@ -573,9 +573,11 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
+            const self_client_path = "././inflight.$Closure3.js";
+            const __parent_this_3_client = context._lift(__parent_this_3);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure3.js")({
-                __parent_this: ${context._lift(__parent_this, [])},
+              require("${self_client_path}")({
+                __parent_this_3: ${__parent_this_3_client},
               })
             `);
           }
@@ -595,7 +597,7 @@ class $Root extends $stdlib.std.Resource {
               $Closure3._registerBindObject(__parent_this_3, host, []);
             }
             if (ops.includes("handle")) {
-              $Closure3._registerBindObject(__parent_this.api, host, ["url"]);
+              $Closure3._registerBindObject(__parent_this_3.api.url, host, []);
             }
             super._registerBind(host, ops);
           }

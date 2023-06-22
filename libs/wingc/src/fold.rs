@@ -338,7 +338,6 @@ where
 		}),
 		Literal::Boolean(x) => Literal::Boolean(x),
 		Literal::Number(x) => Literal::Number(x),
-		Literal::Duration(x) => Literal::Duration(x),
 		Literal::String(x) => Literal::String(x),
 		Literal::Nil => Literal::Nil,
 	}

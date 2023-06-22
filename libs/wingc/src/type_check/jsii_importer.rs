@@ -151,7 +151,7 @@ impl<'a> JsiiImporter<'a> {
 		if let LookupResult::Found(sym, ..) = self.wing_types.libraries.lookup_nested_str(type_str, None) {
 			if let SymbolKind::Namespace(n) = sym {
 				// We are trying to import a namespace directly, so let's eagerly load all of its types
-				self.deep_import_submodule_to_env(n.name.clone().as_str());
+				self.deep_import_submodule_to_env(Some(n.name.clone()));
 			}
 			return true;
 		}
@@ -201,6 +201,7 @@ impl<'a> JsiiImporter<'a> {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
 				env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+				loaded: false,
 			});
 			self
 				.wing_types
@@ -242,6 +243,7 @@ impl<'a> JsiiImporter<'a> {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					loaded: false,
 				});
 				parent_ns
 					.env
@@ -770,12 +772,11 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	/// Imports all types within a given submodule
-	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
-		let sub_string = Some(submodule.to_string());
+	pub fn deep_import_submodule_to_env(&mut self, submodule: Option<String>) {
 		let match_namespace = |jsii_type: &jsii::Type| match jsii_type {
-			jsii::Type::ClassType(c) => c.namespace == sub_string,
-			jsii::Type::EnumType(e) => e.namespace == sub_string,
-			jsii::Type::InterfaceType(i) => i.namespace == sub_string,
+			jsii::Type::ClassType(c) => c.namespace == submodule,
+			jsii::Type::EnumType(e) => e.namespace == submodule,
+			jsii::Type::InterfaceType(i) => i.namespace == submodule,
 		};
 
 		for entry in self
@@ -795,6 +796,27 @@ impl<'a> JsiiImporter<'a> {
 				break;
 			}
 		}
+
+		// Mark the namespace as loaded after recursively importing all types to its environment
+		let mut submodule_fqn = self.jsii_spec.assembly_name.clone();
+		if let Some(submodule) = submodule {
+			submodule_fqn.push_str(&format!(".{}", submodule));
+		}
+		self.mark_namespace_as_loaded(&submodule_fqn);
+	}
+
+	fn mark_namespace_as_loaded(&mut self, module_name: &str) {
+		let n = self
+			.wing_types
+			.libraries
+			.lookup_nested_str_mut(&module_name, None)
+			.ok()
+			.expect(&format!("Namespace {} to be in libraries", module_name))
+			.0
+			.as_namespace_mut()
+			.expect(&format!("{} to be a namespace", module_name));
+
+		n.loaded = true;
 	}
 
 	/// Import all top-level types that are not in a submodule
@@ -851,6 +873,7 @@ impl<'a> JsiiImporter<'a> {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: assembly.name.clone(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					loaded: false,
 				});
 				self
 					.wing_types
@@ -863,6 +886,10 @@ impl<'a> JsiiImporter<'a> {
 					.expect("Failed to define jsii root namespace");
 			}
 		}
+
+		// Mark the namespace as loaded. Note that its inner submodules might not be marked as
+		// loaded yet. But if they'll be accessed then they'll be marked as well.
+		self.mark_namespace_as_loaded(&assembly.name);
 
 		// Create a symbol in the environment for the imported module
 		// For example, `bring cloud` will create a symbol named `cloud` in the environment

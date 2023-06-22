@@ -53,6 +53,9 @@ module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
+    async $inflight_init()  {
+      this.optionalVar = undefined;
+    }
     async returnNil(t)  {
       if (t) {
         return "hello";
@@ -276,8 +279,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "$inflight_init", "optionalVar");
-        const __parent_this = this;
+        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "optionalVar");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

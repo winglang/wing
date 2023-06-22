@@ -25,8 +25,11 @@ module.exports = function({ BinaryOperation }) {
 ```js
 module.exports = function({  }) {
   class BinaryOperation {
+     constructor(lhs, rhs)  {
+      this.lhs = lhs;
+      this.rhs = rhs;
+    }
     async add()  {
-      const __parent_this = this;
       return (this.lhs + this.rhs);
     }
      constructor(lhs, rhs)  {
@@ -174,8 +177,7 @@ class $Root extends $stdlib.std.Resource {
     class BinaryOperation extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("add", "constructor", "lhs", "rhs");
-        const __parent_this = this;
+        this._addInflightOps("add", "lhs", "rhs");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

@@ -44,12 +44,11 @@ module.exports = function({  }) {
   class C {
     constructor({  }) {
     }
+    async $inflight_init()  {
+    }
     async my_method3(x)  {
     }
     async my_method4(x)  {
-    }
-    async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return C;
@@ -150,8 +149,7 @@ class $Root extends $stdlib.std.Resource {
     class C extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("my_method3", "my_method4", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("my_method3", "my_method4");
       }
        my_method(x)  {
       }

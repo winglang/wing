@@ -96,7 +96,10 @@ module.exports = function({  }) {
       (await this.func.handle(message));
     }
     async $inflight_init()  {
-      const __parent_this = this;
+    }
+    async invoke(message)  {
+      (await this.func.handle(message));
+      (await this.func.handle(message));
     }
   }
   return Doubler;
@@ -320,8 +323,7 @@ class $Root extends $stdlib.std.Resource {
     class Doubler extends $stdlib.std.Resource {
       constructor(scope, id, func) {
         super(scope, id);
-        this._addInflightOps("invoke", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("invoke");
         this.func = func;
       }
       static _toInflightType(context) {
@@ -379,8 +381,6 @@ class $Root extends $stdlib.std.Resource {
     class Doubler2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
-        const __parent_this = this;
       }
        makeFunc(handler)  {
         const __parent_this_2 = this;

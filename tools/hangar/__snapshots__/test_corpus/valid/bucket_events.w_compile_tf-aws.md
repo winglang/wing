@@ -74,8 +74,6 @@ module.exports = function({ other }) {
     async handle(key, event)  {
       (await other.put(`last_${event}_key`,key));
     }
-    async $inflight_init()  {
-    }
   }
   return $Closure4;
 }

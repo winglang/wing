@@ -46,6 +46,8 @@ module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
+    async $inflight_init()  {
+    }
     static async regexInflight(pattern, text)  {
       return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
     }
@@ -274,8 +276,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call");
       }
       static getGreeting(name)  {
         return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)

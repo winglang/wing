@@ -11,7 +11,9 @@ module.exports = function({  }) {
       {console.log((await this.s1.concat(" world")))};
     }
     async $inflight_init()  {
-      const __parent_this = this;
+    }
+    async foo()  {
+      {console.log((await this.s1.concat(" world")))};
     }
   }
   return R;
@@ -65,8 +67,7 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("foo");
         this.s1 = "hello";
       }
       static _toInflightType(context) {

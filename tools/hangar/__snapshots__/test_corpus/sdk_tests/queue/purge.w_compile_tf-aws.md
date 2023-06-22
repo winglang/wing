@@ -55,6 +55,8 @@ module.exports = function({  }) {
   class TestHelper {
     constructor({  }) {
     }
+    async $inflight_init()  {
+    }
     async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
     }
@@ -214,8 +216,7 @@ class $Root extends $stdlib.std.Resource {
     class TestHelper extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("sleep", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("sleep");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

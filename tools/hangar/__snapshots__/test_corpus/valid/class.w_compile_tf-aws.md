@@ -174,8 +174,11 @@ module.exports = function({  }) {
   class C5 {
     constructor({  }) {
     }
+    async $inflight_init()  {
+      this.x = 123;
+      this.y = 321;
+    }
     async set(b)  {
-      const __parent_this = this;
       this.y = b;
     }
     async $inflight_init()  {
@@ -583,8 +586,6 @@ class $Root extends $stdlib.std.Resource {
     class C1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -607,8 +608,6 @@ class $Root extends $stdlib.std.Resource {
     class C2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
-        const __parent_this = this;
         this.x = 1;
       }
       static _toInflightType(context) {
@@ -632,8 +631,6 @@ class $Root extends $stdlib.std.Resource {
     class C3 extends $stdlib.std.Resource {
       constructor(scope, id, a, b) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
-        const __parent_this = this;
         this.x = a;
         if (true) {
           this.y = b;
@@ -660,8 +657,6 @@ class $Root extends $stdlib.std.Resource {
     class C4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
-        const __parent_this = this;
       }
       static m()  {
         return 1;
@@ -687,8 +682,7 @@ class $Root extends $stdlib.std.Resource {
     class C5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("set", "$inflight_init", "x", "y");
-        const __parent_this = this;
+        this._addInflightOps("set", "x", "y");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

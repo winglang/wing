@@ -53,6 +53,8 @@ module.exports = function({  }) {
   class Fetch {
     constructor({  }) {
     }
+    async $inflight_init()  {
+    }
     async get(url)  {
       return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
     }
@@ -336,8 +338,7 @@ class $Root extends $stdlib.std.Resource {
     class Fetch extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("get");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

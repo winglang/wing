@@ -68,13 +68,30 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(two === 2)'`)})((two === 2))};
     }
     async $inflight_init()  {
-      const __parent_this = this;
       this.inflight2 = async () =>  {
         return 2;
       }
       ;
       const ret = (await this.inflight2());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(ret === 2)'`)})((ret === 2))};
+    }
+    async makeFn(x)  {
+      if ((x === true)) {
+        return this.inflight1;
+      }
+      else {
+        return this.inflight2;
+      }
+    }
+    async callFn(x)  {
+      const partialFn = (await this.makeFn(x));
+      return (await partialFn());
+    }
+    async callFn2()  {
+      const one = (await this.inflight1());
+      const two = (await this.inflight2());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(one === 1)'`)})((one === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(two === 2)'`)})((two === 2))};
     }
   }
   return Foo;
@@ -217,8 +234,8 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("makeFn", "callFn", "callFn2", "$inflight_init", "inflight2");
-        const __parent_this = this;
+        this._addInflightOps("makeFn", "callFn", "callFn2", "inflight2");
+        const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);

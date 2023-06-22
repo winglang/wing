@@ -26,6 +26,34 @@ exports[`access_static_from_instance.w 1`] = `
   |   ^^^^^^^^^^^^^^ Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
 
 
+error: Cannot access static property \\"f\\" from instance
+   --> ../../../examples/tests/invalid/access_static_from_instance.w:19:5
+   |
+19 | foo.f; // Can't access static fields through instances
+   |     ^ Cannot access static property \\"f\\" from instance
+
+
+error: Cannot access static property \\"m\\" from instance
+   --> ../../../examples/tests/invalid/access_static_from_instance.w:20:5
+   |
+20 | foo.m(); // Can't access static methods through instances
+   |     ^ Cannot access static property \\"m\\" from instance
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
+  |
+7 |     this.instanceField = 1; // Can't access instance fields from static methods
+  |     ^^^^ Unknown symbol \\"this\\"
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
+  |
+8 |     this.f = 1; // Can't access static fields through \`this\`
+  |     ^^^^ Unknown symbol \\"this\\"
+
+
  
 
 
@@ -1313,11 +1341,11 @@ Duration <DURATION>
 `;
 
 exports[`resource_access_field_as_method.w 1`] = `
-"error: Expected a function or method
+"error: Expected a function or method, found \\"str\\"
   --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:1
   |
 9 | x.name();
-  | ^^^^^^ Expected a function or method
+  | ^^^^^^ Expected a function or method, found \\"str\\"
 
 
  
@@ -1407,6 +1435,45 @@ error: Inflight initializers cannot have parameters
   |
 9 |   inflight init(x: num) {}
   |                ^^^^^^^^ Inflight initializers cannot have parameters
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
+exports[`scope_and_id.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/scope_and_id.w:6:25
+  |
+6 | new PreflightClass() as x;
+  |                         ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected scope to be a preflight object, instead found \\"num\\"
+  --> ../../../examples/tests/invalid/scope_and_id.w:8:1
+  |
+8 | new PreflightClass() in x;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected scope to be a preflight object, instead found \\"num\\"
+
+
+error: Inflight classes cannot have an id
+   --> ../../../examples/tests/invalid/scope_and_id.w:15:26
+   |
+15 |   new InflightClass() as \\"hi\\";
+   |                          ^^^^ Inflight classes cannot have an id
+
+
+error: Inflight classes cannot have a scope
+   --> ../../../examples/tests/invalid/scope_and_id.w:17:26
+   |
+17 |   new InflightClass() in pc;
+   |                          ^^ Inflight classes cannot have a scope
 
 
  
@@ -1808,6 +1875,13 @@ error: Unknown symbol \\"B\\"
    |
 28 | class A extends B {
    |                 ^ Unknown symbol \\"B\\"
+
+
+error: Unknown symbol \\"unknown\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.w:32:1
+   |
+32 | unknown = 1;
+   | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
 error: Unknown symbol \\"assert\\"

@@ -33,7 +33,9 @@ module.exports = function({  }) {
       return "hello world!";
     }
     async $inflight_init()  {
-      const __parent_this = this;
+    }
+    async handle(message)  {
+      return "hello world!";
     }
   }
   return Foo;
@@ -243,8 +245,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

@@ -49,6 +49,8 @@ module.exports = function({  }) {
       this.api = api;
       this.url = url;
     }
+    async $inflight_init()  {
+    }
     static async isValidUrl(url)  {
       return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
     }
@@ -360,8 +362,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("isValidUrl", "foo", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("isValidUrl", "foo");
         this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
         this.url = this.api.url;
       }

@@ -128,34 +128,52 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_duration(&self, node: &Node) -> DiagnosticResult<Literal> {
+	fn build_duration(&self, node: &Node) -> DiagnosticResult<Expr> {
 		let value = self.check_error(node.named_child(0).unwrap(), "duration")?;
-		let value_text = self.node_text(&self.get_child_field(&value, "value")?);
+		let value_literal = self
+			.node_text(&self.get_child_field(&value, "value")?)
+			.parse::<f64>()
+			.expect("Duration string");
 
-		match value.kind() {
-			"milliseconds" => Ok(Literal::Duration(
-				value_text.parse::<f64>().expect("Duration string") / 1000_f64,
-			)),
-			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
-			"minutes" => Ok(Literal::Duration(
-				// Specific "Minutes" duration needed here
-				value_text.parse::<f64>().expect("Duration string") * 60_f64,
-			)),
-			"hours" => Ok(Literal::Duration(
-				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
-			)),
-			"days" => Ok(Literal::Duration(
-				value_text.parse::<f64>().expect("Duration string") * 86400_f64,
-			)),
-			"months" => Ok(Literal::Duration(
-				value_text.parse::<f64>().expect("Duration string") * 2628000_f64,
-			)),
-			"years" => Ok(Literal::Duration(
-				value_text.parse::<f64>().expect("Duration string") * 31536000_f64,
-			)),
-			"ERROR" => self.add_error("Expected duration type", &node),
-			other => self.report_unimplemented_grammar(other, "duration type", node),
-		}
+		let seconds = match value.kind() {
+			"milliseconds" => value_literal / 1000_f64,
+			"seconds" => value_literal,
+			"minutes" => value_literal * 60_f64,
+			"hours" => value_literal * 3600_f64,
+			"days" => value_literal * 86400_f64,
+			"months" => value_literal * 2628000_f64,
+			"years" => value_literal * 31536000_f64,
+			"ERROR" => self.add_error("Expected duration type", &node)?,
+			other => self.report_unimplemented_grammar(other, "duration type", node)?,
+		};
+		let span = self.node_span(node);
+		// represent duration literals as the AST equivalent of `duration.fromSeconds(value)`
+		Ok(Expr::new(
+			ExprKind::Call {
+				callee: Box::new(Expr::new(
+					ExprKind::Reference(Reference::InstanceMember {
+						object: Box::new(Expr::new(
+							ExprKind::Reference(Reference::Identifier(Symbol {
+								name: "duration".to_string(),
+								span: span.clone(),
+							})),
+							span.clone(),
+						)),
+						property: Symbol {
+							name: "fromSeconds".to_string(),
+							span: span.clone(),
+						},
+						optional_accessor: false,
+					}),
+					span.clone(),
+				)),
+				arg_list: ArgList {
+					pos_args: vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
+					named_args: IndexMap::new(),
+				},
+			},
+			span.clone(),
+		))
 	}
 
 	fn node_span(&self, node: &Node) -> WingSpan {
@@ -1126,10 +1144,11 @@ impl<'s> Parser<'s> {
 					Ok(ArgList::new())
 				};
 
-				let obj_id = expression_node.child_by_field_name("id").map(|n| {
-					let id_str = self.node_text(&n.named_child(0).unwrap());
-					id_str[1..id_str.len() - 1].to_string()
-				});
+				let obj_id = if let Some(id_node) = expression_node.child_by_field_name("id") {
+					Some(Box::new(self.build_expression(&id_node, phase)?))
+				} else {
+					None
+				};
 				let obj_scope = if let Some(scope_expr_node) = expression_node.child_by_field_name("scope") {
 					Some(Box::new(self.build_expression(&scope_expr_node, phase)?))
 				} else {
@@ -1287,10 +1306,7 @@ impl<'s> Parser<'s> {
 				})),
 				expression_span,
 			)),
-			"duration" => Ok(Expr::new(
-				ExprKind::Literal(self.build_duration(&expression_node)?),
-				expression_span,
-			)),
+			"duration" => self.build_duration(&expression_node),
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
@@ -1555,7 +1571,13 @@ impl<'s> Parser<'s> {
 	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
 		let name_node = statement_node.child_by_field_name("name").unwrap();
 		let name_text = self.node_text(&name_node);
-		let test_id = format!("test:{}", &name_text[1..name_text.len() - 1]);
+		let test_id = Box::new(Expr::new(
+			ExprKind::Literal(Literal::String(format!(
+				"\"test:{}\"",
+				&name_text[1..name_text.len() - 1]
+			))),
+			self.node_span(&name_node),
+		));
 		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), Phase::Inflight);
 		let statements_span = statements.span.clone();
 		let span = self.node_span(statement_node);

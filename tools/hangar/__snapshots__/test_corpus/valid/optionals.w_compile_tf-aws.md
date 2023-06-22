@@ -297,8 +297,11 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Sub";
       }
       static _toInflightType(context) {
+        const self_client_path = "././inflight.Sub.js";
+        const SuperClient = Super._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Sub.js")({
+          require("${self_client_path}")({
+            Super: ${SuperClient.text},
           })
         `);
       }
@@ -326,8 +329,11 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Sub";
       }
       static _toInflightType(context) {
+        const self_client_path = "././inflight.Sub1.js";
+        const SuperClient = Super._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Sub1.js")({
+          require("${self_client_path}")({
+            Super: ${SuperClient.text},
           })
         `);
       }

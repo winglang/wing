@@ -4,8 +4,10 @@
 ```js
 module.exports = function({  }) {
   class C {
+     constructor()  {
+      this.field = 12;
+    }
     async method()  {
-      const __parent_this = this;
     }
      constructor()  {
       this.field = 12;
@@ -61,8 +63,7 @@ class $Root extends $stdlib.std.Resource {
     class C extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method", "constructor", "field");
-        const __parent_this = this;
+        this._addInflightOps("method", "field");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

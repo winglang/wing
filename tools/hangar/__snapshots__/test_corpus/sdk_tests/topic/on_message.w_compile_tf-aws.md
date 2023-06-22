@@ -83,7 +83,9 @@ module.exports = function({  }) {
       return ((await this.c.peek()) === 10);
     }
     async $inflight_init()  {
-      const __parent_this = this;
+    }
+    async test()  {
+      return ((await this.c.peek()) === 10);
     }
   }
   return Predicate;
@@ -96,6 +98,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class TestHelper {
     constructor({  }) {
+    }
+    async $inflight_init()  {
     }
     static async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
@@ -460,8 +464,7 @@ class $Root extends $stdlib.std.Resource {
     class Predicate extends $stdlib.std.Resource {
       constructor(scope, id, c) {
         super(scope, id);
-        this._addInflightOps("test", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("test");
         this.c = c;
       }
       static _toInflightType(context) {
@@ -495,8 +498,7 @@ class $Root extends $stdlib.std.Resource {
     class TestHelper extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("sleep", "$inflight_init");
-        const __parent_this = this;
+        this._addInflightOps("sleep");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

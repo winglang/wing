@@ -1,0 +1,22 @@
+{
+  "name": "@wingconsole/use-loading",
+  "version": "0.0.0",
+  "private": true,
+  "exports": "./src/index.ts",
+  "types": "./src/index.ts",
+  "sideEffects": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "tsc": "tsc --build",
+    "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.12",
+    "@wingconsole/eslint-plugin": "file:../../tools/eslint-plugin",
+    "@wingconsole/tsconfig": "file:../../tools/tsconfig",
+    "typescript": "^5.1.3"
+  }
+}
