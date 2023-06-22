@@ -61,7 +61,6 @@ import TOCInline from '@theme/TOCInline';
 | Name   | Extra information                  |
 | ------ | ---------------------------------- |
 | `void` | represents the absence of a type   |
-| `nil`  | represents the absence of a value  |
 | `num`  | represents numbers (doubles)       |
 | `str`  | UTF-16 encoded strings             |
 | `bool` | represents true or false           |
@@ -73,18 +72,6 @@ import TOCInline from '@theme/TOCInline';
 > let z = true;               // z is a bool
 > let q: num? = nil;          // q is an optional num
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const x: number = 1;
-> const v: number = 23.6;
-> const y: string = "Hello";
-> const z: boolean = true;
-> const q: number? = undefined;
-> ```
-  
-</details>
 
 [`▲ top`][top]
 
@@ -138,8 +125,8 @@ The `inflight` modifier indicates that a function is an inflight function.
 `inflight` in Wing implies `async` in JavaScript.
 
 ```pre
-(arg1: <type1>, arg2: <type2>, ...): returnType => <type>
-inflight (arg1: <type1>, arg2: <type2>, ...): returnType => <type>
+(arg1: <type1>, arg2: <type2>, ...): <returnType> => <type>
+inflight (arg1: <type1>, arg2: <type2>, ...): <returnType> => <type>
 ```
 
 > ```TS
@@ -154,6 +141,7 @@ Return type is required for function types.
 > let my_func = (callback: (num): void) => {  };
 > let my_func2 = (callback: ((num): void): (str): void) => {  };
 > ```
+
 Return type is optional for closures.
 > ```TS
 > let my_func3 = (x: num) => {  };
@@ -168,7 +156,7 @@ Return type is optional for closures.
 
 #### 1.1.4 Json type
 
-Wing has a data type called `Json`. This type represents an immutable untyped [JSON
+Wing has a primitive data type called `Json`. This type represents an immutable untyped [JSON
 value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
 `boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
 strings and values can be any other JSON value).
@@ -208,11 +196,11 @@ To access a field within an object, use `.get("{field name}")`:
 let boom: Json = jsonObj.get("boom");
 ```
 
-Trying to access a non-existent field will fail at runtime. For example:
+Trying to access a non-existent field will fail at compile time. For example:
 
 ```TS
-log(jsonObj.get("boom").get("dude").get("world"));
-// RUNTIME ERROR: Cannot read properties of undefined (reading 'world')
+log("${jsonObj.get("boom").get("dude").get("world")}");
+// ERROR: Cannot read properties of undefined (reading 'world')
 ```
 
 To obtain an array of all the keys within a JSON object use the `Json.keys(o)` method. 
@@ -1833,8 +1821,6 @@ exports.makeId = function () {
 
 Given a method of name X, the compiler will map the method to the JavaScript export with the 
 matching name (without any case conversion).
-
-We currently only support specifying `extern` for static methods (either inflight or preflight).
 
 ### 5.2.1 TypeScript
 
