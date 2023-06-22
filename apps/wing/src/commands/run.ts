@@ -5,24 +5,42 @@ import open from "open";
 import { createConsoleApp } from "@wingconsole/app";
 import { parseNumericString } from "../util";
 
-export async function run(wingfile?: string, options?: { port?: string }) {
-  if (!wingfile) {
+/**
+ * Run options for the `run` command.
+ * This is passed from Commander to the `run` function.
+ */
+export interface RunOptions {
+  /**
+   * Preferred port number.
+   *
+   * Falls back to a random port number if necessary.
+   */
+  readonly port?: string;
+}
+
+/**
+ * Runs a Wing program in the Console.
+ * @param entrypoint The program .w entrypoint. Looks for a .w file in the current directory if not specified.
+ * @param options Run options.
+ */
+export async function run(entrypoint?: string, options?: RunOptions) {
+  if (!entrypoint) {
     const wingFiles = readdirSync(".").filter((item) => item.endsWith(".w"));
     if (wingFiles.length !== 1) {
       throw new Error("Please specify which file you want to run");
     }
-    wingfile = wingFiles[0];
+    entrypoint = wingFiles[0];
   }
 
-  if (!existsSync(wingfile)) {
-    throw new Error(wingfile + " doesn't exist");
+  if (!existsSync(entrypoint)) {
+    throw new Error(entrypoint + " doesn't exist");
   }
 
-  wingfile = resolve(wingfile);
-  debug("opening the wing console with:" + wingfile);
+  entrypoint = resolve(entrypoint);
+  debug("opening the wing console with:" + entrypoint);
 
   const { port } = await createConsoleApp({
-    wingfile,
+    wingfile: entrypoint,
     requestedPort: parseNumericString(options?.port),
     hostUtils: {
       async openExternal(url) {
