@@ -36,7 +36,7 @@ async function main() {
     process.env.PROGRESS = "1";
   });
 
-  program.option("--no-progress", "Don't show compilation progress", () => {});
+  program.option("--no-progress", "Don't show compilation progress");
 
   program
     .option("--no-update-check", "Skip checking for toolchain updates")
