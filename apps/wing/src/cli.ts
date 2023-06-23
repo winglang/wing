@@ -36,6 +36,8 @@ async function main() {
     process.env.PROGRESS = "1";
   });
 
+  program.option("--no-progress", "Don't show compilation progress", () => {});
+
   program
     .option("--no-update-check", "Skip checking for toolchain updates")
     .hook("preAction", async (cmd) => {
@@ -64,13 +66,14 @@ async function main() {
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .default("sim")
     )
+    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", async (cmd) => {
       const target = cmd.opts().target;
-      if (target != "sim") {
+      const progress = program.opts().progress;
+      if (progress !== false && target !== "sim") {
         process.env.PROGRESS = "1";
       }
     })
-    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .action(actionErrorHandler(compile));
 
   program
@@ -84,13 +87,14 @@ async function main() {
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .default("sim")
     )
+    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", async (cmd) => {
       const target = cmd.opts().target;
-      if (target != "sim") {
+      const progress = program.opts().progress;
+      if (progress !== false && target !== "sim") {
         process.env.PROGRESS = "1";
       }
     })
-    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .action(actionErrorHandler(test));
 
   program.command("docs").description("Open the Wing documentation").action(docs);
