@@ -5,6 +5,8 @@ import { Code, InflightClient } from "../core";
  * Number
  */
 export class Number {
+  private constructor() {}
+
   /**
    * Parse a number from Json.
    *

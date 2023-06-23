@@ -5,6 +5,8 @@ import { Code, InflightClient } from "../core";
  * Boolean
  */
 export class Boolean {
+  private constructor() {}
+
   /**
    * Parse a boolean from Json.
    *

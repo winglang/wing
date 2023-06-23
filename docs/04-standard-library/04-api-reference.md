@@ -3207,19 +3207,6 @@ The website's custom domain name.
 
 Immutable Array.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Array.Initializer"></a>
-
-```wing
-bring std;
-
-new std.Array()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -3364,19 +3351,6 @@ The length of the array.
 ### Boolean <a name="Boolean" id="@winglang/sdk.std.Boolean"></a>
 
 Boolean.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Boolean.Initializer"></a>
-
-```wing
-bring std;
-
-new std.Boolean()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
 
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
@@ -3724,196 +3698,9 @@ Return the total number of years in this Duration.
 ---
 
 
-### ImmutableMap <a name="ImmutableMap" id="@winglang/sdk.std.ImmutableMap"></a>
-
-Immutable Map.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableMap.Initializer"></a>
-
-```wing
-bring std;
-
-new std.ImmutableMap()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copyMut</a></code> | Create a mutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.keys">keys</a></code> | Returns the keys of this map. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.values">values</a></code> | Returns the values of this map. |
-
----
-
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.ImmutableMap.copyMut"></a>
-
-```wing
-copyMut(): MutableMap
-```
-
-Create a mutable shallow copy of this map.
-
-##### `get` <a name="get" id="@winglang/sdk.std.ImmutableMap.get"></a>
-
-```wing
-get(key: str): T1
-```
-
-Returns a specified element from the map.
-
-If the value that is associated to the provided key is an object, then you will get a reference
-to that object and any change made to that object will effectively modify it inside the map.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.ImmutableMap.get.parameter.key"></a>
-
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.ImmutableMap.has"></a>
-
-```wing
-has(key: str): bool
-```
-
-Returns a boolean indicating whether an element with the specified key exists or not.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.ImmutableMap.has.parameter.key"></a>
-
-- *Type:* str
-
-The key of the element to test for presence.
-
----
-
-##### `keys` <a name="keys" id="@winglang/sdk.std.ImmutableMap.keys"></a>
-
-```wing
-keys(): MutArray<str>
-```
-
-Returns the keys of this map.
-
-##### `size` <a name="size" id="@winglang/sdk.std.ImmutableMap.size"></a>
-
-```wing
-size(): num
-```
-
-Returns the number of elements in the map.
-
-TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
-
-##### `values` <a name="values" id="@winglang/sdk.std.ImmutableMap.values"></a>
-
-```wing
-values(): Array
-```
-
-Returns the values of this map.
-
-
-
-
-### ImmutableSet <a name="ImmutableSet" id="@winglang/sdk.std.ImmutableSet"></a>
-
-Immutable Set.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableSet.Initializer"></a>
-
-```wing
-bring std;
-
-new std.ImmutableSet()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.copyMut">copyMut</a></code> | Create a mutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
-
----
-
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.ImmutableSet.copyMut"></a>
-
-```wing
-copyMut(): MutableSet
-```
-
-Create a mutable shallow copy of this set.
-
-##### `has` <a name="has" id="@winglang/sdk.std.ImmutableSet.has"></a>
-
-```wing
-has(value: T1): bool
-```
-
-Returns a boolean indicating whether an element with the specified value exists in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.ImmutableSet.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
-
----
-
-##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.ImmutableSet.property.size"></a>
-
-```wing
-size: num;
-```
-
-- *Type:* num
-
-The length of the set.
-
----
-
-
 ### Json <a name="Json" id="@winglang/sdk.std.Json"></a>
 
 Immutable Json.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Json.Initializer"></a>
-
-```wing
-bring std;
-
-new std.Json()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -4141,72 +3928,32 @@ to get values from.
 
 
 
-### MutableMap <a name="MutableMap" id="@winglang/sdk.std.MutableMap"></a>
+### Map <a name="Map" id="@winglang/sdk.std.Map"></a>
 
-Mutable Map.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableMap.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutableMap()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
+Immutable Map.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
-| <code><a href="#@winglang/sdk.std.MutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.MutableMap.keys">keys</a></code> | Returns the keys of this map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
-| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.values">values</a></code> | Returns the values of this map. |
+| <code><a href="#@winglang/sdk.std.Map.copyMut">copyMut</a></code> | Create a mutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.Map.get">get</a></code> | Returns a specified element from the map. |
+| <code><a href="#@winglang/sdk.std.Map.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.Map.keys">keys</a></code> | Returns the keys of this map. |
+| <code><a href="#@winglang/sdk.std.Map.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.Map.values">values</a></code> | Returns the values of this map. |
 
 ---
 
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
+##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Map.copyMut"></a>
 
 ```wing
-clear(): void
+copyMut(): MutMap
 ```
 
-Removes all elements.
+Create a mutable shallow copy of this map.
 
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableMap.copy"></a>
-
-```wing
-copy(): ImmutableMap
-```
-
-Create an immutable shallow copy of this map.
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
-
-```wing
-delete(key: str): bool
-```
-
-Removes the specified element from a map.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
-
-- *Type:* str
-
-The key.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.std.MutableMap.get"></a>
+##### `get` <a name="get" id="@winglang/sdk.std.Map.get"></a>
 
 ```wing
 get(key: str): T1
@@ -4217,7 +3964,7 @@ Returns a specified element from the map.
 If the value that is associated to the provided key is an object, then you will get a reference
 to that object and any change made to that object will effectively modify it inside the map.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.get.parameter.key"></a>
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Map.get.parameter.key"></a>
 
 - *Type:* str
 
@@ -4225,7 +3972,7 @@ The key of the element to return.
 
 ---
 
-##### `has` <a name="has" id="@winglang/sdk.std.MutableMap.has"></a>
+##### `has` <a name="has" id="@winglang/sdk.std.Map.has"></a>
 
 ```wing
 has(key: str): bool
@@ -4233,7 +3980,7 @@ has(key: str): bool
 
 Returns a boolean indicating whether an element with the specified key exists or not.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.has.parameter.key"></a>
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Map.has.parameter.key"></a>
 
 - *Type:* str
 
@@ -4241,7 +3988,7 @@ The key of the element to test for presence.
 
 ---
 
-##### `keys` <a name="keys" id="@winglang/sdk.std.MutableMap.keys"></a>
+##### `keys` <a name="keys" id="@winglang/sdk.std.Map.keys"></a>
 
 ```wing
 keys(): MutArray<str>
@@ -4249,33 +3996,7 @@ keys(): MutArray<str>
 
 Returns the keys of this map.
 
-##### `set` <a name="set" id="@winglang/sdk.std.MutableMap.set"></a>
-
-```wing
-set(key: str, value: T1): void
-```
-
-Adds or updates an entry in a Map object with a specified key and a value.
-
-TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.set.parameter.key"></a>
-
-- *Type:* str
-
-The key of the element to add.
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableMap.set.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value of the element to add.
-
----
-
-##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
+##### `size` <a name="size" id="@winglang/sdk.std.Map.size"></a>
 
 ```wing
 size(): num
@@ -4285,7 +4006,7 @@ Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
 
-##### `values` <a name="values" id="@winglang/sdk.std.MutableMap.values"></a>
+##### `values` <a name="values" id="@winglang/sdk.std.Map.values"></a>
 
 ```wing
 values(): Array
@@ -4296,137 +4017,9 @@ Returns the values of this map.
 
 
 
-### MutableSet <a name="MutableSet" id="@winglang/sdk.std.MutableSet"></a>
-
-Mutable Set.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableSet.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutableSet()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableSet.add">add</a></code> | Add value to set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
-
----
-
-##### `add` <a name="add" id="@winglang/sdk.std.MutableSet.add"></a>
-
-```wing
-add(value: T1): MutableSet
-```
-
-Add value to set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.add.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-value to add.
-
----
-
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutableSet.clear"></a>
-
-```wing
-clear(): void
-```
-
-The clear() method removes all elements from a set.
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
-
-```wing
-copy(): ImmutableSet
-```
-
-Create an immutable shallow copy of this set.
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutableSet.delete"></a>
-
-```wing
-delete(value: T1): bool
-```
-
-Removes a specified value from a set, if it is in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.delete.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to remove from the set.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
-
-```wing
-has(value: T1): bool
-```
-
-Returns a boolean indicating whether an element with the specified value exists in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
-
----
-
-##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.MutableSet.property.size"></a>
-
-```wing
-size: num;
-```
-
-- *Type:* num
-
-The length of the set.
-
----
-
-
 ### MutArray <a name="MutArray" id="@winglang/sdk.std.MutArray"></a>
 
 Mutable Array.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutArray.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutArray()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -4599,19 +4192,6 @@ The length of the array.
 
 Mutable Json.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutJson.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutJson()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -4729,22 +4309,253 @@ to copy.
 
 
 
-### Number <a name="Number" id="@winglang/sdk.std.Number"></a>
+### MutMap <a name="MutMap" id="@winglang/sdk.std.MutMap"></a>
 
-Number.
+Mutable Map.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Number.Initializer"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutMap.clear">clear</a></code> | Removes all elements. |
+| <code><a href="#@winglang/sdk.std.MutMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.MutMap.delete">delete</a></code> | Removes the specified element from a map. |
+| <code><a href="#@winglang/sdk.std.MutMap.get">get</a></code> | Returns a specified element from the map. |
+| <code><a href="#@winglang/sdk.std.MutMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.MutMap.keys">keys</a></code> | Returns the keys of this map. |
+| <code><a href="#@winglang/sdk.std.MutMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
+| <code><a href="#@winglang/sdk.std.MutMap.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.MutMap.values">values</a></code> | Returns the values of this map. |
+
+---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutMap.clear"></a>
 
 ```wing
-bring std;
-
-new std.Number()
+clear(): void
 ```
+
+Removes all elements.
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutMap.copy"></a>
+
+```wing
+copy(): Map
+```
+
+Create an immutable shallow copy of this map.
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutMap.delete"></a>
+
+```wing
+delete(key: str): bool
+```
+
+Removes the specified element from a map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.delete.parameter.key"></a>
+
+- *Type:* str
+
+The key.
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.std.MutMap.get"></a>
+
+```wing
+get(key: str): T1
+```
+
+Returns a specified element from the map.
+
+If the value that is associated to the provided key is an object, then you will get a reference
+to that object and any change made to that object will effectively modify it inside the map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.get.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutMap.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Returns a boolean indicating whether an element with the specified key exists or not.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.has.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to test for presence.
+
+---
+
+##### `keys` <a name="keys" id="@winglang/sdk.std.MutMap.keys"></a>
+
+```wing
+keys(): MutArray<str>
+```
+
+Returns the keys of this map.
+
+##### `set` <a name="set" id="@winglang/sdk.std.MutMap.set"></a>
+
+```wing
+set(key: str, value: T1): void
+```
+
+Adds or updates an entry in a Map object with a specified key and a value.
+
+TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.set.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to add.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutMap.set.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value of the element to add.
+
+---
+
+##### `size` <a name="size" id="@winglang/sdk.std.MutMap.size"></a>
+
+```wing
+size(): num
+```
+
+Returns the number of elements in the map.
+
+TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `values` <a name="values" id="@winglang/sdk.std.MutMap.values"></a>
+
+```wing
+values(): Array
+```
+
+Returns the values of this map.
+
+
+
+
+### MutSet <a name="MutSet" id="@winglang/sdk.std.MutSet"></a>
+
+Mutable Set.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutSet.add">add</a></code> | Add value to set. |
+| <code><a href="#@winglang/sdk.std.MutSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
+| <code><a href="#@winglang/sdk.std.MutSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
+| <code><a href="#@winglang/sdk.std.MutSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
+| <code><a href="#@winglang/sdk.std.MutSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+
+---
+
+##### `add` <a name="add" id="@winglang/sdk.std.MutSet.add"></a>
+
+```wing
+add(value: T1): MutSet
+```
+
+Add value to set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.add.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+value to add.
+
+---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutSet.clear"></a>
+
+```wing
+clear(): void
+```
+
+The clear() method removes all elements from a set.
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutSet.copy"></a>
+
+```wing
+copy(): Set
+```
+
+Create an immutable shallow copy of this set.
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutSet.delete"></a>
+
+```wing
+delete(value: T1): bool
+```
+
+Removes a specified value from a set, if it is in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.delete.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to remove from the set.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutSet.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.has.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to test for presence in the Set object.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
 
 ---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.MutSet.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The length of the set.
+
+---
+
+
+### Number <a name="Number" id="@winglang/sdk.std.Number"></a>
+
+Number.
 
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
@@ -4798,39 +4609,72 @@ to parse number from.
 
 Range.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Range.Initializer"></a>
+
+
+
+
+### Set <a name="Set" id="@winglang/sdk.std.Set"></a>
+
+Immutable Set.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Set.copyMut">copyMut</a></code> | Create a mutable shallow copy of this set. |
+| <code><a href="#@winglang/sdk.std.Set.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+
+---
+
+##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Set.copyMut"></a>
 
 ```wing
-bring std;
-
-new std.Range()
+copyMut(): MutSet
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+Create a mutable shallow copy of this set.
+
+##### `has` <a name="has" id="@winglang/sdk.std.Set.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.Set.has.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to test for presence in the Set object.
 
 ---
 
 
+#### Properties <a name="Properties" id="Properties"></a>
 
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Set.property.size">size</a></code> | <code>num</code> | The length of the set. |
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.Set.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The length of the set.
+
+---
 
 
 ### String <a name="String" id="@winglang/sdk.std.String"></a>
 
 String.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.String.Initializer"></a>
-
-```wing
-bring std;
-
-new std.String()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
 
 #### Methods <a name="Methods" id="Methods"></a>
 

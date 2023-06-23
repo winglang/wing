@@ -4,6 +4,8 @@ import { Code, InflightClient } from "../core";
  * Range
  */
 export class Range {
+  private constructor() {}
+
   /**
    * Generate a range of numbers.
    *

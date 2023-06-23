@@ -10,7 +10,9 @@ import { Code, InflightClient } from "../core";
  *
  * @typeparam T1
  */
-export class ImmutableSet {
+export class Set {
+  private constructor() {}
+
   /**
    * @internal
    */
@@ -43,7 +45,7 @@ export class ImmutableSet {
    *
    * @returns a MutableSet with the same values as this set
    */
-  public copyMut(): MutableSet {
+  public copyMut(): MutSet {
     throw new Error("Macro");
   }
 }
@@ -53,7 +55,9 @@ export class ImmutableSet {
  *
  * @typeparam T1
  */
-export class MutableSet {
+export class MutSet {
+  private constructor() {}
+
   /**
    * @internal
    */
@@ -74,7 +78,7 @@ export class MutableSet {
    * @param value value to add
    * @returns true if the value was added, false if it was already in the set
    */
-  public add(value: T1): MutableSet {
+  public add(value: T1): MutSet {
     value;
     throw new Error("Abstract");
   }
@@ -93,7 +97,7 @@ export class MutableSet {
    *
    * @returns an ImmutableSet with the same values as this set
    */
-  public copy(): ImmutableSet {
+  public copy(): Set {
     throw new Error("Macro");
   }
 

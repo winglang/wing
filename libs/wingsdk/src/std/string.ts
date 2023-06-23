@@ -9,6 +9,8 @@ import { Code, InflightClient } from "../core";
  * String
  */
 export class String {
+  private constructor() {}
+
   /**
    * @internal
    */
