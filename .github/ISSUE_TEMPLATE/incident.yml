@@ -1,0 +1,30 @@
+name: Incident 🚒
+description: Respond to a production incident - checklist
+labels: ["🚒 incident"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A production incident started. Please stay cool, no need to call 911. Follow the checklist below - you've got this :muscle: <br/>
+        You may refer to the [Wing maintainers operational guide](https://www.winglang.io/docs/contributors/maintainers/operations) for more details.
+  - type: markdown
+    attributes:
+      value: |
+        ## Incident Response Checklist
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description:
+      options:
+        - label: ACKNOWLEDGE the incident on PagerDuty and BetterStack.
+        - label: PRIORITIZE
+            P0 - Extreme/Total user interruption, no reasonable workaround.
+            P1 - Major degradation of user experience, with possible workarounds.
+            P2 - Minor degradation of user experience with workaround, or major contributor experience disruption.
+        - label: (optional) CONTACT a relevant person who has more information about the incident.
+        - label: (optional) ANNOUNCE major incidents on Slack #dev or #general channels.
+        - label: HANDLE by reverting or forward fixing.
+        - label: DOCUMENT your actions on the created #alert Slack thread.
+        - label: RESOLVE the incident on PagerDuty (BetterStack resolves automatically).
+        - label: LESSONS LEARNED should be shared via the "post-mortem" workflow on #dev Slack channel.
