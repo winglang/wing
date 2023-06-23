@@ -3,7 +3,7 @@
 exports[`can add row in preflight 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "Adding row from preflight (key=joe-id).",
+  "Adding initial row (key=joe-id).",
   "wingsdk.cloud.Table created.",
   "get row joe-id from table my_addrow_table.",
   "wingsdk.cloud.Table deleted.",
