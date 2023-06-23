@@ -140,10 +140,21 @@ function removePathsFromTraceLine(line?: string) {
   return line;
 }
 
+function removeLineNumbers(line?: string) {
+  if (!line) {
+    return undefined;
+  }
+
+  return line.replace(/:\d+:\d+/g, ":<sanitized>");
+}
+
 function sanitizeResult(result: TestResult): TestResult {
   let error: string | undefined;
   if (result.error) {
-    let lines = result.error.split("\n").map(removePathsFromTraceLine);
+    let lines = result.error
+      .split("\n")
+      .map(removePathsFromTraceLine)
+      .map(removeLineNumbers);
 
     // remove all lines after "at Simulator.runTest" since they are platform-dependent
     let lastLine = lines.findIndex((line) =>
