@@ -27,7 +27,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
   public async init(): Promise<TableAttributes> {
     for (const [key, row] of Object.entries(this.initialRows)) {
       await this.context.withTrace({
-        message: `Adding row from preflight (key=${key}).`,
+        message: `Adding initial row (key=${key}).`,
         activity: async () => {
           return this.table.set(key, row);
         },
