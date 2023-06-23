@@ -851,6 +851,76 @@ exports[`tree.json for an app with many resources 1`] = `
                     "id": "BigPublisher",
                     "path": "root/Default/Default/BigPublisher",
                   },
+                  "ScopeAndIdTestClass": {
+                    "attributes": {
+                      "wing:resource:connections": [],
+                    },
+                    "children": {
+                      "Dummy": {
+                        "attributes": {
+                          "wing:resource:connections": [],
+                        },
+                        "children": {
+                          "Dummy": {
+                            "attributes": {
+                              "wing:resource:connections": [],
+                            },
+                            "constructInfo": {
+                              "fqn": "@winglang/sdk.std.Resource",
+                              "version": "0.0.0",
+                            },
+                            "id": "Dummy",
+                            "path": "root/Default/Default/ScopeAndIdTestClass/Dummy/Dummy",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "id": "Dummy",
+                        "path": "root/Default/Default/ScopeAndIdTestClass/Dummy",
+                      },
+                      "tc0": {
+                        "attributes": {
+                          "wing:resource:connections": [],
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "id": "tc0",
+                        "path": "root/Default/Default/ScopeAndIdTestClass/tc0",
+                      },
+                      "tc1": {
+                        "attributes": {
+                          "wing:resource:connections": [],
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "id": "tc1",
+                        "path": "root/Default/Default/ScopeAndIdTestClass/tc1",
+                      },
+                      "tc2": {
+                        "attributes": {
+                          "wing:resource:connections": [],
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "id": "tc2",
+                        "path": "root/Default/Default/ScopeAndIdTestClass/tc2",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "@winglang/sdk.std.Resource",
+                      "version": "0.0.0",
+                    },
+                    "id": "ScopeAndIdTestClass",
+                    "path": "root/Default/Default/ScopeAndIdTestClass",
+                  },
                   "cloud.Bucket": {
                     "attributes": {
                       "wing:resource:connections": [

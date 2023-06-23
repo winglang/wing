@@ -364,8 +364,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic").onMessage(new $Closure1(this,"$Closure1"),{ timeout: $stdlib.std.Duration.fromSeconds(180) }));
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue").setConsumer(new $Closure2(this,"$Closure2"),{ timeout: $stdlib.std.Duration.fromSeconds(180) }));
+    (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic").onMessage(new $Closure1(this,"$Closure1"),{ timeout: (std.Duration.fromSeconds(180)) }));
+    (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue").setConsumer(new $Closure2(this,"$Closure2"),{ timeout: (std.Duration.fromSeconds(180)) }));
   }
 }
 class $App extends $AppBase {

@@ -77,6 +77,7 @@ impl Documented for TypeRef {
 			| Type::Json
 			| Type::MutJson
 			| Type::Nil
+			| Type::Unresolved
 			| Type::Array(_)
 			| Type::MutArray(_)
 			| Type::Map(_)

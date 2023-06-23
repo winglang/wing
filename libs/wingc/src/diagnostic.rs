@@ -207,6 +207,21 @@ pub fn found_errors() -> bool {
 	})
 }
 
+#[cfg(test)]
+/// Asserts that no panics occurred during compilation. Should only be used for testing
+pub fn assert_no_panics() {
+	let panics = DIAGNOSTICS.with(|diagnostics| {
+		let diagnostics = diagnostics.borrow();
+		diagnostics
+			.iter()
+			.filter(|d| d.message.starts_with("Compiler bug"))
+			.cloned()
+			.collect::<Vec<_>>()
+	});
+
+	assert_eq!(panics.len(), 0, "Compiler bug detected: {:#?}", panics);
+}
+
 /// Returns the list of diagnostics
 pub fn get_diagnostics() -> Vec<Diagnostic> {
 	DIAGNOSTICS.with(|diagnostics| {
