@@ -379,14 +379,8 @@ fn add_std_namespace(type_: &str) -> std::string::String {
 		&type_name
 	};
 	let type_name = match type_name {
-		"Set" => "ImmutableSet",
-		"Map" => "ImmutableMap",
-		"Array" => "ImmutableArray",
-		"MutSet" => "MutableSet",
-		"MutMap" => "MutableMap",
-		"MutArray" => "MutableArray",
-		"Json" | "MutJson" | "MutableArray" | "MutableMap" | "MutableSet" | "ImmutableArray" | "ImmutableMap"
-		| "ImmutableSet" | "String" | "Duration" | "Boolean" | "Number" => type_name,
+		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
+		| "Boolean" | "Number" => type_name,
 		_ => return type_name.to_string(),
 	};
 
