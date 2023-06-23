@@ -3203,6 +3203,164 @@ The website's custom domain name.
 
 ## Classes <a name="Classes" id="Classes"></a>
 
+### Array <a name="Array" id="@winglang/sdk.std.Array"></a>
+
+Immutable Array.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Array.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Array()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Array.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.Array.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.Array.contains">contains</a></code> | Checks if this array includes searchElement. |
+| <code><a href="#@winglang/sdk.std.Array.copyMut">copyMut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+
+---
+
+##### `at` <a name="at" id="@winglang/sdk.std.Array.at"></a>
+
+```wing
+at(index: num): T1
+```
+
+Get the value at the given index.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Array.at.parameter.index"></a>
+
+- *Type:* num
+
+index of the value to get.
+
+---
+
+##### `concat` <a name="concat" id="@winglang/sdk.std.Array.concat"></a>
+
+```wing
+concat(arr: Array): Array
+```
+
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.Array.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Array">Array</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.Array.contains"></a>
+
+```wing
+contains(searchElement: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Array.copyMut"></a>
+
+```wing
+copyMut(): MutArray
+```
+
+Create a mutable shallow copy of this array.
+
+##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.Array.indexOf"></a>
+
+```wing
+indexOf(searchElement: T1): num
+```
+
+Returns the index of the first occurrence of searchElement found.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `join` <a name="join" id="@winglang/sdk.std.Array.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.Array.join.parameter.separator"></a>
+
+- *Type:* str
+
+---
+
+##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.Array.lastIndexOf"></a>
+
+```wing
+lastIndexOf(searchElement: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Array.property.length">length</a></code> | <code>num</code> | The length of the array. |
+
+---
+
+##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.Array.property.length"></a>
+
+```wing
+length: num;
+```
+
+- *Type:* num
+
+The length of the array.
+
+---
+
+
 ### Boolean <a name="Boolean" id="@winglang/sdk.std.Boolean"></a>
 
 Boolean.
@@ -3566,164 +3724,6 @@ Return the total number of years in this Duration.
 ---
 
 
-### ImmutableArray <a name="ImmutableArray" id="@winglang/sdk.std.ImmutableArray"></a>
-
-Immutable Array.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableArray.Initializer"></a>
-
-```wing
-bring std;
-
-new std.ImmutableArray()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code> | Get the value at the given index. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copyMut</a></code> | Create a mutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
-
----
-
-##### `at` <a name="at" id="@winglang/sdk.std.ImmutableArray.at"></a>
-
-```wing
-at(index: num): T1
-```
-
-Get the value at the given index.
-
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.ImmutableArray.at.parameter.index"></a>
-
-- *Type:* num
-
-index of the value to get.
-
----
-
-##### `concat` <a name="concat" id="@winglang/sdk.std.ImmutableArray.concat"></a>
-
-```wing
-concat(arr: ImmutableArray): ImmutableArray
-```
-
-Merge arr to the end of this array.
-
-###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.ImmutableArray.concat.parameter.arr"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.ImmutableArray">ImmutableArray</a>
-
-array to merge.
-
----
-
-##### `contains` <a name="contains" id="@winglang/sdk.std.ImmutableArray.contains"></a>
-
-```wing
-contains(searchElement: T1): bool
-```
-
-Checks if this array includes searchElement.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.ImmutableArray.contains.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.ImmutableArray.copyMut"></a>
-
-```wing
-copyMut(): MutableArray
-```
-
-Create a mutable shallow copy of this array.
-
-##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.ImmutableArray.indexOf"></a>
-
-```wing
-indexOf(searchElement: T1): num
-```
-
-Returns the index of the first occurrence of searchElement found.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.ImmutableArray.indexOf.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `join` <a name="join" id="@winglang/sdk.std.ImmutableArray.join"></a>
-
-```wing
-join(separator?: str): str
-```
-
-Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
-
-If the array has only
-one item, then that item will be returned without using the separator.
-
-###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.ImmutableArray.join.parameter.separator"></a>
-
-- *Type:* str
-
----
-
-##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.ImmutableArray.lastIndexOf"></a>
-
-```wing
-lastIndexOf(searchElement: T1): num
-```
-
-Returns the index of the last occurrence of searchElement found.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.ImmutableArray.lastIndexOf.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
-
----
-
-##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.ImmutableArray.property.length"></a>
-
-```wing
-length: num;
-```
-
-- *Type:* num
-
-The length of the array.
-
----
-
-
 ### ImmutableMap <a name="ImmutableMap" id="@winglang/sdk.std.ImmutableMap"></a>
 
 Immutable Map.
@@ -3818,7 +3818,7 @@ TODO: For now this has to be a method rather than a getter as macros only work o
 ##### `values` <a name="values" id="@winglang/sdk.std.ImmutableMap.values"></a>
 
 ```wing
-values(): ImmutableArray
+values(): Array
 ```
 
 Returns the values of this map.
@@ -4141,190 +4141,6 @@ to get values from.
 
 
 
-### MutableArray <a name="MutableArray" id="@winglang/sdk.std.MutableArray"></a>
-
-Mutable Array.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableArray.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutableArray()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableArray.at">at</a></code> | Get the value at the given index. |
-| <code><a href="#@winglang/sdk.std.MutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
-| <code><a href="#@winglang/sdk.std.MutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.MutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
-| <code><a href="#@winglang/sdk.std.MutableArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.MutableArray.pop">pop</a></code> | Remove value from end of array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.push">push</a></code> | Add value to end of array. |
-
----
-
-##### `at` <a name="at" id="@winglang/sdk.std.MutableArray.at"></a>
-
-```wing
-at(index: num): T1
-```
-
-Get the value at the given index.
-
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutableArray.at.parameter.index"></a>
-
-- *Type:* num
-
-index of the value to get.
-
----
-
-##### `concat` <a name="concat" id="@winglang/sdk.std.MutableArray.concat"></a>
-
-```wing
-concat(arr: MutableArray): MutableArray
-```
-
-Merge arr to the end of this array.
-
-###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutableArray.concat.parameter.arr"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.MutableArray">MutableArray</a>
-
-array to merge.
-
----
-
-##### `contains` <a name="contains" id="@winglang/sdk.std.MutableArray.contains"></a>
-
-```wing
-contains(searchElement: T1): bool
-```
-
-Checks if this array includes searchElement.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutableArray.contains.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableArray.copy"></a>
-
-```wing
-copy(): ImmutableArray
-```
-
-Create an immutable shallow copy of this array.
-
-##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.MutableArray.indexOf"></a>
-
-```wing
-indexOf(searchElement: T1): num
-```
-
-Returns the index of the first occurrence of searchElement found.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutableArray.indexOf.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `join` <a name="join" id="@winglang/sdk.std.MutableArray.join"></a>
-
-```wing
-join(separator?: str): str
-```
-
-Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
-
-If the array has only
-one item, then that item will be returned without using the separator.
-
-###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutableArray.join.parameter.separator"></a>
-
-- *Type:* str
-
----
-
-##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.MutableArray.lastIndexOf"></a>
-
-```wing
-lastIndexOf(searchElement: T1): num
-```
-
-Returns the index of the last occurrence of searchElement found.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutableArray.lastIndexOf.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `pop` <a name="pop" id="@winglang/sdk.std.MutableArray.pop"></a>
-
-```wing
-pop(): T1
-```
-
-Remove value from end of array.
-
-##### `push` <a name="push" id="@winglang/sdk.std.MutableArray.push"></a>
-
-```wing
-push(value: T1): void
-```
-
-Add value to end of array.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableArray.push.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-value to add.
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
-
----
-
-##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.MutableArray.property.length"></a>
-
-```wing
-length: num;
-```
-
-- *Type:* num
-
-The length of the array.
-
----
-
-
 ### MutableMap <a name="MutableMap" id="@winglang/sdk.std.MutableMap"></a>
 
 Mutable Map.
@@ -4472,7 +4288,7 @@ TODO: For now this has to be a method rather than a getter as macros only work o
 ##### `values` <a name="values" id="@winglang/sdk.std.MutableMap.values"></a>
 
 ```wing
-values(): ImmutableArray
+values(): Array
 ```
 
 Returns the values of this map.
@@ -4591,6 +4407,190 @@ size: num;
 - *Type:* num
 
 The length of the set.
+
+---
+
+
+### MutArray <a name="MutArray" id="@winglang/sdk.std.MutArray"></a>
+
+Mutable Array.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutArray.Initializer"></a>
+
+```wing
+bring std;
+
+new std.MutArray()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.MutArray.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.MutArray.contains">contains</a></code> | Checks if this array includes searchElement. |
+| <code><a href="#@winglang/sdk.std.MutArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.MutArray.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.MutArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.MutArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
+
+---
+
+##### `at` <a name="at" id="@winglang/sdk.std.MutArray.at"></a>
+
+```wing
+at(index: num): T1
+```
+
+Get the value at the given index.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.at.parameter.index"></a>
+
+- *Type:* num
+
+index of the value to get.
+
+---
+
+##### `concat` <a name="concat" id="@winglang/sdk.std.MutArray.concat"></a>
+
+```wing
+concat(arr: MutArray): MutArray
+```
+
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutArray.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutArray">MutArray</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.MutArray.contains"></a>
+
+```wing
+contains(searchElement: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutArray.copy"></a>
+
+```wing
+copy(): Array
+```
+
+Create an immutable shallow copy of this array.
+
+##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.MutArray.indexOf"></a>
+
+```wing
+indexOf(searchElement: T1): num
+```
+
+Returns the index of the first occurrence of searchElement found.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `join` <a name="join" id="@winglang/sdk.std.MutArray.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutArray.join.parameter.separator"></a>
+
+- *Type:* str
+
+---
+
+##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.MutArray.lastIndexOf"></a>
+
+```wing
+lastIndexOf(searchElement: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `pop` <a name="pop" id="@winglang/sdk.std.MutArray.pop"></a>
+
+```wing
+pop(): T1
+```
+
+Remove value from end of array.
+
+##### `push` <a name="push" id="@winglang/sdk.std.MutArray.push"></a>
+
+```wing
+push(value: T1): void
+```
+
+Add value to end of array.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.push.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+value to add.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
+
+---
+
+##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.MutArray.property.length"></a>
+
+```wing
+length: num;
+```
+
+- *Type:* num
+
+The length of the array.
 
 ---
 
