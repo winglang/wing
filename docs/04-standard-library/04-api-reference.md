@@ -5138,29 +5138,6 @@ The length of the string.
 ---
 
 
-### T1 <a name="T1" id="@winglang/sdk.std.T1"></a>
-
-Generic type argument.
-
-This type is replaced at compile time.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.T1.Initializer"></a>
-
-```wing
-bring std;
-
-new std.T1()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-
-
-
 ### Util <a name="Util" id="@winglang/sdk.util.Util"></a>
 
 Utility functions.
