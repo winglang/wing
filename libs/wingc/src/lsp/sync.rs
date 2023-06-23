@@ -135,7 +135,7 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 	let app_name = source_path.file_stem().expect("Empty filename").to_str().unwrap();
 	let project_dir = source_path.parent().expect("Empty filename");
 
-	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
+	let mut jsifier = JSifier::new(&types, &source_path, app_name, &project_dir, true);
 	jsifier.jsify(&scope);
 
 	return FileData {

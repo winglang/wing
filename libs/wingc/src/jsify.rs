@@ -30,7 +30,8 @@ use crate::{
 		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
+	WINGSDK_STD_MODULE,
 };
 
 use self::{codemaker::CodeMaker, files::Files};
@@ -62,6 +63,7 @@ pub struct JSifyContext {
 
 pub struct JSifier<'a> {
 	pub types: &'a Types,
+	source_path: &'a Path,
 	/// Stores all generated JS files in memory.
 	files: Files,
 	/// Root of the project, used for resolving extern modules
@@ -79,9 +81,16 @@ enum BindMethod {
 }
 
 impl<'a> JSifier<'a> {
-	pub fn new(types: &'a Types, app_name: &'a str, absolute_project_root: &'a Path, shim: bool) -> Self {
+	pub fn new(
+		types: &'a Types,
+		source_path: &'a Path,
+		app_name: &'a str,
+		absolute_project_root: &'a Path,
+		shim: bool,
+	) -> Self {
 		Self {
 			types,
+			source_path,
 			files: Files::new(),
 			shim,
 			app_name,
@@ -339,24 +348,27 @@ impl<'a> JSifier<'a> {
 			ExprKind::Literal(lit) => match lit {
         Literal::Nil => "undefined".to_string(),
 				Literal::String(s) => s.to_string(),
-				Literal::InterpolatedString(s) => format!(
-					"`{}`",
-					s.parts
+				Literal::InterpolatedString(s) => {
+					let comma_separated_statics = s
+						.parts
 						.iter()
-						.map(|p| match p {
-							InterpolatedStringPart::Static(l) => l.to_string(),
-							InterpolatedStringPart::Expr(e) => {
-								match *self.get_expr_type(e) {
-									Type::Json | Type::MutJson => {
-										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, ctx))
-									}
-									_ => format!("${{{}}}", self.jsify_expression(e, ctx)),
-								}
-							}
+						.filter_map(|p| match p {
+							InterpolatedStringPart::Static(l) => Some(format!("\"{}\"", l.to_string())),
+							InterpolatedStringPart::Expr(_) => None,
 						})
 						.collect::<Vec<String>>()
-						.join("")
-				),
+						.join(", ");
+					let comma_separated_exprs = s
+						.parts
+						.iter()
+						.filter_map(|p| match p {
+							InterpolatedStringPart::Static(_) => None,
+							InterpolatedStringPart::Expr(e) => Some(self.jsify_expression(e, ctx)),
+						})
+						.collect::<Vec<String>>()
+						.join(", ");
+					format!("String.raw({{ raw: [{}] }}, {})", comma_separated_statics, comma_separated_exprs)
+			},
 				Literal::Number(n) => format!("{}", n),
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
@@ -386,7 +398,13 @@ impl<'a> JSifier<'a> {
 					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
 					_ => format!("({})", self.jsify_expression(callee, ctx)),
 				};
-				let arg_string = self.jsify_arg_list(&arg_list, None, None, ctx);
+				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
+				let mut args_text_string = lookup_span(&arg_list.span, self.source_path);
+				if args_text_string.len() > 0 {
+					// remove the parens
+					args_text_string = args_text_string[1..args_text_string.len() - 1].to_string();
+				}
+				let args_text_string = escape_javascript_string(&args_text_string);
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
@@ -399,8 +417,8 @@ impl<'a> JSifier<'a> {
 
 							_ => expr_string,
 						};
-						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS];
-						let replace_with = &[self_string, &arg_string];
+						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
+						let replace_with = &[self_string, &args_string, &args_text_string];
 						let ac = AhoCorasick::new(patterns);
 						return ac.replace_all(js_override, replace_with);
 					}
@@ -408,7 +426,7 @@ impl<'a> JSifier<'a> {
 
 				// NOTE: if the expression is a "handle" class, the object itself is callable (see
 				// `jsify_class_inflight` below), so we can just call it as-is.
-				format!("({auto_await}{expr_string}({arg_string}))")
+				format!("({auto_await}{expr_string}({args_string}))")
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
@@ -1960,4 +1978,51 @@ fn jsify_type_name(t: &Vec<Symbol>, phase: Phase) -> String {
 	} else {
 		p.join(".")
 	}
+}
+
+fn lookup_span(span: &WingSpan, source_path: &Path) -> String {
+	let source = std::fs::read_to_string(source_path).unwrap();
+	let lines = source.lines().collect_vec();
+
+	let start_line = span.start.line as usize;
+	let end_line = span.end.line as usize;
+
+	let start_col = span.start.col as usize;
+	let end_col = span.end.col as usize;
+
+	let mut result = String::new();
+
+	if start_line == end_line {
+		result.push_str(&lines[start_line][start_col..end_col]);
+	} else {
+		result.push_str(&lines[start_line][start_col..]);
+		result.push('\n');
+
+		for line in lines[start_line + 1..end_line].iter() {
+			result.push_str(line);
+			result.push('\n');
+		}
+
+		result.push_str(&lines[end_line][..end_col]);
+	}
+
+	result
+}
+
+fn escape_javascript_string(s: &str) -> String {
+	let mut result = String::new();
+
+	for c in s.chars() {
+		match c {
+			'"' => result.push_str("\\\""),
+			'\n' => result.push_str("\\n"),
+			'\r' => result.push_str("\\r"),
+			'\t' => result.push_str("\\t"),
+			'\'' => result.push_str("\\'"),
+			'\\' => result.push_str("\\\\"),
+			_ => result.push(c),
+		}
+	}
+
+	result
 }

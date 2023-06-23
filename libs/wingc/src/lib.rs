@@ -72,6 +72,7 @@ const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
+const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
 pub struct CompilerOutput {}
 
@@ -157,14 +158,14 @@ pub fn parse(source_path: &Path) -> Scope {
 		}
 	};
 
-	let tree = match parser.parse(&source[..], None) {
+	let tree = match parser.parse(&source, None) {
 		Some(tree) => tree,
 		None => {
 			panic!("Failed parsing source file: {}", source_path.display());
 		}
 	};
 
-	let wing_parser = Parser::new(&source[..], source_path.to_str().unwrap().to_string());
+	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string());
 
 	wing_parser.wingit(&tree.root_node())
 }
@@ -210,7 +211,9 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some("{((cond) => {if (!cond) throw new Error(`assertion failed: '$args$'`)})($args$)}".to_string()),
+			js_override: Some(
+				"{((cond) => {if (!cond) throw new Error(\"assertion failed: $args_text$\")})($args$)}".to_string(),
+			),
 			docs: Docs::with_summary("Asserts that a condition is true"),
 		}),
 		scope,
@@ -347,7 +350,7 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
+	let mut jsifier = JSifier::new(&types, &source_path, app_name, &project_dir, true);
 	jsifier.jsify(&scope);
 	jsifier.emit_files(&out_dir);
 

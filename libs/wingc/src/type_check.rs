@@ -634,6 +634,7 @@ pub struct FunctionSignature {
 	/// This string may contain special tokens:
 	/// - `$self$`: The expression on which this function was called
 	/// - `$args$`: the arguments passed to this function call
+	/// - `$args_text$`: the original source text of the arguments passed to this function call, escaped
 	pub js_override: Option<String>,
 	pub docs: Docs,
 }
