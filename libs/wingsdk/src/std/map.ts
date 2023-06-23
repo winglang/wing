@@ -12,14 +12,14 @@ import { Code, InflightClient } from "../core";
  * @typeparam T1
  */
 export class Map {
-  private constructor() {}
-
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * Returns the number of elements in the map.
@@ -102,14 +102,14 @@ export class Map {
  * @typeparam T1
  */
 export class MutMap {
-  private constructor() {}
-
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * Returns the number of elements in the map.

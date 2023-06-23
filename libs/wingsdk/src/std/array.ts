@@ -11,14 +11,14 @@ import { Code, InflightClient } from "../core";
  * @typeparam T1
  */
 export class Array {
-  private constructor() {}
-
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * The length of the array
@@ -119,14 +119,14 @@ export class Array {
  * @typeparam T1
  */
 export class MutArray {
-  private constructor() {}
-
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * The length of the array

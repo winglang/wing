@@ -9,8 +9,6 @@ import { Code, InflightClient } from "../core";
  * String
  */
 export class String {
-  private constructor() {}
-
   /**
    * @internal
    */
@@ -30,6 +28,8 @@ export class String {
     json;
     throw new Error("Macro");
   }
+
+  private constructor() {}
 
   /**
    * The length of the string.

@@ -11,14 +11,14 @@ import { Code, InflightClient } from "../core";
  * @typeparam T1
  */
 export class Set {
-  private constructor() {}
-
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * The length of the set
@@ -56,14 +56,14 @@ export class Set {
  * @typeparam T1
  */
 export class MutSet {
-  private constructor() {}
-
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * The length of the set

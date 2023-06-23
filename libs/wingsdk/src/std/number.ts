@@ -5,8 +5,6 @@ import { Code, InflightClient } from "../core";
  * Number
  */
 export class Number {
-  private constructor() {}
-
   /**
    * Parse a number from Json.
    *
@@ -39,4 +37,6 @@ export class Number {
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 }

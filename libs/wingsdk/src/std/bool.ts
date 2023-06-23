@@ -5,8 +5,6 @@ import { Code, InflightClient } from "../core";
  * Boolean
  */
 export class Boolean {
-  private constructor() {}
-
   /**
    * Parse a boolean from Json.
    *
@@ -28,4 +26,6 @@ export class Boolean {
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 }
