@@ -1,5 +1,5 @@
 ---
-title: Counter 
+title: cloud.Counter 
 id: counter
 description: A built-in resource for representing an container for numbers in the cloud.
 keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Counter]
