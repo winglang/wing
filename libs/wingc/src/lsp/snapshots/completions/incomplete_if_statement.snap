@@ -16,7 +16,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n copy: (): ImmutableMap\n```\n---\nCreate an immutable shallow copy of this map.\n\n### Returns\nan ImmutableMap with the same values as this map"
+    value: "```wing\n copy: (): Map\n```\n---\nCreate an immutable shallow copy of this map.\n\n### Returns\nan ImmutableMap with the same values as this map"
   sortText: ff|copy
   insertText: copy($0)
   insertTextFormat: 2
@@ -93,7 +93,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n values: (): ImmutableArray\n```\n---\nReturns the values of this map.\n\n### Returns\nan array containing of type T the values of this map"
+    value: "```wing\n values: (): Array\n```\n---\nReturns the values of this map.\n\n### Returns\nan array containing of type T the values of this map"
   sortText: ff|values
   insertText: values($0)
   insertTextFormat: 2

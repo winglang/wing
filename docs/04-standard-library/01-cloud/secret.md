@@ -1,5 +1,5 @@
 ---
-title: cloud.Secret 
+title: Secret
 id: secret
 description: A built-in resource for securely storing secrets in the cloud.
 keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, secrets]
@@ -77,4 +77,4 @@ See [AWS documentation](https://docs.aws.amazon.com/secretsmanager/latest/usergu
 
 ## API Reference
 
-The full list of APIs for `cloud.Secret` is available in the [API Reference](../04-api-reference.md).
+The full list of APIs for `cloud.Secret` is available in the [API Reference](../api-reference).
