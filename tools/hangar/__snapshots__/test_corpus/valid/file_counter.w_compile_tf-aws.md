@@ -13,7 +13,7 @@ module.exports = function({ counter, bucket }) {
     }
     async handle(body)  {
       const next = (await counter.inc());
-      const key = `myfile-${"hi"}.txt`;
+      const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
       (await bucket.put(key,body));
     }
   }

@@ -37,9 +37,9 @@ module.exports = function({ f, api }) {
     }
     async handle()  {
       const username = "tsuf";
-      const res = (await f.get(`${api.url}/users/${username}`));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
+      const res = (await f.get(String.raw({ raw: ["", "/users/", ""] }, api.url, username)));
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"status\") == 200")})(((res)["status"] === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"body\").get(\"user\") == username")})((((res)["body"])["user"] === username))};
     }
   }
   return $Closure2;

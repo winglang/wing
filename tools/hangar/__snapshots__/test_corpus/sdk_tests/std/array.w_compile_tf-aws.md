@@ -12,8 +12,8 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.freeze(["hello"]).length === 1)'`)})((Object.freeze(["hello"]).length === 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(["hello"].length === 1)'`)})((["hello"].length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].length == 1")})((Object.freeze(["hello"]).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\"].length == 1")})((["hello"].length === 1))};
     }
   }
   return $Closure1;
@@ -33,8 +33,8 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Object.freeze(["hello"]).at(0)) === "hello")'`)})(((await Object.freeze(["hello"]).at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await ["hello", "world"].at(1)) === "world")'`)})(((await ["hello", "world"].at(1)) === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].at(0) == \"hello\"")})(((await Object.freeze(["hello"]).at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\", \"world\"].at(1) == \"world\"")})(((await ["hello", "world"].at(1)) === "world"))};
     }
   }
   return $Closure2;
@@ -55,11 +55,11 @@ module.exports = function({  }) {
     }
     async handle()  {
       const a = ["hello"];
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 1)'`)})((a.length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
       (await a.push("world"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 2)'`)})((a.length === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await a.at(0)) === "hello")'`)})(((await a.at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await a.at(1)) === "world")'`)})(((await a.at(1)) === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 2")})((a.length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.at(0) == \"hello\"")})(((await a.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.at(1) == \"world\"")})(((await a.at(1)) === "world"))};
     }
   }
   return $Closure3;
@@ -426,18 +426,18 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.freeze([1, 2, 3]).length === 3)'`)})((Object.freeze([1, 2, 3]).length === 3))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '([1, 2, 3].length === 3)'`)})(([1, 2, 3].length === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: [1,2,3].length == 3")})((Object.freeze([1, 2, 3]).length === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<num>[1,2,3].length == 3")})(([1, 2, 3].length === 3))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Closure1(this,"$Closure1"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.freeze(["hello"]).at(0)) === "hello")'`)})(((Object.freeze(["hello"]).at(0)) === "hello"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((["hello", "world"].at(1)) === "world")'`)})(((["hello", "world"].at(1)) === "world"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].at(0) == \"hello\"")})(((Object.freeze(["hello"]).at(0)) === "hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\", \"world\"].at(1) == \"world\"")})(((["hello", "world"].at(1)) === "world"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:at()",new $Closure2(this,"$Closure2"));
     const a = ["hello"];
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 1)'`)})((a.length === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
     (a.push("world"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 2)'`)})((a.length === 2))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((a.at(0)) === "hello")'`)})(((a.at(0)) === "hello"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((a.at(1)) === "world")'`)})(((a.at(1)) === "world"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 2")})((a.length === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: a.at(0) == \"hello\"")})(((a.at(0)) === "hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: a.at(1) == \"world\"")})(((a.at(1)) === "world"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:push()",new $Closure3(this,"$Closure3"));
   }
 }

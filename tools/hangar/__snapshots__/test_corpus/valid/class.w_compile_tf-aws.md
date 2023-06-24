@@ -12,10 +12,10 @@ module.exports = function({ c5 }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.x === 123)'`)})((c5.x === 123))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 321)'`)})((c5.y === 321))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})((c5.x === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})((c5.y === 321))};
       (await c5.set(111));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(c5.y === 111)'`)})((c5.y === 111))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})((c5.y === 111))};
     }
   }
   return $Closure1;
@@ -35,9 +35,9 @@ module.exports = function({ student }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(student.name === "Tom")'`)})((student.name === "Tom"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(student.major === "MySpace")'`)})((student.major === "MySpace"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(student.hrlyWage === 38)'`)})((student.hrlyWage === 38))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})((student.name === "Tom"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})((student.major === "MySpace"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})((student.hrlyWage === 38))};
     }
   }
   return $Closure2;
@@ -57,7 +57,7 @@ module.exports = function({ ta }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(ta.hrlyWage === 10)'`)})((ta.hrlyWage === 10))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})((ta.hrlyWage === 10))};
     }
   }
   return $Closure3;
@@ -78,7 +78,7 @@ module.exports = function({ B }) {
     }
     async handle()  {
       const b = new B("ba");
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(b.sound === "ba")'`)})((b.sound === "ba"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((b.sound === "ba"))};
     }
   }
   return $Closure4;
@@ -1095,11 +1095,11 @@ class $Root extends $stdlib.std.Resource {
     }
     new C1(this,"C1");
     const c2 = new C2(this,"C2");
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(c2.x === 1)'`)})((c2.x === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c2.x == 1")})((c2.x === 1))};
     const c3 = new C3(this,"C3",1,2);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(c3.x === 1)'`)})((c3.x === 1))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(c3.y === 2)'`)})((c3.y === 2))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((C4.m()) === 1)'`)})(((C4.m()) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c3.x == 1")})((c3.x === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c3.y == 2")})((c3.y === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: C4.m() == 1")})(((C4.m()) === 1))};
     const c5 = new C5(this,"C5");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access inflight field",new $Closure1(this,"$Closure1"));
     const student = new PaidStudent(this,"PaidStudent","Tom","MySpace",38);

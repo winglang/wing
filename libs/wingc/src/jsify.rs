@@ -1981,7 +1981,8 @@ fn jsify_type_name(t: &Vec<Symbol>, phase: Phase) -> String {
 }
 
 fn lookup_span(span: &WingSpan, source_path: &Path) -> String {
-	let source = std::fs::read_to_string(source_path).unwrap();
+	let source = std::fs::read_to_string(source_path)
+		.expect(format!("Failed to read source file \"{}\"", source_path.display()).as_str());
 	let lines = source.lines().collect_vec();
 
 	let start_line = span.start.line as usize;

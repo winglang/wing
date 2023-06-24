@@ -1238,13 +1238,11 @@ impl<'s> Parser<'s> {
 							start_from = last_start;
 						}
 
-						if interpolation_start != last_start {
-							parts.push(InterpolatedStringPart::Static(
-								str::from_utf8(&self.source[start_from..interpolation_start])
-									.unwrap()
-									.into(),
-							));
-						}
+						parts.push(InterpolatedStringPart::Static(
+							str::from_utf8(&self.source[start_from..interpolation_start])
+								.unwrap()
+								.into(),
+						));
 
 						parts.push(InterpolatedStringPart::Expr(
 							self.build_expression(&interpolation_node.named_child(0).unwrap(), phase)?,
@@ -1255,11 +1253,9 @@ impl<'s> Parser<'s> {
 						start_from = last_end;
 					}
 
-					if last_end != end {
-						parts.push(InterpolatedStringPart::Static(
-							str::from_utf8(&self.source[last_end..end]).unwrap().into(),
-						));
-					}
+					parts.push(InterpolatedStringPart::Static(
+						str::from_utf8(&self.source[last_end..end]).unwrap().into(),
+					));
 
 					Ok(Expr::new(
 						ExprKind::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
