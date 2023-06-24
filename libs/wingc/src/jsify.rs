@@ -363,7 +363,12 @@ impl<'a> JSifier<'a> {
 						.iter()
 						.filter_map(|p| match p {
 							InterpolatedStringPart::Static(_) => None,
-							InterpolatedStringPart::Expr(e) => Some(self.jsify_expression(e, ctx)),
+							InterpolatedStringPart::Expr(e) => Some(match *self.get_expr_type(e) {
+								Type::Json | Type::MutJson => {
+									format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, ctx))
+								}
+								_ => format!("${{{}}}", self.jsify_expression(e, ctx)),
+							})
 						})
 						.collect::<Vec<String>>()
 						.join(", ");
