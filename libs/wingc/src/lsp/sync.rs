@@ -150,7 +150,7 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 
 #[cfg(test)]
 pub mod test_utils {
-	use std::str::FromStr;
+	use std::{fs, str::FromStr};
 	use uuid::Uuid;
 
 	use lsp_types::*;
@@ -179,8 +179,12 @@ pub mod test_utils {
 	/// ```
 	///
 	pub fn load_file_with_contents(content: &str) -> TextDocumentPositionParams {
-		let filename = format!("file:///{}.w", Uuid::new_v4());
-		let uri = Url::from_str(&filename).unwrap();
+		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
+		let filename = format!("{}.w", Uuid::new_v4());
+		let file_path = temp_dir.path().join(&filename);
+		fs::write(&file_path, content).expect("Failed to write to temporary file");
+		let file_uri_string = format!("file:///{}", file_path.to_str().unwrap());
+		let uri = Url::from_str(&file_uri_string).unwrap();
 		on_document_did_open(DidOpenTextDocumentParams {
 			text_document: lsp_types::TextDocumentItem {
 				uri: uri.clone(),
