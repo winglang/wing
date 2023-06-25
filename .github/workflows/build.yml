@@ -192,7 +192,7 @@ jobs:
         if: steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
         with:
-          name: diff
+          name: build.diff
           path: build.diff
 
 

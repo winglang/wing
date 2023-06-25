@@ -48,6 +48,10 @@ jobs:
       if: steps.download-artifacts.outputs.found_artifact == 'true'
       with:
         github_token: ${{secrets.MUTATION_TOKEN}}
+    - name: Disable Git Hooks
+      if: steps.download-artifacts.outputs.found_artifact == 'true'
+      run: |
+        git config --local core.hooksPath /dev/null
     - name: Checkout Workflow Branch
       if: steps.download-artifacts.outputs.found_artifact == 'true'
       uses: actions/checkout@v3
