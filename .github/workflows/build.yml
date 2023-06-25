@@ -339,16 +339,9 @@ jobs:
       - benchmarks
       - unit-tests
     steps:
-      - name: Download Patches
-        id: download-artifacts
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          workflow_conclusion: ""
-          name: .+\.diff$
-          name_is_regexp: true
-          if_no_artifact_found: ignore
-      - name: Check Patches
+      - name: Download patches
+        uses: actions/download-artifact@v3
+      - name: Check patches
         run: |
           PATCH_COUNT=0
           for f in $(find ./*.diff/*.diff); do
