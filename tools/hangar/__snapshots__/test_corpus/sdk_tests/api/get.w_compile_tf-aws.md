@@ -1,8 +1,8 @@
-# [api_path_vars.w](../../../../../examples/tests/valid/api_path_vars.w) | compile | tf-aws
+# [get.w](../../../../../../examples/tests/sdk_tests/api/get.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ std_Json }) {
+module.exports = function({ api_GET, body }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,10 +12,12 @@ module.exports = function({ std_Json }) {
     async $inflight_init()  {
     }
     async handle(req)  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.method === api_GET)'`)})((req.method === api_GET))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.path === "/path")'`)})((req.path === "/path"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.headers)["content-type"] === "application/json")'`)})(((req.headers)["content-type"] === "application/json"))};
       return {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "status": 200,}
+      "status": 200,
+      "body": body,}
       ;
     }
   }
@@ -26,7 +28,7 @@ module.exports = function({ std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, http_Util, std_Json }) {
+module.exports = function({ api, http_GET, body, http_Util }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -36,10 +38,24 @@ module.exports = function({ api, http_Util, std_Json }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const username = "tsuf";
-      const res = (await http_Util.get(`${api.url}/users/${username}`));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.status === 200)'`)})((res.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((JSON.parse((res.body ?? ""))))["user"] === username)'`)})((((JSON.parse((res.body ?? ""))))["user"] === username))};
+      const url = (api.url + "/path");
+      const getResponse = (await http_Util.get(url,Object.freeze({"headers":Object.freeze({"content-type":"application/json"})})));
+      const fetchResponse = (await http_Util.fetch(url,{
+      "method": http_GET,
+      "headers": Object.freeze({"content-type":"application/json"}),}
+      ));
+      const fetchResponseNoMethod = (await http_Util.fetch(url,{
+      "headers": Object.freeze({"content-type":"application/json"}),}
+      ));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(getResponse.body === body)'`)})((getResponse.body === body))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(getResponse.status === 200)'`)})((getResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(getResponse.url === url)'`)})((getResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.body === body)'`)})((fetchResponse.body === body))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.status === 200)'`)})((fetchResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.url === url)'`)})((fetchResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponseNoMethod.body === body)'`)})((fetchResponseNoMethod.body === body))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponseNoMethod.status === 200)'`)})((fetchResponseNoMethod.status === 200))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponseNoMethod.url === url)'`)})((fetchResponseNoMethod.url === url))};
     }
   }
   return $Closure2;
@@ -80,7 +96,7 @@ module.exports = function({ api, http_Util, std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:http.get and http.fetch can preform a call to an api\",\"${aws_lambda_function.root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_543A78D5.arn}\"]]"
     }
   },
   "provider": {
@@ -102,7 +118,7 @@ module.exports = function({ api, http_Util, std_Json }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
         "triggers": {
-          "redeployment": "ee1148d10d8bb2403dd0cc6100b576b5968ee68f"
+          "redeployment": "c3461b0b0043b244acf509a72d2abc470b20cb05"
         }
       }
     },
@@ -114,7 +130,7 @@ module.exports = function({ api, http_Util, std_Json }) {
             "uniqueId": "root_cloudApi_api_8C9FE51E"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/users/{name}\":{\"get\":{\"operationId\":\"get-users/{name}\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[{\"name\":\"name\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.root_cloudApi_cloudApiOnRequestcdafee6e_582EA655.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/path\":{\"get\":{\"operationId\":\"get-path\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.root_cloudApi_cloudApiOnRequestcdafee6e_582EA655.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}}}}",
         "name": "api-c895068c"
       }
     },
@@ -141,11 +157,11 @@ module.exports = function({ api, http_Util, std_Json }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_09386838": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/IamRole",
+            "uniqueId": "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_09386838"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -162,15 +178,15 @@ module.exports = function({ api, http_Util, std_Json }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3.name}"
       },
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_108210B3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/IamRolePolicy",
+            "uniqueId": "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_108210B3"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_09386838.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -184,15 +200,15 @@ module.exports = function({ api, http_Util, std_Json }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3.name}"
       },
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_2F4F63AD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_2F4F63AD"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_09386838.name}"
       }
     },
     "aws_lambda_function": {
@@ -222,28 +238,28 @@ module.exports = function({ api, http_Util, std_Json }) {
           "subnet_ids": []
         }
       },
-      "root_testtest_Handler_046C3415": {
+      "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_543A78D5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/Default",
+            "uniqueId": "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_543A78D5"
           }
         },
         "environment": {
           "variables": {
             "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
-            "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
+            "WING_FUNCTION_NAME": "Handler-c838ce37",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
           }
         },
-        "function_name": "Handler-c8f4f2a1",
+        "function_name": "Handler-c838ce37",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_IamRole_09386838.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_key": "${aws_s3_object.root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_S3Object_C6152827.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -252,18 +268,18 @@ module.exports = function({ api, http_Util, std_Json }) {
       }
     },
     "aws_lambda_permission": {
-      "root_cloudApi_api_permissionGET9f89597e_58775ACD": {
+      "root_cloudApi_api_permissionGETe2131352_C536168C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/api/permission-GET-9f89597e",
-            "uniqueId": "root_cloudApi_api_permissionGET9f89597e_58775ACD"
+            "path": "root/Default/Default/cloud.Api/api/permission-GET-e2131352",
+            "uniqueId": "root_cloudApi_api_permissionGETe2131352_C536168C"
           }
         },
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.root_cloudApi_cloudApiOnRequestcdafee6e_582EA655.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/users/{name}",
-        "statement_id": "AllowExecutionFromAPIGateway-GET-9f89597e"
+        "source_arn": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/path",
+        "statement_id": "AllowExecutionFromAPIGateway-GET-e2131352"
       }
     },
     "aws_s3_bucket": {
@@ -289,11 +305,11 @@ module.exports = function({ api, http_Util, std_Json }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_S3Object_C6152827": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "path": "root/Default/Default/test:http.get and http.fetch can preform a call to an api/Handler/S3Object",
+            "uniqueId": "root_testhttpgetandhttpfetchcanpreformacalltoanapi_Handler_S3Object_C6152827"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -325,10 +341,12 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
-        const std_JsonClient = std.Json._toInflightType(context);
+        const api_GET_client = context._lift(api_GET);
+        const body_client = context._lift(body);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            std_Json: ${std_JsonClient.text},
+            api_GET: ${api_GET_client},
+            body: ${body_client},
           })
         `);
       }
@@ -345,8 +363,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Closure1._registerBindObject(api_GET, host, []);
+          $Closure1._registerBindObject(body, host, []);
         }
         if (ops.includes("handle")) {
+          $Closure1._registerBindObject(api_GET, host, []);
+          $Closure1._registerBindObject(body, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -360,13 +382,15 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
         const api_client = context._lift(api);
+        const http_GET_client = context._lift(http_GET);
+        const body_client = context._lift(body);
         const http_UtilClient = http.Util._toInflightType(context);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             api: ${api_client},
+            http_GET: ${http_GET_client},
+            body: ${body_client},
             http_Util: ${http_UtilClient.text},
-            std_Json: ${std_JsonClient.text},
           })
         `);
       }
@@ -384,22 +408,28 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           $Closure2._registerBindObject(api, host, []);
+          $Closure2._registerBindObject(body, host, []);
+          $Closure2._registerBindObject(http_GET, host, []);
         }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
+          $Closure2._registerBindObject(body, host, []);
+          $Closure2._registerBindObject(http_GET, host, []);
         }
         super._registerBind(host, ops);
       }
     }
+    const http_GET = http.HttpMethod.GET;
+    const api_GET = cloud.HttpMethod.GET;
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const handler = new $Closure1(this,"$Closure1");
-    (api.get("/users/{name}",handler));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure2(this,"$Closure2"));
+    const body = "ok!";
+    (api.get("/path",new $Closure1(this,"$Closure1")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.get and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "api_path_vars", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "get", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
