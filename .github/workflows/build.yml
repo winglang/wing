@@ -334,6 +334,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           run_id: ${{ github.run_id }}
+          workflow_conclusion: ""
           name: .+\.diff$
           name_is_regexp: true
           if_no_artifact_found: ignore
