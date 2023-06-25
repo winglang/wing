@@ -121,6 +121,8 @@ export class Json {
     throw new Error("Macro");
   }
 
+  private constructor() {}
+
   /**
    * Returns a specified element from the Json.
    *
@@ -171,6 +173,8 @@ export class MutJson {
     json;
     throw new Error("Macro");
   }
+
+  private constructor() {}
 
   /**
    * Returns a specified element from the Json.

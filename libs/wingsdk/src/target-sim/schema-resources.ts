@@ -170,6 +170,7 @@ export interface TableSchema extends BaseResourceSchema {
     readonly name: string;
     readonly columns: { [key: string]: ColumnType };
     readonly primaryKey: string;
+    readonly initialRows: Record<string, Json>;
   };
 }
 
