@@ -328,8 +328,15 @@ jobs:
       - benchmarks
       - unit-tests
     steps:
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
+      - name: Download Patches
+        id: download-artifacts
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          run_id: ${{ github.run_id }}
+          name: .+\.diff$
+          name_is_regexp: true
+          if_no_artifact_found: ignore
       - name: Check Patches
         run: |
           PATCH_COUNT=0
