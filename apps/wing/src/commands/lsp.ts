@@ -4,6 +4,9 @@ import {
   TextDocumentSyncKind,
   InitializeResult,
   DiagnosticSeverity,
+  Diagnostic,
+  Range,
+  DocumentUri,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
@@ -12,11 +15,26 @@ export async function run_server() {
   let wingc = await wingCompiler.load({
     imports: {
       env: {
-        send_notification,
+        send_diagnostic
       },
     },
   });
   let badState = false;
+
+  const raw_diagnostics: wingCompiler.WingDiagnostic[] = [];
+
+  function send_diagnostic(
+    data_ptr: number,
+    data_len: number
+  ) {
+    const data_buf = Buffer.from(
+      (wingc.exports.memory as WebAssembly.Memory).buffer,
+      data_ptr,
+      data_len
+    );
+    const data_str = new TextDecoder().decode(data_buf);
+    raw_diagnostics.push(JSON.parse(data_str));
+  }
 
   const callWing = (func: wingCompiler.WingCompilerFunction, args: any): any | null => {
     if (badState) {
@@ -81,33 +99,35 @@ export async function run_server() {
     return result;
   });
 
-  connection.onDidOpenTextDocument(async (params) => {
+  async function handle_event_and_update_diagnostics(wingc_handler_name: wingCompiler.WingCompilerFunction, params: any, uri: DocumentUri) {
     if (badState) {
       wingc = await wingCompiler.load({
         imports: {
           env: {
-            send_notification,
+            send_diagnostic,
           },
         },
       });
       badState = false;
     }
+    // Reset diagnostics list
+    raw_diagnostics.length = 0;
+    // Call wingc handler
+    callWing(wingc_handler_name, params);
+    // purposely not awaiting this, notifications are fire-and-forget
+    connection.sendDiagnostics({
+      uri,
+      diagnostics: raw_diagnostics.map((rd) => {
+        return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
+      })
+    });
+  }
 
-    callWing("wingc_on_did_open_text_document", params);
+  connection.onDidOpenTextDocument(async (params) => {
+    handle_event_and_update_diagnostics("wingc_on_did_open_text_document", params, params.textDocument.uri);
   });
   connection.onDidChangeTextDocument(async (params) => {
-    if (badState) {
-      wingc = await wingCompiler.load({
-        imports: {
-          env: {
-            send_notification,
-          },
-        },
-      });
-      badState = false;
-    }
-
-    callWing("wingc_on_did_change_text_document", params);
+    handle_event_and_update_diagnostics("wingc_on_did_change_text_document", params, params.textDocument.uri);
   });
   connection.onCompletion(async (params) => {
     return callWing("wingc_on_completion", params);
@@ -124,34 +144,6 @@ export async function run_server() {
   connection.onHover(async (params) => {
     return callWing("wingc_on_hover", params);
   });
-
-  /**
-   * This function is called by the WASM code to immediately
-   * send a notification to the client.
-   */
-  function send_notification(
-    type_ptr: number,
-    type_len: number,
-    data_ptr: number,
-    data_len: number
-  ) {
-    const type_buf = Buffer.from(
-      (wingc.exports.memory as WebAssembly.Memory).buffer,
-      type_ptr,
-      type_len
-    );
-    const type_str = new TextDecoder().decode(type_buf);
-
-    const data_buf = Buffer.from(
-      (wingc.exports.memory as WebAssembly.Memory).buffer,
-      data_ptr,
-      data_len
-    );
-    const data_str = new TextDecoder().decode(data_buf);
-
-    // purposely not awaiting this, notifications are fire-and-forget
-    void connection.sendNotification(type_str, JSON.parse(data_str));
-  }
 
   connection.listen();
 }

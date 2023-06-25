@@ -337,6 +337,9 @@ pub enum StmtKind {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
+	SuperConstructor {
+		arg_list: ArgList,
+	},
 	Let {
 		reassignable: bool,
 		var_name: Symbol,
@@ -389,6 +392,7 @@ pub enum StmtKind {
 		catch_block: Option<CatchBlock>,
 		finally_statements: Option<Scope>,
 	},
+	CompilerDebugEnv,
 }
 
 #[derive(Debug)]
@@ -416,7 +420,7 @@ pub struct StructField {
 pub enum ExprKind {
 	New {
 		class: TypeAnnotation,
-		obj_id: Option<String>,
+		obj_id: Option<Box<Expr>>,
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
 	},
@@ -506,7 +510,6 @@ pub enum Literal {
 	String(String),
 	InterpolatedString(InterpolatedString),
 	Number(f64),
-	Duration(f64),
 	Boolean(bool),
 	Nil,
 }

@@ -1,3 +1,4 @@
+use colored::Colorize;
 use derivative::Derivative;
 use duplicate::duplicate_item;
 
@@ -6,8 +7,11 @@ use crate::{
 	diagnostic::TypeError,
 	type_check::{SymbolKind, Type, TypeRef},
 };
-use std::collections::{btree_map, BTreeMap, HashSet};
 use std::fmt::Debug;
+use std::{
+	collections::{btree_map, BTreeMap, HashSet},
+	fmt::Display,
+};
 
 use super::{UnsafeRef, VariableInfo};
 
@@ -25,6 +29,36 @@ pub struct SymbolEnv {
 	pub is_init: bool,
 	pub phase: Phase,
 	statement_idx: usize,
+}
+
+impl Display for SymbolEnv {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut level = 0;
+		let mut env = self;
+		loop {
+			write!(f, "level {}: {{ ", level)?;
+			let mut items = vec![];
+			for (name, (_, kind)) in &env.symbol_map {
+				let repr = match kind {
+					SymbolKind::Type(t) => format!("{} [type]", t).red(),
+					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
+					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
+				};
+				items.push(format!("{} => {}", name, repr));
+			}
+			write!(f, "{} }}", items.join(", "))?;
+
+			if let Some(parent) = &env.parent {
+				env = parent;
+				level += 1;
+				writeln!(f)?; // new line
+			} else {
+				break;
+			}
+		}
+
+		Ok(())
+	}
 }
 
 impl Debug for SymbolEnv {
@@ -517,10 +551,12 @@ mod tests {
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
 			env: SymbolEnv::new(None, types.void(), false, Phase::Independent, 0),
+			loaded: false,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
 			env: SymbolEnv::new(Some(ns1.env.get_ref()), types.void(), false, Phase::Independent, 0),
+			loaded: false,
 		});
 
 		// Define ns2 in n1's env

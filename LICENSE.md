@@ -1,6 +1,10 @@
-MIT License
+Copyright (c) 2022-present Monada, Inc.
 
-Copyright (c) 2022-2023 Monada, Inc.
+Portions of this software are licensed as follows:
+
+- All content that resides under the "apps/wing-console/" directory of this repository, if that directory exists, is licensed under the license defined in "apps/wing-console/LICENSE.md".
+- All third party components incorporated into the Winglang Software are licensed under the original license provided by the owner of the applicable component.
+- Content outside of the above mentioned directories or restrictions above is available under the "MIT" license as defined below.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

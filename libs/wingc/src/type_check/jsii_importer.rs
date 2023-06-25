@@ -148,10 +148,11 @@ impl<'a> JsiiImporter<'a> {
 		let type_str = type_fqn.as_str();
 
 		// check if type is already imported
-		if matches!(
-			self.wing_types.libraries.lookup_nested_str(type_str, None),
-			LookupResult::Found(..)
-		) {
+		if let LookupResult::Found(sym, ..) = self.wing_types.libraries.lookup_nested_str(type_str, None) {
+			if let SymbolKind::Namespace(n) = sym {
+				// We are trying to import a namespace directly, so let's eagerly load all of its types
+				self.deep_import_submodule_to_env(Some(n.name.clone()));
+			}
 			return true;
 		}
 
@@ -200,6 +201,7 @@ impl<'a> JsiiImporter<'a> {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
 				env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+				loaded: false,
 			});
 			self
 				.wing_types
@@ -241,6 +243,7 @@ impl<'a> JsiiImporter<'a> {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					loaded: false,
 				});
 				parent_ns
 					.env
@@ -316,6 +319,7 @@ impl<'a> JsiiImporter<'a> {
 			true => self.wing_types.add_type(Type::Struct(Struct {
 				name: new_type_symbol.clone(),
 				extends: extends.clone(),
+				docs: Docs::from(&jsii_interface.docs),
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
@@ -327,6 +331,7 @@ impl<'a> JsiiImporter<'a> {
 			false => self.wing_types.add_type(Type::Interface(Interface {
 				name: new_type_symbol.clone(),
 				extends: extends.clone(),
+				docs: Docs::from(&jsii_interface.docs),
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
@@ -756,27 +761,84 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
+		let mut param_type = self.type_ref_to_wing_type(&parameter.type_);
+
+		// TODO variadic parameter support https://github.com/winglang/wing/issues/397
 		if parameter.variadic.unwrap_or(false) {
-			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/winglang/wing/issues/397");
+			param_type = self.wing_types.add_type(Type::Array(param_type));
+			param_type = self.wing_types.add_type(Type::Optional(param_type));
 		}
 
-		let param_type = self.type_ref_to_wing_type(&parameter.type_);
 		if parameter.optional.unwrap_or(false) {
-			self.wing_types.add_type(Type::Optional(param_type))
-		} else {
-			param_type
+			param_type = self.wing_types.add_type(Type::Optional(param_type));
 		}
+
+		param_type
 	}
 
 	/// Imports all types within a given submodule
-	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
-		let assembly = self.jsii_types.find_assembly(&self.jsii_spec.assembly_name).unwrap();
-		let start_string = format!("{}.{}", assembly.name, submodule);
-		assembly.types.as_ref().unwrap().keys().for_each(|type_fqn| {
-			if type_fqn.as_str().starts_with(&start_string) {
-				self.import_type(&FQN::from(type_fqn.as_str()));
+	pub fn deep_import_submodule_to_env(&mut self, submodule: Option<String>) {
+		let match_namespace = |jsii_type: &jsii::Type| match jsii_type {
+			jsii::Type::ClassType(c) => c.namespace == submodule,
+			jsii::Type::EnumType(e) => e.namespace == submodule,
+			jsii::Type::InterfaceType(i) => i.namespace == submodule,
+		};
+
+		for entry in self
+			.jsii_types
+			.find_assembly(&self.jsii_spec.assembly_name)
+			.unwrap()
+			.types
+			.as_ref()
+			.unwrap()
+			.iter()
+			.skip_while(|e| !match_namespace(e.1))
+		{
+			if match_namespace(entry.1) {
+				self.import_type(&FQN::from(entry.0.as_str()));
+			} else {
+				// the types should be well ordered, so we can break early
+				break;
 			}
-		});
+		}
+
+		// Mark the namespace as loaded after recursively importing all types to its environment
+		let mut submodule_fqn = self.jsii_spec.assembly_name.clone();
+		if let Some(submodule) = submodule {
+			submodule_fqn.push_str(&format!(".{}", submodule));
+		}
+		self.mark_namespace_as_loaded(&submodule_fqn);
+	}
+
+	fn mark_namespace_as_loaded(&mut self, module_name: &str) {
+		let n = self
+			.wing_types
+			.libraries
+			.lookup_nested_str_mut(&module_name, None)
+			.ok()
+			.expect(&format!("Namespace {} to be in libraries", module_name))
+			.0
+			.as_namespace_mut()
+			.expect(&format!("{} to be a namespace", module_name));
+
+		n.loaded = true;
+	}
+
+	/// Import all top-level types that are not in a submodule
+	pub fn import_root_types(&mut self) {
+		let assembly = self.jsii_types.find_assembly(&self.jsii_spec.assembly_name).unwrap();
+		for entry in assembly.types.as_ref().unwrap().iter() {
+			if match entry.1 {
+				jsii::Type::ClassType(c) => c.namespace.is_none(),
+				jsii::Type::EnumType(e) => e.namespace.is_none(),
+				jsii::Type::InterfaceType(i) => i.namespace.is_none(),
+			} {
+				self.import_type(&FQN::from(entry.0.as_str()));
+			} else {
+				// the types should be well ordered, so we can break early
+				break;
+			}
+		}
 	}
 
 	/// Imports submodules of the assembly, preparing each as an available namespace
@@ -816,6 +878,7 @@ impl<'a> JsiiImporter<'a> {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: assembly.name.clone(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					loaded: false,
 				});
 				self
 					.wing_types
@@ -828,6 +891,10 @@ impl<'a> JsiiImporter<'a> {
 					.expect("Failed to define jsii root namespace");
 			}
 		}
+
+		// Mark the namespace as loaded. Note that its inner submodules might not be marked as
+		// loaded yet. But if they'll be accessed then they'll be marked as well.
+		self.mark_namespace_as_loaded(&assembly.name);
 
 		// Create a symbol in the environment for the imported module
 		// For example, `bring cloud` will create a symbol named `cloud` in the environment

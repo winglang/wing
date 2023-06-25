@@ -52,7 +52,7 @@ pub trait Visit<'ast> {
 		&mut self,
 		node: &'ast Expr,
 		class: &'ast TypeAnnotation,
-		obj_id: &'ast Option<String>,
+		obj_id: &'ast Option<Box<Expr>>,
 		obj_scope: &'ast Option<Box<Expr>>,
 		arg_list: &'ast ArgList,
 	) {
@@ -101,6 +101,7 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
+		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Bring {
 			module_name,
 			identifier,
@@ -222,6 +223,7 @@ where
 				v.visit_scope(finally_statements);
 			}
 		}
+		StmtKind::CompilerDebugEnv => {}
 	}
 }
 
@@ -273,7 +275,7 @@ pub fn visit_expr_new<'ast, V>(
 	v: &mut V,
 	_node: &'ast Expr,
 	class: &'ast TypeAnnotation,
-	_obj_id: &'ast Option<String>,
+	obj_id: &'ast Option<Box<Expr>>,
 	obj_scope: &'ast Option<Box<Expr>>,
 	arg_list: &'ast ArgList,
 ) where
@@ -281,6 +283,9 @@ pub fn visit_expr_new<'ast, V>(
 {
 	v.visit_type_annotation(class);
 	v.visit_args(arg_list);
+	if let Some(id) = obj_id {
+		v.visit_expr(&id);
+	}
 	if let Some(scope) = obj_scope {
 		v.visit_expr(&scope);
 	}
@@ -383,7 +388,6 @@ where
 		Literal::Nil => {}
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
-		Literal::Duration(_) => {}
 		Literal::String(_) => {}
 	}
 }

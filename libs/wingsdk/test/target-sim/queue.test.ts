@@ -125,7 +125,7 @@ test("messages are requeued if the function fails after timeout", async () => {
 
   // warm up the function so timing is more predictable
   const fn = s.getResource(
-    "root/my_queue-AddConsumer-e645076f"
+    "root/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;
   await fn.invoke(JSON.stringify({ messages: [] }));
 
@@ -161,7 +161,7 @@ test("messages are not requeued if the function fails before timeout", async () 
 
   // warm up the function so timing is more predictable
   const fn = s.getResource(
-    "root/my_queue-AddConsumer-e645076f"
+    "root/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;
   await fn.invoke(JSON.stringify({ messages: [] }));
 
@@ -204,7 +204,7 @@ test("messages are not requeued if the function fails after retention timeout", 
 
   // warm up the function so timing is more predictable
   const fn = s.getResource(
-    "root/my_queue-AddConsumer-e645076f"
+    "root/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;
   await fn.invoke(JSON.stringify({ messages: [] }));
 

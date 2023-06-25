@@ -321,6 +321,8 @@ class $Root extends $stdlib.std.Resource {
     const m = (JSON.parse(JSON.stringify(x)));
     ((obj, args) => { obj[args[0]] = args[1]; })(m, ["a",321]);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((m)["a"] === 321)'`)})(((m)["a"] === 321))};
+    const n = Object.freeze(JSON.parse(JSON.stringify(m)));
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(m !== n)'`)})((m !== n))};
     let k2 = (Object.keys(m));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(k2.length === 2)'`)})((k2.length === 2))};
     ((args) => { delete (args[0])[args[1]]; })([m,"b"]);

@@ -26,7 +26,7 @@ module.exports = function({ res, bucket }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ __parent_this }) {
+module.exports = function({ __parent_this_2 }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -36,7 +36,7 @@ module.exports = function({ __parent_this }) {
     async $inflight_init()  {
     }
     async handle()  {
-      (await __parent_this.b.put("foo1.txt","bar"));
+      (await __parent_this_2.b.put("foo1.txt","bar"));
     }
   }
   return $Closure2;
@@ -46,7 +46,7 @@ module.exports = function({ __parent_this }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ __parent_this }) {
+module.exports = function({ __parent_this_3 }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -56,7 +56,7 @@ module.exports = function({ __parent_this }) {
     async $inflight_init()  {
     }
     async handle()  {
-      (await __parent_this.b.put("foo2.txt","bar"));
+      (await __parent_this_3.b.put("foo2.txt","bar"));
     }
   }
   return $Closure3;
@@ -66,7 +66,7 @@ module.exports = function({ __parent_this }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ __parent_this }) {
+module.exports = function({ __parent_this_4 }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -76,7 +76,7 @@ module.exports = function({ __parent_this }) {
     async $inflight_init()  {
     }
     async handle()  {
-      (await __parent_this.q.push("foo"));
+      (await __parent_this_4.q.push("foo"));
     }
   }
   return $Closure4;
@@ -116,22 +116,18 @@ module.exports = function({ Foo, MyEnum }) {
       this.name = name;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     static async barStatic()  {
       return "bar static";
     }
     async myMethod()  {
-      const __parent_this = this;
       (await this.foo.fooInc());
       const s = (await Foo.fooStatic());
       (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
       return (await this.b.get("foo"));
     }
     async testTypeAccess()  {
-      const __parent_this = this;
       if (true) {
-        const __parent_this = this;
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
@@ -154,20 +150,31 @@ module.exports = function({  }) {
       this.t = t;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async publish(s)  {
-      const __parent_this = this;
       (await this.t.publish(s));
       (await this.q.push(s));
       (await this.b2.put("foo",s));
     }
     async getObjectCount()  {
-      const __parent_this = this;
       return (await this.b.list()).length;
     }
   }
   return BigPublisher;
+}
+
+```
+
+## inflight.Dummy.js
+```js
+module.exports = function({  }) {
+  class Dummy {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+    }
+  }
+  return Dummy;
 }
 
 ```
@@ -180,17 +187,14 @@ module.exports = function({  }) {
       this.c = c;
     }
     async $inflight_init()  {
-      const __parent_this = this;
       this.inflightField = 123;
       (await this.c.inc(110));
       (await this.c.dec(10));
     }
     async fooInc()  {
-      const __parent_this = this;
       (await this.c.inc());
     }
     async fooGet()  {
-      const __parent_this = this;
       return (await this.c.peek());
     }
     static async fooStatic()  {
@@ -198,6 +202,20 @@ module.exports = function({  }) {
     }
   }
   return Foo;
+}
+
+```
+
+## inflight.ScopeAndIdTestClass.js
+```js
+module.exports = function({  }) {
+  class ScopeAndIdTestClass {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+    }
+  }
+  return ScopeAndIdTestClass;
 }
 
 ```
@@ -261,11 +279,11 @@ module.exports = function({  }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56": {
+      "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRole_E639C724": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRole",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRole",
+            "uniqueId": "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRole_E639C724"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -309,15 +327,15 @@ module.exports = function({  }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRole_D1453FEC.name}"
       },
-      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRolePolicy_EC261835": {
+      "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRolePolicy_578A4183": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRolePolicy",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRolePolicy_EC261835"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicy",
+            "uniqueId": "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRolePolicy_578A4183"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}\",\"${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56.name}"
+        "role": "${aws_iam_role.root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRole_E639C724.name}"
       },
       "root_BigPublisher_cloudTopicOnMessage113c9059_IamRolePolicy_285181B8": {
         "//": {
@@ -361,15 +379,15 @@ module.exports = function({  }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessagea6a70fca_IamRole_D1453FEC.name}"
       },
-      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRolePolicyAttachment_14959DA8": {
+      "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRolePolicyAttachment_7459EE3C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/IamRolePolicyAttachment",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRolePolicyAttachment_14959DA8"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicyAttachment",
+            "uniqueId": "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRolePolicyAttachment_7459EE3C"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56.name}"
+        "role": "${aws_iam_role.root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRole_E639C724.name}"
       },
       "root_BigPublisher_cloudTopicOnMessage113c9059_IamRolePolicyAttachment_B3218D47": {
         "//": {
@@ -412,7 +430,7 @@ module.exports = function({  }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.arn}",
-        "function_name": "${aws_lambda_function.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_A77F3D9C.function_name}"
+        "function_name": "${aws_lambda_function.root_BigPublisher_cloudQueueSetConsumerc50bc9ef_127D0344.function_name}"
       }
     },
     "aws_lambda_function": {
@@ -448,11 +466,11 @@ module.exports = function({  }) {
           "subnet_ids": []
         }
       },
-      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_A77F3D9C": {
+      "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_127D0344": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/Default",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_A77F3D9C"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/Default",
+            "uniqueId": "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_127D0344"
           }
         },
         "environment": {
@@ -463,17 +481,17 @@ module.exports = function({  }) {
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
             "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
-            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-c50bc9ef-c82c3ecc",
+            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-c50bc9ef-c889d16f",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Queue-AddConsumer-c50bc9ef-c82c3ecc",
+        "function_name": "cloud-Queue-SetConsumer-c50bc9ef-c889d16f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_IamRole_E462FE56.arn}",
+        "role": "${aws_iam_role.root_BigPublisher_cloudQueueSetConsumerc50bc9ef_IamRole_E639C724.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_BigPublisher_cloudQueueAddConsumerc50bc9ef_S3Object_AFB69B73.key}",
+        "s3_key": "${aws_s3_object.root_BigPublisher_cloudQueueSetConsumerc50bc9ef_S3Object_5ECEF0A3.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -767,11 +785,11 @@ module.exports = function({  }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_S3Object_AFB69B73": {
+      "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_S3Object_5ECEF0A3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-AddConsumer-c50bc9ef/S3Object",
-            "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc50bc9ef_S3Object_AFB69B73"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/S3Object",
+            "uniqueId": "root_BigPublisher_cloudQueueSetConsumerc50bc9ef_S3Object_5ECEF0A3"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -898,7 +916,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("fooInc", "fooGet", "fooStatic", "inflightField");
-        const __parent_this = this;
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       static _toInflightType(context) {
@@ -943,7 +960,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, name, b, e) {
         super(scope, id);
         this._addInflightOps("barStatic", "myMethod", "testTypeAccess");
-        const __parent_this = this;
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
@@ -1056,11 +1072,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("publish", "getObjectCount");
-        const __parent_this = this;
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b2");
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
         this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
+        const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -1069,10 +1085,10 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure2.js";
-            const __parent_this_client = context._lift(__parent_this);
+            const __parent_this_2_client = context._lift(__parent_this_2);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+                __parent_this_2: ${__parent_this_2_client},
               })
             `);
           }
@@ -1089,15 +1105,16 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Closure2._registerBindObject(__parent_this, host, []);
+              $Closure2._registerBindObject(__parent_this_2, host, []);
             }
             if (ops.includes("handle")) {
-              $Closure2._registerBindObject(__parent_this.b, host, ["put"]);
+              $Closure2._registerBindObject(__parent_this_2.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
         }
         (this.t.onMessage(new $Closure2(this,"$Closure2")));
+        const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -1106,10 +1123,10 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure3.js";
-            const __parent_this_client = context._lift(__parent_this);
+            const __parent_this_3_client = context._lift(__parent_this_3);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+                __parent_this_3: ${__parent_this_3_client},
               })
             `);
           }
@@ -1126,15 +1143,16 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Closure3._registerBindObject(__parent_this, host, []);
+              $Closure3._registerBindObject(__parent_this_3, host, []);
             }
             if (ops.includes("handle")) {
-              $Closure3._registerBindObject(__parent_this.b, host, ["put"]);
+              $Closure3._registerBindObject(__parent_this_3.b, host, ["put"]);
             }
             super._registerBind(host, ops);
           }
         }
         (this.q.setConsumer(new $Closure3(this,"$Closure3")));
+        const __parent_this_4 = this;
         class $Closure4 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -1143,10 +1161,10 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure4.js";
-            const __parent_this_client = context._lift(__parent_this);
+            const __parent_this_4_client = context._lift(__parent_this_4);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("${self_client_path}")({
-                __parent_this: ${__parent_this_client},
+                __parent_this_4: ${__parent_this_4_client},
               })
             `);
           }
@@ -1163,10 +1181,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("$inflight_init")) {
-              $Closure4._registerBindObject(__parent_this, host, []);
+              $Closure4._registerBindObject(__parent_this_4, host, []);
             }
             if (ops.includes("handle")) {
-              $Closure4._registerBindObject(__parent_this.q, host, ["push"]);
+              $Closure4._registerBindObject(__parent_this_4.q, host, ["push"]);
             }
             super._registerBind(host, ops);
           }
@@ -1253,6 +1271,71 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class Dummy extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Dummy.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const DummyClient = ${Dummy._toInflightType(this).text};
+            const client = new DummyClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class ScopeAndIdTestClass extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        const d1 = new Dummy(this,"Dummy");
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'd1.node.path.endsWith("/ScopeAndIdTestClass/Dummy")'`)})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
+        const d2 = new Dummy(d1,"Dummy");
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'd2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy")'`)})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
+        for (const i of $stdlib.std.Range.of(0, 3, false)) {
+          const x = new Dummy(this,`tc${i}`);
+          const expected_path = `/ScopeAndIdTestClass/tc${i}`;
+          {((cond) => {if (!cond) throw new Error(`assertion failed: 'x.node.path.endsWith(expected_path)'`)})(x.node.path.endsWith(expected_path))};
+        }
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.ScopeAndIdTestClass.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const ScopeAndIdTestClassClient = ${ScopeAndIdTestClass._toInflightType(this).text};
+            const client = new ScopeAndIdTestClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const MyEnum = 
       Object.freeze((function (tmp) {
         tmp[tmp["A"] = 0] = "A";
@@ -1266,6 +1349,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
     const bigOlPublisher = new BigPublisher(this,"BigPublisher");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:dependency cycles",new $Closure5(this,"$Closure5"));
+    new ScopeAndIdTestClass(this,"ScopeAndIdTestClass");
   }
 }
 class $App extends $AppBase {

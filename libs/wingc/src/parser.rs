@@ -13,14 +13,13 @@ use crate::ast::{
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{Diagnostic, DiagnosticResult, Diagnostics, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
-	pub diagnostics: RefCell<Diagnostics>,
 	is_in_loop: RefCell<bool>,
 }
 
@@ -45,7 +44,6 @@ impl<'s> Parser<'s> {
 			source,
 			source_name,
 			error_nodes: RefCell::new(HashSet::new()),
-			diagnostics: RefCell::new(Diagnostics::new()),
 			is_in_loop: RefCell::new(false),
 		}
 	}
@@ -70,8 +68,7 @@ impl<'s> Parser<'s> {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
 		};
-		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().push(diag);
+		report_diagnostic(diag);
 
 		// Track that we have produced a diagnostic for this node
 		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
@@ -131,22 +128,52 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_duration(&self, node: &Node) -> DiagnosticResult<Literal> {
+	fn build_duration(&self, node: &Node) -> DiagnosticResult<Expr> {
 		let value = self.check_error(node.named_child(0).unwrap(), "duration")?;
-		let value_text = self.node_text(&self.get_child_field(&value, "value")?);
+		let value_literal = self
+			.node_text(&self.get_child_field(&value, "value")?)
+			.parse::<f64>()
+			.expect("Duration string");
 
-		match value.kind() {
-			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
-			"minutes" => Ok(Literal::Duration(
-				// Specific "Minutes" duration needed here
-				value_text.parse::<f64>().expect("Duration string") * 60_f64,
-			)),
-			"hours" => Ok(Literal::Duration(
-				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
-			)),
-			"ERROR" => self.add_error("Expected duration type", &node),
-			other => self.report_unimplemented_grammar(other, "duration type", node),
-		}
+		let seconds = match value.kind() {
+			"milliseconds" => value_literal / 1000_f64,
+			"seconds" => value_literal,
+			"minutes" => value_literal * 60_f64,
+			"hours" => value_literal * 3600_f64,
+			"days" => value_literal * 86400_f64,
+			"months" => value_literal * 2628000_f64,
+			"years" => value_literal * 31536000_f64,
+			"ERROR" => self.add_error("Expected duration type", &node)?,
+			other => self.report_unimplemented_grammar(other, "duration type", node)?,
+		};
+		let span = self.node_span(node);
+		// represent duration literals as the AST equivalent of `duration.fromSeconds(value)`
+		Ok(Expr::new(
+			ExprKind::Call {
+				callee: Box::new(Expr::new(
+					ExprKind::Reference(Reference::InstanceMember {
+						object: Box::new(Expr::new(
+							ExprKind::Reference(Reference::Identifier(Symbol {
+								name: "duration".to_string(),
+								span: span.clone(),
+							})),
+							span.clone(),
+						)),
+						property: Symbol {
+							name: "fromSeconds".to_string(),
+							span: span.clone(),
+						},
+						optional_accessor: false,
+					}),
+					span.clone(),
+				)),
+				arg_list: ArgList {
+					pos_args: vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
+					named_args: IndexMap::new(),
+				},
+			},
+			span.clone(),
+		))
 	}
 
 	fn node_span(&self, node: &Node) -> WingSpan {
@@ -203,6 +230,8 @@ impl<'s> Parser<'s> {
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
+			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
+			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase, idx)?,
 			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -501,7 +530,7 @@ impl<'s> Parser<'s> {
 				"class_field" => {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
-						self.diagnostics.borrow_mut().push(Diagnostic {
+						report_diagnostic(Diagnostic {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
@@ -1115,10 +1144,11 @@ impl<'s> Parser<'s> {
 					Ok(ArgList::new())
 				};
 
-				let obj_id = expression_node.child_by_field_name("id").map(|n| {
-					let id_str = self.node_text(&n.named_child(0).unwrap());
-					id_str[1..id_str.len() - 1].to_string()
-				});
+				let obj_id = if let Some(id_node) = expression_node.child_by_field_name("id") {
+					Some(Box::new(self.build_expression(&id_node, phase)?))
+				} else {
+					None
+				};
 				let obj_scope = if let Some(scope_expr_node) = expression_node.child_by_field_name("scope") {
 					Some(Box::new(self.build_expression(&scope_expr_node, phase)?))
 				} else {
@@ -1276,10 +1306,7 @@ impl<'s> Parser<'s> {
 				})),
 				expression_span,
 			)),
-			"duration" => Ok(Expr::new(
-				ExprKind::Literal(self.build_duration(&expression_node)?),
-				expression_span,
-			)),
+			"duration" => self.build_duration(&expression_node),
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
@@ -1485,10 +1512,72 @@ impl<'s> Parser<'s> {
 		}
 	}
 
+	fn build_super_constructor_statement(&self, statement_node: &Node, phase: Phase, idx: usize) -> Result<StmtKind, ()> {
+		// Calls to super constructor can only occur in specific scenario:
+		// 1. We are in a derived class' constructor
+		// 2. The statement is the first statement in the block
+		let parent_block = statement_node.parent();
+		if let Some(p) = parent_block {
+			let parent_block_context = p.parent();
+
+			if let Some(context) = parent_block_context {
+				match context.kind() {
+					"initializer" | "inflight_initializer" => {
+						// Check that call to super constructor was first in statement block
+						if idx != 0 {
+							self.add_error(
+								"Call to super constructor must be first statement in constructor",
+								statement_node,
+							)?;
+						};
+
+						// Check that the class has a parent
+						let class_node = context.parent().unwrap().parent().unwrap();
+						let parent_class = class_node.child_by_field_name("parent");
+
+						if let None = parent_class {
+							self.add_error(
+								"Call to super constructor can only be made from derived classes",
+								statement_node,
+							)?;
+						}
+					}
+					_ => {
+						// super constructor used outside of an initializer IE:
+						// class B extends A {
+						//   someMethod() {super()};
+						// }
+						self.add_error(
+							"Call to super constructor can only be done from within class constructor",
+							statement_node,
+						)?;
+					}
+				}
+			} else {
+				// No parent block found this probably means super() call was found in top level statements
+				self.add_error(
+					"Call to super constructor can only be done from within a class constructor",
+					statement_node,
+				)?;
+			}
+		}
+
+		let arg_node = statement_node.child_by_field_name("args").unwrap();
+		let arg_list = self.build_arg_list(&arg_node, phase)?;
+
+		Ok(StmtKind::SuperConstructor { arg_list })
+	}
+
 	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
 		let name_node = statement_node.child_by_field_name("name").unwrap();
 		let name_text = self.node_text(&name_node);
-		let test_id = format!("test:{}", &name_text[1..name_text.len() - 1]);
+		let test_id = Box::new(Expr::new(
+			ExprKind::Literal(Literal::String(format!(
+				"\"test:{}\"",
+				&name_text[1..name_text.len() - 1]
+			))),
+			self.node_span(&name_node),
+		));
 		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), Phase::Inflight);
 		let statements_span = statements.span.clone();
 		let span = self.node_span(statement_node);

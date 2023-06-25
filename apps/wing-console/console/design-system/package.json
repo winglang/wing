@@ -1,0 +1,45 @@
+{
+  "name": "@wingconsole/design-system",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "version": "0.0.0",
+  "private": true,
+  "exports": "./src/index.ts",
+  "types": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "tsc": "tsc --build",
+    "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
+    "vitest": "vitest run --coverage --passWithNoTests"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.5",
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
+    "@popperjs/core": "^2.11.8",
+    "@storybook/react": "^7.0.20",
+    "@testing-library/react": "^14.0.0",
+    "@types/lodash": "^4.14.195",
+    "@types/react": "^18.2.12",
+    "@types/react-dom": "^18.2.5",
+    "@vitejs/plugin-react": "^4.0.0",
+    "@vitest/coverage-c8": "^0.31.4",
+    "@wingconsole/eslint-plugin": "file:../../tools/eslint-plugin",
+    "@wingconsole/tsconfig": "file:../../tools/tsconfig",
+    "classnames": "^2.3.2",
+    "eslint": "^8.42.0",
+    "happy-dom": "^9.20.3",
+    "lodash": "^4.17.21",
+    "nanoid": "^4.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-lottie-player": "^1.5.4",
+    "react-popper": "^2.3.0",
+    "require-from-string": "^2.0.2",
+    "typescript": "^5.1.3",
+    "vite": "^4.3.9",
+    "vitest": "^0.31.4",
+    "webpack": "^5.86.0"
+  }
+}

@@ -47,7 +47,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     static async regexInflight(pattern, text)  {
       return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
@@ -62,7 +61,6 @@ module.exports = function({  }) {
       return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
     }
     async call()  {
-      const __parent_this = this;
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regexInflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regexInflight("[a-z]+-\\d+","abc-123")))};
       const uuid = (await Foo.getUuid());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
@@ -276,7 +274,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call");
-        const __parent_this = this;
       }
       static getGreeting(name)  {
         return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)

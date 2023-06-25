@@ -9,7 +9,7 @@ import { IInflightHost, IResource, Resource } from "../std";
  */
 export class Testing {
   /**
-   * Make an `IFunctionHandler`, `IQueueAddConsumerHandler` or any other handler
+   * Make an `IFunctionHandler`, `IQueueSetConsumerHandler` or any other handler
    * on the fly. The resource will have a single method named "handle".
    *
    * The JavaScript code passed to the handler must be in the form of
