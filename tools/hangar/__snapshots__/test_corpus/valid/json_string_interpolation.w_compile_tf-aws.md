@@ -43,9 +43,9 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const obj = Object.freeze({"strValue":"test","numValue":1});
-    const notStringifyStrValue = `string: ${typeof (obj)["strValue"] === 'string' ? (obj)["strValue"] : JSON.stringify((obj)["strValue"], null, 2)}`;
+    const notStringifyStrValue = `string: ${((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))((obj)["strValue"])}`;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(notStringifyStrValue === "string: test")'`)})((notStringifyStrValue === "string: test"))};
-    const stringifyNumValue = `number: ${typeof (obj)["numValue"] === 'string' ? (obj)["numValue"] : JSON.stringify((obj)["numValue"], null, 2)}`;
+    const stringifyNumValue = `number: ${((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))((obj)["numValue"])}`;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(stringifyNumValue === "number: 1")'`)})((stringifyNumValue === "number: 1"))};
   }
 }
