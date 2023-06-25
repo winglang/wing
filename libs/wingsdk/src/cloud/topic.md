@@ -87,11 +87,11 @@ AWS implementations of `cloud.Topic` use [AWS SNS](https://docs.aws.amazon.com/s
 
 ### Azure (`tf-azure`)
 
-Tracking issue: [#621](https://github.com/winglang/wing/issues/621)
+🚧 Not supported yet (tracking issue: [#621](https://github.com/winglang/wing/issues/621))
 
 ### GCP (`tf-gcp`)
 
-Tracking issue: [#620](https://github.com/winglang/wing/issues/620)
+🚧 Not supported yet (tracking issue: [#620](https://github.com/winglang/wing/issues/620))
 
 ## API Reference
 

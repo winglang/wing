@@ -22,6 +22,7 @@
     "install:hangar": "npm --prefix tools/hangar install",
     "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
     "install:sdk": "npm --prefix libs/wingsdk install",
+    "install:compiler": "npm --prefix libs/wingcompiler install --ignore-scripts",
     "install:tree-sitter-wing": "npm --prefix libs/tree-sitter-wing install --ignore-scripts",
     "install:vscode-wing": "npm --prefix apps/vscode-wing install",
     "install:wasi": "bash scripts/setup_wasi.sh",

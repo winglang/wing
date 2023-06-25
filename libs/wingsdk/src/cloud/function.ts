@@ -4,7 +4,8 @@ import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core/app";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration, IInflightHost, IResource, Resource } from "../std";
+import { Duration } from "../std/duration";
+import { IInflightHost, IResource, Resource } from "../std/resource";
 
 /**
  * Global identifier for `Function`.
@@ -105,6 +106,10 @@ export abstract class Function extends Resource implements IInflightHost {
     const entrypoint = join(workdir, `${assetName}.js`);
     writeFileSync(entrypoint, lines.join("\n"));
     this.entrypoint = entrypoint;
+
+    if (process.env.WING_TARGET) {
+      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
+    }
   }
 
   /**

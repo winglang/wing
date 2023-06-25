@@ -21,7 +21,7 @@ describe("compile", async () => {
             cwd: benchmarksTestDir,
             wingFile: wingFile,
             args: ["compile", "--target", target],
-            shouldSucceed: true,
+            expectStdErr: false,
           });
         },
         {
@@ -53,7 +53,9 @@ describe("compile", async () => {
 
               if (meanTime > foundThreshold) {
                 // TODO Fail on this once we have a good baseline
-                console.warn(`${wingFile} | ${target}: Mean time ${meanTime}ms is greater than threshold ${foundThreshold}ms`)
+                console.warn(
+                  `${wingFile} | ${target}: Mean time ${meanTime}ms is greater than threshold ${foundThreshold}ms`
+                );
               }
             });
           },

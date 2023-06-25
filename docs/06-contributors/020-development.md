@@ -8,6 +8,11 @@ This topic includes a description of common development workflows for the Wing p
 
 ## Environment Setup
 
+:::info
+You can open up this repo just using the badge below. It is recommended to select a 4-core minimum machine.
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
+:::
+
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
@@ -196,6 +201,13 @@ npx nx lint wingc
 You can show clippy errors in your IDE by installing the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension and setting the option "Rust-analyzer › Check: Command" to "clippy" instead of "check".
 
 The [insta](https://marketplace.visualstudio.com/items?itemName=mitsuhiko.insta) extension allows you to view snapshots in the tests files.
+
+## How do I debug the Wing compiler on VSCode?
+
+To debug the Rust compiler on VSCode, first you need to install the [CodeLLDB extension](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb).<br/>
+Next, you can use the `Debug Wing Compiler` launch configuration available on our [launch.json](https://github.com/winglang/wing/blob/main/.vscode/launch.json).
+
+Hit F5 to start debugging. You'll be prompted to insert the path to the `.w` file you want to debug.<br/>You can use the `${workspaceFolder}/examples/tests/valid/hello.w` file for example.
 
 ## How do I make changes to the Wing grammar?
 

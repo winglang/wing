@@ -35,7 +35,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
-  public addConsumer(
+  public setConsumer(
     inflight: cloud.IQueueAddConsumerHandler,
     props: cloud.QueueAddConsumerProps = {}
   ): cloud.Function {

@@ -1,6 +1,6 @@
 # Wing Examples
 
-This directory contains a collection of Wing examples of the kinds of apps you can build in Wing! Check out the [Wing Contributor's Handbook](../docs/06-contributors/docs#%EF%B8%8F-how-do-i-add-an-example) for a guide on on how to add your own example.
+This directory contains a collection of Wing examples of the kinds of apps you can build in Wing! Check out the [Wing Contributor's Handbook](https://docs.winglang.io/contributors/docs#%EF%B8%8F-how-do-i-add-an-example) for a guide on on how to add your own example.
 
 The examples in the `tests` directory are examples specifically used for testing the compiler. `tests/valid` are examples that should compile successfully, and `tests/invalid` are examples that should fail.
 
@@ -44,6 +44,12 @@ _Add yours here!_
 
 * **Source code:** [./proposed/task-manager.w](./proposed/task-manager.w)
 * **Description:** A task manager that lets you create background tasks asynchronously, and check their status at any point in time.
+* **Author:** [@Chriscbr](https://github.com/Chriscbr)
+
+### URL Shortener
+
+* **Source code:** [./proposed/url-shortener.w](./proposed/url-shortener.w)
+* **Description:** A URL shortener consisting of two API endpoints, `/create` and `/u/:id`. IDs are managed using buckets, but could be swapped with a table or other stateful storage mechanism. Requires installing `node-fetch@2` from npm.
 * **Author:** [@Chriscbr](https://github.com/Chriscbr)
 
 <!--

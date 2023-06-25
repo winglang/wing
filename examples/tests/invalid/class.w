@@ -74,3 +74,7 @@ struct S1 {}
 class C8 extends S1 {
                //^^ Preflight class C8's parent is not a class
 }
+
+class C11 extends C11 {
+                //^^^ Class cannot extend itself
+}

@@ -2,7 +2,8 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
-import { T1 } from "./util";
+import { T1 } from "./generics";
+import { Code, InflightClient } from "../core";
 
 /**
  * Immutable Array
@@ -10,6 +11,13 @@ import { T1 } from "./util";
  * @typeparam T1
  */
 export class ImmutableArray {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * The length of the array
    * @returns the length of the array
@@ -109,6 +117,13 @@ export class ImmutableArray {
  * @typeparam T1
  */
 export class MutableArray {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * The length of the array
    * @returns the length of the array

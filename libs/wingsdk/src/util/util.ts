@@ -1,3 +1,5 @@
+import { Code, InflightClient } from "../core";
+
 /**
  * Utility functions.
  */
@@ -21,5 +23,12 @@ export class Util {
    */
   public static tryEnv(name: string): string | undefined {
     return process.env[name];
+  }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
   }
 }

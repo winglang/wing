@@ -22,13 +22,13 @@ let queue = new cloud.Queue();
 let counter = new cloud.Counter();
 let bucket = new cloud.Bucket();
 
-queue.addConsumer(inflight (message: str) => {
+queue.setConsumer(inflight (message: str) => {
   let i = counter.inc();
   bucket.put("file-${i}.txt", message);
 });
 ```
 
-`cloud.Queue`, `cloud.Counter`, and `cloud.Bucket` are *preflight objects*. They represent cloud infrastructure resources. When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation of these resources. The `queue.addConsumer()` method is a *preflight method* that configures the infrastructure to invoke a particular *inflight function* for each message in the queue.
+`cloud.Queue`, `cloud.Counter`, and `cloud.Bucket` are *preflight objects*. They represent cloud infrastructure resources. When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation of these resources. The `queue.setConsumer()` method is a *preflight method* that configures the infrastructure to invoke a particular *inflight function* for each message in the queue.
 
 **Now comes the cool part**: the code that runs inside the inflight function interacts with the `counter` and the `bucket` objects through their *inflight methods* (`counter.inc()` and `bucket.put()`). These methods can only be called from inflight scopes.
 
@@ -36,7 +36,7 @@ queue.addConsumer(inflight (message: str) => {
 
 In existing languages, where there is no way to distinguish between multiple execution phases, it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific execution phase.
 
-In addition, other parts of Wing's *cloud-oriented* cannot be represented naturally without native support from the language. We've seen some worthy efforts in projects like [Pulumi's Function Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/) and [Functionless](https://functionless.org/). But although these efforts come close, they either have to make compromises in safety (e.g. it is possible to capture mutable objects) or in the programming model (e.g. type system is too complex).
+In addition, other parts of Wing's *cloud-oriented* cannot be represented naturally without native support from the language. We've seen some worthy efforts in projects like [Pulumi's Function Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/) and [Functionless](https://github.com/functionless/functionless). But although these efforts come close, they either have to make compromises in safety (e.g. it is possible to capture mutable objects) or in the programming model (e.g. type system is too complex).
 
 We believe that Wing, a language that natively supports this paradigm, will make using it much easier by streamlining common patterns, in a way that is impossible to accomplish with existing ones. Kind of like what C++ did for object orientation. You could write object-oriented code in C, but you had to work hard to make it work without native support from the language.
 

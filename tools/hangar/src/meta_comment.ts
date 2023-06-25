@@ -1,4 +1,4 @@
-import { readFileSync } from "fs-extra";
+import { readFileSync } from "fs";
 import YAML from "yaml";
 
 export interface MetaTestCase {
@@ -33,6 +33,13 @@ export interface MetaComment {
    * @default - Will not be skipped
    */
   skip?: boolean;
+
+  /**
+   * Environment variables to set for this test
+   * 
+   * @default - No environment variables will be set
+   */
+  env?: Record<string, string>;
 }
 
 export function parseMetaCommentFromPath(testPath: string) {

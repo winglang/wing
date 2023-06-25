@@ -1,28 +1,17 @@
 {
   "name": "winglang",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["wingc", "sdk"],
+  "implicitDependencies": ["wingc", "sdk", "compiler"],
   "targets": {
-    "copy": {
-      "options": {
-        "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
-        "cwd": "apps/wing"
-      },
-      "configurations": {
-        "release": {
-          "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./"
-        }
-      }
-    },
     "build": {
-      "dependsOn": ["^build", "copy"],
+      "dependsOn": ["^build"],
       "options": {
         "command": "npm run build",
         "cwd": "apps/wing"
       }
     },
     "test": {
-      "dependsOn": ["copy"],
+      "dependsOn": ["^build"],
       "options": {
         "command": "npm run test",
         "cwd": "apps/wing"
@@ -30,12 +19,7 @@
     },
     "package": {
       "options": {
-        "commands": [
-          "npx patch-package",
-          "npm run bump",
-          "npm pack",
-          "npm run unbump"
-        ],
+        "commands": ["npm run bump", "npm pack", "npm run unbump"],
         "cwd": "apps/wing",
         "parallel": false
       }

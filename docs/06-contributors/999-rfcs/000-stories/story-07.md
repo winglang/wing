@@ -47,8 +47,7 @@ We are able to answer the following questions:
 We want to make sure that our user journey is safe and meets the legal standard, including: having our EULA available, 
 making sure we do not leak any private information, etc...
 
-## Console is ready for public [console/#161](https://github.com/winglang/console/issues/161)
-
+## Console is ready for public 
 See list in ticket
 
 ## Our service is always available for our users [#527](https://github.com/winglang/wing/issues/527)

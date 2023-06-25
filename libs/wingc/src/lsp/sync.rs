@@ -5,6 +5,8 @@ use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
+use crate::closure_transform::ClosureTransformer;
+use crate::fold::Fold;
 use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
@@ -99,9 +101,17 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 
 	let wing_parser = Parser::new(text, source_file.to_string());
 
+	let scope = wing_parser.wingit(&tree.root_node());
+
+	// -- DESUGARING PHASE --
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = ClosureTransformer::new();
 	// Note: The scope is intentionally boxed here to force heap allocation
-	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
-	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
+	// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
+	let mut scope = Box::new(inflight_transformer.fold_scope(scope));
+
+	// -- TYPECHECKING PHASE --
 
 	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
 

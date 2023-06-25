@@ -30,7 +30,7 @@ export class Testing {
     const clients: Record<string, string> = {};
 
     for (const [k, v] of Object.entries(bindings)) {
-      clients[k] = serializeImmutableData(v.obj);
+      clients[k] = serializeImmutableData(scope, v.obj);
     }
 
     // implements IFunctionHandler

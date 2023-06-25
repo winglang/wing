@@ -16,7 +16,7 @@ exports[`create a schedule 1`] = `
         "attrs": {},
         "path": "root/my_schedule",
         "props": {
-          "cronExpression": "*/1 * * * *",
+          "cronExpression": "*/1 * * * ?",
         },
         "type": "wingsdk.cloud.Schedule",
       },
@@ -114,7 +114,7 @@ console.log(\\"Hello from schedule!\\");
         "attrs": {},
         "path": "root/my_schedule",
         "props": {
-          "cronExpression": "* */3 * * *",
+          "cronExpression": "* */3 * * ?",
         },
         "type": "wingsdk.cloud.Schedule",
       },
@@ -310,7 +310,7 @@ console.log(\\"Hello from schedule!\\");
         "attrs": {},
         "path": "root/my_schedule",
         "props": {
-          "cronExpression": "*/10 * * * *",
+          "cronExpression": "*/10 * * * ?",
         },
         "type": "wingsdk.cloud.Schedule",
       },
@@ -506,7 +506,7 @@ console.log(\\"Hello from schedule!\\");
         "attrs": {},
         "path": "root/my_schedule",
         "props": {
-          "cronExpression": "* * * * *",
+          "cronExpression": "* * * * ?",
         },
         "type": "wingsdk.cloud.Schedule",
       },

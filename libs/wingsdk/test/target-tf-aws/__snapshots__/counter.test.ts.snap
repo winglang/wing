@@ -1555,7 +1555,7 @@ exports[`replace invalid character from counter name 2`] = `
 }
 `;
 
-exports[`reset() policy statement 1`] = `
+exports[`set() policy statement 1`] = `
 "{
   \\"output\\": {
     \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
@@ -1631,7 +1631,7 @@ exports[`reset() policy statement 1`] = `
 }"
 `;
 
-exports[`reset() policy statement 2`] = `
+exports[`set() policy statement 2`] = `
 {
   "tree": {
     "children": {
@@ -1653,7 +1653,7 @@ exports[`reset() policy statement 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "reset",
+                      "relationship": "set",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -1685,7 +1685,7 @@ exports[`reset() policy statement 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "reset",
+                      "relationship": "set",
                       "resource": "root/Default/Counter",
                     },
                   ],

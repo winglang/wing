@@ -83,11 +83,13 @@ module.exports = grammar({
               $.json_container_type
             )
           ),
-          choice(".", "?."),
+          field("accessor_type", $._accessor),
           // While the "property" identifier is optional in this grammar, upstream parsing will fail if it is not present
           optional(field("property", $._member_identifier))
         )
       ),
+
+    _accessor: ($) => choice(".", "?."),
 
     inflight_specifier: ($) => "inflight",
 
@@ -316,7 +318,8 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.json_literal,
         $.struct_literal,
-        $.optional_test
+        $.optional_test,
+        $.compiler_dbg_panic,
       ),
 
     // Primitives
@@ -365,6 +368,8 @@ module.exports = grammar({
 
     optional_test: ($) =>
       prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
+
+    compiler_dbg_panic: ($) => "😱",
 
     _callable_expression: ($) =>
       choice(

@@ -79,7 +79,8 @@ store.onCreate(inflight (key: str) => {
 });
 
 store.onDelete(inflight (key: str) => {
-  log("Deleted " + key);
+  copies.delete(key);
+  log("Deleted ${key}");
 });
 ```
 

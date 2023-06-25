@@ -7,7 +7,7 @@ keywords: [rfcs, rfc, overview, process]
 An RFC is short for "request for comments". It's a document that describes a new feature or change
 to Wing. It's a way to propose, gather feedback, and reach consensus for a change from maintainers,
 contributors, and users before writing any code. For an example of an RFC, check out:
-https://github.com/winglang/wing/blob/main/docs/05-rfcs/2022-06-14-polycons.md
+https://docs.winglang.io/contributors/rfcs/2022-06-14-polycons
 
 Usually, an RFC is a common practice for major features or complex changes that require that extra
 vetting. However, the process is designed to be as lightweight as needed and can be used to request

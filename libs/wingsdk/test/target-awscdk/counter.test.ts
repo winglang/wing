@@ -179,20 +179,20 @@ test("peek() policy statement", () => {
   expect(template.toJSON()).toMatchSnapshot();
 });
 
-test("reset() policy statement", () => {
+test("set() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = Counter._newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) {
-  const val = await this.my_counter.reset();
+  const val = await this.my_counter.set();
   console.log(val);
 }`,
     {
       my_counter: {
         obj: counter,
-        ops: [CounterInflightMethods.RESET],
+        ops: [CounterInflightMethods.SET],
       },
     }
   );

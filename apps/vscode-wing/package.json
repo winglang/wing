@@ -53,10 +53,13 @@
   },
   "keywords": [
     "cdk",
+    "cdktf",
     "cloud",
     "infrastructure",
     "language",
-    "wing"
+    "terraform",
+    "wing",
+    "winglang"
   ],
   "engines": {
     "vscode": "^1.70.0"

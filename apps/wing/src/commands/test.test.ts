@@ -1,33 +1,8 @@
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
-import { tmpTestFile } from "./compile.test";
-import { checkTerraformStateIsEmpty, renderTestReport, terraformInit } from "./test";
-import { compile } from "./compile";
-import { Target } from "./constants";
+import { renderTestReport } from "./test";
+
 import { TestResult, TraceType } from "@winglang/sdk/lib/cloud";
 import chalk from "chalk";
-
-describe("test command tests", () => {
-  test(
-    "checkTerraformStateIsEmpty won't fail on a newly created folder",
-    async () => {
-      let error;
-      const exampleWingFile = await tmpTestFile("captures.w");
-
-      const outDir = await compile(exampleWingFile, {
-        target: Target.TF_AWS,
-      });
-      await terraformInit(outDir);
-      try {
-        await checkTerraformStateIsEmpty(outDir);
-      } catch (e) {
-        error = e;
-      }
-
-      expect(error).toBeUndefined();
-    },
-    { timeout: 5 * 60 * 1000 }
-  );
-});
 
 const defaultChalkLevel = chalk.level;
 

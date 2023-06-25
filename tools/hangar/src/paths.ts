@@ -1,5 +1,5 @@
 import * as path from "path";
-import * as fs from "fs-extra";
+import * as fs from "fs";
 
 export const repoRoot = path.resolve(__dirname, "../../..");
 export const testDir = path.join(repoRoot, "examples/tests");
@@ -20,6 +20,9 @@ export const snapshotDir = path.join(hangarDir, "__snapshots__");
 
 export const targetWingSpec =
   process.env.HANGAR_WING_SPEC ?? `file:${path.join(repoRoot, `apps/wing`)}`;
+export const targetWingCompilerSpec =
+  process.env.HANGAR_WINGCOMPILER_SPEC ??
+  `file:${path.join(repoRoot, `libs/wingcompiler`)}`;
 export const targetWingSDKSpec =
   process.env.HANGAR_WINGSDK_SPEC ??
   `file:${path.join(repoRoot, `libs/wingsdk`)}`;

@@ -34,10 +34,6 @@ libs/tree-sitter-wing/src/tree_sitter/
 
 # wing
 apps/wing/dist
-apps/wing/*.wsim
-apps/wing/.wing
-apps/wing/*.wasm
-apps/wing/cdktf.out
 
 # wing-playground
 apps/wing-playground/*.wasm
