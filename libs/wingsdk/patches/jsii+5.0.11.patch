@@ -1,8 +1,22 @@
 diff --git a/node_modules/jsii/lib/assembler.js b/node_modules/jsii/lib/assembler.js
-index c1fa482..5032732 100644
+index c1fa482..9cf0ce2 100644
 --- a/node_modules/jsii/lib/assembler.js
 +++ b/node_modules/jsii/lib/assembler.js
-@@ -1583,9 +1583,9 @@ class Assembler {
+@@ -1572,7 +1572,12 @@ class Assembler {
+             return { type: spec.CANONICAL_ANY };
+         }
+         if (type.symbol.name === 'Array') {
+-            return { type: _arrayType.call(this) };
++            // "Array" only refers to the real JS array type if it has a type parameter
++            // this is a hack so we can export classes named Array
++            const typeRef = type;
++            if (typeRef.typeArguments && typeRef.typeArguments.length === 1) {
++                return { type: _arrayType.call(this) };
++            }
+         }
+         if (type.symbol.name === '__type' && type.symbol.members) {
+             return { type: _mapType.call(this) };
+@@ -1583,9 +1588,9 @@ class Assembler {
                  this._diagnostics.push(jsii_diagnostic_1.JsiiDiagnostic.JSII_1002_UNSPECIFIED_PROMISE.create(declaration));
                  return { type: spec.CANONICAL_ANY };
              }

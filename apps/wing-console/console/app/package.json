@@ -18,9 +18,8 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
-    "express": "^4.18.2",
     "@wingconsole/server": "file:../server",
-    "bump-pack": "file:../../../../tools/bump-pack"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
@@ -34,6 +33,7 @@
     "@wingconsole/tsconfig": "file:../../tools/tsconfig",
     "@wingconsole/ui": "file:../ui",
     "autoprefixer": "^10.4.14",
+    "bump-pack": "file:../../../../tools/bump-pack",
     "eslint": "^8.42.0",
     "open": "^9.1.0",
     "react": "^18.2.0",
