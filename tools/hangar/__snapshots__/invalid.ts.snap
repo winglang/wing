@@ -121,6 +121,38 @@ Duration <DURATION>
 "
 `;
 
+exports[`bring_non_std_construct.w 1`] = `
+"error: Expected 1 positional argument(s) but got 0
+  --> ../../../examples/tests/invalid/bring_non_std_construct.w:8:1
+  |
+8 | new cdktf.S3Backend();
+  | ^^^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
+   --> ../../../examples/tests/invalid/bring_non_std_construct.w:13:85
+   |
+13 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) as \\"s3_backend\\";
+   |                                                                                     ^^^^^^^^^^^^ Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
+
+
+error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
+   --> ../../../examples/tests/invalid/bring_non_std_construct.w:15:85
+   |
+15 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) in this;
+   |                                                                                     ^^^^ Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
+
+
+ 
+
+
+
+
+Tests 1 failed (1) 
+Duration <DURATION>
+"
+`;
+
 exports[`capture_mutables.w 1`] = `
 "error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
   --> ../../../examples/tests/invalid/capture_mutables.w:8:10

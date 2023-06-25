@@ -1,6 +1,6 @@
 bring "cdktf" as cdktf;
 
-// We want to test importing a construct that doesn't have a `scope`/`id` pair as it's first arguments.
+// We want to test importing a construct that doesn't have a `scope`/`id` pair as its first arguments.
 // Such constructs are technically valid but go against CDK conventions. Nonetheless we need to see
 // we support them and provide correct diagnosticts when the user uses them.
 // We use cdktf's backends as an example of such constructs.
