@@ -1,5 +1,5 @@
 ---
-title: cloud.Service 
+title: Service
 id: service
 description: A built-in resource for publishing messages to subscribers.
 keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, services]
@@ -109,4 +109,4 @@ Within the context of the simulator, services are just spawned processes ran wit
 
 ## API Reference
 
-The full list of APIs for `cloud.Service` is available in the [API Reference](../04-api-reference.md).
+The full list of APIs for `cloud.Service` is available in the [API Reference](../api-reference).

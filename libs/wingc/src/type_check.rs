@@ -12,9 +12,9 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::{
-	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
+	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_HTTP_MODULE,
+	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_REDIS_MODULE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -1369,12 +1369,10 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env).type_,
 			ExprKind::New {
 				class,
-				obj_id: _, // TODO
+				obj_id,
 				arg_list,
-				obj_scope, // TODO
+				obj_scope,
 			} => {
-				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
-
 				// Type check the arguments
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
@@ -1444,16 +1442,20 @@ impl<'a> TypeChecker<'a> {
 
 				self.type_check_arg_list_against_function_sig(&arg_list, &constructor_sig, exp, arg_list_types);
 
-				// If this is a preflight class then create a new type for this resource object
+				// Type check the scope and id
+				let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env));
+				let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env));
+
+				// If this is a preflight class make sure the object's scope and id are of correct type
 				if type_.is_preflight_class() {
 					// Get reference to resource object's scope
-					let obj_scope_type = if let Some(obj_scope) = obj_scope {
-						Some(self.type_check_exp(obj_scope, env))
-					} else {
+					let obj_scope_type = if obj_scope_type.is_none() {
 						// If this returns None, this means we're instantiating a preflight object in the global scope, which is valid
 						env
 							.lookup(&"this".into(), Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
+					} else {
+						obj_scope_type
 					};
 
 					// Verify the object scope is an actually resource
@@ -1469,7 +1471,18 @@ impl<'a> TypeChecker<'a> {
 						}
 					}
 
-					// TODO: make sure there's no existing object with this scope/id, fail if there is! -> this can only be done in synth because I can't evaluate the scope expression here.. handle this somehow with source mapping
+					// Verify the object id is a string
+					if let Some(obj_id_type) = obj_id_type {
+						self.validate_type(obj_id_type, self.types.string(), obj_id.as_ref().unwrap());
+					}
+				} else {
+					// This is an inflight class, make sure the object scope and id are not set
+					if let Some(obj_scope) = obj_scope {
+						self.spanned_error(obj_scope, "Inflight classes cannot have a scope");
+					}
+					if let Some(obj_id) = obj_id {
+						self.spanned_error(obj_id, "Inflight classes cannot have an id");
+					}
 				}
 				type_
 			}
@@ -2302,7 +2315,7 @@ impl<'a> TypeChecker<'a> {
 						// we use the module name as the identifier.
 						// For example, `bring cloud` will import the `cloud` namespace from @winglang/sdk and assign it
 						// to an identifier named `cloud`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE => {
+						WINGSDK_CLOUD_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE | WINGSDK_HTTP_MODULE => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
 							alias = identifier.as_ref().unwrap_or(&module_name);

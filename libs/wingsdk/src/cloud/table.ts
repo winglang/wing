@@ -44,6 +44,11 @@ export interface TableProps {
    * @default undefined
    */
   readonly primaryKey?: string;
+  /**
+   * The table's initial rows.
+   * @default undefined
+   */
+  readonly initialRows?: { [key: string]: Json };
 }
 
 /**
@@ -105,6 +110,11 @@ export abstract class Table extends Resource {
       TableInflightMethods.LIST
     );
   }
+
+  /**
+   * Add a row to the table that is created when the app is deployed.
+   */
+  public abstract addRow(key: string, row: Json): void;
 }
 
 /**

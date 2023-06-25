@@ -803,6 +803,61 @@ Information on how to display a resource in the UI.
 ---
 
 
+### Redis <a name="Redis" id="@winglang/sdk.redis.Redis"></a>
+
+**Inflight client:** [@winglang/sdk.redis.IRedisClient](#@winglang/sdk.redis.IRedisClient)
+
+Represents a cloud redis db.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.redis.Redis.Initializer"></a>
+
+```wing
+bring redis;
+
+new redis.Redis()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.redis.Redis.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.redis.Redis.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.redis.Redis.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.redis.Redis.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+
 ### Resource <a name="Resource" id="@winglang/sdk.std.Resource"></a>
 
 - *Implements:* <a href="#@winglang/sdk.std.IResource">IResource</a>
@@ -1097,6 +1152,33 @@ new cloud.Table(props: TableProps)
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Table.addRow">addRow</a></code> | Add a row to the table that is created when the app is deployed. |
+
+---
+
+##### `addRow` <a name="addRow" id="@winglang/sdk.cloud.Table.addRow"></a>
+
+```wing
+addRow(key: str, row: Json): void
+```
+
+Add a row to the table that is created when the app is deployed.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Table.addRow.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.Table.addRow.parameter.row"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2436,6 +2518,198 @@ The maximum number of messages to send to subscribers at once.
 
 ---
 
+### RequestOptions <a name="RequestOptions" id="@winglang/sdk.http.RequestOptions"></a>
+
+An object containing any custom settings that you want to apply to the request.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.http.RequestOptions.Initializer"></a>
+
+```wing
+bring http;
+
+let RequestOptions = http.RequestOptions{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.body">body</a></code> | <code>str</code> | Any body that you want to add to your request. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.cache">cache</a></code> | <code><a href="#@winglang/sdk.http.RequestCache">RequestCache</a></code> | The cache mode you want to use for the request. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | Any headers you want to add to your request. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.method">method</a></code> | <code><a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a></code> | The request method, e.g., GET, POST. The default is GET. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.redirect">redirect</a></code> | <code><a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a></code> | he redirect mode to use: follow, error. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.referrer">referrer</a></code> | <code>str</code> | A string specifying "no-referrer", client, or a URL. |
+
+---
+
+##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.http.RequestOptions.property.body"></a>
+
+```wing
+body: str;
+```
+
+- *Type:* str
+
+Any body that you want to add to your request.
+
+Note that a request using the GET or HEAD method cannot have a body.
+
+---
+
+##### `cache`<sup>Optional</sup> <a name="cache" id="@winglang/sdk.http.RequestOptions.property.cache"></a>
+
+```wing
+cache: RequestCache;
+```
+
+- *Type:* <a href="#@winglang/sdk.http.RequestCache">RequestCache</a>
+
+The cache mode you want to use for the request.
+
+---
+
+##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.http.RequestOptions.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Any headers you want to add to your request.
+
+---
+
+##### `method`<sup>Optional</sup> <a name="method" id="@winglang/sdk.http.RequestOptions.property.method"></a>
+
+```wing
+method: HttpMethod;
+```
+
+- *Type:* <a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a>
+- *Default:* GET
+
+The request method, e.g., GET, POST. The default is GET.
+
+---
+
+##### `redirect`<sup>Optional</sup> <a name="redirect" id="@winglang/sdk.http.RequestOptions.property.redirect"></a>
+
+```wing
+redirect: RequestRedirect;
+```
+
+- *Type:* <a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a>
+- *Default:* follow
+
+he redirect mode to use: follow, error.
+
+The default is follow.
+
+---
+
+##### `referrer`<sup>Optional</sup> <a name="referrer" id="@winglang/sdk.http.RequestOptions.property.referrer"></a>
+
+```wing
+referrer: str;
+```
+
+- *Type:* str
+- *Default:* about:client
+
+A string specifying "no-referrer", client, or a URL.
+
+The default is "about:client".
+
+---
+
+### Response <a name="Response" id="@winglang/sdk.http.Response"></a>
+
+Represents the response to a request.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.http.Response.Initializer"></a>
+
+```wing
+bring http;
+
+let Response = http.Response{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.http.Response.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The map of header information associated with the response. |
+| <code><a href="#@winglang/sdk.http.Response.property.ok">ok</a></code> | <code>bool</code> | A boolean indicating whether the response was successful (status in the range 200 – 299) or not. |
+| <code><a href="#@winglang/sdk.http.Response.property.status">status</a></code> | <code>num</code> | The status code of the response. |
+| <code><a href="#@winglang/sdk.http.Response.property.url">url</a></code> | <code>str</code> | The URL of the response. |
+| <code><a href="#@winglang/sdk.http.Response.property.body">body</a></code> | <code>str</code> | A string represents the body contents. |
+
+---
+
+##### `headers`<sup>Required</sup> <a name="headers" id="@winglang/sdk.http.Response.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The map of header information associated with the response.
+
+---
+
+##### `ok`<sup>Required</sup> <a name="ok" id="@winglang/sdk.http.Response.property.ok"></a>
+
+```wing
+ok: bool;
+```
+
+- *Type:* bool
+
+A boolean indicating whether the response was successful (status in the range 200 – 299) or not.
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="@winglang/sdk.http.Response.property.status"></a>
+
+```wing
+status: num;
+```
+
+- *Type:* num
+
+The status code of the response.
+
+(This will be 200 for a success).
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Response.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+The URL of the response.
+
+---
+
+##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.http.Response.property.body"></a>
+
+```wing
+body: str;
+```
+
+- *Type:* str
+
+A string represents the body contents.
+
+---
+
 ### ScheduleOnTickProps <a name="ScheduleOnTickProps" id="@winglang/sdk.cloud.ScheduleOnTickProps"></a>
 
 Options for Schedule.onTick.
@@ -2735,6 +3009,7 @@ let TableProps = cloud.TableProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TableProps.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
+| <code><a href="#@winglang/sdk.cloud.TableProps.property.initialRows">initialRows</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | The table's initial rows. |
 | <code><a href="#@winglang/sdk.cloud.TableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
 | <code><a href="#@winglang/sdk.cloud.TableProps.property.primaryKey">primaryKey</a></code> | <code>str</code> | The table's primary key. |
 
@@ -2750,6 +3025,19 @@ columns: MutMap<ColumnType>;
 - *Default:* undefined
 
 The table's columns.
+
+---
+
+##### `initialRows`<sup>Optional</sup> <a name="initialRows" id="@winglang/sdk.cloud.TableProps.property.initialRows"></a>
+
+```wing
+initialRows: MutMap<Json>;
+```
+
+- *Type:* MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
+- *Default:* undefined
+
+The table's initial rows.
 
 ---
 
@@ -3203,22 +3491,154 @@ The website's custom domain name.
 
 ## Classes <a name="Classes" id="Classes"></a>
 
-### Boolean <a name="Boolean" id="@winglang/sdk.std.Boolean"></a>
+### Array <a name="Array" id="@winglang/sdk.std.Array"></a>
 
-Boolean.
+Immutable Array.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Boolean.Initializer"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Array.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.Array.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.Array.contains">contains</a></code> | Checks if this array includes searchElement. |
+| <code><a href="#@winglang/sdk.std.Array.copyMut">copyMut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+
+---
+
+##### `at` <a name="at" id="@winglang/sdk.std.Array.at"></a>
 
 ```wing
-bring std;
-
-new std.Boolean()
+at(index: num): T1
 ```
+
+Get the value at the given index.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Array.at.parameter.index"></a>
+
+- *Type:* num
+
+index of the value to get.
+
+---
+
+##### `concat` <a name="concat" id="@winglang/sdk.std.Array.concat"></a>
+
+```wing
+concat(arr: Array): Array
+```
+
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.Array.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Array">Array</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.Array.contains"></a>
+
+```wing
+contains(searchElement: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Array.copyMut"></a>
+
+```wing
+copyMut(): MutArray
+```
+
+Create a mutable shallow copy of this array.
+
+##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.Array.indexOf"></a>
+
+```wing
+indexOf(searchElement: T1): num
+```
+
+Returns the index of the first occurrence of searchElement found.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `join` <a name="join" id="@winglang/sdk.std.Array.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.Array.join.parameter.separator"></a>
+
+- *Type:* str
+
+---
+
+##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.Array.lastIndexOf"></a>
+
+```wing
+lastIndexOf(searchElement: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Array.property.length">length</a></code> | <code>num</code> | The length of the array. |
 
 ---
+
+##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.Array.property.length"></a>
+
+```wing
+length: num;
+```
+
+- *Type:* num
+
+The length of the array.
+
+---
+
+
+### Boolean <a name="Boolean" id="@winglang/sdk.std.Boolean"></a>
+
+Boolean.
 
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
@@ -3566,354 +3986,9 @@ Return the total number of years in this Duration.
 ---
 
 
-### ImmutableArray <a name="ImmutableArray" id="@winglang/sdk.std.ImmutableArray"></a>
-
-Immutable Array.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableArray.Initializer"></a>
-
-```wing
-bring std;
-
-new std.ImmutableArray()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code> | Get the value at the given index. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copyMut</a></code> | Create a mutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
-
----
-
-##### `at` <a name="at" id="@winglang/sdk.std.ImmutableArray.at"></a>
-
-```wing
-at(index: num): T1
-```
-
-Get the value at the given index.
-
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.ImmutableArray.at.parameter.index"></a>
-
-- *Type:* num
-
-index of the value to get.
-
----
-
-##### `concat` <a name="concat" id="@winglang/sdk.std.ImmutableArray.concat"></a>
-
-```wing
-concat(arr: ImmutableArray): ImmutableArray
-```
-
-Merge arr to the end of this array.
-
-###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.ImmutableArray.concat.parameter.arr"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.ImmutableArray">ImmutableArray</a>
-
-array to merge.
-
----
-
-##### `contains` <a name="contains" id="@winglang/sdk.std.ImmutableArray.contains"></a>
-
-```wing
-contains(searchElement: T1): bool
-```
-
-Checks if this array includes searchElement.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.ImmutableArray.contains.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.ImmutableArray.copyMut"></a>
-
-```wing
-copyMut(): MutableArray
-```
-
-Create a mutable shallow copy of this array.
-
-##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.ImmutableArray.indexOf"></a>
-
-```wing
-indexOf(searchElement: T1): num
-```
-
-Returns the index of the first occurrence of searchElement found.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.ImmutableArray.indexOf.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `join` <a name="join" id="@winglang/sdk.std.ImmutableArray.join"></a>
-
-```wing
-join(separator?: str): str
-```
-
-Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
-
-If the array has only
-one item, then that item will be returned without using the separator.
-
-###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.ImmutableArray.join.parameter.separator"></a>
-
-- *Type:* str
-
----
-
-##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.ImmutableArray.lastIndexOf"></a>
-
-```wing
-lastIndexOf(searchElement: T1): num
-```
-
-Returns the index of the last occurrence of searchElement found.
-
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.ImmutableArray.lastIndexOf.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
-
----
-
-##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.ImmutableArray.property.length"></a>
-
-```wing
-length: num;
-```
-
-- *Type:* num
-
-The length of the array.
-
----
-
-
-### ImmutableMap <a name="ImmutableMap" id="@winglang/sdk.std.ImmutableMap"></a>
-
-Immutable Map.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableMap.Initializer"></a>
-
-```wing
-bring std;
-
-new std.ImmutableMap()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copyMut</a></code> | Create a mutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.keys">keys</a></code> | Returns the keys of this map. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.values">values</a></code> | Returns the values of this map. |
-
----
-
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.ImmutableMap.copyMut"></a>
-
-```wing
-copyMut(): MutableMap
-```
-
-Create a mutable shallow copy of this map.
-
-##### `get` <a name="get" id="@winglang/sdk.std.ImmutableMap.get"></a>
-
-```wing
-get(key: str): T1
-```
-
-Returns a specified element from the map.
-
-If the value that is associated to the provided key is an object, then you will get a reference
-to that object and any change made to that object will effectively modify it inside the map.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.ImmutableMap.get.parameter.key"></a>
-
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.ImmutableMap.has"></a>
-
-```wing
-has(key: str): bool
-```
-
-Returns a boolean indicating whether an element with the specified key exists or not.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.ImmutableMap.has.parameter.key"></a>
-
-- *Type:* str
-
-The key of the element to test for presence.
-
----
-
-##### `keys` <a name="keys" id="@winglang/sdk.std.ImmutableMap.keys"></a>
-
-```wing
-keys(): MutArray<str>
-```
-
-Returns the keys of this map.
-
-##### `size` <a name="size" id="@winglang/sdk.std.ImmutableMap.size"></a>
-
-```wing
-size(): num
-```
-
-Returns the number of elements in the map.
-
-TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
-
-##### `values` <a name="values" id="@winglang/sdk.std.ImmutableMap.values"></a>
-
-```wing
-values(): ImmutableArray
-```
-
-Returns the values of this map.
-
-
-
-
-### ImmutableSet <a name="ImmutableSet" id="@winglang/sdk.std.ImmutableSet"></a>
-
-Immutable Set.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableSet.Initializer"></a>
-
-```wing
-bring std;
-
-new std.ImmutableSet()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.copyMut">copyMut</a></code> | Create a mutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
-
----
-
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.ImmutableSet.copyMut"></a>
-
-```wing
-copyMut(): MutableSet
-```
-
-Create a mutable shallow copy of this set.
-
-##### `has` <a name="has" id="@winglang/sdk.std.ImmutableSet.has"></a>
-
-```wing
-has(value: T1): bool
-```
-
-Returns a boolean indicating whether an element with the specified value exists in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.ImmutableSet.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
-
----
-
-##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.ImmutableSet.property.size"></a>
-
-```wing
-size: num;
-```
-
-- *Type:* num
-
-The length of the set.
-
----
-
-
 ### Json <a name="Json" id="@winglang/sdk.std.Json"></a>
 
 Immutable Json.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Json.Initializer"></a>
-
-```wing
-bring std;
-
-new std.Json()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -4141,40 +4216,116 @@ to get values from.
 
 
 
-### MutableArray <a name="MutableArray" id="@winglang/sdk.std.MutableArray"></a>
+### Map <a name="Map" id="@winglang/sdk.std.Map"></a>
 
-Mutable Array.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableArray.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutableArray()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
+Immutable Map.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableArray.at">at</a></code> | Get the value at the given index. |
-| <code><a href="#@winglang/sdk.std.MutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
-| <code><a href="#@winglang/sdk.std.MutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.MutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
-| <code><a href="#@winglang/sdk.std.MutableArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.MutableArray.pop">pop</a></code> | Remove value from end of array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.push">push</a></code> | Add value to end of array. |
+| <code><a href="#@winglang/sdk.std.Map.copyMut">copyMut</a></code> | Create a mutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.Map.get">get</a></code> | Returns a specified element from the map. |
+| <code><a href="#@winglang/sdk.std.Map.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.Map.keys">keys</a></code> | Returns the keys of this map. |
+| <code><a href="#@winglang/sdk.std.Map.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.Map.values">values</a></code> | Returns the values of this map. |
 
 ---
 
-##### `at` <a name="at" id="@winglang/sdk.std.MutableArray.at"></a>
+##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Map.copyMut"></a>
+
+```wing
+copyMut(): MutMap
+```
+
+Create a mutable shallow copy of this map.
+
+##### `get` <a name="get" id="@winglang/sdk.std.Map.get"></a>
+
+```wing
+get(key: str): T1
+```
+
+Returns a specified element from the map.
+
+If the value that is associated to the provided key is an object, then you will get a reference
+to that object and any change made to that object will effectively modify it inside the map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Map.get.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.Map.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Returns a boolean indicating whether an element with the specified key exists or not.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Map.has.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to test for presence.
+
+---
+
+##### `keys` <a name="keys" id="@winglang/sdk.std.Map.keys"></a>
+
+```wing
+keys(): MutArray<str>
+```
+
+Returns the keys of this map.
+
+##### `size` <a name="size" id="@winglang/sdk.std.Map.size"></a>
+
+```wing
+size(): num
+```
+
+Returns the number of elements in the map.
+
+TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `values` <a name="values" id="@winglang/sdk.std.Map.values"></a>
+
+```wing
+values(): Array
+```
+
+Returns the values of this map.
+
+
+
+
+### MutArray <a name="MutArray" id="@winglang/sdk.std.MutArray"></a>
+
+Mutable Array.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.MutArray.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.MutArray.contains">contains</a></code> | Checks if this array includes searchElement. |
+| <code><a href="#@winglang/sdk.std.MutArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.MutArray.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.MutArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.MutArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
+
+---
+
+##### `at` <a name="at" id="@winglang/sdk.std.MutArray.at"></a>
 
 ```wing
 at(index: num): T1
@@ -4182,7 +4333,7 @@ at(index: num): T1
 
 Get the value at the given index.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutableArray.at.parameter.index"></a>
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.at.parameter.index"></a>
 
 - *Type:* num
 
@@ -4190,23 +4341,23 @@ index of the value to get.
 
 ---
 
-##### `concat` <a name="concat" id="@winglang/sdk.std.MutableArray.concat"></a>
+##### `concat` <a name="concat" id="@winglang/sdk.std.MutArray.concat"></a>
 
 ```wing
-concat(arr: MutableArray): MutableArray
+concat(arr: MutArray): MutArray
 ```
 
 Merge arr to the end of this array.
 
-###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutableArray.concat.parameter.arr"></a>
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutArray.concat.parameter.arr"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.MutableArray">MutableArray</a>
+- *Type:* <a href="#@winglang/sdk.std.MutArray">MutArray</a>
 
 array to merge.
 
 ---
 
-##### `contains` <a name="contains" id="@winglang/sdk.std.MutableArray.contains"></a>
+##### `contains` <a name="contains" id="@winglang/sdk.std.MutArray.contains"></a>
 
 ```wing
 contains(searchElement: T1): bool
@@ -4214,7 +4365,7 @@ contains(searchElement: T1): bool
 
 Checks if this array includes searchElement.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutableArray.contains.parameter.searchElement"></a>
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.contains.parameter.searchElement"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
@@ -4222,15 +4373,15 @@ to search for.
 
 ---
 
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableArray.copy"></a>
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutArray.copy"></a>
 
 ```wing
-copy(): ImmutableArray
+copy(): Array
 ```
 
 Create an immutable shallow copy of this array.
 
-##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.MutableArray.indexOf"></a>
+##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.MutArray.indexOf"></a>
 
 ```wing
 indexOf(searchElement: T1): num
@@ -4238,7 +4389,7 @@ indexOf(searchElement: T1): num
 
 Returns the index of the first occurrence of searchElement found.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutableArray.indexOf.parameter.searchElement"></a>
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.indexOf.parameter.searchElement"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
@@ -4246,7 +4397,7 @@ to search for.
 
 ---
 
-##### `join` <a name="join" id="@winglang/sdk.std.MutableArray.join"></a>
+##### `join` <a name="join" id="@winglang/sdk.std.MutArray.join"></a>
 
 ```wing
 join(separator?: str): str
@@ -4257,13 +4408,13 @@ Returns a new string containing the concatenated values in this array, separated
 If the array has only
 one item, then that item will be returned without using the separator.
 
-###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutableArray.join.parameter.separator"></a>
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutArray.join.parameter.separator"></a>
 
 - *Type:* str
 
 ---
 
-##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.MutableArray.lastIndexOf"></a>
+##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.MutArray.lastIndexOf"></a>
 
 ```wing
 lastIndexOf(searchElement: T1): num
@@ -4271,7 +4422,7 @@ lastIndexOf(searchElement: T1): num
 
 Returns the index of the last occurrence of searchElement found.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutableArray.lastIndexOf.parameter.searchElement"></a>
+###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.lastIndexOf.parameter.searchElement"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
@@ -4279,7 +4430,7 @@ to search for.
 
 ---
 
-##### `pop` <a name="pop" id="@winglang/sdk.std.MutableArray.pop"></a>
+##### `pop` <a name="pop" id="@winglang/sdk.std.MutArray.pop"></a>
 
 ```wing
 pop(): T1
@@ -4287,7 +4438,7 @@ pop(): T1
 
 Remove value from end of array.
 
-##### `push` <a name="push" id="@winglang/sdk.std.MutableArray.push"></a>
+##### `push` <a name="push" id="@winglang/sdk.std.MutArray.push"></a>
 
 ```wing
 push(value: T1): void
@@ -4295,7 +4446,7 @@ push(value: T1): void
 
 Add value to end of array.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableArray.push.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.push.parameter.value"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
@@ -4308,11 +4459,11 @@ value to add.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
+| <code><a href="#@winglang/sdk.std.MutArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
 
 ---
 
-##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.MutableArray.property.length"></a>
+##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.MutArray.property.length"></a>
 
 ```wing
 length: num;
@@ -4325,292 +4476,9 @@ The length of the array.
 ---
 
 
-### MutableMap <a name="MutableMap" id="@winglang/sdk.std.MutableMap"></a>
-
-Mutable Map.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableMap.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutableMap()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
-| <code><a href="#@winglang/sdk.std.MutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.MutableMap.keys">keys</a></code> | Returns the keys of this map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
-| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.values">values</a></code> | Returns the values of this map. |
-
----
-
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
-
-```wing
-clear(): void
-```
-
-Removes all elements.
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableMap.copy"></a>
-
-```wing
-copy(): ImmutableMap
-```
-
-Create an immutable shallow copy of this map.
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
-
-```wing
-delete(key: str): bool
-```
-
-Removes the specified element from a map.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
-
-- *Type:* str
-
-The key.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.std.MutableMap.get"></a>
-
-```wing
-get(key: str): T1
-```
-
-Returns a specified element from the map.
-
-If the value that is associated to the provided key is an object, then you will get a reference
-to that object and any change made to that object will effectively modify it inside the map.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.get.parameter.key"></a>
-
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutableMap.has"></a>
-
-```wing
-has(key: str): bool
-```
-
-Returns a boolean indicating whether an element with the specified key exists or not.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.has.parameter.key"></a>
-
-- *Type:* str
-
-The key of the element to test for presence.
-
----
-
-##### `keys` <a name="keys" id="@winglang/sdk.std.MutableMap.keys"></a>
-
-```wing
-keys(): MutArray<str>
-```
-
-Returns the keys of this map.
-
-##### `set` <a name="set" id="@winglang/sdk.std.MutableMap.set"></a>
-
-```wing
-set(key: str, value: T1): void
-```
-
-Adds or updates an entry in a Map object with a specified key and a value.
-
-TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.set.parameter.key"></a>
-
-- *Type:* str
-
-The key of the element to add.
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableMap.set.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value of the element to add.
-
----
-
-##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
-
-```wing
-size(): num
-```
-
-Returns the number of elements in the map.
-
-TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
-
-##### `values` <a name="values" id="@winglang/sdk.std.MutableMap.values"></a>
-
-```wing
-values(): ImmutableArray
-```
-
-Returns the values of this map.
-
-
-
-
-### MutableSet <a name="MutableSet" id="@winglang/sdk.std.MutableSet"></a>
-
-Mutable Set.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableSet.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutableSet()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableSet.add">add</a></code> | Add value to set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
-
----
-
-##### `add` <a name="add" id="@winglang/sdk.std.MutableSet.add"></a>
-
-```wing
-add(value: T1): MutableSet
-```
-
-Add value to set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.add.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-value to add.
-
----
-
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutableSet.clear"></a>
-
-```wing
-clear(): void
-```
-
-The clear() method removes all elements from a set.
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
-
-```wing
-copy(): ImmutableSet
-```
-
-Create an immutable shallow copy of this set.
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutableSet.delete"></a>
-
-```wing
-delete(value: T1): bool
-```
-
-Removes a specified value from a set, if it is in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.delete.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to remove from the set.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
-
-```wing
-has(value: T1): bool
-```
-
-Returns a boolean indicating whether an element with the specified value exists in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
-
----
-
-##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.MutableSet.property.size"></a>
-
-```wing
-size: num;
-```
-
-- *Type:* num
-
-The length of the set.
-
----
-
-
 ### MutJson <a name="MutJson" id="@winglang/sdk.std.MutJson"></a>
 
 Mutable Json.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutJson.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutJson()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -4729,22 +4597,253 @@ to copy.
 
 
 
-### Number <a name="Number" id="@winglang/sdk.std.Number"></a>
+### MutMap <a name="MutMap" id="@winglang/sdk.std.MutMap"></a>
 
-Number.
+Mutable Map.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Number.Initializer"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutMap.clear">clear</a></code> | Removes all elements. |
+| <code><a href="#@winglang/sdk.std.MutMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.MutMap.delete">delete</a></code> | Removes the specified element from a map. |
+| <code><a href="#@winglang/sdk.std.MutMap.get">get</a></code> | Returns a specified element from the map. |
+| <code><a href="#@winglang/sdk.std.MutMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.MutMap.keys">keys</a></code> | Returns the keys of this map. |
+| <code><a href="#@winglang/sdk.std.MutMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
+| <code><a href="#@winglang/sdk.std.MutMap.size">size</a></code> | Returns the number of elements in the map. |
+| <code><a href="#@winglang/sdk.std.MutMap.values">values</a></code> | Returns the values of this map. |
+
+---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutMap.clear"></a>
 
 ```wing
-bring std;
-
-new std.Number()
+clear(): void
 ```
+
+Removes all elements.
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutMap.copy"></a>
+
+```wing
+copy(): Map
+```
+
+Create an immutable shallow copy of this map.
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutMap.delete"></a>
+
+```wing
+delete(key: str): bool
+```
+
+Removes the specified element from a map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.delete.parameter.key"></a>
+
+- *Type:* str
+
+The key.
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.std.MutMap.get"></a>
+
+```wing
+get(key: str): T1
+```
+
+Returns a specified element from the map.
+
+If the value that is associated to the provided key is an object, then you will get a reference
+to that object and any change made to that object will effectively modify it inside the map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.get.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutMap.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Returns a boolean indicating whether an element with the specified key exists or not.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.has.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to test for presence.
+
+---
+
+##### `keys` <a name="keys" id="@winglang/sdk.std.MutMap.keys"></a>
+
+```wing
+keys(): MutArray<str>
+```
+
+Returns the keys of this map.
+
+##### `set` <a name="set" id="@winglang/sdk.std.MutMap.set"></a>
+
+```wing
+set(key: str, value: T1): void
+```
+
+Adds or updates an entry in a Map object with a specified key and a value.
+
+TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.set.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to add.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutMap.set.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value of the element to add.
+
+---
+
+##### `size` <a name="size" id="@winglang/sdk.std.MutMap.size"></a>
+
+```wing
+size(): num
+```
+
+Returns the number of elements in the map.
+
+TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+##### `values` <a name="values" id="@winglang/sdk.std.MutMap.values"></a>
+
+```wing
+values(): Array
+```
+
+Returns the values of this map.
+
+
+
+
+### MutSet <a name="MutSet" id="@winglang/sdk.std.MutSet"></a>
+
+Mutable Set.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutSet.add">add</a></code> | Add value to set. |
+| <code><a href="#@winglang/sdk.std.MutSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
+| <code><a href="#@winglang/sdk.std.MutSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
+| <code><a href="#@winglang/sdk.std.MutSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
+| <code><a href="#@winglang/sdk.std.MutSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+
+---
+
+##### `add` <a name="add" id="@winglang/sdk.std.MutSet.add"></a>
+
+```wing
+add(value: T1): MutSet
+```
+
+Add value to set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.add.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+value to add.
+
+---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutSet.clear"></a>
+
+```wing
+clear(): void
+```
+
+The clear() method removes all elements from a set.
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutSet.copy"></a>
+
+```wing
+copy(): Set
+```
+
+Create an immutable shallow copy of this set.
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutSet.delete"></a>
+
+```wing
+delete(value: T1): bool
+```
+
+Removes a specified value from a set, if it is in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.delete.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to remove from the set.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutSet.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.has.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to test for presence in the Set object.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
 
 ---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.MutSet.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The length of the set.
+
+---
+
+
+### Number <a name="Number" id="@winglang/sdk.std.Number"></a>
+
+Number.
 
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
@@ -4798,12 +4897,22 @@ to parse number from.
 
 Range.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Range.Initializer"></a>
+
+
+
+
+### RedisClientBase <a name="RedisClientBase" id="@winglang/sdk.redis.RedisClientBase"></a>
+
+- *Implements:* <a href="#@winglang/sdk.redis.IRedisClient">IRedisClient</a>
+
+Base class for `Redis` Client.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.redis.RedisClientBase.Initializer"></a>
 
 ```wing
-bring std;
+bring redis;
 
-new std.Range()
+new redis.RedisClientBase()
 ```
 
 | **Name** | **Type** | **Description** |
@@ -4811,26 +4920,231 @@ new std.Range()
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.del">del</a></code> | Removes the specified key. |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.get">get</a></code> | Get value at given key. |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.hget">hget</a></code> | Returns the value associated with field in the hash stored at key. |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.hset">hset</a></code> | Sets the specified field to respective value in the hash stored at key. |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis). |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.sadd">sadd</a></code> | Add the specified members to the set stored at key. |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.set">set</a></code> | Set key value pair. |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
+| <code><a href="#@winglang/sdk.redis.RedisClientBase.url">url</a></code> | Get url of redis server. |
+
+---
+
+##### `del` <a name="del" id="@winglang/sdk.redis.RedisClientBase.del"></a>
+
+```wing
+del(key: str): num
+```
+
+Removes the specified key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.del.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.redis.RedisClientBase.get"></a>
+
+```wing
+get(key: str): str
+```
+
+Get value at given key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.get.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+##### `hget` <a name="hget" id="@winglang/sdk.redis.RedisClientBase.hget"></a>
+
+```wing
+hget(key: str, field: str): str
+```
+
+Returns the value associated with field in the hash stored at key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.hget.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.redis.RedisClientBase.hget.parameter.field"></a>
+
+- *Type:* str
+
+---
+
+##### `hset` <a name="hset" id="@winglang/sdk.redis.RedisClientBase.hset"></a>
+
+```wing
+hset(key: str, field: str, value: str): num
+```
+
+Sets the specified field to respective value in the hash stored at key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.hset.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.redis.RedisClientBase.hset.parameter.field"></a>
+
+- *Type:* str
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.RedisClientBase.hset.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+##### `rawClient` <a name="rawClient" id="@winglang/sdk.redis.RedisClientBase.rawClient"></a>
+
+```wing
+rawClient(): any
+```
+
+Get raw redis client (currently IoRedis).
+
+##### `sadd` <a name="sadd" id="@winglang/sdk.redis.RedisClientBase.sadd"></a>
+
+```wing
+sadd(key: str, value: str): num
+```
+
+Add the specified members to the set stored at key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.sadd.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.RedisClientBase.sadd.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+##### `set` <a name="set" id="@winglang/sdk.redis.RedisClientBase.set"></a>
+
+```wing
+set(key: str, value: str): void
+```
+
+Set key value pair.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.set.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.RedisClientBase.set.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+##### `smembers` <a name="smembers" id="@winglang/sdk.redis.RedisClientBase.smembers"></a>
+
+```wing
+smembers(key: str): MutArray<str>
+```
+
+Returns all the members of the set value stored at key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.smembers.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+##### `url` <a name="url" id="@winglang/sdk.redis.RedisClientBase.url"></a>
+
+```wing
+url(): str
+```
+
+Get url of redis server.
 
 
+
+
+### Set <a name="Set" id="@winglang/sdk.std.Set"></a>
+
+Immutable Set.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Set.copyMut">copyMut</a></code> | Create a mutable shallow copy of this set. |
+| <code><a href="#@winglang/sdk.std.Set.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+
+---
+
+##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Set.copyMut"></a>
+
+```wing
+copyMut(): MutSet
+```
+
+Create a mutable shallow copy of this set.
+
+##### `has` <a name="has" id="@winglang/sdk.std.Set.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.Set.has.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to test for presence in the Set object.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Set.property.size">size</a></code> | <code>num</code> | The length of the set. |
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.Set.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The length of the set.
+
+---
 
 
 ### String <a name="String" id="@winglang/sdk.std.String"></a>
 
 String.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.String.Initializer"></a>
-
-```wing
-bring std;
-
-new std.String()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -5057,18 +5371,18 @@ The length of the string.
 ---
 
 
-### T1 <a name="T1" id="@winglang/sdk.std.T1"></a>
+### Util <a name="Util" id="@winglang/sdk.http.Util"></a>
 
-Generic type argument.
+**Inflight client:** [true](#true)
 
-This type is replaced at compile time.
+the Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.T1.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/sdk.http.Util.Initializer"></a>
 
 ```wing
-bring std;
+bring http;
 
-new std.T1()
+new http.Util()
 ```
 
 | **Name** | **Type** | **Description** |
@@ -5077,6 +5391,162 @@ new std.T1()
 ---
 
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.Util.delete">delete</a></code> | Sends a DELETE request. |
+| <code><a href="#@winglang/sdk.http.Util.fetch">fetch</a></code> | Sends an HTTP request to a URL, returning a fulfilled or failed response. |
+| <code><a href="#@winglang/sdk.http.Util.get">get</a></code> | Sends a GET request. |
+| <code><a href="#@winglang/sdk.http.Util.patch">patch</a></code> | Sends a PATCH request. |
+| <code><a href="#@winglang/sdk.http.Util.post">post</a></code> | Sends a POST request. |
+| <code><a href="#@winglang/sdk.http.Util.put">put</a></code> | Sends a PUT request. |
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.http.Util.delete"></a>
+
+```wing
+bring http;
+
+http.Util.delete(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a DELETE request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.delete.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.delete.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `fetch` <a name="fetch" id="@winglang/sdk.http.Util.fetch"></a>
+
+```wing
+bring http;
+
+http.Util.fetch(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends an HTTP request to a URL, returning a fulfilled or failed response.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.fetch.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.fetch.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.http.Util.get"></a>
+
+```wing
+bring http;
+
+http.Util.get(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a GET request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.get.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.get.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `patch` <a name="patch" id="@winglang/sdk.http.Util.patch"></a>
+
+```wing
+bring http;
+
+http.Util.patch(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a PATCH request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.patch.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.patch.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `post` <a name="post" id="@winglang/sdk.http.Util.post"></a>
+
+```wing
+bring http;
+
+http.Util.post(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a POST request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.post.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.post.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `put` <a name="put" id="@winglang/sdk.http.Util.put"></a>
+
+```wing
+bring http;
+
+http.Util.put(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a PUT request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.put.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.put.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
 
 
 
@@ -6085,6 +6555,215 @@ Function that will be called when a message is received from the queue.
 ---
 
 
+### IRedisClient <a name="IRedisClient" id="@winglang/sdk.redis.IRedisClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.redis.RedisClientBase">RedisClientBase</a>, <a href="#@winglang/sdk.redis.IRedisClient">IRedisClient</a>
+
+Inflight interface for `Redis`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.del">del</a></code> | Removes the specified key. |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.get">get</a></code> | Get value at given key. |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.hget">hget</a></code> | Returns the value associated with field in the hash stored at key. |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.hset">hset</a></code> | Sets the specified field to respective value in the hash stored at key. |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis). |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.sadd">sadd</a></code> | Add the specified members to the set stored at key. |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.set">set</a></code> | Set key value pair. |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
+| <code><a href="#@winglang/sdk.redis.IRedisClient.url">url</a></code> | Get url of redis server. |
+
+---
+
+##### `del` <a name="del" id="@winglang/sdk.redis.IRedisClient.del"></a>
+
+```wing
+del(key: str): num
+```
+
+**Inflight client:** [true](#true)
+
+Removes the specified key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.del.parameter.key"></a>
+
+- *Type:* str
+
+the key.
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.redis.IRedisClient.get"></a>
+
+```wing
+get(key: str): str
+```
+
+**Inflight client:** [true](#true)
+
+Get value at given key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.get.parameter.key"></a>
+
+- *Type:* str
+
+the key to get.
+
+---
+
+##### `hget` <a name="hget" id="@winglang/sdk.redis.IRedisClient.hget"></a>
+
+```wing
+hget(key: str, field: str): str
+```
+
+**Inflight client:** [true](#true)
+
+Returns the value associated with field in the hash stored at key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.hget.parameter.key"></a>
+
+- *Type:* str
+
+the key.
+
+---
+
+###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.redis.IRedisClient.hget.parameter.field"></a>
+
+- *Type:* str
+
+the field at given key.
+
+---
+
+##### `hset` <a name="hset" id="@winglang/sdk.redis.IRedisClient.hset"></a>
+
+```wing
+hset(key: str, field: str, value: str): num
+```
+
+**Inflight client:** [true](#true)
+
+Sets the specified field to respective value in the hash stored at key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.hset.parameter.key"></a>
+
+- *Type:* str
+
+key to set.
+
+---
+
+###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.redis.IRedisClient.hset.parameter.field"></a>
+
+- *Type:* str
+
+field in key to set.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.IRedisClient.hset.parameter.value"></a>
+
+- *Type:* str
+
+value to set at field in key.
+
+---
+
+##### `rawClient` <a name="rawClient" id="@winglang/sdk.redis.IRedisClient.rawClient"></a>
+
+```wing
+rawClient(): any
+```
+
+**Inflight client:** [true](#true)
+
+Get raw redis client (currently IoRedis).
+
+##### `sadd` <a name="sadd" id="@winglang/sdk.redis.IRedisClient.sadd"></a>
+
+```wing
+sadd(key: str, value: str): num
+```
+
+**Inflight client:** [true](#true)
+
+Add the specified members to the set stored at key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.sadd.parameter.key"></a>
+
+- *Type:* str
+
+the key.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.IRedisClient.sadd.parameter.value"></a>
+
+- *Type:* str
+
+the value to add to the set at given key.
+
+---
+
+##### `set` <a name="set" id="@winglang/sdk.redis.IRedisClient.set"></a>
+
+```wing
+set(key: str, value: str): void
+```
+
+**Inflight client:** [true](#true)
+
+Set key value pair.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.set.parameter.key"></a>
+
+- *Type:* str
+
+the key to set.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.IRedisClient.set.parameter.value"></a>
+
+- *Type:* str
+
+the value to store at given key.
+
+---
+
+##### `smembers` <a name="smembers" id="@winglang/sdk.redis.IRedisClient.smembers"></a>
+
+```wing
+smembers(key: str): MutArray<str>
+```
+
+**Inflight client:** [true](#true)
+
+Returns all the members of the set value stored at key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.smembers.parameter.key"></a>
+
+- *Type:* str
+
+the key.
+
+---
+
+##### `url` <a name="url" id="@winglang/sdk.redis.IRedisClient.url"></a>
+
+```wing
+url(): str
+```
+
+**Inflight client:** [true](#true)
+
+Get url of redis server.
+
+
 ### IResource <a name="IResource" id="@winglang/sdk.std.IResource"></a>
 
 - *Extends:* <a href="#@winglang/sdk.core.IInspectable">IInspectable</a>, constructs.IConstruct
@@ -6890,6 +7569,150 @@ Options.
 ##### `PATCH` <a name="PATCH" id="@winglang/sdk.cloud.HttpMethod.PATCH"></a>
 
 Patch.
+
+---
+
+
+### HttpMethod <a name="HttpMethod" id="@winglang/sdk.http.HttpMethod"></a>
+
+The request's method.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.HttpMethod.GET">GET</a></code> | GET. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.PUT">PUT</a></code> | PUT. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.DELETE">DELETE</a></code> | DELETE. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.PATCH">PATCH</a></code> | PATCH. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.POST">POST</a></code> | POST. |
+
+---
+
+##### `GET` <a name="GET" id="@winglang/sdk.http.HttpMethod.GET"></a>
+
+GET.
+
+---
+
+
+##### `PUT` <a name="PUT" id="@winglang/sdk.http.HttpMethod.PUT"></a>
+
+PUT.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/sdk.http.HttpMethod.DELETE"></a>
+
+DELETE.
+
+---
+
+
+##### `PATCH` <a name="PATCH" id="@winglang/sdk.http.HttpMethod.PATCH"></a>
+
+PATCH.
+
+---
+
+
+##### `POST` <a name="POST" id="@winglang/sdk.http.HttpMethod.POST"></a>
+
+POST.
+
+---
+
+
+### RequestCache <a name="RequestCache" id="@winglang/sdk.http.RequestCache"></a>
+
+The cache mode of the request.
+
+It controls how a request will interact with the system's HTTP cache.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestCache.DEFAULT">DEFAULT</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+| <code><a href="#@winglang/sdk.http.RequestCache.NO_STORE">NO_STORE</a></code> | The runtime environment fetches the resource from the remote server without first looking in the cache, and will not update the cache with the downloaded resource. |
+| <code><a href="#@winglang/sdk.http.RequestCache.RELOAD">RELOAD</a></code> | The runtime environment fetches the resource from the remote server without first looking in the cache, but then will update the cache with the downloaded resource. |
+| <code><a href="#@winglang/sdk.http.RequestCache.NO_CACHE">NO_CACHE</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+| <code><a href="#@winglang/sdk.http.RequestCache.FORCE_CACHE">FORCE_CACHE</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+
+---
+
+##### `DEFAULT` <a name="DEFAULT" id="@winglang/sdk.http.RequestCache.DEFAULT"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match and it is fresh, it will be returned from the cache.
+* If there is a match but it is stale, the runtime environment will make a conditional request to the remote server.
+* If the server indicates that the resource has not changed, it will be returned from the cache.
+* Otherwise the resource will be downloaded from the server and the cache will be updated.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+##### `NO_STORE` <a name="NO_STORE" id="@winglang/sdk.http.RequestCache.NO_STORE"></a>
+
+The runtime environment fetches the resource from the remote server without first looking in the cache, and will not update the cache with the downloaded resource.
+
+---
+
+
+##### `RELOAD` <a name="RELOAD" id="@winglang/sdk.http.RequestCache.RELOAD"></a>
+
+The runtime environment fetches the resource from the remote server without first looking in the cache, but then will update the cache with the downloaded resource.
+
+---
+
+
+##### `NO_CACHE` <a name="NO_CACHE" id="@winglang/sdk.http.RequestCache.NO_CACHE"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match, fresh or stale, the runtime environment will make a conditional request to the remote server.
+* If the server indicates that the resource has not changed, it will be returned from the cache. Otherwise the resource will be downloaded from the server and the cache will be updated.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+##### `FORCE_CACHE` <a name="FORCE_CACHE" id="@winglang/sdk.http.RequestCache.FORCE_CACHE"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match, fresh or stale, it will be returned from the cache.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+### RequestRedirect <a name="RequestRedirect" id="@winglang/sdk.http.RequestRedirect"></a>
+
+The redirect read-only property that contains the mode for how redirects are handled.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestRedirect.FOLLOW">FOLLOW</a></code> | Follow all redirects incurred when fetching a resource. |
+| <code><a href="#@winglang/sdk.http.RequestRedirect.ERROR">ERROR</a></code> | Return a network error when a request is met with a redirect. |
+
+---
+
+##### `FOLLOW` <a name="FOLLOW" id="@winglang/sdk.http.RequestRedirect.FOLLOW"></a>
+
+Follow all redirects incurred when fetching a resource.
+
+---
+
+
+##### `ERROR` <a name="ERROR" id="@winglang/sdk.http.RequestRedirect.ERROR"></a>
+
+Return a network error when a request is met with a redirect.
 
 ---
 
