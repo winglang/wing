@@ -1005,6 +1005,127 @@ module.exports = function({  }) {
           }
         },
         "bucket_prefix": "code-c84a50b1-"
+      },
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53"
+          }
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": false
+      },
+      "root_myBucket_86EF9F01": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/myBucket/Default",
+            "uniqueId": "root_myBucket_86EF9F01"
+          }
+        },
+        "bucket_prefix": "mybucket-c8573914-",
+        "force_destroy": false
+      },
+      "root_mySecondBucket_DC733AF4": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/mySecondBucket/Default",
+            "uniqueId": "root_mySecondBucket_DC733AF4"
+          }
+        },
+        "bucket_prefix": "mysecondbucket-c8d5dc33-",
+        "force_destroy": false
+      }
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+          }
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
+      },
+      "root_myBucket_PublicAccessBlock_D0DC82F2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/myBucket/PublicAccessBlock",
+            "uniqueId": "root_myBucket_PublicAccessBlock_D0DC82F2"
+          }
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "${aws_s3_bucket.root_myBucket_86EF9F01.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
+      },
+      "root_mySecondBucket_PublicAccessBlock_3CD2DFE6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/mySecondBucket/PublicAccessBlock",
+            "uniqueId": "root_mySecondBucket_PublicAccessBlock_3CD2DFE6"
+          }
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "${aws_s3_bucket.root_mySecondBucket_DC733AF4.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
+      }
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256"
+            }
+          }
+        ]
+      },
+      "root_myBucket_Encryption_6D0EB5B0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/myBucket/Encryption",
+            "uniqueId": "root_myBucket_Encryption_6D0EB5B0"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_myBucket_86EF9F01.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256"
+            }
+          }
+        ]
+      },
+      "root_mySecondBucket_Encryption_AFD9A702": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/mySecondBucket/Encryption",
+            "uniqueId": "root_mySecondBucket_Encryption_AFD9A702"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_mySecondBucket_DC733AF4.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256"
+            }
+          }
+        ]
       }
     },
     "aws_s3_object": {
@@ -1540,11 +1661,17 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"myBucket");
+    const buckets = Object.freeze([bucket]);
+    const anotherBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"mySecondBucket");
+    const anotherBuckets = Object.freeze([anotherBucket]);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(buckets.length === 1)'`)})((buckets.length === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.freeze([1, 2, 3]).length === 3)'`)})((Object.freeze([1, 2, 3]).length === 3))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '([1, 2, 3].length === 3)'`)})(([1, 2, 3].length === 3))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Closure1(this,"$Closure1"));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.freeze(["hello"]).at(0)) === "hello")'`)})(((Object.freeze(["hello"]).at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((["hello", "world"].at(1)) === "world")'`)})(((["hello", "world"].at(1)) === "world"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((buckets.at(0)).node.id === "myBucket")'`)})(((buckets.at(0)).node.id === "myBucket"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:at()",new $Closure2(this,"$Closure2"));
     const a = ["hello"];
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 1)'`)})((a.length === 1))};
@@ -1573,6 +1700,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(d.length === 2)'`)})((d.length === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((d.at(0)) === "hello")'`)})(((d.at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((d.at(1)) === "wing")'`)})(((d.at(1)) === "wing"))};
+    const mergedBuckets = (buckets.concat(anotherBuckets));
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(mergedBuckets.length === 2)'`)})((mergedBuckets.length === 2))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mergedBuckets.at(0)).node.id === "myBucket")'`)})(((mergedBuckets.at(0)).node.id === "myBucket"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mergedBuckets.at(1)).node.id === "mySecondBucket")'`)})(((mergedBuckets.at(1)).node.id === "mySecondBucket"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concatMutArray()",new $Closure4(this,"$Closure4"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concatArray()",new $Closure5(this,"$Closure5"));
     const e = ["hello", "wing"];
@@ -1582,6 +1713,9 @@ class $Root extends $stdlib.std.Resource {
     const n = "NotThere";
     const doesNotContain = e.includes(n);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(!doesNotContain)'`)})((!doesNotContain))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: 'buckets.includes((buckets.at(0)))'`)})(buckets.includes((buckets.at(0))))};
+    const dummyBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(!buckets.includes(dummyBucket))'`)})((!buckets.includes(dummyBucket)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:contains()",new $Closure6(this,"$Closure6"));
     const g = ["hello", "wing"];
     const h = "wing";
@@ -1590,6 +1724,8 @@ class $Root extends $stdlib.std.Resource {
     const t = "notThere";
     const secondIndex = g.indexOf(t);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(secondIndex === (-1))'`)})((secondIndex === (-1)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(buckets.indexOf(bucket) === 0)'`)})((buckets.indexOf(bucket) === 0))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(buckets.indexOf(dummyBucket) === (-1))'`)})((buckets.indexOf(dummyBucket) === (-1)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:indexOf()",new $Closure7(this,"$Closure7"));
     const i = ["hello", "wing"];
     const j = "wing";
@@ -1609,6 +1745,9 @@ class $Root extends $stdlib.std.Resource {
     const p = Object.freeze([...(o)]);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.length === p.length)'`)})((o.length === p.length))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((o.at(0)) === (p.at(0)))'`)})(((o.at(0)) === (p.at(0))))};
+    const copiedBuckets = [...(buckets)];
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(copiedBuckets.length === 1)'`)})((copiedBuckets.length === 1))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((copiedBuckets.at(0)).node.id === "myBucket")'`)})(((copiedBuckets.at(0)).node.id === "myBucket"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure10(this,"$Closure10"));
     const q = Object.freeze(["hello", "wing"]);
     const r = [...(q)];
@@ -1621,6 +1760,9 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(u === 2)'`)})((u === 2))};
     const v = s.lastIndexOf("something");
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(v === (-1))'`)})((v === (-1)))};
+    const multipleBuckets = [bucket, bucket, anotherBucket];
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(multipleBuckets.lastIndexOf(bucket) === 1)'`)})((multipleBuckets.lastIndexOf(bucket) === 1))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(multipleBuckets.lastIndexOf(dummyBucket) === (-1))'`)})((multipleBuckets.lastIndexOf(dummyBucket) === (-1)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lastIndexOf()",new $Closure12(this,"$Closure12"));
   }
 }

@@ -2,6 +2,15 @@ bring cloud;
 //-----------------------------------------------------------------------------
 // length
 
+// Bucket can be tested only in preflight mode
+
+let bucket = new cloud.Bucket() as "myBucket";
+let buckets = Array<cloud.Bucket>[bucket];
+let anotherBucket = new cloud.Bucket() as "mySecondBucket";
+let anotherBuckets = Array<cloud.Bucket>[anotherBucket];
+
+assert(buckets.length == 1);
+
 assert([1,2,3].length == 3);
 assert(MutArray<num>[1,2,3].length == 3);
 
@@ -15,6 +24,8 @@ test "length" {
 
 assert(["hello"].at(0) == "hello");
 assert(MutArray<str>["hello", "world"].at(1) == "world");
+
+assert(buckets.at(0).node.id == "myBucket");
 
 test "at()" {
   assert(["hello"].at(0) == "hello");
@@ -34,16 +45,6 @@ let item = a.pop();
 assert(item == "world");
 assert(a.length == 1);
 assert(a.at(0) == "hello");
-
-/*
-// The below does not work, opened issue #3043
-let bucket = new cloud.Bucket() as "myBucket";
-let buckets = Array<cloud.Bucket>[bucket];
-
-test "pushAndPopBuckets()" {
-  assert(buckets.length == 1);
-}
-*/
 
 test "pushAndPop()" {
   let a = MutArray<str>["hello"];
@@ -78,6 +79,11 @@ assert(d.length == 2);
 assert(d.at(0) == "hello");
 assert(d.at(1) == "wing");
 
+let mergedBuckets = buckets.concat(anotherBuckets);
+assert(mergedBuckets.length == 2);
+assert(mergedBuckets.at(0).node.id == "myBucket");
+assert(mergedBuckets.at(1).node.id == "mySecondBucket");
+
 test "concatMutArray()" {
   let b = MutArray<str>["hello"];
   assert(b.length == 1);
@@ -111,6 +117,10 @@ let n = "NotThere";
 let doesNotContain = e.contains(n);
 assert(!doesNotContain);
 
+assert(buckets.contains(buckets.at(0)));
+let dummyBucket = new cloud.Bucket();
+assert(!buckets.contains(dummyBucket));
+
 test "contains()" {
   let e = MutArray<str>["hello", "wing"];
   let f = "wing";
@@ -133,6 +143,9 @@ assert(index == 1);
 let t = "notThere";
 let secondIndex = g.indexOf(t);
 assert(secondIndex == -1);
+
+assert(buckets.indexOf(bucket) == 0);
+assert(buckets.indexOf(dummyBucket) == -1);
 
 test "indexOf()" {
   let g = MutArray<str>["hello", "wing"];
@@ -188,6 +201,10 @@ let p = o.copy();
 assert(o.length == p.length);
 assert(o.at(0) == p.at(0));
 
+let copiedBuckets = buckets.copyMut();
+assert(copiedBuckets.length == 1);
+assert(copiedBuckets.at(0).node.id == "myBucket");
+
 test "copy()" {
   let o = MutArray<str>["hello", "wing"];
   let p = o.copy();
@@ -220,6 +237,10 @@ assert(u == 2);
 
 let v = s.lastIndexOf("something");
 assert(v == -1);
+
+let multipleBuckets = MutArray<cloud.Bucket>[bucket, bucket, anotherBucket];
+assert(multipleBuckets.lastIndexOf(bucket) == 1);
+assert(multipleBuckets.lastIndexOf(dummyBucket) == -1);
 
 test "lastIndexOf()" {
   let lastStr = "wing";
