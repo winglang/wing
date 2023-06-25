@@ -7,12 +7,8 @@
 3
 pass ─ anon_function.wsim (no tests)
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

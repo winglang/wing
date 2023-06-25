@@ -25,7 +25,7 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions { }
+export interface TestOptions extends CompileOptions {}
 
 export async function test(entrypoints: string[], options: TestOptions) {
   const startTime = Date.now();
@@ -62,36 +62,36 @@ function printResults(
   const durationInSeconds = duration / 1000;
   const totalSum = failing.length + passing.length;
   console.log(" "); // for getting a new line- \n does't seem to work :(
-  console.log(`
-${totalSum > 1
-      ? `Tests Results:
-${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
-${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}
-${" "}
-`
-      : ""
-    }
-${failing.length && totalSum > 1
-      ? `
-${" "}
-Errors:` +
-      failing
-        .map(
-          ({ testName, error }) => `
+  const areErrors = failing.length > 0 && totalSum > 1;
+  const showTitle = totalSum > 1;
 
-At ${testName}\n ${chalk.red(error.message)}
-        `
-        )
-        .join("\n\n")
-      : ""
-    }
+  const results = [
+    showTitle && `Tests Results:`,
+    // prints a list of the tests names with an icon
+    ...(showTitle ? passing.map((testName) => `    ${chalk.green("✓")} ${testName}`) : []),
+    ...(showTitle ? failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`) : []),
+    // prints error messages form failed tests
+    areErrors && " ",
+    areErrors && `Errors:`,
+    ...(areErrors
+      ? failing.map(({ testName, error }) => `At ${testName}\n ${chalk.red(error.message)}`)
+      : []),
+    " ",
+    // prints a summary of how many tests passed and failed
+    `${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
+      failing.length && passing.length ? chalk.dim(" |") : ""
+    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
+      `(${totalSum})`
+    )}`,
+    // prints the test duration
+    `${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(
+      durationInSeconds % 60
+    ).toFixed(2)}s`,
+  ]
+    .filter((value) => !!value)
+    .join("\n");
 
-${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${failing.length && passing.length ? chalk.dim(" |") : ""
-    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(`(${totalSum})`)} 
-${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(durationInSeconds % 60).toFixed(
-      2
-    )}s
-`);
+  console.log(results);
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
@@ -236,7 +236,11 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const testArns = await awsCdkOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK, process.env.CDK_STACK_NAME!);
+      const testArns = await awsCdkOutput(
+        synthDir,
+        ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK,
+        process.env.CDK_STACK_NAME!
+      );
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
@@ -283,7 +287,9 @@ async function isAwsCdkInstalled(synthDir: string) {
 }
 
 export async function awsCdkDeploy(synthDir: string) {
-  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", { cwd: synthDir });
+  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", {
+    cwd: synthDir,
+  });
 }
 
 export async function awsCdkDestroy(synthDir: string) {

@@ -4,12 +4,8 @@
 ```log
 pass ─ inflight_class_modifiers.wsim (no tests)
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

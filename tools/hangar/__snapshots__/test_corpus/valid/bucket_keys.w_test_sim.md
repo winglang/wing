@@ -4,12 +4,8 @@
 ```log
 pass ─ bucket_keys.wsim » root/env0/test:test
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

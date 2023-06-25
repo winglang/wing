@@ -4,12 +4,8 @@
 ```log
 pass ─ json_bucket.wsim » root/env0/test:put
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

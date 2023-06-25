@@ -4,12 +4,8 @@
 ```log
 pass ─ sleep.wsim » root/env0/test:sleep 100 mili seconds
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

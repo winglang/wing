@@ -4,12 +4,8 @@
 ```log
 pass ─ file_counter.wsim (no tests)
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

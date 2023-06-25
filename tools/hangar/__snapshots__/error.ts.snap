@@ -11,13 +11,9 @@ exports[`bool_from_json.w 1`] = `
    }
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`num_from_str.w 1`] = `
@@ -31,13 +27,9 @@ exports[`num_from_str.w 1`] = `
    }
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`number_from_json.w 1`] = `
@@ -51,13 +43,9 @@ exports[`number_from_json.w 1`] = `
    }
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`repeat_construct_id.w 1`] = `
@@ -77,13 +65,9 @@ For more information, see https://docs.winglang.io/concepts/resources
    }
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`repeat_construct_id2.w 1`] = `
@@ -103,13 +87,9 @@ For more information, see https://docs.winglang.io/concepts/resources
    }
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`string_from_json.w 1`] = `
@@ -123,13 +103,9 @@ exports[`string_from_json.w 1`] = `
    }
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`utilities.w 1`] = `
@@ -143,11 +119,7 @@ exports[`utilities.w 1`] = `
        {((msg) => {throw new Error(msg)})(\\"me\\")};
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Duration <DURATION>"
 `;

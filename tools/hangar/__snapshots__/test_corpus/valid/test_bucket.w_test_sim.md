@@ -5,12 +5,8 @@
 pass ─ test_bucket.wsim » root/env0/test:put
 pass ─ test_bucket.wsim » root/env1/test:get
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

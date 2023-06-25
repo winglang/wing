@@ -5,12 +5,8 @@
 pass ─ capture_tokens.wsim » root/env0/test:inflight class  
 pass ─ capture_tokens.wsim » root/env1/test:inflight globals
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

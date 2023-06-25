@@ -4,12 +4,8 @@
 ```log
 pass ─ events.wsim » root/env0/hitCount is incremented according to the bucket event
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

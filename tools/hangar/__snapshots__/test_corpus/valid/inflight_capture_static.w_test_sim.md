@@ -8,12 +8,8 @@ pass ─ inflight_capture_static.wsim » root/env2/test:call static method of an
 pass ┌ inflight_capture_static.wsim » root/env3/test:call static method of a namespaced type      
      └ WING_TARGET=sim
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

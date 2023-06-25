@@ -4,12 +4,8 @@
 ```log
 pass ─ delete.wsim » root/env0/test:delete
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

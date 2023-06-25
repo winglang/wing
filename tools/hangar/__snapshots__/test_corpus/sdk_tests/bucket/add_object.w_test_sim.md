@@ -4,12 +4,8 @@
 ```log
 pass ─ add_object.wsim » root/env0/test:addObject
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

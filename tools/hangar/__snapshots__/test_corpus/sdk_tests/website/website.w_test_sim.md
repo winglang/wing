@@ -4,12 +4,8 @@
 ```log
 pass ─ website.wsim » root/env0/test:access files on the website
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

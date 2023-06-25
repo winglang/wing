@@ -4,12 +4,8 @@
 ```log
 pass ─ env.wsim » root/env0/test:use util from inflight
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

@@ -4,12 +4,8 @@
 ```log
 pass ─ capture_resource_and_data.wsim » root/env0/test:resource and data
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

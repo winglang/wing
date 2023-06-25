@@ -4,12 +4,8 @@
 ```log
 pass ─ inflight_class_inner_capture_mutable.wsim » root/env0/test:inner inflight class capture immutable
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 

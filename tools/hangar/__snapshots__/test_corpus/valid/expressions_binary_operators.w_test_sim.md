@@ -4,12 +4,8 @@
 ```log
 pass ─ expressions_binary_operators.wsim (no tests)
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
 Duration <DURATION>
-
 ```
 
