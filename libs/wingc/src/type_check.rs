@@ -1446,6 +1446,8 @@ impl<'a> TypeChecker<'a> {
 				let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env));
 				let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env));
 
+				let non_std_args = !type_.as_class().unwrap().std_construct_args;
+
 				// If this is a preflight class make sure the object's scope and id are of correct type
 				if type_.is_preflight_class() {
 					// Get reference to resource object's scope
@@ -1455,6 +1457,17 @@ impl<'a> TypeChecker<'a> {
 							.lookup(&"this".into(), Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
 					} else {
+						// If this is a non-standard preflight class, make sure the object's scope isn't explicitly set (using the `in` keywords)
+						if non_std_args {
+							self.spanned_error(
+								obj_scope.as_ref().unwrap(),
+								format!(
+									"Cannot set scope of non-standard preflight class \"{}\" using `in`",
+									type_
+								),
+							);
+						}
+
 						obj_scope_type
 					};
 
@@ -1474,6 +1487,13 @@ impl<'a> TypeChecker<'a> {
 					// Verify the object id is a string
 					if let Some(obj_id_type) = obj_id_type {
 						self.validate_type(obj_id_type, self.types.string(), obj_id.as_ref().unwrap());
+						// If this is a non-standard preflight class, make sure the object's id isn't explicitly set (using the `as` keywords)
+						if non_std_args {
+							self.spanned_error(
+								obj_id.as_ref().unwrap(),
+								format!("Cannot set id of non-standard preflight class \"{}\" using `as`", type_),
+							);
+						}
 					}
 				} else {
 					// This is an inflight class, make sure the object scope and id are not set

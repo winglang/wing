@@ -303,17 +303,17 @@ impl<'a> JSifier<'a> {
 
 				let ctor = self.jsify_type(&class.kind, ctx);
 
-				let scope = if is_preflight_class {
+				let scope = if is_preflight_class && class_type.std_construct_args {
 					if let Some(scope) = obj_scope {
 						Some(self.jsify_expression(scope, ctx))
 					} else {
 						Some("this".to_string()) 
 					}
 				} else {
-					 None
-					 };
+					None
+			 	};
 
-				let id = if is_preflight_class {
+				let id = if is_preflight_class && class_type.std_construct_args {
 					Some(if let Some(id_exp) = obj_id {
 						self.jsify_expression(id_exp, ctx)
 					} else {
