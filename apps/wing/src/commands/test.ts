@@ -65,33 +65,42 @@ function printResults(
   const areErrors = failing.length > 0 && totalSum > 1;
   const showTitle = totalSum > 1;
 
-  const results = [
-    showTitle && `Tests Results:`,
+  const results = [];
+
+  if (showTitle) {
     // prints a list of the tests names with an icon
-    ...(showTitle ? passing.map((testName) => `    ${chalk.green("✓")} ${testName}`) : []),
-    ...(showTitle ? failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`) : []),
+    results.push(`Results:`);
+    results.push(...passing.map((testName) => `    ${chalk.green("✓")} ${testName}`));
+    results.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
+  }
+
+  if (areErrors) {
     // prints error messages form failed tests
-    areErrors && " ",
-    areErrors && `Errors:`,
-    ...(areErrors
-      ? failing.map(({ testName, error }) => `At ${testName}\n ${chalk.red(error.message)}`)
-      : []),
-    " ",
-    // prints a summary of how many tests passed and failed
+    results.push(" ");
+    results.push("Errors:");
+    results.push(
+      ...failing.map(({ testName, error }) => `At ${testName}\n ${chalk.red(error.message)}`)
+    );
+  }
+
+  // prints a summary of how many tests passed and failed
+  results.push(" ");
+  results.push(
     `${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
       failing.length && passing.length ? chalk.dim(" |") : ""
     }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
       `(${totalSum})`
-    )}`,
-    // prints the test duration
+    )}`
+  );
+
+  // prints the test duration
+  results.push(
     `${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(
       durationInSeconds % 60
-    ).toFixed(2)}s`,
-  ]
-    .filter((value) => !!value)
-    .join("\n");
+    ).toFixed(2)}s`
+  );
 
-  console.log(results);
+  console.log(results.filter((value) => !!value).join("\n"));
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
