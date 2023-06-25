@@ -21,6 +21,77 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.$Closure10.js
+```js
+module.exports = function({  }) {
+  class $Closure10 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const o = ["hello", "wing"];
+      const p = Object.freeze([...(o)]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.length === p.length)'`)})((o.length === p.length))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await o.at(0)) === (await p.at(0)))'`)})(((await o.at(0)) === (await p.at(0))))};
+    }
+  }
+  return $Closure10;
+}
+
+```
+
+## inflight.$Closure11.js
+```js
+module.exports = function({  }) {
+  class $Closure11 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const q = Object.freeze(["hello", "wing"]);
+      const r = [...(q)];
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(q.length === r.length)'`)})((q.length === r.length))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.at(0)) === (await r.at(0)))'`)})(((await q.at(0)) === (await r.at(0))))};
+    }
+  }
+  return $Closure11;
+}
+
+```
+
+## inflight.$Closure12.js
+```js
+module.exports = function({  }) {
+  class $Closure12 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const lastStr = "wing";
+      const s = ["hello", lastStr, lastStr];
+      const u = s.lastIndexOf(lastStr);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(u === 2)'`)})((u === 2))};
+      const v = s.lastIndexOf("something");
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(v === (-1))'`)})((v === (-1)))};
+    }
+  }
+  return $Closure12;
+}
+
+```
+
 ## inflight.$Closure2.js
 ```js
 module.exports = function({  }) {
@@ -60,7 +131,8 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 2)'`)})((a.length === 2))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await a.at(0)) === "hello")'`)})(((await a.at(0)) === "hello"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await a.at(1)) === "world")'`)})(((await a.at(1)) === "world"))};
-      (await a.pop());
+      const item = (await a.pop());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(item === "world")'`)})((item === "world"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 1)'`)})((a.length === 1))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await a.at(0)) === "hello")'`)})(((await a.at(0)) === "hello"))};
     }
@@ -109,10 +181,14 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const e = ["hello", "wing"];
-      const f = "wing";
-      const contains = e.includes(f);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'contains'`)})(contains)};
+      const array = Object.freeze(["hello"]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(array.length === 1)'`)})((array.length === 1))};
+      const anotherArray = Object.freeze(["wing"]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(anotherArray.length === 1)'`)})((anotherArray.length === 1))};
+      const mergedArray = (await array.concat(anotherArray));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(mergedArray.length === 2)'`)})((mergedArray.length === 2))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await mergedArray.at(0)) === "hello")'`)})(((await mergedArray.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await mergedArray.at(1)) === "wing")'`)})(((await mergedArray.at(1)) === "wing"))};
     }
   }
   return $Closure5;
@@ -132,10 +208,13 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const g = ["hello", "wing"];
-      const h = "wing";
-      const index = g.indexOf(h);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(index === 1)'`)})((index === 1))};
+      const e = ["hello", "wing"];
+      const f = "wing";
+      const contains = e.includes(f);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'contains'`)})(contains)};
+      const g = "NotThere";
+      const doesNotContain = e.includes(g);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!doesNotContain)'`)})((!doesNotContain))};
     }
   }
   return $Closure6;
@@ -155,15 +234,66 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const i = ["hello", "wing"];
-      const j = "wing";
-      const delimeter = ";";
-      const joinedString = (await i.join(delimeter));
-      const expectedString = (((await i.at(0)) + delimeter) + (await i.at(1)));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedString === expectedString)'`)})((joinedString === expectedString))};
+      const g = ["hello", "wing"];
+      const h = "wing";
+      const index = g.indexOf(h);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(index === 1)'`)})((index === 1))};
+      const t = "notThere";
+      const secondIndex = g.indexOf(t);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(secondIndex === (-1))'`)})((secondIndex === (-1)))};
     }
   }
   return $Closure7;
+}
+
+```
+
+## inflight.$Closure8.js
+```js
+module.exports = function({  }) {
+  class $Closure8 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const i = ["hello", "wing"];
+      const j = "wing";
+      const separator = ";";
+      const joinedString = (await i.join(separator));
+      const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedString === expectedString)'`)})((joinedString === expectedString))};
+    }
+  }
+  return $Closure8;
+}
+
+```
+
+## inflight.$Closure9.js
+```js
+module.exports = function({  }) {
+  class $Closure9 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const i = ["hello", "wing"];
+      const j = "wing";
+      const separator = ",";
+      const joinedString = (await i.join());
+      const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedString === expectedString)'`)})((joinedString === expectedString))};
+    }
+  }
+  return $Closure9;
 }
 
 ```
@@ -189,7 +319,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:length\",\"${aws_lambda_function.root_testlength_Handler_7245E498.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.root_testat_Handler_39FB3FA1.arn}\"],[\"root/Default/Default/test:pushAndPop()\",\"${aws_lambda_function.root_testpushAndPop_Handler_20B4DAAB.arn}\"],[\"root/Default/Default/test:concat()\",\"${aws_lambda_function.root_testconcat_Handler_2B9B5654.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.root_testcontains_Handler_9F29A18C.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.root_testindexOf_Handler_6F5475B9.arn}\"],[\"root/Default/Default/test:join()\",\"${aws_lambda_function.root_testjoin_Handler_CB9050B7.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:length\",\"${aws_lambda_function.root_testlength_Handler_7245E498.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.root_testat_Handler_39FB3FA1.arn}\"],[\"root/Default/Default/test:pushAndPop()\",\"${aws_lambda_function.root_testpushAndPop_Handler_20B4DAAB.arn}\"],[\"root/Default/Default/test:concatMutArray()\",\"${aws_lambda_function.root_testconcatMutArray_Handler_CCDA88F4.arn}\"],[\"root/Default/Default/test:concatArray()\",\"${aws_lambda_function.root_testconcatArray_Handler_BCC85120.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.root_testcontains_Handler_9F29A18C.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.root_testindexOf_Handler_6F5475B9.arn}\"],[\"root/Default/Default/test:join()\",\"${aws_lambda_function.root_testjoin_Handler_CB9050B7.arn}\"],[\"root/Default/Default/test:joinWithDefaultSeparator()\",\"${aws_lambda_function.root_testjoinWithDefaultSeparator_Handler_D6A71109.arn}\"],[\"root/Default/Default/test:copy()\",\"${aws_lambda_function.root_testcopy_Handler_8004DED9.arn}\"],[\"root/Default/Default/test:copyMut()\",\"${aws_lambda_function.root_testcopyMut_Handler_40DBEE6F.arn}\"],[\"root/Default/Default/test:lastIndexOf()\",\"${aws_lambda_function.root_testlastIndexOf_Handler_6B91D55C.arn}\"]]"
     }
   },
   "provider": {
@@ -208,11 +338,20 @@ module.exports = function({  }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testconcat_Handler_IamRole_D3565082": {
+      "root_testconcatArray_Handler_IamRole_1305F7EF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:concat()/Handler/IamRole",
-            "uniqueId": "root_testconcat_Handler_IamRole_D3565082"
+            "path": "root/Default/Default/test:concatArray()/Handler/IamRole",
+            "uniqueId": "root_testconcatArray_Handler_IamRole_1305F7EF"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "root_testconcatMutArray_Handler_IamRole_51074FC0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:concatMutArray()/Handler/IamRole",
+            "uniqueId": "root_testconcatMutArray_Handler_IamRole_51074FC0"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -226,6 +365,24 @@ module.exports = function({  }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
+      "root_testcopyMut_Handler_IamRole_0420D757": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copyMut()/Handler/IamRole",
+            "uniqueId": "root_testcopyMut_Handler_IamRole_0420D757"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "root_testcopy_Handler_IamRole_61CF9BB6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copy()/Handler/IamRole",
+            "uniqueId": "root_testcopy_Handler_IamRole_61CF9BB6"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
       "root_testindexOf_Handler_IamRole_7B64B0A4": {
         "//": {
           "metadata": {
@@ -235,11 +392,29 @@ module.exports = function({  }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
+      "root_testjoinWithDefaultSeparator_Handler_IamRole_236D0F20": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:joinWithDefaultSeparator()/Handler/IamRole",
+            "uniqueId": "root_testjoinWithDefaultSeparator_Handler_IamRole_236D0F20"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
       "root_testjoin_Handler_IamRole_51CF02B8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:join()/Handler/IamRole",
             "uniqueId": "root_testjoin_Handler_IamRole_51CF02B8"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "root_testlastIndexOf_Handler_IamRole_79D10A99": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:lastIndexOf()/Handler/IamRole",
+            "uniqueId": "root_testlastIndexOf_Handler_IamRole_79D10A99"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -274,15 +449,25 @@ module.exports = function({  }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testat_Handler_IamRole_EA5BD403.name}"
       },
-      "root_testconcat_Handler_IamRolePolicy_9FC6C8CB": {
+      "root_testconcatArray_Handler_IamRolePolicy_ECEF2107": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:concat()/Handler/IamRolePolicy",
-            "uniqueId": "root_testconcat_Handler_IamRolePolicy_9FC6C8CB"
+            "path": "root/Default/Default/test:concatArray()/Handler/IamRolePolicy",
+            "uniqueId": "root_testconcatArray_Handler_IamRolePolicy_ECEF2107"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testconcat_Handler_IamRole_D3565082.name}"
+        "role": "${aws_iam_role.root_testconcatArray_Handler_IamRole_1305F7EF.name}"
+      },
+      "root_testconcatMutArray_Handler_IamRolePolicy_3C7C25C2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:concatMutArray()/Handler/IamRolePolicy",
+            "uniqueId": "root_testconcatMutArray_Handler_IamRolePolicy_3C7C25C2"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testconcatMutArray_Handler_IamRole_51074FC0.name}"
       },
       "root_testcontains_Handler_IamRolePolicy_98FEE2B9": {
         "//": {
@@ -294,6 +479,26 @@ module.exports = function({  }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testcontains_Handler_IamRole_D838F461.name}"
       },
+      "root_testcopyMut_Handler_IamRolePolicy_0651D1C7": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copyMut()/Handler/IamRolePolicy",
+            "uniqueId": "root_testcopyMut_Handler_IamRolePolicy_0651D1C7"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testcopyMut_Handler_IamRole_0420D757.name}"
+      },
+      "root_testcopy_Handler_IamRolePolicy_AED6FB45": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copy()/Handler/IamRolePolicy",
+            "uniqueId": "root_testcopy_Handler_IamRolePolicy_AED6FB45"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testcopy_Handler_IamRole_61CF9BB6.name}"
+      },
       "root_testindexOf_Handler_IamRolePolicy_8E7A6391": {
         "//": {
           "metadata": {
@@ -304,6 +509,16 @@ module.exports = function({  }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testindexOf_Handler_IamRole_7B64B0A4.name}"
       },
+      "root_testjoinWithDefaultSeparator_Handler_IamRolePolicy_821C9484": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:joinWithDefaultSeparator()/Handler/IamRolePolicy",
+            "uniqueId": "root_testjoinWithDefaultSeparator_Handler_IamRolePolicy_821C9484"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testjoinWithDefaultSeparator_Handler_IamRole_236D0F20.name}"
+      },
       "root_testjoin_Handler_IamRolePolicy_A86111B4": {
         "//": {
           "metadata": {
@@ -313,6 +528,16 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testjoin_Handler_IamRole_51CF02B8.name}"
+      },
+      "root_testlastIndexOf_Handler_IamRolePolicy_C49B9CD0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:lastIndexOf()/Handler/IamRolePolicy",
+            "uniqueId": "root_testlastIndexOf_Handler_IamRolePolicy_C49B9CD0"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testlastIndexOf_Handler_IamRole_79D10A99.name}"
       },
       "root_testlength_Handler_IamRolePolicy_9DE70A2C": {
         "//": {
@@ -346,15 +571,25 @@ module.exports = function({  }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testat_Handler_IamRole_EA5BD403.name}"
       },
-      "root_testconcat_Handler_IamRolePolicyAttachment_3ECF4EC6": {
+      "root_testconcatArray_Handler_IamRolePolicyAttachment_A6817FE8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:concat()/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testconcat_Handler_IamRolePolicyAttachment_3ECF4EC6"
+            "path": "root/Default/Default/test:concatArray()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testconcatArray_Handler_IamRolePolicyAttachment_A6817FE8"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testconcat_Handler_IamRole_D3565082.name}"
+        "role": "${aws_iam_role.root_testconcatArray_Handler_IamRole_1305F7EF.name}"
+      },
+      "root_testconcatMutArray_Handler_IamRolePolicyAttachment_823829C8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:concatMutArray()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testconcatMutArray_Handler_IamRolePolicyAttachment_823829C8"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testconcatMutArray_Handler_IamRole_51074FC0.name}"
       },
       "root_testcontains_Handler_IamRolePolicyAttachment_2B74BA53": {
         "//": {
@@ -366,6 +601,26 @@ module.exports = function({  }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testcontains_Handler_IamRole_D838F461.name}"
       },
+      "root_testcopyMut_Handler_IamRolePolicyAttachment_A145DB50": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copyMut()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testcopyMut_Handler_IamRolePolicyAttachment_A145DB50"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testcopyMut_Handler_IamRole_0420D757.name}"
+      },
+      "root_testcopy_Handler_IamRolePolicyAttachment_DE98366C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copy()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testcopy_Handler_IamRolePolicyAttachment_DE98366C"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testcopy_Handler_IamRole_61CF9BB6.name}"
+      },
       "root_testindexOf_Handler_IamRolePolicyAttachment_44945C33": {
         "//": {
           "metadata": {
@@ -376,6 +631,16 @@ module.exports = function({  }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testindexOf_Handler_IamRole_7B64B0A4.name}"
       },
+      "root_testjoinWithDefaultSeparator_Handler_IamRolePolicyAttachment_580EDA79": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:joinWithDefaultSeparator()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testjoinWithDefaultSeparator_Handler_IamRolePolicyAttachment_580EDA79"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testjoinWithDefaultSeparator_Handler_IamRole_236D0F20.name}"
+      },
       "root_testjoin_Handler_IamRolePolicyAttachment_24627D71": {
         "//": {
           "metadata": {
@@ -385,6 +650,16 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testjoin_Handler_IamRole_51CF02B8.name}"
+      },
+      "root_testlastIndexOf_Handler_IamRolePolicyAttachment_C8DBAEB8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:lastIndexOf()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testlastIndexOf_Handler_IamRolePolicyAttachment_C8DBAEB8"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testlastIndexOf_Handler_IamRole_79D10A99.name}"
       },
       "root_testlength_Handler_IamRolePolicyAttachment_75515754": {
         "//": {
@@ -434,26 +709,52 @@ module.exports = function({  }) {
           "subnet_ids": []
         }
       },
-      "root_testconcat_Handler_2B9B5654": {
+      "root_testconcatArray_Handler_BCC85120": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:concat()/Handler/Default",
-            "uniqueId": "root_testconcat_Handler_2B9B5654"
+            "path": "root/Default/Default/test:concatArray()/Handler/Default",
+            "uniqueId": "root_testconcatArray_Handler_BCC85120"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c869963c",
+            "WING_FUNCTION_NAME": "Handler-c8ba9aa0",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c869963c",
+        "function_name": "Handler-c8ba9aa0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testconcat_Handler_IamRole_D3565082.arn}",
+        "role": "${aws_iam_role.root_testconcatArray_Handler_IamRole_1305F7EF.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testconcat_Handler_S3Object_883D8A97.key}",
+        "s3_key": "${aws_s3_object.root_testconcatArray_Handler_S3Object_7F2389FB.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "root_testconcatMutArray_Handler_CCDA88F4": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:concatMutArray()/Handler/Default",
+            "uniqueId": "root_testconcatMutArray_Handler_CCDA88F4"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8e5a138",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8e5a138",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testconcatMutArray_Handler_IamRole_51074FC0.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testconcatMutArray_Handler_S3Object_500993A4.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -486,6 +787,58 @@ module.exports = function({  }) {
           "subnet_ids": []
         }
       },
+      "root_testcopyMut_Handler_40DBEE6F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copyMut()/Handler/Default",
+            "uniqueId": "root_testcopyMut_Handler_40DBEE6F"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8b1cc09",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8b1cc09",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testcopyMut_Handler_IamRole_0420D757.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testcopyMut_Handler_S3Object_2868869B.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "root_testcopy_Handler_8004DED9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copy()/Handler/Default",
+            "uniqueId": "root_testcopy_Handler_8004DED9"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c802a3d7",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c802a3d7",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testcopy_Handler_IamRole_61CF9BB6.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testcopy_Handler_S3Object_29FB2C8F.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
       "root_testindexOf_Handler_6F5475B9": {
         "//": {
           "metadata": {
@@ -512,6 +865,32 @@ module.exports = function({  }) {
           "subnet_ids": []
         }
       },
+      "root_testjoinWithDefaultSeparator_Handler_D6A71109": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:joinWithDefaultSeparator()/Handler/Default",
+            "uniqueId": "root_testjoinWithDefaultSeparator_Handler_D6A71109"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c833ed71",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c833ed71",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testjoinWithDefaultSeparator_Handler_IamRole_236D0F20.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testjoinWithDefaultSeparator_Handler_S3Object_42DD08C0.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
       "root_testjoin_Handler_CB9050B7": {
         "//": {
           "metadata": {
@@ -532,6 +911,32 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testjoin_Handler_S3Object_72E20B44.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "root_testlastIndexOf_Handler_6B91D55C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:lastIndexOf()/Handler/Default",
+            "uniqueId": "root_testlastIndexOf_Handler_6B91D55C"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c84609d0",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c84609d0",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testlastIndexOf_Handler_IamRole_79D10A99.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testlastIndexOf_Handler_S3Object_2B34A1FC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -614,11 +1019,22 @@ module.exports = function({  }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testconcat_Handler_S3Object_883D8A97": {
+      "root_testconcatArray_Handler_S3Object_7F2389FB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:concat()/Handler/S3Object",
-            "uniqueId": "root_testconcat_Handler_S3Object_883D8A97"
+            "path": "root/Default/Default/test:concatArray()/Handler/S3Object",
+            "uniqueId": "root_testconcatArray_Handler_S3Object_7F2389FB"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "root_testconcatMutArray_Handler_S3Object_500993A4": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:concatMutArray()/Handler/S3Object",
+            "uniqueId": "root_testconcatMutArray_Handler_S3Object_500993A4"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -636,6 +1052,28 @@ module.exports = function({  }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
+      "root_testcopyMut_Handler_S3Object_2868869B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copyMut()/Handler/S3Object",
+            "uniqueId": "root_testcopyMut_Handler_S3Object_2868869B"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "root_testcopy_Handler_S3Object_29FB2C8F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:copy()/Handler/S3Object",
+            "uniqueId": "root_testcopy_Handler_S3Object_29FB2C8F"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
       "root_testindexOf_Handler_S3Object_4F451E5A": {
         "//": {
           "metadata": {
@@ -647,11 +1085,33 @@ module.exports = function({  }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
+      "root_testjoinWithDefaultSeparator_Handler_S3Object_42DD08C0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:joinWithDefaultSeparator()/Handler/S3Object",
+            "uniqueId": "root_testjoinWithDefaultSeparator_Handler_S3Object_42DD08C0"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
       "root_testjoin_Handler_S3Object_72E20B44": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:join()/Handler/S3Object",
             "uniqueId": "root_testjoin_Handler_S3Object_72E20B44"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "root_testlastIndexOf_Handler_S3Object_2B34A1FC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:lastIndexOf()/Handler/S3Object",
+            "uniqueId": "root_testlastIndexOf_Handler_S3Object_2B34A1FC"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -692,6 +1152,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -919,6 +1380,166 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Closure8 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure8.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure8Client = ${$Closure8._toInflightType(this).text};
+            const client = new $Closure8Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Closure9 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure9.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure9Client = ${$Closure9._toInflightType(this).text};
+            const client = new $Closure9Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Closure10 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure10.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure10Client = ${$Closure10._toInflightType(this).text};
+            const client = new $Closure10Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Closure11 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure11.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure11Client = ${$Closure11._toInflightType(this).text};
+            const client = new $Closure11Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Closure12 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure12.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure12Client = ${$Closure12._toInflightType(this).text};
+            const client = new $Closure12Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.freeze([1, 2, 3]).length === 3)'`)})((Object.freeze([1, 2, 3]).length === 3))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '([1, 2, 3].length === 3)'`)})(([1, 2, 3].length === 3))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Closure1(this,"$Closure1"));
@@ -931,10 +1552,19 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 2)'`)})((a.length === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((a.at(0)) === "hello")'`)})(((a.at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((a.at(1)) === "world")'`)})(((a.at(1)) === "world"))};
-    (a.pop());
+    const item = (a.pop());
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(item === "world")'`)})((item === "world"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 1)'`)})((a.length === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((a.at(0)) === "hello")'`)})(((a.at(0)) === "hello"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:pushAndPop()",new $Closure3(this,"$Closure3"));
+    const array = Object.freeze(["hello"]);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(array.length === 1)'`)})((array.length === 1))};
+    const anotherArray = Object.freeze(["wing"]);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(anotherArray.length === 1)'`)})((anotherArray.length === 1))};
+    const mergedArray = (array.concat(anotherArray));
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(mergedArray.length === 2)'`)})((mergedArray.length === 2))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mergedArray.at(0)) === "hello")'`)})(((mergedArray.at(0)) === "hello"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((mergedArray.at(1)) === "wing")'`)})(((mergedArray.at(1)) === "wing"))};
     const b = ["hello"];
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(b.length === 1)'`)})((b.length === 1))};
     const c = ["wing"];
@@ -943,24 +1573,55 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(d.length === 2)'`)})((d.length === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((d.at(0)) === "hello")'`)})(((d.at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((d.at(1)) === "wing")'`)})(((d.at(1)) === "wing"))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concat()",new $Closure4(this,"$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concatMutArray()",new $Closure4(this,"$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concatArray()",new $Closure5(this,"$Closure5"));
     const e = ["hello", "wing"];
     const f = "wing";
     const contains = e.includes(f);
     {((cond) => {if (!cond) throw new Error(`assertion failed: 'contains'`)})(contains)};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:contains()",new $Closure5(this,"$Closure5"));
+    const n = "NotThere";
+    const doesNotContain = e.includes(n);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(!doesNotContain)'`)})((!doesNotContain))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:contains()",new $Closure6(this,"$Closure6"));
     const g = ["hello", "wing"];
     const h = "wing";
     const index = g.indexOf(h);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(index === 1)'`)})((index === 1))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:indexOf()",new $Closure6(this,"$Closure6"));
+    const t = "notThere";
+    const secondIndex = g.indexOf(t);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(secondIndex === (-1))'`)})((secondIndex === (-1)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:indexOf()",new $Closure7(this,"$Closure7"));
     const i = ["hello", "wing"];
     const j = "wing";
     const delimeter = ";";
     const joinedString = (i.join(delimeter));
     const expectedString = (((i.at(0)) + delimeter) + (i.at(1)));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedString === expectedString)'`)})((joinedString === expectedString))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:join()",new $Closure7(this,"$Closure7"));
+    const l = ["hello", "wing"];
+    const m = "wing";
+    const separator = ",";
+    const joinedStringWithDefault = (i.join());
+    const expectedStringWithDefault = (((i.at(0)) + separator) + (i.at(1)));
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedStringWithDefault === expectedStringWithDefault)'`)})((joinedStringWithDefault === expectedStringWithDefault))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:join()",new $Closure8(this,"$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:joinWithDefaultSeparator()",new $Closure9(this,"$Closure9"));
+    const o = ["hello", "wing"];
+    const p = Object.freeze([...(o)]);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.length === p.length)'`)})((o.length === p.length))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((o.at(0)) === (p.at(0)))'`)})(((o.at(0)) === (p.at(0))))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure10(this,"$Closure10"));
+    const q = Object.freeze(["hello", "wing"]);
+    const r = [...(q)];
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(q.length === r.length)'`)})((q.length === r.length))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((q.at(0)) === (r.at(0)))'`)})(((q.at(0)) === (r.at(0))))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copyMut()",new $Closure11(this,"$Closure11"));
+    const lastStr = "wing";
+    const s = ["hello", lastStr, lastStr];
+    const u = s.lastIndexOf(lastStr);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(u === 2)'`)})((u === 2))};
+    const v = s.lastIndexOf("something");
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(v === (-1))'`)})((v === (-1)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lastIndexOf()",new $Closure12(this,"$Closure12"));
   }
 }
 class $App extends $AppBase {

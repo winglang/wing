@@ -1,3 +1,4 @@
+bring cloud;
 //-----------------------------------------------------------------------------
 // length
 
@@ -18,7 +19,6 @@ assert(MutArray<str>["hello", "world"].at(1) == "world");
 test "at()" {
   assert(["hello"].at(0) == "hello");
   assert(MutArray<str>["hello", "world"].at(1) == "world");
-  
 }
 
 //-----------------------------------------------------------------------------
@@ -30,9 +30,20 @@ a.push("world");
 assert(a.length == 2);
 assert(a.at(0) == "hello");
 assert(a.at(1) == "world");
-a.pop();
+let item = a.pop();
+assert(item == "world");
 assert(a.length == 1);
 assert(a.at(0) == "hello");
+
+/*
+// The below does not work, opened issue #3043
+let bucket = new cloud.Bucket() as "myBucket";
+let buckets = Array<cloud.Bucket>[bucket];
+
+test "pushAndPopBuckets()" {
+  assert(buckets.length == 1);
+}
+*/
 
 test "pushAndPop()" {
   let a = MutArray<str>["hello"];
@@ -41,7 +52,8 @@ test "pushAndPop()" {
   assert(a.length == 2);
   assert(a.at(0) == "hello");
   assert(a.at(1) == "world");
-  a.pop();
+  let item = a.pop();
+  assert(item == "world");
   assert(a.length == 1);
   assert(a.at(0) == "hello");
 }
@@ -168,6 +180,9 @@ test "joinWithDefaultSeparator()" {
   assert(joinedString == expectedString);
 }
 
+//-----------------------------------------------------------------------------
+// copy()
+
 let o = MutArray<str>["hello", "wing"];
 let p = o.copy();
 assert(o.length == p.length);
@@ -185,12 +200,18 @@ let r = q.copyMut();
 assert(q.length == r.length);
 assert(q.at(0) == r.at(0));
 
+//-----------------------------------------------------------------------------
+// copyMut()
+
 test "copyMut()" {
   let q = Array<str>["hello", "wing"];
   let r = q.copyMut();
   assert(q.length == r.length);
   assert(q.at(0) == r.at(0));
 }
+
+//-----------------------------------------------------------------------------
+// lastIndexOf()
 
 let lastStr = "wing";
 let s = MutArray<str>["hello", lastStr, lastStr];
