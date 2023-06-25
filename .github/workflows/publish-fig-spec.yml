@@ -1,0 +1,55 @@
+name: Puplish Fig Completion Spec
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish:
+    name: "Publish fig spec"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v2
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Check git diff of Wing CLI
+        id: git-diff-wing-cli
+        run: |
+          if git diff --quiet ${{ steps.setSHAs.outputs.base }} ${{ github.sha }} -- apps/wing; then
+            echo "::set-output name=diff::false"
+          else
+            echo "::set-output name=diff::true"
+          fi
+
+      - name: Install Wing CLI
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        run: npm i -g winglang
+
+      - id: wing-version
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        run: wing --version
+
+      - name: Generate the fig spec
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        run: node usr/local/lib/node_module/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
+
+      - name: Upload fig spec
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: wing
+          path: usr/local/lib/node_module/dist/new-fig-cli-generated.ts
+
+      - name: Create Autocomplete PR
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        uses: withfig/push-to-fig-autocomplete-action@v1
+        with:
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          autocomplete-spec-name: wing
+          spec-path: new-fig-cli-generated.ts
+          integration: commander
+          new-spec-version: ${{ steps.wing-version.outputs.version }}

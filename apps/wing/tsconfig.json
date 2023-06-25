@@ -22,6 +22,7 @@
     "declaration": true,
     "baseUrl": ".",
     "esModuleInterop": true,
+    "types": ["@withfig/autocomplete-types"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

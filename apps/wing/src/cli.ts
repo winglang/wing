@@ -1,12 +1,11 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import { compile, docs, test, checkForUpdates, run } from "./commands";
+import { compile, docs, test, checkForUpdates, run, addCompletionSpecCommand } from "./commands";
 import { satisfies } from "compare-versions";
 
 import { Command, Option } from "commander";
 import { run_server } from "./commands/lsp";
-import { addCompletionSpecCommand } from '@fig/complete-commander'
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
