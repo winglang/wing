@@ -39,7 +39,7 @@ module.exports = function({ api, http_Util, std_Json }) {
       const username = "tsuf";
       const res = (await http_Util.get(`${api.url}/users/${username}`));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.status === 200)'`)})((res.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((JSON.parse(res.body)))["user"] === username)'`)})((((JSON.parse(res.body)))["user"] === username))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((JSON.parse((res.body ?? ""))))["user"] === username)'`)})((((JSON.parse((res.body ?? ""))))["user"] === username))};
     }
   }
   return $Closure2;

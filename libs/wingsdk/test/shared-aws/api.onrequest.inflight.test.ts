@@ -194,7 +194,7 @@ describe("ApiRequest", () => {
 
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
-      body: { foo: "bar" },
+      body: JSON.stringify({ foo: "bar" }),
       headers: { "header-1": "value-1" },
       method: "GET",
       path: "/",
@@ -289,7 +289,7 @@ describe("ApiRequest", () => {
 
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
-      body: { foo: "bar", bar: "baz" },
+      body: JSON.stringify({ foo: "bar", bar: "baz" }),
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },

@@ -20,7 +20,6 @@ test "test" {
   let res: http.Response = http.get("${api.url}/users/${username}");
 
 
-
   assert(res.status == 200);
-  assert(Json.parse(res.body).get("user") == username);
+  assert(Json.parse(res.body ?? "").get("user") == username);
 }
