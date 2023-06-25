@@ -1,3 +1,5 @@
+bring cloud;
+
 //-----------------------------------------------------------------------------
 // length
 
@@ -30,9 +32,19 @@ a.push("world");
 assert(a.length == 2);
 assert(a.at(0) == "hello");
 assert(a.at(1) == "world");
-a.pop();
+let item = a.pop();
+assert(item == "world");
 assert(a.length == 1);
 assert(a.at(0) == "hello");
+
+/*
+let bucket = new cloud.Bucket() as "myBucket";
+
+test "pushAndPopBuckets()" {
+  let buckets = Array<cloud.Bucket>[bucket];
+  assert(buckets.length == 1);
+}
+*/
 
 test "pushAndPop()" {
   let a = MutArray<str>["hello"];
@@ -41,7 +53,8 @@ test "pushAndPop()" {
   assert(a.length == 2);
   assert(a.at(0) == "hello");
   assert(a.at(1) == "world");
-  a.pop();
+  let item = a.pop();
+  assert(item == "world");
   assert(a.length == 1);
   assert(a.at(0) == "hello");
 }
@@ -168,6 +181,9 @@ test "joinWithDefaultSeparator()" {
   assert(joinedString == expectedString);
 }
 
+//-----------------------------------------------------------------------------
+// copy()
+
 let o = MutArray<str>["hello", "wing"];
 let p = o.copy();
 assert(o.length == p.length);
@@ -180,6 +196,9 @@ test "copy()" {
   assert(o.at(0) == p.at(0));
 }
 
+//-----------------------------------------------------------------------------
+// copyMut()
+
 let q = Array<str>["hello", "wing"];
 let r = q.copyMut();
 assert(q.length == r.length);
@@ -191,6 +210,9 @@ test "copyMut()" {
   assert(q.length == r.length);
   assert(q.at(0) == r.at(0));
 }
+
+//-----------------------------------------------------------------------------
+// lastIndexOf()
 
 let lastStr = "wing";
 let s = MutArray<str>["hello", lastStr, lastStr];
