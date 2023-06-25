@@ -216,6 +216,12 @@ pub struct Class {
 	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
 	pub docs: Docs,
+
+	// Preflight classes are CDK Constructs which means they have a scode and id as their first arguments
+	// this is natively supported by wing used the `as` `in` keywords. However theoretically it is possible
+	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
+	// and instead the use will need to pass the relevant args to the class's init method.
+	pub std_construct_args: bool,
 }
 
 #[derive(Derivative)]
@@ -740,7 +746,7 @@ impl TypeRef {
 		None
 	}
 
-	pub fn as_mut_class(&mut self) -> Option<&mut Class> {
+	pub fn as_class_mut(&mut self) -> Option<&mut Class> {
 		match **self {
 			Type::Class(ref mut class) => Some(class),
 			_ => None,
@@ -826,6 +832,10 @@ impl TypeRef {
 				.any(|(name, type_)| name == HANDLE_METHOD_NAME && type_.is_inflight_function());
 		}
 		false
+	}
+
+	pub fn is_string(&self) -> bool {
+		matches!(**self, Type::String)
 	}
 
 	pub fn is_struct(&self) -> bool {
@@ -2384,6 +2394,7 @@ impl<'a> TypeChecker<'a> {
 					phase: *phase,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 					docs: Docs::default(),
+					std_construct_args: *phase == Phase::Preflight,
 				};
 				let mut class_type = self.types.add_type(Type::Class(class_spec));
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
@@ -2451,7 +2462,7 @@ impl<'a> TypeChecker<'a> {
 				);
 
 				// Replace the dummy class environment with the real one before type checking the methods
-				class_type.as_mut_class().unwrap().env = class_env;
+				class_type.as_class_mut().unwrap().env = class_env;
 				let class_env = &class_type.as_class().unwrap().env;
 
 				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
@@ -3111,11 +3122,12 @@ impl<'a> TypeChecker<'a> {
 			type_parameters: Some(type_params),
 			phase: original_type_class.phase,
 			docs: original_type_class.docs.clone(),
+			std_construct_args: original_type_class.std_construct_args,
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
-		let new_type_class = new_type.as_mut_class().unwrap();
+		let new_type_class = new_type.as_class_mut().unwrap();
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
