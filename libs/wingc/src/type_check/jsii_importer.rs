@@ -698,43 +698,6 @@ impl<'a> JsiiImporter<'a> {
 				}
 
 				for param in params_iter {
-					// If this is a resource then skip scope and id arguments
-					// TODO hack - skip this check if the resource's name is "App"
-					// https://github.com/winglang/wing/issues/1485
-					// if class_phase == Phase::Preflight && type_name != "App" {
-					// 	if i == 0 {
-					// 		// First arg must be called scope and be a preflight class and it must not be variadic or optional
-					// 		let scope_type = self.type_ref_to_wing_type(&param.type_);
-					// 		if param.name != "scope"
-					// 			|| !scope_type.is_preflight_class()
-					// 			|| param.variadic.unwrap_or(false)
-					// 			|| param.optional.unwrap_or(false)
-					// 		{
-					// 			debug!(
-					// 				"Preflight class {}'s constructor doesn't have a first arg called scope of type preflight class",
-					// 				jsii_class_fqn
-					// 			);
-					// 			return; // TODO: this is a bug because we abort the import after we already partially imported the class
-					// 		}
-					// 		continue;
-					// 	} else if i == 1 {
-					// 		// Second arg must be called id and be a string and it must not be variadic or optional
-					// 		let id_type = self.type_ref_to_wing_type(&param.type_);
-					// 		if param.name != "id"
-					// 			|| !id_type.is_string()
-					// 			|| param.variadic.unwrap_or(false)
-					// 			|| param.optional.unwrap_or(false)
-					// 		{
-					// 			debug!(
-					// 				"Preflight class {}'s constructor doesn't have a second arg called id of type string",
-					// 				jsii_class_fqn
-					// 			);
-					// 			return; // TODO: this is a bug because we abort the import after we already partially imported the class
-					// 		}
-					// 		continue;
-					// 	}
-					// }
-
 					fn_params.push(FunctionParameter {
 						name: param.name.clone(),
 						typeref: self.parameter_to_wing_type(&param),
