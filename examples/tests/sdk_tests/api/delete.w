@@ -1,6 +1,7 @@
 bring cloud;
 bring http;
 
+// https://github.com/winglang/wing/issues/3049
 let http_DELETE = http.HttpMethod.DELETE;
 let api_DELETE = cloud.HttpMethod.DELETE;
 

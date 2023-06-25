@@ -1,6 +1,7 @@
 bring cloud;
 bring http;
 
+// https://github.com/winglang/wing/issues/3049
 let http_PUT = http.HttpMethod.PUT;
 let api_PUT = cloud.HttpMethod.PUT;
 

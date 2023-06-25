@@ -1,6 +1,7 @@
 bring cloud;
 bring http;
 
+// https://github.com/winglang/wing/issues/3049
 let http_PATCH = http.HttpMethod.PATCH;
 let api_PATCH = cloud.HttpMethod.PATCH;
 
