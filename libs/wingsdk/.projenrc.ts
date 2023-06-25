@@ -195,7 +195,7 @@ keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 `;
 
-const docsPath = "../../docs/04-standard-library/04-api-reference.md";
+const docsPath = "../../docs/04-standard-library/90-api-reference.md";
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
