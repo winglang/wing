@@ -1,7 +1,6 @@
 bring cloud;
 class KeyValueStore {
   bucket: cloud.Bucket;
-  extern "./helper.js" inflight toString(k: inflight (str): void): str;
   var onUpdateCallback : inflight (str): void;
   init(store: cloud.Bucket) {
     this.bucket = store;
