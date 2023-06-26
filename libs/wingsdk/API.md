@@ -3983,6 +3983,19 @@ Return the total number of years in this Duration.
 
 Immutable Json.
 
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Json.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Json()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -4195,14 +4208,14 @@ the key to delete.
 ```wing
 bring std;
 
-std.Json.has(json: any, key: str)
+std.Json.has(json: Json, key: str)
 ```
 
 Checks if a Json object has a given key.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.has.parameter.json"></a>
 
-- *Type:* any
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 The json object to inspect.
 
@@ -4580,6 +4593,19 @@ The length of the array.
 
 Mutable Json.
 
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutJson.Initializer"></a>
+
+```wing
+bring std;
+
+new std.MutJson()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -4757,150 +4783,6 @@ The index of the element in the Json Array to return.
 
 ---
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.MutJson.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
-| <code><a href="#@winglang/sdk.std.MutJson.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
-| <code><a href="#@winglang/sdk.std.MutJson.delete">delete</a></code> | Deletes a key in a given Json. |
-| <code><a href="#@winglang/sdk.std.MutJson.has">has</a></code> | Checks if a Json object has a given key. |
-| <code><a href="#@winglang/sdk.std.MutJson.keys">keys</a></code> | Returns the keys from the Json object. |
-| <code><a href="#@winglang/sdk.std.MutJson.stringify">stringify</a></code> | Formats Json as string. |
-
----
-
-##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.MutJson.deepCopy"></a>
-
-```wing
-bring std;
-
-std.MutJson.deepCopy(json: MutJson)
-```
-
-Creates an immutable deep copy of the Json.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.deepCopy.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
-
-to copy.
-
----
-
-##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.MutJson.deepCopyMut"></a>
-
-```wing
-bring std;
-
-std.MutJson.deepCopyMut(json: Json)
-```
-
-Creates a mutable deep copy of the Json.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.deepCopyMut.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to copy.
-
----
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutJson.delete"></a>
-
-```wing
-bring std;
-
-std.MutJson.delete(json: MutJson, key: str)
-```
-
-Deletes a key in a given Json.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.delete.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
-
-to delete key from.
-
----
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.delete.parameter.key"></a>
-
-- *Type:* str
-
-the key to delete.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutJson.has"></a>
-
-```wing
-bring std;
-
-std.MutJson.has(json: any, key: str)
-```
-
-Checks if a Json object has a given key.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.has.parameter.json"></a>
-
-- *Type:* any
-
-The json object to inspect.
-
----
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.has.parameter.key"></a>
-
-- *Type:* str
-
-The key to check.
-
----
-
-##### `keys` <a name="keys" id="@winglang/sdk.std.MutJson.keys"></a>
-
-```wing
-bring std;
-
-std.MutJson.keys(json: any)
-```
-
-Returns the keys from the Json object.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.keys.parameter.json"></a>
-
-- *Type:* any
-
-to get keys from.
-
----
-
-##### `stringify` <a name="stringify" id="@winglang/sdk.std.MutJson.stringify"></a>
-
-```wing
-bring std;
-
-std.MutJson.stringify(json: any, indent?: num)
-```
-
-Formats Json as string.
-
-(JSON.stringify($args$))
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.stringify.parameter.json"></a>
-
-- *Type:* any
-
-to format as string.
-
----
-
-###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.MutJson.stringify.parameter.indent"></a>
-
-- *Type:* num
-
----
 
 
 
