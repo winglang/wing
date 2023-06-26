@@ -63,18 +63,14 @@ test "pushAndPop()" {
 // concat()
 let array = Array<str>["hello"];
 assert(array.length == 1);
-let anotherArray = Array<str>["wing"];
-assert(anotherArray.length == 1);
-let mergedArray = array.concat(anotherArray);
+let mergedArray = array.concat(Array<str>["wing"]);
 assert(mergedArray.length == 2);
 assert(mergedArray.at(0) == "hello");
 assert(mergedArray.at(1) == "wing");
 
 let b = MutArray<str>["hello"];
 assert(b.length == 1);
-let c = MutArray<str>["wing"];
-assert(c.length == 1);
-let d = b.concat(c);
+let d = b.concat(MutArray<str>["wing"]);
 assert(d.length == 2);
 assert(d.at(0) == "hello");
 assert(d.at(1) == "wing");
@@ -87,9 +83,7 @@ assert(mergedBuckets.at(1).node.id == "mySecondBucket");
 test "concatMutArray()" {
   let b = MutArray<str>["hello"];
   assert(b.length == 1);
-  let c = MutArray<str>["wing"];
-  assert(c.length == 1);
-  let d = b.concat(c);
+  let d = b.concat(MutArray<str>["wing"]);
   assert(d.length == 2);
   assert(d.at(0) == "hello");
   assert(d.at(1) == "wing");
@@ -110,74 +104,70 @@ test "concatArray()" {
 // contains()
 
 let e = MutArray<str>["hello", "wing"];
-let f = "wing";
-let contains = e.contains(f);
-assert(contains);
-let n = "NotThere";
-let doesNotContain = e.contains(n);
-assert(!doesNotContain);
+assert(e.contains("wing"));
+assert(!e.contains("NotThere"));
 
 assert(buckets.contains(buckets.at(0)));
 let dummyBucket = new cloud.Bucket();
 assert(!buckets.contains(dummyBucket));
 
+let h = Array<str>["hello", "wing"];
+assert(h.contains("wing"));
+assert(!h.contains("NotThere"));
+
 test "contains()" {
   let e = MutArray<str>["hello", "wing"];
-  let f = "wing";
-  let contains = e.contains(f);
-  assert(contains);
+  assert(e.contains("wing"));
+  assert(!e.contains("NotThere"));
 
-  let g = "NotThere";
-  let doesNotContain = e.contains(g);
-  assert(!doesNotContain);
+  let h = Array<str>["hello", "wing"];
+  assert(h.contains("wing"));
+  assert(!h.contains("NotThere"));
 }
 
 //-----------------------------------------------------------------------------
 // indexOf()
 
 let g = MutArray<str>["hello", "wing"];
-let h = "wing";
-let index = g.indexOf(h);
-assert(index == 1);
-
-let t = "notThere";
-let secondIndex = g.indexOf(t);
-assert(secondIndex == -1);
-
+assert(g.indexOf("wing") == 1);
+assert(g.indexOf("notThere") == -1);
 assert(buckets.indexOf(bucket) == 0);
 assert(buckets.indexOf(dummyBucket) == -1);
 
 test "indexOf()" {
   let g = MutArray<str>["hello", "wing"];
-  let h = "wing";
-  let index = g.indexOf(h);
-  assert(index == 1);
+  assert(g.indexOf("wing") == 1);
+  assert(g.indexOf("notThere") == -1);
+}
 
-  let t = "notThere";
-  let secondIndex = g.indexOf(t);
-  assert(secondIndex == -1);
+let q = MutArray<str>["hello", "wing"];
+assert(q.indexOf("wing") == 1);
+assert(q.indexOf("notThere") == -1);
+
+
+test "indexOfArray()" {
+  let g = Array<str>["hello", "wing"];
+  assert(g.indexOf("wing") == 1);
+  assert(g.indexOf("notThere") == -1);
 }
 
 //-----------------------------------------------------------------------------
 // join()
 
-let i = MutArray<str>["hello", "wing"];
-let j = "wing";
+let m = MutArray<str>["hello", "wing"];
 let delimeter = ";";
-let joinedString = i.join(delimeter);
-let expectedString = i.at(0) + delimeter + i.at(1);
+let joinedString = m.join(delimeter);
+let expectedString = m.at(0) + delimeter + m.at(1);
 assert(joinedString == expectedString);
 
 let l = MutArray<str>["hello", "wing"];
-let m = "wing";
 let separator = ",";
-let joinedStringWithDefault = i.join();
-let expectedStringWithDefault = i.at(0) + separator + i.at(1);
+let joinedStringWithDefault = m.join();
+let expectedStringWithDefault = m.at(0) + separator + m.at(1);
 assert(joinedStringWithDefault == expectedStringWithDefault);
 
 test "join()" {
   let i = MutArray<str>["hello", "wing"];
-  let j = "wing";
   let separator = ";";
   let joinedString = i.join(separator);
   let expectedString = i.at(0) + separator + i.at(1);
@@ -186,7 +176,6 @@ test "join()" {
 
 test "joinWithDefaultSeparator()" {
   let i = MutArray<str>["hello", "wing"];
-  let j = "wing";
   let separator = ",";
   let joinedString = i.join();
   let expectedString = i.at(0) + separator + i.at(1);
@@ -212,8 +201,8 @@ test "copy()" {
   assert(o.at(0) == p.at(0));
 }
 
-let q = Array<str>["hello", "wing"];
-let r = q.copyMut();
+let v = Array<str>["hello", "wing"];
+let r = v.copyMut();
 assert(q.length == r.length);
 assert(q.at(0) == r.at(0));
 
@@ -232,11 +221,9 @@ test "copyMut()" {
 
 let lastStr = "wing";
 let s = MutArray<str>["hello", lastStr, lastStr];
-let u = s.lastIndexOf(lastStr);
-assert(u == 2);
+assert(s.lastIndexOf(lastStr) == 2);
 
-let v = s.lastIndexOf("something");
-assert(v == -1);
+assert(s.lastIndexOf("something") == -1);
 
 let multipleBuckets = MutArray<cloud.Bucket>[bucket, bucket, anotherBucket];
 assert(multipleBuckets.lastIndexOf(bucket) == 1);
@@ -245,9 +232,7 @@ assert(multipleBuckets.lastIndexOf(dummyBucket) == -1);
 test "lastIndexOf()" {
   let lastStr = "wing";
   let s = MutArray<str>["hello", lastStr, lastStr];
-  let u = s.lastIndexOf(lastStr);
-  assert(u == 2);
+  assert(s.lastIndexOf(lastStr) == 2);
 
-  let v = s.lastIndexOf("something");
-  assert(v == -1);
+  assert(s.lastIndexOf("something") == -1);
 }

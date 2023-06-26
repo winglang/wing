@@ -33,10 +33,11 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const o = ["hello", "wing"];
-      const p = Object.freeze([...(o)]);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.length === p.length)'`)})((o.length === p.length))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await o.at(0)) === (await p.at(0)))'`)})(((await o.at(0)) === (await p.at(0))))};
+      const i = ["hello", "wing"];
+      const separator = ",";
+      const joinedString = (await i.join());
+      const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedString === expectedString)'`)})((joinedString === expectedString))};
     }
   }
   return $Closure10;
@@ -56,10 +57,10 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const q = Object.freeze(["hello", "wing"]);
-      const r = [...(q)];
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(q.length === r.length)'`)})((q.length === r.length))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.at(0)) === (await r.at(0)))'`)})(((await q.at(0)) === (await r.at(0))))};
+      const o = ["hello", "wing"];
+      const p = Object.freeze([...(o)]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.length === p.length)'`)})((o.length === p.length))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await o.at(0)) === (await p.at(0)))'`)})(((await o.at(0)) === (await p.at(0))))};
     }
   }
   return $Closure11;
@@ -79,15 +80,36 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const lastStr = "wing";
-      const s = ["hello", lastStr, lastStr];
-      const u = s.lastIndexOf(lastStr);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(u === 2)'`)})((u === 2))};
-      const v = s.lastIndexOf("something");
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(v === (-1))'`)})((v === (-1)))};
+      const q = Object.freeze(["hello", "wing"]);
+      const r = [...(q)];
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(q.length === r.length)'`)})((q.length === r.length))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await q.at(0)) === (await r.at(0)))'`)})(((await q.at(0)) === (await r.at(0))))};
     }
   }
   return $Closure12;
+}
+
+```
+
+## inflight.$Closure13.js
+```js
+module.exports = function({  }) {
+  class $Closure13 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const lastStr = "wing";
+      const s = ["hello", lastStr, lastStr];
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.lastIndexOf(lastStr) === 2)'`)})((s.lastIndexOf(lastStr) === 2))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.lastIndexOf("something") === (-1))'`)})((s.lastIndexOf("something") === (-1)))};
+    }
+  }
+  return $Closure13;
 }
 
 ```
@@ -156,9 +178,7 @@ module.exports = function({  }) {
     async handle()  {
       const b = ["hello"];
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(b.length === 1)'`)})((b.length === 1))};
-      const c = ["wing"];
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(c.length === 1)'`)})((c.length === 1))};
-      const d = (await b.concat(c));
+      const d = (await b.concat(["wing"]));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(d.length === 2)'`)})((d.length === 2))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await d.at(0)) === "hello")'`)})(((await d.at(0)) === "hello"))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await d.at(1)) === "wing")'`)})(((await d.at(1)) === "wing"))};
@@ -209,12 +229,11 @@ module.exports = function({  }) {
     }
     async handle()  {
       const e = ["hello", "wing"];
-      const f = "wing";
-      const contains = e.includes(f);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'contains'`)})(contains)};
-      const g = "NotThere";
-      const doesNotContain = e.includes(g);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!doesNotContain)'`)})((!doesNotContain))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'e.includes("wing")'`)})(e.includes("wing"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!e.includes("NotThere"))'`)})((!e.includes("NotThere")))};
+      const h = Object.freeze(["hello", "wing"]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'h.includes("wing")'`)})(h.includes("wing"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!h.includes("NotThere"))'`)})((!h.includes("NotThere")))};
     }
   }
   return $Closure6;
@@ -235,12 +254,8 @@ module.exports = function({  }) {
     }
     async handle()  {
       const g = ["hello", "wing"];
-      const h = "wing";
-      const index = g.indexOf(h);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(index === 1)'`)})((index === 1))};
-      const t = "notThere";
-      const secondIndex = g.indexOf(t);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(secondIndex === (-1))'`)})((secondIndex === (-1)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(g.indexOf("wing") === 1)'`)})((g.indexOf("wing") === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(g.indexOf("notThere") === (-1))'`)})((g.indexOf("notThere") === (-1)))};
     }
   }
   return $Closure7;
@@ -260,12 +275,9 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const i = ["hello", "wing"];
-      const j = "wing";
-      const separator = ";";
-      const joinedString = (await i.join(separator));
-      const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedString === expectedString)'`)})((joinedString === expectedString))};
+      const g = Object.freeze(["hello", "wing"]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(g.indexOf("wing") === 1)'`)})((g.indexOf("wing") === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(g.indexOf("notThere") === (-1))'`)})((g.indexOf("notThere") === (-1)))};
     }
   }
   return $Closure8;
@@ -286,9 +298,8 @@ module.exports = function({  }) {
     }
     async handle()  {
       const i = ["hello", "wing"];
-      const j = "wing";
-      const separator = ",";
-      const joinedString = (await i.join());
+      const separator = ";";
+      const joinedString = (await i.join(separator));
       const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedString === expectedString)'`)})((joinedString === expectedString))};
     }
@@ -319,7 +330,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:length\",\"${aws_lambda_function.root_testlength_Handler_7245E498.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.root_testat_Handler_39FB3FA1.arn}\"],[\"root/Default/Default/test:pushAndPop()\",\"${aws_lambda_function.root_testpushAndPop_Handler_20B4DAAB.arn}\"],[\"root/Default/Default/test:concatMutArray()\",\"${aws_lambda_function.root_testconcatMutArray_Handler_CCDA88F4.arn}\"],[\"root/Default/Default/test:concatArray()\",\"${aws_lambda_function.root_testconcatArray_Handler_BCC85120.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.root_testcontains_Handler_9F29A18C.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.root_testindexOf_Handler_6F5475B9.arn}\"],[\"root/Default/Default/test:join()\",\"${aws_lambda_function.root_testjoin_Handler_CB9050B7.arn}\"],[\"root/Default/Default/test:joinWithDefaultSeparator()\",\"${aws_lambda_function.root_testjoinWithDefaultSeparator_Handler_D6A71109.arn}\"],[\"root/Default/Default/test:copy()\",\"${aws_lambda_function.root_testcopy_Handler_8004DED9.arn}\"],[\"root/Default/Default/test:copyMut()\",\"${aws_lambda_function.root_testcopyMut_Handler_40DBEE6F.arn}\"],[\"root/Default/Default/test:lastIndexOf()\",\"${aws_lambda_function.root_testlastIndexOf_Handler_6B91D55C.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:length\",\"${aws_lambda_function.root_testlength_Handler_7245E498.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.root_testat_Handler_39FB3FA1.arn}\"],[\"root/Default/Default/test:pushAndPop()\",\"${aws_lambda_function.root_testpushAndPop_Handler_20B4DAAB.arn}\"],[\"root/Default/Default/test:concatMutArray()\",\"${aws_lambda_function.root_testconcatMutArray_Handler_CCDA88F4.arn}\"],[\"root/Default/Default/test:concatArray()\",\"${aws_lambda_function.root_testconcatArray_Handler_BCC85120.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.root_testcontains_Handler_9F29A18C.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.root_testindexOf_Handler_6F5475B9.arn}\"],[\"root/Default/Default/test:indexOfArray()\",\"${aws_lambda_function.root_testindexOfArray_Handler_C5842150.arn}\"],[\"root/Default/Default/test:join()\",\"${aws_lambda_function.root_testjoin_Handler_CB9050B7.arn}\"],[\"root/Default/Default/test:joinWithDefaultSeparator()\",\"${aws_lambda_function.root_testjoinWithDefaultSeparator_Handler_D6A71109.arn}\"],[\"root/Default/Default/test:copy()\",\"${aws_lambda_function.root_testcopy_Handler_8004DED9.arn}\"],[\"root/Default/Default/test:copyMut()\",\"${aws_lambda_function.root_testcopyMut_Handler_40DBEE6F.arn}\"],[\"root/Default/Default/test:lastIndexOf()\",\"${aws_lambda_function.root_testlastIndexOf_Handler_6B91D55C.arn}\"]]"
     }
   },
   "provider": {
@@ -379,6 +390,15 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:copy()/Handler/IamRole",
             "uniqueId": "root_testcopy_Handler_IamRole_61CF9BB6"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "root_testindexOfArray_Handler_IamRole_83E668FB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:indexOfArray()/Handler/IamRole",
+            "uniqueId": "root_testindexOfArray_Handler_IamRole_83E668FB"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -498,6 +518,16 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testcopy_Handler_IamRole_61CF9BB6.name}"
+      },
+      "root_testindexOfArray_Handler_IamRolePolicy_38DAB8BF": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:indexOfArray()/Handler/IamRolePolicy",
+            "uniqueId": "root_testindexOfArray_Handler_IamRolePolicy_38DAB8BF"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testindexOfArray_Handler_IamRole_83E668FB.name}"
       },
       "root_testindexOf_Handler_IamRolePolicy_8E7A6391": {
         "//": {
@@ -620,6 +650,16 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testcopy_Handler_IamRole_61CF9BB6.name}"
+      },
+      "root_testindexOfArray_Handler_IamRolePolicyAttachment_C8C5F58B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:indexOfArray()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testindexOfArray_Handler_IamRolePolicyAttachment_C8C5F58B"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testindexOfArray_Handler_IamRole_83E668FB.name}"
       },
       "root_testindexOf_Handler_IamRolePolicyAttachment_44945C33": {
         "//": {
@@ -833,6 +873,32 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testcopy_Handler_S3Object_29FB2C8F.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "root_testindexOfArray_Handler_C5842150": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:indexOfArray()/Handler/Default",
+            "uniqueId": "root_testindexOfArray_Handler_C5842150"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c88fa7a3",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c88fa7a3",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testindexOfArray_Handler_IamRole_83E668FB.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testindexOfArray_Handler_S3Object_302D960F.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -1189,6 +1255,17 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:copy()/Handler/S3Object",
             "uniqueId": "root_testcopy_Handler_S3Object_29FB2C8F"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "root_testindexOfArray_Handler_S3Object_302D960F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:indexOfArray()/Handler/S3Object",
+            "uniqueId": "root_testindexOfArray_Handler_S3Object_302D960F"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -1661,6 +1738,38 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Closure13 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure13.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure13Client = ${$Closure13._toInflightType(this).text};
+            const client = new $Closure13Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"myBucket");
     const buckets = Object.freeze([bucket]);
     const anotherBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"mySecondBucket");
@@ -1686,17 +1795,13 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:pushAndPop()",new $Closure3(this,"$Closure3"));
     const array = Object.freeze(["hello"]);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(array.length === 1)'`)})((array.length === 1))};
-    const anotherArray = Object.freeze(["wing"]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(anotherArray.length === 1)'`)})((anotherArray.length === 1))};
-    const mergedArray = (array.concat(anotherArray));
+    const mergedArray = (array.concat(Object.freeze(["wing"])));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(mergedArray.length === 2)'`)})((mergedArray.length === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((mergedArray.at(0)) === "hello")'`)})(((mergedArray.at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((mergedArray.at(1)) === "wing")'`)})(((mergedArray.at(1)) === "wing"))};
     const b = ["hello"];
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(b.length === 1)'`)})((b.length === 1))};
-    const c = ["wing"];
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(c.length === 1)'`)})((c.length === 1))};
-    const d = (b.concat(c));
+    const d = (b.concat(["wing"]));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(d.length === 2)'`)})((d.length === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((d.at(0)) === "hello")'`)})(((d.at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((d.at(1)) === "wing")'`)})(((d.at(1)) === "wing"))};
@@ -1707,40 +1812,37 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concatMutArray()",new $Closure4(this,"$Closure4"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concatArray()",new $Closure5(this,"$Closure5"));
     const e = ["hello", "wing"];
-    const f = "wing";
-    const contains = e.includes(f);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 'contains'`)})(contains)};
-    const n = "NotThere";
-    const doesNotContain = e.includes(n);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(!doesNotContain)'`)})((!doesNotContain))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: 'e.includes("wing")'`)})(e.includes("wing"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(!e.includes("NotThere"))'`)})((!e.includes("NotThere")))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: 'buckets.includes((buckets.at(0)))'`)})(buckets.includes((buckets.at(0))))};
     const dummyBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(!buckets.includes(dummyBucket))'`)})((!buckets.includes(dummyBucket)))};
+    const h = Object.freeze(["hello", "wing"]);
+    {((cond) => {if (!cond) throw new Error(`assertion failed: 'h.includes("wing")'`)})(h.includes("wing"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(!h.includes("NotThere"))'`)})((!h.includes("NotThere")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:contains()",new $Closure6(this,"$Closure6"));
     const g = ["hello", "wing"];
-    const h = "wing";
-    const index = g.indexOf(h);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(index === 1)'`)})((index === 1))};
-    const t = "notThere";
-    const secondIndex = g.indexOf(t);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(secondIndex === (-1))'`)})((secondIndex === (-1)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(g.indexOf("wing") === 1)'`)})((g.indexOf("wing") === 1))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(g.indexOf("notThere") === (-1))'`)})((g.indexOf("notThere") === (-1)))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(buckets.indexOf(bucket) === 0)'`)})((buckets.indexOf(bucket) === 0))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(buckets.indexOf(dummyBucket) === (-1))'`)})((buckets.indexOf(dummyBucket) === (-1)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:indexOf()",new $Closure7(this,"$Closure7"));
-    const i = ["hello", "wing"];
-    const j = "wing";
+    const q = ["hello", "wing"];
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(q.indexOf("wing") === 1)'`)})((q.indexOf("wing") === 1))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(q.indexOf("notThere") === (-1))'`)})((q.indexOf("notThere") === (-1)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:indexOfArray()",new $Closure8(this,"$Closure8"));
+    const m = ["hello", "wing"];
     const delimeter = ";";
-    const joinedString = (i.join(delimeter));
-    const expectedString = (((i.at(0)) + delimeter) + (i.at(1)));
+    const joinedString = (m.join(delimeter));
+    const expectedString = (((m.at(0)) + delimeter) + (m.at(1)));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedString === expectedString)'`)})((joinedString === expectedString))};
     const l = ["hello", "wing"];
-    const m = "wing";
     const separator = ",";
-    const joinedStringWithDefault = (i.join());
-    const expectedStringWithDefault = (((i.at(0)) + separator) + (i.at(1)));
+    const joinedStringWithDefault = (m.join());
+    const expectedStringWithDefault = (((m.at(0)) + separator) + (m.at(1)));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(joinedStringWithDefault === expectedStringWithDefault)'`)})((joinedStringWithDefault === expectedStringWithDefault))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:join()",new $Closure8(this,"$Closure8"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:joinWithDefaultSeparator()",new $Closure9(this,"$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:join()",new $Closure9(this,"$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:joinWithDefaultSeparator()",new $Closure10(this,"$Closure10"));
     const o = ["hello", "wing"];
     const p = Object.freeze([...(o)]);
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.length === p.length)'`)})((o.length === p.length))};
@@ -1748,22 +1850,20 @@ class $Root extends $stdlib.std.Resource {
     const copiedBuckets = [...(buckets)];
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(copiedBuckets.length === 1)'`)})((copiedBuckets.length === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((copiedBuckets.at(0)).node.id === "myBucket")'`)})(((copiedBuckets.at(0)).node.id === "myBucket"))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure10(this,"$Closure10"));
-    const q = Object.freeze(["hello", "wing"]);
-    const r = [...(q)];
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copy()",new $Closure11(this,"$Closure11"));
+    const v = Object.freeze(["hello", "wing"]);
+    const r = [...(v)];
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(q.length === r.length)'`)})((q.length === r.length))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((q.at(0)) === (r.at(0)))'`)})(((q.at(0)) === (r.at(0))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copyMut()",new $Closure11(this,"$Closure11"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:copyMut()",new $Closure12(this,"$Closure12"));
     const lastStr = "wing";
     const s = ["hello", lastStr, lastStr];
-    const u = s.lastIndexOf(lastStr);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(u === 2)'`)})((u === 2))};
-    const v = s.lastIndexOf("something");
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(v === (-1))'`)})((v === (-1)))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.lastIndexOf(lastStr) === 2)'`)})((s.lastIndexOf(lastStr) === 2))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.lastIndexOf("something") === (-1))'`)})((s.lastIndexOf("something") === (-1)))};
     const multipleBuckets = [bucket, bucket, anotherBucket];
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(multipleBuckets.lastIndexOf(bucket) === 1)'`)})((multipleBuckets.lastIndexOf(bucket) === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(multipleBuckets.lastIndexOf(dummyBucket) === (-1))'`)})((multipleBuckets.lastIndexOf(dummyBucket) === (-1)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lastIndexOf()",new $Closure12(this,"$Closure12"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lastIndexOf()",new $Closure13(this,"$Closure13"));
   }
 }
 class $App extends $AppBase {
