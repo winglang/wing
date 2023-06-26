@@ -187,7 +187,7 @@ jobs:
           if [ -s build.diff ]; then
             echo "Diff found, creating a patch to apply later"
             cat build.diff
-            echo "::set-output name=diff::true"
+            echo "diff=true" >> $GITHUB_OUTPUT
           fi
       - name: Upload Diff
         if: github.event_name == 'pull_request' && steps.diff.outputs.diff == 'true'
@@ -315,8 +315,8 @@ jobs:
           git add --all
           git diff --staged --patch > $DIFF_NAME
           if [ -s $DIFF_NAME ]; then
-            echo "::set-output name=diff::true"
-            echo "::set-output name=diff_name::$DIFF_NAME"
+            echo "diff=true" >> $GITHUB_OUTPUT
+            echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
           fi
       - name: Fail with Diff
         if: github.event_name == 'push' && matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'

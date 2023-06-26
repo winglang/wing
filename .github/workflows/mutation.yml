@@ -4,10 +4,8 @@ run-name: "Pull Request Mutation: ${{ github.event.workflow_run.head_branch }}"
 
 on:
   workflow_run:
-    branches-ignore:
-      - main
     workflows:
-      - "Build"
+      - Build
     types:
       - completed
 
@@ -17,73 +15,64 @@ concurrency:
 
 permissions:
   contents: write
+  statuses: write
 
 jobs:
   mutate:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'failure'
+    # Run if the workflow run is a pull request
+    if: github.event.workflow_run.conclusion == 'failure' && ((github.repository == 'winglang/wing' && github.event.workflow_run.head_branch != 'main') || github.repository != 'winglang/wing')
     steps:
-    - id: token-check
-      name: Check if mutation token is set
-      working-directory: ${{ github.workspace }}
-      run: echo "HAS_TOKEN=${{ secrets.MUTATION_TOKEN && 'true' || 'false' }}" >> $GITHUB_OUTPUT
-    - name: Token notice
-      if: steps.token-check.outputs.HAS_TOKEN == 'false'
-      working-directory: ${{ github.workspace }}
-      run: |
-        echo "Add a MUTATION_TOKEN repository secret with a personal access token to enable self mutation.
-        It requires read/write repo permissions." >> $GITHUB_STEP_SUMMARY
-        exit 1
-    - name: Download artifacts
-      id: download-artifacts
-      uses: dawidd6/action-download-artifact@v2
-      with:
-        github_token: ${{secrets.MUTATION_TOKEN}}
-        run_id: ${{ github.event.workflow_run.id }}
-        name: .+\.diff$
-        name_is_regexp: true
-        if_no_artifact_found: ignore
-        path: patches
-    - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
-      if: steps.download-artifacts.outputs.found_artifact == 'true'
-      with:
-        github_token: ${{secrets.MUTATION_TOKEN}}
-    - name: Disable Git Hooks
-      if: steps.download-artifacts.outputs.found_artifact == 'true'
-      run: |
-        git config --global core.hooksPath /dev/null
-    - name: Checkout Workflow Branch
-      if: steps.download-artifacts.outputs.found_artifact == 'true'
-      uses: actions/checkout@v3
-      with:
-        token: ${{secrets.MUTATION_TOKEN}}
-        ref: ${{ github.event.workflow_run.head_branch }}
-        path: repo
-    - id: self_mutation
-      if: steps.download-artifacts.outputs.found_artifact == 'true'
-      name: Apply downloaded pathes
-      working-directory: repo
-      run: |
-        for f in $(find ../patches/*.diff/*.diff); do
-          echo "Applying $f"
-          git apply $f
-          if [ $? -eq 0 ]; then
-            echo "Patch applied successfully"
-            rm $f
-          else
-            echo "Patch failed to apply"
-            cat $f
-            exit 1
-          fi
-        done
-    - name: Push changes
-      if: steps.download-artifacts.outputs.found_artifact == 'true'
-      working-directory: repo
-      env:
-        HEAD_REF: ${{ github.event.workflow_run.head_branch }}
-      run: |
-        git config user.name "monada-bot[bot]"
-        git config user.email "monabot@monada.co"
-        git add --all
-        git commit -s -m "chore: self mutation"
-        git push origin HEAD:$HEAD_REF
+      - name: Download artifacts
+        id: download-artifacts
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: .+\.diff$
+          name_is_regexp: true
+          if_no_artifact_found: ignore
+          path: patches
+      - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+      - name: Disable Git Hooks
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        run: |
+          git config --global core.hooksPath /dev/null
+      - name: Checkout Workflow Branch
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        uses: actions/checkout@v3
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          ref: ${{ github.event.workflow_run.head_branch }}
+          path: repo
+      - id: self_mutation
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        name: Apply downloaded pathes
+        working-directory: repo
+        run: |
+          for f in $(find ../patches/*.diff/*.diff); do
+            echo "Applying $f"
+            git apply $f
+            if [ $? -eq 0 ]; then
+              echo "Patch applied successfully"
+              rm $f
+            else
+              echo "Patch failed to apply"
+              cat $f
+              exit 1
+            fi
+          done
+      - name: Push changes
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        working-directory: repo
+        env:
+          HEAD_REF: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          git config user.name "monada-bot[bot]"
+          git config user.email "monabot@monada.co"
+          git add --all
+          git commit -s -m "chore: self mutation"
+          git push origin HEAD:$HEAD_REF
