@@ -670,7 +670,7 @@ impl<'a> JsiiImporter<'a> {
 			if let Some(params) = &initializer.parameters {
 				let mut params_iter = params.iter();
 
-				// If this is a preflight class then we need to verify its first two scope and id args:
+				// If this is a preflight class then we need to verify its first two args (scope and id):
 				// If both exist and are of a preflight class type and string type respectively then this is a standard constrcut type
 				// otherwise we need to mark it as having non standard constructor args meaning we can't use the `as` `in` keywords
 				// when instantiating it.

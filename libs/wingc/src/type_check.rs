@@ -217,10 +217,10 @@ pub struct Class {
 	pub phase: Phase,
 	pub docs: Docs,
 
-	// Preflight classes are CDK Constructs which means they have a scode and id as their first arguments
-	// this is natively supported by wing used the `as` `in` keywords. However theoretically it is possible
+	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
+	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
 	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
-	// and instead the use will need to pass the relevant args to the class's init method.
+	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
 }
 
