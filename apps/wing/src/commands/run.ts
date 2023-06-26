@@ -6,7 +6,7 @@ import { createConsoleApp } from "@wingconsole/app";
 import { parseNumericString } from "../util";
 
 /**
- * Run options for the `run` command.
+ * Options for the `run` command.
  * This is passed from Commander to the `run` function.
  */
 export interface RunOptions {
