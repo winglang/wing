@@ -38,7 +38,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\nstatic has: (json: any, key: str): bool\n```\n---\nChecks if a Json object has a given key.\n\n### Parameters\n - *json* - The json object to inspect.\n - *key* - The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
+    value: "```wing\nstatic has: (json: Json, key: str): bool\n```\n---\nChecks if a Json object has a given key.\n\n### Parameters\n - *json* - The json object to inspect.\n - *key* - The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
   sortText: ff|has
   insertText: has($0)
   insertTextFormat: 2
