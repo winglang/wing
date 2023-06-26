@@ -894,10 +894,10 @@ impl TypeRef {
 			Type::Anything => false,
 			Type::Unresolved => false,
 			Type::Void => false,
-			Type::MutJson => false,
-			Type::MutArray(_) => false,
-			Type::MutMap(_) => false,
-			Type::MutSet(_) => false,
+			Type::MutJson => true,
+			Type::MutArray(v) => v.is_capturable(),
+			Type::MutMap(v) => v.is_capturable(),
+			Type::MutSet(v) => v.is_capturable(),
 			Type::Function(sig) => sig.phase == Phase::Inflight,
 
 			// only preflight classes can be captured
