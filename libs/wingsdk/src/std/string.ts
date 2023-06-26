@@ -29,6 +29,8 @@ export class String {
     throw new Error("Macro");
   }
 
+  private constructor() {}
+
   /**
    * The length of the string.
    */

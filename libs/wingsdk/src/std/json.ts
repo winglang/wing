@@ -121,6 +121,8 @@ export class Json {
     throw new Error("Macro");
   }
 
+  private constructor() {}
+
   /**
    * Returns a specified element from the Json.
    *
@@ -172,6 +174,8 @@ export class MutJson {
     throw new Error("Macro");
   }
 
+  private constructor() {}
+
   /**
    * Returns a specified element from the Json.
    *
@@ -206,7 +210,7 @@ export class MutJson {
    * @param key The key of the element to add
    * @param value The value of the element to add
    */
-  public set(key: string, value: any): void {
+  public set(key: string, value: MutJson): void {
     key;
     value;
     throw new Error("Macro");
@@ -219,7 +223,7 @@ export class MutJson {
    *
    * @param value The value of the element to set
    */
-  public setAt(index: number, value: any): void {
+  public setAt(index: number, value: MutJson): void {
     index;
     value;
     throw new Error("Macro");

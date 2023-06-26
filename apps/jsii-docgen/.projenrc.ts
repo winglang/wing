@@ -67,5 +67,6 @@ project.addFields({
 
 // We use of symlinks between several projects but we do not use workspaces
 project.npmrc.addConfig("install-links", "false");
+project.npmrc.addConfig("fund", "false");
 
 project.synth();

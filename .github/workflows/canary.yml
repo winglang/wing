@@ -19,7 +19,7 @@ jobs:
           - macos-latest
         node:
           - 18
-          - 19
+          - 20
         install_command:
           - npm install -g winglang
     runs-on: ${{ matrix.runner }}
@@ -30,6 +30,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: Get Latest Wing Version
         id: get-version
+        shell: bash
         run: |
           echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
       - name: Install Wing

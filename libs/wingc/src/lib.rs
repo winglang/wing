@@ -13,6 +13,7 @@ use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use fold::Fold;
 use jsify::JSifier;
+use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
@@ -53,14 +54,15 @@ pub const WINGSDK_STD_MODULE: &'static str = "std";
 const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 const WINGSDK_UTIL_MODULE: &'static str = "util";
+const WINGSDK_HTTP_MODULE: &'static str = "http";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
-const WINGSDK_MAP: &'static str = "std.ImmutableMap";
-const WINGSDK_MUT_MAP: &'static str = "std.MutableMap";
-const WINGSDK_ARRAY: &'static str = "std.ImmutableArray";
-const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
-const WINGSDK_SET: &'static str = "std.ImmutableSet";
-const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
+const WINGSDK_MAP: &'static str = "std.Map";
+const WINGSDK_MUT_MAP: &'static str = "std.MutMap";
+const WINGSDK_ARRAY: &'static str = "std.Array";
+const WINGSDK_MUT_ARRAY: &'static str = "std.MutArray";
+const WINGSDK_SET: &'static str = "std.Set";
+const WINGSDK_MUT_SET: &'static str = "std.MutSet";
 const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
@@ -168,7 +170,13 @@ pub fn parse(source_path: &Path) -> Scope {
 	wing_parser.wingit(&tree.root_node())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii_types: &mut TypeSystem) {
+pub fn type_check(
+	scope: &mut Scope,
+	types: &mut Types,
+	source_path: &Path,
+	jsii_types: &mut TypeSystem,
+	jsii_imports: &mut Vec<JsiiImportSpec>,
+) {
 	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
@@ -244,7 +252,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path, jsii
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path, jsii_types);
+	let mut tc = TypeChecker::new(types, source_path, jsii_types, jsii_imports);
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
@@ -309,11 +317,14 @@ pub fn compile(
 	let mut types = Types::new();
 	let mut jsii_types = TypeSystem::new();
 
-	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types, &source_path, &mut jsii_types);
+	// Create a universal JSII import spec (need to keep this alive during entire compilation)
+	let mut jsii_imports = vec![];
 
-	// Validate that every Expr in the final tree has been type checked
-	let mut tc_assert = TypeCheckAssert::new(&types);
+	// Type check everything and build typed symbol environment
+	type_check(&mut scope, &mut types, &source_path, &mut jsii_types, &mut jsii_imports);
+
+	// Validate the type checker didn't miss anything see `TypeCheckAssert` for details
+	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 	tc_assert.check(&scope);
 
 	// bail out now (before jsification) if there are errors (no point in jsifying)
@@ -365,7 +376,7 @@ fn is_project_dir_absolute(project_dir: &PathBuf) -> bool {
 
 #[cfg(test)]
 mod sanity {
-	use crate::compile;
+	use crate::{compile, diagnostic::assert_no_panics};
 	use std::{
 		fs,
 		path::{Path, PathBuf},
@@ -409,6 +420,9 @@ mod sanity {
 					test_file.display(),
 					result.err().unwrap()
 				);
+
+				// Even if the test fails when we expect it to, none of the failures should be due to a compiler bug
+				assert_no_panics();
 			} else {
 				assert!(
 					!expect_failure,

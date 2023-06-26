@@ -26,10 +26,8 @@ module.exports = function({ myConst, Foo }) {
 module.exports = function({ myConst }) {
   class Foo {
      constructor()  {
-      const __parent_this = this;
     }
     async getValue()  {
-      const __parent_this = this;
       return myConst;
     }
   }
@@ -174,7 +172,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("getValue");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Foo.js";
