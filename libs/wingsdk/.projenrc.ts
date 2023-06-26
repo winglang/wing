@@ -96,7 +96,7 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "~5.0.0",
+  jsiiVersion: "5.0.11",
 });
 
 project.eslint?.addPlugins("sort-exports");
