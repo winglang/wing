@@ -36,30 +36,28 @@ async function main() {
 
   // If it's the first run, display the disclaimer and create the flag file
   if (isFirstRun) {
-    const disclaimer = `${chalk.hex("#2AD5C1")(
-      `🧪 This is an early pre-release of the Wing Programming Language (aka "alpha").\n` +
-        `\n` +
-        `We are working hard to make this a great tool, but there's still a pretty good\n` +
-        `chance you'll encounter missing pieces, rough edges, performance issues and even,\n` +
-        `god forbid, bugs 🐞.\n` +
-        `\n` +
-        `Please don't hesitate to ping us at ${chalk.blueBright.bold.underline(
-          "https://t.winglang.io/slack"
-        )} or file an issue at\n` +
-        `${chalk.blue.bold.underline(
-          "https://github.com/winglang/wing"
-        )}. We promise to do our best to respond quickly and help out.\n` +
-        `\n` +
-        `To help us identify issues early, we are collecting anonymous analytics.\n` +
-        `To turn this off, set ${chalk.yellowBright.bold("WING_CLI_DISABLE_ANALYTICS=1")}.\n` +
-        `For more information see ${chalk.blueBright.bold.underline(
-          "https://winglang.io/docs/analytics"
-        )}\n` +
-        `\n` +
-        `${chalk.redBright("(This message will self-destruct after the first run)")}`
-    )}`;
+    const disclaimer = `
+🧪 This is an early pre-release of the Wing Programming Language (aka "alpha").
+  
+We are working hard to make this a great tool, but there's still a pretty good
+chance you'll encounter missing pieces, rough edges, performance issues and even,
+god forbid, bugs 🐞.
 
-    console.log(disclaimer);
+Please don't hesitate to ping us at ${chalk.blueBright.bold.underline(
+      "https://t.winglang.io/slack"
+    )} or file an issue at
+${chalk.blueBright.bold.underline(
+  "https://github.com/winglang/wing"
+)}. We promise to do our best to respond quickly and help out.
+
+To help us identify issues early, we are collecting anonymous analytics.
+To turn this off, set ${chalk.yellowBright.bold("WING_CLI_DISABLE_ANALYTICS=1")}.
+For more information see ${chalk.blueBright.bold.underline("https://winglang.io/docs/analytics")}
+
+${chalk.redBright("(This message will self-destruct after the first run)")}
+`;
+
+    console.log(`${chalk.hex("#2AD5C1")(disclaimer)}`);
 
     fs.writeFileSync(flagFilePath, "");
   }
