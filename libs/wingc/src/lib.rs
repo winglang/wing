@@ -11,6 +11,7 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use files::Files;
 use fold::Fold;
 use jsify::JSifier;
 use type_check::jsii_importer::JsiiImportSpec;
@@ -39,6 +40,7 @@ mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 mod docs;
+mod files;
 pub mod fold;
 pub mod jsify;
 pub mod lsp;
@@ -136,7 +138,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn parse(source_path: &Path) -> Scope {
+pub fn parse(source_path: &Path) -> (Files, Scope) {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
@@ -155,9 +157,20 @@ pub fn parse(source_path: &Path) -> Scope {
 				env: RefCell::new(None),
 				span: Default::default(),
 			};
-			return empty_scope;
+			return (Files::default(), empty_scope);
 		}
 	};
+
+	let mut files = Files::new();
+	match files.add_file(
+		source_path.to_path_buf(),
+		String::from_utf8(source.clone()).expect("Invalid UTF-8 sequence"),
+	) {
+		Ok(_) => {}
+		Err(err) => {
+			panic!("Failed adding source file to parser: {}", err);
+		}
+	}
 
 	let tree = match parser.parse(&source, None) {
 		Some(tree) => tree,
@@ -168,7 +181,7 @@ pub fn parse(source_path: &Path) -> Scope {
 
 	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string());
 
-	wing_parser.wingit(&tree.root_node())
+	(files, wing_parser.wingit(&tree.root_node()))
 }
 
 pub fn type_check(
@@ -306,7 +319,7 @@ pub fn compile(
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
-	let scope = parse(&source_path);
+	let (files, scope) = parse(&source_path);
 
 	// -- DESUGARING PHASE --
 
@@ -351,7 +364,7 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&types, &source_path, app_name, &project_dir, true);
+	let mut jsifier = JSifier::new(&types, &files, app_name, &project_dir, true);
 	jsifier.jsify(&scope);
 	jsifier.emit_files(&out_dir);
 

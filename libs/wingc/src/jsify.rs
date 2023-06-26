@@ -1,5 +1,4 @@
 pub mod codemaker;
-mod files;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
@@ -24,6 +23,7 @@ use crate::{
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	files::Files,
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
@@ -34,7 +34,7 @@ use crate::{
 	WINGSDK_STD_MODULE,
 };
 
-use self::{codemaker::CodeMaker, files::Files};
+use self::codemaker::CodeMaker;
 
 const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
@@ -63,9 +63,8 @@ pub struct JSifyContext {
 
 pub struct JSifier<'a> {
 	pub types: &'a Types,
-	source_path: &'a Path,
-	/// Stores all generated JS files in memory.
-	files: Files,
+	source_files: &'a Files,
+	emitted_files: Files,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
 	shim: bool,
@@ -83,15 +82,15 @@ enum BindMethod {
 impl<'a> JSifier<'a> {
 	pub fn new(
 		types: &'a Types,
-		source_path: &'a Path,
+		source_files: &'a Files,
 		app_name: &'a str,
 		absolute_project_root: &'a Path,
 		shim: bool,
 	) -> Self {
 		Self {
 			types,
-			source_path,
-			files: Files::new(),
+			source_files,
+			emitted_files: Files::new(),
 			shim,
 			app_name,
 			absolute_project_root,
@@ -189,7 +188,7 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		match self.files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
+		match self.emitted_files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
@@ -197,7 +196,7 @@ impl<'a> JSifier<'a> {
 
 	/// Write all files to the output directory
 	pub fn emit_files(&mut self, out_dir: &Path) {
-		match self.files.emit_files(out_dir) {
+		match self.emitted_files.emit_files(out_dir) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
@@ -404,7 +403,7 @@ impl<'a> JSifier<'a> {
 					_ => format!("({})", self.jsify_expression(callee, ctx)),
 				};
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
-				let mut args_text_string = lookup_span(&arg_list.span, self.source_path);
+				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
 				if args_text_string.len() > 0 {
 					// remove the parens
 					args_text_string = args_text_string[1..args_text_string.len() - 1].to_string();
@@ -1335,7 +1334,7 @@ impl<'a> JSifier<'a> {
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		match self.files.add_file(inflight_filename(class), code.to_string()) {
+		match self.emitted_files.add_file(inflight_filename(class), code.to_string()) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
@@ -1985,9 +1984,10 @@ fn jsify_type_name(t: &Vec<Symbol>, phase: Phase) -> String {
 	}
 }
 
-fn lookup_span(span: &WingSpan, source_path: &Path) -> String {
-	let source = std::fs::read_to_string(source_path)
-		.expect(format!("Failed to read source file \"{}\"", source_path.display()).as_str());
+fn lookup_span(span: &WingSpan, files: &Files) -> String {
+	let source = files
+		.get_file(&span.file_id)
+		.expect(&format!("failed to find source file with id {}", span.file_id));
 	let lines = source.lines().collect_vec();
 
 	let start_line = span.start.line as usize;
