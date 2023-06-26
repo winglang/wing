@@ -129,6 +129,6 @@ Any maintainer should be empowered to take ownership of an incident if they wish
 
 The notification channel and timing is configured per user. It's recommended to configure it in the following way:
 
-![](docs/contributing/99-maintainerstion-configuration.png)
+![](/contributing/99-maintainerstion-configuration.png)
 
 for more information about notifications rules configuration, please refer to this [tutorial](https://support.pagerduty.com/docs/user-profile#notification-rules).
