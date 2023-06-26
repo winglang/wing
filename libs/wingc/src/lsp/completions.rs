@@ -802,6 +802,18 @@ util.
 	);
 
 	test_completion_list!(
+		namespace_inflight,
+		r#"
+bring http;
+
+inflight () => {
+  http.
+     //^"
+};"#,
+		assert!(!namespace_inflight.is_empty())
+	);
+
+	test_completion_list!(
 		mut_json_methods,
 		r#"
 let j = MutJson {};

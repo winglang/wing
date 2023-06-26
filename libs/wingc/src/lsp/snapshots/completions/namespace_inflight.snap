@@ -1,0 +1,106 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: HttpMethod
+  kind: 13
+  documentation:
+    kind: markdown
+    value: ""
+  sortText: jj|HttpMethod
+- label: RequestCache
+  kind: 13
+  documentation:
+    kind: markdown
+    value: ""
+  sortText: jj|RequestCache
+- label: RequestOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nRequestOptions\n```\n---\nAn object containing any custom settings that you want to apply to the request."
+  sortText: hh|RequestOptions
+- label: RequestRedirect
+  kind: 13
+  documentation:
+    kind: markdown
+    value: ""
+  sortText: jj|RequestRedirect
+- label: Response
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nResponse\n```\n---\nRepresents the response to a request."
+  sortText: hh|Response
+- label: Util
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Util\n```\n---\nthe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
+  sortText: gg|Util
+- label: delete
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic delete: (url: str, options: RequestOptions?): Response\n```\n---\nSends a DELETE request.\n\n### Returns\nthe formatted response of the call"
+  sortText: ff|delete
+  insertText: delete($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: fetch
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic fetch: (url: str, options: RequestOptions?): Response\n```\n---\nSends an HTTP request to a URL, returning a fulfilled or failed response.\n\n### Returns\nthe formatted response of the call\n\n*@throws* *Only throws if there is a networking error*"
+  sortText: ff|fetch
+  insertText: fetch($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: get
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic get: (url: str, options: RequestOptions?): Response\n```\n---\nSends a GET request.\n\n### Returns\nthe formatted response of the call"
+  sortText: ff|get
+  insertText: get($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: patch
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic patch: (url: str, options: RequestOptions?): Response\n```\n---\nSends a PATCH request.\n\n### Returns\nthe formatted response of the call"
+  sortText: ff|patch
+  insertText: patch($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: post
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic post: (url: str, options: RequestOptions?): Response\n```\n---\nSends a POST request.\n\n### Returns\nthe formatted response of the call"
+  sortText: ff|post
+  insertText: post($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: put
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic put: (url: str, options: RequestOptions?): Response\n```\n---\nSends a PUT request.\n\n### Returns\nthe formatted response of the call"
+  sortText: ff|put
+  insertText: put($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+
