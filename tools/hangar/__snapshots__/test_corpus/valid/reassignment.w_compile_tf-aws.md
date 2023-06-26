@@ -4,7 +4,8 @@
 ```js
 module.exports = function({  }) {
   class R {
-    constructor({ f1 }) {
+    constructor({ f, f1 }) {
+      this.f = f;
       this.f1 = f1;
     }
     async $inflight_init()  {
@@ -76,11 +77,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
+        const f_client = this._lift(this.f);
         const f1_client = this._lift(this.f1);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const RClient = ${R._toInflightType(this).text};
             const client = new RClient({
+              f: ${f_client},
               f1: ${f1_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -90,6 +93,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          R._registerBindObject(this.f, host, []);
           R._registerBindObject(this.f1, host, []);
         }
         super._registerBind(host, ops);

@@ -1359,7 +1359,7 @@ impl<'a> JSifier<'a> {
 				.filter(|(_, kind, _)| {
 					let var = kind.as_variable().unwrap();
 					// We capture preflight non-reassignable fields
-					var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
+					var.phase != Phase::Inflight && var.type_.is_capturable()
 				})
 				.map(|(name, ..)| name)
 				.collect_vec()
@@ -1541,18 +1541,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 					}
 
 					// now we need to verify that the component can be captured.
-					// (1) non-reassignable
 					// (2) capturable type (immutable/resource).
-
-					// if the variable is reassignable, bail out
-					if variable.reassignable {
-						report_diagnostic(Diagnostic {
-							message: format!("Cannot capture reassignable field '{curr}'"),
-							span: Some(curr.span.clone()),
-						});
-
-						return;
-					}
 
 					// if this type is not capturable, bail out
 					if !variable.type_.is_capturable() {
@@ -1695,19 +1684,28 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let lookup = env.lookup_ext(&x, Some(self.statement_index));
 
 				// if the reference is already defined later in this scope, skip it
-				if let LookupResult::DefinedLater = lookup {
+				if matches!(lookup, LookupResult::DefinedLater) {
 					return vec![];
 				}
 
+				let id_name = x.name.clone();
+				let id_span = x.span.clone();
+
 				let LookupResult::Found(kind, _) = lookup else {
 					return vec![Component {
-						text: x.name.clone(),
-						span: x.span.clone(),
+						text: id_name,
+						span: id_span,
 						kind: ComponentKind::Unsupported,
 					}];
 				};
 
-				let var = kind.as_variable().expect("variable");
+				let Some(var) = kind.as_variable() else {
+					return vec![Component {
+						text: id_name,
+						span: id_span,
+						kind: ComponentKind::Unsupported,
+					}];
+				};
 
 				// If the reference isn't a preflight (lifted) variable then skip it
 				if var.phase != Phase::Preflight {
@@ -1715,8 +1713,8 @@ impl<'a> FieldReferenceVisitor<'a> {
 				}
 
 				return vec![Component {
-					text: x.name.clone(),
-					span: x.span.clone(),
+					text: id_name,
+					span: id_span,
 					kind: ComponentKind::Member(var),
 				}];
 			}
@@ -1889,7 +1887,9 @@ impl<'a> CaptureScanner<'a> {
 
 				self.captured_vars.insert(fullname);
 			}
-			SymbolKind::Namespace(_) => todo!(),
+			// Namespaces are not captured as they are not actually valid references
+			// The existence of this reference will have already caused an error in the type checker
+			SymbolKind::Namespace(_) => {}
 		}
 	}
 }
