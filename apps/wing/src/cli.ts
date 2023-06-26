@@ -1,6 +1,7 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
+import os from "os";
 import fs from "fs";
 import path from "path";
 import chalk from "chalk";
@@ -29,7 +30,8 @@ async function main() {
   checkNodeVersion();
 
   // Check if the flag file exists
-  const flagFilePath = path.join(__dirname, ".cli_initialized");
+  const wingDirPath = path.join(os.homedir(), ".wing");
+  const flagFilePath = path.join(wingDirPath, ".cli_initialized");
   const isFirstRun = !fs.existsSync(flagFilePath);
 
   // If it's the first run, display the disclaimer and create the flag file
