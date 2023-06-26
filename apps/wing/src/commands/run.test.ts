@@ -132,7 +132,7 @@ test("wing it with a custom port runs", async () => {
   }
 });
 
-test("wing it with an invalid port ignores it", async () => {
+test("wing it throws when invalid port number is used", async () => {
   const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
   const prevdir = process.cwd();
   try {
@@ -140,13 +140,9 @@ test("wing it with an invalid port ignores it", async () => {
 
     writeFileSync("foo.w", "bring cloud;");
 
-    await run("foo.w", { port: "not a number" });
-    expect(createConsoleApp).toBeCalledWith({
-      wingfile: resolve("foo.w"),
-      requestedPort: undefined,
-      hostUtils: expect.anything(),
-    });
-    expect(open).toBeCalledWith("http://localhost:3000/");
+    await expect(async () => {
+      await run("foo.w", { port: "not a number" });
+    }).rejects.toThrowError('"not a number" is not a number');
   } finally {
     process.chdir(prevdir);
   }

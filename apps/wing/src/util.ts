@@ -77,12 +77,19 @@ export async function generateTmpDir(sourcePath: string, ...additionalFiles: str
 /**
  * Casts a numeric string to a number.
  *
- * Returns `undefined` if the string is not a number.
+ * Returns `undefined` if the string is empty.
+ *
+ * @throws If the string is not a number.
  */
 export function parseNumericString(text?: string) {
-  const number = Number(text);
-  if (isNaN(number)) {
+  if (!text) {
     return undefined;
   }
+
+  const number = Number(text);
+  if (isNaN(number)) {
+    throw new Error(`"${text}" is not a number`);
+  }
+
   return number;
 }
