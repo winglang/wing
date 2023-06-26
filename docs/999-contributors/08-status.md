@@ -5,23 +5,23 @@ keywords: [Wing project status, wing status, project status]
 slug: /status
 ---
 
-:::caution Maturity: Alpha
-
-Under active development.
-
-:::
+## 🧪 This is a pre-release
 
 **Wing is very young, naive, and currently under active development**. This
 means that we still don't think it's a very useful tool at the moment, and
-definitely not ready for production use. Many of the APIs and language features
+probably not ready for production use. Many of the APIs and language features
 will likely change in the coming months.
 
 However, it's definitely ready for those brave of hearts who would like to be
 involved at this early stage, influence our roadmap and join us for the ride.
 
-We are hard at work to get it to a state where it is ready to be used for real
-world projects (let's call it **Beta**). To that end, we need to cover
-sufficient surface area across the various components.
+We are working hard to make this a great tool, but there's still a pretty good 
+chance you'll encounter missing pieces, rough edges, performance issues and even,
+god forbid, bugs 🐞. 
+
+Please don't hesitate to ping us on [Slack](https://t.winglang.io/slack) or 
+[file an issue](https://github.com/winglang/wing). We promise to do our best to
+respond quickly and help out.
 
 ## Roadmap
 
