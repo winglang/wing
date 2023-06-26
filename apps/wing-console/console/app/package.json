@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "preview": "node scripts/preview.mjs",
-    "dev": "tsup --watch",
+    "dev": "node scripts/dev.mjs",
     "compile": "tsup",
     "vitest": "vitest run --coverage --passWithNoTests",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
