@@ -1,6 +1,10 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
+import fs from "fs";
+import path from "path";
+import chalk from "chalk";
+
 import { compile, docs, test, checkForUpdates, run } from "./commands";
 import { satisfies } from "compare-versions";
 
@@ -23,6 +27,40 @@ function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
 
 async function main() {
   checkNodeVersion();
+
+  // Check if the flag file exists
+  const flagFilePath = path.join(__dirname, ".cli_initialized");
+  const isFirstRun = !fs.existsSync(flagFilePath);
+
+  // If it's the first run, display the disclaimer and create the flag file
+  if (isFirstRun) {
+    const disclaimer = `${chalk.hex("#2AD5C1")(
+      `🧪 This is an early pre-release of the Wing Programming Language (aka "alpha").\n` +
+        `\n` +
+        `We are working hard to make this a great tool, but there's still a pretty good\n` +
+        `chance you'll encounter missing pieces, rough edges, performance issues and even,\n` +
+        `god forbid, bugs 🐞.\n` +
+        `\n` +
+        `Please don't hesitate to ping us at ${chalk.blueBright.bold.underline(
+          "https://t.winglang.io/slack"
+        )} or file an issue at\n` +
+        `${chalk.blue.bold.underline(
+          "https://github.com/winglang/wing"
+        )}. We promise to do our best to respond quickly and help out.\n` +
+        `\n` +
+        `To help us identify issues early, we are collecting anonymous analytics.\n` +
+        `To turn this off, set ${chalk.yellowBright.bold("WING_CLI_DISABLE_ANALYTICS=1")}.\n` +
+        `For more information see ${chalk.blueBright.bold.underline(
+          "https://winglang.io/docs/analytics"
+        )}\n` +
+        `\n` +
+        `${chalk.redBright("(This message will self-destruct after the first run)")}`
+    )}`;
+
+    console.log(disclaimer);
+
+    fs.writeFileSync(flagFilePath, "");
+  }
 
   const program = new Command();
 
