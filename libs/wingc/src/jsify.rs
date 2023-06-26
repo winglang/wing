@@ -1541,18 +1541,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 					}
 
 					// now we need to verify that the component can be captured.
-					// (1) non-reassignable
 					// (2) capturable type (immutable/resource).
-
-					// if the variable is reassignable, bail out
-					if variable.reassignable {
-						report_diagnostic(Diagnostic {
-							message: format!("Cannot capture reassignable field '{curr}'"),
-							span: Some(curr.span.clone()),
-						});
-
-						return;
-					}
 
 					// if this type is not capturable, bail out
 					if !variable.type_.is_capturable() {
