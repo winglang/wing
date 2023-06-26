@@ -1,6 +1,7 @@
 ---
 title: Functions
-id: functions
+id: functions-example
 keywords: [Wing example]
 ---
+
 
