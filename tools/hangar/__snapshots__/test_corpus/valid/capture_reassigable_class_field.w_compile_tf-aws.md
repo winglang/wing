@@ -41,7 +41,7 @@ module.exports = function({ counter }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ kv, counter }) {
+module.exports = function({ kv, counter, util_Util }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -52,11 +52,24 @@ module.exports = function({ kv, counter }) {
     }
     async handle()  {
       (await kv.set("k",Object.freeze({"value":"v"})));
+      (await kv.set("k2",Object.freeze({"value":"v"})));
       (await kv.get("k"));
       (await kv.get("k"));
       (await kv.get("k2"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek("k")) === 2)'`)})(((await counter.peek("k")) === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek("k2")) === 1)'`)})(((await counter.peek("k2")) === 1))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await util_Util.waitUntil(async () =>  {
+        return ((await counter.peek("k")) === 2);
+      }
+      ))'`)})((await util_Util.waitUntil(async () =>  {
+        return ((await counter.peek("k")) === 2);
+      }
+      )))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await util_Util.waitUntil(async () =>  {
+        return ((await counter.peek("k2")) === 1);
+      }
+      ))'`)})((await util_Util.waitUntil(async () =>  {
+        return ((await counter.peek("k2")) === 1);
+      }
+      )))};
     }
   }
   return $Closure3;
@@ -75,10 +88,10 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async get(key)  {
+      (await this.onUpdateCallback(key));
       return (await this.bucket.getJson(key));
     }
     async set(key, value)  {
-      (await this.onUpdateCallback(key));
       (await this.bucket.putJson(key,value));
     }
   }
@@ -118,11 +131,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "root_cloudCounter_E0AC1263": {
+      "root_sasa_B91F09DA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "root_cloudCounter_E0AC1263"
+            "path": "root/Default/Default/sasa/Default",
+            "uniqueId": "root_sasa_B91F09DA"
           }
         },
         "attribute": [
@@ -133,7 +146,7 @@ module.exports = function({  }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c866f225"
+        "name": "wing-counter-sasa-c8fc4cc8"
       }
     },
     "aws_iam_role": {
@@ -155,7 +168,7 @@ module.exports = function({  }) {
             "uniqueId": "root_testmain_Handler_IamRolePolicy_184F2A46"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}\",\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}\",\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_sasa_B91F09DA.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_sasa_B91F09DA.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testmain_Handler_IamRole_0300CAA5.name}"
       }
     },
@@ -181,9 +194,9 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.bucket}",
+            "BUCKET_NAME_ce72b88b_IS_PUBLIC": "false",
+            "DYNAMODB_TABLE_NAME_5a275103": "${aws_dynamodb_table.root_sasa_B91F09DA.name}",
             "WING_FUNCTION_NAME": "Handler-c8d10438",
             "WING_TARGET": "tf-aws"
           }
@@ -212,41 +225,41 @@ module.exports = function({  }) {
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudBucket_4F3C4F53": {
+      "root_KeyValueStore_cloudBucket_B6A49C6A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/Default",
+            "uniqueId": "root_KeyValueStore_cloudBucket_B6A49C6A"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "cloud-bucket-c8a9ef69-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "root_KeyValueStore_cloudBucket_PublicAccessBlock_742F6520": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_KeyValueStore_cloudBucket_PublicAccessBlock_742F6520"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "root_KeyValueStore_cloudBucket_Encryption_FDD09906": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/Encryption",
+            "uniqueId": "root_KeyValueStore_cloudBucket_Encryption_FDD09906"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -281,14 +294,15 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class KeyValueStore extends $stdlib.std.Resource {
-      constructor(scope, id, store) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("get", "set");
-        this.bucket = store;
+        this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
@@ -356,10 +370,10 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("get")) {
           KeyValueStore._registerBindObject(this.bucket, host, ["getJson"]);
+          KeyValueStore._registerBindObject(this.onUpdateCallback, host, ["handle"]);
         }
         if (ops.includes("set")) {
           KeyValueStore._registerBindObject(this.bucket, host, ["putJson"]);
-          KeyValueStore._registerBindObject(this.onUpdateCallback, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
@@ -410,10 +424,12 @@ class $Root extends $stdlib.std.Resource {
         const self_client_path = "././inflight.$Closure3.js";
         const kv_client = context._lift(kv);
         const counter_client = context._lift(counter);
+        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             kv: ${kv_client},
             counter: ${counter_client},
+            util_Util: ${util_UtilClient.text},
           })
         `);
       }
@@ -440,8 +456,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const kv = new KeyValueStore(this,"KeyValueStore",this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket"));
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+    const kv = new KeyValueStore(this,"KeyValueStore");
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"sasa");
     (kv.onUpdate(new $Closure2(this,"$Closure2")));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:main",new $Closure3(this,"$Closure3"));
   }
