@@ -9,12 +9,15 @@ hide_title: true
 
 # Welcome Wingnuts! :wave: 
 
-:::caution This is Alpha
+:::note This is a pre-release 🧪
 
-Wing is in its very early stages of development and not recommended for
-production use. Many features are still missing, and APIs will dramatically
-evolve in the coming months. We are excited for anyone to take part in
-influencing the direction of every part of this project.
+We are working hard to make this a great tool, but there's still a pretty good 
+chance you'll encounter missing pieces, rough edges, performance issues and even,
+god forbid, bugs 🐞. 
+
+Please don't hesitate to ping us on [Slack](https://t.winglang.io/slack) or 
+[file an issue](https://github.com/winglang/wing). We promise to do our best to
+respond quickly and help out.
 
 Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
 more information about stability and roadmap 👷‍♀️ 
