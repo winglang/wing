@@ -1359,7 +1359,7 @@ impl<'a> JSifier<'a> {
 				.filter(|(_, kind, _)| {
 					let var = kind.as_variable().unwrap();
 					// We capture preflight non-reassignable fields
-					var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
+					var.phase != Phase::Inflight && var.type_.is_capturable()
 				})
 				.map(|(name, ..)| name)
 				.collect_vec()
