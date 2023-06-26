@@ -43,7 +43,7 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const myfunc =  (x) =>  {
-      {console.log(`${x}`)};
+      {console.log(String.raw({ raw: ["", ""] }, x))};
       x = (x + 1);
       if ((x > 3.14)) {
         return;
@@ -53,7 +53,7 @@ class $Root extends $stdlib.std.Resource {
     ;
     (myfunc(1));
     (( (x) =>  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 1)'`)})((x === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == 1")})((x === 1))};
     }
     )(1));
   }

@@ -12,10 +12,10 @@ module.exports = function({ api_DELETE }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.method === api_DELETE)'`)})((req.method === api_DELETE))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.query)["all"] === "true")'`)})(((req.query)["all"] === "true"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.query)["page"] === "6")'`)})(((req.query)["page"] === "6"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.path === "/path")'`)})((req.path === "/path"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_DELETE")})((req.method === api_DELETE))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})(((req.query)["all"] === "true"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"page\") == \"6\"")})(((req.query)["page"] === "6"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
       return {
       "status": 200,
       "body": (req.query)["page"],}
@@ -39,15 +39,15 @@ module.exports = function({ api, http_DELETE, http_Util }) {
     async $inflight_init()  {
     }
     async handle()  {
-      const url = `${api.url}/path?all=true&page=6`;
+      const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, api.url);
       const response = (await http_Util.delete(url));
       const fetchResponse = (await http_Util.fetch(url,Object.freeze({"method":http_DELETE})));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.body === "6")'`)})((response.body === "6"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.status === 200)'`)})((response.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.url === url)'`)})((response.url === url))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.body === "6")'`)})((fetchResponse.body === "6"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.status === 200)'`)})((fetchResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.url === url)'`)})((fetchResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == \"6\"")})((response.body === "6"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == \"6\"")})((fetchResponse.body === "6"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
     }
   }
   return $Closure2;

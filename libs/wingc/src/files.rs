@@ -35,6 +35,7 @@ impl From<FilesError> for Diagnostic {
 
 impl Error for FilesError {}
 
+#[derive(Default)]
 pub struct Files {
 	data: HashMap<PathBuf, String>,
 }
@@ -51,6 +52,10 @@ impl Files {
 		}
 		self.data.insert(path, content);
 		Ok(())
+	}
+
+	pub fn get_file<S: AsRef<Path>>(&self, path: S) -> Option<&String> {
+		self.data.get(path.as_ref())
 	}
 
 	pub fn emit_files(&self, out_dir: &Path) -> Result<(), FilesError> {

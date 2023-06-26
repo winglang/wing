@@ -43,7 +43,7 @@ const projen = require("projen");
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(projen.LogLevel.OFF !== projen.LogLevel.VERBOSE)'`)})((projen.LogLevel.OFF !== projen.LogLevel.VERBOSE))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: projen.LogLevel.OFF != projen.LogLevel.VERBOSE")})((projen.LogLevel.OFF !== projen.LogLevel.VERBOSE))};
   }
 }
 class $App extends $AppBase {

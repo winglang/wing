@@ -12,13 +12,13 @@ module.exports = function({ _id, user, api_PUT, body, std_Json }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      const path = `/path/${_id}/nn/${user}`;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.method === api_PUT)'`)})((req.method === api_PUT))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.vars)["id"] === _id)'`)})(((req.vars)["id"] === _id))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.vars)["user"] === user)'`)})(((req.vars)["user"] === user))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.path === path)'`)})((req.path === path))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]))'`)})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.headers)["content-type"] === "application/json")'`)})(((req.headers)["content-type"] === "application/json"))};
+      const path = String.raw({ raw: ["/path/", "/nn/", ""] }, _id, user);
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PUT")})((req.method === api_PUT))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})(((req.vars)["id"] === _id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"user\") == user")})(((req.vars)["user"] === user))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === path))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
       "body": (req.vars)["id"],}
@@ -42,7 +42,7 @@ module.exports = function({ api, _id, user, body, http_PUT, http_Util, std_Json 
     async $inflight_init()  {
     }
     async handle()  {
-      const url = `${api.url}/path/${_id}/nn/${user}`;
+      const url = String.raw({ raw: ["", "/path/", "/nn/", ""] }, api.url, _id, user);
       const response = (await http_Util.put(url,{
       "headers": Object.freeze({"content-type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
@@ -52,12 +52,12 @@ module.exports = function({ api, _id, user, body, http_PUT, http_Util, std_Json 
       "headers": Object.freeze({"content-type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
       ));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.body === _id)'`)})((response.body === _id))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.status === 200)'`)})((response.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.url === url)'`)})((response.url === url))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.body === _id)'`)})((fetchResponse.body === _id))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.status === 200)'`)})((fetchResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.url === url)'`)})((fetchResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((response.body === _id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == _id")})((fetchResponse.body === _id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
     }
   }
   return $Closure2;
