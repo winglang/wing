@@ -358,11 +358,6 @@ export const ElkMap = <T extends unknown = undefined>({
       const initialY =
         initialX > (firstBend?.x || 0) ? point.endPoint.y : point.startPoint.y;
 
-      console.log("initialX > point?", initialX, point.startPoint.x);
-
-      console.log("y", point.startPoint.y, point.endPoint.y);
-      console.log("initialY", initialY);
-
       let position = {
         x: initialX,
         y: initialY + arrowOffset,
