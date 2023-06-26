@@ -1292,11 +1292,11 @@ Duration <DURATION>
 `;
 
 exports[`panic.w 1`] = `
-"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributing/bugs
   --> ../../../examples/tests/invalid/panic.w:6:1
   |
 6 | 😱;
-  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributing/bugs
 
 
  
