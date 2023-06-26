@@ -195,11 +195,11 @@ keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 `;
 
-const docsPath = "../../docs/04-standard-library/90-api-reference.md";
+const docsPath = "../../docs/docs/04-standard-library/90-api-reference.md";
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
-// copy resource docs from src/cloud to docs
+// copy resource docs from src/cloud to docs/docs
 docgen.exec(
   `cp -r src/cloud/*.md ../../docs/docs/04-standard-library/01-cloud/`
 );

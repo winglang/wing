@@ -130,10 +130,10 @@
           "exec": "jsii-docgen -o API.md -l wing"
         },
         {
-          "exec": "echo '---\ntitle: API reference\nid: sdk\ndescription: Wing standard library API reference\nkeywords: [Wing sdk, sdk, Wing API Reference]\n---\n' > ../../docs/04-standard-library/90-api-reference.md"
+          "exec": "echo '---\ntitle: API reference\nid: sdk\ndescription: Wing standard library API reference\nkeywords: [Wing sdk, sdk, Wing API Reference]\n---\n' > ../../docs/docs/04-standard-library/90-api-reference.md"
         },
         {
-          "exec": "cat API.md >> ../../docs/04-standard-library/90-api-reference.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/90-api-reference.md"
         }
       ]
     },
