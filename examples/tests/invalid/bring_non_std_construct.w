@@ -14,5 +14,5 @@ class Foo {
                                                                                   //^ Cannot set id of non-standard preflight class "S3Backend" using `as`
     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: "foo", key: "bar"}) in this;
                                                                                   //^ Cannot set scope of non-standard preflight class "S3Backend" using `in`
-                                                                                }
+  }
 }
