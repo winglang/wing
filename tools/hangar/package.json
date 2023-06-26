@@ -12,6 +12,7 @@
   "author": "Monada",
   "license": "Apache-2.0",
   "devDependencies": {
+    "cdktf": "^0.17.0",
     "execa": "^7.1.1",
     "npm": "^9.6.4",
     "tsx": "^3.12.6",
