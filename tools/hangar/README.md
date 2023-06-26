@@ -1,6 +1,6 @@
 # Hangar - Wing Toolchain Test Suite
 
-[How to run E2E tests?](https://docs.winglang.io/contributors/development#-how-do-i-run-tests)
+[How to run E2E tests?](https://docs.winglang.io/contributing/development#-how-do-i-run-tests)
 
 ### Ideas for later
 

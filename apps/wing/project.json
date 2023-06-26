@@ -1,7 +1,7 @@
 {
   "name": "winglang",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["wingc", "sdk", "compiler"],
+  "implicitDependencies": ["wingc", "sdk", "compiler", "console-app"],
   "targets": {
     "build": {
       "dependsOn": ["^build"],

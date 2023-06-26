@@ -20,6 +20,12 @@ export const snapshotDir = path.join(hangarDir, "__snapshots__");
 
 export const targetWingSpec =
   process.env.HANGAR_WING_SPEC ?? `file:${path.join(repoRoot, `apps/wing`)}`;
+export const targetWingConsoleAppSpec =
+  process.env.HANGAR_WINGCONSOLE_APP_SPEC ??
+  `file:${path.join(repoRoot, `apps/wing-console/console/app`)}`;
+export const targetWingConsoleServerSpec =
+  process.env.HANGAR_WINGCONSOLE_SERVER_SPEC ??
+  `file:${path.join(repoRoot, `apps/wing-console/console/server`)}`;
 export const targetWingCompilerSpec =
   process.env.HANGAR_WINGCOMPILER_SPEC ??
   `file:${path.join(repoRoot, `libs/wingcompiler`)}`;

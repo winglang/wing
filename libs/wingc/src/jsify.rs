@@ -346,7 +346,7 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
-        Literal::Nil => "undefined".to_string(),
+				Literal::Nil => "undefined".to_string(),
 				Literal::String(s) => s.to_string(),
 				Literal::InterpolatedString(s) => {
 					let comma_separated_statics = s
@@ -365,15 +365,15 @@ impl<'a> JSifier<'a> {
 							InterpolatedStringPart::Static(_) => None,
 							InterpolatedStringPart::Expr(e) => Some(match *self.get_expr_type(e) {
 								Type::Json | Type::MutJson => {
-									format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, ctx))
+									format!("((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))({})", self.jsify_expression(e, ctx))
 								}
-								_ => format!("${{{}}}", self.jsify_expression(e, ctx)),
+								_ => self.jsify_expression(e, ctx),
 							})
 						})
 						.collect::<Vec<String>>()
 						.join(", ");
 					format!("String.raw({{ raw: [{}] }}, {})", comma_separated_statics, comma_separated_exprs)
-			},
+				},
 				Literal::Number(n) => format!("{}", n),
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
@@ -1382,7 +1382,7 @@ impl<'a> JSifier<'a> {
 				.filter(|(_, kind, _)| {
 					let var = kind.as_variable().unwrap();
 					// We capture preflight non-reassignable fields
-					var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
+					var.phase != Phase::Inflight && var.type_.is_capturable()
 				})
 				.map(|(name, ..)| name)
 				.collect_vec()
@@ -1564,18 +1564,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 					}
 
 					// now we need to verify that the component can be captured.
-					// (1) non-reassignable
 					// (2) capturable type (immutable/resource).
-
-					// if the variable is reassignable, bail out
-					if variable.reassignable {
-						report_diagnostic(Diagnostic {
-							message: format!("Cannot capture reassignable field '{curr}'"),
-							span: Some(curr.span.clone()),
-						});
-
-						return;
-					}
 
 					// if this type is not capturable, bail out
 					if !variable.type_.is_capturable() {
@@ -1718,19 +1707,28 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let lookup = env.lookup_ext(&x, Some(self.statement_index));
 
 				// if the reference is already defined later in this scope, skip it
-				if let LookupResult::DefinedLater = lookup {
+				if matches!(lookup, LookupResult::DefinedLater) {
 					return vec![];
 				}
 
+				let id_name = x.name.clone();
+				let id_span = x.span.clone();
+
 				let LookupResult::Found(kind, _) = lookup else {
 					return vec![Component {
-						text: x.name.clone(),
-						span: x.span.clone(),
+						text: id_name,
+						span: id_span,
 						kind: ComponentKind::Unsupported,
 					}];
 				};
 
-				let var = kind.as_variable().expect("variable");
+				let Some(var) = kind.as_variable() else {
+					return vec![Component {
+						text: id_name,
+						span: id_span,
+						kind: ComponentKind::Unsupported,
+					}];
+				};
 
 				// If the reference isn't a preflight (lifted) variable then skip it
 				if var.phase != Phase::Preflight {
@@ -1738,8 +1736,8 @@ impl<'a> FieldReferenceVisitor<'a> {
 				}
 
 				return vec![Component {
-					text: x.name.clone(),
-					span: x.span.clone(),
+					text: id_name,
+					span: id_span,
 					kind: ComponentKind::Member(var),
 				}];
 			}
@@ -1912,7 +1910,9 @@ impl<'a> CaptureScanner<'a> {
 
 				self.captured_vars.insert(fullname);
 			}
-			SymbolKind::Namespace(_) => todo!(),
+			// Namespaces are not captured as they are not actually valid references
+			// The existence of this reference will have already caused an error in the type checker
+			SymbolKind::Namespace(_) => {}
 		}
 	}
 }
@@ -2018,17 +2018,37 @@ fn lookup_span(span: &WingSpan, source_path: &Path) -> String {
 fn escape_javascript_string(s: &str) -> String {
 	let mut result = String::new();
 
+	// escape all escapable characters -- see the section "Escape sequences" in
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#literals
 	for c in s.chars() {
 		match c {
+			'\0' => result.push_str("\\0"),
+			'\'' => result.push_str("\\'"),
 			'"' => result.push_str("\\\""),
+			'\\' => result.push_str("\\\\"),
 			'\n' => result.push_str("\\n"),
 			'\r' => result.push_str("\\r"),
 			'\t' => result.push_str("\\t"),
-			'\'' => result.push_str("\\'"),
-			'\\' => result.push_str("\\\\"),
 			_ => result.push(c),
 		}
 	}
 
 	result
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn test_escape_javascript_string() {
+		assert_eq!(escape_javascript_string("hello"), String::from("hello"));
+		assert_eq!(escape_javascript_string("hello\nworld"), String::from("hello\\nworld"));
+		assert_eq!(escape_javascript_string("hello\rworld"), String::from("hello\\rworld"));
+		assert_eq!(escape_javascript_string("hello\tworld"), String::from("hello\\tworld"));
+		assert_eq!(escape_javascript_string("hello\\world"), String::from("hello\\\\world"));
+		assert_eq!(escape_javascript_string("hello'world"), String::from("hello\\'world"));
+		assert_eq!(escape_javascript_string("hello\"world"), String::from("hello\\\"world"));
+		assert_eq!(escape_javascript_string("hello\0world"), String::from("hello\\0world"));
+	}
 }
