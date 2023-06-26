@@ -21,7 +21,7 @@ jobs:
   mutate:
     runs-on: ubuntu-latest
     # Run if the workflow run is a pull request
-    if: github.event.workflow_run.conclusion == 'failure' && ((github.action_repository == 'winglang/wing' && github.event.workflow_run.head_branch != 'main') || github.repository != github.action_repository)
+    if: github.event.workflow_run.conclusion == 'failure' && ((github.event.workflow_run.repository.full_name == 'winglang/wing' && github.event.workflow_run.head_branch != 'main') || github.event.workflow_run.repository.full_name != 'winglang/wing')
     steps:
       - name: Download artifacts
         id: download-artifacts
