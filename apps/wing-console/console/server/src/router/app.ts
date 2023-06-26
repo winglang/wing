@@ -1,8 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
-import { ConstructTree } from "@winglang/sdk/lib/core";
-import { ConstructInfo, DisplayInfo } from "@winglang/sdk/lib/core/tree";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
@@ -385,13 +383,10 @@ export const createAppRouter = () => {
             input?.showTests,
           ),
         ];
-        const edges = uniqby(
-          createMapEdgeFromConstructTreeNode(
-            shakedTree,
-            nodeMap,
-            input?.showTests,
-          ),
-          (edge) => edge.id,
+        const edges = createMapEdgeFromConstructTreeNode(
+          shakedTree,
+          nodeMap,
+          input?.showTests,
         );
 
         return {
@@ -484,6 +479,7 @@ function createMapNodeFromConstructTreeNode(
 
 export interface MapEdge {
   id: string;
+  label?: string;
   source: string;
   target: string;
 }
@@ -514,6 +510,7 @@ function createMapEdgeFromConstructTreeNode(
       ?.map((connection: NodeConnection) => {
         return {
           id: `${connection.resource} -> ${node.path}`,
+          label: connection.relationship,
           source: connection.resource,
           target: node.path,
         };
