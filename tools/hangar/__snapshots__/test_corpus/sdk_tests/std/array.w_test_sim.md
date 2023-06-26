@@ -17,7 +17,7 @@ pass ─ array.wsim » root/env8/test:join()
 pass ─ array.wsim » root/env9/test:joinWithDefaultSeparator()
  
  
-Tests 3 passed (3)
+Tests 13 passed (13)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
