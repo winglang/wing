@@ -36,6 +36,7 @@ export async function test(entrypoints: string[], options: TestOptions) {
       const singleTestResults: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
       results.push({ testName, results: singleTestResults ?? [] });
     } catch (error) {
+      console.log((error as Error).message);
       results.push({
         testName: generateTestName(entrypoint),
         results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
