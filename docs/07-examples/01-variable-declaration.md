@@ -15,3 +15,16 @@ x = 77; // ERROR: x is non reassignable
 let var y = "hello";
 y = "world"; // OK (y is reassignable)
 ```
+
+### Scopes
+```ts playground
+
+let s = "parent";
+log(s); // prints parent
+if true {
+  let s = "inner";
+  log(s); // prints inner
+}
+log(s); // prints parent
+
+```
