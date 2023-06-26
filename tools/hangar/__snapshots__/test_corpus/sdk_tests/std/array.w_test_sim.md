@@ -7,7 +7,8 @@ pass ─ array.wsim » root/env1/test:at()
 pass ─ array.wsim » root/env2/test:push()
  
  
-Tests 1 passed (1)
+Tests 3 passed (3)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

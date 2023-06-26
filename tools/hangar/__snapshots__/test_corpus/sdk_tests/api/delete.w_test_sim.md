@@ -6,6 +6,7 @@ pass ─ delete.wsim » root/env0/test:http.delete and http.fetch can preform a 
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

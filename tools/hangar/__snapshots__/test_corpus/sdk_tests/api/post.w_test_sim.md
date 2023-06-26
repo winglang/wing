@@ -6,6 +6,7 @@ pass ─ post.wsim » root/env0/test:http.post and http.fetch can preform a call
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

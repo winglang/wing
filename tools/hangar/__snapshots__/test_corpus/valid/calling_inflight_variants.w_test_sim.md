@@ -6,6 +6,7 @@ pass ─ calling_inflight_variants.wsim » root/env0/test:calling different type
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

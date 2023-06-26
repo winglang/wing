@@ -6,6 +6,7 @@ pass ─ put_json.wsim » root/env0/test:putJson
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

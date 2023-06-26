@@ -6,6 +6,7 @@ pass ─ public_url.wsim » root/env0/test:publicUrl
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

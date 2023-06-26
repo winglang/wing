@@ -6,6 +6,7 @@ pass ─ try_delete.wsim » root/env0/test:tryDelete
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

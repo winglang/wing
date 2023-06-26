@@ -6,6 +6,7 @@ pass ─ inflight_class_structural_interace_handler.wsim » root/env0/test:struc
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

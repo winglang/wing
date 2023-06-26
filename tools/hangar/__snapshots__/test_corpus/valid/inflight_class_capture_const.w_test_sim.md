@@ -6,6 +6,7 @@ pass ─ inflight_class_capture_const.wsim » root/env0/test:inflight class capt
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

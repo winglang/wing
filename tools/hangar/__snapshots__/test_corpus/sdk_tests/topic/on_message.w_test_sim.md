@@ -6,6 +6,7 @@ pass ─ on_message.wsim » root/env0/test:onMessage
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

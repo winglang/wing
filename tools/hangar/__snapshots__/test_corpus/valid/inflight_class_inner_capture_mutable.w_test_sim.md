@@ -6,6 +6,7 @@ pass ─ inflight_class_inner_capture_mutable.wsim » root/env0/test:inner infli
  
  
 Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

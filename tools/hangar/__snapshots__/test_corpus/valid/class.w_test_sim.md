@@ -8,7 +8,8 @@ pass ─ class.wsim » root/env2/test:devived class init body happens after supe
 pass ─ class.wsim » root/env3/test:inflight super constructor                 
  
  
-Tests 1 passed (1)
+Tests 4 passed (4)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

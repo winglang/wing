@@ -9,7 +9,8 @@ pass ─ wait-until.wsim » root/env3/test:setting props
 pass ─ wait-until.wsim » root/env4/test:throwing exception from predicate should throw immediately
  
  
-Tests 1 passed (1)
+Tests 5 passed (5)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 
