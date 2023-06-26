@@ -124,7 +124,7 @@
       "description": "Generate API.md from .jsii manifest",
       "steps": [
         {
-          "exec": "cp -r src/cloud/*.md ../../docs/04-standard-library/01-cloud/"
+          "exec": "cp -r src/cloud/*.md ../../docs/docs/04-standard-library/01-cloud/"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing"

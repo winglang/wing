@@ -200,7 +200,9 @@ const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
 // copy resource docs from src/cloud to docs
-docgen.exec(`cp -r src/cloud/*.md ../../docs/04-standard-library/01-cloud/`);
+docgen.exec(
+  `cp -r src/cloud/*.md ../../docs/docs/04-standard-library/01-cloud/`
+);
 
 docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
