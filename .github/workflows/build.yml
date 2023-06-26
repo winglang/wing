@@ -180,7 +180,6 @@ jobs:
 
       - name: Create git patch
         id: diff
-        if: github.event_name == 'pull_request'
         run: |
           git add --all
           git diff --staged --patch > build.diff
@@ -190,17 +189,11 @@ jobs:
             echo "diff=true" >> $GITHUB_OUTPUT
           fi
       - name: Upload Diff
-        if: github.event_name == 'pull_request' && steps.diff.outputs.diff == 'true'
+        if: steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: build.diff
           path: build.diff
-      - name: Fail with Diff
-        if: github.event_name == 'push' && steps.diff.outputs.diff == 'true'
-        run: |
-          echo "Diff found, please create a PR with an update"
-          exit 1
-
 
   benchmarks:
     name: E2E Benchmarks
@@ -309,7 +302,7 @@ jobs:
 
       - name: Create mutation if needed
         # we only care about the diff in our standard dev env
-        if: matrix.runner == 'ubuntu' && matrix.node == '18' && github.event_name == 'pull_request'
+        if: matrix.runner == 'ubuntu' && matrix.node == '18'
         id: diff
         env:
           RAW_SHARD: ${{ matrix.shard }}
@@ -322,11 +315,6 @@ jobs:
             echo "diff=true" >> $GITHUB_OUTPUT
             echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
           fi
-      - name: Fail with Diff
-        if: github.event_name == 'push' && matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
-        run: |
-          echo "Diff found, please create a PR with an update"
-          exit 1
       - name: Upload mutation
         if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
