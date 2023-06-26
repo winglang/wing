@@ -178,6 +178,23 @@ jobs:
       - name: Test
         run: npm run test:ci
 
+      - name: Create git patch
+        id: diff
+        run: |
+          git add --all
+          git diff --staged --patch > build.diff
+          if [ -s build.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat build.diff
+            echo "diff=true" >> $GITHUB_OUTPUT
+          fi
+      - name: Upload Diff
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: build.diff
+          path: build.diff
+
   benchmarks:
     name: E2E Benchmarks
     runs-on: ubuntu-latest
@@ -249,17 +266,19 @@ jobs:
             full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:
-      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/target/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/target/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/target/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/target/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/target/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
+        with:
+          path: target
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -279,7 +298,29 @@ jobs:
         working-directory: tools/hangar
         run: |
           npm run test:generate
-          npm run test -- --shard=${{ matrix.shard }}
+          npm run test -- --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
+
+      - name: Create mutation if needed
+        # we only care about the diff in our standard dev env
+        if: matrix.runner == 'ubuntu' && matrix.node == '18'
+        id: diff
+        env:
+          RAW_SHARD: ${{ matrix.shard }}
+        run: |
+          SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
+          DIFF_NAME="e2e-$SHARD.diff"
+          git add --all
+          git diff --staged --patch > $DIFF_NAME
+          if [ -s $DIFF_NAME ]; then
+            echo "diff=true" >> $GITHUB_OUTPUT
+            echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
+          fi
+      - name: Upload mutation
+        if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.diff.outputs.diff_name }}
+          path: ${{ steps.diff.outputs.diff_name }}
 
   quality-gate:
     name: Quality Gate
@@ -290,6 +331,19 @@ jobs:
       - benchmarks
       - unit-tests
     steps:
+      - name: Download patches
+        uses: actions/download-artifact@v3
+      - name: Check patches
+        run: |
+          PATCH_COUNT=0
+          for f in $(find ./*.diff/*.diff); do
+            PATCH_COUNT=$((PATCH_COUNT + 1))
+            cat $f
+          done
+          if [ $PATCH_COUNT -gt 0 ]; then
+            echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
+            exit 1
+          fi
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
 
@@ -302,7 +356,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
