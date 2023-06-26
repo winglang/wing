@@ -1,9 +1,9 @@
 import { Code, InflightClient } from "../core";
 
 /**
- * Base class for Json
+ * Immutable Json
  */
-class BaseJson {
+export class Json {
   /**
    * @internal
    */
@@ -80,92 +80,6 @@ class BaseJson {
     throw new Error("Macro");
   }
 
-  /**
-   * Checks if a Json object has a given key
-   *
-   * @macro ((args) => { return args[0].hasOwnProperty(args[1]); })([$args$])
-   *
-   * @param json The json object to inspect
-   * @param key The key to check
-   * @returns Boolean value corresponding to whether the key exists
-   */
-  public static has(json: Json | MutJson, key: string): boolean {
-    json;
-    key;
-    throw new Error("Macro");
-  }
-
-  /**
-   * Convert Json element to string if possible.
-   *
-   * @macro ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })($self$)
-   *
-   * @returns a string.
-   */
-  public asStr(): string {
-    throw new Error("Macro");
-  }
-
-  /**
-   * Convert Json element to string if possible.
-   *
-   * @macro ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
-   *
-   * @returns a string.
-   */
-  public tryAsStr(): string | undefined {
-    throw new Error("Macro");
-  }
-
-  /**
-   * Convert Json element to number if possible.
-   *
-   * @macro ((arg) => { if (typeof arg !== "number") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a number")}; return JSON.parse(JSON.stringify(arg)) })($self$)
-   *
-   * @returns a string.
-   */
-  public asNum(): number {
-    throw new Error("Macro");
-  }
-
-  /**
-   * Convert Json element to string if possible.
-   *
-   * @macro ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
-   *
-   * @returns a string.
-   */
-  public tryAsNum(): number | undefined {
-    throw new Error("Macro");
-  }
-
-  /**
-   * Convert Json element to number if possible.
-   *
-   * @macro ((arg) => { if (typeof arg !== "boolean") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a boolean")}; return JSON.parse(JSON.stringify(arg)) })($self$)
-   *
-   * @returns a string.
-   */
-  public asBool(): boolean {
-    throw new Error("Macro");
-  }
-
-  /**
-   * Convert Json element to boolean if possible.
-   *
-   * @macro ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
-   *
-   * @returns a string.
-   */
-  public tryAsBool(): boolean | undefined {
-    throw new Error("Macro");
-  }
-}
-
-/**
- * Immutable Json
- */
-export class Json extends BaseJson {
   /**
    * Returns the values from the Json.
    *
@@ -271,12 +185,85 @@ export class Json extends BaseJson {
     index;
     throw new Error("Macro");
   }
+
+  /**
+   * Convert Json element to string if possible.
+   *
+   * @macro ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   *
+   * @returns a string.
+   */
+  public asStr(): string {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to string if possible.
+   *
+   * @macro ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   *
+   * @returns a string.
+   */
+  public tryAsStr(): string | undefined {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to number if possible.
+   *
+   * @macro ((arg) => { if (typeof arg !== "number") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a number")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   *
+   * @returns a string.
+   */
+  public asNum(): number {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to string if possible.
+   *
+   * @macro ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   *
+   * @returns a string.
+   */
+  public tryAsNum(): number | undefined {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to number if possible.
+   *
+   * @macro ((arg) => { if (typeof arg !== "boolean") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a boolean")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   *
+   * @returns a string.
+   */
+  public asBool(): boolean {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to boolean if possible.
+   *
+   * @macro ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   *
+   * @returns a string.
+   */
+  public tryAsBool(): boolean | undefined {
+    throw new Error("Macro");
+  }
 }
 
 /**
  * Mutable Json
  */
-export class MutJson extends BaseJson {
+export class MutJson {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Returns a specified element from the Json.
    *
@@ -353,6 +340,72 @@ export class MutJson extends BaseJson {
    */
   public tryGetAt(index: number): MutJson | undefined {
     index;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to string if possible.
+   *
+   * @macro ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   *
+   * @returns a string.
+   */
+  public asStr(): string {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to string if possible.
+   *
+   * @macro ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   *
+   * @returns a string.
+   */
+  public tryAsStr(): string | undefined {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to number if possible.
+   *
+   * @macro ((arg) => { if (typeof arg !== "number") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a number")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   *
+   * @returns a string.
+   */
+  public asNum(): number {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to string if possible.
+   *
+   * @macro ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   *
+   * @returns a string.
+   */
+  public tryAsNum(): number | undefined {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to number if possible.
+   *
+   * @macro ((arg) => { if (typeof arg !== "boolean") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a boolean")}; return JSON.parse(JSON.stringify(arg)) })($self$)
+   *
+   * @returns a string.
+   */
+  public asBool(): boolean {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Convert Json element to boolean if possible.
+   *
+   * @macro ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })($self$)
+   *
+   * @returns a string.
+   */
+  public tryAsBool(): boolean | undefined {
     throw new Error("Macro");
   }
 }
