@@ -658,6 +658,7 @@ impl<'a> JsiiImporter<'a> {
 			type_parameters: type_params,
 			phase: class_phase,
 			docs: Docs::from(&jsii_class.docs),
+			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);
@@ -667,23 +668,39 @@ impl<'a> JsiiImporter<'a> {
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
-
 		if let Some(initializer) = jsii_initializer {
 			let mut fn_params = vec![];
 			if let Some(params) = &initializer.parameters {
-				for (i, param) in params.iter().enumerate() {
-					// If this is a resource then skip scope and id arguments
-					// TODO hack - skip this check if the resource's name is "App"
-					// https://github.com/winglang/wing/issues/1485
-					if class_phase == Phase::Preflight && type_name != "App" {
-						if i == 0 {
-							assert!(param.name == "scope");
-							continue;
-						} else if i == 1 {
-							assert!(param.name == "id");
-							continue;
+				let mut params_iter = params.iter();
+
+				// If this is a preflight class then we need to verify its first two args (scope and id):
+				// If both exist and are of a preflight class type and string type respectively then this is a standard constrcut type
+				// otherwise we need to mark it as having non standard constructor args meaning we can't use the `as` `in` keywords
+				// when instantiating it.
+				if class_phase == Phase::Preflight {
+					let scope_arg = params.get(0);
+					let id_arg = params.get(1);
+					if let (Some(scope_arg), Some(id_arg)) = (scope_arg, id_arg) {
+						let scope_arg_type = self.type_ref_to_wing_type(&scope_arg.type_);
+						let id_arg_type = self.type_ref_to_wing_type(&id_arg.type_);
+						// If scope is a preflight class, id is a string and both are non variadic non optionals types then this is a standard construct type
+						if scope_arg.name == "scope"
+							&& id_arg.name == "id"
+							&& scope_arg_type.is_preflight_class()
+							&& id_arg_type.is_string()
+							&& !scope_arg.variadic.unwrap_or(false)
+							&& !scope_arg.optional.unwrap_or(false)
+							&& !id_arg.variadic.unwrap_or(false)
+							&& !id_arg.optional.unwrap_or(false)
+						{
+							new_type.as_class_mut().unwrap().std_construct_args = true;
+							params_iter.next();
+							params_iter.next();
 						}
 					}
+				}
+
+				for param in params_iter {
 					fn_params.push(FunctionParameter {
 						name: param.name.clone(),
 						typeref: self.parameter_to_wing_type(&param),

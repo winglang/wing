@@ -3,8 +3,8 @@ import * as fs from "fs";
 
 export const repoRoot = path.resolve(__dirname, "../../..");
 export const testDir = path.join(repoRoot, "examples/tests");
-export const pluginsDir = path.join(repoRoot, "examples/plugins");
 export const validTestDir = path.join(testDir, "valid");
+export const pluginsDir = path.join(validTestDir, "plugins");
 export const sdkTests = path.join(testDir, "sdk_tests");
 export const invalidTestDir = path.join(testDir, "invalid");
 export const benchmarksTestDir = path.join(validTestDir, "benchmarks");

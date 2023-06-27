@@ -12,7 +12,7 @@ module.exports = function({ payloadWithoutOptions, payloadWithBucket }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((payloadWithoutOptions.b) != null) === false)'`)})((((payloadWithoutOptions.b) != null) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((payloadWithoutOptions.b) != null) === false))};
       if (((payloadWithBucket.c) != null)) {
         (await payloadWithBucket.c.put("x.txt","something"));
       }
@@ -441,14 +441,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const x = 4;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((x) != null) === true)'`)})((((x) != null) === true))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((!((x) != null)) === false)'`)})(((!((x) != null)) === false))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((x ?? 5) === 4)'`)})(((x ?? 5) === 4))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x? == true")})((((x) != null) === true))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: !x? == false")})(((!((x) != null)) === false))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x ?? 5 == 4")})(((x ?? 5) === 4))};
     const y = (x ?? 5);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 4)'`)})((y === 4))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y == 4")})((y === 4))};
     const optionalSup = new Super(this,"Super");
     const s = (optionalSup ?? new Sub(this,"Sub"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.name === "Super")'`)})((s.name === "Super"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((s.name === "Super"))};
     let name = {
     "first": "John",
     "last": "Doe",}
@@ -457,7 +457,7 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = name;
       if ($IF_LET_VALUE != undefined) {
         const n = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(n.first === "John")'`)})((n.first === "John"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: n.first == \"John\"")})((n.first === "John"))};
       }
     }
     name = undefined;
@@ -465,10 +465,10 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = name;
       if ($IF_LET_VALUE != undefined) {
         const n = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
       }
     }
     const tryParseName =  (fullName) =>  {
@@ -486,15 +486,15 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = (tryParseName("Good Name"));
       if ($IF_LET_VALUE != undefined) {
         const parsedName = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "Good")'`)})((parsedName.first === "Good"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"Good\"")})((parsedName.first === "Good"))};
         {
           const $IF_LET_VALUE = parsedName.last;
           if ($IF_LET_VALUE != undefined) {
             const lastName = $IF_LET_VALUE;
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(lastName === "Name")'`)})((lastName === "Name"))};
+            {((cond) => {if (!cond) throw new Error("assertion failed: lastName == \"Name\"")})((lastName === "Name"))};
           }
           else {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
       }
@@ -503,12 +503,12 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = (tryParseName("BadName"));
       if ($IF_LET_VALUE != undefined) {
         const parsedName = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "BadName")'`)})((parsedName.first === "BadName"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((parsedName.first === "BadName"))};
         {
           const $IF_LET_VALUE = parsedName.last;
           if ($IF_LET_VALUE != undefined) {
             const lastName = $IF_LET_VALUE;
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
       }
@@ -518,10 +518,10 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = falsy;
       if ($IF_LET_VALUE != undefined) {
         const f = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(f === false)'`)})((f === false))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((f === false))};
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
     const shadow = "root";
@@ -529,16 +529,16 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = shadow;
       if ($IF_LET_VALUE != undefined) {
         const shadow = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(shadow === "root")'`)})((shadow === "root"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: shadow == \"root\"")})((shadow === "root"))};
         const shadow1 = "nested";
         {
           const $IF_LET_VALUE = shadow1;
           if ($IF_LET_VALUE != undefined) {
             const shadow1 = $IF_LET_VALUE;
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(shadow1 === "nested")'`)})((shadow1 === "nested"))};
+            {((cond) => {if (!cond) throw new Error("assertion failed: shadow1 == \"nested\"")})((shadow1 === "nested"))};
           }
           else {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
       }
@@ -556,18 +556,18 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     ;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((fun("hello")) === "hello")'`)})(((fun("hello")) === "hello"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((fun(undefined)) === "default")'`)})(((fun(undefined)) === "default"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: fun(\"hello\") == \"hello\"")})(((fun("hello")) === "hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: fun(nil) == \"default\"")})(((fun(undefined)) === "default"))};
     const tree = new Node(this,"eight",8,new Node(this,"three",3,new Node(this,"one",1,undefined,undefined),new Node(this,"six",6,undefined,undefined)),new Node(this,"ten",10,undefined,new Node(this,"fourteen",14,new Node(this,"thirteen",13,undefined,undefined),undefined)));
     const thirteen = tree.right.right.left.value;
     const notThere = tree.right.right.right;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(thirteen === 13)'`)})((thirteen === 13))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(notThere === undefined)'`)})((notThere === undefined))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: thirteen == 13")})((thirteen === 13))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: notThere == nil")})((notThere === undefined))};
     {
       const $IF_LET_VALUE = tree.left.left;
       if ($IF_LET_VALUE != undefined) {
         const o = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.value === 1)'`)})((o.value === 1))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((o.value === 1))};
       }
     }
     const payloadWithoutOptions = {

@@ -27,9 +27,6 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
-    "@wingconsole/app": "file:../wing-console/console/app",
-    "@winglang/compiler": "file:../../libs/wingcompiler",
-    "@winglang/sdk": "file:../../libs/wingsdk",
     "chalk": "^4.1.2",
     "codespan-wasm": "0.4.0",
     "commander": "^10.0.0",
@@ -38,7 +35,10 @@
     "open": "^8.4.0",
     "ora": "^5.4.1",
     "update-notifier": "^6.0.2",
-    "vscode-languageserver": "^8.0.2"
+    "vscode-languageserver": "^8.0.2",
+    "@wingconsole/app": "file:../wing-console/console/app",
+    "@winglang/compiler": "file:../../libs/wingcompiler",
+    "@winglang/sdk": "file:../../libs/wingsdk"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
