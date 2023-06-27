@@ -458,10 +458,13 @@ export const createAppRouter = () => {
             input?.showTests,
           ),
         ];
-        const edges = createMapEdgeFromConstructTreeNode(
-          shakedTree,
-          nodeMap,
-          input?.showTests,
+        const edges = uniqby(
+          createMapEdgeFromConstructTreeNode(
+            shakedTree,
+            nodeMap,
+            input?.showTests,
+          ),
+          (edge) => edge.id,
         );
 
         return {
@@ -554,7 +557,6 @@ function createMapNodeFromConstructTreeNode(
 
 export interface MapEdge {
   id: string;
-  label?: string;
   source: string;
   target: string;
 }

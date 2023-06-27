@@ -174,14 +174,11 @@ export const ElkMap = <T extends unknown = undefined>({
           "elk.padding": "[top=10,left=10,bottom=10,right=10]",
         },
         children: nodes.map((node) => toElkNode(node)),
-        edges: uniqby(
-          edges?.map((edge) => ({
-            id: edge.id,
-            sources: [edge.source],
-            targets: [edge.target],
-          })),
-          "id",
-        ),
+        edges: edges?.map((edge) => ({
+          id: edge.id,
+          sources: [edge.source],
+          targets: [edge.target],
+        })),
       })
       .then((graph) => {
         if (abort) {
