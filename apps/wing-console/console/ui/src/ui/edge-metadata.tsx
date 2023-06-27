@@ -1,43 +1,71 @@
-import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
-export interface EdgeMetadataProps {
+export interface EdgeMeta {
+  id: string;
   inflights: string[];
-  className?: string;
-  offset?: { x: number | string; y: number | string };
-  arrow?: "left" | "top";
+  position?: { x: number | string; y: number | string };
+  placement?: "right" | "bottom";
 }
 
-export const EdgeMetadata = ({
-  inflights,
-  className,
-  offset,
-  arrow = "left",
-}: EdgeMetadataProps) => {
-  const { theme } = useTheme();
+export interface EdgeMetadataProps {
+  edge?: EdgeMeta;
+  className?: string;
+}
+
+export const EdgeMetadata = (props: EdgeMetadataProps) => {
+  const [edge, setEdge] = useState(props.edge);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (props.edge) {
+      setEdge(props.edge);
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  }, [props.edge]);
 
   return (
     <motion.div
-      className={classNames("absolute z-10", "transition-all", className)}
+      className={classNames(
+        "absolute z-10",
+        "transition-opacity",
+        props.className,
+      )}
       style={{
-        translateX: offset?.x,
-        translateY: offset?.y,
+        translateX: edge?.position?.x,
+        translateY: edge?.position?.y,
+      }}
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: visible ? 1 : 0,
+      }}
+      transition={{ ease: "easeOut", duration: 0.15 }}
+      exit={{
+        opacity: 0,
       }}
     >
       <div
         className={classNames(
           "absolute z-20 w-3 h-3 dark:bg-slate-700",
-          arrow === "left" && "rotate-45 top-3 -left-1.5 border-b border-l",
-          arrow === "top" && "rotate-45 -top-1.5 left-3 border-t border-l",
+          edge?.placement === "right" &&
+            "rotate-45 top-3 -left-1.5 border-b border-l",
+          edge?.placement === "bottom" &&
+            "rotate-45 -top-1.5 left-3 border-t border-l",
           "border-sky-300 dark:border-sky-500",
         )}
       />
       <div
         className={classNames(
           "absolute z-0 w-3 h-3 dark:bg-slate-700",
-          arrow === "left" && "rotate-45 top-3 -left-1.5 border-b border-l",
-          arrow === "top" && "rotate-45 -top-1.5 left-3 border-t border-l",
+          edge?.placement === "right" &&
+            "rotate-45 top-3 -left-1.5 border-b border-l",
+          edge?.placement === "bottom" &&
+            "rotate-45 -top-1.5 left-3 border-t border-l",
           "outline outline-2 outline-sky-200/50 dark:outline-sky-500/50",
           "border-sky-300 dark:border-sky-500",
           "rotate-45 top-3 -left-1.5",
@@ -47,7 +75,6 @@ export const EdgeMetadata = ({
         className={classNames(
           "bg-white dark:bg-slate-700 rounded shadow-xl px-3 py-1 space-y-2 absolute z-10",
           "outline outline-2 outline-sky-200/50 dark:outline-sky-500/50",
-          //"border border-slate-300 dark:border-slate-900",
           "border border-sky-300 dark:border-sky-500",
         )}
       >
@@ -56,7 +83,7 @@ export const EdgeMetadata = ({
         </div>
 
         <div className="leading-tight text-xs truncate transition-all text-slate-900 dark:text-slate-250">
-          {inflights.map((inflight, index: number) => (
+          {edge?.inflights.map((inflight, index: number) => (
             <li key={index}>{inflight}</li>
           ))}
         </div>
