@@ -139,6 +139,56 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(thatSuperNestedValue) == 1")})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue) === 1))};
     const unestedJsonArr = [1, 2, 3];
     {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})(((unestedJsonArr)[0] === 1))};
+    const jsonElements = Object.freeze({"strings":{"single":"Hello","array":["Hello", "World", "!"]},"numbers":{"one":1,"two":2,"three":3},"bools":{"t":true,"f":false}});
+    {
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["strings"])["single"]);
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: val == \"Hello\"")})((val === "Hello"))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = ((jsonElements)["strings"])["array"];
+      if ($IF_LET_VALUE != undefined) {
+        const vals = $IF_LET_VALUE;
+        {
+          const $IF_LET_VALUE = (vals)[0];
+          if ($IF_LET_VALUE != undefined) {
+            const hello = $IF_LET_VALUE;
+            {((cond) => {if (!cond) throw new Error("assertion failed: hello == \"Hello\"")})((hello === "Hello"))};
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+        }
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["numbers"])["two"]);
+      if ($IF_LET_VALUE != undefined) {
+        const two = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: two + 2 == 4")})(((two + 2) === 4))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["bools"])["t"]);
+      if ($IF_LET_VALUE != undefined) {
+        const truth = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: truth")})(truth)};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
   }
 }
 class $App extends $AppBase {
