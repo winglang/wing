@@ -12,6 +12,7 @@ keywords:
     Schedule,
     Cron job,
   ]
+sidebar_position: 1
 ---
 
 The `cloud.Schedule` resource is used to trigger events at a regular interval.

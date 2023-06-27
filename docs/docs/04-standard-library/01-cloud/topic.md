@@ -3,6 +3,7 @@ title: Topic
 id: topic
 description: A built-in resource for publishing messages to subscribers.
 keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, topics]
+sidebar_position: 1
 ---
 
 The `cloud.Topic` class represents a subject of data that is open for subscription.
