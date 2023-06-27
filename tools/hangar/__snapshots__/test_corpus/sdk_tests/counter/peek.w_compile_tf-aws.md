@@ -12,10 +12,10 @@ module.exports = function({ c }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await c.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await c.peek()) === 0))};
       (await c.inc());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 1)'`)})(((await c.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await c.peek()) === 1))};
     }
   }
   return $Closure1;
@@ -36,10 +36,10 @@ module.exports = function({ c }) {
     }
     async handle()  {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek(key)) === 0)'`)})(((await c.peek(key)) === 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek(key)) === 0)'`)})(((await c.peek(key)) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await c.peek(key)) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await c.peek(key)) === 0))};
       (await c.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek(key)) === 1)'`)})(((await c.peek(key)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 1")})(((await c.peek(key)) === 1))};
     }
   }
   return $Closure2;

@@ -276,6 +276,7 @@ impl Fold for ClosureTransformer {
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
 							pos_args: vec![],
+							span: WingSpan::default(),
 						},
 						obj_id: None,
 						obj_scope: None,

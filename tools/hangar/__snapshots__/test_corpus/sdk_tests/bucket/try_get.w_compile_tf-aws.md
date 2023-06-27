@@ -13,12 +13,12 @@ module.exports = function({ b }) {
     }
     async handle()  {
       (await b.put("test1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGet("test1.txt")) === "Foo")'`)})(((await b.tryGet("test1.txt")) === "Foo"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGet("test2.txt")) === undefined)'`)})(((await b.tryGet("test2.txt")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == \"Foo\"")})(((await b.tryGet("test1.txt")) === "Foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == nil")})(((await b.tryGet("test2.txt")) === undefined))};
       (await b.put("test2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGet("test2.txt")) === "Bar")'`)})(((await b.tryGet("test2.txt")) === "Bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == \"Bar\"")})(((await b.tryGet("test2.txt")) === "Bar"))};
       (await b.delete("test1.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGet("test1.txt")) === undefined)'`)})(((await b.tryGet("test1.txt")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == nil")})(((await b.tryGet("test1.txt")) === undefined))};
     }
   }
   return $Closure1;
