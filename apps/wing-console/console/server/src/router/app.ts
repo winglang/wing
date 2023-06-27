@@ -383,9 +383,6 @@ export const createAppRouter = () => {
               if (direction !== "outbound") {
                 return false;
               }
-              if (!sourceNode) {
-                throw new Error(`Could not find node for resource ${resource}`);
-              }
 
               if (sourceNode.display?.hidden) {
                 return false;
