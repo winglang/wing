@@ -10,7 +10,7 @@ exports[`provides raw tree data 1`] = `
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.245",
+          "version": "10.1.314",
         },
         "display": {
           "description": "A suite of APIs for running tests and collecting results.",
@@ -31,7 +31,7 @@ exports[`provides raw tree data 1`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "display": {
               "description": "A cloud function (FaaS)",
@@ -43,7 +43,7 @@ exports[`provides raw tree data 1`] = `
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.245",
+          "version": "10.1.314",
         },
         "display": {
           "description": "A cloud unit test.",
@@ -58,7 +58,7 @@ exports[`provides raw tree data 1`] = `
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.245",
+          "version": "10.1.314",
         },
         "display": {
           "description": "An inflight resource",
@@ -71,7 +71,7 @@ exports[`provides raw tree data 1`] = `
     },
     "constructInfo": {
       "fqn": "constructs.Construct",
-      "version": "10.1.245",
+      "version": "10.1.314",
     },
     "id": "root",
     "path": "root",
@@ -148,8 +148,8 @@ exports[`run single test > test failure 1`] = `
 <sanitized>
 <sanitized>
 <sanitized>
-    at Script.runInContext (node:vm:141:12)
-    at Object.runInContext (node:vm:297:6)
+    at Script.runInContext (node:vm:<sanitized>)
+    at Object.runInContext (node:vm:<sanitized>)
 <sanitized>
     at new Promise (<anonymous>)
 <sanitized>

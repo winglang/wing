@@ -2,14 +2,24 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
-import { T1 } from "./util";
+import { T1 } from "./generics";
+import { Code, InflightClient } from "../core";
 
 /**
  * Immutable Array
  *
  * @typeparam T1
  */
-export class ImmutableArray {
+export class Array {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
+  private constructor() {}
+
   /**
    * The length of the array
    * @returns the length of the array
@@ -34,7 +44,7 @@ export class ImmutableArray {
    *
    * @returns a new ImmutableArray with the values of this array followed by the values of arr
    */
-  public concat(arr: ImmutableArray): ImmutableArray {
+  public concat(arr: Array): Array {
     arr;
     throw new Error("Abstract");
   }
@@ -59,7 +69,7 @@ export class ImmutableArray {
    *
    * @returns a MutableArray with the same values as this array
    */
-  public copyMut(): MutableArray {
+  public copyMut(): MutArray {
     throw new Error("Macro");
   }
 
@@ -108,7 +118,16 @@ export class ImmutableArray {
  *
  * @typeparam T1
  */
-export class MutableArray {
+export class MutArray {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
+  private constructor() {}
+
   /**
    * The length of the array
    * @returns the length of the array
@@ -133,7 +152,7 @@ export class MutableArray {
    *
    * @returns a new MutableArray with the values of this array followed by the values of arr
    */
-  public concat(arr: MutableArray): MutableArray {
+  public concat(arr: MutArray): MutArray {
     arr;
     throw new Error("Abstract");
   }
@@ -158,7 +177,7 @@ export class MutableArray {
    *
    * @returns an ImmutableArray with the same values as this array
    */
-  public copy(): ImmutableArray {
+  public copy(): Array {
     throw new Error("Macro");
   }
 

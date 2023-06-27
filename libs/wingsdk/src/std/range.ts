@@ -1,7 +1,8 @@
+import { Code, InflightClient } from "../core";
+
 /**
  * Range
  */
-
 export class Range {
   /**
    * Generate a range of numbers.
@@ -25,4 +26,13 @@ export class Range {
 
     return Array.from(iterator(start, end, inclusive));
   }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
+  private constructor() {}
 }

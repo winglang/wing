@@ -16,7 +16,7 @@ if (!SUPPORTED_NODE_VERSION) {
 function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
   return (...args: any[]) =>
     fn(...args).catch((err: Error) => {
-      console.error(err.message);
+      console.error(err);
       process.exit(1);
     });
 }
@@ -32,6 +32,10 @@ async function main() {
     process.env.DEBUG = "1";
   });
 
+  program.option("--progress", "Show compilation progress", () => {
+    process.env.PROGRESS = "1";
+  });
+
   program
     .option("--no-update-check", "Skip checking for toolchain updates")
     .hook("preAction", async (cmd) => {
@@ -45,8 +49,9 @@ async function main() {
   program
     .command("run")
     .alias("it")
-    .description("Runs a Wing simulator file in the Wing Console")
-    .argument("[simfile]", ".wsim simulator file")
+    .description("Runs a Wing program in the Wing Console")
+    .argument("[entrypoint]", "program .w entrypoint")
+    .option("-p, --port <port>", "specify port")
     .action(run);
 
   program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
@@ -71,7 +76,7 @@ async function main() {
     .argument("<entrypoint...>", "all entrypoints to test")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "sim"])
+        .choices(["tf-aws", "sim", "awscdk"])
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")

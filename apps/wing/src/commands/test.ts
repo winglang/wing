@@ -1,18 +1,26 @@
-import { basename } from "path";
+import { basename, sep } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
 import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
-import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";
+import { TestRunnerClient } from "@winglang/sdk/lib/shared-aws/test-runner.inflight";
 import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
-import { withSpinner } from "../util";
-import { Target } from "./constants";
+import { generateTmpDir, withSpinner } from "../util";
+import { Target } from "@winglang/compiler";
+import { readFile, rm, rmSync } from "fs";
 
 const log = debug("wing:test");
 
 const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
+const ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK = "WingTestRunnerFunctionArns";
+
+/**
+ * @param path path to the test/s file
+ * @returns the file name and parent dir in the following format: "folder/file.ext"
+ */
+const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 
 /**
  * Options for the `test` command.
@@ -20,26 +28,115 @@ const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 export interface TestOptions extends CompileOptions {}
 
 export async function test(entrypoints: string[], options: TestOptions) {
+  const startTime = Date.now();
+  const results: { testName: string; results: sdk.cloud.TestResult[] }[] = [];
   for (const entrypoint of entrypoints) {
-    await testOne(entrypoint, options);
+    const testName = generateTestName(entrypoint);
+    try {
+      const singleTestResults: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
+      results.push({ testName, results: singleTestResults ?? [] });
+    } catch (error) {
+      console.log((error as Error).message);
+      results.push({
+        testName: generateTestName(entrypoint),
+        results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
+      });
+    }
   }
+  printResults(results, Date.now() - startTime);
+}
+
+function printResults(
+  testResults: { testName: string; results: sdk.cloud.TestResult[] }[],
+  duration: number
+) {
+  const durationInSeconds = duration / 1000;
+  const totalSum = testResults.length;
+  const failing = testResults.filter(({ results }) => results.some(({ pass }) => !pass));
+  const passing = testResults.filter(({ results }) => results.every(({ pass }) => !!pass));
+  const failingTestsNumber = failing.reduce(
+    (acc, { results }) => acc + results.filter(({ pass }) => !pass).length,
+    0
+  );
+  const passingTestsNumber = testResults.reduce(
+    (acc, { results }) => acc + results.filter(({ pass }) => !!pass).length,
+    0
+  );
+  console.log(" "); // for getting a new line- \n does't seem to work :(
+  const areErrors = failing.length > 0 && totalSum > 1;
+  const showTitle = totalSum > 1;
+
+  const results = [];
+
+  if (showTitle) {
+    // prints a list of the tests names with an icon
+    results.push(`Results:`);
+    results.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
+    results.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
+  }
+
+  if (areErrors) {
+    // prints error messages form failed tests
+    results.push(" ");
+    results.push("Errors:");
+    results.push(
+      ...failing.map(({ testName, results }) =>
+        [
+          `At ${testName}`,
+          results.filter(({ pass }) => !pass).map(({ error }) => chalk.red(error)),
+        ].join("\n")
+      )
+    );
+  }
+
+  // prints a summary of how many tests passed and failed
+  results.push(" ");
+  results.push(
+    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
+      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
+    }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
+      `(${failingTestsNumber + passingTestsNumber})`
+    )}`
+  );
+  // prints a summary of how many tests files passed and failed
+  results.push(
+    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
+      failing.length && passing.length ? chalk.dim(" |") : ""
+    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
+      `(${totalSum})`
+    )}`
+  );
+
+  // prints the test duration
+  results.push(
+    `${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(
+      durationInSeconds % 60
+    ).toFixed(2)}s`
+  );
+
+  console.log(results.filter((value) => !!value).join("\n"));
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () =>
-    compile(entrypoint, {
-      ...options,
-      testing: true,
-    })
+  // since the test cleans up after each run, it's essential to create a temporary directory-
+  // at least one that is different then the usual compilation dir,  otherwise we might end up cleaning up the user's actual resources.
+  const tempFile: string = Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
+  const synthDir = await withSpinner(
+    `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
+    () =>
+      compile(tempFile, {
+        ...options,
+        testing: true,
+      })
   );
 
   switch (options.target) {
     case Target.SIM:
-      await testSimulator(synthDir);
-      break;
+      return await testSimulator(synthDir);
     case Target.TF_AWS:
-      await testTfAws(synthDir);
-      break;
+      return await testTfAws(synthDir);
+    case Target.AWSCDK:
+      return await testAwsCdk(synthDir);
     default:
       throw new Error(`unsupported target ${options.target}`);
   }
@@ -148,50 +245,134 @@ async function testSimulator(synthDir: string) {
   const testReport = renderTestReport(synthDir, results);
   console.log(testReport);
 
-  if (testResultsContainsFailure(results)) {
-    process.exit(1);
+  rmSync(synthDir, { recursive: true, force: true });
+
+  return results;
+}
+
+async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+  try {
+    isAwsCdkInstalled(synthDir);
+
+    await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
+
+    const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const testArns = await awsCdkOutput(
+        synthDir,
+        ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK,
+        process.env.CDK_STACK_NAME!
+      );
+      const testRunner = new TestRunnerClient(testArns);
+
+      const tests = await testRunner.listTests();
+      return [testRunner, pickOneTestPerEnvironment(tests)];
+    });
+
+    const results = await withSpinner("Running tests...", async () => {
+      const results = new Array<sdk.cloud.TestResult>();
+      for (const path of tests) {
+        results.push(await testRunner.runTest(path));
+      }
+      return results;
+    });
+
+    const testReport = renderTestReport(synthDir, results);
+    console.log(testReport);
+
+    if (testResultsContainsFailure(results)) {
+      console.log("One or more tests failed. Cleaning up resources...");
+    }
+
+    return results;
+  } catch (err) {
+    console.warn((err as Error).message);
+    return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
+  } finally {
+    await cleanupCdk(synthDir);
   }
 }
 
-async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
-  if (!isTerraformInstalled(synthDir)) {
+async function cleanupCdk(synthDir: string) {
+  await withSpinner("aws-cdk destroy", () => awsCdkDestroy(synthDir));
+  rmSync(synthDir, { recursive: true, force: true });
+}
+
+async function isAwsCdkInstalled(synthDir: string) {
+  try {
+    await execCapture("cdk version --ci true", { cwd: synthDir });
+  } catch (err) {
     throw new Error(
-      "Terraform is not installed. Please install Terraform to run tests in the cloud."
+      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
     );
   }
+}
 
-  await withSpinner("terraform init", () => terraformInit(synthDir));
-
-  await checkTerraformStateIsEmpty(synthDir);
-
-  await withSpinner("terraform apply", () => terraformApply(synthDir));
-
-  const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-    const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
-    const testRunner = new TfawsTestRunnerClient(testArns);
-
-    const tests = await testRunner.listTests();
-    return [testRunner, pickOneTestPerEnvironment(tests)];
+export async function awsCdkDeploy(synthDir: string) {
+  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", {
+    cwd: synthDir,
   });
+}
 
-  const results = await withSpinner("Running tests...", async () => {
-    const results = new Array<sdk.cloud.TestResult>();
-    for (const path of tests) {
-      results.push(await testRunner.runTest(path));
+export async function awsCdkDestroy(synthDir: string) {
+  const removeFile = promisify(rm);
+  await removeFile(synthDir.concat("/output.json"));
+  await execCapture("cdk destroy -f --ci true --app ./", { cwd: synthDir });
+}
+
+async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
+  const readFileCmd = promisify(readFile);
+  const file = await readFileCmd(synthDir.concat("/output.json"));
+  const parsed = JSON.parse(Buffer.from(file).toString());
+  return parsed[stackName][name];
+}
+
+async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | void> {
+  try {
+    if (!isTerraformInstalled(synthDir)) {
+      throw new Error(
+        "Terraform is not installed. Please install Terraform to run tests in the cloud."
+      );
     }
+
+    await withSpinner("terraform init", async () => await terraformInit(synthDir));
+
+    await withSpinner("terraform apply", () => terraformApply(synthDir));
+
+    const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+      const testRunner = new TestRunnerClient(testArns);
+
+      const tests = await testRunner.listTests();
+      return [testRunner, pickOneTestPerEnvironment(tests)];
+    });
+
+    const results = await withSpinner("Running tests...", async () => {
+      const results = new Array<sdk.cloud.TestResult>();
+      for (const path of tests) {
+        results.push(await testRunner.runTest(path));
+      }
+      return results;
+    });
+
+    const testReport = renderTestReport(synthDir, results);
+    console.log(testReport);
+
+    if (testResultsContainsFailure(results)) {
+      console.log("One or more tests failed. Cleaning up resources...");
+    }
+
     return results;
-  });
-
-  const testReport = renderTestReport(synthDir, results);
-  console.log(testReport);
-
-  if (testResultsContainsFailure(results)) {
-    console.log("One or more tests failed. Cleaning up resources...");
+  } catch (err) {
+    console.warn((err as Error).message);
+    return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
+  } finally {
+    await cleanupTf(synthDir);
   }
+}
 
+async function cleanupTf(synthDir: string) {
   await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
-
-  return results;
+  rmSync(synthDir, { recursive: true, force: true });
 }
 
 async function isTerraformInstalled(synthDir: string) {
@@ -199,34 +380,16 @@ async function isTerraformInstalled(synthDir: string) {
   return output.startsWith("Terraform v");
 }
 
-export async function checkTerraformStateIsEmpty(synthDir: string) {
-  try {
-    const output = await execCapture("terraform state list", { cwd: synthDir });
-    if (output.length > 0) {
-      throw new Error(
-        `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
-      );
-    }
-  } catch (err: unknown) {
-    if ((err as Error).message.includes("No state file was found")) {
-      return;
-    }
-
-    // An unexpected error occurred, rethrow it
-    throw err;
-  }
-}
-
 export async function terraformInit(synthDir: string) {
-  await execCapture("terraform init", { cwd: synthDir });
+  return execCapture("terraform init", { cwd: synthDir });
 }
 
 async function terraformApply(synthDir: string) {
-  await execCapture("terraform apply -auto-approve", { cwd: synthDir });
+  return execCapture("terraform apply -auto-approve", { cwd: synthDir });
 }
 
 async function terraformDestroy(synthDir: string) {
-  await execCapture("terraform destroy -auto-approve", { cwd: synthDir });
+  return execCapture("terraform destroy -auto-approve", { cwd: synthDir });
 }
 
 async function terraformOutput(synthDir: string, name: string) {

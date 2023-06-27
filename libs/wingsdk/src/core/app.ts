@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
-import { IResource } from "../std";
+import { Tokens } from "./tokens";
+import { IResource } from "../std/resource";
 
 /**
  * Props for all `App` classes.
@@ -86,6 +87,12 @@ export abstract class App extends Construct {
    * Whether or not this app is being synthesized into a test environment.
    */
   public abstract readonly isTestEnvironment: boolean;
+
+  /**
+   * Tokens handling for this app.
+   * @internal
+   */
+  public abstract readonly _tokens: Tokens;
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit

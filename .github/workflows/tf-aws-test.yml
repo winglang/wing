@@ -1,0 +1,38 @@
+name: SDK Spec AWS Tests
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  install:
+    name: Installation & Test
+    strategy:
+      fail-fast: true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Configure AWS Credentials Action For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Get Latest Wing Version
+        id: get-version
+        run: |
+          echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
+      - name: Install Wing
+        run: |
+          npm install -g winglang@${{ steps.get-version.outputs.version }}
+      - name: Run tests
+        run: |
+          ls
+          wing test -t tf-aws examples/tests/sdk_tests/*/*.w

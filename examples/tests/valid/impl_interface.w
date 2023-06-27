@@ -1,12 +1,12 @@
 bring cloud;
 
-class A impl cloud.IQueueAddConsumerHandler {
+class A impl cloud.IQueueSetConsumerHandler {
   inflight handle(msg: str) {
     return;
   }
 }
 
-let x: cloud.IQueueAddConsumerHandler = new A();
+let x: cloud.IQueueSetConsumerHandler = new A();
 
 let y = inflight () => {
   x.handle("hello world!");
@@ -38,7 +38,7 @@ class r impl I3 {
 
 // a variable of some interface type can be assigned a class instance that implements it.
 interface IAnimal {
-  inflight eat();
+  inflight eat(): void;
 }
 
 class Dog impl IAnimal {

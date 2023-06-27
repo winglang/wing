@@ -1,14 +1,14 @@
 import { execa } from "execa";
-import * as fs from "fs-extra";
+import * as fs from "fs";
 import { expect } from "vitest";
 import { snapshotDir, wingBin } from "./paths";
-import { join, extname } from "path";
+import { join, extname, relative, resolve, dirname, basename } from "path";
 
 export interface RunWingCommandOptions {
   cwd: string;
   wingFile: string;
   args: string[];
-  shouldSucceed: boolean;
+  expectStdErr: boolean;
   plugins?: string[];
   env?: Record<string, string>;
 }
@@ -25,22 +25,32 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       env: options.env,
     }
   );
-  if (options.shouldSucceed) {
-    if (out.exitCode !== 0 || out.stderr !== "") {
-      expect.fail(out.stderr);
-    }
-  } else {
+  if (options.expectStdErr) {
     expect(out.exitCode).not.toBe(0);
     expect(out.stderr).not.toBe("");
+  } else {
+    if (
+      // when this env var is on, we allow the on-demand-panic-char (😱), right now panic writes to stderr (will be changed in the future)
+      options?.env?.WINGC_DEBUG_PANIC !== "type-checking" &&
+      (out.exitCode !== 0 || out.stderr !== "")
+    ) {
+      expect.fail(out.stderr);
+    }
   }
+  out.stderr = sanitizeOutput(out.stderr);
+  out.stdout = sanitizeOutput(out.stdout);
   return out;
+}
+
+function sanitizeOutput(output: string) {
+  return output.replace(/\d+m[\d.]+s/g, "<DURATION>");
 }
 
 export function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+?"/g;
   const assetSourceRegex = /"assets\/.+?"/g;
   const sourceRegex = /(?<=\"source\"\:)\"([A-Z]:|\/|\\)[\/\\\-\w\.]+\"/g;
-  const json = fs.readJsonSync(path);
+  const json = JSON.parse(fs.readFileSync(path, "utf-8"));
 
   const jsonText = JSON.stringify(json);
   const sanitizedJsonText = jsonText
@@ -64,19 +74,35 @@ export function tfResourcesOfCount(
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
+const testsRoot = join(__dirname, "..", "..", "..", "examples", "tests");
+
 export async function createMarkdownSnapshot(
   fileMap: Record<string, string>,
-  wingFile: string,
+  filePath: string,
   testCase: string,
   target: string
 ) {
+  const relativePath = relative(resolve(testsRoot), filePath).replace(
+    /\\/g,
+    "/"
+  );
+  const wingFile = basename(filePath);
+
   const snapPath = join(
     snapshotDir,
     "test_corpus",
+    dirname(relativePath),
     `${wingFile}_${testCase}_${target}.md`
   );
 
-  let md = `# [${wingFile}](../../../../examples/tests/valid/${wingFile}) | ${testCase} | ${target}\n\n`;
+  const testDirRelativeToSnapshot = relative(
+    dirname(snapPath),
+    testsRoot
+  ).replace(/\\/g, "/");
+
+  let md = `# [${wingFile}](${testDirRelativeToSnapshot}/${dirname(
+    relativePath
+  )}/${wingFile}) | ${testCase} | ${target}\n\n`;
 
   const files = Object.keys(fileMap);
   files.sort();

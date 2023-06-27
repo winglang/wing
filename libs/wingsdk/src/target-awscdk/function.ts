@@ -12,6 +12,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { PolicyStatement } from "../shared-aws";
+import { IInflightHost } from "../std";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -38,18 +39,33 @@ export class Function extends cloud.Function {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
       runtime: Runtime.NODEJS_18_X,
+      environment: this.env,
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
     });
 
-    if (props.env) {
-      for (const [key, val] of Object.entries(props.env)) {
-        this.function.addEnvironment(key, val);
-      }
+    this.arn = this.function.functionArn;
+  }
+
+  /** @internal */
+  public _bind(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("functions can only be bound by awscdk.Function for now");
     }
 
-    this.arn = this.function.functionArn;
+    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+      host.addPolicyStatements({
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.function.functionArn}`],
+      });
+    }
+
+    // The function name needs to be passed through an environment variable since
+    // it may not be resolved until deployment time.
+    host.addEnvironment(this.envName(), this.function.functionArn);
+
+    super._bind(host, ops);
   }
 
   /** @internal */
@@ -66,6 +82,9 @@ export class Function extends cloud.Function {
    * Add environment variable to the function.
    */
   public addEnvironment(name: string, value: string) {
+    // Keep a local map of the env vars. Those env vars will be added once the function is initialized
+    super.addEnvironment(name, value);
+
     if (this.function) {
       this.function.addEnvironment(name, value);
     }

@@ -1,0 +1,39 @@
+{
+  "name": "compiler",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": ["wingc", "sdk"],
+  "targets": {
+    "copy": {
+      "options": {
+        "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
+        "cwd": "libs/wingcompiler"
+      },
+      "configurations": {
+        "release": {
+          "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./"
+        }
+      }
+    },
+    "build": {
+      "dependsOn": ["^build", "copy"],
+      "options": {
+        "command": "npm run build",
+        "cwd": "libs/wingcompiler"
+      }
+    },
+    "test": {
+      "dependsOn": ["copy"],
+      "options": {
+        "command": "npm run test",
+        "cwd": "libs/wingcompiler"
+      }
+    },
+    "package": {
+      "options": {
+        "commands": ["npx patch-package", "npm run package"],
+        "cwd": "libs/wingcompiler",
+        "parallel": false
+      }
+    }
+  }
+}

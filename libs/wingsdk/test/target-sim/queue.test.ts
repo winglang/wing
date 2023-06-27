@@ -10,9 +10,9 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const INFLIGHT_CODE = `
 async handle(message) {
-    if (message === "BAD MESSAGE") {
-        throw new Error("ERROR");
-    }
+  if (message === "BAD MESSAGE") {
+    throw new Error("ERROR");
+  }
 }`;
 
 test("create a queue", async () => {
@@ -44,7 +44,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue");
-  queue.addConsumer(handler);
+  queue.setConsumer(handler);
   const s = await app.startSimulator();
 
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
@@ -100,7 +100,7 @@ test("queue with one subscriber, batch size of 5", async () => {
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     initialMessages: ["A", "B", "C", "D", "E", "F"],
   });
-  queue.addConsumer(handler, { batchSize: 5 });
+  queue.setConsumer(handler, { batchSize: 5 });
   const s = await app.startSimulator();
 
   // WHEN
@@ -120,8 +120,14 @@ test("messages are requeued if the function fails after timeout", async () => {
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     timeout: Duration.fromSeconds(1),
   });
-  queue.addConsumer(handler);
+  queue.setConsumer(handler);
   const s = await app.startSimulator();
+
+  // warm up the function so timing is more predictable
+  const fn = s.getResource(
+    "root/my_queue-SetConsumer-e645076f"
+  ) as cloud.IFunctionClient;
+  await fn.invoke(JSON.stringify({ messages: [] }));
 
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
@@ -150,8 +156,14 @@ test("messages are not requeued if the function fails before timeout", async () 
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     timeout: Duration.fromSeconds(1),
   });
-  queue.addConsumer(handler);
+  queue.setConsumer(handler);
   const s = await app.startSimulator();
+
+  // warm up the function so timing is more predictable
+  const fn = s.getResource(
+    "root/my_queue-SetConsumer-e645076f"
+  ) as cloud.IFunctionClient;
+  await fn.invoke(JSON.stringify({ messages: [] }));
 
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
@@ -187,8 +199,14 @@ test("messages are not requeued if the function fails after retention timeout", 
     timeout: Duration.fromSeconds(2),
     retentionPeriod: Duration.fromSeconds(1),
   });
-  queue.addConsumer(handler);
+  queue.setConsumer(handler);
   const s = await app.startSimulator();
+
+  // warm up the function so timing is more predictable
+  const fn = s.getResource(
+    "root/my_queue-SetConsumer-e645076f"
+  ) as cloud.IFunctionClient;
+  await fn.invoke(JSON.stringify({ messages: [] }));
 
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;

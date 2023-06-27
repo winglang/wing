@@ -42,11 +42,10 @@ export class Api
     // Set up an express server that handles the routes.
     this.app = express();
 
-    // Parse request bodies as json.
+    // we parse all requests as text and leave the parsing to the inflight handler
     // matching the limit to aws api gateway's payload size limit:
     // https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
-    this.app.use(express.json({ limit: "10mb" }));
-    this.app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+    this.app.use(express.text({ limit: "10mb", type: "*/*" }));
   }
 
   public async addEventSubscription(
@@ -90,11 +89,10 @@ export class Api
         res: express.Response,
         next: express.NextFunction
       ) => {
-        const body = req.body;
         this.addTrace(
-          `Processing "${route.method} ${route.path}" (body=${JSON.stringify(
-            body
-          )}, params=${JSON.stringify(req.params)}).`
+          `Processing "${route.method} ${route.path}" params=${JSON.stringify(
+            req.params
+          )}).`
         );
 
         const apiRequest = transformRequest(req);
@@ -115,11 +113,14 @@ export class Api
           }
 
           res.status(response.status);
-          res.set("Content-Type", "application/json");
           for (const [key, value] of Object.entries(response.headers ?? {})) {
             res.set(key, value);
           }
-          res.send(JSON.stringify(response.body));
+          if (response.body !== undefined) {
+            res.send(response.body);
+          } else {
+            res.end();
+          }
           this.addTrace(`${route.method} ${route.path} - ${response.status}.`);
         } catch (err) {
           return next(err);

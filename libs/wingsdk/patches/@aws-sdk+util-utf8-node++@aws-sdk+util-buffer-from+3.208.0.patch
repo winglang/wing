@@ -1,0 +1,13 @@
+diff --git a/node_modules/@aws-sdk/util-utf8-node/node_modules/@aws-sdk/util-buffer-from/package.json b/node_modules/@aws-sdk/util-utf8-node/node_modules/@aws-sdk/util-buffer-from/package.json
+index 665aa8c..80fce64 100644
+--- a/node_modules/@aws-sdk/util-utf8-node/node_modules/@aws-sdk/util-buffer-from/package.json
++++ b/node_modules/@aws-sdk/util-utf8-node/node_modules/@aws-sdk/util-buffer-from/package.json
+@@ -43,7 +43,7 @@
+     }
+   },
+   "files": [
+-    "dist-*"
++    "dist-*/**"
+   ],
+   "homepage": "https://github.com/aws/aws-sdk-js-v3/tree/main/packages/util-buffer-from",
+   "repository": {

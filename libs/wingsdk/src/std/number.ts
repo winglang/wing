@@ -1,4 +1,5 @@
 import { Json } from "./json";
+import { Code, InflightClient } from "../core";
 
 /**
  * Number
@@ -29,4 +30,13 @@ export class Number {
     str;
     throw new Error("Macro");
   }
+
+  /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+
+  private constructor() {}
 }

@@ -37,25 +37,25 @@ export class Queue extends cloud.Queue {
     }
   }
 
-  public addConsumer(
-    inflight: cloud.IQueueAddConsumerHandler,
-    props: cloud.QueueAddConsumerProps = {}
+  public setConsumer(
+    inflight: cloud.IQueueSetConsumerHandler,
+    props: cloud.QueueSetConsumerProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-AddConsumerHandler-${hash}`,
+      `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),
-        "queue.addconsumer.inflight.js"
+        "queue.setconsumer.inflight.js"
       ),
-      "QueueAddConsumerHandlerClient"
+      "QueueSetConsumerHandlerClient"
     );
 
     const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-AddConsumer-${hash}`,
+      `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
       props
     );

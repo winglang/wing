@@ -63,7 +63,7 @@ export function calculateCounterPermissions(
   if (
     ops.includes(cloud.CounterInflightMethods.INC) ||
     ops.includes(cloud.CounterInflightMethods.DEC) ||
-    ops.includes(cloud.CounterInflightMethods.RESET)
+    ops.includes(cloud.CounterInflightMethods.SET)
   ) {
     policies.push({
       actions: ["dynamodb:UpdateItem"],

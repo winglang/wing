@@ -18,22 +18,22 @@ let usersTable = new cloud.Table(
 
 let getHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
-    body: {users: usersTable.list()},
+    body: Json.stringify({ users: usersTable.list() }),
     status: 200
   };
 };
 
 let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  let body: Json = req.body ?? {name: "", age: "", id: ""};
+  let body: Json = Json.parse(req.body ?? Json.stringify({name: "", age: "", id: ""}));
   if (body.get("name") == "" || body.get("age")  == "" || body.get("id")  == "") {
     return cloud.ApiResponse {
-      body: {error: "incomplete details"},       
+      body: Json.stringify({ error: "incomplete details" }),
       status: 400
     };
   }
   usersTable.insert(Json.stringify(body.get("id")), body);
   return cloud.ApiResponse {
-    body: {user: body.get("id")},
+    body: Json.stringify({ user: body.get("id") }),
     status: 201
   };
 };
@@ -55,8 +55,3 @@ api.post("/users", postHandler);
 api.options("/users", optionsHandler);
 
 website.addJson("config.json", { apiUrl: api.url });
-
-
-
-
-

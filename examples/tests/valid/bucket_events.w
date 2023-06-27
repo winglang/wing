@@ -15,16 +15,15 @@ b.onCreate(inflight (key:str) => {
     log("created ${key}");
 });
 
-b.onEvent(inflight (key: str) => {   
-    log("last key ${key}");
-    other.put("last_operation_key", Json.stringify(key)); //TODO: until we'll fix the function args conversion/mapping
+b.onEvent(inflight (key: str, event: cloud.BucketEventType) => {   
+    other.put("last_${event}_key", key); 
 });
 
 other.onEvent(inflight (key: str) => {
     log("other bucket event called!");
 });
 
-test "test" {
+test "putting and deleting from a bucket to trigger bucket events" {   
     b.put("a", "1");
     b.put("b", "1");
     b.put("b", "100");

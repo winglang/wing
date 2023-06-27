@@ -46,6 +46,7 @@
     },
     "test": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "inputs": [
         "^default-build",
         "default-test"
@@ -62,7 +63,8 @@
       "dependsOn": ["^build", "build"],
       "inputs": [
         "default-build",
-        "^default-build"
+        "^default-build",
+        "{workspaceRoot}/tools/bump-pack/**"
       ]
     },
     "dev": {

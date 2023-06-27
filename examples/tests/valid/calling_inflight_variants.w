@@ -12,9 +12,13 @@ class Foo {
   inflight inflight2: inflight (): num;
   inflight init() {
     // here is an inflight function created during inflight
-    this.inflight2 = inflight (): num => {
+    this.inflight2 = (): num => {
       return 2;
     };
+
+    // just call me
+    let ret = this.inflight2();
+    assert(ret == 2);
   }
 
   inflight makeFn(x: bool): inflight (): num {
@@ -31,6 +35,14 @@ class Foo {
     let partialFn = this.makeFn(x);
     return partialFn();
   }
+
+  inflight callFn2(): void {
+    // now we call inflight1 and inflight2 directly which know they are handler classes
+    let one = this.inflight1();
+    let two = this.inflight2();
+    assert(one == 1);
+    assert(two == 2);
+  }
 }
 
 let foo = new Foo();
@@ -38,4 +50,5 @@ let foo = new Foo();
 test "calling different types of inflights" {
   assert(foo.callFn(true) == 1);
   assert(foo.callFn(false) == 2);
+  foo.callFn2();
 }

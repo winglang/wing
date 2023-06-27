@@ -30,3 +30,14 @@ let f = p.preflight_method();
 test "it works" {
   f.invoke("text");
 }
+
+test "inflight class inside closure captures from closure" {
+  let x = 12;
+  class Foo {
+    getX(): num { return x; }
+  }
+
+  let foo = new Foo();
+  let y = foo.getX();
+  assert(y == 12);
+}
