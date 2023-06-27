@@ -139,7 +139,7 @@ export const EdgeMetadata = ({
           </Attribute>
 
           <div className="border-t border-transparent">
-            <Attribute name="Inflights" labelTop>
+            <Attribute name="Inflights" centerLabel={false}>
               <div className="w-full">
                 <Tree
                   entries={entries}

@@ -27,7 +27,6 @@ export const MapView = ({
   const { mapData } = useMap({ showTests: showTests ?? false });
 
   const { theme } = useTheme();
-
   return (
     <ZoomPaneProvider>
       <div className="h-full flex flex-col">
