@@ -97,13 +97,13 @@ export const EdgeMetadata = ({
                 theme.bg3,
                 theme.bg3Hover,
                 theme.text1,
-                "w-full flex-shrink-0 max-w-full truncate text-sm flex items-center gap-1 min-w-0",
+                "w-full max-w-full truncate text-sm flex items-center gap-1 min-w-0",
                 "border border-transparent rounded",
               )}
               title={source.path}
               onClick={() => onConnectionNodeClick?.(source.path)}
             >
-              <div className="flex items-center gap-1.5 ml-2 5 min-w-0">
+              <div className="flex items-center gap-1.5 ml-2 5 min-w-0 truncate">
                 <div className="flex-shrink-0 -ml-1">
                   <ResourceIcon
                     className="w-4 h-4"
@@ -121,14 +121,14 @@ export const EdgeMetadata = ({
                 theme.bg3,
                 theme.bg3Hover,
                 theme.text1,
-                "w-full flex-shrink-0 max-w-full truncate text-sm flex items-center gap-1 min-w-0",
+                "w-full max-w-full truncate text-sm flex items-center gap-1 min-w-0",
                 "border border-transparent rounded",
               )}
               title={target.path}
               onClick={() => onConnectionNodeClick?.(target.path)}
             >
-              <div className="flex items-center gap-1.5 ml-2 5 min-w-0">
-                <div className="flex-shrink-0 -ml-1">
+              <div className="flex items-center gap-1.5 ml-2 5 min-w-0 truncate">
+                <div className="flex-shrink-0 -ml-1 truncate">
                   <ResourceIcon
                     className="w-4 h-4"
                     resourceType={target.type}
@@ -142,12 +142,14 @@ export const EdgeMetadata = ({
 
           <div className="border-t border-transparent">
             <Attribute name="Inflights" labelTop>
-              <Tree
-                entries={entries}
-                selectedEntries={[]}
-                onSelectionChange={() => {}}
-                className="min-h-[6rem] h-48 overflow-y-auto resize-y"
-              />
+              <div className="w-full">
+                <Tree
+                  entries={entries}
+                  selectedEntries={[]}
+                  onSelectionChange={() => {}}
+                  className="min-h-[6rem] h-48 overflow-y-auto resize-y"
+                />
+              </div>
             </Attribute>
           </div>
         </div>

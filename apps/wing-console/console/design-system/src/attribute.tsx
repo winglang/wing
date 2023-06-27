@@ -57,16 +57,7 @@ export const Attribute = ({
           readOnly
         />
       )}
-      {value === undefined && (
-        <div
-          className={classNames(
-            theme.text2,
-            "w-full bg-transparent items-center select-text text-sm transition truncate",
-          )}
-        >
-          {children}
-        </div>
-      )}
+      {value === undefined && children}
     </div>
   );
 };
