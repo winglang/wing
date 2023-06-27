@@ -244,8 +244,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		// lets also add some fun snippets
 		completions.push(CompletionItem {
-			label: "inflight () => {}".to_string(),
-			insert_text: Some("inflight ($1) => {$2}".to_string()),
+			label: "inflight () => {};".to_string(),
+			insert_text: Some("inflight ($1) => {$2};".to_string()),
 			insert_text_format: Some(InsertTextFormat::SNIPPET),
 			kind: Some(CompletionItemKind::SNIPPET),
 			..Default::default()
