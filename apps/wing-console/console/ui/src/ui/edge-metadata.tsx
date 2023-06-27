@@ -5,6 +5,7 @@ import {
 import {
   ArrowPathRoundedSquareIcon,
   ArrowRightIcon,
+  ArrowsRightLeftIcon,
   CubeTransparentIcon,
   CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
@@ -66,8 +67,10 @@ export const EdgeMetadata = ({
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">{source.id}</div>
-            <div className="flex">
+            <div className="text-sm font-medium truncate" title={source.id}>
+              {source.id}
+            </div>
+            <div className="flex" title={source.type}>
               <Pill>{source.type}</Pill>
             </div>
           </div>
@@ -88,8 +91,10 @@ export const EdgeMetadata = ({
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">{target.id}</div>
-            <div className="flex">
+            <div className="text-sm font-medium truncate" title={target.id}>
+              {target.id}
+            </div>
+            <div className="flex" title={target.type}>
               <Pill>{target.type}</Pill>
             </div>
           </div>
@@ -98,27 +103,26 @@ export const EdgeMetadata = ({
 
       <InspectorSection
         text="Inflights"
-        icon={CubeTransparentIcon}
+        icon={ArrowsRightLeftIcon}
         open={openInspectorSections.includes("inflights")}
         onClick={() => toggleInspectorSection("inflights")}
         headingClassName="pl-2"
       >
         <div className={classNames("border-t", theme.border4)}>
-          <div
-            className={classNames(
-              "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
-              theme.bg3,
-              theme.text1,
-            )}
-          >
-            {inflights.map((inflight) => (
-              <Attribute
-                key={inflight.name}
-                name="Name"
-                value={inflight.name}
-              />
-            ))}
-          </div>
+          {inflights.map((inflight) => (
+            <div
+              className={classNames(
+                theme.bg3,
+                theme.bg3Hover,
+                theme.text1,
+                "w-full flex-shrink-0 max-w-full truncate text-sm pl-4 pr-2 py-1 flex items-center gap-1 min-w-0",
+              )}
+            >
+              <div className="flex items-center gap-1.5 ml-2.5 min-w-0 truncate">
+                {inflight.name}
+              </div>
+            </div>
+          ))}
         </div>
       </InspectorSection>
     </ScrollableArea>

@@ -31,6 +31,9 @@ queue.setConsumer(handler);
 let counter = new cloud.Counter(initial: 0);
 new cloud.Function(inflight (message: str): str => {
   counter.inc();
+  counter.inc();
+  counter.dec();
+  counter.dec();
   log("Counter is now ${counter.inc(0)}");
   return message;
 }) as "IncrementCounter";
