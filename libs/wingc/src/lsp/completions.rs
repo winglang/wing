@@ -91,18 +91,25 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 			if parent.kind() == "nested_identifier" {
 				if let Some(nearest_expr) = scope_visitor.nearest_expr {
-					let nearest_expr_type = types.get_expr_type(nearest_expr).unwrap();
+					let parent_start = parent.start_position();
+					let parent_start_pos = lsp_types::Position {
+						line: parent_start.row as u32,
+						character: parent_start.column as u32,
+					};
+					if nearest_expr.span.contains(&parent_start_pos) {
+						let nearest_expr_type = types.get_expr_type(nearest_expr).unwrap();
 
-					// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
-					if !nearest_expr_type.is_anything() && !nearest_expr_type.is_unresolved() {
-						return get_completions_from_type(
-							&nearest_expr_type,
-							types,
-							scope_visitor
-								.found_scope
-								.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
-							true,
-						);
+						// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
+						if !nearest_expr_type.is_anything() && !nearest_expr_type.is_unresolved() {
+							return get_completions_from_type(
+								&nearest_expr_type,
+								types,
+								scope_visitor
+									.found_scope
+									.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
+								true,
+							);
+						}
 					}
 				}
 
@@ -378,13 +385,20 @@ fn add_std_namespace(type_: &str) -> std::string::String {
 	} else {
 		&type_name
 	};
+
 	let type_name = match type_name {
-		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" => type_name,
-		_ => return type_name.to_string(),
+		"str" => "String",
+		"duration" => "Duration",
+		"bool" => "Boolean",
+		"num" => "Number",
+		_ => type_name,
 	};
 
-	format!("{WINGSDK_STD_MODULE}.{type_name}")
+	match type_name {
+		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
+		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
+		_ => type_name.to_string(),
+	}
 }
 
 fn get_completions_from_namespace(
@@ -821,5 +835,32 @@ let j = MutJson {};
  //^
 "#,
 		assert!(!mut_json_methods.is_empty())
+	);
+
+	test_completion_list!(
+		static_completions_after_expression,
+		r#"
+2 Json.
+     //^
+"#,
+		assert!(!static_completions_after_expression.is_empty())
+	);
+
+	test_completion_list!(
+		primitives_have_no_completions,
+		r#"
+69.
+ //^
+"#,
+		assert!(primitives_have_no_completions.is_empty())
+	);
+
+	test_completion_list!(
+		renamed_builtin_type_statics,
+		r#"
+str.
+  //^
+"#,
+		assert!(!renamed_builtin_type_statics.is_empty())
 	);
 }
