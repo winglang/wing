@@ -27,6 +27,7 @@ pub struct SymbolEnv {
 	pub return_type: TypeRef,
 
 	pub is_init: bool,
+	pub is_function: bool,
 	pub phase: Phase,
 	statement_idx: usize,
 }
@@ -155,6 +156,7 @@ impl SymbolEnv {
 		parent: Option<SymbolEnvRef>,
 		return_type: TypeRef,
 		is_init: bool,
+		is_function: bool,
 		phase: Phase,
 		statement_idx: usize,
 	) -> Self {
@@ -166,6 +168,7 @@ impl SymbolEnv {
 			parent,
 			return_type,
 			is_init,
+			is_function,
 			phase,
 			statement_idx,
 		}
@@ -350,6 +353,14 @@ impl SymbolEnv {
 	pub fn iter(&self, with_ancestry: bool) -> SymbolEnvIter {
 		SymbolEnvIter::new(self, with_ancestry)
 	}
+
+	pub fn is_in_function(&self) -> bool {
+		let mut curr_env = self.get_ref();
+		while !curr_env.is_function && !curr_env.is_root() {
+			curr_env = curr_env.parent.unwrap();
+		}
+		curr_env.is_function
+	}
 }
 
 pub struct SymbolEnvIter<'a> {
@@ -419,11 +430,12 @@ mod tests {
 	#[test]
 	fn test_statement_idx_lookups() {
 		let types = setup_types();
-		let mut parent_env = SymbolEnv::new(None, types.void(), false, Phase::Independent, 0);
+		let mut parent_env = SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0);
 		let child_scope_idx = 10;
 		let mut child_env = SymbolEnv::new(
 			Some(parent_env.get_ref()),
 			types.void(),
+			false,
 			false,
 			crate::ast::Phase::Independent,
 			child_scope_idx,
@@ -538,10 +550,11 @@ mod tests {
 	#[test]
 	fn test_nested_lookups() {
 		let mut types = setup_types();
-		let mut parent_env = SymbolEnv::new(None, types.void(), false, Phase::Independent, 0);
+		let mut parent_env = SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0);
 		let child_env = SymbolEnv::new(
 			Some(parent_env.get_ref()),
 			types.void(),
+			false,
 			false,
 			crate::ast::Phase::Independent,
 			0,
@@ -550,12 +563,19 @@ mod tests {
 		// Create namespaces
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
-			env: SymbolEnv::new(None, types.void(), false, Phase::Independent, 0),
+			env: SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0),
 			loaded: false,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
-			env: SymbolEnv::new(Some(ns1.env.get_ref()), types.void(), false, Phase::Independent, 0),
+			env: SymbolEnv::new(
+				Some(ns1.env.get_ref()),
+				types.void(),
+				false,
+				false,
+				Phase::Independent,
+				0,
+			),
 			loaded: false,
 		});
 
