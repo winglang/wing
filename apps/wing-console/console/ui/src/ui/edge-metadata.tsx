@@ -94,7 +94,6 @@ export const EdgeMetadata = ({
           <Attribute name="Source">
             <button
               className={classNames(
-                theme.bg3,
                 theme.bg3Hover,
                 theme.text1,
                 "w-full max-w-full truncate text-sm flex items-center gap-1 min-w-0",
@@ -103,7 +102,7 @@ export const EdgeMetadata = ({
               title={source.path}
               onClick={() => onConnectionNodeClick?.(source.path)}
             >
-              <div className="flex items-center gap-1.5 ml-2 5 min-w-0 truncate">
+              <div className="flex items-center gap-1.5 ml-2 5 min-w-0">
                 <div className="flex-shrink-0 -ml-1">
                   <ResourceIcon
                     className="w-4 h-4"
@@ -118,7 +117,6 @@ export const EdgeMetadata = ({
           <Attribute name="Target">
             <button
               className={classNames(
-                theme.bg3,
                 theme.bg3Hover,
                 theme.text1,
                 "w-full max-w-full truncate text-sm flex items-center gap-1 min-w-0",
@@ -127,8 +125,8 @@ export const EdgeMetadata = ({
               title={target.path}
               onClick={() => onConnectionNodeClick?.(target.path)}
             >
-              <div className="flex items-center gap-1.5 ml-2 5 min-w-0 truncate">
-                <div className="flex-shrink-0 -ml-1 truncate">
+              <div className="flex items-center gap-1.5 ml-2 5 min-w-0">
+                <div className="flex-shrink-0 -ml-1">
                   <ResourceIcon
                     className="w-4 h-4"
                     resourceType={target.type}
