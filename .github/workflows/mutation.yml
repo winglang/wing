@@ -47,6 +47,7 @@ jobs:
         with:
           token: ${{secrets.GITHUB_TOKEN}}
           ref: ${{ github.event.workflow_run.head_branch }}
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
           path: repo
       - id: self_mutation
         if: steps.download-artifacts.outputs.found_artifact == 'true'
