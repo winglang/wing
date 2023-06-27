@@ -216,6 +216,12 @@ pub struct Class {
 	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
 	pub docs: Docs,
+
+	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
+	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
+	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
+	// and instead the user will need to pass the relevant args to the class's init method.
+	pub std_construct_args: bool,
 }
 
 #[derive(Derivative)]
@@ -634,6 +640,7 @@ pub struct FunctionSignature {
 	/// This string may contain special tokens:
 	/// - `$self$`: The expression on which this function was called
 	/// - `$args$`: the arguments passed to this function call
+	/// - `$args_text$`: the original source text of the arguments passed to this function call, escaped
 	pub js_override: Option<String>,
 	pub docs: Docs,
 }
@@ -740,7 +747,7 @@ impl TypeRef {
 		None
 	}
 
-	pub fn as_mut_class(&mut self) -> Option<&mut Class> {
+	pub fn as_class_mut(&mut self) -> Option<&mut Class> {
 		match **self {
 			Type::Class(ref mut class) => Some(class),
 			_ => None,
@@ -828,6 +835,10 @@ impl TypeRef {
 		false
 	}
 
+	pub fn is_string(&self) -> bool {
+		matches!(**self, Type::String)
+	}
+
 	pub fn is_struct(&self) -> bool {
 		matches!(**self, Type::Struct(_))
 	}
@@ -894,10 +905,10 @@ impl TypeRef {
 			Type::Anything => false,
 			Type::Unresolved => false,
 			Type::Void => false,
-			Type::MutJson => false,
-			Type::MutArray(_) => false,
-			Type::MutMap(_) => false,
-			Type::MutSet(_) => false,
+			Type::MutJson => true,
+			Type::MutArray(v) => v.is_capturable(),
+			Type::MutMap(v) => v.is_capturable(),
+			Type::MutSet(v) => v.is_capturable(),
 			Type::Function(sig) => sig.phase == Phase::Inflight,
 
 			// only preflight classes can be captured
@@ -1436,6 +1447,8 @@ impl<'a> TypeChecker<'a> {
 				let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env));
 				let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env));
 
+				let non_std_args = !type_.as_class().unwrap().std_construct_args;
+
 				// If this is a preflight class make sure the object's scope and id are of correct type
 				if type_.is_preflight_class() {
 					// Get reference to resource object's scope
@@ -1445,6 +1458,17 @@ impl<'a> TypeChecker<'a> {
 							.lookup(&"this".into(), Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
 					} else {
+						// If this is a non-standard preflight class, make sure the object's scope isn't explicitly set (using the `in` keywords)
+						if non_std_args {
+							self.spanned_error(
+								obj_scope.as_ref().unwrap(),
+								format!(
+									"Cannot set scope of non-standard preflight class \"{}\" using `in`",
+									type_
+								),
+							);
+						}
+
 						obj_scope_type
 					};
 
@@ -1464,6 +1488,13 @@ impl<'a> TypeChecker<'a> {
 					// Verify the object id is a string
 					if let Some(obj_id_type) = obj_id_type {
 						self.validate_type(obj_id_type, self.types.string(), obj_id.as_ref().unwrap());
+						// If this is a non-standard preflight class, make sure the object's id isn't explicitly set (using the `as` keywords)
+						if non_std_args {
+							self.spanned_error(
+								obj_id.as_ref().unwrap(),
+								format!("Cannot set id of non-standard preflight class \"{}\" using `as`", type_),
+							);
+						}
 					}
 				} else {
 					// This is an inflight class, make sure the object scope and id are not set
@@ -2397,6 +2428,7 @@ impl<'a> TypeChecker<'a> {
 					phase: *phase,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 					docs: Docs::default(),
+					std_construct_args: *phase == Phase::Preflight,
 				};
 				let mut class_type = self.types.add_type(Type::Class(class_spec));
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
@@ -2464,7 +2496,7 @@ impl<'a> TypeChecker<'a> {
 				);
 
 				// Replace the dummy class environment with the real one before type checking the methods
-				class_type.as_mut_class().unwrap().env = class_env;
+				class_type.as_class_mut().unwrap().env = class_env;
 				let class_env = &class_type.as_class().unwrap().env;
 
 				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
@@ -3124,11 +3156,12 @@ impl<'a> TypeChecker<'a> {
 			type_parameters: Some(type_params),
 			phase: original_type_class.phase,
 			docs: original_type_class.docs.clone(),
+			std_construct_args: original_type_class.std_construct_args,
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
-		let new_type_class = new_type.as_mut_class().unwrap();
+		let new_type_class = new_type.as_class_mut().unwrap();
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields

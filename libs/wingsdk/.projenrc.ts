@@ -96,7 +96,7 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "~5.0.0",
+  jsiiVersion: "5.0.11",
 });
 
 project.eslint?.addPlugins("sort-exports");
@@ -195,12 +195,14 @@ keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 `;
 
-const docsPath = "../../docs/04-standard-library/90-api-reference.md";
+const docsPath = "../../docs/docs/04-standard-library/90-api-reference.md";
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
-// copy resource docs from src/cloud to docs
-docgen.exec(`cp -r src/cloud/*.md ../../docs/04-standard-library/01-cloud/`);
+// copy resource docs from src/cloud to docs/docs
+docgen.exec(
+  `cp -r src/cloud/*.md ../../docs/docs/04-standard-library/01-cloud/`
+);
 
 docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);

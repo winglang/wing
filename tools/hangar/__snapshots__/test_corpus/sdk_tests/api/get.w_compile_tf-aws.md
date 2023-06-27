@@ -12,9 +12,9 @@ module.exports = function({ api_GET, body }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.method === api_GET)'`)})((req.method === api_GET))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.path === "/path")'`)})((req.path === "/path"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.headers)["content-type"] === "application/json")'`)})(((req.headers)["content-type"] === "application/json"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_GET")})((req.method === api_GET))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
       "body": body,}
@@ -47,15 +47,15 @@ module.exports = function({ api, http_GET, body, http_Util }) {
       const fetchResponseNoMethod = (await http_Util.fetch(url,{
       "headers": Object.freeze({"content-type":"application/json"}),}
       ));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(getResponse.body === body)'`)})((getResponse.body === body))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(getResponse.status === 200)'`)})((getResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(getResponse.url === url)'`)})((getResponse.url === url))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.body === body)'`)})((fetchResponse.body === body))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.status === 200)'`)})((fetchResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.url === url)'`)})((fetchResponse.url === url))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponseNoMethod.body === body)'`)})((fetchResponseNoMethod.body === body))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponseNoMethod.status === 200)'`)})((fetchResponseNoMethod.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponseNoMethod.url === url)'`)})((fetchResponseNoMethod.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((getResponse.body === body))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.status == 200")})((getResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.url == url")})((getResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == body")})((fetchResponse.body === body))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.body == body")})((fetchResponseNoMethod.body === body))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.status == 200")})((fetchResponseNoMethod.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.url == url")})((fetchResponseNoMethod.url === url))};
     }
   }
   return $Closure2;

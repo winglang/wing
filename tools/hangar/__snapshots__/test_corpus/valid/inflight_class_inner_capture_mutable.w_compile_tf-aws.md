@@ -15,9 +15,9 @@ module.exports = function({  }) {
       const y = [1];
       let i = 10;
       const Inner = require("./inflight.Inner.js")({y, i});
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await new Inner().dang()) === 11)'`)})(((await new Inner().dang()) === 11))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await y.at(1)) === 2)'`)})(((await y.at(1)) === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(i === 10)'`)})((i === 10))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})(((await new Inner().dang()) === 11))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})(((await y.at(1)) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
     }
   }
   return $Closure1;
