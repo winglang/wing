@@ -1,6 +1,7 @@
 ---
 title: Contributing to Wing
 id: index
+slug: /
 keywords: [Wing contributors, contributors]
 ---
 
