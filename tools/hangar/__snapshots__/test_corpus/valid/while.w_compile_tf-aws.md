@@ -56,7 +56,7 @@ class $Root extends $stdlib.std.Resource {
         break;
       }
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(z === 3)'`)})((z === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: z == 3")})((z === 3))};
     while (true) {
       break;
     }
@@ -69,8 +69,8 @@ class $Root extends $stdlib.std.Resource {
       }
       v = (v + 1);
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(i === 10)'`)})((i === 10))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(v === 5)'`)})((v === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: v == 5")})((v === 5))};
   }
 }
 class $App extends $AppBase {

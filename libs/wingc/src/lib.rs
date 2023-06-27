@@ -11,6 +11,7 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use files::Files;
 use fold::Fold;
 use jsify::JSifier;
 use type_check::jsii_importer::JsiiImportSpec;
@@ -39,6 +40,7 @@ mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 mod docs;
+mod files;
 pub mod fold;
 pub mod jsify;
 pub mod lsp;
@@ -54,6 +56,7 @@ pub const WINGSDK_STD_MODULE: &'static str = "std";
 const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 const WINGSDK_UTIL_MODULE: &'static str = "util";
+const WINGSDK_HTTP_MODULE: &'static str = "http";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.Map";
@@ -72,6 +75,7 @@ const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
+const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
 pub struct CompilerOutput {}
 
@@ -134,7 +138,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn parse(source_path: &Path) -> Scope {
+pub fn parse(source_path: &Path) -> (Files, Scope) {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
@@ -153,20 +157,31 @@ pub fn parse(source_path: &Path) -> Scope {
 				env: RefCell::new(None),
 				span: Default::default(),
 			};
-			return empty_scope;
+			return (Files::default(), empty_scope);
 		}
 	};
 
-	let tree = match parser.parse(&source[..], None) {
+	let mut files = Files::new();
+	match files.add_file(
+		source_path.to_path_buf(),
+		String::from_utf8(source.clone()).expect("Invalid UTF-8 sequence"),
+	) {
+		Ok(_) => {}
+		Err(err) => {
+			panic!("Failed adding source file to parser: {}", err);
+		}
+	}
+
+	let tree = match parser.parse(&source, None) {
 		Some(tree) => tree,
 		None => {
 			panic!("Failed parsing source file: {}", source_path.display());
 		}
 	};
 
-	let wing_parser = Parser::new(&source[..], source_path.to_str().unwrap().to_string());
+	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string());
 
-	wing_parser.wingit(&tree.root_node())
+	(files, wing_parser.wingit(&tree.root_node()))
 }
 
 pub fn type_check(
@@ -210,7 +225,9 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some("{((cond) => {if (!cond) throw new Error(`assertion failed: '$args$'`)})($args$)}".to_string()),
+			js_override: Some(
+				"{((cond) => {if (!cond) throw new Error(\"assertion failed: $args_text$\")})($args$)}".to_string(),
+			),
 			docs: Docs::with_summary("Asserts that a condition is true"),
 		}),
 		scope,
@@ -302,7 +319,7 @@ pub fn compile(
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
-	let scope = parse(&source_path);
+	let (files, scope) = parse(&source_path);
 
 	// -- DESUGARING PHASE --
 
@@ -347,7 +364,7 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
+	let mut jsifier = JSifier::new(&types, &files, app_name, &project_dir, true);
 	jsifier.jsify(&scope);
 	jsifier.emit_files(&out_dir);
 

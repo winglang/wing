@@ -34,6 +34,8 @@ jobs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
+      vscode-wing-changed: ${{ steps.git-diff-vscode-wing.outputs.diff }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -87,6 +89,12 @@ jobs:
           name: wingconsoleserver
           path: apps/wing-console/console/server/*.tgz
 
+      - name: Upload Wing Console UI
+        uses: actions/upload-artifact@v3
+        with:
+          name: wingconsoleui
+          path: apps/wing-console/console/ui/*.tgz
+
       - name: Upload Wing Console App
         uses: actions/upload-artifact@v3
         with:
@@ -110,6 +118,19 @@ jobs:
         with:
           name: wingc
           path: target/wasm32-wasi/release/wingc.wasm
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Check git diff of VSCode Extension
+        id: git-diff-vscode-wing
+        run: |
+          if git diff --quiet ${{ steps.setSHAs.outputs.base }} ${{ github.sha }} -- apps/vscode-wing; then
+            echo "::set-output name=diff::false"
+          else
+            echo "::set-output name=diff::true"
+          fi
 
       - name: Upload Extension
         uses: actions/upload-artifact@v3
@@ -178,6 +199,23 @@ jobs:
       - name: Test
         run: npm run test:ci
 
+      - name: Create git patch
+        id: diff
+        run: |
+          git add --all
+          git diff --staged --patch > build.diff
+          if [ -s build.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat build.diff
+            echo "diff=true" >> $GITHUB_OUTPUT
+          fi
+      - name: Upload Diff
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: build.diff
+          path: build.diff
+
   benchmarks:
     name: E2E Benchmarks
     runs-on: ubuntu-latest
@@ -185,6 +223,9 @@ jobs:
       - build
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_UI_SPEC: "file:${{ github.workspace }}/wingconsoleui/wingconsole-ui-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
@@ -247,15 +288,20 @@ jobs:
             full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:
-      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/target/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/target/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/target/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_UI_SPEC: "file:${{ github.workspace }}/target/wingconsoleui/wingconsole-ui-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/target/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/target/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
+        with:
+          path: target
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -275,7 +321,29 @@ jobs:
         working-directory: tools/hangar
         run: |
           npm run test:generate
-          npm run test -- --shard=${{ matrix.shard }}
+          npm run test -- --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
+
+      - name: Create mutation if needed
+        # we only care about the diff in our standard dev env
+        if: matrix.runner == 'ubuntu' && matrix.node == '18'
+        id: diff
+        env:
+          RAW_SHARD: ${{ matrix.shard }}
+        run: |
+          SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
+          DIFF_NAME="e2e-$SHARD.diff"
+          git add --all
+          git diff --staged --patch > $DIFF_NAME
+          if [ -s $DIFF_NAME ]; then
+            echo "diff=true" >> $GITHUB_OUTPUT
+            echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
+          fi
+      - name: Upload mutation
+        if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.diff.outputs.diff_name }}
+          path: ${{ steps.diff.outputs.diff_name }}
 
   quality-gate:
     name: Quality Gate
@@ -286,6 +354,19 @@ jobs:
       - benchmarks
       - unit-tests
     steps:
+      - name: Download patches
+        uses: actions/download-artifact@v3
+      - name: Check patches
+        run: |
+          PATCH_COUNT=0
+          for f in $(find ./*.diff/*.diff); do
+            PATCH_COUNT=$((PATCH_COUNT + 1))
+            cat $f
+          done
+          if [ $PATCH_COUNT -gt 0 ]; then
+            echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
+            exit 1
+          fi
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
 
@@ -298,7 +379,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
@@ -307,12 +388,8 @@ jobs:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.build.outputs.version }}"
 
-      - name: Check published VSCode Version
-        id: vscode-version
-        run: echo "version=$(npx -y vsce show Monada.vscode-wing --json | jq '.versions[0].version' -r)" >> $GITHUB_OUTPUT
-
       - name: Publish Extension to Visual Studio Marketplace
-        if: ${{ steps.vscode-version.outputs.version != needs.build.outputs.version }}
+        if: needs.build.outputs.vscode-wing-changed == 'true'
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}

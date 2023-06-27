@@ -2511,6 +2511,198 @@ The maximum number of messages to send to subscribers at once.
 
 ---
 
+### RequestOptions <a name="RequestOptions" id="@winglang/sdk.http.RequestOptions"></a>
+
+An object containing any custom settings that you want to apply to the request.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.http.RequestOptions.Initializer"></a>
+
+```wing
+bring http;
+
+let RequestOptions = http.RequestOptions{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.body">body</a></code> | <code>str</code> | Any body that you want to add to your request. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.cache">cache</a></code> | <code><a href="#@winglang/sdk.http.RequestCache">RequestCache</a></code> | The cache mode you want to use for the request. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | Any headers you want to add to your request. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.method">method</a></code> | <code><a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a></code> | The request method, e.g., GET, POST. The default is GET. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.redirect">redirect</a></code> | <code><a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a></code> | he redirect mode to use: follow, error. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.referrer">referrer</a></code> | <code>str</code> | A string specifying "no-referrer", client, or a URL. |
+
+---
+
+##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.http.RequestOptions.property.body"></a>
+
+```wing
+body: str;
+```
+
+- *Type:* str
+
+Any body that you want to add to your request.
+
+Note that a request using the GET or HEAD method cannot have a body.
+
+---
+
+##### `cache`<sup>Optional</sup> <a name="cache" id="@winglang/sdk.http.RequestOptions.property.cache"></a>
+
+```wing
+cache: RequestCache;
+```
+
+- *Type:* <a href="#@winglang/sdk.http.RequestCache">RequestCache</a>
+
+The cache mode you want to use for the request.
+
+---
+
+##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.http.RequestOptions.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Any headers you want to add to your request.
+
+---
+
+##### `method`<sup>Optional</sup> <a name="method" id="@winglang/sdk.http.RequestOptions.property.method"></a>
+
+```wing
+method: HttpMethod;
+```
+
+- *Type:* <a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a>
+- *Default:* GET
+
+The request method, e.g., GET, POST. The default is GET.
+
+---
+
+##### `redirect`<sup>Optional</sup> <a name="redirect" id="@winglang/sdk.http.RequestOptions.property.redirect"></a>
+
+```wing
+redirect: RequestRedirect;
+```
+
+- *Type:* <a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a>
+- *Default:* follow
+
+he redirect mode to use: follow, error.
+
+The default is follow.
+
+---
+
+##### `referrer`<sup>Optional</sup> <a name="referrer" id="@winglang/sdk.http.RequestOptions.property.referrer"></a>
+
+```wing
+referrer: str;
+```
+
+- *Type:* str
+- *Default:* about:client
+
+A string specifying "no-referrer", client, or a URL.
+
+The default is "about:client".
+
+---
+
+### Response <a name="Response" id="@winglang/sdk.http.Response"></a>
+
+Represents the response to a request.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.http.Response.Initializer"></a>
+
+```wing
+bring http;
+
+let Response = http.Response{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.http.Response.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The map of header information associated with the response. |
+| <code><a href="#@winglang/sdk.http.Response.property.ok">ok</a></code> | <code>bool</code> | A boolean indicating whether the response was successful (status in the range 200 – 299) or not. |
+| <code><a href="#@winglang/sdk.http.Response.property.status">status</a></code> | <code>num</code> | The status code of the response. |
+| <code><a href="#@winglang/sdk.http.Response.property.url">url</a></code> | <code>str</code> | The URL of the response. |
+| <code><a href="#@winglang/sdk.http.Response.property.body">body</a></code> | <code>str</code> | A string represents the body contents. |
+
+---
+
+##### `headers`<sup>Required</sup> <a name="headers" id="@winglang/sdk.http.Response.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The map of header information associated with the response.
+
+---
+
+##### `ok`<sup>Required</sup> <a name="ok" id="@winglang/sdk.http.Response.property.ok"></a>
+
+```wing
+ok: bool;
+```
+
+- *Type:* bool
+
+A boolean indicating whether the response was successful (status in the range 200 – 299) or not.
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="@winglang/sdk.http.Response.property.status"></a>
+
+```wing
+status: num;
+```
+
+- *Type:* num
+
+The status code of the response.
+
+(This will be 200 for a success).
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Response.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+The URL of the response.
+
+---
+
+##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.http.Response.property.body"></a>
+
+```wing
+body: str;
+```
+
+- *Type:* str
+
+A string represents the body contents.
+
+---
+
 ### ScheduleOnTickProps <a name="ScheduleOnTickProps" id="@winglang/sdk.cloud.ScheduleOnTickProps"></a>
 
 Options for Schedule.onTick.
@@ -3791,14 +3983,59 @@ Return the total number of years in this Duration.
 
 Immutable Json.
 
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Json.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Json()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.Json.asBool">asBool</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.Json.asNum">asNum</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns a specified element from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
+| <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
+| <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.Json.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.Json.tryGet">tryGet</a></code> | Optionally returns an specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.Json.tryGetAt">tryGetAt</a></code> | Optionally returns a specified element at a given index from Json Array. |
 
 ---
+
+##### `asBool` <a name="asBool" id="@winglang/sdk.std.Json.asBool"></a>
+
+```wing
+asBool(): bool
+```
+
+Convert Json element to number if possible.
+
+##### `asNum` <a name="asNum" id="@winglang/sdk.std.Json.asNum"></a>
+
+```wing
+asNum(): num
+```
+
+Convert Json element to number if possible.
+
+##### `asStr` <a name="asStr" id="@winglang/sdk.std.Json.asStr"></a>
+
+```wing
+asStr(): str
+```
+
+Convert Json element to string if possible.
 
 ##### `get` <a name="get" id="@winglang/sdk.std.Json.get"></a>
 
@@ -3832,10 +4069,67 @@ The index of the element in the Json Array to return.
 
 ---
 
+##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.Json.tryAsBool"></a>
+
+```wing
+tryAsBool(): bool
+```
+
+Convert Json element to boolean if possible.
+
+##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.Json.tryAsNum"></a>
+
+```wing
+tryAsNum(): num
+```
+
+Convert Json element to string if possible.
+
+##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.Json.tryAsStr"></a>
+
+```wing
+tryAsStr(): str
+```
+
+Convert Json element to string if possible.
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Json.tryGet"></a>
+
+```wing
+tryGet(key: str): Json
+```
+
+Optionally returns an specified element from the Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.Json.tryGetAt"></a>
+
+```wing
+tryGetAt(index: num): Json
+```
+
+Optionally returns a specified element at a given index from Json Array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Json.tryGetAt.parameter.index"></a>
+
+- *Type:* num
+
+The index of the element in the Json Array to return.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.Json.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
@@ -3844,6 +4138,24 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
 | <code><a href="#@winglang/sdk.std.Json.tryParse">tryParse</a></code> | Try to parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
+
+---
+
+##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.Json.deepCopy"></a>
+
+```wing
+bring std;
+
+std.Json.deepCopy(json: MutJson)
+```
+
+Creates an immutable deep copy of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopy.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
+
+to copy.
 
 ---
 
@@ -3870,14 +4182,14 @@ to copy.
 ```wing
 bring std;
 
-std.Json.delete(json: Json, key: str)
+std.Json.delete(json: MutJson, key: str)
 ```
 
 Deletes a key in a given Json.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.delete.parameter.json"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
 
 to delete key from.
 
@@ -3922,14 +4234,14 @@ The key to check.
 ```wing
 bring std;
 
-std.Json.keys(json: Json)
+std.Json.keys(json: any)
 ```
 
 Returns the keys from the Json object.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* any
 
 to get keys from.
 
@@ -3958,7 +4270,7 @@ to parse as Json.
 ```wing
 bring std;
 
-std.Json.stringify(json: Json, indent?: num)
+std.Json.stringify(json: any, indent?: num)
 ```
 
 Formats Json as string.
@@ -3967,7 +4279,7 @@ Formats Json as string.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.stringify.parameter.json"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* any
 
 to format as string.
 
@@ -4281,16 +4593,61 @@ The length of the array.
 
 Mutable Json.
 
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutJson.Initializer"></a>
+
+```wing
+bring std;
+
+new std.MutJson()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryAsNum">tryAsNum</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryGet">tryGet</a></code> | Optionally returns an specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryGetAt">tryGetAt</a></code> | Optionally returns a specified element at a given index from Json Array. |
 
 ---
+
+##### `asBool` <a name="asBool" id="@winglang/sdk.std.MutJson.asBool"></a>
+
+```wing
+asBool(): bool
+```
+
+Convert Json element to number if possible.
+
+##### `asNum` <a name="asNum" id="@winglang/sdk.std.MutJson.asNum"></a>
+
+```wing
+asNum(): num
+```
+
+Convert Json element to number if possible.
+
+##### `asStr` <a name="asStr" id="@winglang/sdk.std.MutJson.asStr"></a>
+
+```wing
+asStr(): str
+```
+
+Convert Json element to string if possible.
 
 ##### `get` <a name="get" id="@winglang/sdk.std.MutJson.get"></a>
 
@@ -4370,31 +4727,62 @@ The value of the element to set.
 
 ---
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.MutJson.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
-
----
-
-##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.MutJson.deepCopy"></a>
+##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.MutJson.tryAsBool"></a>
 
 ```wing
-bring std;
-
-std.MutJson.deepCopy(json: MutJson)
+tryAsBool(): bool
 ```
 
-Creates an immutable deep copy of the Json.
+Convert Json element to boolean if possible.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.deepCopy.parameter.json"></a>
+##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.MutJson.tryAsNum"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
+```wing
+tryAsNum(): num
+```
 
-to copy.
+Convert Json element to string if possible.
+
+##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.MutJson.tryAsStr"></a>
+
+```wing
+tryAsStr(): str
+```
+
+Convert Json element to string if possible.
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.MutJson.tryGet"></a>
+
+```wing
+tryGet(key: str): MutJson
+```
+
+Optionally returns an specified element from the Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
 
 ---
+
+##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.MutJson.tryGetAt"></a>
+
+```wing
+tryGetAt(index: num): MutJson
+```
+
+Optionally returns a specified element at a given index from Json Array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.tryGetAt.parameter.index"></a>
+
+- *Type:* num
+
+The index of the element in the Json Array to return.
+
+---
+
 
 
 
@@ -5170,6 +5558,185 @@ length: num;
 The length of the string.
 
 ---
+
+
+### Util <a name="Util" id="@winglang/sdk.http.Util"></a>
+
+**Inflight client:** [true](#true)
+
+the Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.http.Util.Initializer"></a>
+
+```wing
+bring http;
+
+new http.Util()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.Util.delete">delete</a></code> | Sends a DELETE request. |
+| <code><a href="#@winglang/sdk.http.Util.fetch">fetch</a></code> | Sends an HTTP request to a URL, returning a fulfilled or failed response. |
+| <code><a href="#@winglang/sdk.http.Util.get">get</a></code> | Sends a GET request. |
+| <code><a href="#@winglang/sdk.http.Util.patch">patch</a></code> | Sends a PATCH request. |
+| <code><a href="#@winglang/sdk.http.Util.post">post</a></code> | Sends a POST request. |
+| <code><a href="#@winglang/sdk.http.Util.put">put</a></code> | Sends a PUT request. |
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.http.Util.delete"></a>
+
+```wing
+bring http;
+
+http.Util.delete(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a DELETE request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.delete.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.delete.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `fetch` <a name="fetch" id="@winglang/sdk.http.Util.fetch"></a>
+
+```wing
+bring http;
+
+http.Util.fetch(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends an HTTP request to a URL, returning a fulfilled or failed response.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.fetch.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.fetch.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.http.Util.get"></a>
+
+```wing
+bring http;
+
+http.Util.get(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a GET request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.get.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.get.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `patch` <a name="patch" id="@winglang/sdk.http.Util.patch"></a>
+
+```wing
+bring http;
+
+http.Util.patch(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a PATCH request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.patch.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.patch.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `post` <a name="post" id="@winglang/sdk.http.Util.post"></a>
+
+```wing
+bring http;
+
+http.Util.post(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a POST request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.post.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.post.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `put` <a name="put" id="@winglang/sdk.http.Util.put"></a>
+
+```wing
+bring http;
+
+http.Util.put(url: str, options?: RequestOptions)
+```
+
+**Inflight client:** [true](#true)
+
+Sends a PUT request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.put.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.put.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
 
 
 ### Util <a name="Util" id="@winglang/sdk.util.Util"></a>
@@ -7191,6 +7758,150 @@ Options.
 ##### `PATCH` <a name="PATCH" id="@winglang/sdk.cloud.HttpMethod.PATCH"></a>
 
 Patch.
+
+---
+
+
+### HttpMethod <a name="HttpMethod" id="@winglang/sdk.http.HttpMethod"></a>
+
+The request's method.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.HttpMethod.GET">GET</a></code> | GET. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.PUT">PUT</a></code> | PUT. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.DELETE">DELETE</a></code> | DELETE. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.PATCH">PATCH</a></code> | PATCH. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.POST">POST</a></code> | POST. |
+
+---
+
+##### `GET` <a name="GET" id="@winglang/sdk.http.HttpMethod.GET"></a>
+
+GET.
+
+---
+
+
+##### `PUT` <a name="PUT" id="@winglang/sdk.http.HttpMethod.PUT"></a>
+
+PUT.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/sdk.http.HttpMethod.DELETE"></a>
+
+DELETE.
+
+---
+
+
+##### `PATCH` <a name="PATCH" id="@winglang/sdk.http.HttpMethod.PATCH"></a>
+
+PATCH.
+
+---
+
+
+##### `POST` <a name="POST" id="@winglang/sdk.http.HttpMethod.POST"></a>
+
+POST.
+
+---
+
+
+### RequestCache <a name="RequestCache" id="@winglang/sdk.http.RequestCache"></a>
+
+The cache mode of the request.
+
+It controls how a request will interact with the system's HTTP cache.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestCache.DEFAULT">DEFAULT</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+| <code><a href="#@winglang/sdk.http.RequestCache.NO_STORE">NO_STORE</a></code> | The runtime environment fetches the resource from the remote server without first looking in the cache, and will not update the cache with the downloaded resource. |
+| <code><a href="#@winglang/sdk.http.RequestCache.RELOAD">RELOAD</a></code> | The runtime environment fetches the resource from the remote server without first looking in the cache, but then will update the cache with the downloaded resource. |
+| <code><a href="#@winglang/sdk.http.RequestCache.NO_CACHE">NO_CACHE</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+| <code><a href="#@winglang/sdk.http.RequestCache.FORCE_CACHE">FORCE_CACHE</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+
+---
+
+##### `DEFAULT` <a name="DEFAULT" id="@winglang/sdk.http.RequestCache.DEFAULT"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match and it is fresh, it will be returned from the cache.
+* If there is a match but it is stale, the runtime environment will make a conditional request to the remote server.
+* If the server indicates that the resource has not changed, it will be returned from the cache.
+* Otherwise the resource will be downloaded from the server and the cache will be updated.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+##### `NO_STORE` <a name="NO_STORE" id="@winglang/sdk.http.RequestCache.NO_STORE"></a>
+
+The runtime environment fetches the resource from the remote server without first looking in the cache, and will not update the cache with the downloaded resource.
+
+---
+
+
+##### `RELOAD` <a name="RELOAD" id="@winglang/sdk.http.RequestCache.RELOAD"></a>
+
+The runtime environment fetches the resource from the remote server without first looking in the cache, but then will update the cache with the downloaded resource.
+
+---
+
+
+##### `NO_CACHE` <a name="NO_CACHE" id="@winglang/sdk.http.RequestCache.NO_CACHE"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match, fresh or stale, the runtime environment will make a conditional request to the remote server.
+* If the server indicates that the resource has not changed, it will be returned from the cache. Otherwise the resource will be downloaded from the server and the cache will be updated.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+##### `FORCE_CACHE` <a name="FORCE_CACHE" id="@winglang/sdk.http.RequestCache.FORCE_CACHE"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match, fresh or stale, it will be returned from the cache.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+### RequestRedirect <a name="RequestRedirect" id="@winglang/sdk.http.RequestRedirect"></a>
+
+The redirect read-only property that contains the mode for how redirects are handled.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestRedirect.FOLLOW">FOLLOW</a></code> | Follow all redirects incurred when fetching a resource. |
+| <code><a href="#@winglang/sdk.http.RequestRedirect.ERROR">ERROR</a></code> | Return a network error when a request is met with a redirect. |
+
+---
+
+##### `FOLLOW` <a name="FOLLOW" id="@winglang/sdk.http.RequestRedirect.FOLLOW"></a>
+
+Follow all redirects incurred when fetching a resource.
+
+---
+
+
+##### `ERROR` <a name="ERROR" id="@winglang/sdk.http.RequestRedirect.ERROR"></a>
+
+Return a network error when a request is met with a redirect.
 
 ---
 

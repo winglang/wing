@@ -12,7 +12,7 @@ module.exports = function({ a }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})(("hey" === a.field))};
     }
   }
   return $Closure1;

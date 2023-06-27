@@ -417,6 +417,7 @@ where
 			.into_iter()
 			.map(|(name, arg)| (f.fold_symbol(name), f.fold_expr(arg)))
 			.collect(),
+		span: node.span,
 	}
 }
 

@@ -16,7 +16,7 @@ module.exports = function({ oneHundredMiliseconds, JSHelper, util_Util }) {
       (await util_Util.sleep(oneHundredMiliseconds));
       const end = (await JSHelper.getTime());
       const delta = (end - start);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(delta >= 100)'`)})((delta >= 100))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: delta >= 100")})((delta >= 100))};
     }
   }
   return $Closure1;
