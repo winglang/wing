@@ -376,7 +376,7 @@ export const ElkMap = <T extends unknown = undefined>({
         placement,
       });
     },
-    [setSelectedEdge, onSelectedNodeIdChange, graph?.edges],
+    [setSelectedEdge, onSelectedNodeIdChange, graph?.edges, edges],
   );
 
   useEffect(() => {

@@ -55,39 +55,42 @@ export const EdgeMetadata = ({
     >
       <div
         className={classNames(
-          "absolute z-20 w-3 h-3 dark:bg-slate-700",
-          edgeMeta?.placement === "right" &&
-            "rotate-45 top-3 -left-1.5 border-b border-l",
+          "absolute z-20 w-2.5 h-2.5 bg-white dark:bg-slate-650",
+          edgeMeta?.placement === "right" && [
+            "rotate-45 -left-[4.2px] border-b border-l",
+            (edgeMeta?.inflights.length > 1 && "top-3") || "top-[6.5px]",
+          ],
           edgeMeta?.placement === "bottom" &&
-            "rotate-45 -top-1.5 left-3 border-t border-l",
+            "rotate-45 -top-[4px] left-3 border-t border-l",
           "border-sky-300 dark:border-sky-500",
         )}
       />
       <div
         className={classNames(
-          "absolute z-0 w-3 h-3 dark:bg-slate-700",
-          edgeMeta?.placement === "right" &&
-            "rotate-45 top-3 -left-1.5 border-b border-l",
+          "absolute z-0 w-2.5 h-2.5",
+          edgeMeta?.placement === "right" && [
+            "rotate-45 -left-[4.2px] border-b border-l",
+            (edgeMeta?.inflights.length > 1 && "top-3") || "top-[6.5px]",
+          ],
           edgeMeta?.placement === "bottom" &&
-            "rotate-45 -top-1.5 left-3 border-t border-l",
+            "rotate-45 -top-[4px] left-3 border-t border-l",
           "outline outline-2 outline-sky-200/50 dark:outline-sky-500/50",
           "border-sky-300 dark:border-sky-500",
         )}
       />
       <div
         className={classNames(
-          "bg-white dark:bg-slate-700 rounded shadow-xl px-3 py-1 space-y-2 absolute z-10",
+          "bg-white dark:bg-slate-650 rounded shadow-xl px-2 py-1 space-y-2 absolute z-10",
           "outline outline-2 outline-sky-200/50 dark:outline-sky-500/50",
           "border border-sky-300 dark:border-sky-500",
+          "cursor-default",
         )}
       >
-        <div className="text-slate-900 dark:text-slate-200 text-xs">
-          Inflights
-        </div>
-
-        <div className="leading-tight text-xs truncate transition-all text-slate-900 dark:text-slate-250">
+        <div className="leading-tight text-xs truncate transition-all text-slate-900 dark:text-slate-250 max-w-[8rem]">
           {edgeMeta?.inflights.map((inflight, index: number) => (
-            <li key={index}>{inflight}</li>
+            <div key={index} className="truncate" title={inflight}>
+              {inflight}
+            </div>
           ))}
         </div>
       </div>
