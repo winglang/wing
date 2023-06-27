@@ -4,12 +4,9 @@
 ```log
 pass ─ resource_as_inflight_literal.wsim » root/env0/test:test
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

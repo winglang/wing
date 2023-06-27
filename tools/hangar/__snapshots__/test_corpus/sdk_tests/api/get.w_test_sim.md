@@ -4,12 +4,9 @@
 ```log
 pass ─ get.wsim » root/env0/test:http.get and http.fetch can preform a call to an api
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

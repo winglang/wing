@@ -4,12 +4,9 @@
 ```log
 pass ─ try_get_json.wsim » root/env0/test:tryGetJson
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 
