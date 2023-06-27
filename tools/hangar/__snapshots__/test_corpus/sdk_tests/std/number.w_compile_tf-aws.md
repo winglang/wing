@@ -12,7 +12,7 @@ module.exports = function({ std_Number }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(123) === 123)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(123) === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(Json 123) == 123")})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(123) === 123))};
     }
   }
   return $Closure1;
@@ -32,7 +32,7 @@ module.exports = function({ std_Number }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("888") === 888)'`)})((((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("888") === 888))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: num.fromStr(\"888\") == 888")})((((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("888") === 888))};
     }
   }
   return $Closure2;
@@ -305,9 +305,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(12) === 12)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(12) === 12))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(Json 12) == 12")})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(12) === 12))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:fromJson",new $Closure1(this,"$Closure1"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("42") === 42)'`)})((((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("42") === 42))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: num.fromStr(\"42\") == 42")})((((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("42") === 42))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:fromStr",new $Closure2(this,"$Closure2"));
   }
 }

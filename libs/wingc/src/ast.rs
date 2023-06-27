@@ -494,13 +494,15 @@ impl Expr {
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
 	pub named_args: IndexMap<Symbol, Expr>,
+	pub span: WingSpan,
 }
 
 impl ArgList {
-	pub fn new() -> Self {
+	pub fn new(span: WingSpan) -> Self {
 		ArgList {
 			pos_args: vec![],
 			named_args: IndexMap::new(),
+			span,
 		}
 	}
 }

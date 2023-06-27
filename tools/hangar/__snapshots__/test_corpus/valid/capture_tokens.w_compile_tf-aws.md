@@ -32,8 +32,8 @@ module.exports = function({ url, api, MyResource }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(url))'`)})((await MyResource.isValidUrl(url)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(api.url))'`)})((await MyResource.isValidUrl(api.url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(url)")})((await MyResource.isValidUrl(url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(api.url)")})((await MyResource.isValidUrl(api.url)))};
     }
   }
   return $Closure2;
@@ -55,8 +55,8 @@ module.exports = function({  }) {
       return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
     }
     async foo()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.url))'`)})((await MyResource.isValidUrl(this.url)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.api.url))'`)})((await MyResource.isValidUrl(this.api.url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.url)")})((await MyResource.isValidUrl(this.url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.api.url)")})((await MyResource.isValidUrl(this.api.url)))};
     }
   }
   return MyResource;

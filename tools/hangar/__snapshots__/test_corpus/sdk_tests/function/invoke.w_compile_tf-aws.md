@@ -13,8 +13,8 @@ module.exports = function({ util_Util }) {
     }
     async handle(input)  {
       const target = (await util_Util.tryEnv("WING_TARGET"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((target) != null)'`)})(((target) != null))};
-      return `${input}-response`;
+      {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
+      return String.raw({ raw: ["", "-response"] }, input);
     }
   }
   return $Closure1;
@@ -35,7 +35,7 @@ module.exports = function({ f }) {
     }
     async handle()  {
       const x = (await f.invoke("hello"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "hello-response")'`)})((x === "hello-response"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
     }
   }
   return $Closure2;
