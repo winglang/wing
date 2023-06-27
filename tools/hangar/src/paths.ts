@@ -26,6 +26,9 @@ export const targetWingConsoleAppSpec =
 export const targetWingConsoleServerSpec =
   process.env.HANGAR_WINGCONSOLE_SERVER_SPEC ??
   `file:${path.join(repoRoot, `apps/wing-console/console/server`)}`;
+export const targetWingConsoleUiSpec =
+  process.env.HANGAR_WINGCONSOLE_UI_SPEC ??
+  `file:${path.join(repoRoot, `apps/wing-console/console/ui`)}`;
 export const targetWingCompilerSpec =
   process.env.HANGAR_WINGCOMPILER_SPEC ??
   `file:${path.join(repoRoot, `libs/wingcompiler`)}`;

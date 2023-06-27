@@ -9,13 +9,10 @@ exports[`access_hidden_namespace.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`access_static_from_instance.w 1`] = `
@@ -55,13 +52,10 @@ error: Unknown symbol \\"this\\"
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`bring.w 1`] = `
@@ -87,13 +81,10 @@ error: \\"fs\\" is not a built-in module
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`bring_jsii.w 1`] = `
@@ -112,13 +103,39 @@ error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"fo
 
 
  
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`bring_non_std_construct.w 1`] = `
+"error: Expected 1 positional argument(s) but got 0
+  --> ../../../examples/tests/invalid/bring_non_std_construct.w:8:1
+  |
+8 | new cdktf.S3Backend();
+  | ^^^^^^^^^^^^^^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
+error: Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
+   --> ../../../examples/tests/invalid/bring_non_std_construct.w:13:85
+   |
+13 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) as \\"s3_backend\\";
+   |                                                                                     ^^^^^^^^^^^^ Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
 
 
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
+   --> ../../../examples/tests/invalid/bring_non_std_construct.w:15:85
+   |
+15 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) in this;
+   |                                                                                     ^^^^ Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`capture_redefinition.w 1`] = `
@@ -130,13 +147,10 @@ exports[`capture_redefinition.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`class.w 1`] = `
@@ -323,13 +337,10 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.w 1`] = `
@@ -347,13 +358,10 @@ error: Expected type to be \\"inflight (message: str): void\\", but got \\"$Clos
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`container_types.w 1`] = `
@@ -484,13 +492,10 @@ error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`diags_with_multibyte_chars.w 1`] = `
@@ -502,13 +507,10 @@ exports[`diags_with_multibyte_chars.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`enums.w 1`] = `
@@ -527,13 +529,10 @@ error: Property access unsupported on type \\"SomeEnum\\"
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`extern.w 1`] = `
@@ -552,13 +551,10 @@ error: Failed to resolve extern \\"not-installed\\": Not Found
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`for_loop.w 1`] = `
@@ -570,13 +566,10 @@ exports[`for_loop.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`function_type.w 1`] = `
@@ -595,13 +588,10 @@ error: Expected function return type
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.w 1`] = `
@@ -613,13 +603,10 @@ exports[`immutable_container_types.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`impl_interface.w 1`] = `
@@ -666,25 +653,19 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_capture_mutable.w 1`] = `
 "pass ─ inflight_class_capture_mutable.wsim (no tests)
  
-
-
-
-
-Tests 1 passed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_created_in_preflight.w 1`] = `
@@ -717,13 +698,10 @@ error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_dup_init.w 1`] = `
@@ -737,13 +715,10 @@ exports[`inflight_class_dup_init.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_in_preflight.w 1`] = `
@@ -755,13 +730,10 @@ exports[`inflight_class_in_preflight.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_interface_structural_typing.w 1`] = `
@@ -773,13 +745,10 @@ exports[`inflight_class_interface_structural_typing.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.w 1`] = `
@@ -805,13 +774,10 @@ error: Capturing collection of preflight classes is not supported yet (type is '
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.w 1`] = `
@@ -830,13 +796,10 @@ error: Unable to qualify which operations are performed on 'globalQueue' of type
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.w 1`] = `
@@ -855,13 +818,10 @@ error: Unable to qualify which operations are performed on 'globalB' of type 'Bu
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`interface.w 1`] = `
@@ -908,13 +868,10 @@ error: Symbol \\"foo\\" already defined in this scope
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`json.w 1`] = `
@@ -989,13 +946,10 @@ error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`json_static.w 1`] = `
@@ -1007,13 +961,10 @@ exports[`json_static.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`missing_semicolon.w 1`] = `
@@ -1039,13 +990,10 @@ error: Expected '}'
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`mut_container_types.w 1`] = `
@@ -1148,13 +1096,10 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`nil.w 1`] = `
@@ -1194,13 +1139,10 @@ error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow 
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`optionals.w 1`] = `
@@ -1282,13 +1224,10 @@ error: Variable hi is not reassignable
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`panic.w 1`] = `
@@ -1300,13 +1239,10 @@ exports[`panic.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`panic.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
@@ -1320,13 +1256,10 @@ exports[`preflight_from_inflight.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`primitives.w 1`] = `
@@ -1359,13 +1292,10 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`reassign_to_nonreassignable.w 1`] = `
@@ -1405,13 +1335,10 @@ error: Variable arg is not reassignable
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`resource_access_field_as_method.w 1`] = `
@@ -1423,13 +1350,10 @@ exports[`resource_access_field_as_method.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`resource_captures.w 1`] = `
@@ -1448,13 +1372,10 @@ error: Capturing collection of preflight classes is not supported yet (type is '
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`resource_inflight.w 1`] = `
@@ -1466,13 +1387,10 @@ exports[`resource_inflight.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`resource_init.w 1`] = `
@@ -1505,13 +1423,10 @@ error: Inflight initializers cannot have parameters
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`scope_and_id.w 1`] = `
@@ -1544,13 +1459,10 @@ error: Inflight classes cannot have a scope
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`sorted_errors_no_span.w 1`] = `
@@ -1583,13 +1495,10 @@ error: Expected \\"b\\" to be a type but it's a variable
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`statement_invalid_scope.w 1`] = `
@@ -1622,13 +1531,10 @@ error: Expected continue statement to be inside of a loop (while/for)
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`statements_if.w 1`] = `
@@ -1654,13 +1560,10 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`std_containers.w 1`] = `
@@ -1672,13 +1575,10 @@ exports[`std_containers.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`struct_expansion.w 1`] = `
@@ -1733,13 +1633,10 @@ error: Expected 2 positional argument(s) but got 1
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`structs.w 1`] = `
@@ -1793,13 +1690,10 @@ error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not 
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`try_no_catch_or_finally.w 1`] = `
@@ -1813,13 +1707,10 @@ exports[`try_no_catch_or_finally.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`types_strings_arithmetic.w 1`] = `
@@ -1845,13 +1736,10 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`unimplemented_grammar.w 1`] = `
@@ -1884,13 +1772,10 @@ error: expression \\"await_expression\\" is not supported yet see https://github
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`unknown_field.w 1`] = `
@@ -1902,13 +1787,10 @@ exports[`unknown_field.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`unknown_submodule.w 1`] = `
@@ -1920,13 +1802,10 @@ exports[`unknown_submodule.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.w 1`] = `
@@ -1987,13 +1866,10 @@ error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`use_before_defined.w 1`] = `
@@ -2012,13 +1888,10 @@ error: Symbol \\"x\\" used before being defined
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`variable_scoping.w 1`] = `
@@ -2030,13 +1903,10 @@ exports[`variable_scoping.w 1`] = `
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`void_in_expression_position.w 1`] = `
@@ -2062,11 +1932,8 @@ error: Cannot assign expression of type \\"void\\" to a variable
 
 
  
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;

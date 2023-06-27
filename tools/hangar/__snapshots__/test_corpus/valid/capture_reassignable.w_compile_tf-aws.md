@@ -12,7 +12,7 @@ module.exports = function({ x }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 5)'`)})((x === 5))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})((x === 5))};
     }
   }
   return $Closure1;

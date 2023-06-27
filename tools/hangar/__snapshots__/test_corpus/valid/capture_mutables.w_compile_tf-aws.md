@@ -12,10 +12,10 @@ module.exports = function({ a, s, m, aCloned }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(a.length === 1)'`)})((a.length === 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.size === 1)'`)})((s.size === 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(Object.keys(m).length === 1)'`)})((Object.keys(m).length === 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(aCloned.length === 1)'`)})((aCloned.length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})((s.size === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})((Object.keys(m).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})((aCloned.length === 1))};
     }
   }
   return $Closure1;

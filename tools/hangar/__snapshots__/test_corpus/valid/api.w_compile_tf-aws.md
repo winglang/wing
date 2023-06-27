@@ -40,7 +40,7 @@ module.exports = function({ api }) {
     }
     async handle()  {
       const url = api.url;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
     }
   }
   return $Closure2;
@@ -60,7 +60,7 @@ module.exports = function({ __parent_this_3 }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      const text = `${__parent_this_3.api.url}/endpoint2`;
+      const text = String.raw({ raw: ["", "/endpoint2"] }, __parent_this_3.api.url);
       return {
       "status": 200,
       "body": text,}
