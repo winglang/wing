@@ -14,7 +14,7 @@ application.
 
 There are two main ways to interact with the simulator:
 
-* Running inflight [unit tests](docs/docs/02-concepts/04-tests.md) with the `wing test` command.
+* Running inflight [unit tests](/02-concepts/04-tests.md) with the `wing test` command.
 * Interacting with the simulated application through the Wing Console
 
 The simulator is also available as a set of APIs exported through the
