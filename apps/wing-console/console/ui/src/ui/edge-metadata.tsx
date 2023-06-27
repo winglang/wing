@@ -1,36 +1,32 @@
 import {
-  ArrowLeftOnRectangleIcon,
-  ArrowRightOnRectangleIcon,
-} from "@heroicons/react/20/solid";
-import {
   ArrowPathRoundedSquareIcon,
-  ArrowRightIcon,
   ArrowsRightLeftIcon,
-  CubeTransparentIcon,
-  CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
 import {
   useTheme,
   InspectorSection,
-  Attribute,
   ScrollableArea,
   ResourceIcon,
   Pill,
+  Tree,
+  Attribute,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { MetadataNode } from "./resource-metadata";
 
 export interface EdgeMetadataProps {
   source: MetadataNode;
   target: MetadataNode;
   inflights: { name: string }[];
+  onConnectionNodeClick?: (path: string) => void;
 }
 
 export const EdgeMetadata = ({
   source,
   target,
   inflights,
+  onConnectionNodeClick,
 }: EdgeMetadataProps) => {
   const { theme } = useTheme();
 
@@ -51,6 +47,15 @@ export const EdgeMetadata = ({
     });
   };
 
+  const entries = useMemo(() => {
+    return inflights.map((inflight) => {
+      return {
+        id: inflight.name,
+        name: inflight.name,
+      };
+    });
+  }, [inflights]);
+
   return (
     <ScrollableArea
       overflowY
@@ -59,43 +64,13 @@ export const EdgeMetadata = ({
       <div className="flex justify-between">
         <div className="flex items-center gap-2 px-2 py-2 truncate w-1/2">
           <div className="flex-shrink-0">
-            <ResourceIcon
-              className="w-6 h-6"
-              resourceType={source.type}
-              resourcePath={source.path}
-            />
+            <ArrowPathRoundedSquareIcon className="w-6 h-6" />
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate" title={source.id}>
-              {source.id}
-            </div>
-            <div className="flex" title={source.type}>
-              <Pill>{source.type}</Pill>
-            </div>
-          </div>
-        </div>
-
-        <div className="items-center flex">
-          <ArrowRightIcon className="w-5 h-5" />
-        </div>
-
-        <div className="flex items-center gap-2 px-2 py-2 truncate w-1/2">
-          <div className="flex grow" />
-          <div className="flex-shrink-0">
-            <ResourceIcon
-              className="w-6 h-6"
-              resourceType={target.type}
-              resourcePath={target.path}
-            />
-          </div>
-
-          <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate" title={target.id}>
-              {target.id}
-            </div>
-            <div className="flex" title={target.type}>
-              <Pill>{target.type}</Pill>
+            <div className="text-sm font-medium truncate">Relationship</div>
+            <div className="flex">
+              <Pill>Relationship</Pill>
             </div>
           </div>
         </div>
@@ -108,23 +83,76 @@ export const EdgeMetadata = ({
         onClick={() => toggleInspectorSection("inflights")}
         headingClassName="pl-2"
       >
-        <div className={classNames("border-t", theme.border4)}>
-          {inflights.map((inflight) => (
-            <div
+        <div
+          className={classNames(
+            "border-t",
+            theme.border4,
+            "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
+            "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-250",
+          )}
+        >
+          <Attribute name="Source">
+            <button
               className={classNames(
                 theme.bg3,
                 theme.bg3Hover,
                 theme.text1,
-                "w-full flex-shrink-0 max-w-full truncate text-sm pl-4 pr-2 py-1 flex items-center gap-1 min-w-0",
+                "w-full flex-shrink-0 max-w-full truncate text-sm flex items-center gap-1 min-w-0",
+                "border border-transparent rounded",
               )}
+              title={source.path}
+              onClick={() => onConnectionNodeClick?.(source.path)}
             >
-              <div className="flex items-center gap-1.5 ml-2.5 min-w-0 truncate">
-                {inflight.name}
+              <div className="flex items-center gap-1.5 ml-2 5 min-w-0">
+                <div className="flex-shrink-0 -ml-1">
+                  <ResourceIcon
+                    className="w-4 h-4"
+                    resourceType={source.type}
+                    resourcePath={source.path}
+                  />
+                </div>
+                <div className="truncate">{source.id}</div>
               </div>
-            </div>
-          ))}
+            </button>
+          </Attribute>
+          <Attribute name="Target">
+            <button
+              className={classNames(
+                theme.bg3,
+                theme.bg3Hover,
+                theme.text1,
+                "w-full flex-shrink-0 max-w-full truncate text-sm flex items-center gap-1 min-w-0",
+                "border border-transparent rounded",
+              )}
+              title={target.path}
+              onClick={() => onConnectionNodeClick?.(target.path)}
+            >
+              <div className="flex items-center gap-1.5 ml-2 5 min-w-0">
+                <div className="flex-shrink-0 -ml-1">
+                  <ResourceIcon
+                    className="w-4 h-4"
+                    resourceType={target.type}
+                    resourcePath={target.path}
+                  />
+                </div>
+                <div className="truncate">{target.id}</div>
+              </div>
+            </button>
+          </Attribute>
+
+          <div className="border-t border-transparent">
+            <Attribute name="Inflights" labelTop>
+              <Tree
+                entries={entries}
+                selectedEntries={[]}
+                onSelectionChange={() => {}}
+                className="min-h-[6rem] h-48 overflow-y-auto resize-y"
+              />
+            </Attribute>
+          </div>
         </div>
       </InspectorSection>
+      <div className={classNames(theme.border3, "border-t")}></div>
     </ScrollableArea>
   );
 };

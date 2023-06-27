@@ -160,6 +160,10 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                   source={edgeMetadata.data.source}
                   target={edgeMetadata.data.target}
                   inflights={edgeMetadata.data.inflights}
+                  onConnectionNodeClick={(path) => {
+                    expand(path);
+                    setSelectedItems([path]);
+                  }}
                 />
               )}
             </LeftResizableWidget>

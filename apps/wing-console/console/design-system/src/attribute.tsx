@@ -10,6 +10,7 @@ interface AttributeProps {
   type?: "url";
   url?: string;
   noLeftPadding?: boolean;
+  labelTop?: boolean;
 }
 
 export const Attribute = ({
@@ -19,14 +20,16 @@ export const Attribute = ({
   url,
   children,
   noLeftPadding = false,
+  labelTop = false,
 }: PropsWithChildren<AttributeProps>) => {
   const { theme } = useTheme();
   const id = useId();
   return (
     <div
       className={classNames(
-        "flex flex-row items-center",
+        "flex flex-row",
         !noLeftPadding && "pl-4",
+        !labelTop && "items-center",
       )}
     >
       <label htmlFor={id} className={classNames(theme.text2, "min-w-[100px]")}>
