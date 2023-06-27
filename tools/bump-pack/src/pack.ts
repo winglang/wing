@@ -36,7 +36,8 @@ export async function pack(options: PackOptions) {
  */
 function preparePackageJsonAndRun(packageDir: string, callback: () => void) {
   const packageJsonPath = `${packageDir}/package.json`;
-  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+  const packageJsonString = readFileSync(packageJsonPath, "utf8");
+  const packageJson = JSON.parse(packageJsonString);
   try {
     writeFileSync(
       packageJsonPath,
@@ -54,9 +55,6 @@ function preparePackageJsonAndRun(packageDir: string, callback: () => void) {
 
     callback();
   } finally {
-    writeFileSync(
-      packageJsonPath,
-      `${JSON.stringify(packageJson, undefined, 2)}\n`
-    );
+    writeFileSync(packageJsonPath, packageJsonString);
   }
 }
