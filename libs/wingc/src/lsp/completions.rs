@@ -100,7 +100,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						let nearest_expr_type = types.get_expr_type(nearest_expr).unwrap();
 
 						// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
-						if !nearest_expr_type.is_anything() && !nearest_expr_type.is_unresolved() {
+						if !nearest_expr_type.is_unresolved() {
 							return get_completions_from_type(
 								&nearest_expr_type,
 								types,
