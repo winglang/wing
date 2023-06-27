@@ -25,7 +25,7 @@ implementation.
 
 The next step is to write the first revision of the RFC document itself.
 
-Create a file based off of the [`template.md`](/contributing/999-rfcs/template.md) under the `docs` directory. It includes useful guidance and tips on how to write a good RFC.
+Create a file based off of the [`template.md`](/contributing/rfcs/template) under the `docs` directory. It includes useful guidance and tips on how to write a good RFC.
 
 **What should be included in an RFC?** The purpose of an RFC is to reduce
 ambiguity and risk and get approval for public-facing interfaces (APIs), which are "one-way doors" after the feature is released. Another way to think about it is that the goal and contents of the document should allow us to create a *high-confidence* implementation plan for a feature or a change.
