@@ -9,3 +9,6 @@ class CdkDockerImageFunction {
         }) as "DockerImageFunction";
     }
 }
+
+// Test creating an `App` construct
+new awscdk.App();
