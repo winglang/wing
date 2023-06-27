@@ -442,9 +442,9 @@ export const ElkMap = <T extends unknown = undefined>({
 
             <EdgeMetadata
               edge={selectedEdge}
-              fade={
-                !isHighlighted(selectedEdge?.source ?? "") &&
-                !isHighlighted(selectedEdge?.target ?? "")
+              highlighted={
+                isHighlighted(selectedEdge?.source ?? "") ||
+                isHighlighted(selectedEdge?.target ?? "")
               }
             />
 

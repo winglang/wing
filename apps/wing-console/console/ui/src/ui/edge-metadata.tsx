@@ -15,38 +15,38 @@ export interface EdgeMeta {
 export interface EdgeMetadataProps {
   edge?: EdgeMeta;
   className?: string;
-  fade?: boolean;
+  highlighted?: boolean;
 }
 
-export const EdgeMetadata = (props: EdgeMetadataProps) => {
-  const [edge, setEdge] = useState(props.edge);
+export const EdgeMetadata = ({
+  edge,
+  className,
+  highlighted,
+}: EdgeMetadataProps) => {
+  const [edgeMeta, setEdgeMeta] = useState(edge);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (props.edge) {
-      setEdge(props.edge);
+    if (edge) {
+      setEdgeMeta(edge);
       setVisible(true);
     } else {
       setVisible(false);
     }
-  }, [props.edge]);
+  }, [edge]);
 
   return (
     <motion.div
-      className={classNames(
-        "absolute z-10",
-        "transition-opacity",
-        props.className,
-      )}
+      className={classNames("absolute z-10", "transition-opacity", className)}
       style={{
-        translateX: edge?.position?.x,
-        translateY: edge?.position?.y,
+        translateX: edgeMeta?.position?.x,
+        translateY: edgeMeta?.position?.y,
       }}
       initial={{
         opacity: 0,
       }}
       animate={{
-        opacity: visible ? (props.fade ? 0.35 : 1) : 0,
+        opacity: visible ? (highlighted ? 1 : 0.35) : 0,
       }}
       transition={{ ease: "easeOut", duration: 0.15 }}
       exit={{
@@ -56,9 +56,9 @@ export const EdgeMetadata = (props: EdgeMetadataProps) => {
       <div
         className={classNames(
           "absolute z-20 w-3 h-3 dark:bg-slate-700",
-          edge?.placement === "right" &&
+          edgeMeta?.placement === "right" &&
             "rotate-45 top-3 -left-1.5 border-b border-l",
-          edge?.placement === "bottom" &&
+          edgeMeta?.placement === "bottom" &&
             "rotate-45 -top-1.5 left-3 border-t border-l",
           "border-sky-300 dark:border-sky-500",
         )}
@@ -66,13 +66,12 @@ export const EdgeMetadata = (props: EdgeMetadataProps) => {
       <div
         className={classNames(
           "absolute z-0 w-3 h-3 dark:bg-slate-700",
-          edge?.placement === "right" &&
+          edgeMeta?.placement === "right" &&
             "rotate-45 top-3 -left-1.5 border-b border-l",
-          edge?.placement === "bottom" &&
+          edgeMeta?.placement === "bottom" &&
             "rotate-45 -top-1.5 left-3 border-t border-l",
           "outline outline-2 outline-sky-200/50 dark:outline-sky-500/50",
           "border-sky-300 dark:border-sky-500",
-          "rotate-45 top-3 -left-1.5",
         )}
       />
       <div
@@ -87,7 +86,7 @@ export const EdgeMetadata = (props: EdgeMetadataProps) => {
         </div>
 
         <div className="leading-tight text-xs truncate transition-all text-slate-900 dark:text-slate-250">
-          {edge?.inflights.map((inflight, index: number) => (
+          {edgeMeta?.inflights.map((inflight, index: number) => (
             <li key={index}>{inflight}</li>
           ))}
         </div>
