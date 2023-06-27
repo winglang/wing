@@ -1,0 +1,466 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: Api
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Api\n```\n---\nFunctionality shared between all `Api` implementations."
+  sortText: gg|Api
+- label: ApiConnectProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiConnectProps\n```\n---\nOptions for Api patch endpoint."
+  sortText: hh|ApiConnectProps
+- label: ApiDeleteProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiDeleteProps\n```\n---\nOptions for Api put endpoint."
+  sortText: hh|ApiDeleteProps
+- label: ApiGetProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiGetProps\n```\n---\nOptions for Api get endpoint."
+  sortText: hh|ApiGetProps
+- label: ApiHeadProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiHeadProps\n```\n---\nOptions for Api patch endpoint."
+  sortText: hh|ApiHeadProps
+- label: ApiOptionsProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiOptionsProps\n```\n---\nOptions for Api patch endpoint."
+  sortText: hh|ApiOptionsProps
+- label: ApiPatchProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiPatchProps\n```\n---\nOptions for Api patch endpoint."
+  sortText: hh|ApiPatchProps
+- label: ApiPostProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiPostProps\n```\n---\nOptions for Api post endpoint."
+  sortText: hh|ApiPostProps
+- label: ApiProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiProps\n```\n---\nProperties for `Api`."
+  sortText: hh|ApiProps
+- label: ApiPutProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiPutProps\n```\n---\nOptions for Api put endpoint."
+  sortText: hh|ApiPutProps
+- label: ApiRequest
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiRequest\n```\n---\nShape of a request to an inflight handler."
+  sortText: hh|ApiRequest
+- label: ApiResponse
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nApiResponse\n```\n---\nShape of a response from a inflight handler."
+  sortText: hh|ApiResponse
+- label: Bucket
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
+  sortText: gg|Bucket
+- label: BucketDeleteOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nBucketDeleteOptions\n```\n---\nInterface for delete method inside `Bucket`."
+  sortText: hh|BucketDeleteOptions
+- label: BucketEvent
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nBucketEvent\n```\n---\non_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927."
+  sortText: hh|BucketEvent
+- label: BucketEventType
+  kind: 13
+  documentation:
+    kind: markdown
+    value: ""
+  sortText: jj|BucketEventType
+- label: BucketOnCreateProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nBucketOnCreateProps\n```\n---\non create event options."
+  sortText: hh|BucketOnCreateProps
+- label: BucketOnDeleteProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nBucketOnDeleteProps\n```\n---\non delete event options."
+  sortText: hh|BucketOnDeleteProps
+- label: BucketOnEventProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nBucketOnEventProps\n```\n---\non any event options."
+  sortText: hh|BucketOnEventProps
+- label: BucketOnUpdateProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nBucketOnUpdateProps\n```\n---\non update event options."
+  sortText: hh|BucketOnUpdateProps
+- label: BucketProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nBucketProps\n```\n---\nProperties for `Bucket`."
+  sortText: hh|BucketProps
+- label: ColumnType
+  kind: 13
+  documentation:
+    kind: markdown
+    value: ""
+  sortText: jj|ColumnType
+- label: Counter
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Counter\n```\n---\nRepresents a distributed atomic counter."
+  sortText: gg|Counter
+- label: CounterProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nCounterProps\n```\n---\nProperties for `Counter`."
+  sortText: hh|CounterProps
+- label: Function
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nRepresents a function."
+  sortText: gg|Function
+- label: FunctionProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nFunctionProps\n```\n---\nProperties for `Function`.\n\n### Remarks\nThis is the type users see when constructing a cloud.Function instance."
+  sortText: hh|FunctionProps
+- label: GetSecretValueOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nGetSecretValueOptions\n```\n---\nOptions when getting a secret value."
+  sortText: hh|GetSecretValueOptions
+- label: HttpMethod
+  kind: 13
+  documentation:
+    kind: markdown
+    value: ""
+  sortText: jj|HttpMethod
+- label: IApiClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIApiClient\n```\n---\nInflight methods and members of `cloud.Api`."
+  sortText: ii|IApiClient
+- label: IApiEndpointHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIApiEndpointHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods."
+  sortText: ii|IApiEndpointHandler
+- label: IApiEndpointHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIApiEndpointHandlerClient\n```\n---\nInflight client for `IApiEndpointHandler`."
+  sortText: ii|IApiEndpointHandlerClient
+- label: IBucketClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIBucketClient\n```\n---\nInflight interface for `Bucket`."
+  sortText: ii|IBucketClient
+- label: IBucketEventHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIBucketEventHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to the bucket events."
+  sortText: ii|IBucketEventHandler
+- label: IBucketEventHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIBucketEventHandlerClient\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to the bucket events."
+  sortText: ii|IBucketEventHandlerClient
+- label: ICounterClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nICounterClient\n```\n---\nInflight interface for `Counter`."
+  sortText: ii|ICounterClient
+- label: IFunctionClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIFunctionClient\n```\n---\nInflight interface for `Function`."
+  sortText: ii|IFunctionClient
+- label: IFunctionHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIFunctionHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be used to create a `cloud.Function`."
+  sortText: ii|IFunctionHandler
+- label: IFunctionHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIFunctionHandlerClient\n```\n---\nInflight client for `IFunctionHandler`."
+  sortText: ii|IFunctionHandlerClient
+- label: IQueueClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIQueueClient\n```\n---\nInflight interface for `Queue`."
+  sortText: ii|IQueueClient
+- label: IQueueSetConsumerHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIQueueSetConsumerHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`."
+  sortText: ii|IQueueSetConsumerHandler
+- label: IQueueSetConsumerHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIQueueSetConsumerHandlerClient\n```\n---\nInflight client for `IQueueSetConsumerHandler`."
+  sortText: ii|IQueueSetConsumerHandlerClient
+- label: IScheduleClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIScheduleClient\n```\n---\nInflight interface for `Schedule`."
+  sortText: ii|IScheduleClient
+- label: IScheduleOnTickHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIScheduleOnTickHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`."
+  sortText: ii|IScheduleOnTickHandler
+- label: IScheduleOnTickHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIScheduleOnTickHandlerClient\n```\n---\nInflight client for `IScheduleOnTickHandler`."
+  sortText: ii|IScheduleOnTickHandlerClient
+- label: ISecretClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nISecretClient\n```\n---\nInflight interface for `Secret`."
+  sortText: ii|ISecretClient
+- label: IServiceClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIServiceClient\n```\n---\nInflight interface for `Service`."
+  sortText: ii|IServiceClient
+- label: IServiceOnEventClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIServiceOnEventClient\n```\n---\nInflight client for `IServiceOnEventHandler`."
+  sortText: ii|IServiceOnEventClient
+- label: IServiceOnEventHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIServiceOnEventHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`."
+  sortText: ii|IServiceOnEventHandler
+- label: ITableClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nITableClient\n```\n---\nInflight interface for `Table`."
+  sortText: ii|ITableClient
+- label: ITestRunnerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nITestRunnerClient\n```\n---\nInflight interface for `TestRunner`."
+  sortText: ii|ITestRunnerClient
+- label: ITopicClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nITopicClient\n```\n---\nInflight interface for `Topic`."
+  sortText: ii|ITopicClient
+- label: ITopicOnMessageHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nITopicOnMessageHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Topic.on_message`."
+  sortText: ii|ITopicOnMessageHandler
+- label: ITopicOnMessageHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nITopicOnMessageHandlerClient\n```\n---\nInflight client for `ITopicOnMessageHandler`."
+  sortText: ii|ITopicOnMessageHandlerClient
+- label: IWebsiteClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIWebsiteClient\n```\n---\nInflight methods and members of `cloud.Website`."
+  sortText: ii|IWebsiteClient
+- label: Queue
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Queue\n```\n---\nRepresents a queue."
+  sortText: gg|Queue
+- label: QueueProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nQueueProps\n```\n---\nProperties for `Queue`."
+  sortText: hh|QueueProps
+- label: QueueSetConsumerProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nQueueSetConsumerProps\n```\n---\nOptions for Queue.setConsumer."
+  sortText: hh|QueueSetConsumerProps
+- label: Schedule
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Schedule\n```\n---\nRepresents a schedule."
+  sortText: gg|Schedule
+- label: ScheduleOnTickProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nScheduleOnTickProps\n```\n---\nOptions for Schedule.onTick."
+  sortText: hh|ScheduleOnTickProps
+- label: ScheduleProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nScheduleProps\n```\n---\nProperties for `Schedule`."
+  sortText: hh|ScheduleProps
+- label: Secret
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Secret\n```\n---\nRepresents a cloud secret."
+  sortText: gg|Secret
+- label: SecretProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nSecretProps\n```\n---\nProperties for `Secret`."
+  sortText: hh|SecretProps
+- label: Service
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Service\n```\n---\nRepresents a service."
+  sortText: gg|Service
+- label: ServiceOnStartProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nServiceOnStartProps\n```\n---\nOptions for Service.onStart."
+  sortText: hh|ServiceOnStartProps
+- label: ServiceProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nServiceProps\n```\n---\nProperties for `Service`."
+  sortText: hh|ServiceProps
+- label: Table
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Table\n```\n---\nRepresents a NoSQL database table that can be used to store and query data."
+  sortText: gg|Table
+- label: TableProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTableProps\n```\n---\nProperties for `Table`."
+  sortText: hh|TableProps
+- label: TestResult
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTestResult\n```\n---\nA result of a single test."
+  sortText: hh|TestResult
+- label: TestRunner
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass TestRunner\n```\n---\nRepresents a test engine."
+  sortText: gg|TestRunner
+- label: TestRunnerProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTestRunnerProps\n```\n---\nProperties for `TestRunner`."
+  sortText: hh|TestRunnerProps
+- label: Topic
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Topic\n```\n---\nRepresents a topic."
+  sortText: gg|Topic
+- label: TopicOnMessageProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTopicOnMessageProps\n```\n---\nOptions for `Topic.onMessage`."
+  sortText: hh|TopicOnMessageProps
+- label: TopicProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTopicProps\n```\n---\nProperties for `Topic`."
+  sortText: hh|TopicProps
+- label: Trace
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTrace\n```\n---\nRepresents an trace emitted during simulation."
+  sortText: hh|Trace
+- label: TraceType
+  kind: 13
+  documentation:
+    kind: markdown
+    value: ""
+  sortText: jj|TraceType
+- label: Website
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Website\n```\n---\nRepresents a cloud static website."
+  sortText: gg|Website
+- label: WebsiteProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nWebsiteProps\n```\n---\nwebsite props."
+  sortText: hh|WebsiteProps
+
