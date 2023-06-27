@@ -1,4 +1,5 @@
 import { execSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
 
 export interface PackOptions {
   /**
@@ -22,6 +23,38 @@ export async function pack(options: PackOptions) {
   if (dryRun) {
     console.log(`Would have run "npm pack" in ${packageDir}`);
   } else {
-    execSync("npm pack", { cwd: packageDir, stdio: "inherit" });
+    preparePackageJsonAndRun(packageDir, () => {
+      execSync("npm pack", { cwd: packageDir, stdio: "inherit" });
+    });
+  }
+}
+
+/**
+ * Transforms the package.json at `packageDir` to use the publishConfig field and remove other unnecessary fields such as devDependencies.
+ * @param packageDir The directory that contains the package.json to transform.
+ * @param callback The function called after the transformation, before reverting the package.json back to its original state.
+ */
+function preparePackageJsonAndRun(packageDir: string, callback: () => void) {
+  const packageJsonPath = `${packageDir}/package.json`;
+  const packageJsonContents = readFileSync(packageJsonPath, "utf8");
+  try {
+    const packageJson = JSON.parse(packageJsonContents);
+    writeFileSync(
+      packageJsonPath,
+      JSON.stringify(
+        {
+          ...packageJson,
+          ...packageJson.publishConfig,
+          publishConfig: undefined,
+          devDependencies: undefined,
+        },
+        undefined,
+        2
+      )
+    );
+
+    callback();
+  } finally {
+    writeFileSync(packageJsonPath, packageJsonContents);
   }
 }

@@ -87,6 +87,12 @@ jobs:
           name: wingconsoleserver
           path: apps/wing-console/console/server/*.tgz
 
+      - name: Upload Wing Console UI
+        uses: actions/upload-artifact@v3
+        with:
+          name: wingconsoleui
+          path: apps/wing-console/console/ui/*.tgz
+
       - name: Upload Wing Console App
         uses: actions/upload-artifact@v3
         with:
@@ -204,6 +210,7 @@ jobs:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_UI_SPEC: "file:${{ github.workspace }}/wingconsoleui/wingconsole-ui-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
@@ -269,6 +276,7 @@ jobs:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/target/wing/winglang-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/target/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/target/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_UI_SPEC: "file:${{ github.workspace }}/target/wingconsoleui/wingconsole-ui-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/target/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/target/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:

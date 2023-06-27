@@ -8,6 +8,12 @@
         "command": "npm run compile",
         "cwd": "apps/wing-console/console/ui"
       }
+    },
+    "package": {
+      "options": {
+        "command": "npm run package",
+        "cwd": "apps/wing-console/console/ui"
+      }
     }
   }
 }
