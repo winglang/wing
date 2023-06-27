@@ -32,7 +32,7 @@ and load the application.
 
 Wing Console desktop application will show the following view of you application:
 
-![Wing Console desktop application view](docs/docs/01-start-here/console-app.png 'Wing Console')
+![Wing Console desktop application view](./console-app.png 'Wing Console')
 
 You are now able to run your IDE and the Wing Console side-by-side and watch how changes to your code update your application.
 
@@ -47,7 +47,7 @@ resource. The inspector pane on the right will show information about your
 queue, as well as any relationships (in our case, an outbound relationship to
 the function that handles messages).
 
-![Queue resource view in Wing Console](docs/docs/01-start-here/console-queue.png 'Queue resource')
+![Queue resource view in Wing Console](./console-queue.png 'Queue resource')
 
 ## Sending a message to the queue
 
@@ -58,11 +58,11 @@ Type `Wing` and hit **Send Message**.
 
 On the left sidebar click on the Bucket, you will see the following view:
 
-![Bucket resource view in Wing Console](docs/docs/01-start-here/console-bucket-1.png 'Bucket resource')
+![Bucket resource view in Wing Console](./console-bucket-1.png 'Bucket resource')
 
 Now, check the `wing.txt` file and download it, using the download button
 
-![Download bucket files in Wing Console](docs/docs/01-start-here/console-bucket-2.png 'Download bucket files')
+![Download bucket files in Wing Console](./console-bucket-2.png 'Download bucket files')
 
 The downloaded file should contain `Hello, Wing` text
 

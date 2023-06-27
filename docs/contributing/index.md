@@ -21,4 +21,4 @@ There are many ways to contribute to Wing:
 * Asking and answering questions in the [Wing Slack](https://t.winglang.io/slack)
 * Posting or answering questions in [Wing Discussions](https://github.com/winglang/wing/discussions)
 
-![](docs/contributing/giphy.webp)
+![](./giphy.webp)
