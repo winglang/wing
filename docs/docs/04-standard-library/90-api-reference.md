@@ -3990,14 +3990,59 @@ Return the total number of years in this Duration.
 
 Immutable Json.
 
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Json.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Json()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.Json.asBool">asBool</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.Json.asNum">asNum</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns a specified element from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
+| <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
+| <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.Json.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.Json.tryGet">tryGet</a></code> | Optionally returns an specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.Json.tryGetAt">tryGetAt</a></code> | Optionally returns a specified element at a given index from Json Array. |
 
 ---
+
+##### `asBool` <a name="asBool" id="@winglang/sdk.std.Json.asBool"></a>
+
+```wing
+asBool(): bool
+```
+
+Convert Json element to number if possible.
+
+##### `asNum` <a name="asNum" id="@winglang/sdk.std.Json.asNum"></a>
+
+```wing
+asNum(): num
+```
+
+Convert Json element to number if possible.
+
+##### `asStr` <a name="asStr" id="@winglang/sdk.std.Json.asStr"></a>
+
+```wing
+asStr(): str
+```
+
+Convert Json element to string if possible.
 
 ##### `get` <a name="get" id="@winglang/sdk.std.Json.get"></a>
 
@@ -4031,10 +4076,67 @@ The index of the element in the Json Array to return.
 
 ---
 
+##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.Json.tryAsBool"></a>
+
+```wing
+tryAsBool(): bool
+```
+
+Convert Json element to boolean if possible.
+
+##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.Json.tryAsNum"></a>
+
+```wing
+tryAsNum(): num
+```
+
+Convert Json element to string if possible.
+
+##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.Json.tryAsStr"></a>
+
+```wing
+tryAsStr(): str
+```
+
+Convert Json element to string if possible.
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Json.tryGet"></a>
+
+```wing
+tryGet(key: str): Json
+```
+
+Optionally returns an specified element from the Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.Json.tryGetAt"></a>
+
+```wing
+tryGetAt(index: num): Json
+```
+
+Optionally returns a specified element at a given index from Json Array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Json.tryGetAt.parameter.index"></a>
+
+- *Type:* num
+
+The index of the element in the Json Array to return.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.Json.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
@@ -4043,6 +4145,24 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
 | <code><a href="#@winglang/sdk.std.Json.tryParse">tryParse</a></code> | Try to parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
+
+---
+
+##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.Json.deepCopy"></a>
+
+```wing
+bring std;
+
+std.Json.deepCopy(json: MutJson)
+```
+
+Creates an immutable deep copy of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopy.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
+
+to copy.
 
 ---
 
@@ -4069,14 +4189,14 @@ to copy.
 ```wing
 bring std;
 
-std.Json.delete(json: Json, key: str)
+std.Json.delete(json: MutJson, key: str)
 ```
 
 Deletes a key in a given Json.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.delete.parameter.json"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
 
 to delete key from.
 
@@ -4121,14 +4241,14 @@ The key to check.
 ```wing
 bring std;
 
-std.Json.keys(json: Json)
+std.Json.keys(json: any)
 ```
 
 Returns the keys from the Json object.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* any
 
 to get keys from.
 
@@ -4157,7 +4277,7 @@ to parse as Json.
 ```wing
 bring std;
 
-std.Json.stringify(json: Json, indent?: num)
+std.Json.stringify(json: any, indent?: num)
 ```
 
 Formats Json as string.
@@ -4166,7 +4286,7 @@ Formats Json as string.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.stringify.parameter.json"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* any
 
 to format as string.
 
@@ -4480,16 +4600,61 @@ The length of the array.
 
 Mutable Json.
 
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutJson.Initializer"></a>
+
+```wing
+bring std;
+
+new std.MutJson()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryAsNum">tryAsNum</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryGet">tryGet</a></code> | Optionally returns an specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryGetAt">tryGetAt</a></code> | Optionally returns a specified element at a given index from Json Array. |
 
 ---
+
+##### `asBool` <a name="asBool" id="@winglang/sdk.std.MutJson.asBool"></a>
+
+```wing
+asBool(): bool
+```
+
+Convert Json element to number if possible.
+
+##### `asNum` <a name="asNum" id="@winglang/sdk.std.MutJson.asNum"></a>
+
+```wing
+asNum(): num
+```
+
+Convert Json element to number if possible.
+
+##### `asStr` <a name="asStr" id="@winglang/sdk.std.MutJson.asStr"></a>
+
+```wing
+asStr(): str
+```
+
+Convert Json element to string if possible.
 
 ##### `get` <a name="get" id="@winglang/sdk.std.MutJson.get"></a>
 
@@ -4569,31 +4734,62 @@ The value of the element to set.
 
 ---
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.MutJson.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
-
----
-
-##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.MutJson.deepCopy"></a>
+##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.MutJson.tryAsBool"></a>
 
 ```wing
-bring std;
-
-std.MutJson.deepCopy(json: MutJson)
+tryAsBool(): bool
 ```
 
-Creates an immutable deep copy of the Json.
+Convert Json element to boolean if possible.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.MutJson.deepCopy.parameter.json"></a>
+##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.MutJson.tryAsNum"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
+```wing
+tryAsNum(): num
+```
 
-to copy.
+Convert Json element to string if possible.
+
+##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.MutJson.tryAsStr"></a>
+
+```wing
+tryAsStr(): str
+```
+
+Convert Json element to string if possible.
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.MutJson.tryGet"></a>
+
+```wing
+tryGet(key: str): MutJson
+```
+
+Optionally returns an specified element from the Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
 
 ---
+
+##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.MutJson.tryGetAt"></a>
+
+```wing
+tryGetAt(index: num): MutJson
+```
+
+Optionally returns a specified element at a given index from Json Array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.tryGetAt.parameter.index"></a>
+
+- *Type:* num
+
+The index of the element in the Json Array to return.
+
+---
+
 
 
 

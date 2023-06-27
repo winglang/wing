@@ -15,7 +15,7 @@ m.set("a", 321);
 assert(m.get("a") == 321);
 
 // Immutable Deep Copy
-let n = MutJson.deepCopy(m);
+let n = Json.deepCopy(m);
 assert(m != n);
 
 // Deleting keys
