@@ -7,7 +7,7 @@ import {
   sanitize_json_paths,
   tfResourcesOfCount,
 } from "./utils";
-import * as cdktf from "cdktf";
+import { Testing } from "cdktf";
 
 describe("Plugin examples", () => {
   const app = "app.w";
@@ -38,7 +38,7 @@ describe("Plugin examples", () => {
 
       expect(terraformOutput).toMatchSnapshot();
       expect(
-        cdktf.Testing.toHaveResourceWithProperties(
+        Testing.toHaveResourceWithProperties(
           terraformOutputString,
           "aws_iam_role",
           {

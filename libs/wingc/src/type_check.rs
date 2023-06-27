@@ -640,6 +640,7 @@ pub struct FunctionSignature {
 	/// This string may contain special tokens:
 	/// - `$self$`: The expression on which this function was called
 	/// - `$args$`: the arguments passed to this function call
+	/// - `$args_text$`: the original source text of the arguments passed to this function call, escaped
 	pub js_override: Option<String>,
 	pub docs: Docs,
 }
@@ -904,10 +905,10 @@ impl TypeRef {
 			Type::Anything => false,
 			Type::Unresolved => false,
 			Type::Void => false,
-			Type::MutJson => false,
-			Type::MutArray(_) => false,
-			Type::MutMap(_) => false,
-			Type::MutSet(_) => false,
+			Type::MutJson => true,
+			Type::MutArray(v) => v.is_capturable(),
+			Type::MutMap(v) => v.is_capturable(),
+			Type::MutSet(v) => v.is_capturable(),
 			Type::Function(sig) => sig.phase == Phase::Inflight,
 
 			// only preflight classes can be captured

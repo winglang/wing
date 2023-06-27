@@ -12,7 +12,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
     }
   }
   return $Closure1;

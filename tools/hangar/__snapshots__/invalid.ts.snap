@@ -153,63 +153,6 @@ Duration <DURATION>
 "
 `;
 
-exports[`capture_mutables.w 1`] = `
-"error: Cannot capture field 'a' with non-capturable type 'MutArray<str>'
-  --> ../../../examples/tests/invalid/capture_mutables.w:8:10
-  |
-8 |   assert(a.length == 1);
-  |          ^ Cannot capture field 'a' with non-capturable type 'MutArray<str>'
-
-
-error: Cannot capture field 's' with non-capturable type 'MutSet<num>'
-   --> ../../../examples/tests/invalid/capture_mutables.w:10:10
-   |
-10 |   assert(s.size == 1);
-   |          ^ Cannot capture field 's' with non-capturable type 'MutSet<num>'
-
-
-error: Cannot capture field 'm' with non-capturable type 'MutMap<bool>'
-   --> ../../../examples/tests/invalid/capture_mutables.w:12:10
-   |
-12 |   assert(m.size() == 1);
-   |          ^ Cannot capture field 'm' with non-capturable type 'MutMap<bool>'
-
-
-error: Cannot capture field 'aCloned' with non-capturable type 'MutArray<str>'
-   --> ../../../examples/tests/invalid/capture_mutables.w:14:10
-   |
-14 |   assert(aCloned.length == 1);
-   |          ^^^^^^^ Cannot capture field 'aCloned' with non-capturable type 'MutArray<str>'
-
-
- 
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
-`;
-
-exports[`capture_reassignable.w 1`] = `
-"error: Cannot capture reassignable field 'x'
-  --> ../../../examples/tests/invalid/capture_reassignable.w:6:15
-  |
-6 |     log(\\"x: \${x}\\");
-  |               ^ Cannot capture reassignable field 'x'
-
-
- 
-
-
-
-
-Tests 1 failed (1) 
-Duration <DURATION>
-"
-`;
-
 exports[`capture_redefinition.w 1`] = `
 "error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
   --> ../../../examples/tests/invalid/capture_redefinition.w:4:7
@@ -765,26 +708,13 @@ Duration <DURATION>
 `;
 
 exports[`inflight_class_capture_mutable.w 1`] = `
-"error: Cannot capture field 'x' with non-capturable type 'MutArray<str>'
-  --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:5:9
-  |
-5 |     log(x.at(0));
-  |         ^ Cannot capture field 'x' with non-capturable type 'MutArray<str>'
-
-
-error: Cannot capture reassignable field 'foo'
-   --> ../../../examples/tests/invalid/inflight_class_capture_mutable.w:14:12
-   |
-14 |     return foo;
-   |            ^^^ Cannot capture reassignable field 'foo'
-
-
+"pass ─ inflight_class_capture_mutable.wsim (no tests)
  
 
 
 
 
-Tests 1 failed (1) 
+Tests 1 passed (1) 
 Duration <DURATION>
 "
 `;
@@ -1394,11 +1324,11 @@ Duration <DURATION>
 `;
 
 exports[`panic.w 1`] = `
-"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributing/bugs
   --> ../../../examples/tests/invalid/panic.w:6:1
   |
 6 | 😱;
-  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributors/bugs
+  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://docs.winglang.io/contributing/bugs
 
 
  
@@ -1535,21 +1465,7 @@ Duration <DURATION>
 `;
 
 exports[`resource_captures.w 1`] = `
-"error: Cannot capture reassignable field 'reassignable'
-   --> ../../../examples/tests/invalid/resource_captures.w:18:17
-   |
-18 |     log(\\"\${this.reassignable}\\");
-   |                 ^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
-
-
-error: Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
-   --> ../../../examples/tests/invalid/resource_captures.w:20:14
-   |
-20 |     log(this.mutArray.at(0));
-   |              ^^^^^^^^ Cannot capture field 'mutArray' with non-capturable type 'MutArray<str>'
-
-
-error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
+"error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
    --> ../../../examples/tests/invalid/resource_captures.w:23:13
    |
 23 |     let b = this.bucket;

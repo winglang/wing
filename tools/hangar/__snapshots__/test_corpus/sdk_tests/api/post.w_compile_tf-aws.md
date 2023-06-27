@@ -12,10 +12,10 @@ module.exports = function({ api_POST, body, std_Json }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.method === api_POST)'`)})((req.method === api_POST))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.path === "/path")'`)})((req.path === "/path"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]))'`)})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.headers)["content-type"] === "application/json")'`)})(((req.headers)["content-type"] === "application/json"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_POST")})((req.method === api_POST))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
       "body": req.body,}
@@ -49,12 +49,12 @@ module.exports = function({ api, body, http_POST, http_Util, std_Json }) {
       "headers": Object.freeze({"content-type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
       ));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]))'`)})((response.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.status === 200)'`)})((response.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.url === url)'`)})((response.url === url))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]))'`)})((fetchResponse.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.status === 200)'`)})((fetchResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.url === url)'`)})((fetchResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == Json.stringify(body)")})((response.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == Json.stringify(body)")})((fetchResponse.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
     }
   }
   return $Closure2;

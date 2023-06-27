@@ -12,7 +12,7 @@ module.exports = function({ fn }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn.invoke(\"test\") == \"hello world!\"")})(((await fn.invoke("test")) === "hello world!"))};
     }
   }
   return $Closure1;
