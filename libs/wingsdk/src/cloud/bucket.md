@@ -12,6 +12,7 @@ keywords:
     Object storage,
     Buckets,
   ]
+sidebar_position: 1
 ---
 
 The `cloud.Bucket` resource represents a container for storing data in the cloud.

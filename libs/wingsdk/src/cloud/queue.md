@@ -15,6 +15,7 @@ keywords:
     FIFO queue,
     Channel,
   ]
+sidebar_position: 1
 ---
 
 The `cloud.Queue` resource represents a data structure for holding a list of messages.
