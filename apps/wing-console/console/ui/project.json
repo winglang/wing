@@ -1,7 +1,7 @@
 {
   "name": "console-ui",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["compiler", "sdk"],
+  "implicitDependencies": ["compiler", "sdk", "console-server"],
   "targets": {
     "build": {
       "options": {
