@@ -5,12 +5,9 @@
 1:60
 pass ─ primitive_methods.wsim (no tests)
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 
