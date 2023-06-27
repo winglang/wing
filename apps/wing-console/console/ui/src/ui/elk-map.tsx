@@ -323,6 +323,11 @@ export const ElkMap = <T extends unknown = undefined>({
   const onSelectedEdgeIdChange = useCallback(
     (edgeId: string) => {
       onSelectedNodeIdChange?.("");
+      const edge = edges?.find((edge) => edge.id === edgeId);
+      if (!edge) {
+        setSelectedEdge(undefined);
+        return;
+      }
 
       const inflights =
         edges
@@ -330,8 +335,8 @@ export const ElkMap = <T extends unknown = undefined>({
           .map((edge) => edge.label ?? "")
           .filter((inflight) => inflight !== "") ?? [];
 
-      const edge = graph?.edges?.find((e) => e.id === edgeId);
-      const points = edge?.sections;
+      const elkEdge = graph?.edges?.find((e) => e.id === edgeId);
+      const points = elkEdge?.sections;
       if (!points || !points[0]) {
         return;
       }
@@ -364,6 +369,8 @@ export const ElkMap = <T extends unknown = undefined>({
       }
       setSelectedEdge({
         id: edgeId,
+        source: edge.source,
+        target: edge.target,
         position,
         inflights,
         placement,
@@ -433,7 +440,13 @@ export const ElkMap = <T extends unknown = undefined>({
               ))}
             </AnimatePresence>
 
-            <EdgeMetadata edge={selectedEdge} />
+            <EdgeMetadata
+              edge={selectedEdge}
+              fade={
+                !isHighlighted(selectedEdge?.source ?? "") &&
+                !isHighlighted(selectedEdge?.target ?? "")
+              }
+            />
 
             <AnimatePresence>
               <svg

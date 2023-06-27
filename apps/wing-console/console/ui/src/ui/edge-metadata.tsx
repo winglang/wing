@@ -1,9 +1,12 @@
 import classNames from "classnames";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Edge } from "../shared/Edge";
 
 export interface EdgeMeta {
   id: string;
+  source: string;
+  target: string;
   inflights: string[];
   position?: { x: number | string; y: number | string };
   placement?: "right" | "bottom";
@@ -12,6 +15,7 @@ export interface EdgeMeta {
 export interface EdgeMetadataProps {
   edge?: EdgeMeta;
   className?: string;
+  fade?: boolean;
 }
 
 export const EdgeMetadata = (props: EdgeMetadataProps) => {
@@ -42,7 +46,7 @@ export const EdgeMetadata = (props: EdgeMetadataProps) => {
         opacity: 0,
       }}
       animate={{
-        opacity: visible ? 1 : 0,
+        opacity: visible ? (props.fade ? 0.35 : 1) : 0,
       }}
       transition={{ ease: "easeOut", duration: 0.15 }}
       exit={{
