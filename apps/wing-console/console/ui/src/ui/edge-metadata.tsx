@@ -114,7 +114,7 @@ export const EdgeMetadata = ({
             {inflights.map((inflight) => (
               <Attribute
                 key={inflight.name}
-                name="Inflight"
+                name="Name"
                 value={inflight.name}
               />
             ))}

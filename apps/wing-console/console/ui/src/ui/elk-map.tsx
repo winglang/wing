@@ -1,14 +1,12 @@
 import classNames from "classnames";
 import ELK, { ElkNode, LayoutOptions } from "elkjs/lib/elk.bundled.js";
 import { AnimatePresence, m, motion } from "framer-motion";
-import uniqby from "lodash.uniqby";
 import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
 
 import { Edge } from "../shared/Edge.js";
 import { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
-import { EdgeMeta, EdgeMetadata, EdgeMetadataProps } from "./edge-metadata.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
 import { ZoomPane, useZoomPaneContext } from "./zoom-pane.js";
 const durationClass = "duration-500";
