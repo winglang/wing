@@ -1,19 +1,8 @@
-import { Transition } from "@headlessui/react";
 import classNames from "classnames";
 import ELK, { ElkNode, LayoutOptions } from "elkjs/lib/elk.bundled.js";
 import { AnimatePresence, m, motion } from "framer-motion";
-import { set } from "lodash";
 import uniqby from "lodash.uniqby";
-import {
-  FC,
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { createPortal } from "react-dom";
+import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
 
 import { Edge } from "../shared/Edge.js";
 import { Node } from "../shared/Node.js";
@@ -135,6 +124,8 @@ export interface ElkMapProps<T> {
   node: FC<NodeItemProps<T>>;
   selectedNodeId?: string;
   onSelectedNodeIdChange?: (id: string) => void;
+  selectedEdgeId?: string;
+  onSelectedEdgeIdChange?: (id: string) => void;
 }
 
 export const ElkMap = <T extends unknown = undefined>({
@@ -143,6 +134,8 @@ export const ElkMap = <T extends unknown = undefined>({
   node: NodeItem,
   selectedNodeId,
   onSelectedNodeIdChange,
+  selectedEdgeId,
+  onSelectedEdgeIdChange,
 }: ElkMapProps<T>) => {
   const { nodeRecord } = useNodeStaticData({
     nodes,
@@ -318,74 +311,6 @@ export const ElkMap = <T extends unknown = undefined>({
     [highlighted],
   );
 
-  const [selectedEdge, setSelectedEdge] = useState<EdgeMeta>();
-
-  const onSelectedEdgeIdChange = useCallback(
-    (edgeId: string) => {
-      onSelectedNodeIdChange?.("");
-      const edge = edges?.find((edge) => edge.id === edgeId);
-      if (!edge) {
-        setSelectedEdge(undefined);
-        return;
-      }
-
-      const inflights =
-        edges
-          ?.filter((edge) => edge.id === edgeId)
-          .map((edge) => edge.label ?? "")
-          .filter((inflight) => inflight !== "") ?? [];
-
-      const elkEdge = graph?.edges?.find((e) => e.id === edgeId);
-      const points = elkEdge?.sections;
-      if (!points || !points[0]) {
-        return;
-      }
-      const point = points[0];
-
-      const firstBend = point.bendPoints?.[0];
-      const secondBend = point.bendPoints?.[1];
-      const yDiff = Math.abs(point.startPoint.y - point.endPoint.y);
-
-      let placement = "bottom" as "bottom" | "right";
-      const placementOffset = 22;
-
-      const initialX =
-        point.startPoint.x + (point.endPoint.x - point.startPoint.x) / 2;
-
-      const initialY =
-        initialX > (firstBend?.x || 0) ? point.endPoint.y : point.startPoint.y;
-
-      let position = {
-        x: initialX,
-        y: initialY + placementOffset,
-      };
-
-      if (firstBend && secondBend && yDiff > placementOffset) {
-        placement = "right";
-        position = {
-          x: (firstBend.x + secondBend.x) / 2 + placementOffset,
-          y: (firstBend.y + secondBend.y) / 2,
-        };
-      }
-      setSelectedEdge({
-        id: edgeId,
-        source: edge.source,
-        target: edge.target,
-        position,
-        inflights,
-        placement,
-      });
-    },
-    [setSelectedEdge, onSelectedNodeIdChange, graph?.edges, edges],
-  );
-
-  useEffect(() => {
-    if (!selectedNodeId) {
-      return;
-    }
-    setSelectedEdge(undefined);
-  }, [selectedNodeId]);
-
   return (
     <>
       <InvisibleNodeSizeCalculator
@@ -439,14 +364,6 @@ export const ElkMap = <T extends unknown = undefined>({
                 </motion.div>
               ))}
             </AnimatePresence>
-
-            <EdgeMetadata
-              edge={selectedEdge}
-              highlighted={
-                isHighlighted(selectedEdge?.source ?? "") ||
-                isHighlighted(selectedEdge?.target ?? "")
-              }
-            />
 
             <AnimatePresence>
               <svg
@@ -512,7 +429,7 @@ export const ElkMap = <T extends unknown = undefined>({
                     edge.sources[0] === selectedNodeId ||
                     edge.targets[0] === selectedNodeId;
                   const visible = !highlighted || isNodeHighlighted;
-                  const selected = edge.id === selectedEdge?.id;
+                  const selected = edge.id === selectedEdgeId;
 
                   return (
                     <EdgeItem
@@ -534,7 +451,7 @@ export const ElkMap = <T extends unknown = undefined>({
                         setHighlighted(edge.sources[0] ?? edge.targets[0]);
                       }}
                       onMouseLeave={() => setHighlighted(undefined)}
-                      onClick={() => onSelectedEdgeIdChange?.(edge.id)}
+                      onClick={onSelectedEdgeIdChange}
                     />
                   );
                 })}

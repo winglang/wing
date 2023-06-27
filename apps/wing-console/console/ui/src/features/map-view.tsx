@@ -12,6 +12,8 @@ export interface MapViewProps {
   showTests?: boolean;
   showMapControls?: boolean;
   onSelectedNodeIdChange?: (id: string | undefined) => void;
+  selectedEdgeId?: string;
+  onSelectedEdgeIdChange?: (id: string | undefined) => void;
 }
 
 export const MapView = ({
@@ -19,10 +21,13 @@ export const MapView = ({
   showTests,
   selectedNodeId,
   onSelectedNodeIdChange,
+  selectedEdgeId,
+  onSelectedEdgeIdChange,
 }: MapViewProps) => {
   const { mapData } = useMap({ showTests: showTests ?? false });
 
   const { theme } = useTheme();
+
   return (
     <ZoomPaneProvider>
       <div className="h-full flex flex-col">
@@ -41,6 +46,8 @@ export const MapView = ({
               edges={mapData?.edges ?? []}
               selectedNodeId={selectedNodeId}
               onSelectedNodeIdChange={onSelectedNodeIdChange}
+              selectedEdgeId={selectedEdgeId}
+              onSelectedEdgeIdChange={onSelectedEdgeIdChange}
               node={({ node, depth }) => (
                 <div className="h-full flex flex-col relative">
                   <ContainerNode

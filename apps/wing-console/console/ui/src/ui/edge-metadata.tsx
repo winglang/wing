@@ -1,99 +1,126 @@
+import {
+  ArrowLeftOnRectangleIcon,
+  ArrowRightOnRectangleIcon,
+} from "@heroicons/react/20/solid";
+import {
+  ArrowPathRoundedSquareIcon,
+  ArrowRightIcon,
+  CubeTransparentIcon,
+  CursorArrowRaysIcon,
+} from "@heroicons/react/24/outline";
+import {
+  useTheme,
+  InspectorSection,
+  Attribute,
+  ScrollableArea,
+  ResourceIcon,
+  Pill,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Edge } from "../shared/Edge";
-
-export interface EdgeMeta {
-  id: string;
-  source: string;
-  target: string;
-  inflights: string[];
-  position?: { x: number | string; y: number | string };
-  placement?: "right" | "bottom";
-}
+import { useState } from "react";
+import { MetadataNode } from "./resource-metadata";
 
 export interface EdgeMetadataProps {
-  edge?: EdgeMeta;
-  className?: string;
-  highlighted?: boolean;
+  source: MetadataNode;
+  target: MetadataNode;
+  inflights: { name: string }[];
 }
 
 export const EdgeMetadata = ({
-  edge,
-  className,
-  highlighted,
+  source,
+  target,
+  inflights,
 }: EdgeMetadataProps) => {
-  const [edgeMeta, setEdgeMeta] = useState(edge);
-  const [visible, setVisible] = useState(false);
+  const { theme } = useTheme();
 
-  useEffect(() => {
-    if (edge) {
-      setEdgeMeta(edge);
-      setVisible(true);
-    } else {
-      setVisible(false);
-    }
-  }, [edge]);
+  const [openInspectorSections, setOpenInspectorSections] = useState(() => [
+    "inflights",
+  ]);
+
+  const toggleInspectorSection = (section: string) => {
+    setOpenInspectorSections(([...sections]) => {
+      const index = sections.indexOf(section);
+      if (index === -1) {
+        sections.push(section);
+        return sections;
+      } else {
+        sections.splice(index, 1);
+        return sections;
+      }
+    });
+  };
 
   return (
-    <motion.div
-      className={classNames("absolute z-10", "transition-opacity", className)}
-      style={{
-        translateX: edgeMeta?.position?.x,
-        translateY: edgeMeta?.position?.y,
-      }}
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: visible ? (highlighted ? 1 : 0.35) : 0,
-      }}
-      transition={{ ease: "easeOut", duration: 0.15 }}
-      exit={{
-        opacity: 0,
-      }}
+    <ScrollableArea
+      overflowY
+      className={classNames("h-full text-sm", theme.bg3, theme.text1)}
     >
-      <div
-        className={classNames(
-          "absolute z-20 w-2.5 h-2.5 bg-white dark:bg-slate-650",
-          edgeMeta?.placement === "right" && [
-            "rotate-45 -left-[4.2px] border-b border-l",
-            (edgeMeta?.inflights.length > 1 && "top-3") || "top-[6.5px]",
-          ],
-          edgeMeta?.placement === "bottom" &&
-            "rotate-45 -top-[4px] left-3 border-t border-l",
-          "border-sky-300 dark:border-sky-500",
-        )}
-      />
-      <div
-        className={classNames(
-          "absolute z-0 w-2.5 h-2.5",
-          edgeMeta?.placement === "right" && [
-            "rotate-45 -left-[4.2px] border-b border-l",
-            (edgeMeta?.inflights.length > 1 && "top-3") || "top-[6.5px]",
-          ],
-          edgeMeta?.placement === "bottom" &&
-            "rotate-45 -top-[4px] left-3 border-t border-l",
-          "outline outline-2 outline-sky-200/50 dark:outline-sky-500/50",
-          "border-sky-300 dark:border-sky-500",
-        )}
-      />
-      <div
-        className={classNames(
-          "bg-white dark:bg-slate-650 rounded shadow-xl px-2 py-1 space-y-2 absolute z-10",
-          "outline outline-2 outline-sky-200/50 dark:outline-sky-500/50",
-          "border border-sky-300 dark:border-sky-500",
-          "cursor-default",
-        )}
-      >
-        <div className="leading-tight text-xs truncate transition-all text-slate-900 dark:text-slate-250 max-w-[8rem]">
-          {edgeMeta?.inflights.map((inflight, index: number) => (
-            <div key={index} className="truncate" title={inflight}>
-              {inflight}
+      <div className="flex justify-between">
+        <div className="flex items-center gap-2 px-2 py-2 truncate w-1/2">
+          <div className="flex-shrink-0">
+            <ResourceIcon
+              className="w-6 h-6"
+              resourceType={source.type}
+              resourcePath={source.path}
+            />
+          </div>
+
+          <div className="flex flex-col min-w-0">
+            <div className="text-sm font-medium truncate">{source.id}</div>
+            <div className="flex">
+              <Pill>{source.type}</Pill>
             </div>
-          ))}
+          </div>
+        </div>
+
+        <div className="items-center flex">
+          <ArrowRightIcon className="w-5 h-5" />
+        </div>
+
+        <div className="flex items-center gap-2 px-2 py-2 truncate w-1/2">
+          <div className="flex grow" />
+          <div className="flex-shrink-0">
+            <ResourceIcon
+              className="w-6 h-6"
+              resourceType={target.type}
+              resourcePath={target.path}
+            />
+          </div>
+
+          <div className="flex flex-col min-w-0">
+            <div className="text-sm font-medium truncate">{target.id}</div>
+            <div className="flex">
+              <Pill>{target.type}</Pill>
+            </div>
+          </div>
         </div>
       </div>
-    </motion.div>
+
+      <InspectorSection
+        text="Inflights"
+        icon={CubeTransparentIcon}
+        open={openInspectorSections.includes("inflights")}
+        onClick={() => toggleInspectorSection("inflights")}
+        headingClassName="pl-2"
+      >
+        <div className={classNames("border-t", theme.border4)}>
+          <div
+            className={classNames(
+              "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
+              theme.bg3,
+              theme.text1,
+            )}
+          >
+            {inflights.map((inflight) => (
+              <Attribute
+                key={inflight.name}
+                name="Inflight"
+                value={inflight.name}
+              />
+            ))}
+          </div>
+        </div>
+      </InspectorSection>
+    </ScrollableArea>
   );
 };

@@ -7,7 +7,7 @@ import {
 } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
-import { useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 
 import { AppContext } from "../AppContext.js";
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
@@ -20,6 +20,7 @@ import { ResourceMetadata } from "../ui/resource-metadata.js";
 
 import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
+import { EdgeMetadata } from "../ui/edge-metadata.js";
 
 export interface LayoutProps {
   cloudAppState: State;
@@ -40,6 +41,9 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     errorMessage,
     loading,
     metadata,
+    selectedEdgeId,
+    setSelectedEdgeId,
+    edgeMetadata,
     setSearchText,
     selectedLogTypeFilters,
     setSelectedLogTypeFilters,
@@ -128,6 +132,8 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                 onSelectedNodeIdChange={(nodeId) =>
                   setSelectedItems(nodeId ? [nodeId] : [])
                 }
+                selectedEdgeId={selectedEdgeId}
+                onSelectedEdgeIdChange={setSelectedEdgeId}
               />
             </div>
 
@@ -138,7 +144,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                 theme.bg4,
               )}
             >
-              {metadata.data && (
+              {selectedItems && metadata.data && (
                 <ResourceMetadata
                   node={metadata.data.node}
                   inbound={metadata.data.inbound}
@@ -147,6 +153,13 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                     expand(path);
                     setSelectedItems([path]);
                   }}
+                />
+              )}
+              {selectedEdgeId && edgeMetadata.data && (
+                <EdgeMetadata
+                  source={edgeMetadata.data.source}
+                  target={edgeMetadata.data.target}
+                  inflights={edgeMetadata.data.inflights}
                 />
               )}
             </LeftResizableWidget>

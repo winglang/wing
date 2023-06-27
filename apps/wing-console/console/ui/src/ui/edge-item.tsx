@@ -26,7 +26,7 @@ export const EdgeItem = ({
   selected?: boolean;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
-  onClick?: () => void;
+  onClick?: (id: string) => void;
 }) => {
   const d = useMemo(() => {
     return edge.sections
@@ -77,7 +77,7 @@ export const EdgeItem = ({
       <motion.path
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        onClick={onClick}
+        onClick={() => onClick?.(edge.id)}
         className="opacity-0 pointer-events-auto"
         style={{ translateX: offset.x, translateY: offset.y }}
         markerStart={`url(#${markerStart})`}
