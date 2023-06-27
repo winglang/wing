@@ -1,5 +1,3 @@
-const fetch = require("node-fetch");
-
 exports.makeId = function() {
     let id = "";
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
