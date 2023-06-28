@@ -12,14 +12,3 @@ test "sleep 100 mili seconds" {
   let delta = end - start;
   assert(delta >= 100);
 }
-
-
-
-
-
-
-
-
-
-
-new cloud.
