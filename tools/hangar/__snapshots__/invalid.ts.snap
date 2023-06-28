@@ -1450,6 +1450,49 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`return_types.w 1`] = `
+"error: Return statement outside of function cannot return a value
+  --> ../../../examples/tests/invalid/return_types.w:1:5
+  |
+1 |     return 9;
+  |     ^^^^^^^^^ Return statement outside of function cannot return a value
+
+
+error: Return statement outside of function cannot return a value
+  --> ../../../examples/tests/invalid/return_types.w:4:5
+  |
+4 |     return 9;
+  |     ^^^^^^^^^ Return statement outside of function cannot return a value
+
+
+error: Unexpected return value from void function
+  --> ../../../examples/tests/invalid/return_types.w:9:3
+  |
+9 |   return 9;
+  |   ^^^^^^^^^ Unexpected return value from void function
+
+
+error: Unexpected return value from void function
+   --> ../../../examples/tests/invalid/return_types.w:12:5
+   |
+12 |     return 9;
+   |     ^^^^^^^^^ Unexpected return value from void function
+
+
+error: Unexpected return value from void function
+   --> ../../../examples/tests/invalid/return_types.w:19:5
+   |
+19 |     return 9;
+   |     ^^^^^^^^^ Unexpected return value from void function
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`scope_and_id.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"num\\" instead
   --> ../../../examples/tests/invalid/scope_and_id.w:6:25
