@@ -1,5 +1,5 @@
 ---
-title: Api gateway
+title: API gateway
 id: api-gateway
 keywords: [Wing example]
 ---
