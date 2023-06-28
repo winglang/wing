@@ -1,30 +1,6 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: IPredicateHandler
-  kind: 8
-  documentation:
-    kind: markdown
-    value: "```wing\nIPredicateHandler\n```\n---\nRepresents a predicate with an inflight \"handle\" method that can be passed to `util.busyWait`."
-  sortText: ii|IPredicateHandler
-- label: IPredicateHandlerClient
-  kind: 8
-  documentation:
-    kind: markdown
-    value: "```wing\nIPredicateHandlerClient\n```\n---\nInflight client for `IPredicateHandler`."
-  sortText: ii|IPredicateHandlerClient
-- label: Util
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Util\n```\n---\nUtility functions."
-  sortText: gg|Util
-- label: WaitUntilProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nWaitUntilProps\n```\n---\nProperties for `util.waitUntil`."
-  sortText: hh|WaitUntilProps
 - label: env
   kind: 2
   documentation:
@@ -69,4 +45,28 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: Util
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Util\n```\n---\nUtility functions."
+  sortText: gg|Util
+- label: WaitUntilProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nWaitUntilProps\n```\n---\nProperties for `util.waitUntil`."
+  sortText: hh|WaitUntilProps
+- label: IPredicateHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIPredicateHandler\n```\n---\nRepresents a predicate with an inflight \"handle\" method that can be passed to `util.busyWait`."
+  sortText: ii|IPredicateHandler
+- label: IPredicateHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\nIPredicateHandlerClient\n```\n---\nInflight client for `IPredicateHandler`."
+  sortText: ii|IPredicateHandlerClient
 

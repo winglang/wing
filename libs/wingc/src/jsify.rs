@@ -1823,9 +1823,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 	fn determine_component_kind_from_type(obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
 		match &*obj_type {
-			Type::Void => unreachable!("cannot reference a member of void"),
-			Type::Function(_) => unreachable!("cannot reference a member of a function"),
-			Type::Optional(t) => Self::determine_component_kind_from_type(*t, property),
+			// Invalid cases, should be caught by typechecker
+			Type::Void | Type::Function(_) | Type::Unresolved => None,
+
 			// all fields / methods / values of these types are phase-independent so we can skip them
 			Type::Anything
 			| Type::Number
@@ -1835,15 +1835,18 @@ impl<'a> FieldReferenceVisitor<'a> {
 			| Type::Json
 			| Type::MutJson
 			| Type::Nil
-			| Type::Enum(_) => return None,
+			| Type::Enum(_) => None,
+
+			Type::Optional(t) => Self::determine_component_kind_from_type(*t, property),
+
 			// TODO: collection types are unsupported for now
 			Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
 				Some(ComponentKind::Unsupported)
 			}
+
 			Type::Class(cls) => Some(ComponentKind::Member(cls.env.lookup(&property, None)?.as_variable()?)),
 			Type::Interface(iface) => Some(ComponentKind::Member(iface.env.lookup(&property, None)?.as_variable()?)),
 			Type::Struct(st) => Some(ComponentKind::Member(st.env.lookup(&property, None)?.as_variable()?)),
-			Type::Unresolved => panic!("Encountered unresolved type during jsification"),
 		}
 	}
 }
