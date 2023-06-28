@@ -388,6 +388,12 @@ assert(threeHours.minutes == 180);
 
 Duration objects are immutable and can be referenced across inflight context.
 
+#### 1.1.5.1 Roadmap
+
+An additional built-in `datetime` type is planned and not yet implemented. `datetime` represents a single moment in time in a platform-independent
+format.
+See https://github.com/winglang/wing/issues/2102 to track.
+
 ### 1.2 Utility Functions
 
 | Name     | Extra information                                        |
@@ -608,7 +614,7 @@ Here's a quick summary of how optionality works in Wing:
 * The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
   value. It cannot be used to test if an optional has a value or not.
 
-#### 1.67.1 Declaration
+#### 1.6.1 Declaration
 
 ##### 1.6.1.1 Struct fields
 
@@ -810,6 +816,25 @@ if let ip = ipAddress {
 
 ---
 
+#### 1.6.6 Roadmap
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Default value: the default value notation (`= y`) may appear in declarations of struct fields, class fields or function arguments.
+  See https://github.com/winglang/wing/issues/3121 to track.
+* Chaining `??` operations: the `x ?? y ?? z` notation will return the value in `x` if there is one, `y` otherwise or `z`. The last expression in a `??` chain (e.g. `z`) must be of type `T` (not `T?`).
+  See https://github.com/winglang/wing/issues/1875 to track.
+* The `x ??= y` notation returns `x` if it has a value or assigns `x` with `y` and returns the value of `y`.
+  See https://github.com/winglang/wing/issues/2103 to track.
+* `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
+  See https://github.com/winglang/wing/issues/2103 to track.
+* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy
+  evaluation/memoization (inspired by [Nullish coalescing
+  assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
+  See https://github.com/winglang/wing/issues/2103 to track.
+* Support `??` for different types if they have a common ancestor (and also think of interfaces).
+  See https://github.com/winglang/wing/issues/2103 to track.
+
 ### 1.7 Type Inference
 
 Type can optionally be put between name and the equal sign, using a colon.  
@@ -822,7 +847,7 @@ r-value refers to the right hand side of an assignment here.
 All defined symbols are immutable (constant) by default.  
 Type casting is generally not allowed unless otherwise specified.
 
-Function arguments and their return type is always required.
+Function arguments and their return type are always required.
 
 > ```TS
 > let i = 5;
@@ -976,6 +1001,18 @@ Main concepts to understand:
 - `inflight` implies asynchronous execution.
 
 Contrary to JavaScript, any call to an async function is implicitly awaited in Wing.
+
+#### 1.12.1 Roadmap
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* `await`/`defer` statements - see https://github.com/winglang/wing/issues/116 to track.
+* Promise function type - see https://github.com/winglang/wing/issues/1004 to track.
+
+### 1.13 Roadmap
+
+Access modifiers (`private`/`public`/`internal`/`protected`) are not yet implemented.
+See https://github.com/winglang/wing/issues/108 to track.
 
 ## 2. Statements
 
@@ -1382,6 +1419,14 @@ Multiple implementations of the same interface is invalid and forbidden.
 
 In methods if return type is missing, `: void` is assumed.
 
+#### Roadmap
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Overloading class methods (including `init`) - see https://github.com/winglang/wing/issues/3123 to track.
+* Overriding class methods - see https://github.com/winglang/wing/issues/1124 to track.
+* Using the `final` keyword to stop the inheritance chain - see https://github.com/winglang/wing/issues/460 to track. 
+
 [`▲ top`][top]
 
 ---
@@ -1467,7 +1512,7 @@ let a = new Foo(...) as "custom-id2" in scope; // with constructor arguments
 ```
 "id" must be of type string. It can also be a string literal with substitution
 support (normal strings as well as shell strings).  
-"scope" must be an expression that resolves to a preflight object.  
+"scope" must be an expression that resolves to a preflight object.
 
 Preflight objects can be captured into inflight scopes and once that happens, inside
 the capture block only the inflight members are available.
@@ -1487,7 +1532,7 @@ of methods with different phases is not allowed as well.
 
 Interfaces represent a contract that a class must fulfill.
 Interfaces are defined with the `interface` keyword.
-Currently, preflight interfaces are allowed, while inflight interfaces are not supported yet (see [`inflight interface`: cannot reference interfaces instances from an inflight context](https://github.com/winglang/wing/issues/1961)).
+Currently, preflight interfaces are allowed, while inflight interfaces are not supported yet (see https://github.com/winglang/wing/issues/1961).
 `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
@@ -1644,6 +1689,12 @@ f(1, 2, field1: 3, field2: 4);
 // f(1, 2, field1: 3); // can't do this, partial expansion is not allowed
 ```
 
+#### 3.6.3 Roadmap
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Veriadic arguments ()`...args`) - see https://github.com/winglang/wing/issues/125 to track.
+
 [`▲ top`][top]
 
 ---
@@ -1731,6 +1782,12 @@ The behavior of running tests with `wing test` CLI command is determined by the 
 
 See the [CLI User Manual](https://docs.winglang.io/reference/cli#test-wing-test) for more details on running tests.
 
+### 3.10 Roadmap
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Computed properties (syntactic sugar for getters and setters) - see https://github.com/winglang/wing/issues/128 to track.
+
 [`▲ top`][top]
 
 ---
@@ -1760,7 +1817,7 @@ bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 
 ### 4.2 Exports
 
-Wing currently does not not support exporting symbols from a module.
+Wing currently does not not support exporting symbols from a module - see https://github.com/winglang/wing/issues/129 to track.
 
 [`▲ top`][top]
 
@@ -2052,7 +2109,25 @@ for immutable data (on top of nominal typing).
 
 ---
 
-### 6.4 Credits
+### 6.4 Roadmap
+- [ ] Asynchronous Execution Safety Model.
+- [ ] Make the language `async` by default.
+- [ ] First class support for `regx`, `glob`, and `cron` types.
+- [ ] Support of math operations over `date` and `duration` types.
+- [ ] More useful enums: Support for Enum Classes and Swift style enums.
+- [ ] Reflection: add an extended `typeof` operator to get type information.
+- [ ] Advanced OOP: Support for `abstract` and `private` implementations.
+- [ ] Enforce naming conventions on public APIs (required by JSII).
+- [ ] Develop a conformance test suite for ISO certification.
+- [ ] Launch a formal spec site with ECMA standards.
+- [ ] Built-in automatic formatter and linter.
+- [ ] Distributed concurrency primitives.
+- [ ] Distributed data structures.
+
+[`▲ top`][top]
+---
+
+### 6.5 Credits
 
 * **Contributors (A-Z):**
   * Chris R. ([@Chriscbr](https://github.com/Chriscbr))
