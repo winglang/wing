@@ -1,0 +1,19 @@
+{
+  "name": "console-design-system",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": ["compiler", "sdk", "console-server"],
+  "targets": {
+    "build": {
+      "options": {
+        "command": "npm run compile",
+        "cwd": "apps/wing-console/console/design-system"
+      }
+    },
+    "package": {
+      "options": {
+        "command": "npm run package",
+        "cwd": "apps/wing-console/console/design-system"
+      }
+    }
+  }
+}
