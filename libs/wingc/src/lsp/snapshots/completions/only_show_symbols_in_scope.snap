@@ -9,6 +9,14 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: bb|a
   insertText: a
   insertTextFormat: 2
+- label: b
+  kind: 6
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight b: unresolved\n```\n---"
+  sortText: bb|b
+  insertText: b
+  insertTextFormat: 2
 - label: assert
   kind: 3
   documentation:
@@ -20,14 +28,6 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: b
-  kind: 6
-  documentation:
-    kind: markdown
-    value: "```wing\npreflight b: unresolved\n```\n---"
-  sortText: bb|b
-  insertText: b
-  insertTextFormat: 2
 - label: log
   kind: 3
   documentation:
@@ -65,10 +65,5 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 15
   sortText: "ll|inflight () => {}"
   insertText: "inflight ($1) => {$2}"
-  insertTextFormat: 2
-- label: "test \"\" { }"
-  kind: 15
-  sortText: "ll|test \"\" { }"
-  insertText: "test \"$1\" {\n\t$2\n}"
   insertTextFormat: 2
 

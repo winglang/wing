@@ -7,6 +7,72 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Api\n```\n---\nFunctionality shared between all `Api` implementations."
   sortText: gg|Api
+- label: Bucket
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
+  sortText: gg|Bucket
+- label: Counter
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Counter\n```\n---\nRepresents a distributed atomic counter."
+  sortText: gg|Counter
+- label: Function
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nRepresents a function."
+  sortText: gg|Function
+- label: Queue
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Queue\n```\n---\nRepresents a queue."
+  sortText: gg|Queue
+- label: Schedule
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Schedule\n```\n---\nRepresents a schedule."
+  sortText: gg|Schedule
+- label: Secret
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Secret\n```\n---\nRepresents a cloud secret."
+  sortText: gg|Secret
+- label: Service
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Service\n```\n---\nRepresents a service."
+  sortText: gg|Service
+- label: Table
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Table\n```\n---\nRepresents a NoSQL database table that can be used to store and query data."
+  sortText: gg|Table
+- label: TestRunner
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass TestRunner\n```\n---\nRepresents a test engine."
+  sortText: gg|TestRunner
+- label: Topic
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Topic\n```\n---\nRepresents a topic."
+  sortText: gg|Topic
+- label: Website
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Website\n```\n---\nRepresents a cloud static website."
+  sortText: gg|Website
 - label: ApiConnectProps
   kind: 22
   documentation:
@@ -73,12 +139,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nApiResponse\n```\n---\nShape of a response from a inflight handler."
   sortText: hh|ApiResponse
-- label: Bucket
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
-  sortText: gg|Bucket
 - label: BucketDeleteOptions
   kind: 22
   documentation:
@@ -91,12 +151,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nBucketEvent\n```\n---\non_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927."
   sortText: hh|BucketEvent
-- label: BucketEventType
-  kind: 13
-  documentation:
-    kind: markdown
-    value: ""
-  sortText: jj|BucketEventType
 - label: BucketOnCreateProps
   kind: 22
   documentation:
@@ -127,30 +181,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nBucketProps\n```\n---\nProperties for `Bucket`."
   sortText: hh|BucketProps
-- label: ColumnType
-  kind: 13
-  documentation:
-    kind: markdown
-    value: ""
-  sortText: jj|ColumnType
-- label: Counter
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Counter\n```\n---\nRepresents a distributed atomic counter."
-  sortText: gg|Counter
 - label: CounterProps
   kind: 22
   documentation:
     kind: markdown
     value: "```wing\nCounterProps\n```\n---\nProperties for `Counter`."
   sortText: hh|CounterProps
-- label: Function
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Function impl IInflightHost\n```\n---\nRepresents a function."
-  sortText: gg|Function
 - label: FunctionProps
   kind: 22
   documentation:
@@ -163,12 +199,90 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nGetSecretValueOptions\n```\n---\nOptions when getting a secret value."
   sortText: hh|GetSecretValueOptions
-- label: HttpMethod
-  kind: 13
+- label: QueueProps
+  kind: 22
   documentation:
     kind: markdown
-    value: ""
-  sortText: jj|HttpMethod
+    value: "```wing\nQueueProps\n```\n---\nProperties for `Queue`."
+  sortText: hh|QueueProps
+- label: QueueSetConsumerProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nQueueSetConsumerProps\n```\n---\nOptions for Queue.setConsumer."
+  sortText: hh|QueueSetConsumerProps
+- label: ScheduleOnTickProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nScheduleOnTickProps\n```\n---\nOptions for Schedule.onTick."
+  sortText: hh|ScheduleOnTickProps
+- label: ScheduleProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nScheduleProps\n```\n---\nProperties for `Schedule`."
+  sortText: hh|ScheduleProps
+- label: SecretProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nSecretProps\n```\n---\nProperties for `Secret`."
+  sortText: hh|SecretProps
+- label: ServiceOnStartProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nServiceOnStartProps\n```\n---\nOptions for Service.onStart."
+  sortText: hh|ServiceOnStartProps
+- label: ServiceProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nServiceProps\n```\n---\nProperties for `Service`."
+  sortText: hh|ServiceProps
+- label: TableProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTableProps\n```\n---\nProperties for `Table`."
+  sortText: hh|TableProps
+- label: TestResult
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTestResult\n```\n---\nA result of a single test."
+  sortText: hh|TestResult
+- label: TestRunnerProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTestRunnerProps\n```\n---\nProperties for `TestRunner`."
+  sortText: hh|TestRunnerProps
+- label: TopicOnMessageProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTopicOnMessageProps\n```\n---\nOptions for `Topic.onMessage`."
+  sortText: hh|TopicOnMessageProps
+- label: TopicProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTopicProps\n```\n---\nProperties for `Topic`."
+  sortText: hh|TopicProps
+- label: Trace
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nTrace\n```\n---\nRepresents an trace emitted during simulation."
+  sortText: hh|Trace
+- label: WebsiteProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nWebsiteProps\n```\n---\nwebsite props."
+  sortText: hh|WebsiteProps
 - label: IApiClient
   kind: 8
   documentation:
@@ -325,142 +439,28 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nIWebsiteClient\n```\n---\nInflight methods and members of `cloud.Website`."
   sortText: ii|IWebsiteClient
-- label: Queue
-  kind: 7
+- label: BucketEventType
+  kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nclass Queue\n```\n---\nRepresents a queue."
-  sortText: gg|Queue
-- label: QueueProps
-  kind: 22
+    value: ""
+  sortText: jj|BucketEventType
+- label: ColumnType
+  kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nQueueProps\n```\n---\nProperties for `Queue`."
-  sortText: hh|QueueProps
-- label: QueueSetConsumerProps
-  kind: 22
+    value: ""
+  sortText: jj|ColumnType
+- label: HttpMethod
+  kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nQueueSetConsumerProps\n```\n---\nOptions for Queue.setConsumer."
-  sortText: hh|QueueSetConsumerProps
-- label: Schedule
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Schedule\n```\n---\nRepresents a schedule."
-  sortText: gg|Schedule
-- label: ScheduleOnTickProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nScheduleOnTickProps\n```\n---\nOptions for Schedule.onTick."
-  sortText: hh|ScheduleOnTickProps
-- label: ScheduleProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nScheduleProps\n```\n---\nProperties for `Schedule`."
-  sortText: hh|ScheduleProps
-- label: Secret
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Secret\n```\n---\nRepresents a cloud secret."
-  sortText: gg|Secret
-- label: SecretProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nSecretProps\n```\n---\nProperties for `Secret`."
-  sortText: hh|SecretProps
-- label: Service
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Service\n```\n---\nRepresents a service."
-  sortText: gg|Service
-- label: ServiceOnStartProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nServiceOnStartProps\n```\n---\nOptions for Service.onStart."
-  sortText: hh|ServiceOnStartProps
-- label: ServiceProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nServiceProps\n```\n---\nProperties for `Service`."
-  sortText: hh|ServiceProps
-- label: Table
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Table\n```\n---\nRepresents a NoSQL database table that can be used to store and query data."
-  sortText: gg|Table
-- label: TableProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTableProps\n```\n---\nProperties for `Table`."
-  sortText: hh|TableProps
-- label: TestResult
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTestResult\n```\n---\nA result of a single test."
-  sortText: hh|TestResult
-- label: TestRunner
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass TestRunner\n```\n---\nRepresents a test engine."
-  sortText: gg|TestRunner
-- label: TestRunnerProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTestRunnerProps\n```\n---\nProperties for `TestRunner`."
-  sortText: hh|TestRunnerProps
-- label: Topic
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Topic\n```\n---\nRepresents a topic."
-  sortText: gg|Topic
-- label: TopicOnMessageProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTopicOnMessageProps\n```\n---\nOptions for `Topic.onMessage`."
-  sortText: hh|TopicOnMessageProps
-- label: TopicProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTopicProps\n```\n---\nProperties for `Topic`."
-  sortText: hh|TopicProps
-- label: Trace
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTrace\n```\n---\nRepresents an trace emitted during simulation."
-  sortText: hh|Trace
+    value: ""
+  sortText: jj|HttpMethod
 - label: TraceType
   kind: 13
   documentation:
     kind: markdown
     value: ""
   sortText: jj|TraceType
-- label: Website
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Website\n```\n---\nRepresents a cloud static website."
-  sortText: gg|Website
-- label: WebsiteProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nWebsiteProps\n```\n---\nwebsite props."
-  sortText: hh|WebsiteProps
 

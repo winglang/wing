@@ -1,6 +1,22 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: display
+  kind: 5
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight display: Display\n```\n---\n```wing\nclass Display\n```\n---\nInformation on how to display a resource in the UI."
+  sortText: ee|display
+  insertText: display
+  insertTextFormat: 2
+- label: node
+  kind: 5
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight node: Node\n```\n---\n```wing\nclass Node\n```\n---\nRepresents the construct node in the scope tree."
+  sortText: ee|node
+  insertText: node
+  insertTextFormat: 2
 - label: delete
   kind: 2
   documentation:
@@ -122,20 +138,4 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: display
-  kind: 5
-  documentation:
-    kind: markdown
-    value: "```wing\npreflight display: Display\n```\n---\n```wing\nclass Display\n```\n---\nInformation on how to display a resource in the UI."
-  sortText: ee|display
-  insertText: display
-  insertTextFormat: 2
-- label: node
-  kind: 5
-  documentation:
-    kind: markdown
-    value: "```wing\npreflight node: Node\n```\n---\n```wing\nclass Node\n```\n---\nRepresents the construct node in the scope tree."
-  sortText: ee|node
-  insertText: node
-  insertTextFormat: 2
 

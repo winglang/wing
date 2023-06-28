@@ -40,65 +40,59 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let mut files = files.borrow_mut();
 		let uri = params.text_document_position.text_document.uri;
 		let file_data = files.get_mut(&uri).expect("File must be open to get completions");
-
 		let types = &file_data.types;
 		let root_scope = &file_data.scope;
 		let root_env = root_scope.env.borrow();
 		let root_env = root_env.as_ref().expect("The root scope must have an environment");
+		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
 
 		let mut point = Point::new(
 			params.text_document_position.position.line as usize,
 			max(params.text_document_position.position.character as i64 - 1, 0) as usize,
 		);
-		let mut node_to_complete = file_data
+		let mut search_node = file_data
 			.tree
 			.root_node()
 			.descendant_for_point_range(point, point)
 			.expect("There is always at-least one tree-sitter node");
 
 		while point.column > 0
-			&& (node_to_complete.kind() == "source" || node_to_complete.kind() == "block" || node_to_complete.is_error())
+			&& (search_node.kind() == "source" || search_node.kind() == "block" || search_node.is_error())
 		{
 			// We are somewhere in whitespace/error aether, so we need to backtrack to the nearest node on this line
 			point.column -= 1;
-			node_to_complete = file_data
+			search_node = file_data
 				.tree
 				.root_node()
 				.descendant_for_point_range(point, point)
 				.expect("There is always at-least one tree-sitter node");
 		}
 
-		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+		let node_to_complete = search_node;
+		let node_to_complete_kind = node_to_complete.kind();
 
-		let mut scope_visitor = ScopeVisitor::new(WingSpan {
-			start: node_to_complete.start_position().into(),
-			end: node_to_complete.end_position().into(),
-			file_id: file.to_str().expect("File path must be valid utf8").to_string(),
-		});
-		scope_visitor.visit_scope(root_scope);
+		let mut scope_visitor = ScopeVisitor::new(
+			WingSpan {
+				start: node_to_complete.start_position().into(),
+				end: node_to_complete.end_position().into(),
+				file_id: file.to_str().expect("File path must be valid utf8").to_string(),
+			},
+			&root_scope,
+		);
+		scope_visitor.visit();
 
-		let found_env = scope_visitor.found_scope.unwrap();
-		let found_env = found_env.env.borrow();
+		let found_env = scope_visitor.found_scope.env.borrow();
 		let found_env = found_env.as_ref().unwrap();
 
-		let parent = node_to_complete.parent();
-
-		if node_to_complete.kind() == "." || node_to_complete.kind() == "?." {
-			let parent = parent.expect("A dot must have a parent");
+		if node_to_complete_kind == "." || node_to_complete_kind == "?." {
+			let parent = node_to_complete.parent().expect("A dot must have a parent");
 
 			if let Some(nearest_expr) = scope_visitor.nearest_expr {
 				let nearest_expr_type = types.get_expr_type(nearest_expr).unwrap();
 
 				// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
 				if !nearest_expr_type.is_unresolved() {
-					return get_completions_from_type(
-						&nearest_expr_type,
-						types,
-						scope_visitor
-							.found_scope
-							.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
-						true,
-					);
+					return get_completions_from_type(&nearest_expr_type, types, Some(found_env.phase), true);
 				}
 			}
 
@@ -168,16 +162,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					SymbolKind::Type(t) => {
 						return get_completions_from_type(&t, types, Some(found_env.phase), false);
 					}
-					SymbolKind::Variable(v) => {
-						return get_completions_from_type(
-							&v.type_,
-							types,
-							scope_visitor
-								.found_scope
-								.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
-							false,
-						)
-					}
+					SymbolKind::Variable(v) => return get_completions_from_type(&v.type_, types, Some(found_env.phase), false),
 					SymbolKind::Namespace(n) => {
 						// If the types in this namespace aren't loaded yet, load them now to get completions
 						if !n.loaded {
@@ -202,13 +187,35 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			return vec![];
 		}
 
-		let mut in_type = node_to_complete.kind() == "type_identifier";
+		// we are somewhere but not entirely sure
+		// for now, lets just get all the symbols within the current scope
+		let mut completions = vec![];
 
-		if let Some(parent) = parent {
+		dbg!(node_to_complete_kind);
+
+		let mut in_type = false;
+
+		match node_to_complete_kind {
+			"parameter_list" => in_type = true,
+			")" => return vec![],
+			"source" => {
+				completions.push(CompletionItem {
+					label: "test \"\" { }".to_string(),
+					insert_text: Some("test \"$1\" {\n\t$2\n}".to_string()),
+					insert_text_format: Some(InsertTextFormat::SNIPPET),
+					kind: Some(CompletionItemKind::SNIPPET),
+					..Default::default()
+				});
+			}
+			_ => {}
+		}
+
+		if let Some(parent) = node_to_complete.parent() {
+			dbg!(parent.kind());
 			match parent.kind() {
 				"ERROR" => {
 					// TODO Due to struct expansion, this is not totally accurate, but it's a pretty decent guess
-					if in_type || node_to_complete.kind() == ":" {
+					if in_type || node_to_complete_kind == ":" {
 						in_type = true;
 					} else {
 						return vec![];
@@ -220,11 +227,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 		}
 
-		// we are somewhere but not entirely sure
-		// for now, lets just get all the symbols within the current scope
 		let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
-
-		let mut completions = vec![];
 
 		for symbol_data in found_env.symbol_map.iter().filter(|s| {
 			if let StatementIdx::Index(i) = s.1 .0 {
@@ -244,9 +247,21 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		if let Some(parent) = found_env.parent {
 			for data in parent.iter(true) {
 				if let Some(completion) = format_symbol_kind_as_completion(&data.0, &data.1) {
-					completions.push(completion);
+					if completions.iter().all(|c| c.label != completion.label) {
+						completions.push(completion);
+					}
 				}
 			}
+		}
+
+		if !in_type {
+			completions.push(CompletionItem {
+				label: "inflight () => {}".to_string(),
+				insert_text: Some("inflight ($1) => {$2}".to_string()),
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
+				kind: Some(CompletionItemKind::SNIPPET),
+				..Default::default()
+			});
 		}
 
 		if in_type {
@@ -261,23 +276,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				})
 				.collect()
 		} else {
-			// lets also add some fun snippets
-			completions.push(CompletionItem {
-				label: "inflight () => {}".to_string(),
-				insert_text: Some("inflight ($1) => {$2}".to_string()),
-				insert_text_format: Some(InsertTextFormat::SNIPPET),
-				kind: Some(CompletionItemKind::SNIPPET),
-				..Default::default()
-			});
-
-			completions.push(CompletionItem {
-				label: "test \"\" { }".to_string(),
-				insert_text: Some("test \"$1\" {\n\t$2\n}".to_string()),
-				insert_text_format: Some(InsertTextFormat::SNIPPET),
-				kind: Some(CompletionItemKind::SNIPPET),
-				..Default::default()
-			});
-
 			completions
 		}
 	});
@@ -592,7 +590,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 }
 
 fn should_exclude_symbol(symbol: &str) -> bool {
-	symbol == WINGSDK_STD_MODULE || symbol.starts_with(CLOSURE_CLASS_PREFIX) || symbol == PARENT_THIS_NAME
+	symbol == WINGSDK_STD_MODULE || symbol.starts_with(CLOSURE_CLASS_PREFIX) || symbol.starts_with(PARENT_THIS_NAME)
 }
 
 /// This visitor is used to find the scope
@@ -604,7 +602,7 @@ pub struct ScopeVisitor<'a> {
 	/// or, the last valid statement before the target location
 	pub found_stmt_index: Option<usize>,
 	/// The scope that contains the target location
-	pub found_scope: Option<&'a Scope>,
+	pub found_scope: &'a Scope,
 	/// The nearest expression before (or containing) the target location
 	pub nearest_expr: Option<&'a Expr>,
 	/// The nearest type annotation before (or containing) the target location
@@ -612,21 +610,25 @@ pub struct ScopeVisitor<'a> {
 }
 
 impl<'a> ScopeVisitor<'a> {
-	pub fn new(location: WingSpan) -> Self {
+	pub fn new(location: WingSpan, starting_scope: &'a Scope) -> Self {
 		Self {
 			location,
 			found_stmt_index: None,
 			nearest_expr: None,
-			found_scope: None,
+			found_scope: starting_scope,
 			nearest_type_annotation: None,
 		}
+	}
+
+	pub fn visit(&mut self) {
+		self.visit_scope(&self.found_scope);
 	}
 }
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_scope(&mut self, node: &'a Scope) {
 		if node.span.file_id != "" && node.span.contains(&self.location.start.into()) {
-			self.found_scope = Some(node);
+			self.found_scope = node;
 
 			for (i, statement) in node.statements.iter().enumerate() {
 				if statement.span <= self.location {
@@ -692,13 +694,16 @@ mod tests {
 					partial_result_params: Default::default(),
 				});
 
-				if let CompletionResponse::Array($name) = completion {
+				if let CompletionResponse::Array(mut $name) = completion {
 					insta::with_settings!(
 						{
 							prepend_module_to_snapshot => false,
 							omit_expression => true,
 							snapshot_path => "./snapshots/completions",
 						}, {
+							// sort the vec by sort_text
+							$name.sort_by(|a, b| a.sort_text.cmp(&b.sort_text));
+
 							insta::assert_yaml_snapshot!($name);
 						}
 					);
@@ -718,7 +723,8 @@ mod tests {
 bring cloud;
 
 new cloud. 
-        //^"#,
+        //^
+"#,
 		assert!(!new_expression_nested.is_empty())
 
 		// all items are classes
@@ -737,7 +743,8 @@ class Resource {
 }
 
 Resource. 
-       //^"#,
+       //^
+"#,
 		assert!(!static_method_call.is_empty())
 
 		assert!(static_method_call.iter().filter(|c| c.label == "hello").count() == 1)
@@ -755,7 +762,8 @@ if a == 1 {
 let b =  
 			//^
 			
-let c = 3;"#,
+let c = 3;
+"#,
 		assert!(!only_show_symbols_in_scope.is_empty())
 
 		assert!(only_show_symbols_in_scope.iter().all(|c| c.label != "c"))
@@ -808,7 +816,8 @@ test "test" {
 bring util;
 
 util.
-   //^"#,
+   //^
+"#,
 		assert!(!util_static_methods.is_empty())
 
 		assert!(util_static_methods.iter().filter(|c| c.label == "env").count() == 1)
@@ -822,7 +831,8 @@ bring http;
 inflight () => {
   http.
      //^"
-};"#,
+};
+"#,
 		assert!(!namespace_inflight.is_empty())
 	);
 
@@ -831,7 +841,7 @@ inflight () => {
 		r#"
 let j = MutJson {};
   j.
- //^
+  //^
 "#,
 		assert!(!mut_json_methods.is_empty())
 	);
