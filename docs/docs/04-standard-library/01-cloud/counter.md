@@ -3,6 +3,7 @@ title: Counter
 id: counter
 description: A built-in resource for representing an container for numbers in the cloud.
 keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Counter]
+sidebar_position: 1
 ---
 
 The `cloud.Counter` resource represents a stateful container for one or more numbers in the cloud.
