@@ -257,7 +257,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-const util = require('@winglang/sdk').util;
+const http = require('@winglang/sdk').http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
