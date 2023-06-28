@@ -42,17 +42,17 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const dur = $stdlib.std.Duration.fromSeconds(60);
-    const dur2 = $stdlib.std.Duration.fromSeconds(600);
+    const dur = (std.Duration.fromSeconds(60));
+    const dur2 = (std.Duration.fromSeconds(600));
     const f =  (d) =>  {
     }
     ;
-    const stringy = `${dur.minutes}:${dur.seconds}`;
+    const stringy = String.raw({ raw: ["", ":", ""] }, dur.minutes, dur.seconds);
     {console.log(stringy)};
     if ((stringy.includes("60") && (((stringy.split(":")).at(0)) === "60"))) {
-      {console.log(`${stringy.length}!`)};
+      {console.log(String.raw({ raw: ["", "!"] }, stringy.length))};
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("123") === 123)'`)})((((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("123") === 123))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: num.fromStr(\"123\") == 123")})((((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("123") === 123))};
   }
 }
 class $App extends $AppBase {

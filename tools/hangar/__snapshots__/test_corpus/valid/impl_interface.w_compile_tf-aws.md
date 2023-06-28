@@ -30,10 +30,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async handle(msg)  {
-      const __parent_this = this;
       return;
     }
   }
@@ -49,10 +47,8 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async eat()  {
-      const __parent_this = this;
       return;
     }
   }
@@ -68,10 +64,8 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async method2(x)  {
-      const __parent_this = this;
       return x;
     }
   }
@@ -127,7 +121,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.A.js";
@@ -195,14 +188,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("method2");
-        const __parent_this = this;
       }
        method1(x)  {
-        const __parent_this = this;
         return x;
       }
        method3(x)  {
-        const __parent_this = this;
         return x;
       }
       static _toInflightType(context) {
@@ -235,7 +225,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("eat");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Dog.js";

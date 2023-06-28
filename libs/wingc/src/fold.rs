@@ -1,9 +1,8 @@
 use crate::{
 	ast::{
 		ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString,
-		InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-		TypeAnnotationKind, UserDefinedType,
+		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Reference,
+		Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -168,6 +167,10 @@ where
 				statements: f.fold_scope(catch_block.statements),
 			}),
 			finally_statements: finally_statements.map(|statements| f.fold_scope(statements)),
+		},
+		StmtKind::CompilerDebugEnv => StmtKind::CompilerDebugEnv,
+		StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
+			arg_list: f.fold_args(arg_list),
 		},
 	};
 	Stmt {
@@ -335,7 +338,6 @@ where
 		}),
 		Literal::Boolean(x) => Literal::Boolean(x),
 		Literal::Number(x) => Literal::Number(x),
-		Literal::Duration(x) => Literal::Duration(x),
 		Literal::String(x) => Literal::String(x),
 		Literal::Nil => Literal::Nil,
 	}
@@ -388,7 +390,7 @@ where
 			.into_iter()
 			.map(|param| f.fold_function_parameter(param))
 			.collect(),
-		return_type: node.return_type.map(|type_| Box::new(f.fold_type_annotation(*type_))),
+		return_type: Box::new(f.fold_type_annotation(*node.return_type)),
 		phase: node.phase,
 	}
 }
@@ -415,6 +417,7 @@ where
 			.into_iter()
 			.map(|(name, arg)| (f.fold_symbol(name), f.fold_expr(arg)))
 			.collect(),
+		span: node.span,
 	}
 }
 
@@ -437,8 +440,8 @@ where
 		TypeAnnotationKind::MutMap(t) => TypeAnnotationKind::MutMap(Box::new(f.fold_type_annotation(*t))),
 		TypeAnnotationKind::Set(t) => TypeAnnotationKind::Set(Box::new(f.fold_type_annotation(*t))),
 		TypeAnnotationKind::MutSet(t) => TypeAnnotationKind::MutSet(Box::new(f.fold_type_annotation(*t))),
-		TypeAnnotationKind::Function(t) => TypeAnnotationKind::Function(FunctionTypeAnnotation {
-			param_types: t.param_types.into_iter().map(|t| f.fold_type_annotation(t)).collect(),
+		TypeAnnotationKind::Function(t) => TypeAnnotationKind::Function(FunctionSignature {
+			parameters: t.parameters.into_iter().map(|p| f.fold_function_parameter(p)).collect(),
 			return_type: Box::new(f.fold_type_annotation(*t.return_type)),
 			phase: t.phase,
 		}),

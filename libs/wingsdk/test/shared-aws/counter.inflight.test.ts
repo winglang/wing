@@ -55,6 +55,44 @@ test("inc(5)", async () => {
   expect(response).toEqual(prevValue); // returns previous value
 });
 
+test("key inc(1)", async () => {
+  // GIVEN
+  const prevValue = 887;
+  setupIncMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    expectedAmount: 1,
+    initial: 0,
+    responseValue: prevValue + 1,
+    key: "my-key",
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.inc(undefined, "my-key");
+
+  // THEN
+  expect(response).toEqual(prevValue); // returns previous value
+});
+
+test("key inc(5)", async () => {
+  // GIVEN
+  const prevValue = 887;
+  setupIncMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    expectedAmount: 5,
+    initial: 0,
+    responseValue: 887 + 5,
+    key: "my-key",
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.inc(5, "my-key");
+
+  // THEN
+  expect(response).toEqual(prevValue); // returns previous value
+});
+
 test("set(0)", async () => {
   // GIVEN
   setupSetMock({
@@ -73,6 +111,28 @@ test("set(0)", async () => {
 
   // THEN
   expect(response).toEqual(0);
+});
+
+test("set(10, 'my-key')", async () => {
+  // GIVEN
+  setupSetMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    setValue: 0,
+    key: "my-key",
+  });
+  setupPeekMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    responseValue: 10,
+    key: "my-key",
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  await client.set(10, "my-key");
+  const response = await client.peek("my-key");
+
+  // THEN
+  expect(response).toEqual(10);
 });
 
 test("peek with initial value", async () => {
@@ -100,7 +160,35 @@ test("peek without initial value", async () => {
   expect(response).toEqual(0);
 });
 
+test("peek with value", async () => {
+  setupPeekMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    responseValue: 123,
+    key: "my-key",
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.peek("my-key");
+
+  expect(response).toEqual(123);
+});
+
+test("key peek without value", async () => {
+  setupPeekMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    key: "my-key",
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.peek("my-key");
+
+  expect(response).toEqual(0);
+});
+
 interface MockOptions {
+  readonly key?: string;
   readonly expectedTableName: string;
   readonly expectedAmount?: number;
   readonly initial?: number;
@@ -111,7 +199,7 @@ interface MockOptions {
 function setupIncMock(opts: MockOptions) {
   const expectedRequest: UpdateItemCommandInput = {
     TableName: opts.expectedTableName,
-    Key: { id: { S: "counter" } },
+    Key: { id: { S: opts.key ?? "counter" } },
     UpdateExpression: `SET counter_value = if_not_exists(counter_value, :initial) + :amount`,
     ExpressionAttributeValues: {
       ":amount": { N: `${opts.expectedAmount}` },
@@ -134,7 +222,7 @@ function setupIncMock(opts: MockOptions) {
 function setupPeekMock(opts: MockOptions) {
   const expectedRequest: GetItemCommandInput = {
     TableName: opts.expectedTableName,
-    Key: { id: { S: "counter" } },
+    Key: { id: { S: opts.key ?? "counter" } },
   };
   const mockResponse: GetItemCommandOutput = {
     $metadata: {},
@@ -153,7 +241,7 @@ function setupPeekMock(opts: MockOptions) {
 function setupSetMock(opts: MockOptions) {
   const expectedRequest: UpdateItemCommandInput = {
     TableName: opts.expectedTableName,
-    Key: { id: { S: "counter" } },
+    Key: { id: { S: opts.key ?? "counter" } },
     UpdateExpression: `SET counter_value = :set_value`,
     ExpressionAttributeValues: {
       ":set_value": { N: `${opts.setValue}` },

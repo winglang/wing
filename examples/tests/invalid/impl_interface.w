@@ -1,10 +1,10 @@
 bring cloud;
 
-class A impl cloud.IQueueAddConsumerHandler {
-  // Error: A does not implement "handle" method of cloud.IQueueAddConsumerHandler
+class A impl cloud.IQueueSetConsumerHandler {
+  // Error: A does not implement "handle" method of cloud.IQueueSetConsumerHandler
 }
 
-class B impl cloud.IQueueAddConsumerHandler {
+class B impl cloud.IQueueSetConsumerHandler {
   inflight handle(x: num) {
     // Error: Expected type to be "inflight (str): void", but got "inflight (num): void" instead
     return;

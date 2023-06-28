@@ -8,7 +8,6 @@ module.exports = function({  }) {
       this.f = f;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return R;
@@ -61,17 +60,14 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         this.f = "Hello World!!!";
       }
        method2()  {
-        const __parent_this = this;
         (this.method1());
-        {console.log(`${this.f}`)};
+        {console.log(String.raw({ raw: ["", ""] }, this.f))};
         (this.method2());
       }
        method1()  {
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.R.js";
@@ -102,7 +98,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const x = "hi";
     if (true) {
-      {console.log(`${x}`)};
+      {console.log(String.raw({ raw: ["", ""] }, x))};
       const y = new R(this,"R");
     }
   }

@@ -5,10 +5,15 @@ use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
-use crate::lsp::notifications::send_diagnostics;
+use crate::closure_transform::ClosureTransformer;
+use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
+use crate::files::Files;
+use crate::fold::Fold;
+use crate::jsify::JSifier;
 use crate::parser::Parser;
 use crate::type_check;
-use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
+use crate::type_check::jsii_importer::JsiiImportSpec;
+use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
 pub struct FileData {
@@ -17,11 +22,14 @@ pub struct FileData {
 	/// tree-sitter tree
 	pub tree: Tree,
 	/// The diagnostics returned by wingc
-	pub diagnostics: Diagnostics,
+	pub diagnostics: Vec<Diagnostic>,
 	/// The top scope of the file
 	pub scope: Box<Scope>,
 	/// The universal type collection for the scope. This is saved to ensure references live long enough.
 	pub types: Types,
+	/// The JSII imports for the file. This is saved so we can load JSII types (for autotocompletion for example)
+	/// which don't exist explicitly in the source.
+	pub jsii_imports: Vec<JsiiImportSpec>,
 }
 
 thread_local! {
@@ -49,7 +57,6 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 			let path = uri_path.to_str().unwrap();
 
 			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut jsii_types.borrow_mut());
-			send_diagnostics(&uri, &result.diagnostics);
 			files.borrow_mut().insert(uri, result);
 		});
 	});
@@ -76,7 +83,6 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 				params.content_changes[0].text.as_bytes(),
 				&mut jsii_types.borrow_mut(),
 			);
-			send_diagnostics(&uri, &result.diagnostics);
 			files.borrow_mut().insert(uri, result);
 		});
 	})
@@ -84,6 +90,9 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
 fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) -> FileData {
+	// Reset diagnostics before new compilation (`partial_compile` can be called multiple)
+	reset_diagnostics();
+
 	let mut types = type_check::Types::new();
 
 	let language = tree_sitter_wing::language();
@@ -99,31 +108,65 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 
 	let wing_parser = Parser::new(text, source_file.to_string());
 
+	let scope = wing_parser.wingit(&tree.root_node());
+	let mut files = Files::new();
+	match files.add_file(
+		source_file,
+		String::from_utf8(text.to_vec()).expect("Invalid utf-8 sequence"),
+	) {
+		Ok(_) => {}
+		Err(err) => {
+			panic!("Failed adding source file to parser: {}", err);
+		}
+	}
+
+	// -- DESUGARING PHASE --
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = ClosureTransformer::new();
 	// Note: The scope is intentionally boxed here to force heap allocation
-	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
-	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
+	// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
+	let mut scope = Box::new(inflight_transformer.fold_scope(scope));
 
-	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_types);
+	// -- TYPECHECKING PHASE --
+	let mut jsii_imports = vec![];
 
-	let mut diagnostics = Diagnostics::new();
-	diagnostics.extend(wing_parser.diagnostics.into_inner());
-	diagnostics.extend(type_diag);
+	type_check(
+		&mut scope,
+		&mut types,
+		&Path::new(source_file),
+		jsii_types,
+		&mut jsii_imports,
+	);
+
+	// -- JSIFICATION PHASE --
+
+	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
+	let source_path = Path::new(source_file);
+	let app_name = source_path.file_stem().expect("Empty filename").to_str().unwrap();
+	let project_dir = source_path.parent().expect("Empty filename");
+
+	let mut jsifier = JSifier::new(&types, &files, app_name, &project_dir, true);
+	jsifier.jsify(&scope);
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
 		tree,
-		diagnostics,
+		diagnostics: get_diagnostics(),
 		scope,
 		types,
+		jsii_imports,
 	};
 }
 
 #[cfg(test)]
 pub mod test_utils {
-	use std::str::FromStr;
+	use std::{fs, str::FromStr};
 	use uuid::Uuid;
 
 	use lsp_types::*;
+
+	use crate::diagnostic::assert_no_panics;
 
 	use super::on_document_did_open;
 
@@ -147,8 +190,12 @@ pub mod test_utils {
 	/// ```
 	///
 	pub fn load_file_with_contents(content: &str) -> TextDocumentPositionParams {
-		let filename = format!("file:///{}.w", Uuid::new_v4());
-		let uri = Url::from_str(&filename).unwrap();
+		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
+		let filename = format!("{}.w", Uuid::new_v4());
+		let file_path = temp_dir.path().join(&filename);
+		fs::write(&file_path, content).expect("Failed to write to temporary file");
+		let file_uri_string = format!("file:///{}", file_path.to_str().unwrap());
+		let uri = Url::from_str(&file_uri_string).unwrap();
 		on_document_did_open(DidOpenTextDocumentParams {
 			text_document: lsp_types::TextDocumentItem {
 				uri: uri.clone(),
@@ -157,6 +204,8 @@ pub mod test_utils {
 				text: content.to_string(),
 			},
 		});
+
+		assert_no_panics();
 
 		// find the character cursor position by looking for the character above the ^
 		let mut char_pos = 0_i32;

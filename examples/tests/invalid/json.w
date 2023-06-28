@@ -29,3 +29,12 @@ let jsonObj = Json { boom: bkt };
 
 let jsonIncomplete = Json;
 //                    ^^^^ Expected a "Json" element
+
+let tryNum: num? = j.tryAsStr();
+//                    ^^^^^^^^^^^^ Expected type to be "num?", but got "str?" instead
+
+let tryStr: str? = j.tryAsBool();
+//                 ^^^^^^^^^^^^ Expected type to be "str?", but got "bool?" instead
+
+let tryBool: bool? = j.tryAsNum();
+//                   ^^^^^^^^^^^^ Expected type to be "bool?", but got "num?" instead

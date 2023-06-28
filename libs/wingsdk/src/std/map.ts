@@ -2,7 +2,7 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
-import { ImmutableArray } from "./array";
+import { Array } from "./array";
 import { T1 } from "./generics";
 import { Code, InflightClient } from "../core";
 
@@ -11,13 +11,15 @@ import { Code, InflightClient } from "../core";
  *
  * @typeparam T1
  */
-export class ImmutableMap {
+export class Map {
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * Returns the number of elements in the map.
@@ -67,7 +69,7 @@ export class ImmutableMap {
    *
    * @returns a MutableMap with the same values as this map
    */
-  public copyMut(): MutableMap {
+  public copyMut(): MutMap {
     throw new Error("Macro");
   }
 
@@ -78,7 +80,7 @@ export class ImmutableMap {
    *
    * @returns an array containing the keys of this map
    */
-  public keys(): ImmutableArray {
+  public keys(): string[] {
     throw new Error("Macro");
   }
 
@@ -87,9 +89,9 @@ export class ImmutableMap {
    *
    * @macro Object.values($self$)
    *
-   * @returns an array containing the values of this map
+   * @returns an array of type T containing the values of this map
    */
-  public values(): ImmutableArray {
+  public values(): Array {
     throw new Error("Macro");
   }
 }
@@ -99,13 +101,15 @@ export class ImmutableMap {
  *
  * @typeparam T1
  */
-export class MutableMap {
+export class MutMap {
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private constructor() {}
 
   /**
    * Returns the number of elements in the map.
@@ -135,7 +139,7 @@ export class MutableMap {
    *
    * @returns an ImmutableMap with the same values as this map
    */
-  public copy(): ImmutableMap {
+  public copy(): Map {
     throw new Error("Macro");
   }
 
@@ -203,7 +207,7 @@ export class MutableMap {
    *
    * @returns an array containing the keys of this map
    */
-  public keys(): ImmutableArray {
+  public keys(): string[] {
     throw new Error("Macro");
   }
 
@@ -212,9 +216,9 @@ export class MutableMap {
    *
    * @macro Object.values($self$)
    *
-   * @returns an array containing the values of this map
+   * @returns an array containing of type T the values of this map
    */
-  public values(): ImmutableArray {
+  public values(): Array {
     throw new Error("Macro");
   }
 }

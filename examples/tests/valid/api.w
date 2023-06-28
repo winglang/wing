@@ -13,7 +13,10 @@ let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   };
   
   let resp = cloud.ApiResponse {
-    body: bodyResponse,
+    body: Json.stringify(bodyResponse),
+    headers: {
+      "content-type": "application/json"
+    },
     status: 200,
   };
   return resp;
@@ -35,7 +38,7 @@ class A {
       let text = "${this.api.url}/endpoint2";
       return cloud.ApiResponse {
         status: 200,
-        body: Json text,
+        body: text,
       };
     });
   }

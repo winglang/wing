@@ -1,4 +1,4 @@
-mod codemaker;
+pub mod codemaker;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
@@ -9,7 +9,6 @@ use std::{
 	cmp::Ordering,
 	collections::{BTreeMap, BTreeSet},
 	fmt::Display,
-	fs,
 	path::Path,
 	slice::Iter,
 	vec,
@@ -23,17 +22,21 @@ use crate::{
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
-	diagnostic::{Diagnostic, Diagnostics, WingSpan},
+	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	files::Files,
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
 		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
+	WINGSDK_STD_MODULE,
 };
 
 use self::codemaker::CodeMaker;
+
+const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -60,8 +63,9 @@ pub struct JSifyContext {
 
 pub struct JSifier<'a> {
 	pub types: &'a Types,
-	pub diagnostics: Diagnostics,
-	pub out_dir: &'a Path,
+	source_files: &'a Files,
+	emitted_files: Files,
+	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
 	shim: bool,
 	app_name: &'a str,
@@ -78,15 +82,15 @@ enum BindMethod {
 impl<'a> JSifier<'a> {
 	pub fn new(
 		types: &'a Types,
-		out_dir: &'a Path,
+		source_files: &'a Files,
 		app_name: &'a str,
 		absolute_project_root: &'a Path,
 		shim: bool,
 	) -> Self {
 		Self {
 			types,
-			diagnostics: Diagnostics::new(),
-			out_dir,
+			source_files,
+			emitted_files: Files::new(),
 			shim,
 			app_name,
 			absolute_project_root,
@@ -102,7 +106,7 @@ impl<'a> JSifier<'a> {
 		format!("\"./{}\"", path_name.replace("\\", "/"))
 	}
 
-	pub fn jsify(&mut self, scope: &Scope) -> String {
+	pub fn jsify(&mut self, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
@@ -184,7 +188,18 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		output.to_string()
+		match self.emitted_files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
+	}
+
+	/// Write all files to the output directory
+	pub fn emit_files(&mut self, out_dir: &Path) {
+		match self.emitted_files.emit_files(out_dir) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
 	}
 
 	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
@@ -216,8 +231,8 @@ impl<'a> JSifier<'a> {
 	fn jsify_arg_list(
 		&mut self,
 		arg_list: &ArgList,
-		scope: Option<&str>,
-		id: Option<&str>,
+		scope: Option<String>,
+		id: Option<String>,
 		ctx: &JSifyContext,
 	) -> String {
 		let mut args = vec![];
@@ -228,7 +243,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		if let Some(id_str) = id {
-			args.push(format!("\"{}\"", id_str));
+			args.push(id_str);
 		}
 
 		for arg in arg_list.pos_args.iter() {
@@ -279,12 +294,14 @@ impl<'a> JSifier<'a> {
 				class,
 				obj_id,
 				arg_list,
-				obj_scope: _, // TODO
+				obj_scope
 			} => {
 				let expression_type = self.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
 
-				let class_type = expression_type.as_class().expect("type to be a class");
+				let class_type = if let Some(class_type) = expression_type.as_class() { class_type } else {
+					return "".to_string();
+				};
 				let is_abstract = class_type.is_abstract;
 
 				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
@@ -294,10 +311,22 @@ impl<'a> JSifier<'a> {
 
 				let ctor = self.jsify_type(&class.kind, ctx);
 
-				let scope = if is_preflight_class { Some("this") } else { None };
+				let scope = if is_preflight_class && class_type.std_construct_args {
+					if let Some(scope) = obj_scope {
+						Some(self.jsify_expression(scope, ctx))
+					} else {
+						Some("this".to_string()) 
+					}
+				} else {
+					None
+			 	};
 
-				let id = if is_preflight_class {
-					Some(obj_id.as_ref().unwrap_or(&ctor).as_str())
+				let id = if is_preflight_class && class_type.std_construct_args {
+					Some(if let Some(id_exp) = obj_id {
+						self.jsify_expression(id_exp, ctx)
+					} else {
+						format!("\"{ctor}\"")
+					})
 				} else {
 					None
 				};
@@ -316,28 +345,35 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
-        Literal::Nil => "undefined".to_string(),
+				Literal::Nil => "undefined".to_string(),
 				Literal::String(s) => s.to_string(),
-				Literal::InterpolatedString(s) => format!(
-					"`{}`",
-					s.parts
+				Literal::InterpolatedString(s) => {
+					let comma_separated_statics = s
+						.parts
 						.iter()
-						.map(|p| match p {
-							InterpolatedStringPart::Static(l) => l.to_string(),
-							InterpolatedStringPart::Expr(e) => {
-								match *self.get_expr_type(e) {
-									Type::Json | Type::MutJson => {
-										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, ctx))
-									}
-									_ => format!("${{{}}}", self.jsify_expression(e, ctx)),
-								}
-							}
+						.filter_map(|p| match p {
+							InterpolatedStringPart::Static(l) => Some(format!("\"{}\"", l.to_string())),
+							InterpolatedStringPart::Expr(_) => None,
 						})
 						.collect::<Vec<String>>()
-						.join("")
-				),
+						.join(", ");
+					let comma_separated_exprs = s
+						.parts
+						.iter()
+						.filter_map(|p| match p {
+							InterpolatedStringPart::Static(_) => None,
+							InterpolatedStringPart::Expr(e) => Some(match *self.get_expr_type(e) {
+								Type::Json | Type::MutJson => {
+									format!("((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))({})", self.jsify_expression(e, ctx))
+								}
+								_ => self.jsify_expression(e, ctx),
+							})
+						})
+						.collect::<Vec<String>>()
+						.join(", ");
+					format!("String.raw({{ raw: [{}] }}, {})", comma_separated_statics, comma_separated_exprs)
+				},
 				Literal::Number(n) => format!("{}", n),
-				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {
@@ -361,16 +397,18 @@ impl<'a> JSifier<'a> {
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = self.get_expr_type(callee);
 				let function_sig = function_type.as_function_sig();
-				assert!(
-					function_sig.is_some() || function_type.is_anything() || function_type.is_handler_preflight_class(),
-					"Expected expression to be callable"
-				);
 
 				let expr_string = match &callee.kind {
 					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
 					_ => format!("({})", self.jsify_expression(callee, ctx)),
 				};
-				let arg_string = self.jsify_arg_list(&arg_list, None, None, ctx);
+				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
+				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
+				if args_text_string.len() > 0 {
+					// remove the parens
+					args_text_string = args_text_string[1..args_text_string.len() - 1].to_string();
+				}
+				let args_text_string = escape_javascript_string(&args_text_string);
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
@@ -383,8 +421,8 @@ impl<'a> JSifier<'a> {
 
 							_ => expr_string,
 						};
-						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS];
-						let replace_with = &[self_string, &arg_string];
+						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
+						let replace_with = &[self_string, &args_string, &args_text_string];
 						let ac = AhoCorasick::new(patterns);
 						return ac.replace_all(js_override, replace_with);
 					}
@@ -392,7 +430,7 @@ impl<'a> JSifier<'a> {
 
 				// NOTE: if the expression is a "handle" class, the object itself is callable (see
 				// `jsify_class_inflight` below), so we can just call it as-is.
-				format!("({auto_await}{expr_string}({arg_string}))")
+				format!("({auto_await}{expr_string}({args_string}))")
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
@@ -511,7 +549,7 @@ impl<'a> JSifier<'a> {
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, false, ctx).to_string(),
 			},
-    	ExprKind::CompilerDebugPanic => {
+			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during jsifying)
 				dbg_panic!();
 				"".to_string()
@@ -522,6 +560,13 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
+			StmtKind::SuperConstructor { arg_list } => {
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				match ctx.phase {
+					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
+					_ => CodeMaker::one_line(format!("super({});", args)),
+				}
+			}
 			StmtKind::Bring {
 				module_name,
 				identifier,
@@ -736,6 +781,7 @@ impl<'a> JSifier<'a> {
 
 				code
 			}
+			StmtKind::CompilerDebugEnv => CodeMaker::default(),
 		}
 	}
 
@@ -799,7 +845,7 @@ impl<'a> JSifier<'a> {
 							.expect("Converting extern path to string")
 							.replace("\\", "/"),
 						Err(err) => {
-							self.diagnostics.push(Diagnostic {
+							report_diagnostic(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
 								span: Some(func_def.span.clone()),
 							});
@@ -897,7 +943,12 @@ impl<'a> JSifier<'a> {
 		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
 
 		// Find all free variables in the class, and return a list of their symbols
-		let (captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
+
+		if let Some(parent) = &class.parent {
+			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
+			captured_types.insert(parent.full_path(), parent_type);
+		}
 
 		// Get all references between inflight methods and preflight values
 		let mut refs = self.find_inflight_references(class, &captured_vars);
@@ -1074,7 +1125,14 @@ impl<'a> JSifier<'a> {
 					code.add_code(self.jsify_enum(&e.values));
 					code.close("`);");
 				}
-				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
+				_ => {
+					for sym in n {
+						report_diagnostic(Diagnostic {
+							message: format!("Unexpected type \"{t}\" referenced inflight"),
+							span: Some(sym.span.clone()),
+						});
+					}
+				}
 			}
 		}
 
@@ -1156,7 +1214,6 @@ impl<'a> JSifier<'a> {
 
 				types.extend(visitor.captured_types);
 				vars.extend(visitor.captured_vars);
-				self.diagnostics.extend(visitor.diagnostics);
 			}
 		}
 		// Remove myself from the list of referenced preflight types because I don't need to import myself
@@ -1178,8 +1235,9 @@ impl<'a> JSifier<'a> {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut lifted_by_parent = vec![];
 		if let Some(parent) = &class.parent {
-			let parent_type = resolve_user_defined_type(parent, env, 0).unwrap();
-			lifted_by_parent.extend(self.get_lifted_fields(parent_type));
+			if let Ok(parent_type) = resolve_user_defined_type(parent, env, 0) {
+				lifted_by_parent.extend(self.get_lifted_fields(parent_type));
+			}
 		}
 
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
@@ -1214,7 +1272,7 @@ impl<'a> JSifier<'a> {
 
 			if class.parent.is_some() {
 				class_code.line(format!(
-					"super({});",
+					"super({{{}}});",
 					lifted_by_parent
 						.iter()
 						.map(|name| name.clone())
@@ -1276,11 +1334,10 @@ impl<'a> JSifier<'a> {
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		let clients_dir = format!("{}", self.out_dir.to_string_lossy());
-		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
-		let client_file_name = inflight_filename(class);
-		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
-		fs::write(&relative_file_path, code.to_string()).expect("Writing client inflight source");
+		match self.emitted_files.add_file(inflight_filename(class), code.to_string()) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
 	}
 
 	/// Get the type and capture info for fields that are captured in the client of the given resource
@@ -1300,9 +1357,7 @@ impl<'a> JSifier<'a> {
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
 			let visitor = FieldReferenceVisitor::new(self.types, &function_def, free_vars);
-			let (refs, find_diags) = visitor.find_refs();
-
-			self.diagnostics.extend(find_diags);
+			let refs = visitor.find_refs();
 
 			// add the references to the result
 			result.insert(method_name.name.clone(), refs);
@@ -1310,9 +1365,7 @@ impl<'a> JSifier<'a> {
 
 		// Also add field rerferences from the inflight initializer
 		let visitor = FieldReferenceVisitor::new(self.types, &resource_class.inflight_initializer, free_vars);
-		let (refs, find_diags) = visitor.find_refs();
-
-		self.diagnostics.extend(find_diags);
+		let refs = visitor.find_refs();
 
 		result.insert(CLASS_INFLIGHT_INIT_NAME.to_string(), refs);
 
@@ -1321,18 +1374,20 @@ impl<'a> JSifier<'a> {
 
 	// Get the type and capture info for fields that are captured in the client of the given resource
 	fn get_lifted_fields(&self, resource_type: TypeRef) -> Vec<String> {
-		resource_type
-			.as_class()
-			.unwrap()
-			.env
-			.iter(true)
-			.filter(|(_, kind, _)| {
-				let var = kind.as_variable().unwrap();
-				// We capture preflight non-reassignable fields
-				var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
-			})
-			.map(|(name, ..)| name)
-			.collect_vec()
+		if let Some(resource_class) = resource_type.as_class() {
+			resource_class
+				.env
+				.iter(true)
+				.filter(|(_, kind, _)| {
+					let var = kind.as_variable().unwrap();
+					// We capture preflight non-reassignable fields
+					var.phase != Phase::Inflight && var.type_.is_capturable()
+				})
+				.map(|(name, ..)| name)
+				.collect_vec()
+		} else {
+			vec![]
+		}
 	}
 
 	fn jsify_register_bind_method(
@@ -1425,8 +1480,6 @@ struct FieldReferenceVisitor<'a> {
 
 	/// The current statement index
 	statement_index: usize,
-
-	diagnostics: Diagnostics,
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
@@ -1435,18 +1488,17 @@ impl<'a> FieldReferenceVisitor<'a> {
 			types,
 			references: BTreeMap::new(),
 			function_def,
-			diagnostics: Diagnostics::new(),
 			env: None,
 			free_vars,
 			statement_index: 0,
 		}
 	}
 
-	pub fn find_refs(mut self) -> (BTreeMap<String, BTreeSet<String>>, Diagnostics) {
+	pub fn find_refs(mut self) -> BTreeMap<String, BTreeSet<String>> {
 		if let FunctionBody::Statements(statements) = &self.function_def.body {
 			self.visit_scope(statements);
 		}
-		(self.references, self.diagnostics)
+		self.references
 	}
 }
 
@@ -1511,22 +1563,11 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 					}
 
 					// now we need to verify that the component can be captured.
-					// (1) non-reassignable
 					// (2) capturable type (immutable/resource).
-
-					// if the variable is reassignable, bail out
-					if variable.reassignable {
-						self.diagnostics.push(Diagnostic {
-							message: format!("Cannot capture reassignable field '{curr}'"),
-							span: Some(curr.span.clone()),
-						});
-
-						return;
-					}
 
 					// if this type is not capturable, bail out
 					if !variable.type_.is_capturable() {
-						self.diagnostics.push(Diagnostic {
+						report_diagnostic(Diagnostic {
 							message: format!(
 								"Cannot capture field '{curr}' with non-capturable type '{}'",
 								variable.type_
@@ -1543,7 +1584,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 					// qualify the capture.
 					if let Some(inner_type) = variable.type_.collection_item_type() {
 						if inner_type.is_preflight_class() {
-							self.diagnostics.push(Diagnostic {
+							report_diagnostic(Diagnostic {
 								message: format!(
 									"Capturing collection of preflight classes is not supported yet (type is '{}')",
 									variable.type_,
@@ -1570,7 +1611,13 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 					capture.push(curr);
 					index = index + 1;
 				}
-				ComponentKind::Unsupported => panic!("all components should be valid at this point"),
+				ComponentKind::Unsupported => {
+					report_diagnostic(Diagnostic {
+						message: format!("Unsupported component \"{}\"", curr.text),
+						span: Some(curr.span.clone()),
+					});
+					return;
+				}
 			}
 		}
 
@@ -1596,7 +1643,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 				// if our last captured component is a non-handler preflight class and we don't have a
 				// qualification for it, it's currently an error.
 				if v.type_.is_preflight_class() && !v.type_.is_handler_preflight_class() && qualification.len() == 0 {
-					self.diagnostics.push(Diagnostic {
+					report_diagnostic(Diagnostic {
 						message: format!(
 							"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
 							key, v.type_,
@@ -1659,15 +1706,28 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let lookup = env.lookup_ext(&x, Some(self.statement_index));
 
 				// if the reference is already defined later in this scope, skip it
-				if let LookupResult::DefinedLater = lookup {
+				if matches!(lookup, LookupResult::DefinedLater) {
 					return vec![];
 				}
 
+				let id_name = x.name.clone();
+				let id_span = x.span.clone();
+
 				let LookupResult::Found(kind, _) = lookup else {
-					panic!("reference to undefined symbol");
+					return vec![Component {
+						text: id_name,
+						span: id_span,
+						kind: ComponentKind::Unsupported,
+					}];
 				};
 
-				let var = kind.as_variable().expect("variable");
+				let Some(var) = kind.as_variable() else {
+					return vec![Component {
+						text: id_name,
+						span: id_span,
+						kind: ComponentKind::Unsupported,
+					}];
+				};
 
 				// If the reference isn't a preflight (lifted) variable then skip it
 				if var.phase != Phase::Preflight {
@@ -1675,8 +1735,8 @@ impl<'a> FieldReferenceVisitor<'a> {
 				}
 
 				return vec![Component {
-					text: x.name.clone(),
-					span: x.span.clone(),
+					text: id_name,
+					span: id_span,
 					kind: ComponentKind::Member(var),
 				}];
 			}
@@ -1703,8 +1763,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let env = self.env.unwrap();
 
 				// Get the type we're accessing a member of
-				let t = resolve_user_defined_type(type_, &env, self.statement_index).expect("covered by type checking");
-
+				let Ok(t) = resolve_user_defined_type(type_, &env, self.statement_index) else {
+					return vec![];
+				};
 				// If the type we're referencing isn't a preflight class then skip it
 				let Some(class) = t.as_preflight_class() else {
 					return vec![];
@@ -1754,29 +1815,10 @@ impl<'a> FieldReferenceVisitor<'a> {
 			Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
 				Some(ComponentKind::Unsupported)
 			}
-			Type::Class(cls) => Some(ComponentKind::Member(
-				cls
-					.env
-					.lookup(&property, None)
-					.expect("covered by type checking")
-					.as_variable()
-					.unwrap(),
-			)),
-			Type::Interface(iface) => Some(ComponentKind::Member(
-				iface
-					.env
-					.lookup(&property, None)
-					.expect("covered by type checking")
-					.as_variable()
-					.unwrap(),
-			)),
-			Type::Struct(st) => Some(ComponentKind::Member(
-				st.env
-					.lookup(&property, None)
-					.expect("covered by type checking")
-					.as_variable()
-					.unwrap(),
-			)),
+			Type::Class(cls) => Some(ComponentKind::Member(cls.env.lookup(&property, None)?.as_variable()?)),
+			Type::Interface(iface) => Some(ComponentKind::Member(iface.env.lookup(&property, None)?.as_variable()?)),
+			Type::Struct(st) => Some(ComponentKind::Member(st.env.lookup(&property, None)?.as_variable()?)),
+			Type::Unresolved => panic!("Encountered unresolved type during jsification"),
 		}
 	}
 }
@@ -1801,9 +1843,6 @@ struct CaptureScanner<'a> {
 
 	/// The index of the last visited statement.
 	current_index: usize,
-
-	/// Compilation errors emitted by the visitor
-	diagnostics: Diagnostics,
 }
 
 impl<'a> CaptureScanner<'a> {
@@ -1816,7 +1855,6 @@ impl<'a> CaptureScanner<'a> {
 			method_env: env,
 			current_env: env,
 			current_index: 0,
-			diagnostics: Diagnostics::new(),
 		}
 	}
 
@@ -1836,7 +1874,7 @@ impl<'a> CaptureScanner<'a> {
 		if let LookupResult::DefinedLater = lookup {
 			let sym = path.first().unwrap();
 
-			self.diagnostics.push(Diagnostic {
+			report_diagnostic(Diagnostic {
 				span: Some(sym.span.clone()),
 				message: format!(
 					"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
@@ -1846,9 +1884,9 @@ impl<'a> CaptureScanner<'a> {
 			return;
 		}
 
-		// any other lookup failure is likely a bug in the compiler
+		// any other lookup failure is likely a an invalid reference so we can skip it
 		let LookupResult::Found(kind, symbol_info) = lookup else {
-			panic!("unable to find symbol in current environment");
+			return;
 		};
 
 		// now, we need to determine if the environment this symbol is defined in is a parent of the
@@ -1871,7 +1909,9 @@ impl<'a> CaptureScanner<'a> {
 
 				self.captured_vars.insert(fullname);
 			}
-			SymbolKind::Namespace(_) => todo!(),
+			// Namespaces are not captured as they are not actually valid references
+			// The existence of this reference will have already caused an error in the type checker
+			SymbolKind::Namespace(_) => {}
 		}
 	}
 }
@@ -1881,7 +1921,7 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 		&mut self,
 		node: &'ast Expr,
 		class: &'ast TypeAnnotation,
-		obj_id: &'ast Option<String>,
+		obj_id: &'ast Option<Box<Expr>>,
 		obj_scope: &'ast Option<Box<Expr>>,
 		arg_list: &'ast ArgList,
 	) {
@@ -1941,5 +1981,74 @@ fn jsify_type_name(t: &Vec<Symbol>, phase: Phase) -> String {
 		p.join("_")
 	} else {
 		p.join(".")
+	}
+}
+
+fn lookup_span(span: &WingSpan, files: &Files) -> String {
+	let source = files
+		.get_file(&span.file_id)
+		.expect(&format!("failed to find source file with id {}", span.file_id));
+	let lines = source.lines().collect_vec();
+
+	let start_line = span.start.line as usize;
+	let end_line = span.end.line as usize;
+
+	let start_col = span.start.col as usize;
+	let end_col = span.end.col as usize;
+
+	let mut result = String::new();
+
+	if start_line == end_line {
+		result.push_str(&lines[start_line][start_col..end_col]);
+	} else {
+		result.push_str(&lines[start_line][start_col..]);
+		result.push('\n');
+
+		for line in lines[start_line + 1..end_line].iter() {
+			result.push_str(line);
+			result.push('\n');
+		}
+
+		result.push_str(&lines[end_line][..end_col]);
+	}
+
+	result
+}
+
+fn escape_javascript_string(s: &str) -> String {
+	let mut result = String::new();
+
+	// escape all escapable characters -- see the section "Escape sequences" in
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#literals
+	for c in s.chars() {
+		match c {
+			'\0' => result.push_str("\\0"),
+			'\'' => result.push_str("\\'"),
+			'"' => result.push_str("\\\""),
+			'\\' => result.push_str("\\\\"),
+			'\n' => result.push_str("\\n"),
+			'\r' => result.push_str("\\r"),
+			'\t' => result.push_str("\\t"),
+			_ => result.push(c),
+		}
+	}
+
+	result
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn test_escape_javascript_string() {
+		assert_eq!(escape_javascript_string("hello"), String::from("hello"));
+		assert_eq!(escape_javascript_string("hello\nworld"), String::from("hello\\nworld"));
+		assert_eq!(escape_javascript_string("hello\rworld"), String::from("hello\\rworld"));
+		assert_eq!(escape_javascript_string("hello\tworld"), String::from("hello\\tworld"));
+		assert_eq!(escape_javascript_string("hello\\world"), String::from("hello\\\\world"));
+		assert_eq!(escape_javascript_string("hello'world"), String::from("hello\\'world"));
+		assert_eq!(escape_javascript_string("hello\"world"), String::from("hello\\\"world"));
+		assert_eq!(escape_javascript_string("hello\0world"), String::from("hello\\0world"));
 	}
 }

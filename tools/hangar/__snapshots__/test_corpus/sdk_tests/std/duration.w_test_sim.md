@@ -2,14 +2,11 @@
 
 ## stdout.log
 ```log
-pass ─ duration.wsim (no tests)
+pass ─ duration.wsim » root/env0/test:duration
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

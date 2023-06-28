@@ -14,8 +14,8 @@ class ReplayableQueue {
     this.counter = new cloud.Counter();
   }
 
-  addConsumer(fn: inflight (str): str){
-    this.queue.addConsumer(fn);
+  setConsumer(fn: inflight (str): str){
+    this.queue.setConsumer(fn);
   }
   
   inflight push(m: str) {
@@ -35,10 +35,10 @@ class ReplayableQueue {
 class RemoteControl { 
   init(q: ReplayableQueue){
     let f = inflight (m: str): str => {
-      log("addConsumer got triggered with ${m}");
+      log("setConsumer got triggered with ${m}");
     };
       
-    q.addConsumer(f);
+    q.setConsumer(f);
     
     new cloud.Function(inflight (m: str) => {
       q.push(m);

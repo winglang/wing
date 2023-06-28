@@ -202,7 +202,7 @@ test("function with a queue binding", () => {
     "Processor",
     `async handle(event) { console.log("Received" + event); }`
   );
-  queue.addConsumer(processor);
+  queue.setConsumer(processor);
   const output = app.synth();
 
   // THEN

@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ usersTable }) {
+module.exports = function({ usersTable, std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -13,7 +13,7 @@ module.exports = function({ usersTable }) {
     }
     async handle(req)  {
       return {
-      "body": Object.freeze({"users":(await usersTable.list())}),
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"users":(await usersTable.list())})]),
       "status": 200,}
       ;
     }
@@ -35,16 +35,16 @@ module.exports = function({ usersTable, std_Json }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      const body = (req.body ?? Object.freeze({"name":"","age":"","id":""}));
+      const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"name":"","age":"","id":""})]))));
       if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
         return {
-        "body": Object.freeze({"error":"incomplete details"}),
+        "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"error":"incomplete details"})]),
         "status": 400,}
         ;
       }
       (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
       return {
-      "body": Object.freeze({"user":(body)["id"]}),
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(body)["id"]})]),
       "status": 201,}
       ;
     }
@@ -619,9 +619,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
         const usersTable_client = context._lift(usersTable);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             usersTable: ${usersTable_client},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }

@@ -1,7 +1,0 @@
-label: SDK Resources
-# description: Resources that are included in Wing, built in open source.
-collapsible: true
-collapsed: true
-link:
-  type: generated-index
-  title: SDK Resources

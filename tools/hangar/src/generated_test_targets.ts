@@ -69,10 +69,12 @@ export async function testTest(
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await fs.mkdir(testDir, { recursive: true });
 
+  const relativeWingFile = relative(testDir, join(sourceDir, wingFile));
+
   const filePath = join(sourceDir, wingFile);
   const out = await runWingCommand({
     cwd: testDir,
-    wingFile: filePath,
+    wingFile: relativeWingFile,
     args,
     expectStdErr: false,
     env,

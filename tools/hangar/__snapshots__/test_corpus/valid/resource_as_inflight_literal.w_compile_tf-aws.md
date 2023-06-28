@@ -12,7 +12,7 @@ module.exports = function({ fn }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await fn.invoke("test")) === "hello world!")'`)})(((await fn.invoke("test")) === "hello world!"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn.invoke(\"test\") == \"hello world!\"")})(((await fn.invoke("test")) === "hello world!"))};
     }
   }
   return $Closure1;
@@ -30,10 +30,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async handle(message)  {
-      const __parent_this = this;
       return "hello world!";
     }
   }
@@ -245,7 +243,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Foo.js";

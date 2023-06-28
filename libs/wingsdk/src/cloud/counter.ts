@@ -65,34 +65,38 @@ export interface ICounterClient {
   /**
    * Increments the counter atomically by a certain amount and returns the previous value.
    * @param amount amount to increment (default is 1).
+   * @param key specify the key to be incremented.
    * @returns the previous value of the counter.
    * @inflight
    */
-  inc(amount?: number): Promise<number>;
+  inc(amount?: number, key?: string): Promise<number>;
 
   /**
    * Decrement the counter, returning the previous value.
    * @param amount amount to decrement (default is 1).
+   * @param key specify the key to be decremented.
    * @returns the previous value of the counter.
    * @inflight
    */
-  dec(amount?: number): Promise<number>;
+  dec(amount?: number, key?: string): Promise<number>;
 
   /**
    * Get the current value of the counter.
    * Using this API may introduce race conditions since the value can change between
    * the time it is read and the time it is used in your code.
+   * @param key specify the key to be retrieved.
    * @returns current value
    * @inflight
    */
-  peek(): Promise<number>;
+  peek(key?: string): Promise<number>;
 
   /**
    * Set a counter to a given value.
    * @param value new value
+   * @param key specify the key to be set.
    * @inflight
    */
-  set(value: number): Promise<void>;
+  set(value: number, key?: string): Promise<void>;
 }
 
 /**

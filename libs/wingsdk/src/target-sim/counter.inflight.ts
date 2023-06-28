@@ -6,14 +6,14 @@ import {
 } from "../testing/simulator";
 
 export class Counter implements ICounterClient, ISimulatorResourceInstance {
-  private value: number;
+  private values: Map<string, number>;
   private readonly context: ISimulatorContext;
 
   public constructor(
     props: CounterSchema["props"],
     context: ISimulatorContext
   ) {
-    this.value = props.initial;
+    this.values = new Map().set("default", props.initial);
     this.context = context;
   }
 
@@ -23,42 +23,58 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {}
 
-  public async inc(amount: number = 1): Promise<number> {
+  public async inc(
+    amount: number = 1,
+    key: string = "default"
+  ): Promise<number> {
     return this.context.withTrace({
-      message: `Inc (amount=${amount}).`,
+      message: `Inc (amount=${amount}${
+        key != "default" ? ", key: " + key : ""
+      }).`,
       activity: async () => {
-        const prev = this.value;
-        this.value += amount;
+        const prev = this.values.get(key) ?? 0;
+        this.values.set(key, prev + amount);
         return prev;
       },
     });
   }
 
-  public async dec(amount: number = 1): Promise<number> {
+  public async dec(
+    amount: number = 1,
+    key: string = "default"
+  ): Promise<number> {
+    key;
     return this.context.withTrace({
-      message: `Dec (amount=${amount}).`,
+      message: `Dec (amount=${amount}${
+        key != "default" ? ", key: " + key : ""
+      }).`,
       activity: async () => {
-        const prev = this.value;
-        this.value -= amount;
+        const prev = this.values.get(key) ?? 0;
+        this.values.set(key, prev - amount);
         return prev;
       },
     });
   }
 
-  public async peek(): Promise<number> {
+  public async peek(key: string = "default"): Promise<number> {
     return this.context.withTrace({
-      message: `Peek (value=${this.value}).`,
+      message: `Peek (value=${this.values.get(key) ?? 0}${
+        key != "default" ? ", key: " + key : ""
+      }).`,
       activity: async () => {
-        return this.value;
+        return this.values.get(key) ?? 0;
       },
     });
   }
 
-  public async set(value: number): Promise<void> {
+  public async set(value: number, key: string = "default"): Promise<void> {
+    key;
     return this.context.withTrace({
-      message: `Set (value=${this.value}).`,
+      message: `Set (value=${value}${
+        key != "default" ? ", key: " + key : ""
+      }).`,
       activity: async () => {
-        this.value = value;
+        this.values.set(key, value);
       },
     });
   }

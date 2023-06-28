@@ -32,7 +32,7 @@ exports[`create a counter 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -48,7 +48,7 @@ exports[`create a counter 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -60,7 +60,7 @@ exports[`create a counter 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -115,7 +115,7 @@ exports[`dec 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -131,7 +131,7 @@ exports[`dec 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -143,7 +143,7 @@ exports[`dec 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -198,7 +198,7 @@ exports[`inc 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -214,7 +214,7 @@ exports[`inc 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -226,7 +226,254 @@ exports[`inc 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`key dec 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Counter created.",
+  "Dec (amount=1, key: my-key).",
+  "Dec (amount=1, key: my-key).",
+  "Dec (amount=10, key: my-key).",
+  "Dec (amount=10, key: my-key).",
+  "wingsdk.cloud.Counter deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`key dec 2`] = `
+{
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_counter",
+        "props": {
+          "initial": 0,
+        },
+        "type": "wingsdk.cloud.Counter",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_counter": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A distributed atomic counter",
+            "title": "Counter",
+          },
+          "id": "my_counter",
+          "path": "root/my_counter",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.314",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`key inc 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Counter created.",
+  "Inc (amount=1, key: my-key).",
+  "Inc (amount=1, key: my-key).",
+  "Inc (amount=10, key: my-key).",
+  "Inc (amount=10, key: my-key).",
+  "wingsdk.cloud.Counter deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`key inc 2`] = `
+{
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_counter",
+        "props": {
+          "initial": 0,
+        },
+        "type": "wingsdk.cloud.Counter",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_counter": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A distributed atomic counter",
+            "title": "Counter",
+          },
+          "id": "my_counter",
+          "path": "root/my_counter",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.314",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`key set to new value 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Counter created.",
+  "Set (value=5, key: my-key).",
+  "Peek (value=5, key: my-key).",
+  "wingsdk.cloud.Counter deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`key set to new value 2`] = `
+{
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_counter",
+        "props": {
+          "initial": 0,
+        },
+        "type": "wingsdk.cloud.Counter",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_counter": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "A distributed atomic counter",
+            "title": "Counter",
+          },
+          "id": "my_counter",
+          "path": "root/my_counter",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",
@@ -240,7 +487,7 @@ exports[`set to new value 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Counter created.",
-  "Set (value=123).",
+  "Set (value=5).",
   "Peek (value=5).",
   "wingsdk.cloud.Counter deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -279,7 +526,7 @@ exports[`set to new value 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -295,7 +542,7 @@ exports[`set to new value 2`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.1.314",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -307,7 +554,7 @@ exports[`set to new value 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.1.314",
       },
       "id": "root",
       "path": "root",

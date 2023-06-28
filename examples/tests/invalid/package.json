@@ -1,9 +1,10 @@
 {
   "dependencies": {
-    "jsii-code-samples": "1.7.0"
+    "jsii-code-samples": "1.7.0",
+    "cdktf": "0.17.0"
   },
   "volta": {
-    "node": "18.12.1",
+    "node": "18.16.0",
     "npm": "8.19.3"
   }
 }
