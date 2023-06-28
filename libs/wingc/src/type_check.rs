@@ -1027,7 +1027,7 @@ impl Types {
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
 		let void_ref = UnsafeRef::<Type>(&*types[void_idx] as *const Type);
-		let libraries = SymbolEnv::new(None, void_ref, false, Phase::Preflight, 0);
+		let libraries = SymbolEnv::new(None, void_ref, false, false, Phase::Preflight, 0);
 
 		Self {
 			types,
@@ -1825,6 +1825,7 @@ impl<'a> TypeChecker<'a> {
 			Some(env.get_ref()),
 			sig.return_type,
 			false,
+			true,
 			func_def.signature.phase,
 			self.statement_idx,
 		);
@@ -2164,7 +2165,7 @@ impl<'a> TypeChecker<'a> {
 					_t => self.types.error(),
 				};
 
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				match scope_env.define(
 					&iterator,
 					SymbolKind::make_free_variable(iterator.clone(), iterator_type, false, env.phase),
@@ -2186,6 +2187,7 @@ impl<'a> TypeChecker<'a> {
 				statements.set_env(SymbolEnv::new(
 					Some(env.get_ref()),
 					env.return_type,
+					false,
 					false,
 					env.phase,
 					stmt.idx,
@@ -2215,7 +2217,7 @@ impl<'a> TypeChecker<'a> {
 				// and complete the type checking process for additional errors.
 				let var_type = cond_type.maybe_unwrap_option();
 
-				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 
 				// Add the variable to if block scope
 				match stmt_env.define(
@@ -2237,6 +2239,7 @@ impl<'a> TypeChecker<'a> {
 						Some(env.get_ref()),
 						env.return_type,
 						false,
+						false,
 						env.phase,
 						stmt.idx,
 					));
@@ -2256,6 +2259,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
+					false,
 					env.phase,
 					stmt.idx,
 				));
@@ -2269,6 +2273,7 @@ impl<'a> TypeChecker<'a> {
 						Some(env.get_ref()),
 						env.return_type,
 						false,
+						false,
 						env.phase,
 						stmt.idx,
 					));
@@ -2279,6 +2284,7 @@ impl<'a> TypeChecker<'a> {
 					else_scope.set_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
+						false,
 						false,
 						env.phase,
 						stmt.idx,
@@ -2359,6 +2365,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
+					false,
 					env.phase,
 					stmt.idx,
 				));
@@ -2369,6 +2376,8 @@ impl<'a> TypeChecker<'a> {
 					let return_type = self.type_check_exp(return_expression, env);
 					if !env.return_type.is_void() {
 						self.validate_type(return_type, env.return_type, return_expression);
+					} else if env.is_in_function() {
+						self.spanned_error(stmt, "Unexpected return value from void function");
 					} else {
 						self.spanned_error(stmt, "Return statement outside of function cannot return a value");
 					}
@@ -2400,7 +2409,7 @@ impl<'a> TypeChecker<'a> {
 				let (parent_class, parent_class_env) = self.extract_parent_class(parent.as_ref(), *phase, name, env, stmt);
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
 				let impl_interfaces = implements
 					.iter()
@@ -2439,7 +2448,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), false, env.phase, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), false, false, env.phase, stmt.idx);
 
 				// Add fields to the class env
 				for field in fields.iter() {
@@ -2590,7 +2599,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Interface(AstInterface { name, methods, extends }) => {
 				// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
 				let extend_interfaces = extends
 					.iter()
@@ -2626,7 +2635,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create the real interface environment to be filled with the interface AST types
-				let mut interface_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let mut interface_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
 				// Add methods to the interface env
 				for (method_name, sig) in methods.iter() {
@@ -2664,7 +2673,7 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
 				// Add fields to the struct env
 				for field in fields.iter() {
@@ -2738,13 +2747,13 @@ impl<'a> TypeChecker<'a> {
 				finally_statements,
 			} => {
 				// Create a new environment for the try block
-				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				try_statements.set_env(try_env);
 				self.inner_scopes.push(try_statements);
 
 				// Create a new environment for the catch block
 				if let Some(catch_block) = catch_block {
-					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 
 					// Add the exception variable to the catch block
 					if let Some(exception_var) = &catch_block.exception_var {
@@ -2765,7 +2774,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create a new environment for the finally block
 				if let Some(finally_statements) = finally_statements {
-					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
@@ -2811,6 +2820,7 @@ impl<'a> TypeChecker<'a> {
 						let mut init_env = SymbolEnv::new(
 							Some(class_env.get_ref()),
 							self.types.void(),
+							true,
 							true,
 							class_env.phase,
 							scope.statements[0].idx,
@@ -2924,6 +2934,7 @@ impl<'a> TypeChecker<'a> {
 			Some(parent_env.get_ref()),
 			method_sig.return_type,
 			is_init,
+			true,
 			method_sig.phase,
 			statement_idx,
 		);
@@ -3145,7 +3156,14 @@ impl<'a> TypeChecker<'a> {
 			types_map.insert(format!("{o}"), (*o, *n));
 		}
 
-		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, false, Phase::Independent, 0);
+		let new_env = SymbolEnv::new(
+			None,
+			original_type_class.env.return_type,
+			false,
+			false,
+			Phase::Independent,
+			0,
+		);
 		let tt = Type::Class(Class {
 			name: original_type_class.name.clone(),
 			env: new_env,
