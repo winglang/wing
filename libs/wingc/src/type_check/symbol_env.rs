@@ -27,6 +27,7 @@ pub struct SymbolEnv {
 	pub return_type: TypeRef,
 
 	pub is_init: bool,
+	// Whether this scope is inside of a function
 	pub is_function: bool,
 	pub phase: Phase,
 	statement_idx: usize,
