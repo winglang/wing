@@ -39,35 +39,27 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let uri = params.text_document_position.text_document.uri;
 		let file_data = files.get_mut(&uri).expect("File must be open to get completions");
 		let types = &file_data.types;
+		let root_ts_node = file_data.tree.root_node();
 		let root_scope = &file_data.scope;
 		let root_env = root_scope.env.borrow();
 		let root_env = root_env.as_ref().expect("The root scope must have an environment");
 		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
 
-		let mut point = Point::new(
-			params.text_document_position.position.line as usize,
-			max(params.text_document_position.position.character as i64 - 1, 0) as usize,
+		let node_to_complete = nearest_interesting_node(
+			Point::new(
+				params.text_document_position.position.line as usize,
+				max(params.text_document_position.position.character as i64 - 1, 0) as usize,
+			),
+			&root_ts_node,
 		);
-		let mut search_node = file_data
-			.tree
-			.root_node()
-			.descendant_for_point_range(point, point)
-			.expect("There is always at-least one tree-sitter node");
-
-		while point.column > 0
-			&& (search_node.kind() == "source" || search_node.kind() == "block" || search_node.is_error())
-		{
-			// We are somewhere in whitespace/error aether, so we need to backtrack to the nearest node on this line
-			point.column -= 1;
-			search_node = file_data
-				.tree
-				.root_node()
-				.descendant_for_point_range(point, point)
-				.expect("There is always at-least one tree-sitter node");
-		}
-
-		let node_to_complete = search_node;
 		let node_to_complete_kind = node_to_complete.kind();
+
+		let mut previous_node = None;
+		let mut previous_point = node_to_complete.start_position();
+		if previous_point.column > 0 {
+			previous_point.column -= 1;
+			previous_node = nearest_interesting_node(previous_point, &root_ts_node).into();
+		}
 
 		let mut scope_visitor = ScopeVisitor::new(
 			WingSpan {
@@ -90,6 +82,13 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 				// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
 				if !nearest_expr_type.is_unresolved() {
+					// We need to double-check for an invalid nested reference (e.g. If there are multiple dots in a row)
+					if let Some(previous_node) = previous_node {
+						if previous_node.kind() == "." || previous_node.kind() == "?." {
+							return vec![];
+						}
+					}
+
 					return get_completions_from_type(&nearest_expr_type, types, Some(found_env.phase), true);
 				}
 			}
@@ -283,6 +282,22 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		.collect();
 
 	CompletionResponse::Array(final_completions)
+}
+
+/// Within root_node, find the nearest (previous) node on the same line that is interesting for completion
+fn nearest_interesting_node<'a>(mut point: Point, root_node: &'a tree_sitter::Node<'a>) -> tree_sitter::Node<'a> {
+	loop {
+		let search_node = root_node
+			.descendant_for_point_range(point, point)
+			.expect("There is always at-least one tree-sitter node");
+
+		if point.column == 0 || (search_node.kind() != "source" && search_node.kind() != "block" && !search_node.is_error())
+		{
+			return search_node;
+		}
+
+		point.column -= 1;
+	}
 }
 
 /// Given a CompletionItem, mutates it so it can be used as a snippet to trigger parameter hints
@@ -635,6 +650,15 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 		// i.e we want the expression that is to the left of it
 		if node.span.end == self.location.start {
 			self.nearest_expr = Some(node);
+		} else if node.span.end <= self.location.start {
+			if let Some(nearest_expr) = self.nearest_expr {
+				// If we already have a nearest expression, we want to find the one that is closest to our target location
+				if node.span.end > nearest_expr.span.end {
+					self.nearest_expr = Some(node);
+				}
+			} else {
+				self.nearest_expr = Some(node);
+			}
 		}
 
 		// We don't want to visit the children of a reference expression
