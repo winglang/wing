@@ -1,12 +1,12 @@
 bring math;
 
-let pi = 3.41;
-let minus_pi = -pi;
+let x = 3;
+let y = 5;
 
-assert(math.abs(pi) == 3.41);
-assert(math.abs(minus_pi) == 3.41);
+assert(math.abs(y - x) == 2);
+assert(math.abs(x - y) == 2);
 
 test "inflight absolute" {
-  assert(math.abs(pi) == 3.41);
-  assert(math.abs(minus_pi) == 3.41);
+  assert(math.abs(x - y) == 2);
+  assert(math.abs(y - x) == 2);
 }

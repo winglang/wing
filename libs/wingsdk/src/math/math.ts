@@ -16,7 +16,7 @@ export class Util {
    * @param value The input number.
    */
   public static abs(value: number): number {
-    return value < 0 ? value * -1 : value;
+    return Math.abs(value);
   }
 
   /**
@@ -52,7 +52,7 @@ export class Util {
       return Math.min(...arr);
     }
 
-    throw new Error('The argument is not a Set');
+    throw new Error("The argument is not a Set");
   }
 
   /**
@@ -64,8 +64,8 @@ export class Util {
       return Math.max(...arr);
     }
 
-    throw new Error('The argument is not a Set');
+    throw new Error("The argument is not a Set");
   }
 
-  private constructor() { }
+  private constructor() {}
 }

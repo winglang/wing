@@ -1,17 +1,22 @@
 bring math;
 
-let pi = 3.41;
+let x = 5.05;
+let y = 5.95;
 
-let euler = 2.71828;
+assert(math.floor(x) == 5);
+assert(math.ceil(x) == 6);
 
-assert(math.floor(pi) == 3);
-assert(math.ceil(pi) == 4);
-assert(math.round(pi) == 3);
-assert(math.round(euler) == 3);
+assert(math.round(x) == 5);
+assert(math.round(y) == 6);
+assert(math.round(-x) == -5);
+assert(math.round(-y) == -6);
 
 test "inflight floor/ceil" {
-  assert(math.floor(pi) == 3);
-  assert(math.ceil(pi) == 4);
-  assert(math.round(pi) == 3);
-  assert(math.round(euler) == 3);
+  assert(math.floor(x) == 5);
+  assert(math.ceil(x) == 6);
+
+  assert(math.round(x) == 5);
+  assert(math.round(y) == 6);
+  assert(math.round(-x) == -5);
+  assert(math.round(-y) == -6);
 }
