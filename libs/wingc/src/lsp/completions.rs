@@ -915,4 +915,24 @@ cloud.Bucket.
 "#,
 		assert!(!namespace_middle_dot.is_empty())
 	);
+
+	test_completion_list!(
+		variable_type_annotation_namespace,
+		r#"
+bring cloud;
+let x: cloud.
+           //^
+"#,
+		assert!(!variable_type_annotation_namespace.is_empty())
+	);
+
+	test_completion_list!(
+		optional_chaining,
+		r#"
+let j = Json {};
+j.tryGet("")?.
+            //^
+"#,
+		assert!(!optional_chaining.is_empty())
+	);
 }
