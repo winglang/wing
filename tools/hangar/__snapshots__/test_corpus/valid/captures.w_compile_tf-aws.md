@@ -2,31 +2,31 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ bucket1, bucket2, bucket3 }) {
+module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle(event)  {
-      (await bucket1.put("file.txt","data"));
-      (await bucket2.get("file.txt"));
-      (await bucket2.get("file2.txt"));
-      (await bucket3.get("file3.txt"));
-      for (const stuff of (await bucket1.list())) {
+      (await $bucket1.put("file.txt","data"));
+      (await $bucket2.get("file.txt"));
+      (await $bucket2.get("file2.txt"));
+      (await $bucket3.get("file3.txt"));
+      for (const stuff of (await $bucket1.list())) {
         {console.log(stuff)};
       }
-      {console.log((await bucket2.publicUrl("file.txt")))};
+      {console.log((await $bucket2.publicUrl("file.txt")))};
       try {
-        (await bucket1.publicUrl("file.txt"));
+        (await $bucket1.publicUrl("file.txt"));
       }
       catch ($error_error) {
         const error = $error_error.message;
         {console.log(error)};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -480,23 +480,21 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const bucket1_client = context._lift(bucket1);
-        const bucket2_client = context._lift(bucket2);
-        const bucket3_client = context._lift(bucket3);
+        const $bucket1 = context._lift(bucket1, ["put", "list", "publicUrl"]);
+        const $bucket2 = context._lift(bucket2, ["get", "get", "publicUrl"]);
+        const $bucket3 = context._lift(bucket3, ["get"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            bucket1: ${bucket1_client},
-            bucket2: ${bucket2_client},
-            bucket3: ${bucket3_client},
+          require("./inflight.$Closure1.js")({ 
+            $bucket1: ${$bucket1},
+            $bucket2: ${$bucket2},
+            $bucket3: ${$bucket3},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -504,14 +502,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(bucket1, host, []);
-          $Closure1._registerBindObject(bucket2, host, []);
-          $Closure1._registerBindObject(bucket3, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
-          $Closure1._registerBindObject(bucket2, host, ["get", "publicUrl"]);
+          $Closure1._registerBindObject(bucket1, host, ["put", "list", "publicUrl"]);
+          $Closure1._registerBindObject(bucket2, host, ["get", "get", "publicUrl"]);
           $Closure1._registerBindObject(bucket3, host, ["get"]);
         }
         super._registerBind(host, ops);

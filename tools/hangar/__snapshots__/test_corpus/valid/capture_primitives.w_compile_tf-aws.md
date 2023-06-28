@@ -2,31 +2,31 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
+module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle(s)  {
-      {console.log(myStr)};
-      const n = myNum;
+      {console.log($myStr)};
+      const n = $myNum;
       {console.log(`${n}`)};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
-      if (myBool) {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '($mySecondBool === false)'`)})(($mySecondBool === false))};
+      if ($myBool) {
         {console.log("bool=true")};
       }
       else {
         {console.log("bool=false")};
       }
-      const min = myDur.minutes;
-      const sec = myDur.seconds;
-      const hr = myDur.hours;
+      const min = $myDur_minutes;
+      const sec = $myDur_seconds;
+      const hr = $myDur_hours;
       const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -173,27 +173,29 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const myStr_client = context._lift(myStr);
-        const myNum_client = context._lift(myNum);
-        const mySecondBool_client = context._lift(mySecondBool);
-        const myBool_client = context._lift(myBool);
-        const myDur_client = context._lift(myDur);
+        const $myBool = context._lift(myBool, []);
+        const $myDur_hours = context._lift(myDur.hours, []);
+        const $myDur_minutes = context._lift(myDur.minutes, []);
+        const $myDur_seconds = context._lift(myDur.seconds, []);
+        const $myNum = context._lift(myNum, []);
+        const $mySecondBool = context._lift(mySecondBool, []);
+        const $myStr = context._lift(myStr, []);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            myStr: ${myStr_client},
-            myNum: ${myNum_client},
-            mySecondBool: ${mySecondBool_client},
-            myBool: ${myBool_client},
-            myDur: ${myDur_client},
+          require("./inflight.$Closure1.js")({ 
+            $myBool: ${$myBool},
+            $myDur_hours: ${$myDur_hours},
+            $myDur_minutes: ${$myDur_minutes},
+            $myDur_seconds: ${$myDur_seconds},
+            $myNum: ${$myNum},
+            $mySecondBool: ${$mySecondBool},
+            $myStr: ${$myStr},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -201,16 +203,11 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(myBool, host, []);
-          $Closure1._registerBindObject(myDur, host, []);
-          $Closure1._registerBindObject(myNum, host, []);
-          $Closure1._registerBindObject(mySecondBool, host, []);
-          $Closure1._registerBindObject(myStr, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(myBool, host, []);
-          $Closure1._registerBindObject(myDur, host, []);
+          $Closure1._registerBindObject(myDur.hours, host, []);
+          $Closure1._registerBindObject(myDur.minutes, host, []);
+          $Closure1._registerBindObject(myDur.seconds, host, []);
           $Closure1._registerBindObject(myNum, host, []);
           $Closure1._registerBindObject(mySecondBool, host, []);
           $Closure1._registerBindObject(myStr, host, []);

@@ -3,17 +3,16 @@
 ## inflight.$Closure1.js
 ```js
 module.exports = function({ JSHelper, util_Util }) {
+  const util = {
+    Util: util_Util,
+  };
+  
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       const start = (await JSHelper.getTime());
-      if ((await util_Util.waitUntil(async () =>  {
+      if ((await util.Util.waitUntil(async () =>  {
         return true;
       }
       ))) {
@@ -23,6 +22,11 @@ module.exports = function({ JSHelper, util_Util }) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
       }
     }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
   }
   return $Closure1;
 }
@@ -31,26 +35,30 @@ module.exports = function({ JSHelper, util_Util }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ oneSecond, JSHelper, util_Util }) {
+module.exports = function({ $oneSecond, JSHelper, util_Util }) {
+  const util = {
+    Util: util_Util,
+  };
+  
   class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       const start = (await JSHelper.getTime());
-      if ((await util_Util.waitUntil(async () =>  {
+      if ((await util.Util.waitUntil(async () =>  {
         return false;
       }
-      ,{ timeout: oneSecond }))) {
+      ,{ timeout: $oneSecond }))) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
       }
       else {
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(((await JSHelper.getTime()) - start) > (1 * 1000))'`)})((((await JSHelper.getTime()) - start) > (1 * 1000)))};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -60,29 +68,33 @@ module.exports = function({ oneSecond, JSHelper, util_Util }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ invokeCounter, oneSecond, JSHelper, util_Util }) {
+module.exports = function({ $invokeCounter, $oneSecond, JSHelper, util_Util }) {
+  const util = {
+    Util: util_Util,
+  };
+  
   class $Closure3 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       const start = (await JSHelper.getTime());
       const returnTrueAfter3Seconds = async () =>  {
-        (await invokeCounter.inc());
+        (await $invokeCounter.inc());
         return (((await JSHelper.getTime()) - start) > (3 * 1000));
       }
       ;
-      if ((await util_Util.waitUntil(returnTrueAfter3Seconds,{ interval: oneSecond }))) {
-        const invocations = (await invokeCounter.peek());
+      if ((await util.Util.waitUntil(returnTrueAfter3Seconds,{ interval: $oneSecond }))) {
+        const invocations = (await $invokeCounter.peek());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((invocations > 1) && (invocations < 10))'`)})(((invocations > 1) && (invocations < 10)))};
       }
       else {
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure3;
@@ -92,29 +104,33 @@ module.exports = function({ invokeCounter, oneSecond, JSHelper, util_Util }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ invokeCounter, oneSecond, fiveSeconds, JSHelper, util_Util }) {
+module.exports = function({ $fiveSeconds, $invokeCounter, $oneSecond, JSHelper, util_Util }) {
+  const util = {
+    Util: util_Util,
+  };
+  
   class $Closure4 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       const start = (await JSHelper.getTime());
       const returnFalse = async () =>  {
-        (await invokeCounter.inc());
+        (await $invokeCounter.inc());
         return false;
       }
       ;
-      if ((await util_Util.waitUntil(returnFalse,{ interval: oneSecond, timeout: fiveSeconds }))) {
+      if ((await util.Util.waitUntil(returnFalse,{ interval: $oneSecond, timeout: $fiveSeconds }))) {
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
       }
       else {
-        const invokeCount = (await invokeCounter.peek());
+        const invokeCount = (await $invokeCounter.peek());
         {((cond) => {if (!cond) throw new Error(`assertion failed: '((invokeCount > 3) && (invokeCount < 7))'`)})(((invokeCount > 3) && (invokeCount < 7)))};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure4;
@@ -124,27 +140,31 @@ module.exports = function({ invokeCounter, oneSecond, fiveSeconds, JSHelper, uti
 
 ## inflight.$Closure5.js
 ```js
-module.exports = function({ invokeCounter, util_Util }) {
+module.exports = function({ $invokeCounter, util_Util }) {
+  const util = {
+    Util: util_Util,
+  };
+  
   class $Closure5 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       try {
-        (await util_Util.waitUntil(async () =>  {
-          (await invokeCounter.inc());
+        (await util.Util.waitUntil(async () =>  {
+          (await $invokeCounter.inc());
           {((msg) => {throw new Error(msg)})("ERROR")};
         }
         ));
         {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
       }
       catch {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await invokeCounter.peek()) === 1)'`)})(((await invokeCounter.peek()) === 1))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $invokeCounter.peek()) === 1)'`)})(((await $invokeCounter.peek()) === 1))};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure5;
@@ -156,12 +176,12 @@ module.exports = function({ invokeCounter, util_Util }) {
 ```js
 module.exports = function({  }) {
   class JSHelper {
-    constructor({  }) {
-    }
     async $inflight_init()  {
     }
     static async getTime()  {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
+    }
+    constructor({  }) {
     }
   }
   return JSHelper;
@@ -594,32 +614,20 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("getTime");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.JSHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.JSHelper.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const JSHelperClient = ${JSHelper._toInflightType(this).text};
-            const client = new JSHelperClient({
+            const client = new (${JSHelper._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("getTime")) {
-        }
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -629,34 +637,24 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
+        const lifted_JSHelper = JSHelper._toInflightType(context).text;
+        const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure1.js")({ 
+            JSHelper: ${lifted_JSHelper},
+            util_Util: ${lifted_util_Util},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-          $Closure1._registerBindObject(JSHelper, host, ["getTime"]);
-        }
-        super._registerBind(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -666,23 +664,21 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const oneSecond_client = context._lift(oneSecond);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
+        const $oneSecond = context._lift(oneSecond, []);
+        const lifted_JSHelper = JSHelper._toInflightType(context).text;
+        const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            oneSecond: ${oneSecond_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure2.js")({ 
+            $oneSecond: ${$oneSecond},
+            JSHelper: ${lifted_JSHelper},
+            util_Util: ${lifted_util_Util},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -690,11 +686,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure2._registerBindObject(oneSecond, host, []);
         }
         super._registerBind(host, ops);
@@ -707,25 +699,23 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const oneSecond_client = context._lift(oneSecond);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
+        const $invokeCounter = context._lift(invokeCounter, ["inc", "peek"]);
+        const $oneSecond = context._lift(oneSecond, []);
+        const lifted_JSHelper = JSHelper._toInflightType(context).text;
+        const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            oneSecond: ${oneSecond_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure3.js")({ 
+            $invokeCounter: ${$invokeCounter},
+            $oneSecond: ${$oneSecond},
+            JSHelper: ${lifted_JSHelper},
+            util_Util: ${lifted_util_Util},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
-            const client = new $Closure3Client({
+            const client = new (${$Closure3._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -733,12 +723,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(invokeCounter, host, []);
-          $Closure3._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure3._registerBindObject(invokeCounter, host, ["inc", "peek"]);
           $Closure3._registerBindObject(oneSecond, host, []);
         }
@@ -752,27 +737,25 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const oneSecond_client = context._lift(oneSecond);
-        const fiveSeconds_client = context._lift(fiveSeconds);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
+        const $fiveSeconds = context._lift(fiveSeconds, []);
+        const $invokeCounter = context._lift(invokeCounter, ["inc", "peek"]);
+        const $oneSecond = context._lift(oneSecond, []);
+        const lifted_JSHelper = JSHelper._toInflightType(context).text;
+        const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            oneSecond: ${oneSecond_client},
-            fiveSeconds: ${fiveSeconds_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure4.js")({ 
+            $fiveSeconds: ${$fiveSeconds},
+            $invokeCounter: ${$invokeCounter},
+            $oneSecond: ${$oneSecond},
+            JSHelper: ${lifted_JSHelper},
+            util_Util: ${lifted_util_Util},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType(this).text};
-            const client = new $Closure4Client({
+            const client = new (${$Closure4._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -780,13 +763,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure4._registerBindObject(fiveSeconds, host, []);
-          $Closure4._registerBindObject(invokeCounter, host, []);
-          $Closure4._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure4._registerBindObject(fiveSeconds, host, []);
           $Closure4._registerBindObject(invokeCounter, host, ["inc", "peek"]);
           $Closure4._registerBindObject(oneSecond, host, []);
@@ -801,21 +778,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure5.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const util_UtilClient = util.Util._toInflightType(context);
+        const $invokeCounter = context._lift(invokeCounter, ["inc", "peek"]);
+        const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure5.js")({ 
+            $invokeCounter: ${$invokeCounter},
+            util_Util: ${lifted_util_Util},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType(this).text};
-            const client = new $Closure5Client({
+            const client = new (${$Closure5._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -823,9 +798,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure5._registerBindObject(invokeCounter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure5._registerBindObject(invokeCounter, host, ["inc", "peek"]);
         }

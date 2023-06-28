@@ -2,19 +2,23 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ w, indexFile, otherFile, config, std_Json, Util }) {
+module.exports = function({ $config, $indexFile, $otherFile, $w_url, Util, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http($w_url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$indexFile]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http($w_url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$indexFile])))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http(($w_url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$otherFile]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http(($w_url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$otherFile])))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http(($w_url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([$config])]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http(($w_url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([$config])])))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http(w.url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([indexFile]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http(w.url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([indexFile])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http((w.url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([otherFile]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http((w.url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([otherFile])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http((w.url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([config])]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http((w.url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([config])])))};
     }
   }
   return $Closure1;
@@ -26,12 +30,12 @@ module.exports = function({ w, indexFile, otherFile, config, std_Json, Util }) {
 ```js
 module.exports = function({  }) {
   class Util {
-    constructor({  }) {
-    }
     async $inflight_init()  {
     }
     static async http(url)  {
       return (require("<ABSOLUTE_PATH>/http.js")["http"])(url)
+    }
+    constructor({  }) {
     }
   }
   return Util;
@@ -345,32 +349,20 @@ class $Root extends $stdlib.std.Resource {
         return (require("<ABSOLUTE_PATH>/fs.js")["readFile"])(path)
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Util.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Util.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const UtilClient = ${Util._toInflightType(this).text};
-            const client = new UtilClient({
+            const client = new (${Util._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("http")) {
-        }
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -380,29 +372,27 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const w_client = context._lift(w);
-        const indexFile_client = context._lift(indexFile);
-        const otherFile_client = context._lift(otherFile);
-        const config_client = context._lift(config);
-        const std_JsonClient = std.Json._toInflightType(context);
-        const UtilClient = Util._toInflightType(context);
+        const $config = context._lift(config, []);
+        const $indexFile = context._lift(indexFile, []);
+        const $otherFile = context._lift(otherFile, []);
+        const $w_url = context._lift(w.url, []);
+        const lifted_Util = Util._toInflightType(context).text;
+        const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            w: ${w_client},
-            indexFile: ${indexFile_client},
-            otherFile: ${otherFile_client},
-            config: ${config_client},
-            std_Json: ${std_JsonClient.text},
-            Util: ${UtilClient.text},
+          require("./inflight.$Closure1.js")({ 
+            $config: ${$config},
+            $indexFile: ${$indexFile},
+            $otherFile: ${$otherFile},
+            $w_url: ${$w_url},
+            Util: ${lifted_Util},
+            std_Json: ${lifted_std_Json},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -410,14 +400,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(config, host, []);
-          $Closure1._registerBindObject(indexFile, host, []);
-          $Closure1._registerBindObject(otherFile, host, []);
-          $Closure1._registerBindObject(w, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(Util, host, ["http"]);
           $Closure1._registerBindObject(config, host, []);
           $Closure1._registerBindObject(indexFile, host, []);
           $Closure1._registerBindObject(otherFile, host, []);

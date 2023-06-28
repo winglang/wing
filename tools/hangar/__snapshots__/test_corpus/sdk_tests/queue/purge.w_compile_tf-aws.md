@@ -2,46 +2,46 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ q, js }) {
+module.exports = function({ $js, $q }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
-      (await q.push("foo"));
-      (await q.push("bar"));
-      (await q.push("baz"));
+      (await $q.push("foo"));
+      (await $q.push("bar"));
+      (await $q.push("baz"));
       const wait = async (pred) =>  {
         let i = 0;
         while ((i < 60)) {
           if ((await pred())) {
             return true;
           }
-          (await js.sleep(100));
+          (await $js.sleep(100));
           i = (i + 1);
         }
         return false;
       }
       ;
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await q.approxSize()) === 3);
+        return ((await $q.approxSize()) === 3);
       }
       ))'`)})((await wait(async () =>  {
-        return ((await q.approxSize()) === 3);
+        return ((await $q.approxSize()) === 3);
       }
       )))};
-      (await q.purge());
+      (await $q.purge());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await q.approxSize()) === 0);
+        return ((await $q.approxSize()) === 0);
       }
       ))'`)})((await wait(async () =>  {
-        return ((await q.approxSize()) === 0);
+        return ((await $q.approxSize()) === 0);
       }
       )))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -53,12 +53,12 @@ module.exports = function({ q, js }) {
 ```js
 module.exports = function({  }) {
   class TestHelper {
-    constructor({  }) {
-    }
     async $inflight_init()  {
     }
     async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
+    }
+    constructor({  }) {
     }
   }
   return TestHelper;
@@ -216,29 +216,20 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("sleep");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.TestHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.TestHelper.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const TestHelperClient = ${TestHelper._toInflightType(this).text};
-            const client = new TestHelperClient({
+            const client = new (${TestHelper._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("sleep")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -248,21 +239,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const q_client = context._lift(q);
-        const js_client = context._lift(js);
+        const $js = context._lift(js, ["sleep"]);
+        const $q = context._lift(q, ["push", "push", "push", "approxSize", "purge", "approxSize"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            q: ${q_client},
-            js: ${js_client},
+          require("./inflight.$Closure1.js")({ 
+            $js: ${$js},
+            $q: ${$q},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -270,13 +259,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(js, host, []);
-          $Closure1._registerBindObject(q, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(js, host, ["sleep"]);
-          $Closure1._registerBindObject(q, host, ["approxSize", "purge", "push"]);
+          $Closure1._registerBindObject(q, host, ["push", "push", "push", "approxSize", "purge", "approxSize"]);
         }
         super._registerBind(host, ops);
       }

@@ -2,13 +2,12 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ PARSE_ERROR, std_String }) {
+module.exports = function({ $PARSE_ERROR, std_String }) {
+  const std = {
+    String: std_String,
+  };
+  
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
@@ -18,8 +17,13 @@ module.exports = function({ PARSE_ERROR, std_String }) {
       }
       catch ($error_s) {
         const s = $error_s.message;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === PARSE_ERROR)'`)})((s === PARSE_ERROR))};
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === $PARSE_ERROR)'`)})((s === $PARSE_ERROR))};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -31,16 +35,16 @@ module.exports = function({ PARSE_ERROR, std_String }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("hello".length === 5)'`)})(("hello".length === 5))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("".length === 0)'`)})(("".length === 0))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -52,15 +56,15 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await "boom".at(0)) === "b")'`)})(((await "boom".at(0)) === "b"))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure3;
@@ -338,21 +342,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const PARSE_ERROR_client = context._lift(PARSE_ERROR);
-        const std_StringClient = std.String._toInflightType(context);
+        const $PARSE_ERROR = context._lift(PARSE_ERROR, []);
+        const lifted_std_String = std.String._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            PARSE_ERROR: ${PARSE_ERROR_client},
-            std_String: ${std_StringClient.text},
+          require("./inflight.$Closure1.js")({ 
+            $PARSE_ERROR: ${$PARSE_ERROR},
+            std_String: ${lifted_std_String},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -360,9 +362,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(PARSE_ERROR, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(PARSE_ERROR, host, []);
         }
@@ -376,29 +375,20 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure2.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -408,29 +398,20 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
-            const client = new $Closure3Client({
+            const client = new (${$Closure3._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const assertThrows =  (expected, block) =>  {

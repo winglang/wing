@@ -2,19 +2,19 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ $b }) {
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.list()).length === 0)'`)})(((await $b.list()).length === 0))};
+      (await $b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.list()).length === 1)'`)})(((await $b.list()).length === 1))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 0)'`)})(((await b.list()).length === 0))};
-      (await b.put("hello.txt","world"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 1)'`)})(((await b.list()).length === 1))};
     }
   }
   return $Closure1;
@@ -24,18 +24,18 @@ module.exports = function({ b }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ $b }) {
   class $Closure2 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await $b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.get("hello.txt")) === "world")'`)})(((await $b.get("hello.txt")) === "world"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.put("hello.txt","world"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("hello.txt")) === "world")'`)})(((await b.get("hello.txt")) === "world"))};
     }
   }
   return $Closure2;
@@ -295,19 +295,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
+        const $b = context._lift(b, ["list", "put", "list"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
+          require("./inflight.$Closure1.js")({ 
+            $b: ${$b},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -315,11 +313,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["list", "put"]);
+          $Closure1._registerBindObject(b, host, ["list", "put", "list"]);
         }
         super._registerBind(host, ops);
       }
@@ -331,19 +326,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const b_client = context._lift(b);
+        const $b = context._lift(b, ["put", "get"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
+          require("./inflight.$Closure2.js")({ 
+            $b: ${$b},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -351,11 +344,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(b, host, ["get", "put"]);
+          $Closure2._registerBindObject(b, host, ["put", "get"]);
         }
         super._registerBind(host, ops);
       }

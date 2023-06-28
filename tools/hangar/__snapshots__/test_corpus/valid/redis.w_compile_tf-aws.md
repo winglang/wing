@@ -2,23 +2,23 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ r, r2 }) {
+module.exports = function({ $r, $r2 }) {
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const connection = (await $r.rawClient());
+      (await connection.set("wing","does redis"));
+      const value = (await connection.get("wing"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
+      (await $r2.set("wing","does redis again"));
+      const value2 = (await $r2.get("wing"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const connection = (await r.rawClient());
-      (await connection.set("wing","does redis"));
-      const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
-      (await r2.set("wing","does redis again"));
-      const value2 = (await r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
     }
   }
   return $Closure1;
@@ -489,21 +489,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const r_client = context._lift(r);
-        const r2_client = context._lift(r2);
+        const $r = context._lift(r, ["rawClient"]);
+        const $r2 = context._lift(r2, ["set", "get"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            r: ${r_client},
-            r2: ${r2_client},
+          require("./inflight.$Closure1.js")({ 
+            $r: ${$r},
+            $r2: ${$r2},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -511,13 +509,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(r, host, []);
-          $Closure1._registerBindObject(r2, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(r, host, ["rawClient"]);
-          $Closure1._registerBindObject(r2, host, ["get", "set"]);
+          $Closure1._registerBindObject(r2, host, ["set", "get"]);
         }
         super._registerBind(host, ops);
       }

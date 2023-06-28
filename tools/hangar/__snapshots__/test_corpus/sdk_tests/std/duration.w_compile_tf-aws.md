@@ -3,35 +3,39 @@
 ## inflight.$Closure1.js
 ```js
 module.exports = function({ std_Duration }) {
+  const std = {
+    Duration: std_Duration,
+  };
+  
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(0.012)).seconds === (12 / 1000))'`)})(((await std.Duration.fromSeconds(0.012)).seconds === (12 / 1000)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(12)).seconds === 12)'`)})(((await std.Duration.fromSeconds(12)).seconds === 12))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(720)).seconds === (12 * 60))'`)})(((await std.Duration.fromSeconds(720)).seconds === (12 * 60)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(43200)).seconds === ((12 * 60) * 60))'`)})(((await std.Duration.fromSeconds(43200)).seconds === ((12 * 60) * 60)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(1036800)).seconds === (((12 * 60) * 60) * 24))'`)})(((await std.Duration.fromSeconds(1036800)).seconds === (((12 * 60) * 60) * 24)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(31536000)).seconds === (((((12 * 60) * 60) * 24) * 365) / 12))'`)})(((await std.Duration.fromSeconds(31536000)).seconds === (((((12 * 60) * 60) * 24) * 365) / 12)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(378432000)).seconds === ((((12 * 60) * 60) * 24) * 365))'`)})(((await std.Duration.fromSeconds(378432000)).seconds === ((((12 * 60) * 60) * 24) * 365)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromMilliseconds(10)).seconds === (await std.Duration.fromSeconds(0.01)).seconds)'`)})(((await std.Duration.fromMilliseconds(10)).seconds === (await std.Duration.fromSeconds(0.01)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromMinutes(10)).seconds === (await std.Duration.fromSeconds(600)).seconds)'`)})(((await std.Duration.fromMinutes(10)).seconds === (await std.Duration.fromSeconds(600)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(10)).seconds === (await std.Duration.fromSeconds(10)).seconds)'`)})(((await std.Duration.fromSeconds(10)).seconds === (await std.Duration.fromSeconds(10)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromHours(10)).seconds === (await std.Duration.fromSeconds(36000)).seconds)'`)})(((await std.Duration.fromHours(10)).seconds === (await std.Duration.fromSeconds(36000)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromDays(10)).seconds === (await std.Duration.fromSeconds(864000)).seconds)'`)})(((await std.Duration.fromDays(10)).seconds === (await std.Duration.fromSeconds(864000)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromMonths(10)).seconds === (await std.Duration.fromSeconds(26280000)).seconds)'`)})(((await std.Duration.fromMonths(10)).seconds === (await std.Duration.fromSeconds(26280000)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromYears(10)).seconds === (await std.Duration.fromSeconds(315360000)).seconds)'`)})(((await std.Duration.fromYears(10)).seconds === (await std.Duration.fromSeconds(315360000)).seconds))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(1)).milliseconds === 1000)'`)})(((await std.Duration.fromSeconds(1)).milliseconds === 1000))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(1)).minutes === (1 / 60))'`)})(((await std.Duration.fromSeconds(1)).minutes === (1 / 60)))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(1)).hours === (1 / (60 * 60)))'`)})(((await std.Duration.fromSeconds(1)).hours === (1 / (60 * 60))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24)))'`)})(((await std.Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12)))'`)})(((await std.Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12))))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std.Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365)))'`)})(((await std.Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365))))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(0.012)).seconds === (12 / 1000))'`)})(((await std_Duration.fromSeconds(0.012)).seconds === (12 / 1000)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(12)).seconds === 12)'`)})(((await std_Duration.fromSeconds(12)).seconds === 12))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(720)).seconds === (12 * 60))'`)})(((await std_Duration.fromSeconds(720)).seconds === (12 * 60)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(43200)).seconds === ((12 * 60) * 60))'`)})(((await std_Duration.fromSeconds(43200)).seconds === ((12 * 60) * 60)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1036800)).seconds === (((12 * 60) * 60) * 24))'`)})(((await std_Duration.fromSeconds(1036800)).seconds === (((12 * 60) * 60) * 24)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(31536000)).seconds === (((((12 * 60) * 60) * 24) * 365) / 12))'`)})(((await std_Duration.fromSeconds(31536000)).seconds === (((((12 * 60) * 60) * 24) * 365) / 12)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(378432000)).seconds === ((((12 * 60) * 60) * 24) * 365))'`)})(((await std_Duration.fromSeconds(378432000)).seconds === ((((12 * 60) * 60) * 24) * 365)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromMilliseconds(10)).seconds === (await std_Duration.fromSeconds(0.01)).seconds)'`)})(((await std_Duration.fromMilliseconds(10)).seconds === (await std_Duration.fromSeconds(0.01)).seconds))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromMinutes(10)).seconds === (await std_Duration.fromSeconds(600)).seconds)'`)})(((await std_Duration.fromMinutes(10)).seconds === (await std_Duration.fromSeconds(600)).seconds))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(10)).seconds === (await std_Duration.fromSeconds(10)).seconds)'`)})(((await std_Duration.fromSeconds(10)).seconds === (await std_Duration.fromSeconds(10)).seconds))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromHours(10)).seconds === (await std_Duration.fromSeconds(36000)).seconds)'`)})(((await std_Duration.fromHours(10)).seconds === (await std_Duration.fromSeconds(36000)).seconds))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromDays(10)).seconds === (await std_Duration.fromSeconds(864000)).seconds)'`)})(((await std_Duration.fromDays(10)).seconds === (await std_Duration.fromSeconds(864000)).seconds))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromMonths(10)).seconds === (await std_Duration.fromSeconds(26280000)).seconds)'`)})(((await std_Duration.fromMonths(10)).seconds === (await std_Duration.fromSeconds(26280000)).seconds))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromYears(10)).seconds === (await std_Duration.fromSeconds(315360000)).seconds)'`)})(((await std_Duration.fromYears(10)).seconds === (await std_Duration.fromSeconds(315360000)).seconds))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).milliseconds === 1000)'`)})(((await std_Duration.fromSeconds(1)).milliseconds === 1000))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).minutes === (1 / 60))'`)})(((await std_Duration.fromSeconds(1)).minutes === (1 / 60)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).hours === (1 / (60 * 60)))'`)})(((await std_Duration.fromSeconds(1)).hours === (1 / (60 * 60))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24)))'`)})(((await std_Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12)))'`)})(((await std_Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await std_Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365)))'`)})(((await std_Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365))))};
     }
   }
   return $Closure1;
@@ -177,31 +181,22 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const std_DurationClient = std.Duration._toInflightType(context);
+        const lifted_std_Duration = std.Duration._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            std_Duration: ${std_DurationClient.text},
+          require("./inflight.$Closure1.js")({ 
+            std_Duration: ${lifted_std_Duration},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((std.Duration.fromSeconds(0.012)).seconds === (12 / 1000))'`)})(((std.Duration.fromSeconds(0.012)).seconds === (12 / 1000)))};

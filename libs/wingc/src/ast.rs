@@ -9,6 +9,7 @@ use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
+use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
@@ -665,5 +666,18 @@ where
 {
 	fn span(&self) -> WingSpan {
 		(&**self).span()
+	}
+}
+
+impl Class {
+	/// Returns all methods, including the initializer and inflight initializer.
+	pub fn all_methods(&self) -> Vec<(Symbol, &FunctionDefinition)> {
+		let mut methods = vec![];
+		for m in &self.methods {
+			methods.push((m.0.clone(), &m.1));
+		}
+		methods.push((Symbol::global(CLASS_INIT_NAME), &self.initializer));
+		methods.push((Symbol::global(CLASS_INFLIGHT_INIT_NAME), &self.inflight_initializer));
+		methods
 	}
 }

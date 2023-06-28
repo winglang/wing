@@ -2,29 +2,29 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ $b }) {
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await $b.put("test1.txt","Foo"));
+      (await $b.put("test2.txt","Bar"));
+      const first = (await $b.get("test1.txt"));
+      const second = (await $b.get("test2.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(first === "Foo")'`)})((first === "Foo"))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(second === "Bar")'`)})((second === "Bar"))};
+      (await $b.delete("test1.txt"));
+      const files = (await $b.list());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
+      (await $b.put("test2.txt","Baz"));
+      const third = (await $b.get("test2.txt"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === "Baz")'`)})((third === "Baz"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.put("test1.txt","Foo"));
-      (await b.put("test2.txt","Bar"));
-      const first = (await b.get("test1.txt"));
-      const second = (await b.get("test2.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(first === "Foo")'`)})((first === "Foo"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(second === "Bar")'`)})((second === "Bar"))};
-      (await b.delete("test1.txt"));
-      const files = (await b.list());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
-      (await b.put("test2.txt","Baz"));
-      const third = (await b.get("test2.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === "Baz")'`)})((third === "Baz"))};
     }
   }
   return $Closure1;
@@ -216,19 +216,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
+        const $b = context._lift(b, ["put", "put", "get", "get", "delete", "list", "put", "get"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
+          require("./inflight.$Closure1.js")({ 
+            $b: ${$b},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -236,11 +234,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["delete", "get", "list", "put"]);
+          $Closure1._registerBindObject(b, host, ["put", "put", "get", "get", "delete", "list", "put", "get"]);
         }
         super._registerBind(host, ops);
       }

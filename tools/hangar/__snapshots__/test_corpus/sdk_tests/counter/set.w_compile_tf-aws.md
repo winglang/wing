@@ -2,25 +2,25 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ counter }) {
+module.exports = function({ $counter }) {
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek()) === 0)'`)})(((await $counter.peek()) === 0))};
+      (await $counter.inc());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek()) === 1)'`)})(((await $counter.peek()) === 1))};
+      (await $counter.inc());
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek()) === 2)'`)})(((await $counter.peek()) === 2))};
+      (await $counter.inc(10));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek()) === 12)'`)})(((await $counter.peek()) === 12))};
+      (await $counter.set(88));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek()) === 88)'`)})(((await $counter.peek()) === 88))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
-      (await counter.inc());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
-      (await counter.inc());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 2)'`)})(((await counter.peek()) === 2))};
-      (await counter.inc(10));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
-      (await counter.set(88));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 88)'`)})(((await counter.peek()) === 88))};
     }
   }
   return $Closure1;
@@ -30,26 +30,26 @@ module.exports = function({ counter }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ counter }) {
+module.exports = function({ $counter }) {
   class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 0)'`)})(((await counter.peek(key)) === 0))};
-      (await counter.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 1)'`)})(((await counter.peek(key)) === 1))};
-      (await counter.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 2)'`)})(((await counter.peek(key)) === 2))};
-      (await counter.inc(10,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 12)'`)})(((await counter.peek(key)) === 12))};
-      (await counter.set(88,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 88)'`)})(((await counter.peek(key)) === 88))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 0)'`)})(((await $counter.peek(key)) === 0))};
+      (await $counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 1)'`)})(((await $counter.peek(key)) === 1))};
+      (await $counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 2)'`)})(((await $counter.peek(key)) === 2))};
+      (await $counter.inc(10,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 12)'`)})(((await $counter.peek(key)) === 12))};
+      (await $counter.set(88,key));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 88)'`)})(((await $counter.peek(key)) === 88))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -283,19 +283,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const counter_client = context._lift(counter);
+        const $counter = context._lift(counter, ["peek", "inc", "peek", "inc", "peek", "inc", "peek", "set", "peek"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counter: ${counter_client},
+          require("./inflight.$Closure1.js")({ 
+            $counter: ${$counter},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -303,11 +301,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(counter, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(counter, host, ["inc", "peek", "set"]);
+          $Closure1._registerBindObject(counter, host, ["peek", "inc", "peek", "inc", "peek", "inc", "peek", "set", "peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -319,19 +314,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const counter_client = context._lift(counter);
+        const $counter = context._lift(counter, ["peek", "inc", "peek", "inc", "peek", "inc", "peek", "set", "peek"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counter: ${counter_client},
+          require("./inflight.$Closure2.js")({ 
+            $counter: ${$counter},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -339,11 +332,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(counter, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(counter, host, ["inc", "peek", "set"]);
+          $Closure2._registerBindObject(counter, host, ["peek", "inc", "peek", "inc", "peek", "inc", "peek", "set", "peek"]);
         }
         super._registerBind(host, ops);
       }

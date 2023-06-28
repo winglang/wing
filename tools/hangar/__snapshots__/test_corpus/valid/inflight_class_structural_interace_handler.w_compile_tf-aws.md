@@ -4,11 +4,6 @@
 ```js
 module.exports = function({ NotGoo }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
@@ -17,6 +12,11 @@ module.exports = function({ NotGoo }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await y.handle()) === 456)'`)})(((await y.handle()) === 456))};
       const x = new NotGoo();
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((await x.handle()) === 123)'`)})(((await x.handle()) === 123))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -195,29 +195,20 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.NotGoo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.NotGoo.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const NotGooClient = ${NotGoo._toInflightType(this).text};
-            const client = new NotGooClient({
+            const client = new (${NotGoo._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -227,31 +218,22 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const NotGooClient = NotGoo._toInflightType(context);
+        const lifted_NotGoo = NotGoo._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            NotGoo: ${NotGooClient.text},
+          require("./inflight.$Closure1.js")({ 
+            NotGoo: ${lifted_NotGoo},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:structure interface types for 'handle'",new $Closure1(this,"$Closure1"));

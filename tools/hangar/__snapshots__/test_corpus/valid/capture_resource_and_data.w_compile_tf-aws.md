@@ -2,20 +2,20 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ data, res, queue }) {
+module.exports = function({ $data_size, $queue, $res }) {
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '($data_size === 3)'`)})(($data_size === 3))};
+      (await $res.put("file.txt","world"));
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $res.get("file.txt")) === "world")'`)})(((await $res.get("file.txt")) === "world"))};
+      (await $queue.push("spirulina"));
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(data.size === 3)'`)})((data.size === 3))};
-      (await res.put("file.txt","world"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await res.get("file.txt")) === "world")'`)})(((await res.get("file.txt")) === "world"))};
-      (await queue.push("spirulina"));
     }
   }
   return $Closure1;
@@ -219,23 +219,21 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const data_client = context._lift(data);
-        const res_client = context._lift(res);
-        const queue_client = context._lift(queue);
+        const $data_size = context._lift(data.size, []);
+        const $queue = context._lift(queue, ["push"]);
+        const $res = context._lift(res, ["put", "get"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            data: ${data_client},
-            res: ${res_client},
-            queue: ${queue_client},
+          require("./inflight.$Closure1.js")({ 
+            $data_size: ${$data_size},
+            $queue: ${$queue},
+            $res: ${$res},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -243,15 +241,10 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(data, host, []);
-          $Closure1._registerBindObject(queue, host, []);
-          $Closure1._registerBindObject(res, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(data, host, ["size"]);
+          $Closure1._registerBindObject(data.size, host, []);
           $Closure1._registerBindObject(queue, host, ["push"]);
-          $Closure1._registerBindObject(res, host, ["get", "put"]);
+          $Closure1._registerBindObject(res, host, ["put", "get"]);
         }
         super._registerBind(host, ops);
       }

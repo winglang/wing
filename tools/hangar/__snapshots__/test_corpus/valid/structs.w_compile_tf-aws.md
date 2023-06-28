@@ -4,13 +4,13 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor({ data }) {
-      this.data = data;
-    }
     async $inflight_init()  {
     }
     async getStuff()  {
-      return this.data.field0;
+      return this.$this_data_field0;
+    }
+    constructor({ $this_data_field0 }) {
+      this.$this_data_field0 = $this_data_field0;
     }
   }
   return Foo;
@@ -67,19 +67,16 @@ class $Root extends $stdlib.std.Resource {
         this.data = b;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({ 
           })
         `);
       }
       _toInflight() {
-        const data_client = this._lift(this.data);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this).text};
-            const client = new FooClient({
-              data: ${data_client},
+            const client = new (${Foo._toInflightType(this).text})({
+              $this_data_field0: ${this._lift(this.data.field0, [])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -87,9 +84,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.data, host, []);
-        }
         if (ops.includes("getStuff")) {
           Foo._registerBindObject(this.data.field0, host, []);
         }

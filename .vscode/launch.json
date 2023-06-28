@@ -47,7 +47,9 @@
       "name": "Debug Extension",
       "type": "extensionHost",
       "request": "launch",
-      "outFiles": ["${workspaceFolder}/apps/vscode-wing/lib/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/apps/vscode-wing/lib/**/*.js"
+      ],
       "env": {
         "WING_BIN": "${workspaceFolder}/apps/wing/bin/wing",
         "RUST_BACKTRACE": "1"
@@ -70,7 +72,7 @@
         ]
       },
       "args": [
-        "${input:wingSource}"
+        "${file}"
       ],
       "sourceLanguages": [
         "rust"

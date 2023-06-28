@@ -4,10 +4,9 @@
 ```js
 module.exports = function({  }) {
   class R {
-    constructor({ f1 }) {
-      this.f1 = f1;
-    }
     async $inflight_init()  {
+    }
+    constructor({  }) {
     }
   }
   return R;
@@ -69,30 +68,20 @@ class $Root extends $stdlib.std.Resource {
         this.f = (this.f + 1);
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.R.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.R.js")({ 
           })
         `);
       }
       _toInflight() {
-        const f1_client = this._lift(this.f1);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const RClient = ${R._toInflightType(this).text};
-            const client = new RClient({
-              f1: ${f1_client},
+            const client = new (${R._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          R._registerBindObject(this.f1, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     let x = 5;

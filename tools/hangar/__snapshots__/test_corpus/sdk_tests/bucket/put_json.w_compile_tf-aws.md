@@ -2,32 +2,32 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ $b }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       const jsonObj1 = Object.freeze({"test":"test1"});
       const jsonObj2 = Object.freeze({"test":"test2"});
-      (await b.putJson("test1.txt",jsonObj1));
-      (await b.putJson("test2.txt",jsonObj2));
-      const testJson1 = (await b.getJson("test1.txt"));
-      const testJson2 = (await b.getJson("test2.txt"));
+      (await $b.putJson("test1.txt",jsonObj1));
+      (await $b.putJson("test2.txt",jsonObj2));
+      const testJson1 = (await $b.getJson("test1.txt"));
+      const testJson2 = (await $b.getJson("test2.txt"));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson1)["test"] === (jsonObj1)["test"])'`)})(((testJson1)["test"] === (jsonObj1)["test"]))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson2)["test"] === (jsonObj2)["test"])'`)})(((testJson2)["test"] === (jsonObj2)["test"]))};
       const jsonObj3 = Object.freeze({"test":"test3"});
-      (await b.putJson("test3.txt",jsonObj3));
-      const testJson3 = (await b.getJson("test3.txt"));
+      (await $b.putJson("test3.txt",jsonObj3));
+      const testJson3 = (await $b.getJson("test3.txt"));
       {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson3)["test"] === (jsonObj3)["test"])'`)})(((testJson3)["test"] === (jsonObj3)["test"]))};
-      (await b.delete("test1.txt"));
-      const files = (await b.list());
+      (await $b.delete("test1.txt"));
+      const files = (await $b.list());
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -219,19 +219,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
+        const $b = context._lift(b, ["putJson", "putJson", "getJson", "getJson", "putJson", "getJson", "delete", "list"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
+          require("./inflight.$Closure1.js")({ 
+            $b: ${$b},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -239,11 +237,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["delete", "getJson", "list", "putJson"]);
+          $Closure1._registerBindObject(b, host, ["putJson", "putJson", "getJson", "getJson", "putJson", "getJson", "delete", "list"]);
         }
         super._registerBind(host, ops);
       }

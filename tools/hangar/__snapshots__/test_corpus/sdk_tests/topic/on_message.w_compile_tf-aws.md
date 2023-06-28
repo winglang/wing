@@ -2,17 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ c }) {
+module.exports = function({ $c }) {
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await $c.inc());
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await c.inc());
     }
   }
   return $Closure1;
@@ -22,17 +22,17 @@ module.exports = function({ c }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ c }) {
+module.exports = function({ $c }) {
   class $Closure2 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await $c.inc());
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await c.inc());
     }
   }
   return $Closure2;
@@ -42,29 +42,29 @@ module.exports = function({ c }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ t, predicate, TestHelper }) {
+module.exports = function({ $predicate, $t, TestHelper }) {
   class $Closure3 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
-        (await t.publish("msg"));
+        (await $t.publish("msg"));
       }
       let i = 0;
       while ((i < 600)) {
         i = (i + 1);
-        if ((await predicate.test())) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+        if ((await $predicate.test())) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await $predicate.test())'`)})((await $predicate.test()))};
           return;
         }
         (await TestHelper.sleep(100));
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await $predicate.test())'`)})((await $predicate.test()))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure3;
@@ -76,13 +76,13 @@ module.exports = function({ t, predicate, TestHelper }) {
 ```js
 module.exports = function({  }) {
   class Predicate {
-    constructor({ c }) {
-      this.c = c;
-    }
     async $inflight_init()  {
     }
     async test()  {
-      return ((await this.c.peek()) === 10);
+      return ((await this.$this_c.peek()) === 10);
+    }
+    constructor({ $this_c }) {
+      this.$this_c = $this_c;
     }
   }
   return Predicate;
@@ -94,12 +94,12 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class TestHelper {
-    constructor({  }) {
-    }
     async $inflight_init()  {
     }
     static async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
+    }
+    constructor({  }) {
     }
   }
   return TestHelper;
@@ -462,19 +462,16 @@ class $Root extends $stdlib.std.Resource {
         this.c = c;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Predicate.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Predicate.js")({ 
           })
         `);
       }
       _toInflight() {
-        const c_client = this._lift(this.c);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const PredicateClient = ${Predicate._toInflightType(this).text};
-            const client = new PredicateClient({
-              c: ${c_client},
+            const client = new (${Predicate._toInflightType(this).text})({
+              $this_c: ${this._lift(this.c, ["peek"])},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -482,9 +479,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Predicate._registerBindObject(this.c, host, []);
-        }
         if (ops.includes("test")) {
           Predicate._registerBindObject(this.c, host, ["peek"]);
         }
@@ -497,32 +491,20 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("sleep");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.TestHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.TestHelper.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const TestHelperClient = ${TestHelper._toInflightType(this).text};
-            const client = new TestHelperClient({
+            const client = new (${TestHelper._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("sleep")) {
-        }
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -532,19 +514,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const c_client = context._lift(c);
+        const $c = context._lift(c, ["inc"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c: ${c_client},
+          require("./inflight.$Closure1.js")({ 
+            $c: ${$c},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -552,9 +532,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(c, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(c, host, ["inc"]);
         }
@@ -568,19 +545,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const c_client = context._lift(c);
+        const $c = context._lift(c, ["inc"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c: ${c_client},
+          require("./inflight.$Closure2.js")({ 
+            $c: ${$c},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -588,9 +563,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(c, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(c, host, ["inc"]);
         }
@@ -604,23 +576,21 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const t_client = context._lift(t);
-        const predicate_client = context._lift(predicate);
-        const TestHelperClient = TestHelper._toInflightType(context);
+        const $predicate = context._lift(predicate, ["test", "test", "test"]);
+        const $t = context._lift(t, ["publish"]);
+        const lifted_TestHelper = TestHelper._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            t: ${t_client},
-            predicate: ${predicate_client},
-            TestHelper: ${TestHelperClient.text},
+          require("./inflight.$Closure3.js")({ 
+            $predicate: ${$predicate},
+            $t: ${$t},
+            TestHelper: ${lifted_TestHelper},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
-            const client = new $Closure3Client({
+            const client = new (${$Closure3._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -628,13 +598,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(predicate, host, []);
-          $Closure3._registerBindObject(t, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(TestHelper, host, ["sleep"]);
-          $Closure3._registerBindObject(predicate, host, ["test"]);
+          $Closure3._registerBindObject(predicate, host, ["test", "test", "test"]);
           $Closure3._registerBindObject(t, host, ["publish"]);
         }
         super._registerBind(host, ops);

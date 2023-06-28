@@ -2,19 +2,19 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ counter, bucket }) {
+module.exports = function({ $bucket, $counter }) {
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle(body)  {
+      const next = (await $counter.inc());
+      const key = `myfile-${"hi"}.txt`;
+      (await $bucket.put(key,body));
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(body)  {
-      const next = (await counter.inc());
-      const key = `myfile-${"hi"}.txt`;
-      (await bucket.put(key,body));
     }
   }
   return $Closure1;
@@ -251,21 +251,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const counter_client = context._lift(counter);
-        const bucket_client = context._lift(bucket);
+        const $bucket = context._lift(bucket, ["put"]);
+        const $counter = context._lift(counter, ["inc"]);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counter: ${counter_client},
-            bucket: ${bucket_client},
+          require("./inflight.$Closure1.js")({ 
+            $bucket: ${$bucket},
+            $counter: ${$counter},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -273,10 +271,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(bucket, host, []);
-          $Closure1._registerBindObject(counter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(bucket, host, ["put"]);
           $Closure1._registerBindObject(counter, host, ["inc"]);

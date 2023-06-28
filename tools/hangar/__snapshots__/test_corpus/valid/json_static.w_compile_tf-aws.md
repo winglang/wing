@@ -2,18 +2,22 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ jj, std_Json }) {
+module.exports = function({ $jj, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jj]);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")'`)})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")'`)})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
     }
   }
   return $Closure1;
@@ -24,18 +28,22 @@ module.exports = function({ jj, std_Json }) {
 ## inflight.$Closure2.js
 ```js
 module.exports = function({ std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       const hasCheck = Object.freeze({"a":"hello","b":"wing"});
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true)'`)})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false)'`)})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -248,21 +256,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const jj_client = context._lift(jj);
-        const std_JsonClient = std.Json._toInflightType(context);
+        const $jj = context._lift(jj, []);
+        const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            jj: ${jj_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({ 
+            $jj: ${$jj},
+            std_Json: ${lifted_std_Json},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -270,9 +276,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(jj, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(jj, host, []);
         }
@@ -286,31 +289,22 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const std_JsonClient = std.Json._toInflightType(context);
+        const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure2.js")({ 
+            std_Json: ${lifted_std_Json},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const x = Object.freeze({"a":123,"b":{"c":456,"d":789}});

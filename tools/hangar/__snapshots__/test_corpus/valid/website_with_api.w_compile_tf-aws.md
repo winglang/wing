@@ -2,20 +2,24 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ usersTable, std_Json }) {
+module.exports = function({ $usersTable, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle(req)  {
       return {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"users":(await usersTable.list())})]),
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"users":(await $usersTable.list())})]),
       "status": 200,}
       ;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -25,13 +29,12 @@ module.exports = function({ usersTable, std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ usersTable, std_Json }) {
+module.exports = function({ $usersTable, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle(req)  {
@@ -42,11 +45,16 @@ module.exports = function({ usersTable, std_Json }) {
         "status": 400,}
         ;
       }
-      (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+      (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(body)["id"]})]),
       "status": 201,}
       ;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -58,11 +66,6 @@ module.exports = function({ usersTable, std_Json }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle(req)  {
@@ -70,6 +73,11 @@ module.exports = function({  }) {
       "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
       "status": 204,}
       ;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure3;
@@ -617,21 +625,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const usersTable_client = context._lift(usersTable);
-        const std_JsonClient = std.Json._toInflightType(context);
+        const $usersTable = context._lift(usersTable, ["list"]);
+        const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            usersTable: ${usersTable_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({ 
+            $usersTable: ${$usersTable},
+            std_Json: ${lifted_std_Json},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -639,9 +645,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(usersTable, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(usersTable, host, ["list"]);
         }
@@ -655,21 +658,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const usersTable_client = context._lift(usersTable);
-        const std_JsonClient = std.Json._toInflightType(context);
+        const $usersTable = context._lift(usersTable, ["insert"]);
+        const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            usersTable: ${usersTable_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure2.js")({ 
+            $usersTable: ${$usersTable},
+            std_Json: ${lifted_std_Json},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -677,9 +678,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(usersTable, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(usersTable, host, ["insert"]);
         }
@@ -693,29 +691,20 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
-            const client = new $Closure3Client({
+            const client = new (${$Closure3._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");

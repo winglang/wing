@@ -2,20 +2,19 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ table, std_String }) {
+module.exports = function({ $table, std_String }) {
+  const std = {
+    String: std_String,
+  };
+  
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
-      (await table.insert("eyal",Object.freeze({"gender":"male"})));
-      (await table.insert("revital",Object.freeze({"gender":"female"})));
+      (await $table.insert("eyal",Object.freeze({"gender":"male"})));
+      (await $table.insert("revital",Object.freeze({"gender":"female"})));
       const unorderded = {};
-      for (const u of (await table.list())) {
+      for (const u of (await $table.list())) {
         ((obj, args) => { obj[args[0]] = args[1]; })(unorderded, [((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((u)["name"]),u]);
       }
       const revital = (unorderded)["revital"];
@@ -24,6 +23,11 @@ module.exports = function({ table, std_String }) {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("male" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["gender"]))'`)})(("male" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((eyal)["gender"])))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("revital" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["name"]))'`)})(("revital" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["name"])))};
       {((cond) => {if (!cond) throw new Error(`assertion failed: '("female" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["gender"]))'`)})(("female" === ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((revital)["gender"])))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -192,21 +196,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const table_client = context._lift(table);
-        const std_StringClient = std.String._toInflightType(context);
+        const $table = context._lift(table, ["insert", "insert", "list"]);
+        const lifted_std_String = std.String._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            table: ${table_client},
-            std_String: ${std_StringClient.text},
+          require("./inflight.$Closure1.js")({ 
+            $table: ${$table},
+            std_String: ${lifted_std_String},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -214,11 +216,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(table, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(table, host, ["insert", "list"]);
+          $Closure1._registerBindObject(table, host, ["insert", "insert", "list"]);
         }
         super._registerBind(host, ops);
       }

@@ -85,7 +85,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "inbound",
                               "implicit": false,
-                              "relationship": "inflightField",
+                              "relationship": "fooGet",
                               "resource": "root/Default/Default/test:test/Handler",
                             },
                           ],
@@ -97,13 +97,13 @@ exports[`tree.json for an app with many resources 1`] = `
                                 {
                                   "direction": "inbound",
                                   "implicit": false,
-                                  "relationship": "dec",
+                                  "relationship": "inc",
                                   "resource": "root/Default/Default/test:test/Handler",
                                 },
                                 {
                                   "direction": "inbound",
                                   "implicit": false,
-                                  "relationship": "inc",
+                                  "relationship": "dec",
                                   "resource": "root/Default/Default/test:test/Handler",
                                 },
                                 {
@@ -157,13 +157,13 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "getObjectCount",
+                          "relationship": "publish",
                           "resource": "root/Default/Default/test:dependency cycles/Handler",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "publish",
+                          "relationship": "getObjectCount",
                           "resource": "root/Default/Default/test:dependency cycles/Handler",
                         },
                       ],
@@ -933,13 +933,13 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "get",
+                          "relationship": "put",
                           "resource": "root/Default/Default/test:test/Handler",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "put",
+                          "relationship": "get",
                           "resource": "root/Default/Default/test:test/Handler",
                         },
                       ],
@@ -1016,13 +1016,13 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "getObjectCount",
+                              "relationship": "publish",
                               "resource": "root/Default/Default/BigPublisher",
                             },
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "publish",
+                              "relationship": "getObjectCount",
                               "resource": "root/Default/Default/BigPublisher",
                             },
                           ],
@@ -1111,25 +1111,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "dec",
-                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "inc",
-                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
                               "relationship": "list",
-                              "resource": "root/Default/Default/cloud.Bucket",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "get",
                               "resource": "root/Default/Default/cloud.Bucket",
                             },
                             {
@@ -1141,19 +1123,37 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "get",
+                              "resource": "root/Default/Default/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "inc",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "dec",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "peek",
                               "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
                             },
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "fooGet",
+                              "relationship": "fooInc",
                               "resource": "root/Default/Default/Bar/Foo",
                             },
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "fooInc",
+                              "relationship": "fooGet",
                               "resource": "root/Default/Default/Bar/Foo",
                             },
                             {
@@ -1167,12 +1167,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "implicit": false,
                               "relationship": "testTypeAccess",
                               "resource": "root/Default/Default/Bar",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "inflightField",
-                              "resource": "root/Default/Default/Bar/Foo",
                             },
                           ],
                         },

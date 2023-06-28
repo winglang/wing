@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join, resolve } from "path";
-import { buildSync } from "esbuild-wasm";
+import { Message, buildSync } from "esbuild-wasm";
 import { normalPath } from "./misc";
 
 export interface Bundle {
@@ -36,7 +36,11 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   });
 
   if (esbuild.errors.length > 0) {
-    throw new Error(`Failed to bundle function: ${esbuild.errors.join("\n")}`);
+    let formatError = (m: Message) => {
+      return `${m.location?.file ?? "<file>"}:${m.location?.line ?? "<line>"}:${m.location?.column ?? "<col>"}: ${m.text}`
+    };
+
+    throw new Error(`Failed to bundle function: ${esbuild.errors.map(formatError).join("\n")}`);
   }
 
   // the bundled contains line comments with file paths, which are not useful for us, especially

@@ -4,9 +4,9 @@
 ```js
 module.exports = function({  }) {
   class WingResource {
-    constructor({  }) {
-    }
     async $inflight_init()  {
+    }
+    constructor({  }) {
     }
   }
   return WingResource;
@@ -77,27 +77,20 @@ class $Root extends $stdlib.std.Resource {
         {console.log(`my id is ${this.node.id}`)};
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.WingResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.WingResource.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const WingResourceClient = ${WingResource._toInflightType(this).text};
-            const client = new WingResourceClient({
+            const client = new (${WingResource._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const getPath =  (c) =>  {

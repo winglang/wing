@@ -2,19 +2,23 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ RANDOM, NIL, util_Util }) {
+module.exports = function({ $NIL, $RANDOM, util_Util }) {
+  const util = {
+    Util: util_Util,
+  };
+  
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await util.Util.env("WING_TARGET")).length > 0)'`)})(((await util.Util.env("WING_TARGET")).length > 0))};
+      const noValue = ((await util.Util.tryEnv($RANDOM)) ?? $NIL);
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(noValue === $NIL)'`)})((noValue === $NIL))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await util_Util.env("WING_TARGET")).length > 0)'`)})(((await util_Util.env("WING_TARGET")).length > 0))};
-      const noValue = ((await util_Util.tryEnv(RANDOM)) ?? NIL);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(noValue === NIL)'`)})((noValue === NIL))};
     }
   }
   return $Closure1;
@@ -161,23 +165,21 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const RANDOM_client = context._lift(RANDOM);
-        const NIL_client = context._lift(NIL);
-        const util_UtilClient = util.Util._toInflightType(context);
+        const $NIL = context._lift(NIL, []);
+        const $RANDOM = context._lift(RANDOM, []);
+        const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            RANDOM: ${RANDOM_client},
-            NIL: ${NIL_client},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure1.js")({ 
+            $NIL: ${$NIL},
+            $RANDOM: ${$RANDOM},
+            util_Util: ${lifted_util_Util},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -185,10 +187,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(NIL, host, []);
-          $Closure1._registerBindObject(RANDOM, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(NIL, host, []);
           $Closure1._registerBindObject(RANDOM, host, []);

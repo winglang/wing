@@ -2,17 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ counter, std_Json }) {
+module.exports = function({ $counter, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle(request)  {
-      const count = (await counter.inc());
+      const count = (await $counter.inc());
       const bodyResponse = Object.freeze({"count":count});
       const resp = {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),
@@ -20,6 +19,11 @@ module.exports = function({ counter, std_Json }) {
       "status": 200,}
       ;
       return resp;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -29,18 +33,18 @@ module.exports = function({ counter, std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api }) {
+module.exports = function({ $api_url }) {
   class $Closure2 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const url = $api_url;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const url = api.url;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
     }
   }
   return $Closure2;
@@ -50,21 +54,21 @@ module.exports = function({ api }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ __parent_this_3 }) {
+module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle(req)  {
-      const text = `${__parent_this_3.api.url}/endpoint2`;
+      const text = `${$__parent_this_3_api_url}/endpoint2`;
       return {
       "status": 200,
       "body": text,}
       ;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure3;
@@ -76,10 +80,9 @@ module.exports = function({ __parent_this_3 }) {
 ```js
 module.exports = function({  }) {
   class A {
-    constructor({ api }) {
-      this.api = api;
-    }
     async $inflight_init()  {
+    }
+    constructor({  }) {
     }
   }
   return A;
@@ -142,7 +145,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.root_A_cloudApi_api_A554547B.id}",
         "triggers": {
-          "redeployment": "66f9e4b69146527e1951e6308dc9128a3ca41abb"
+          "redeployment": "ee737a93987c97858ba9524a5b87b2ff1b0e62e4"
         }
       },
       "root_cloudApi_api_deployment_E29F699A": {
@@ -329,10 +332,9 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C8B1D888": "${aws_api_gateway_stage.root_A_cloudApi_api_stage_EEF6B12C.invoke_url}",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-73c5308f-c85168bb",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_41": "${jsonencode(aws_api_gateway_stage.root_A_cloudApi_api_stage_EEF6B12C.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_42": "${jsonencode(aws_api_gateway_stage.root_A_cloudApi_api_stage_EEF6B12C.invoke_url)}"
           }
         },
         "function_name": "cloud-Api-OnRequest-73c5308f-c85168bb",
@@ -384,7 +386,6 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8315524",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
@@ -500,21 +501,19 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const counter_client = context._lift(counter);
-        const std_JsonClient = std.Json._toInflightType(context);
+        const $counter = context._lift(counter, ["inc"]);
+        const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counter: ${counter_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({ 
+            $counter: ${$counter},
+            std_Json: ${lifted_std_Json},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -522,9 +521,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(counter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(counter, host, ["inc"]);
         }
@@ -538,19 +534,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_client = context._lift(api);
+        const $api_url = context._lift(api.url, []);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
+          require("./inflight.$Closure2.js")({ 
+            $api_url: ${$api_url},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -558,9 +552,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
         }
@@ -579,19 +570,17 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const self_client_path = "././inflight.$Closure3.js";
-            const __parent_this_3_client = context._lift(__parent_this_3);
+            const $__parent_this_3_api_url = context._lift(__parent_this_3.api.url, []);
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("${self_client_path}")({
-                __parent_this_3: ${__parent_this_3_client},
+              require("./inflight.$Closure3.js")({ 
+                $__parent_this_3_api_url: ${$__parent_this_3_api_url},
               })
             `);
           }
           _toInflight() {
             return $stdlib.core.NodeJsCode.fromInline(`
               (await (async () => {
-                const $Closure3Client = ${$Closure3._toInflightType(this).text};
-                const client = new $Closure3Client({
+                const client = new (${$Closure3._toInflightType(this).text})({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
@@ -599,9 +588,6 @@ class $Root extends $stdlib.std.Resource {
             `);
           }
           _registerBind(host, ops) {
-            if (ops.includes("$inflight_init")) {
-              $Closure3._registerBindObject(__parent_this_3, host, []);
-            }
             if (ops.includes("handle")) {
               $Closure3._registerBindObject(__parent_this_3.api.url, host, []);
             }
@@ -611,30 +597,20 @@ class $Root extends $stdlib.std.Resource {
         (this.api.get("/endpoint1",new $Closure3(this,"$Closure3")));
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.A.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.A.js")({ 
           })
         `);
       }
       _toInflight() {
-        const api_client = this._lift(this.api);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const AClient = ${A._toInflightType(this).text};
-            const client = new AClient({
-              api: ${api_client},
+            const client = new (${A._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this.api, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");

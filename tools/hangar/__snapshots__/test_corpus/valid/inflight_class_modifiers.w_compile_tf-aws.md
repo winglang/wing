@@ -63,29 +63,20 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("method", "field");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.C.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.C.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const CClient = ${C._toInflightType(this).text};
-            const client = new CClient({
+            const client = new (${C._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("method")) {
-        }
-        super._registerBind(host, ops);
       }
     }
   }
