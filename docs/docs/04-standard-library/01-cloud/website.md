@@ -12,6 +12,7 @@ keywords:
     Schedule,
     Cron job,
   ]
+sidebar_position: 1
 ---
 
 The `cloud.Website` resource represents a static website that can be hosted in the cloud.

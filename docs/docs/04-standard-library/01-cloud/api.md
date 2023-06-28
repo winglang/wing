@@ -13,6 +13,7 @@ keywords:
     Endpoints,
     HTTP endpoint,
   ]
+sidebar_position: 1
 ---
 
 The `cloud.Api` resource represents a collection of HTTP endpoints that can be invoked by clients over the internet.
