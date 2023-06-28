@@ -891,14 +891,14 @@ x..
 	);
 
 	test_completion_list!(
-		inside_class_declaration_empty,
+		inside_class_declaration,
 		r#"
 class Foo {
    
 //^
 }
 "#,
-		assert!(inside_class_declaration_empty.is_empty())
+		assert!(!inside_class_declaration.is_empty())
 	);
 
 	test_completion_list!(
