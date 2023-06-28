@@ -134,8 +134,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 			let reference_text = add_std_namespace(std::str::from_utf8(bytes).expect("Reference must be valid utf8"));
 
-			dbg!(&reference_text);
-
 			if let Some((lookup_thing, _)) = found_env
 				.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
 				.ok()
@@ -173,13 +171,17 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		// for now, lets just get all the symbols within the current scope
 		let mut completions = vec![];
 
-		dbg!(node_to_complete_kind);
-
 		let mut in_type = false;
 
 		match node_to_complete_kind {
-			"parameter_list" => in_type = true,
+			// there are no possible completions that could follow ")"
 			")" => return vec![],
+
+			// This is the node we are in in the following case:
+			// inflight (stuff: ): num => {}
+			//                 ^
+			"parameter_list" => in_type = true,
+
 			"source" => {
 				completions.push(CompletionItem {
 					label: "test \"\" { }".to_string(),
@@ -193,7 +195,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		}
 
 		if let Some(parent) = node_to_complete.parent() {
-			dbg!(parent.kind());
 			match parent.kind() {
 				"ERROR" => {
 					// TODO Due to struct expansion, this is not totally accurate, but it's a pretty decent guess
