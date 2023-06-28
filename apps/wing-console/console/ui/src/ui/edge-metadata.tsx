@@ -31,7 +31,7 @@ export const EdgeMetadata = ({
   const { theme } = useTheme();
 
   const [openInspectorSections, setOpenInspectorSections] = useState(() => [
-    "inflights",
+    "properties",
   ]);
 
   const toggleInspectorSection = (section: string) => {
@@ -77,10 +77,10 @@ export const EdgeMetadata = ({
       </div>
 
       <InspectorSection
-        text="Inflights"
+        text="Properties"
         icon={ArrowsRightLeftIcon}
-        open={openInspectorSections.includes("inflights")}
-        onClick={() => toggleInspectorSection("inflights")}
+        open={openInspectorSections.includes("properties")}
+        onClick={() => toggleInspectorSection("properties")}
         headingClassName="pl-2"
       >
         <div
