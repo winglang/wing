@@ -3,6 +3,7 @@ title: Service
 id: service
 description: A built-in resource for publishing messages to subscribers.
 keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, services]
+sidebar_position: 1
 ---
 
 The `cloud.Service` class represents a cloud service that has a start and optional stop lifecycle.

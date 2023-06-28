@@ -11,6 +11,7 @@ keywords:
     Wing programming language,
     Serverless function,
   ]
+sidebar_position: 1
 ---
 
 The `cloud.Function` resource represents a serverless function for performing short, stateless tasks.
