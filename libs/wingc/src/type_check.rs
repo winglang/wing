@@ -1617,8 +1617,8 @@ impl<'a> TypeChecker<'a> {
 					})
 					.collect();
 
-				// If the struct type is anything, we don't need to validate the fields
-				if struct_type.is_anything() {
+				// If we don't have type information for the struct we don't need to validate the fields
+				if struct_type.is_anything() || struct_type.is_unresolved() {
 					return struct_type;
 				}
 

@@ -180,3 +180,13 @@ if let truth = jsonElements.tryGet("bools")?.tryGet("t")?.tryAsBool() {
   // This should not happen
   assert(false);
 }
+
+// tryGet Chains where members are missing
+if let val = jsonElements.tryGet("strings")?.tryGet("non")?.tryGet("existant")?.tryGet("element") {
+  assert(false); // nothing should have been found
+}
+
+// tryGetAt chains with missing members
+if let val = jsonElements.tryGet("cant")?.tryGetAt(1000)?.tryGetAt(42) {
+  assert(false); // nothing should have been found
+}
