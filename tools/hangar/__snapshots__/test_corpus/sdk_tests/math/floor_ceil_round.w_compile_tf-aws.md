@@ -46,7 +46,7 @@ module.exports = function({ x, y, math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight floor--ceil\",\"${aws_lambda_function.root_testinflightfloorceil_Handler_16E98CE5.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight floor--ceil--round\",\"${aws_lambda_function.root_testinflightfloorceilround_Handler_76DC7965.arn}\"]]"
     }
   },
   "provider": {
@@ -56,61 +56,61 @@ module.exports = function({ x, y, math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightfloorceil_Handler_IamRole_D2741FF5": {
+      "root_testinflightfloorceilround_Handler_IamRole_CB79DA89": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight floor--ceil/Handler/IamRole",
-            "uniqueId": "root_testinflightfloorceil_Handler_IamRole_D2741FF5"
+            "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRole",
+            "uniqueId": "root_testinflightfloorceilround_Handler_IamRole_CB79DA89"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightfloorceil_Handler_IamRolePolicy_9A68FCB0": {
+      "root_testinflightfloorceilround_Handler_IamRolePolicy_24AE8C0B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight floor--ceil/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightfloorceil_Handler_IamRolePolicy_9A68FCB0"
+            "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRolePolicy",
+            "uniqueId": "root_testinflightfloorceilround_Handler_IamRolePolicy_24AE8C0B"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightfloorceil_Handler_IamRole_D2741FF5.name}"
+        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightfloorceil_Handler_IamRolePolicyAttachment_4AF8A281": {
+      "root_testinflightfloorceilround_Handler_IamRolePolicyAttachment_D9DEE6B2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight floor--ceil/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightfloorceil_Handler_IamRolePolicyAttachment_4AF8A281"
+            "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinflightfloorceilround_Handler_IamRolePolicyAttachment_D9DEE6B2"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightfloorceil_Handler_IamRole_D2741FF5.name}"
+        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightfloorceil_Handler_16E98CE5": {
+      "root_testinflightfloorceilround_Handler_76DC7965": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight floor--ceil/Handler/Default",
-            "uniqueId": "root_testinflightfloorceil_Handler_16E98CE5"
+            "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/Default",
+            "uniqueId": "root_testinflightfloorceilround_Handler_76DC7965"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8309bd4",
+            "WING_FUNCTION_NAME": "Handler-c8bf255a",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8309bd4",
+        "function_name": "Handler-c8bf255a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightfloorceil_Handler_IamRole_D2741FF5.arn}",
+        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightfloorceil_Handler_S3Object_6E7EEB90.key}",
+        "s3_key": "${aws_s3_object.root_testinflightfloorceilround_Handler_S3Object_4406FBE6.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -130,11 +130,11 @@ module.exports = function({ x, y, math_Util }) {
       }
     },
     "aws_s3_object": {
-      "root_testinflightfloorceil_Handler_S3Object_6E7EEB90": {
+      "root_testinflightfloorceilround_Handler_S3Object_4406FBE6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight floor--ceil/Handler/S3Object",
-            "uniqueId": "root_testinflightfloorceil_Handler_S3Object_6E7EEB90"
+            "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/S3Object",
+            "uniqueId": "root_testinflightfloorceilround_Handler_S3Object_4406FBE6"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -207,7 +207,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})(((math.Util.round(y)) === 6))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})(((math.Util.round((-x))) === (-5)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})(((math.Util.round((-y))) === (-6)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight floor/ceil",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight floor/ceil/round",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {

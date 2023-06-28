@@ -11,7 +11,7 @@ assert(math.round(y) == 6);
 assert(math.round(-x) == -5);
 assert(math.round(-y) == -6);
 
-test "inflight floor/ceil" {
+test "inflight floor/ceil/round" {
   assert(math.floor(x) == 5);
   assert(math.ceil(x) == 6);
 
