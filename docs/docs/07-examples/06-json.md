@@ -80,7 +80,7 @@ for v in Json.values(arrayValue) {
 }
 ```
 
-## To Primitives
+## Safely convert to primitives
 ### To `str`
 ```js playground
 let j = Json {
