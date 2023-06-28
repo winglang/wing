@@ -12,11 +12,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: inflightClass.inflightMethod() == \"Inflight method\"")})(((await inflightClass.inflightMethod()) === "Inflight method"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: InflightClass.staticInflightMethod() == \"Static inflight method\"")})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure1;
 }

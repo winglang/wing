@@ -68,11 +68,6 @@ module.exports = function({ $counter }) {
       const r3 = (await counter.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r3 == 12")})((r3 === 12))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure2;
 }

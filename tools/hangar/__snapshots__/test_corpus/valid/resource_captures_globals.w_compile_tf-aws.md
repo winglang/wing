@@ -34,6 +34,11 @@ module.exports = function({ Another }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
+    }
   }
   return $Closure2;
 }
@@ -95,9 +100,6 @@ module.exports = function({ $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $
       (await globalAnother.first.myResource.put("key","value"));
       {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await globalAnother.myMethod()) > 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await Another.myStaticMethod()) > 0))};
-    }
-    constructor({ $this_localTopic }) {
-      this.$this_localTopic = $this_localTopic;
     }
   }
   return MyResource;

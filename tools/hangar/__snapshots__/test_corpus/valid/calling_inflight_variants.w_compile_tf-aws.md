@@ -79,9 +79,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: one == 1")})((one === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: two == 2")})((two === 2))};
     }
-    constructor({ $this_inflight1 }) {
-      this.$this_inflight1 = $this_inflight1;
-    }
   }
   return Foo;
 }

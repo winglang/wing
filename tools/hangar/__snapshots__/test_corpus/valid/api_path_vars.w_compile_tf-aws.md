@@ -45,6 +45,14 @@ module.exports = function({ api, http_Util, std_Json }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const username = "tsuf";
+      const res = (await http_Util.get(String.raw({ raw: ["", "/users/", ""] }, api.url, username)));
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((res.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((JSON.parse((res.body ?? ""))))["user"] === username))};
+    }
   }
   return $Closure2;
 }

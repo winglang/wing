@@ -53,11 +53,6 @@ module.exports = function({ $counter }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == -3")})(((await counter.peek(key)) === (-3)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == -1")})((dec2 === (-1)))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure2;
 }

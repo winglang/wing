@@ -122,27 +122,6 @@ module.exports = function({  }) {
     async testInflightField()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.inflightField == 123")})((this.inflightField === 123))};
     }
-    constructor({ $___this_setOfStr_has__s3____, $_this_arrayOfStr_at_0__, $_this_arrayOfStr_at_1__, $_this_mapOfNum___k1__, $_this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
-      this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
-      this.$_this_arrayOfStr_at_0__ = $_this_arrayOfStr_at_0__;
-      this.$_this_arrayOfStr_at_1__ = $_this_arrayOfStr_at_1__;
-      this.$_this_mapOfNum___k1__ = $_this_mapOfNum___k1__;
-      this.$_this_mapOfNum___k2__ = $_this_mapOfNum___k2__;
-      this.$_this_myOptStr_______ = $_this_myOptStr_______;
-      this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
-      this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
-      this.$this_another = $this_another;
-      this.$this_another_first_myResource = $this_another_first_myResource;
-      this.$this_another_myField = $this_another_myField;
-      this.$this_arrayOfStr_length = $this_arrayOfStr_length;
-      this.$this_extBucket = $this_extBucket;
-      this.$this_extNum = $this_extNum;
-      this.$this_myBool = $this_myBool;
-      this.$this_myNum = $this_myNum;
-      this.$this_myQueue = $this_myQueue;
-      this.$this_myResource = $this_myResource;
-      this.$this_myStr = $this_myStr;
-    }
   }
   return MyResource;
 }

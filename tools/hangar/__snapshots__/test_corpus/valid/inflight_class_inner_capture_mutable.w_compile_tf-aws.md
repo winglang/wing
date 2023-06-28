@@ -14,11 +14,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})(((await y.at(1)) === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure1;
 }

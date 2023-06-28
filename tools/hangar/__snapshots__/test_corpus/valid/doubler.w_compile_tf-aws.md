@@ -14,6 +14,11 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle(m)  {
+      return String.raw({ raw: ["Hello ", "!"] }, m);
+    }
   }
   return $Closure1;
 }

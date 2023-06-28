@@ -33,6 +33,96 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].length == 1")})((Object.freeze(["hello"]).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\"].length == 1")})((["hello"].length === 1))};
+    }
+  }
+  return $Closure10;
+}
+
+```
+
+## inflight.$Closure11.js
+```js
+module.exports = function({  }) {
+  class $Closure11 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const o = ["hello", "wing"];
+      const p = Object.freeze([...(o)]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: o.length == p.length")})((o.length === p.length))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: o.at(0) == p.at(0)")})(((await o.at(0)) === (await p.at(0))))};
+    }
+  }
+  return $Closure11;
+}
+
+```
+
+## inflight.$Closure12.js
+```js
+module.exports = function({  }) {
+  class $Closure12 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const q = Object.freeze(["hello", "wing"]);
+      const r = [...(q)];
+      {((cond) => {if (!cond) throw new Error("assertion failed: q.length == r.length")})((q.length === r.length))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: q.at(0) == r.at(0)")})(((await q.at(0)) === (await r.at(0))))};
+    }
+  }
+  return $Closure12;
+}
+
+```
+
+## inflight.$Closure13.js
+```js
+module.exports = function({  }) {
+  class $Closure13 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const lastStr = "wing";
+      const s = ["hello", lastStr, lastStr];
+      {((cond) => {if (!cond) throw new Error("assertion failed: s.lastIndexOf(lastStr) == 2")})((s.lastIndexOf(lastStr) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s.lastIndexOf(\"something\") == -1")})((s.lastIndexOf("something") === (-1)))};
+    }
+  }
+  return $Closure13;
+}
+
+```
+
+## inflight.$Closure10.js
+```js
+module.exports = function({  }) {
+  class $Closure10 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
       const i = ["hello", "wing"];
       const separator = ",";
       const joinedString = (await i.join());
@@ -129,6 +219,12 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].at(0) == \"hello\"")})(((await Object.freeze(["hello"]).at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\", \"world\"].at(1) == \"world\"")})(((await ["hello", "world"].at(1)) === "world"))};
+    }
   }
   return $Closure2;
 }
@@ -160,6 +256,155 @@ module.exports = function({  }) {
     }
   }
   return $Closure3;
+}
+
+```
+
+## inflight.$Closure4.js
+```js
+module.exports = function({  }) {
+  class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const a = ["hello"];
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
+      (await a.push("world"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 2")})((a.length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.at(0) == \"hello\"")})(((await a.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.at(1) == \"world\"")})(((await a.at(1)) === "world"))};
+      const item = (await a.pop());
+      {((cond) => {if (!cond) throw new Error("assertion failed: item == \"world\"")})((item === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.at(0) == \"hello\"")})(((await a.at(0)) === "hello"))};
+    }
+  }
+  return $Closure4;
+}
+
+```
+
+## inflight.$Closure5.js
+```js
+module.exports = function({  }) {
+  class $Closure5 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const array = Object.freeze(["hello"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: array.length == 1")})((array.length === 1))};
+      const anotherArray = Object.freeze(["wing"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: anotherArray.length == 1")})((anotherArray.length === 1))};
+      const mergedArray = (await array.concat(anotherArray));
+      {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.length == 2")})((mergedArray.length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(0) == \"hello\"")})(((await mergedArray.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(1) == \"wing\"")})(((await mergedArray.at(1)) === "wing"))};
+    }
+  }
+  return $Closure5;
+}
+
+```
+
+## inflight.$Closure6.js
+```js
+module.exports = function({  }) {
+  class $Closure6 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const e = ["hello", "wing"];
+      {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"wing\")")})(e.includes("wing"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !e.contains(\"NotThere\")")})((!e.includes("NotThere")))};
+      const h = Object.freeze(["hello", "wing"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: h.contains(\"wing\")")})(h.includes("wing"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !h.contains(\"NotThere\")")})((!h.includes("NotThere")))};
+    }
+  }
+  return $Closure6;
+}
+
+```
+
+## inflight.$Closure7.js
+```js
+module.exports = function({  }) {
+  class $Closure7 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const g = ["hello", "wing"];
+      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((g.indexOf("wing") === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"notThere\") == -1")})((g.indexOf("notThere") === (-1)))};
+    }
+  }
+  return $Closure7;
+}
+
+```
+
+## inflight.$Closure8.js
+```js
+module.exports = function({  }) {
+  class $Closure8 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const g = Object.freeze(["hello", "wing"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((g.indexOf("wing") === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"notThere\") == -1")})((g.indexOf("notThere") === (-1)))};
+    }
+  }
+  return $Closure8;
+}
+
+```
+
+## inflight.$Closure9.js
+```js
+module.exports = function({  }) {
+  class $Closure9 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const i = ["hello", "wing"];
+      const separator = ";";
+      const joinedString = (await i.join(separator));
+      const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
+      {((cond) => {if (!cond) throw new Error("assertion failed: joinedString == expectedString")})((joinedString === expectedString))};
+    }
+  }
+  return $Closure9;
 }
 
 ```
@@ -1421,6 +1666,38 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
+      }
+    }
+    class $Closure4 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure4.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure4Client = ${$Closure4._toInflightType(this).text};
+            const client = new $Closure4Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {

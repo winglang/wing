@@ -14,6 +14,11 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
+    }
   }
   return $Closure1;
 }
@@ -34,6 +39,11 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(String.raw({ raw: ["updated ", ""] }, key))};
+    }
   }
   return $Closure2;
 }
@@ -53,6 +63,11 @@ module.exports = function({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(String.raw({ raw: ["created ", ""] }, key))};
     }
   }
   return $Closure3;

@@ -64,8 +64,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: uuid.length == 36")})((uuid.length === 36))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Foo.getData() == \"Cool data!\"")})(((await Foo.getData()) === "Cool data!"))};
     }
-    constructor({  }) {
-    }
   }
   return Foo;
 }

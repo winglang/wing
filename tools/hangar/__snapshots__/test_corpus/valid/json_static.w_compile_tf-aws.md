@@ -46,11 +46,6 @@ module.exports = function({ std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"a\") == true")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"c\") == false")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure2;
 }
