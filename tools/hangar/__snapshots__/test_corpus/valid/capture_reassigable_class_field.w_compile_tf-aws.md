@@ -189,7 +189,6 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.bucket}",
-            "BUCKET_NAME_ce72b88b_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_5a275103": "${aws_dynamodb_table.root_sasa_B91F09DA.name}",
             "WING_FUNCTION_NAME": "Handler-c8d10438",
             "WING_TARGET": "tf-aws"

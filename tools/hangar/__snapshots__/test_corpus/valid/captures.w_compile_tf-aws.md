@@ -1,45 +1,40 @@
 # [captures.w](../../../../../examples/tests/valid/captures.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ bucket1, bucket2, bucket3 }) {
+module.exports = function({ bucket1, bucket2, bucket3 }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(event) {
-      await bucket1.put("file.txt", "data");
-      await bucket2.get("file.txt");
-      await bucket2.get("file2.txt");
-      await bucket3.get("file3.txt");
-      for (const stuff of await bucket1.list()) {
-        {
-          console.log(stuff);
-        }
+    async $inflight_init()  {
+    }
+    async handle(event)  {
+      (await bucket1.put("file.txt","data"));
+      (await bucket2.get("file.txt"));
+      (await bucket2.get("file2.txt"));
+      (await bucket3.get("file3.txt"));
+      for (const stuff of (await bucket1.list())) {
+        {console.log(stuff)};
       }
-      {
-        console.log(await bucket2.publicUrl("file.txt"));
-      }
+      {console.log((await bucket2.publicUrl("file.txt")))};
       try {
-        await bucket1.publicUrl("file.txt");
-      } catch ($error_error) {
+        (await bucket1.publicUrl("file.txt"));
+      }
+      catch ($error_error) {
         const error = $error_error.message;
-        {
-          console.log(error);
-        }
+        {console.log(error)};
       }
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -64,7 +59,9 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -244,7 +241,6 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"
           }
@@ -458,19 +454,18 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -506,68 +501,29 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(bucket3, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(bucket1, host, [
-            "list",
-            "publicUrl",
-            "put",
-          ]);
+          $Closure1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
           $Closure1._registerBindObject(bucket2, host, ["get", "publicUrl"]);
           $Closure1._registerBindObject(bucket3, host, ["get"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const bucket1 = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
+    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PublicBucket",{
+    "public": true,}
     );
-    const bucket2 = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "PublicBucket",
-      {
-        public: true,
-      }
-    );
-    const bucket3 = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "PrivateBucket",
-      { public: false }
-    );
-    const queue = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Queue",
-      this,
-      "cloud.Queue"
-    );
-    const handler = new $Closure1(this, "$Closure1");
-    queue.setConsumer(handler, { batchSize: 5 });
-    this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Function",
-      this,
-      "cloud.Function",
-      handler,
-      { env: Object.freeze({}) }
-    );
+    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PrivateBucket",{ public: false });
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    const handler = new $Closure1(this,"$Closure1");
+    (queue.setConsumer(handler,{ batchSize: 5 }));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: Object.freeze({}) });
     const emptyEnv = Object.freeze({});
-    this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Function",
-      this,
-      "AnotherFunction",
-      handler,
-      { env: emptyEnv }
-    );
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: emptyEnv });
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "captures",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "captures", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -581,4 +537,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

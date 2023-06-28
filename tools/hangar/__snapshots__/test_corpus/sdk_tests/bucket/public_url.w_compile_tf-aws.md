@@ -1,50 +1,38 @@
 # [public_url.w](../../../../../../examples/tests/sdk_tests/bucket/public_url.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ publicBucket, privateBucket }) {
+module.exports = function({ publicBucket, privateBucket }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
+    async $inflight_init()  {
+    }
+    async handle()  {
       let error = "";
-      await publicBucket.put("file1.txt", "Foo");
-      await privateBucket.put("file2.txt", "Bar");
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: publicBucket.publicUrl("file1.txt") != ""'
-            );
-        })((await publicBucket.publicUrl("file1.txt")) !== "");
-      }
+      (await publicBucket.put("file1.txt","Foo"));
+      (await privateBucket.put("file2.txt","Bar"));
+      const publicUrl = (await publicBucket.publicUrl("file1.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((publicUrl !== ""))};
       try {
-        await privateBucket.publicUrl("file2.txt");
-      } catch ($error_e) {
+        (await privateBucket.publicUrl("file2.txt"));
+      }
+      catch ($error_e) {
         const e = $error_e.message;
         error = e;
       }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: error == "Cannot provide public url for a non-public bucket"'
-            );
-        })(error === "Cannot provide public url for a non-public bucket");
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((error === "Cannot provide public url for a non-public bucket"))};
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -69,7 +57,9 @@ module.exports = function ({ publicBucket, privateBucket }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -260,20 +250,19 @@ module.exports = function ({ publicBucket, privateBucket }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
-const util = require("@winglang/sdk").util;
+const cloud = require('@winglang/sdk').cloud;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -306,49 +295,23 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(publicBucket, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(privateBucket, host, [
-            "publicUrl",
-            "put",
-          ]);
-          $Closure1._registerBindObject(publicBucket, host, [
-            "publicUrl",
-            "put",
-          ]);
+          $Closure1._registerBindObject(privateBucket, host, ["publicUrl", "put"]);
+          $Closure1._registerBindObject(publicBucket, host, ["publicUrl", "put"]);
         }
         super._registerBind(host, ops);
       }
     }
     const bucketProps = {
-      public: true,
-    };
-    const publicBucket = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "publicBucket",
-      bucketProps
-    );
-    const privateBucket = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "privateBucket"
-    );
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:publicUrl",
-      new $Closure1(this, "$Closure1")
-    );
+    "public": true,}
+    ;
+    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",bucketProps);
+    const privateBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"privateBucket");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:publicUrl",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "public_url",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "public_url", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -362,4 +325,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+
