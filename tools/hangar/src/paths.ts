@@ -3,8 +3,8 @@ import * as fs from "fs";
 
 export const repoRoot = path.resolve(__dirname, "../../..");
 export const testDir = path.join(repoRoot, "examples/tests");
-export const pluginsDir = path.join(repoRoot, "examples/plugins");
 export const validTestDir = path.join(testDir, "valid");
+export const pluginsDir = path.join(validTestDir, "plugins");
 export const sdkTests = path.join(testDir, "sdk_tests");
 export const invalidTestDir = path.join(testDir, "invalid");
 export const benchmarksTestDir = path.join(validTestDir, "benchmarks");
@@ -20,6 +20,15 @@ export const snapshotDir = path.join(hangarDir, "__snapshots__");
 
 export const targetWingSpec =
   process.env.HANGAR_WING_SPEC ?? `file:${path.join(repoRoot, `apps/wing`)}`;
+export const targetWingConsoleAppSpec =
+  process.env.HANGAR_WINGCONSOLE_APP_SPEC ??
+  `file:${path.join(repoRoot, `apps/wing-console/console/app`)}`;
+export const targetWingConsoleServerSpec =
+  process.env.HANGAR_WINGCONSOLE_SERVER_SPEC ??
+  `file:${path.join(repoRoot, `apps/wing-console/console/server`)}`;
+export const targetWingConsoleUiSpec =
+  process.env.HANGAR_WINGCONSOLE_UI_SPEC ??
+  `file:${path.join(repoRoot, `apps/wing-console/console/ui`)}`;
 export const targetWingCompilerSpec =
   process.env.HANGAR_WINGCOMPILER_SPEC ??
   `file:${path.join(repoRoot, `libs/wingcompiler`)}`;

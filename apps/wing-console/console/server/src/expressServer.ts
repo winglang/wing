@@ -51,8 +51,6 @@ export const createExpressServer = async ({
   const app = express();
   app.use(cors());
 
-  onExpressCreated?.(app);
-
   const { router } = mergeAllRouters();
   const createContext = (): RouterContext => {
     return {
@@ -83,6 +81,10 @@ export const createExpressServer = async ({
       createContext,
     }),
   );
+
+  // Allow extending the express app (after trpc is set up).
+  onExpressCreated?.(app);
+
   log.info("Looking for an open port");
   const port = await getPort({ port: requestedPort });
   const server = app.listen(port);

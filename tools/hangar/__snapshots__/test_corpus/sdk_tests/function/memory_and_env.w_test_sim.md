@@ -4,12 +4,9 @@
 ```log
 pass ─ memory_and_env.wsim » root/env0/test:function with memory and function with env can be invoked
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

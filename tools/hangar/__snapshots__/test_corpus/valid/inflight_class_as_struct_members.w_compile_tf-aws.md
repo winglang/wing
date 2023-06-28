@@ -35,7 +35,7 @@ module.exports = function({ getBar }) {
     }
     async handle()  {
       const bar = (await getBar());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bar.foo.get()) === 42)'`)})(((await bar.foo.get()) === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bar.foo.get() == 42")})(((await bar.foo.get()) === 42))};
     }
   }
   return $Closure2;

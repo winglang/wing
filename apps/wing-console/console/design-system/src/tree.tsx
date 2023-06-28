@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { uniq } from "lodash";
+import uniq from "lodash.uniq";
 import { useState, KeyboardEvent, useEffect, Ref, useCallback } from "react";
 
 import { useTheme } from "./theme-provider.js";

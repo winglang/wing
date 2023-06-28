@@ -17,10 +17,10 @@ module.exports = function({ JSHelper, util_Util }) {
         return true;
       }
       ))) {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((await JSHelper.getTime()) - start) < 1000)'`)})((((await JSHelper.getTime()) - start) < 1000))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start < 1000")})((((await JSHelper.getTime()) - start) < 1000))};
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
   }
@@ -46,10 +46,10 @@ module.exports = function({ oneSecond, JSHelper, util_Util }) {
         return false;
       }
       ,{ timeout: oneSecond }))) {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(((await JSHelper.getTime()) - start) > (1 * 1000))'`)})((((await JSHelper.getTime()) - start) > (1 * 1000)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start > 1 * 1000")})((((await JSHelper.getTime()) - start) > (1 * 1000)))};
       }
     }
   }
@@ -78,10 +78,10 @@ module.exports = function({ invokeCounter, oneSecond, JSHelper, util_Util }) {
       ;
       if ((await util_Util.waitUntil(returnTrueAfter3Seconds,{ interval: oneSecond }))) {
         const invocations = (await invokeCounter.peek());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((invocations > 1) && (invocations < 10))'`)})(((invocations > 1) && (invocations < 10)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed:  invocations > 1 && invocations < 10 ")})(((invocations > 1) && (invocations < 10)))};
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
   }
@@ -109,11 +109,11 @@ module.exports = function({ invokeCounter, oneSecond, fiveSeconds, JSHelper, uti
       }
       ;
       if ((await util_Util.waitUntil(returnFalse,{ interval: oneSecond, timeout: fiveSeconds }))) {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
         const invokeCount = (await invokeCounter.peek());
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((invokeCount > 3) && (invokeCount < 7))'`)})(((invokeCount > 3) && (invokeCount < 7)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCount > 3 && invokeCount < 7")})(((invokeCount > 3) && (invokeCount < 7)))};
       }
     }
   }
@@ -140,10 +140,10 @@ module.exports = function({ invokeCounter, util_Util }) {
           {((msg) => {throw new Error(msg)})("ERROR")};
         }
         ));
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       catch {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await invokeCounter.peek()) === 1)'`)})(((await invokeCounter.peek()) === 1))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})(((await invokeCounter.peek()) === 1))};
       }
     }
   }

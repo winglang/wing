@@ -92,6 +92,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    this.node.root.new("aws-cdk-lib.App",awscdk.App,);
   }
 }
 class $App extends $AppBase {
