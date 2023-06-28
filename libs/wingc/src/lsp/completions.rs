@@ -210,7 +210,15 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					}
 				}
 				// we are inside a class definition, so for now let's show nothing at all
-				"resource_definition" | "class_definition" => return vec![],
+				"resource_definition" | "class_definition" => {
+					return vec![CompletionItem {
+						label: "init".to_string(),
+						insert_text: Some("init($1) {\n\t$2\n}".to_string()),
+						insert_text_format: Some(InsertTextFormat::SNIPPET),
+						kind: Some(CompletionItemKind::SNIPPET),
+						..Default::default()
+					}];
+				}
 
 				"custom_type" => in_type = true,
 				_ => {}
