@@ -79,11 +79,6 @@ export class Bucket extends cloud.Bucket {
       functionHandler,
       opts
     );
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: cloud.BucketEventType.CREATE,
-    });
 
     if (!(fn instanceof Function)) {
       throw new Error(
@@ -100,6 +95,12 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnCreate", inflight, opts);
 
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.CREATE,
+    });
+
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
       new LambdaDestination(fn._function)
@@ -111,12 +112,6 @@ export class Bucket extends cloud.Bucket {
     opts?: cloud.BucketOnDeleteProps
   ): void {
     const fn = this.onEventFunction("OnDelete", inflight, opts);
-
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: cloud.BucketEventType.DELETE,
-    });
 
     Resource.addConnection({
       from: this,

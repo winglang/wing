@@ -945,6 +945,27 @@ error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json
    |                            ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
 
 
+error: Expected type to be \\"num?\\", but got \\"str?\\" instead
+   --> ../../../examples/tests/invalid/json.w:33:20
+   |
+33 | let tryNum: num? = j.tryAsStr();
+   |                    ^^^^^^^^^^^^ Expected type to be \\"num?\\", but got \\"str?\\" instead
+
+
+error: Expected type to be \\"str?\\", but got \\"bool?\\" instead
+   --> ../../../examples/tests/invalid/json.w:36:20
+   |
+36 | let tryStr: str? = j.tryAsBool();
+   |                    ^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"bool?\\" instead
+
+
+error: Expected type to be \\"bool?\\", but got \\"num?\\" instead
+   --> ../../../examples/tests/invalid/json.w:39:22
+   |
+39 | let tryBool: bool? = j.tryAsNum();
+   |                      ^^^^^^^^^^^^ Expected type to be \\"bool?\\", but got \\"num?\\" instead
+
+
  
  
 Tests 1 failed (1)
