@@ -10,7 +10,7 @@ use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
 use crate::lsp::sync::{FILES, JSII_TYPES};
-use crate::type_check::symbol_env::{LookupResult, StatementIdx, SymbolEnv};
+use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
 	import_udt_from_jsii, resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef,
 	CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
@@ -95,15 +95,27 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 
 			if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
-				if let Some(value) = get_completions_from_found_type_annotation(
-					nearest_type_annotation,
-					found_env,
-					scope_visitor.found_stmt_index,
-					types,
-					root_env,
-				) {
+				if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
+					let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap_or(0));
+
+					let mut completions = if let Ok(type_lookup) = type_lookup {
+						get_completions_from_type(&type_lookup, types, Some(found_env.phase), false)
+					} else {
+						// this is probably a namespace, let's look it up
+						if let Some(namespace) = root_env
+							.lookup_nested_str(&udt.full_path_str(), scope_visitor.found_stmt_index)
+							.ok()
+							.and_then(|n| n.0.as_namespace_ref())
+						{
+							get_completions_from_namespace(&namespace, Some(found_env.phase))
+						} else {
+							// This is not a known type or namespace
+							vec![]
+						}
+					};
+
 					if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
-						return value
+						completions = completions
 							.iter()
 							.filter(|c| {
 								matches!(
@@ -119,18 +131,17 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								c
 							})
 							.collect();
-					} else {
-						return value;
 					}
+
+					return completions;
 				}
 			}
 
 			// We're likely in a type reference of some kind, so let's use the raw text for a lookup
-			let wing_source = file_data.contents.as_bytes();
-
-			let bytes = &wing_source[parent.start_byte()..node_to_complete.start_byte()];
-
-			let reference_text = add_std_namespace(std::str::from_utf8(bytes).expect("Reference must be valid utf8"));
+			let wing_source_bytes = file_data.contents.as_bytes();
+			let reference_bytes = &wing_source_bytes[parent.start_byte()..node_to_complete.start_byte()];
+			let reference_text =
+				add_std_namespace(std::str::from_utf8(reference_bytes).expect("Reference must be valid utf8"));
 
 			if let Some((lookup_thing, _)) = found_env
 				.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
@@ -180,6 +191,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			//                 ^
 			"parameter_list" => in_type = true,
 
+			// We are somewhere in the root of a file, so let's add some fun snippets
 			"source" => {
 				completions.push(CompletionItem {
 					label: "test \"\" { }".to_string(),
@@ -273,40 +285,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 	CompletionResponse::Array(final_completions)
 }
 
-fn get_completions_from_found_type_annotation(
-	nearest_type_annotation: &TypeAnnotation,
-	found_env: &SymbolEnv,
-	found_stmt_index: Option<usize>,
-	types: &Types,
-	root_env: &SymbolEnv,
-) -> Option<Vec<CompletionItem>> {
-	if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
-		let type_lookup = resolve_user_defined_type(udt, found_env, found_stmt_index.unwrap_or(0));
-
-		if let Ok(type_lookup) = type_lookup {
-			return Some(get_completions_from_type(
-				&type_lookup,
-				types,
-				Some(found_env.phase),
-				false,
-			));
-		} else {
-			// this is probably a namespace, let's look it up
-			if let Some(namespace) = root_env
-				.lookup_nested_str(&udt.full_path_str(), found_stmt_index)
-				.ok()
-				.and_then(|n| n.0.as_namespace_ref())
-			{
-				return Some(get_completions_from_namespace(&namespace, Some(found_env.phase)));
-			}
-
-			// This is not a known type or namespace
-			return Some(vec![]);
-		}
-	}
-	None
-}
-
+/// Given a CompletionItem, mutates it so it can be used as a snippet to trigger parameter hints
 fn convert_to_call_completion(completion_item: &mut CompletionItem) {
 	completion_item.insert_text = Some(format!("{}($0)", completion_item.label));
 	completion_item.insert_text_format = Some(InsertTextFormat::SNIPPET);
