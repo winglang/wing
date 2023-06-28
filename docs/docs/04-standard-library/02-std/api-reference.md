@@ -19,7 +19,7 @@ sidebar_position: 100
 
 Shared behavior between all Wing SDK resources.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Resource.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.Resource.Initializer"></a>
 
 ```wing
 bring std;
@@ -27,41 +27,36 @@ bring std;
 new std.Resource()
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
 ---
 
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Resource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.std.Resource.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.Resource.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.std.Resource.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -76,7 +71,7 @@ Information on how to display a resource in the UI.
 
 Represents a unit test.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Test.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.Test.Initializer"></a>
 
 ```wing
 bring std;
@@ -84,22 +79,10 @@ bring std;
 new std.Test(inflight: ITestHandler, props?: TestProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Test.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.std.Test.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.std.TestProps">TestProps</a></code> | *No description.* |
-
----
-
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.std.Test.Initializer.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a>
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.std.Test.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.TestProps">TestProps</a>
+| <code>inflight</code> | <code><a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a></code> | *No description.* |
+| <code>props</code> | <code><a href="#@winglang/sdk.std.TestProps">TestProps</a></code> | *No description.* |
 
 ---
 
@@ -107,32 +90,30 @@ new std.Test(inflight: ITestHandler, props?: TestProps)
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Test.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.std.Test.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.Test.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.std.Test.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -150,63 +131,59 @@ Props for `Resource.addConnection`.
 ```wing
 bring std;
 
-let AddConnectionProps = std.AddConnectionProps{ ... }
+let addconnectionprops = std.AddConnectionProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.from">from</a></code> | <code><a href="#@winglang/sdk.std.IResource">IResource</a></code> | The resource creating the connection to `to`. |
-| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship between the resources. |
-| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.to">to</a></code> | <code><a href="#@winglang/sdk.std.IResource">IResource</a></code> | The resource `from` is connecting to. |
-| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.implicit">implicit</a></code> | <code>bool</code> | Whether the relationship is implicit, i.e. it is not explicitly defined by the user. |
+| <code>from</code> | <code><a href="#@winglang/sdk.std.IResource">IResource</a></code> | The resource creating the connection to `to`. |
+| <code>relationship</code> | <code>str</code> | The type of relationship between the resources. |
+| <code>to</code> | <code><a href="#@winglang/sdk.std.IResource">IResource</a></code> | The resource `from` is connecting to. |
+| <code>implicit</code> | <code>bool</code> | Whether the relationship is implicit, i.e. it is not explicitly defined by the user. |
 
 ---
 
-##### `from`<sup>Required</sup> <a name="from" id="@winglang/sdk.std.AddConnectionProps.property.from"></a>
-
+**<code>from</code>**
 ```wing
 from: IResource;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Type:* <code><a href="#@winglang/sdk.std.IResource">IResource</a></code>
 
 The resource creating the connection to `to`.
 
 ---
 
-##### `relationship`<sup>Required</sup> <a name="relationship" id="@winglang/sdk.std.AddConnectionProps.property.relationship"></a>
-
+**<code>relationship</code>**
 ```wing
 relationship: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The type of relationship between the resources.
 
 ---
 
-##### `to`<sup>Required</sup> <a name="to" id="@winglang/sdk.std.AddConnectionProps.property.to"></a>
-
+**<code>to</code>**
 ```wing
 to: IResource;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Type:* <code><a href="#@winglang/sdk.std.IResource">IResource</a></code>
 
 The resource `from` is connecting to.
 
 ---
 
-##### `implicit`<sup>Optional</sup> <a name="implicit" id="@winglang/sdk.std.AddConnectionProps.property.implicit"></a>
-
+**<code>implicit</code>**
 ```wing
 implicit: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 - *Default:* false
 
 Whether the relationship is implicit, i.e. it is not explicitly defined by the user.
@@ -222,63 +199,59 @@ A connection between two resources.
 ```wing
 bring std;
 
-let Connection = std.Connection{ ... }
+let connection = std.Connection { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Connection.property.direction">direction</a></code> | <code><a href="#@winglang/sdk.std.Direction">Direction</a></code> | The direction of the connection. |
-| <code><a href="#@winglang/sdk.std.Connection.property.implicit">implicit</a></code> | <code>bool</code> | Whether the relationship is implicit, i.e. it is not explicitly defined by the user. |
-| <code><a href="#@winglang/sdk.std.Connection.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship with the resource. |
-| <code><a href="#@winglang/sdk.std.Connection.property.resource">resource</a></code> | <code><a href="#@winglang/sdk.std.IResource">IResource</a></code> | The resource this connection is to. |
+| <code>direction</code> | <code><a href="#@winglang/sdk.std.Direction">Direction</a></code> | The direction of the connection. |
+| <code>implicit</code> | <code>bool</code> | Whether the relationship is implicit, i.e. it is not explicitly defined by the user. |
+| <code>relationship</code> | <code>str</code> | The type of relationship with the resource. |
+| <code>resource</code> | <code><a href="#@winglang/sdk.std.IResource">IResource</a></code> | The resource this connection is to. |
 
 ---
 
-##### `direction`<sup>Required</sup> <a name="direction" id="@winglang/sdk.std.Connection.property.direction"></a>
-
+**<code>direction</code>**
 ```wing
 direction: Direction;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Direction">Direction</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Direction">Direction</a></code>
 
 The direction of the connection.
 
 ---
 
-##### `implicit`<sup>Required</sup> <a name="implicit" id="@winglang/sdk.std.Connection.property.implicit"></a>
-
+**<code>implicit</code>**
 ```wing
 implicit: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 
 Whether the relationship is implicit, i.e. it is not explicitly defined by the user.
 
 ---
 
-##### `relationship`<sup>Required</sup> <a name="relationship" id="@winglang/sdk.std.Connection.property.relationship"></a>
-
+**<code>relationship</code>**
 ```wing
 relationship: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The type of relationship with the resource.
 
 ---
 
-##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/sdk.std.Connection.property.resource"></a>
-
+**<code>resource</code>**
 ```wing
 resource: IResource;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Type:* <code><a href="#@winglang/sdk.std.IResource">IResource</a></code>
 
 The resource this connection is to.
 
@@ -293,52 +266,49 @@ Properties for the Display class.
 ```wing
 bring std;
 
-let DisplayProps = std.DisplayProps{ ... }
+let displayprops = std.DisplayProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.DisplayProps.property.description">description</a></code> | <code>str</code> | Description of the resource. |
-| <code><a href="#@winglang/sdk.std.DisplayProps.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
-| <code><a href="#@winglang/sdk.std.DisplayProps.property.title">title</a></code> | <code>str</code> | Title of the resource. |
+| <code>description</code> | <code>str</code> | Description of the resource. |
+| <code>hidden</code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
+| <code>title</code> | <code>str</code> | Title of the resource. |
 
 ---
 
-##### `description`<sup>Optional</sup> <a name="description" id="@winglang/sdk.std.DisplayProps.property.description"></a>
-
+**<code>description</code>**
 ```wing
 description: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 - *Default:* No description.
 
 Description of the resource.
 
 ---
 
-##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/sdk.std.DisplayProps.property.hidden"></a>
-
+**<code>hidden</code>**
 ```wing
 hidden: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 - *Default:* Undefined
 
 Whether the resource should be hidden from the UI.
 
 ---
 
-##### `title`<sup>Optional</sup> <a name="title" id="@winglang/sdk.std.DisplayProps.property.title"></a>
-
+**<code>title</code>**
 ```wing
 title: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 - *Default:* No title.
 
 Title of the resource.
@@ -356,52 +326,49 @@ This is the type users see when constructing a std.Test instance.
 ```wing
 bring std;
 
-let TestProps = std.TestProps{ ... }
+let testprops = std.TestProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.TestProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.std.TestProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.std.TestProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code>env</code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code>memory</code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code>timeout</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.std.TestProps.property.env"></a>
-
+**<code>env</code>**
 ```wing
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.std.TestProps.property.memory"></a>
-
+**<code>memory</code>**
 ```wing
 memory: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 - *Default:* 128
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.std.TestProps.property.timeout"></a>
-
+**<code>timeout</code>**
 ```wing
 timeout: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -418,90 +385,68 @@ Immutable Array.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Array.at">at</a></code> | Get the value at the given index. |
-| <code><a href="#@winglang/sdk.std.Array.concat">concat</a></code> | Merge arr to the end of this array. |
-| <code><a href="#@winglang/sdk.std.Array.contains">contains</a></code> | Checks if this array includes searchElement. |
-| <code><a href="#@winglang/sdk.std.Array.copyMut">copyMut</a></code> | Create a mutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
-| <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+| <code>at</code> | Get the value at the given index. |
+| <code>concat</code> | Merge arr to the end of this array. |
+| <code>contains</code> | Checks if this array includes searchElement. |
+| <code>copyMut</code> | Create a mutable shallow copy of this array. |
+| <code>indexOf</code> | Returns the index of the first occurrence of searchElement found. |
+| <code>join</code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code>lastIndexOf</code> | Returns the index of the last occurrence of searchElement found. |
 
 ---
 
-##### `at` <a name="at" id="@winglang/sdk.std.Array.at"></a>
-
+**<code>at</code>**
 ```wing
 at(index: num): T1
 ```
 
 Get the value at the given index.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Array.at.parameter.index"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>index</code> | <code>num</code> | index of the value to get. |
 
-- *Type:* num
-
-index of the value to get.
-
----
-
-##### `concat` <a name="concat" id="@winglang/sdk.std.Array.concat"></a>
-
+**<code>concat</code>**
 ```wing
 concat(arr: Array): Array
 ```
 
 Merge arr to the end of this array.
 
-###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.Array.concat.parameter.arr"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>arr</code> | <code><a href="#@winglang/sdk.std.Array">Array</a></code> | array to merge. |
 
-- *Type:* <a href="#@winglang/sdk.std.Array">Array</a>
-
-array to merge.
-
----
-
-##### `contains` <a name="contains" id="@winglang/sdk.std.Array.contains"></a>
-
+**<code>contains</code>**
 ```wing
 contains(searchElement: T1): bool
 ```
 
 Checks if this array includes searchElement.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.contains.parameter.searchElement"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchElement</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | to search for. |
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Array.copyMut"></a>
-
+**<code>copyMut</code>**
 ```wing
 copyMut(): MutArray
 ```
 
 Create a mutable shallow copy of this array.
 
-##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.Array.indexOf"></a>
-
+**<code>indexOf</code>**
 ```wing
 indexOf(searchElement: T1): num
 ```
 
 Returns the index of the first occurrence of searchElement found.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.indexOf.parameter.searchElement"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchElement</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | to search for. |
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `join` <a name="join" id="@winglang/sdk.std.Array.join"></a>
-
+**<code>join</code>**
 ```wing
 join(separator?: str): str
 ```
@@ -511,44 +456,36 @@ Returns a new string containing the concatenated values in this array, separated
 If the array has only
 one item, then that item will be returned without using the separator.
 
-###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.Array.join.parameter.separator"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>separator</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.Array.lastIndexOf"></a>
-
+**<code>lastIndexOf</code>**
 ```wing
 lastIndexOf(searchElement: T1): num
 ```
 
 Returns the index of the last occurrence of searchElement found.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.lastIndexOf.parameter.searchElement"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchElement</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | to search for. |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Array.property.length">length</a></code> | <code>num</code> | The length of the array. |
+| <code>length</code> | <code>num</code> | The length of the array. |
 
 ---
 
-##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.Array.property.length"></a>
-
+**<code>length</code>**
 ```wing
 length: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 The length of the array.
 
@@ -560,16 +497,15 @@ The length of the array.
 Boolean.
 
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+#### Static Methods <a name="Static Methods" id="Static Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Boolean.fromJson">fromJson</a></code> | Parse a boolean from Json. |
+| <code>fromJson</code> | Parse a boolean from Json. |
 
 ---
 
-##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Boolean.fromJson"></a>
-
+**<code>fromJson</code>**
 ```wing
 bring std;
 
@@ -578,13 +514,9 @@ std.Boolean.fromJson(json: Json)
 
 Parse a boolean from Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Boolean.fromJson.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to parse boolean from.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | to parse boolean from. |
 
 
 
@@ -592,7 +524,7 @@ to parse boolean from.
 
 Information on how to display a resource in the UI.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Display.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.Display.Initializer"></a>
 
 ```wing
 bring std;
@@ -600,15 +532,9 @@ bring std;
 new std.Display(props?: DisplayProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Display.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.std.DisplayProps">DisplayProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.std.Display.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.DisplayProps">DisplayProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.std.DisplayProps">DisplayProps</a></code> | *No description.* |
 
 ---
 
@@ -616,45 +542,42 @@ new std.Display(props?: DisplayProps)
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Display.property.description">description</a></code> | <code>str</code> | Description of the resource. |
-| <code><a href="#@winglang/sdk.std.Display.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
-| <code><a href="#@winglang/sdk.std.Display.property.title">title</a></code> | <code>str</code> | Title of the resource. |
+| <code>description</code> | <code>str</code> | Description of the resource. |
+| <code>hidden</code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
+| <code>title</code> | <code>str</code> | Title of the resource. |
 
 ---
 
-##### `description`<sup>Optional</sup> <a name="description" id="@winglang/sdk.std.Display.property.description"></a>
-
+**<code>description</code>**
 ```wing
 description: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 Description of the resource.
 
 ---
 
-##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/sdk.std.Display.property.hidden"></a>
-
+**<code>hidden</code>**
 ```wing
 hidden: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 
 Whether the resource should be hidden from the UI.
 
 ---
 
-##### `title`<sup>Optional</sup> <a name="title" id="@winglang/sdk.std.Display.property.title"></a>
-
+**<code>title</code>**
 ```wing
 title: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 Title of the resource.
 
@@ -666,22 +589,21 @@ Title of the resource.
 Represents a length of time.
 
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+#### Static Methods <a name="Static Methods" id="Static Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Duration.fromDays">fromDays</a></code> | Create a Duration representing an amount of days. |
-| <code><a href="#@winglang/sdk.std.Duration.fromHours">fromHours</a></code> | Create a Duration representing an amount of hours. |
-| <code><a href="#@winglang/sdk.std.Duration.fromMilliseconds">fromMilliseconds</a></code> | Create a Duration representing an amount of milliseconds. |
-| <code><a href="#@winglang/sdk.std.Duration.fromMinutes">fromMinutes</a></code> | Create a Duration representing an amount of minutes. |
-| <code><a href="#@winglang/sdk.std.Duration.fromMonths">fromMonths</a></code> | Create a Duration representing an amount of months. |
-| <code><a href="#@winglang/sdk.std.Duration.fromSeconds">fromSeconds</a></code> | Create a Duration representing an amount of seconds. |
-| <code><a href="#@winglang/sdk.std.Duration.fromYears">fromYears</a></code> | Create a Duration representing an amount of years. |
+| <code>fromDays</code> | Create a Duration representing an amount of days. |
+| <code>fromHours</code> | Create a Duration representing an amount of hours. |
+| <code>fromMilliseconds</code> | Create a Duration representing an amount of milliseconds. |
+| <code>fromMinutes</code> | Create a Duration representing an amount of minutes. |
+| <code>fromMonths</code> | Create a Duration representing an amount of months. |
+| <code>fromSeconds</code> | Create a Duration representing an amount of seconds. |
+| <code>fromYears</code> | Create a Duration representing an amount of years. |
 
 ---
 
-##### `fromDays` <a name="fromDays" id="@winglang/sdk.std.Duration.fromDays"></a>
-
+**<code>fromDays</code>**
 ```wing
 bring std;
 
@@ -690,16 +612,11 @@ std.Duration.fromDays(amount: num)
 
 Create a Duration representing an amount of days.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromDays.parameter.amount"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | the amount of Days the `Duration` will represent. |
 
-- *Type:* num
-
-the amount of Days the `Duration` will represent.
-
----
-
-##### `fromHours` <a name="fromHours" id="@winglang/sdk.std.Duration.fromHours"></a>
-
+**<code>fromHours</code>**
 ```wing
 bring std;
 
@@ -708,16 +625,11 @@ std.Duration.fromHours(amount: num)
 
 Create a Duration representing an amount of hours.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromHours.parameter.amount"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | the amount of Hours the `Duration` will represent. |
 
-- *Type:* num
-
-the amount of Hours the `Duration` will represent.
-
----
-
-##### `fromMilliseconds` <a name="fromMilliseconds" id="@winglang/sdk.std.Duration.fromMilliseconds"></a>
-
+**<code>fromMilliseconds</code>**
 ```wing
 bring std;
 
@@ -726,16 +638,11 @@ std.Duration.fromMilliseconds(amount: num)
 
 Create a Duration representing an amount of milliseconds.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromMilliseconds.parameter.amount"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | the amount of Milliseconds the `Duration` will represent. |
 
-- *Type:* num
-
-the amount of Milliseconds the `Duration` will represent.
-
----
-
-##### `fromMinutes` <a name="fromMinutes" id="@winglang/sdk.std.Duration.fromMinutes"></a>
-
+**<code>fromMinutes</code>**
 ```wing
 bring std;
 
@@ -744,16 +651,11 @@ std.Duration.fromMinutes(amount: num)
 
 Create a Duration representing an amount of minutes.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromMinutes.parameter.amount"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | the amount of Minutes the `Duration` will represent. |
 
-- *Type:* num
-
-the amount of Minutes the `Duration` will represent.
-
----
-
-##### `fromMonths` <a name="fromMonths" id="@winglang/sdk.std.Duration.fromMonths"></a>
-
+**<code>fromMonths</code>**
 ```wing
 bring std;
 
@@ -762,16 +664,11 @@ std.Duration.fromMonths(amount: num)
 
 Create a Duration representing an amount of months.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromMonths.parameter.amount"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | the amount of Months the `Duration` will represent. |
 
-- *Type:* num
-
-the amount of Months the `Duration` will represent.
-
----
-
-##### `fromSeconds` <a name="fromSeconds" id="@winglang/sdk.std.Duration.fromSeconds"></a>
-
+**<code>fromSeconds</code>**
 ```wing
 bring std;
 
@@ -780,16 +677,11 @@ std.Duration.fromSeconds(amount: num)
 
 Create a Duration representing an amount of seconds.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromSeconds.parameter.amount"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | the amount of Seconds the `Duration` will represent. |
 
-- *Type:* num
-
-the amount of Seconds the `Duration` will represent.
-
----
-
-##### `fromYears` <a name="fromYears" id="@winglang/sdk.std.Duration.fromYears"></a>
-
+**<code>fromYears</code>**
 ```wing
 bring std;
 
@@ -798,107 +690,96 @@ std.Duration.fromYears(amount: num)
 
 Create a Duration representing an amount of years.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromYears.parameter.amount"></a>
-
-- *Type:* num
-
-the amount of Years the `Duration` will represent.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | the amount of Years the `Duration` will represent. |
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Duration.property.days">days</a></code> | <code>num</code> | Return the total number of days in this Duration. |
-| <code><a href="#@winglang/sdk.std.Duration.property.hours">hours</a></code> | <code>num</code> | Return the total number of hours in this Duration. |
-| <code><a href="#@winglang/sdk.std.Duration.property.milliseconds">milliseconds</a></code> | <code>num</code> | Return the total number of milliseconds in this Duration. |
-| <code><a href="#@winglang/sdk.std.Duration.property.minutes">minutes</a></code> | <code>num</code> | Return the total number of minutes in this Duration. |
-| <code><a href="#@winglang/sdk.std.Duration.property.months">months</a></code> | <code>num</code> | Return the total number of months in this Duration. |
-| <code><a href="#@winglang/sdk.std.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of seconds in this Duration. |
-| <code><a href="#@winglang/sdk.std.Duration.property.years">years</a></code> | <code>num</code> | Return the total number of years in this Duration. |
+| <code>days</code> | <code>num</code> | Return the total number of days in this Duration. |
+| <code>hours</code> | <code>num</code> | Return the total number of hours in this Duration. |
+| <code>milliseconds</code> | <code>num</code> | Return the total number of milliseconds in this Duration. |
+| <code>minutes</code> | <code>num</code> | Return the total number of minutes in this Duration. |
+| <code>months</code> | <code>num</code> | Return the total number of months in this Duration. |
+| <code>seconds</code> | <code>num</code> | Return the total number of seconds in this Duration. |
+| <code>years</code> | <code>num</code> | Return the total number of years in this Duration. |
 
 ---
 
-##### `days`<sup>Required</sup> <a name="days" id="@winglang/sdk.std.Duration.property.days"></a>
-
+**<code>days</code>**
 ```wing
 days: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 Return the total number of days in this Duration.
 
 ---
 
-##### `hours`<sup>Required</sup> <a name="hours" id="@winglang/sdk.std.Duration.property.hours"></a>
-
+**<code>hours</code>**
 ```wing
 hours: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 Return the total number of hours in this Duration.
 
 ---
 
-##### `milliseconds`<sup>Required</sup> <a name="milliseconds" id="@winglang/sdk.std.Duration.property.milliseconds"></a>
-
+**<code>milliseconds</code>**
 ```wing
 milliseconds: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 Return the total number of milliseconds in this Duration.
 
 ---
 
-##### `minutes`<sup>Required</sup> <a name="minutes" id="@winglang/sdk.std.Duration.property.minutes"></a>
-
+**<code>minutes</code>**
 ```wing
 minutes: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 Return the total number of minutes in this Duration.
 
 ---
 
-##### `months`<sup>Required</sup> <a name="months" id="@winglang/sdk.std.Duration.property.months"></a>
-
+**<code>months</code>**
 ```wing
 months: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 Return the total number of months in this Duration.
 
 ---
 
-##### `seconds`<sup>Required</sup> <a name="seconds" id="@winglang/sdk.std.Duration.property.seconds"></a>
-
+**<code>seconds</code>**
 ```wing
 seconds: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 Return the total number of seconds in this Duration.
 
 ---
 
-##### `years`<sup>Required</sup> <a name="years" id="@winglang/sdk.std.Duration.property.years"></a>
-
+**<code>years</code>**
 ```wing
 years: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 Return the total number of years in this Duration.
 
@@ -909,7 +790,7 @@ Return the total number of years in this Duration.
 
 Immutable Json.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Json.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.Json.Initializer"></a>
 
 ```wing
 bring std;
@@ -917,158 +798,128 @@ bring std;
 new std.Json()
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Json.asBool">asBool</a></code> | Convert Json element to number if possible. |
-| <code><a href="#@winglang/sdk.std.Json.asNum">asNum</a></code> | Convert Json element to number if possible. |
-| <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns a specified element from the Json. |
-| <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
-| <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
-| <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.Json.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.Json.tryGet">tryGet</a></code> | Optionally returns an specified element from the Json. |
-| <code><a href="#@winglang/sdk.std.Json.tryGetAt">tryGetAt</a></code> | Optionally returns a specified element at a given index from Json Array. |
+| <code>asBool</code> | Convert Json element to number if possible. |
+| <code>asNum</code> | Convert Json element to number if possible. |
+| <code>asStr</code> | Convert Json element to string if possible. |
+| <code>get</code> | Returns a specified element from the Json. |
+| <code>getAt</code> | Returns a specified element at a given index from Json Array. |
+| <code>tryAsBool</code> | Convert Json element to boolean if possible. |
+| <code>tryAsNum</code> | Convert Json element to string if possible. |
+| <code>tryAsStr</code> | Convert Json element to string if possible. |
+| <code>tryGet</code> | Optionally returns an specified element from the Json. |
+| <code>tryGetAt</code> | Optionally returns a specified element at a given index from Json Array. |
 
 ---
 
-##### `asBool` <a name="asBool" id="@winglang/sdk.std.Json.asBool"></a>
-
+**<code>asBool</code>**
 ```wing
 asBool(): bool
 ```
 
 Convert Json element to number if possible.
 
-##### `asNum` <a name="asNum" id="@winglang/sdk.std.Json.asNum"></a>
-
+**<code>asNum</code>**
 ```wing
 asNum(): num
 ```
 
 Convert Json element to number if possible.
 
-##### `asStr` <a name="asStr" id="@winglang/sdk.std.Json.asStr"></a>
-
+**<code>asStr</code>**
 ```wing
 asStr(): str
 ```
 
 Convert Json element to string if possible.
 
-##### `get` <a name="get" id="@winglang/sdk.std.Json.get"></a>
-
+**<code>get</code>**
 ```wing
 get(key: str): Json
 ```
 
 Returns a specified element from the Json.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.get.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to return. |
 
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `getAt` <a name="getAt" id="@winglang/sdk.std.Json.getAt"></a>
-
+**<code>getAt</code>**
 ```wing
 getAt(index: num): Json
 ```
 
 Returns a specified element at a given index from Json Array.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Json.getAt.parameter.index"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>index</code> | <code>num</code> | The index of the element in the Json Array to return. |
 
-- *Type:* num
-
-The index of the element in the Json Array to return.
-
----
-
-##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.Json.tryAsBool"></a>
-
+**<code>tryAsBool</code>**
 ```wing
 tryAsBool(): bool
 ```
 
 Convert Json element to boolean if possible.
 
-##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.Json.tryAsNum"></a>
-
+**<code>tryAsNum</code>**
 ```wing
 tryAsNum(): num
 ```
 
 Convert Json element to string if possible.
 
-##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.Json.tryAsStr"></a>
-
+**<code>tryAsStr</code>**
 ```wing
 tryAsStr(): str
 ```
 
 Convert Json element to string if possible.
 
-##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Json.tryGet"></a>
-
+**<code>tryGet</code>**
 ```wing
 tryGet(key: str): Json
 ```
 
 Optionally returns an specified element from the Json.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.tryGet.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to return. |
 
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.Json.tryGetAt"></a>
-
+**<code>tryGetAt</code>**
 ```wing
 tryGetAt(index: num): Json
 ```
 
 Optionally returns a specified element at a given index from Json Array.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Json.tryGetAt.parameter.index"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>index</code> | <code>num</code> | The index of the element in the Json Array to return. |
 
-- *Type:* num
-
-The index of the element in the Json Array to return.
-
----
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+#### Static Methods <a name="Static Methods" id="Static Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Json.deepCopy">deepCopy</a></code> | Creates an immutable deep copy of the Json. |
-| <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
-| <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
-| <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
-| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
-| <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
-| <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
-| <code><a href="#@winglang/sdk.std.Json.tryParse">tryParse</a></code> | Try to parse a string into a Json. |
-| <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
+| <code>deepCopy</code> | Creates an immutable deep copy of the Json. |
+| <code>deepCopyMut</code> | Creates a mutable deep copy of the Json. |
+| <code>delete</code> | Deletes a key in a given Json. |
+| <code>has</code> | Checks if a Json object has a given key. |
+| <code>keys</code> | Returns the keys from the Json object. |
+| <code>parse</code> | Parse a string into a Json. |
+| <code>stringify</code> | Formats Json as string. |
+| <code>tryParse</code> | Try to parse a string into a Json. |
+| <code>values</code> | Returns the values from the Json. |
 
 ---
 
-##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.Json.deepCopy"></a>
-
+**<code>deepCopy</code>**
 ```wing
 bring std;
 
@@ -1077,16 +928,11 @@ std.Json.deepCopy(json: MutJson)
 
 Creates an immutable deep copy of the Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopy.parameter.json"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code><a href="#@winglang/sdk.std.MutJson">MutJson</a></code> | to copy. |
 
-- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
-
-to copy.
-
----
-
-##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.Json.deepCopyMut"></a>
-
+**<code>deepCopyMut</code>**
 ```wing
 bring std;
 
@@ -1095,16 +941,11 @@ std.Json.deepCopyMut(json: Json)
 
 Creates a mutable deep copy of the Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.deepCopyMut.parameter.json"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | to copy. |
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to copy.
-
----
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.Json.delete"></a>
-
+**<code>delete</code>**
 ```wing
 bring std;
 
@@ -1113,24 +954,12 @@ std.Json.delete(json: MutJson, key: str)
 
 Deletes a key in a given Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.delete.parameter.json"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code><a href="#@winglang/sdk.std.MutJson">MutJson</a></code> | to delete key from. |
+| <code>key</code> | <code>str</code> | the key to delete. |
 
-- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
-
-to delete key from.
-
----
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.delete.parameter.key"></a>
-
-- *Type:* str
-
-the key to delete.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
-
+**<code>has</code>**
 ```wing
 bring std;
 
@@ -1139,24 +968,12 @@ std.Json.has(json: Json, key: str)
 
 Checks if a Json object has a given key.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.has.parameter.json"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The json object to inspect. |
+| <code>key</code> | <code>str</code> | The key to check. |
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-The json object to inspect.
-
----
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.has.parameter.key"></a>
-
-- *Type:* str
-
-The key to check.
-
----
-
-##### `keys` <a name="keys" id="@winglang/sdk.std.Json.keys"></a>
-
+**<code>keys</code>**
 ```wing
 bring std;
 
@@ -1165,16 +982,11 @@ std.Json.keys(json: any)
 
 Returns the keys from the Json object.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code>any</code> | to get keys from. |
 
-- *Type:* any
-
-to get keys from.
-
----
-
-##### `parse` <a name="parse" id="@winglang/sdk.std.Json.parse"></a>
-
+**<code>parse</code>**
 ```wing
 bring std;
 
@@ -1183,16 +995,11 @@ std.Json.parse(str: str)
 
 Parse a string into a Json.
 
-###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.parse.parameter.str"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>str</code> | <code>str</code> | to parse as Json. |
 
-- *Type:* str
-
-to parse as Json.
-
----
-
-##### `stringify` <a name="stringify" id="@winglang/sdk.std.Json.stringify"></a>
-
+**<code>stringify</code>**
 ```wing
 bring std;
 
@@ -1203,22 +1010,12 @@ Formats Json as string.
 
 (JSON.stringify($args$))
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.stringify.parameter.json"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code>any</code> | to format as string. |
+| <code>indent</code> | <code>num</code> | *No description.* |
 
-- *Type:* any
-
-to format as string.
-
----
-
-###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.stringify.parameter.indent"></a>
-
-- *Type:* num
-
----
-
-##### `tryParse` <a name="tryParse" id="@winglang/sdk.std.Json.tryParse"></a>
-
+**<code>tryParse</code>**
 ```wing
 bring std;
 
@@ -1227,16 +1024,11 @@ std.Json.tryParse(str: str)
 
 Try to parse a string into a Json.
 
-###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.tryParse.parameter.str"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>str</code> | <code>str</code> | to parse as Json. |
 
-- *Type:* str
-
-to parse as Json.
-
----
-
-##### `values` <a name="values" id="@winglang/sdk.std.Json.values"></a>
-
+**<code>values</code>**
 ```wing
 bring std;
 
@@ -1245,13 +1037,9 @@ std.Json.values(json: Json)
 
 Returns the values from the Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.values.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to get values from.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | to get values from. |
 
 
 
@@ -1263,25 +1051,23 @@ Immutable Map.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Map.copyMut">copyMut</a></code> | Create a mutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.Map.get">get</a></code> | Returns a specified element from the map. |
-| <code><a href="#@winglang/sdk.std.Map.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.Map.keys">keys</a></code> | Returns the keys of this map. |
-| <code><a href="#@winglang/sdk.std.Map.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.Map.values">values</a></code> | Returns the values of this map. |
+| <code>copyMut</code> | Create a mutable shallow copy of this map. |
+| <code>get</code> | Returns a specified element from the map. |
+| <code>has</code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code>keys</code> | Returns the keys of this map. |
+| <code>size</code> | Returns the number of elements in the map. |
+| <code>values</code> | Returns the values of this map. |
 
 ---
 
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Map.copyMut"></a>
-
+**<code>copyMut</code>**
 ```wing
 copyMut(): MutMap
 ```
 
 Create a mutable shallow copy of this map.
 
-##### `get` <a name="get" id="@winglang/sdk.std.Map.get"></a>
-
+**<code>get</code>**
 ```wing
 get(key: str): T1
 ```
@@ -1291,40 +1077,29 @@ Returns a specified element from the map.
 If the value that is associated to the provided key is an object, then you will get a reference
 to that object and any change made to that object will effectively modify it inside the map.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Map.get.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to return. |
 
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.Map.has"></a>
-
+**<code>has</code>**
 ```wing
 has(key: str): bool
 ```
 
 Returns a boolean indicating whether an element with the specified key exists or not.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Map.has.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to test for presence. |
 
-- *Type:* str
-
-The key of the element to test for presence.
-
----
-
-##### `keys` <a name="keys" id="@winglang/sdk.std.Map.keys"></a>
-
+**<code>keys</code>**
 ```wing
 keys(): MutArray<str>
 ```
 
 Returns the keys of this map.
 
-##### `size` <a name="size" id="@winglang/sdk.std.Map.size"></a>
-
+**<code>size</code>**
 ```wing
 size(): num
 ```
@@ -1333,8 +1108,7 @@ Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
 
-##### `values` <a name="values" id="@winglang/sdk.std.Map.values"></a>
-
+**<code>values</code>**
 ```wing
 values(): Array
 ```
@@ -1352,92 +1126,70 @@ Mutable Array.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutArray.at">at</a></code> | Get the value at the given index. |
-| <code><a href="#@winglang/sdk.std.MutArray.concat">concat</a></code> | Merge arr to the end of this array. |
-| <code><a href="#@winglang/sdk.std.MutArray.contains">contains</a></code> | Checks if this array includes searchElement. |
-| <code><a href="#@winglang/sdk.std.MutArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.MutArray.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.MutArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
-| <code><a href="#@winglang/sdk.std.MutArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
-| <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
+| <code>at</code> | Get the value at the given index. |
+| <code>concat</code> | Merge arr to the end of this array. |
+| <code>contains</code> | Checks if this array includes searchElement. |
+| <code>copy</code> | Create an immutable shallow copy of this array. |
+| <code>indexOf</code> | Returns the index of the first occurrence of searchElement found. |
+| <code>join</code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code>lastIndexOf</code> | Returns the index of the last occurrence of searchElement found. |
+| <code>pop</code> | Remove value from end of array. |
+| <code>push</code> | Add value to end of array. |
 
 ---
 
-##### `at` <a name="at" id="@winglang/sdk.std.MutArray.at"></a>
-
+**<code>at</code>**
 ```wing
 at(index: num): T1
 ```
 
 Get the value at the given index.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.at.parameter.index"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>index</code> | <code>num</code> | index of the value to get. |
 
-- *Type:* num
-
-index of the value to get.
-
----
-
-##### `concat` <a name="concat" id="@winglang/sdk.std.MutArray.concat"></a>
-
+**<code>concat</code>**
 ```wing
 concat(arr: MutArray): MutArray
 ```
 
 Merge arr to the end of this array.
 
-###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutArray.concat.parameter.arr"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>arr</code> | <code><a href="#@winglang/sdk.std.MutArray">MutArray</a></code> | array to merge. |
 
-- *Type:* <a href="#@winglang/sdk.std.MutArray">MutArray</a>
-
-array to merge.
-
----
-
-##### `contains` <a name="contains" id="@winglang/sdk.std.MutArray.contains"></a>
-
+**<code>contains</code>**
 ```wing
 contains(searchElement: T1): bool
 ```
 
 Checks if this array includes searchElement.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.contains.parameter.searchElement"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchElement</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | to search for. |
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutArray.copy"></a>
-
+**<code>copy</code>**
 ```wing
 copy(): Array
 ```
 
 Create an immutable shallow copy of this array.
 
-##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.MutArray.indexOf"></a>
-
+**<code>indexOf</code>**
 ```wing
 indexOf(searchElement: T1): num
 ```
 
 Returns the index of the first occurrence of searchElement found.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.indexOf.parameter.searchElement"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchElement</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | to search for. |
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `join` <a name="join" id="@winglang/sdk.std.MutArray.join"></a>
-
+**<code>join</code>**
 ```wing
 join(separator?: str): str
 ```
@@ -1447,68 +1199,54 @@ Returns a new string containing the concatenated values in this array, separated
 If the array has only
 one item, then that item will be returned without using the separator.
 
-###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutArray.join.parameter.separator"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>separator</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.MutArray.lastIndexOf"></a>
-
+**<code>lastIndexOf</code>**
 ```wing
 lastIndexOf(searchElement: T1): num
 ```
 
 Returns the index of the last occurrence of searchElement found.
 
-###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.lastIndexOf.parameter.searchElement"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchElement</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | to search for. |
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-to search for.
-
----
-
-##### `pop` <a name="pop" id="@winglang/sdk.std.MutArray.pop"></a>
-
+**<code>pop</code>**
 ```wing
 pop(): T1
 ```
 
 Remove value from end of array.
 
-##### `push` <a name="push" id="@winglang/sdk.std.MutArray.push"></a>
-
+**<code>push</code>**
 ```wing
 push(value: T1): void
 ```
 
 Add value to end of array.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.push.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-value to add.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>value</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | value to add. |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
+| <code>length</code> | <code>num</code> | The length of the array. |
 
 ---
 
-##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.MutArray.property.length"></a>
-
+**<code>length</code>**
 ```wing
 length: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 The length of the array.
 
@@ -1519,7 +1257,7 @@ The length of the array.
 
 Mutable Json.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutJson.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.MutJson.Initializer"></a>
 
 ```wing
 bring std;
@@ -1527,187 +1265,136 @@ bring std;
 new std.MutJson()
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to number if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
-| <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
-| <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
-| <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
-| <code><a href="#@winglang/sdk.std.MutJson.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.tryAsNum">tryAsNum</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.tryGet">tryGet</a></code> | Optionally returns an specified element from the Json. |
-| <code><a href="#@winglang/sdk.std.MutJson.tryGetAt">tryGetAt</a></code> | Optionally returns a specified element at a given index from Json Array. |
+| <code>asBool</code> | Convert Json element to number if possible. |
+| <code>asNum</code> | Convert Json element to number if possible. |
+| <code>asStr</code> | Convert Json element to string if possible. |
+| <code>get</code> | Returns a specified element from the Json. |
+| <code>getAt</code> | Returns a specified element at a given index from MutJson Array. |
+| <code>set</code> | Adds or updates an element in MutJson with a specific key and value. |
+| <code>setAt</code> | Set element in MutJson Array with a specific key and value. |
+| <code>tryAsBool</code> | Convert Json element to boolean if possible. |
+| <code>tryAsNum</code> | Convert Json element to string if possible. |
+| <code>tryAsStr</code> | Convert Json element to string if possible. |
+| <code>tryGet</code> | Optionally returns an specified element from the Json. |
+| <code>tryGetAt</code> | Optionally returns a specified element at a given index from Json Array. |
 
 ---
 
-##### `asBool` <a name="asBool" id="@winglang/sdk.std.MutJson.asBool"></a>
-
+**<code>asBool</code>**
 ```wing
 asBool(): bool
 ```
 
 Convert Json element to number if possible.
 
-##### `asNum` <a name="asNum" id="@winglang/sdk.std.MutJson.asNum"></a>
-
+**<code>asNum</code>**
 ```wing
 asNum(): num
 ```
 
 Convert Json element to number if possible.
 
-##### `asStr` <a name="asStr" id="@winglang/sdk.std.MutJson.asStr"></a>
-
+**<code>asStr</code>**
 ```wing
 asStr(): str
 ```
 
 Convert Json element to string if possible.
 
-##### `get` <a name="get" id="@winglang/sdk.std.MutJson.get"></a>
-
+**<code>get</code>**
 ```wing
 get(key: str): MutJson
 ```
 
 Returns a specified element from the Json.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.get.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to return. |
 
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `getAt` <a name="getAt" id="@winglang/sdk.std.MutJson.getAt"></a>
-
+**<code>getAt</code>**
 ```wing
 getAt(index: num): MutJson
 ```
 
 Returns a specified element at a given index from MutJson Array.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.getAt.parameter.index"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>index</code> | <code>num</code> | The index of the element in the MutJson Array to return. |
 
-- *Type:* num
-
-The index of the element in the MutJson Array to return.
-
----
-
-##### `set` <a name="set" id="@winglang/sdk.std.MutJson.set"></a>
-
+**<code>set</code>**
 ```wing
 set(key: str, value: MutJson): void
 ```
 
 Adds or updates an element in MutJson with a specific key and value.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.set.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to add. |
+| <code>value</code> | <code><a href="#@winglang/sdk.std.MutJson">MutJson</a></code> | The value of the element to add. |
 
-- *Type:* str
-
-The key of the element to add.
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutJson.set.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
-
-The value of the element to add.
-
----
-
-##### `setAt` <a name="setAt" id="@winglang/sdk.std.MutJson.setAt"></a>
-
+**<code>setAt</code>**
 ```wing
 setAt(index: num, value: MutJson): void
 ```
 
 Set element in MutJson Array with a specific key and value.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.setAt.parameter.index"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>index</code> | <code>num</code> | *No description.* |
+| <code>value</code> | <code><a href="#@winglang/sdk.std.MutJson">MutJson</a></code> | The value of the element to set. |
 
-- *Type:* num
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutJson.setAt.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.MutJson">MutJson</a>
-
-The value of the element to set.
-
----
-
-##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.MutJson.tryAsBool"></a>
-
+**<code>tryAsBool</code>**
 ```wing
 tryAsBool(): bool
 ```
 
 Convert Json element to boolean if possible.
 
-##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.MutJson.tryAsNum"></a>
-
+**<code>tryAsNum</code>**
 ```wing
 tryAsNum(): num
 ```
 
 Convert Json element to string if possible.
 
-##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.MutJson.tryAsStr"></a>
-
+**<code>tryAsStr</code>**
 ```wing
 tryAsStr(): str
 ```
 
 Convert Json element to string if possible.
 
-##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.MutJson.tryGet"></a>
-
+**<code>tryGet</code>**
 ```wing
 tryGet(key: str): MutJson
 ```
 
 Optionally returns an specified element from the Json.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.tryGet.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to return. |
 
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.MutJson.tryGetAt"></a>
-
+**<code>tryGetAt</code>**
 ```wing
 tryGetAt(index: num): MutJson
 ```
 
 Optionally returns a specified element at a given index from Json Array.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.tryGetAt.parameter.index"></a>
-
-- *Type:* num
-
-The index of the element in the Json Array to return.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>index</code> | <code>num</code> | The index of the element in the Json Array to return. |
 
 
 
@@ -1720,52 +1407,44 @@ Mutable Map.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutMap.clear">clear</a></code> | Removes all elements. |
-| <code><a href="#@winglang/sdk.std.MutMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.MutMap.delete">delete</a></code> | Removes the specified element from a map. |
-| <code><a href="#@winglang/sdk.std.MutMap.get">get</a></code> | Returns a specified element from the map. |
-| <code><a href="#@winglang/sdk.std.MutMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.MutMap.keys">keys</a></code> | Returns the keys of this map. |
-| <code><a href="#@winglang/sdk.std.MutMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
-| <code><a href="#@winglang/sdk.std.MutMap.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.MutMap.values">values</a></code> | Returns the values of this map. |
+| <code>clear</code> | Removes all elements. |
+| <code>copy</code> | Create an immutable shallow copy of this map. |
+| <code>delete</code> | Removes the specified element from a map. |
+| <code>get</code> | Returns a specified element from the map. |
+| <code>has</code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code>keys</code> | Returns the keys of this map. |
+| <code>set</code> | Adds or updates an entry in a Map object with a specified key and a value. |
+| <code>size</code> | Returns the number of elements in the map. |
+| <code>values</code> | Returns the values of this map. |
 
 ---
 
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutMap.clear"></a>
-
+**<code>clear</code>**
 ```wing
 clear(): void
 ```
 
 Removes all elements.
 
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutMap.copy"></a>
-
+**<code>copy</code>**
 ```wing
 copy(): Map
 ```
 
 Create an immutable shallow copy of this map.
 
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutMap.delete"></a>
-
+**<code>delete</code>**
 ```wing
 delete(key: str): bool
 ```
 
 Removes the specified element from a map.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.delete.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key. |
 
-- *Type:* str
-
-The key.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.std.MutMap.get"></a>
-
+**<code>get</code>**
 ```wing
 get(key: str): T1
 ```
@@ -1775,40 +1454,29 @@ Returns a specified element from the map.
 If the value that is associated to the provided key is an object, then you will get a reference
 to that object and any change made to that object will effectively modify it inside the map.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.get.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to return. |
 
-- *Type:* str
-
-The key of the element to return.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutMap.has"></a>
-
+**<code>has</code>**
 ```wing
 has(key: str): bool
 ```
 
 Returns a boolean indicating whether an element with the specified key exists or not.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.has.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to test for presence. |
 
-- *Type:* str
-
-The key of the element to test for presence.
-
----
-
-##### `keys` <a name="keys" id="@winglang/sdk.std.MutMap.keys"></a>
-
+**<code>keys</code>**
 ```wing
 keys(): MutArray<str>
 ```
 
 Returns the keys of this map.
 
-##### `set` <a name="set" id="@winglang/sdk.std.MutMap.set"></a>
-
+**<code>set</code>**
 ```wing
 set(key: str, value: T1): void
 ```
@@ -1817,24 +1485,12 @@ Adds or updates an entry in a Map object with a specified key and a value.
 
 TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutMap.set.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | The key of the element to add. |
+| <code>value</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | The value of the element to add. |
 
-- *Type:* str
-
-The key of the element to add.
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutMap.set.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value of the element to add.
-
----
-
-##### `size` <a name="size" id="@winglang/sdk.std.MutMap.size"></a>
-
+**<code>size</code>**
 ```wing
 size(): num
 ```
@@ -1843,8 +1499,7 @@ Returns the number of elements in the map.
 
 TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
 
-##### `values` <a name="values" id="@winglang/sdk.std.MutMap.values"></a>
-
+**<code>values</code>**
 ```wing
 values(): Array
 ```
@@ -1862,94 +1517,76 @@ Mutable Set.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutSet.add">add</a></code> | Add value to set. |
-| <code><a href="#@winglang/sdk.std.MutSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
-| <code><a href="#@winglang/sdk.std.MutSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
-| <code><a href="#@winglang/sdk.std.MutSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+| <code>add</code> | Add value to set. |
+| <code>clear</code> | The clear() method removes all elements from a set. |
+| <code>copy</code> | Create an immutable shallow copy of this set. |
+| <code>delete</code> | Removes a specified value from a set, if it is in the set. |
+| <code>has</code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 
 ---
 
-##### `add` <a name="add" id="@winglang/sdk.std.MutSet.add"></a>
-
+**<code>add</code>**
 ```wing
 add(value: T1): MutSet
 ```
 
 Add value to set.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.add.parameter.value"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>value</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | value to add. |
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-value to add.
-
----
-
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutSet.clear"></a>
-
+**<code>clear</code>**
 ```wing
 clear(): void
 ```
 
 The clear() method removes all elements from a set.
 
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutSet.copy"></a>
-
+**<code>copy</code>**
 ```wing
 copy(): Set
 ```
 
 Create an immutable shallow copy of this set.
 
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutSet.delete"></a>
-
+**<code>delete</code>**
 ```wing
 delete(value: T1): bool
 ```
 
 Removes a specified value from a set, if it is in the set.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.delete.parameter.value"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>value</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | The value to remove from the set. |
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to remove from the set.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutSet.has"></a>
-
+**<code>has</code>**
 ```wing
 has(value: T1): bool
 ```
 
 Returns a boolean indicating whether an element with the specified value exists in the set.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>value</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | The value to test for presence in the Set object. |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
+| <code>size</code> | <code>num</code> | The length of the set. |
 
 ---
 
-##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.MutSet.property.size"></a>
-
+**<code>size</code>**
 ```wing
 size: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 The length of the set.
 
@@ -1961,17 +1598,16 @@ The length of the set.
 Number.
 
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+#### Static Methods <a name="Static Methods" id="Static Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Number.fromJson">fromJson</a></code> | Parse a number from Json. |
-| <code><a href="#@winglang/sdk.std.Number.fromStr">fromStr</a></code> | Parse a number from string. |
+| <code>fromJson</code> | Parse a number from Json. |
+| <code>fromStr</code> | Parse a number from string. |
 
 ---
 
-##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Number.fromJson"></a>
-
+**<code>fromJson</code>**
 ```wing
 bring std;
 
@@ -1980,16 +1616,11 @@ std.Number.fromJson(json: Json)
 
 Parse a number from Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Number.fromJson.parameter.json"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | to parse number from. |
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to parse number from.
-
----
-
-##### `fromStr` <a name="fromStr" id="@winglang/sdk.std.Number.fromStr"></a>
-
+**<code>fromStr</code>**
 ```wing
 bring std;
 
@@ -1998,13 +1629,9 @@ std.Number.fromStr(str: str)
 
 Parse a number from string.
 
-###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Number.fromStr.parameter.str"></a>
-
-- *Type:* str
-
-to parse number from.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>str</code> | <code>str</code> | to parse number from. |
 
 
 
@@ -2024,51 +1651,44 @@ Immutable Set.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Set.copyMut">copyMut</a></code> | Create a mutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.Set.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+| <code>copyMut</code> | Create a mutable shallow copy of this set. |
+| <code>has</code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 
 ---
 
-##### `copyMut` <a name="copyMut" id="@winglang/sdk.std.Set.copyMut"></a>
-
+**<code>copyMut</code>**
 ```wing
 copyMut(): MutSet
 ```
 
 Create a mutable shallow copy of this set.
 
-##### `has` <a name="has" id="@winglang/sdk.std.Set.has"></a>
-
+**<code>has</code>**
 ```wing
 has(value: T1): bool
 ```
 
 Returns a boolean indicating whether an element with the specified value exists in the set.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.Set.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>value</code> | <code><a href="#@winglang/sdk.std.T1">T1</a></code> | The value to test for presence in the Set object. |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Set.property.size">size</a></code> | <code>num</code> | The length of the set. |
+| <code>size</code> | <code>num</code> | The length of the set. |
 
 ---
 
-##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.Set.property.size"></a>
-
+**<code>size</code>**
 ```wing
 size: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 The length of the set.
 
@@ -2083,190 +1703,139 @@ String.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.String.at">at</a></code> | Returns the character at the specified index. |
-| <code><a href="#@winglang/sdk.std.String.concat">concat</a></code> | Combines the text of two (or more) strings and returns a new string. |
-| <code><a href="#@winglang/sdk.std.String.contains">contains</a></code> | Checks if string includes substring. |
-| <code><a href="#@winglang/sdk.std.String.endsWith">endsWith</a></code> | Does this string end with the given searchString? |
-| <code><a href="#@winglang/sdk.std.String.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchString found. |
-| <code><a href="#@winglang/sdk.std.String.lowercase">lowercase</a></code> | Returns this string in lower case. |
-| <code><a href="#@winglang/sdk.std.String.split">split</a></code> | Splits string by separator. |
-| <code><a href="#@winglang/sdk.std.String.startsWith">startsWith</a></code> | Does this string start with the given searchString? |
-| <code><a href="#@winglang/sdk.std.String.substring">substring</a></code> | Returns a string between indexStart, indexEnd. |
-| <code><a href="#@winglang/sdk.std.String.trim">trim</a></code> | Removes white spaces from start and end of this string. |
-| <code><a href="#@winglang/sdk.std.String.uppercase">uppercase</a></code> | Returns this string in upper case. |
+| <code>at</code> | Returns the character at the specified index. |
+| <code>concat</code> | Combines the text of two (or more) strings and returns a new string. |
+| <code>contains</code> | Checks if string includes substring. |
+| <code>endsWith</code> | Does this string end with the given searchString? |
+| <code>indexOf</code> | Returns the index of the first occurrence of searchString found. |
+| <code>lowercase</code> | Returns this string in lower case. |
+| <code>split</code> | Splits string by separator. |
+| <code>startsWith</code> | Does this string start with the given searchString? |
+| <code>substring</code> | Returns a string between indexStart, indexEnd. |
+| <code>trim</code> | Removes white spaces from start and end of this string. |
+| <code>uppercase</code> | Returns this string in upper case. |
 
 ---
 
-##### `at` <a name="at" id="@winglang/sdk.std.String.at"></a>
-
+**<code>at</code>**
 ```wing
 at(index: num): str
 ```
 
 Returns the character at the specified index.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.String.at.parameter.index"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>index</code> | <code>num</code> | position of the character. |
 
-- *Type:* num
-
-position of the character.
-
----
-
-##### `concat` <a name="concat" id="@winglang/sdk.std.String.concat"></a>
-
+**<code>concat</code>**
 ```wing
 concat(strN: str): str
 ```
 
 Combines the text of two (or more) strings and returns a new string.
 
-###### `strN`<sup>Required</sup> <a name="strN" id="@winglang/sdk.std.String.concat.parameter.strN"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>strN</code> | <code>str</code> | one or more strings to concatenate to this string. |
 
-- *Type:* str
-
-one or more strings to concatenate to this string.
-
----
-
-##### `contains` <a name="contains" id="@winglang/sdk.std.String.contains"></a>
-
+**<code>contains</code>**
 ```wing
 contains(searchString: str): bool
 ```
 
 Checks if string includes substring.
 
-###### `searchString`<sup>Required</sup> <a name="searchString" id="@winglang/sdk.std.String.contains.parameter.searchString"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchString</code> | <code>str</code> | substring to search for. |
 
-- *Type:* str
-
-substring to search for.
-
----
-
-##### `endsWith` <a name="endsWith" id="@winglang/sdk.std.String.endsWith"></a>
-
+**<code>endsWith</code>**
 ```wing
 endsWith(searchString: str): bool
 ```
 
 Does this string end with the given searchString?
 
-###### `searchString`<sup>Required</sup> <a name="searchString" id="@winglang/sdk.std.String.endsWith.parameter.searchString"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchString</code> | <code>str</code> | substring to search for. |
 
-- *Type:* str
-
-substring to search for.
-
----
-
-##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.String.indexOf"></a>
-
+**<code>indexOf</code>**
 ```wing
 indexOf(searchString: str): num
 ```
 
 Returns the index of the first occurrence of searchString found.
 
-###### `searchString`<sup>Required</sup> <a name="searchString" id="@winglang/sdk.std.String.indexOf.parameter.searchString"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchString</code> | <code>str</code> | substring to search for. |
 
-- *Type:* str
-
-substring to search for.
-
----
-
-##### `lowercase` <a name="lowercase" id="@winglang/sdk.std.String.lowercase"></a>
-
+**<code>lowercase</code>**
 ```wing
 lowercase(): str
 ```
 
 Returns this string in lower case.
 
-##### `split` <a name="split" id="@winglang/sdk.std.String.split"></a>
-
+**<code>split</code>**
 ```wing
 split(separator: str): MutArray<str>
 ```
 
 Splits string by separator.
 
-###### `separator`<sup>Required</sup> <a name="separator" id="@winglang/sdk.std.String.split.parameter.separator"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>separator</code> | <code>str</code> | separator to split by. |
 
-- *Type:* str
-
-separator to split by.
-
----
-
-##### `startsWith` <a name="startsWith" id="@winglang/sdk.std.String.startsWith"></a>
-
+**<code>startsWith</code>**
 ```wing
 startsWith(searchString: str): bool
 ```
 
 Does this string start with the given searchString?
 
-###### `searchString`<sup>Required</sup> <a name="searchString" id="@winglang/sdk.std.String.startsWith.parameter.searchString"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>searchString</code> | <code>str</code> | substring to search for. |
 
-- *Type:* str
-
-substring to search for.
-
----
-
-##### `substring` <a name="substring" id="@winglang/sdk.std.String.substring"></a>
-
+**<code>substring</code>**
 ```wing
 substring(indexStart: num, indexEnd?: num): str
 ```
 
 Returns a string between indexStart, indexEnd.
 
-###### `indexStart`<sup>Required</sup> <a name="indexStart" id="@winglang/sdk.std.String.substring.parameter.indexStart"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>indexStart</code> | <code>num</code> | index of the character we slice at. |
+| <code>indexEnd</code> | <code>num</code> | optional - index of the character we end slicing at. |
 
-- *Type:* num
-
-index of the character we slice at.
-
----
-
-###### `indexEnd`<sup>Optional</sup> <a name="indexEnd" id="@winglang/sdk.std.String.substring.parameter.indexEnd"></a>
-
-- *Type:* num
-
-optional - index of the character we end slicing at.
-
----
-
-##### `trim` <a name="trim" id="@winglang/sdk.std.String.trim"></a>
-
+**<code>trim</code>**
 ```wing
 trim(): str
 ```
 
 Removes white spaces from start and end of this string.
 
-##### `uppercase` <a name="uppercase" id="@winglang/sdk.std.String.uppercase"></a>
-
+**<code>uppercase</code>**
 ```wing
 uppercase(): str
 ```
 
 Returns this string in upper case.
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+#### Static Methods <a name="Static Methods" id="Static Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.String.fromJson">fromJson</a></code> | Parse string from Json. |
+| <code>fromJson</code> | Parse string from Json. |
 
 ---
 
-##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.String.fromJson"></a>
-
+**<code>fromJson</code>**
 ```wing
 bring std;
 
@@ -2275,29 +1844,24 @@ std.String.fromJson(json: Json)
 
 Parse string from Json.
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.String.fromJson.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-to create string from.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>json</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | to create string from. |
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.String.property.length">length</a></code> | <code>num</code> | The length of the string. |
+| <code>length</code> | <code>num</code> | The length of the string. |
 
 ---
 
-##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.String.property.length"></a>
-
+**<code>length</code>**
 ```wing
 length: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 The length of the string.
 
@@ -2310,16 +1874,13 @@ Generic type argument.
 
 This type is replaced at compile time.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.T1.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.T1.Initializer"></a>
 
 ```wing
 bring std;
 
 new std.T1()
 ```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
 
 ---
 
@@ -2340,32 +1901,30 @@ A resource that can run inflight code.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.IInflightHost.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.std.IInflightHost.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.IInflightHost.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.std.IInflightHost.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -2382,32 +1941,30 @@ Abstract interface for `Resource`.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.IResource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.std.IResource.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.IResource.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.std.IResource.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -2426,32 +1983,30 @@ Interface with an inflight "handle" method that can be used to construct a `std.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.ITestHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.std.ITestHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.ITestHandler.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.std.ITestHandler.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -2467,12 +2022,11 @@ Inflight client for `ITestHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.ITestHandlerClient.handle">handle</a></code> | Inflight function that will be called when the test is run. |
+| <code>handle</code> | Inflight function that will be called when the test is run. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.std.ITestHandlerClient.handle"></a>
-
+**<code>handle</code>**
 ```wing
 handle(): void
 ```
@@ -2495,21 +2049,5 @@ the arrow would point from A to B, and vice versa for inbound connections.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Direction.OUTBOUND">OUTBOUND</a></code> | Indicates that this resource calls, triggers, or references the resource it is connected to. |
-| <code><a href="#@winglang/sdk.std.Direction.INBOUND">INBOUND</a></code> | Indicates that this resource is called, triggered, or referenced by the resource it is connected to. |
-
----
-
-##### `OUTBOUND` <a name="OUTBOUND" id="@winglang/sdk.std.Direction.OUTBOUND"></a>
-
-Indicates that this resource calls, triggers, or references the resource it is connected to.
-
----
-
-
-##### `INBOUND` <a name="INBOUND" id="@winglang/sdk.std.Direction.INBOUND"></a>
-
-Indicates that this resource is called, triggered, or referenced by the resource it is connected to.
-
----
-
+| <code>OUTBOUND</code> | Indicates that this resource calls, triggers, or references the resource it is connected to. |
+| <code>INBOUND</code> | Indicates that this resource is called, triggered, or referenced by the resource it is connected to. |

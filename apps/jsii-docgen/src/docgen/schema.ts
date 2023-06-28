@@ -460,7 +460,8 @@ export interface DocsSchema {
   readonly deprecationReason?: string;
 
   /**
-   * Inflight client
+   * Whether or not this represents an inflight API element
+   * like an inflight method or inflight class.
    */
   readonly inflight?: string;
 }

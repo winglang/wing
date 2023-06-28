@@ -485,7 +485,8 @@ export class TranspiledTypeReference {
       undefined,
       undefined,
       undefined,
-      tfs
+      tfs,
+      undefined
     );
   }
 

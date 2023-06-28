@@ -16,7 +16,7 @@ const typeToString: TranspiledTypeReferenceToStringOptions = {
 
 const formatStructInitialization = (type: transpile.TranspiledType) => {
   const target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
-  return `let ${type.name} = ${target}{ ... }`;
+  return `let ${type.name.toLowerCase()} = ${target} { ... }`;
 };
 
 const formatClassInitialization = (
@@ -220,14 +220,9 @@ export class WingTranspile extends transpile.TranspileBase {
     }
     fqn.push(type.name);
 
-    let typeName = type.name;
-    if (typeName === "inflight") {
-      typeName = "~inflight";
-    }
-
     return new transpile.TranspiledType({
       fqn: fqn.filter((s) => s !== "@winglang/sdk").join("."),
-      name: typeName,
+      name: type.name,
       namespace: type.namespace,
       module: moduleLike.name,
       submodule: moduleLike.submodule,
@@ -251,9 +246,6 @@ export class WingTranspile extends transpile.TranspileBase {
     transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty
   ): string {
     let tf = transpiled.typeReference.toString(typeToString);
-    if (tf === "Inflight") {
-      tf = "~Inflight";
-    }
     return `${transpiled.name}${transpiled.optional ? "?" : ""}: ${tf}`;
   }
 
@@ -262,9 +254,6 @@ export class WingTranspile extends transpile.TranspileBase {
     typeReference: transpile.TranspiledTypeReference
   ): string {
     let tf = typeReference.toString(typeToString);
-    if (tf === "Inflight") {
-      tf = "~Inflight";
-    }
     return `${name}: ${tf};`;
   }
 }

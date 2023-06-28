@@ -19,7 +19,7 @@ sidebar_position: 100
 
 Represents a cloud redis db.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.redis.Redis.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.redis.Redis.Initializer"></a>
 
 ```wing
 bring redis;
@@ -27,41 +27,36 @@ bring redis;
 new redis.Redis()
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
 ---
 
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.redis.Redis.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.redis.Redis.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.redis.Redis.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.redis.Redis.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -77,7 +72,7 @@ Information on how to display a resource in the UI.
 
 Base class for `Redis` Client.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.redis.RedisClientBase.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.redis.RedisClientBase.Initializer"></a>
 
 ```wing
 bring redis;
@@ -85,165 +80,114 @@ bring redis;
 new redis.RedisClientBase()
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.del">del</a></code> | Removes the specified key. |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.get">get</a></code> | Get value at given key. |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.hget">hget</a></code> | Returns the value associated with field in the hash stored at key. |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.hset">hset</a></code> | Sets the specified field to respective value in the hash stored at key. |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis). |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.sadd">sadd</a></code> | Add the specified members to the set stored at key. |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.set">set</a></code> | Set key value pair. |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
-| <code><a href="#@winglang/sdk.redis.RedisClientBase.url">url</a></code> | Get url of redis server. |
+| <code>del</code> | Removes the specified key. |
+| <code>get</code> | Get value at given key. |
+| <code>hget</code> | Returns the value associated with field in the hash stored at key. |
+| <code>hset</code> | Sets the specified field to respective value in the hash stored at key. |
+| <code>rawClient</code> | Get raw redis client (currently IoRedis). |
+| <code>sadd</code> | Add the specified members to the set stored at key. |
+| <code>set</code> | Set key value pair. |
+| <code>smembers</code> | Returns all the members of the set value stored at key. |
+| <code>url</code> | Get url of redis server. |
 
 ---
 
-##### `del` <a name="del" id="@winglang/sdk.redis.RedisClientBase.del"></a>
-
+**<code>del</code>**
 ```wing
 del(key: str): num
 ```
 
 Removes the specified key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.del.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.redis.RedisClientBase.get"></a>
-
+**<code>get</code>**
 ```wing
 get(key: str): str
 ```
 
 Get value at given key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.get.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-##### `hget` <a name="hget" id="@winglang/sdk.redis.RedisClientBase.hget"></a>
-
+**<code>hget</code>**
 ```wing
 hget(key: str, field: str): str
 ```
 
 Returns the value associated with field in the hash stored at key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.hget.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
+| <code>field</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.redis.RedisClientBase.hget.parameter.field"></a>
-
-- *Type:* str
-
----
-
-##### `hset` <a name="hset" id="@winglang/sdk.redis.RedisClientBase.hset"></a>
-
+**<code>hset</code>**
 ```wing
 hset(key: str, field: str, value: str): num
 ```
 
 Sets the specified field to respective value in the hash stored at key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.hset.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
+| <code>field</code> | <code>str</code> | *No description.* |
+| <code>value</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.redis.RedisClientBase.hset.parameter.field"></a>
-
-- *Type:* str
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.RedisClientBase.hset.parameter.value"></a>
-
-- *Type:* str
-
----
-
-##### `rawClient` <a name="rawClient" id="@winglang/sdk.redis.RedisClientBase.rawClient"></a>
-
+**<code>rawClient</code>**
 ```wing
 rawClient(): any
 ```
 
 Get raw redis client (currently IoRedis).
 
-##### `sadd` <a name="sadd" id="@winglang/sdk.redis.RedisClientBase.sadd"></a>
-
+**<code>sadd</code>**
 ```wing
 sadd(key: str, value: str): num
 ```
 
 Add the specified members to the set stored at key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.sadd.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
+| <code>value</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.RedisClientBase.sadd.parameter.value"></a>
-
-- *Type:* str
-
----
-
-##### `set` <a name="set" id="@winglang/sdk.redis.RedisClientBase.set"></a>
-
+**<code>set</code>**
 ```wing
 set(key: str, value: str): void
 ```
 
 Set key value pair.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.set.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
+| <code>value</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.RedisClientBase.set.parameter.value"></a>
-
-- *Type:* str
-
----
-
-##### `smembers` <a name="smembers" id="@winglang/sdk.redis.RedisClientBase.smembers"></a>
-
+**<code>smembers</code>**
 ```wing
 smembers(key: str): MutArray<str>
 ```
 
 Returns all the members of the set value stored at key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.RedisClientBase.smembers.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-##### `url` <a name="url" id="@winglang/sdk.redis.RedisClientBase.url"></a>
-
+**<code>url</code>**
 ```wing
 url(): str
 ```
@@ -265,20 +209,19 @@ Inflight interface for `Redis`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.del">del</a></code> | Removes the specified key. |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.get">get</a></code> | Get value at given key. |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.hget">hget</a></code> | Returns the value associated with field in the hash stored at key. |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.hset">hset</a></code> | Sets the specified field to respective value in the hash stored at key. |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.rawClient">rawClient</a></code> | Get raw redis client (currently IoRedis). |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.sadd">sadd</a></code> | Add the specified members to the set stored at key. |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.set">set</a></code> | Set key value pair. |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
-| <code><a href="#@winglang/sdk.redis.IRedisClient.url">url</a></code> | Get url of redis server. |
+| <code>del</code> | Removes the specified key. |
+| <code>get</code> | Get value at given key. |
+| <code>hget</code> | Returns the value associated with field in the hash stored at key. |
+| <code>hset</code> | Sets the specified field to respective value in the hash stored at key. |
+| <code>rawClient</code> | Get raw redis client (currently IoRedis). |
+| <code>sadd</code> | Add the specified members to the set stored at key. |
+| <code>set</code> | Set key value pair. |
+| <code>smembers</code> | Returns all the members of the set value stored at key. |
+| <code>url</code> | Get url of redis server. |
 
 ---
 
-##### `del` <a name="del" id="@winglang/sdk.redis.IRedisClient.del"></a>
-
+**<code>del</code>**
 ```wing
 del(key: str): num
 ```
@@ -287,16 +230,11 @@ del(key: str): num
 
 Removes the specified key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.del.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | the key. |
 
-- *Type:* str
-
-the key.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.redis.IRedisClient.get"></a>
-
+**<code>get</code>**
 ```wing
 get(key: str): str
 ```
@@ -305,16 +243,11 @@ get(key: str): str
 
 Get value at given key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.get.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | the key to get. |
 
-- *Type:* str
-
-the key to get.
-
----
-
-##### `hget` <a name="hget" id="@winglang/sdk.redis.IRedisClient.hget"></a>
-
+**<code>hget</code>**
 ```wing
 hget(key: str, field: str): str
 ```
@@ -323,24 +256,12 @@ hget(key: str, field: str): str
 
 Returns the value associated with field in the hash stored at key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.hget.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | the key. |
+| <code>field</code> | <code>str</code> | the field at given key. |
 
-- *Type:* str
-
-the key.
-
----
-
-###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.redis.IRedisClient.hget.parameter.field"></a>
-
-- *Type:* str
-
-the field at given key.
-
----
-
-##### `hset` <a name="hset" id="@winglang/sdk.redis.IRedisClient.hset"></a>
-
+**<code>hset</code>**
 ```wing
 hset(key: str, field: str, value: str): num
 ```
@@ -349,32 +270,13 @@ hset(key: str, field: str, value: str): num
 
 Sets the specified field to respective value in the hash stored at key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.hset.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | key to set. |
+| <code>field</code> | <code>str</code> | field in key to set. |
+| <code>value</code> | <code>str</code> | value to set at field in key. |
 
-- *Type:* str
-
-key to set.
-
----
-
-###### `field`<sup>Required</sup> <a name="field" id="@winglang/sdk.redis.IRedisClient.hset.parameter.field"></a>
-
-- *Type:* str
-
-field in key to set.
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.IRedisClient.hset.parameter.value"></a>
-
-- *Type:* str
-
-value to set at field in key.
-
----
-
-##### `rawClient` <a name="rawClient" id="@winglang/sdk.redis.IRedisClient.rawClient"></a>
-
+**<code>rawClient</code>**
 ```wing
 rawClient(): any
 ```
@@ -383,8 +285,7 @@ rawClient(): any
 
 Get raw redis client (currently IoRedis).
 
-##### `sadd` <a name="sadd" id="@winglang/sdk.redis.IRedisClient.sadd"></a>
-
+**<code>sadd</code>**
 ```wing
 sadd(key: str, value: str): num
 ```
@@ -393,24 +294,12 @@ sadd(key: str, value: str): num
 
 Add the specified members to the set stored at key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.sadd.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | the key. |
+| <code>value</code> | <code>str</code> | the value to add to the set at given key. |
 
-- *Type:* str
-
-the key.
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.IRedisClient.sadd.parameter.value"></a>
-
-- *Type:* str
-
-the value to add to the set at given key.
-
----
-
-##### `set` <a name="set" id="@winglang/sdk.redis.IRedisClient.set"></a>
-
+**<code>set</code>**
 ```wing
 set(key: str, value: str): void
 ```
@@ -419,24 +308,12 @@ set(key: str, value: str): void
 
 Set key value pair.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.set.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | the key to set. |
+| <code>value</code> | <code>str</code> | the value to store at given key. |
 
-- *Type:* str
-
-the key to set.
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.redis.IRedisClient.set.parameter.value"></a>
-
-- *Type:* str
-
-the value to store at given key.
-
----
-
-##### `smembers` <a name="smembers" id="@winglang/sdk.redis.IRedisClient.smembers"></a>
-
+**<code>smembers</code>**
 ```wing
 smembers(key: str): MutArray<str>
 ```
@@ -445,16 +322,11 @@ smembers(key: str): MutArray<str>
 
 Returns all the members of the set value stored at key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.redis.IRedisClient.smembers.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | the key. |
 
-- *Type:* str
-
-the key.
-
----
-
-##### `url` <a name="url" id="@winglang/sdk.redis.IRedisClient.url"></a>
-
+**<code>url</code>**
 ```wing
 url(): str
 ```

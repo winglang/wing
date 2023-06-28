@@ -372,12 +372,8 @@ export class MarkdownRenderer {
 
     const md = new MarkdownDocument({ header: { title: "Members" } });
 
-    md.table(this.createTable(enus));
-    md.split();
+    md.table(this.createTable(enus, false));
 
-    for (const enu of enus) {
-      md.section(this.visitEnumMember(enu));
-    }
     return md;
   }
 
@@ -388,7 +384,7 @@ export class MarkdownRenderer {
 
     const md = new MarkdownDocument({ header: { title: "Properties" } });
 
-    md.table(this.createTableWithTypes(properties));
+    md.table(this.createTableWithTypes("Property", properties, false));
     md.split();
 
     for (const prop of properties) {
@@ -407,7 +403,7 @@ export class MarkdownRenderer {
         ...this.metadata,
       }),
       header: {
-        title: "Initializers",
+        title: "Initializer",
       },
     });
 
@@ -415,12 +411,11 @@ export class MarkdownRenderer {
       md.code(this.language.toString(), init.usage);
     }
 
-    md.table(this.createTableWithTypes(init.parameters));
-    md.split();
-
-    for (const param of init.parameters) {
-      md.section(this.visitParameter(param));
+    if (init.parameters.length > 0) {
+      md.table(this.createTableWithTypes("Parameter", init.parameters, false));
     }
+
+    md.split();
 
     return md;
   }
@@ -432,7 +427,7 @@ export class MarkdownRenderer {
 
     const md = new MarkdownDocument({ header: { title: "Methods" } });
 
-    md.table(this.createTable(methods));
+    md.table(this.createTable(methods, false));
     md.split();
 
     for (const method of methods) {
@@ -446,9 +441,9 @@ export class MarkdownRenderer {
       return MarkdownDocument.EMPTY;
     }
 
-    const md = new MarkdownDocument({ header: { title: "Static Functions" } });
+    const md = new MarkdownDocument({ header: { title: "Static Methods" } });
 
-    md.table(this.createTable(methods));
+    md.table(this.createTable(methods, false));
     md.split();
 
     for (const method of methods) {
@@ -464,7 +459,7 @@ export class MarkdownRenderer {
 
     const md = new MarkdownDocument({ header: { title: "Constants" } });
 
-    md.table(this.createTableWithTypes(constants));
+    md.table(this.createTableWithTypes("Constant", constants, false));
     md.split();
 
     for (const con of constants) {
@@ -507,22 +502,9 @@ export class MarkdownRenderer {
   }
 
   public visitProperty(prop: PropertySchema): MarkdownDocument {
-    const optionality = prop.optional ? "Optional" : "Required";
+    const md = new MarkdownDocument();
 
-    const md = new MarkdownDocument({
-      id: this.anchorFormatter({
-        id: prop.id,
-        displayName: prop.displayName,
-        fqn: prop.fqn,
-        ...this.metadata,
-      }),
-      header: {
-        title: prop.displayName,
-        sup: optionality,
-        pre: true,
-        strike: prop.docs.deprecated,
-      },
-    });
+    md.lines(MarkdownDocument.bold(MarkdownDocument.pre(prop.displayName)));
 
     if (prop.docs.deprecated) {
       md.bullet(
@@ -538,7 +520,9 @@ export class MarkdownRenderer {
     }
 
     const metadata: Record<string, string> = {
-      Type: this.typeFormatter(prop.type, this.metadata, this.linkFormatter),
+      Type: MarkdownDocument.pre(
+        this.typeFormatter(prop.type, this.metadata, this.linkFormatter)
+      ),
     };
 
     if (prop.default) {
@@ -615,19 +599,9 @@ export class MarkdownRenderer {
   }
 
   public visitInstanceMethod(method: MethodSchema): MarkdownDocument {
-    const md = new MarkdownDocument({
-      id: this.anchorFormatter({
-        id: method.id,
-        displayName: method.displayName,
-        fqn: method.fqn,
-        ...this.metadata,
-      }),
-      header: {
-        title: method.displayName,
-        pre: true,
-        strike: method.docs.deprecated,
-      },
-    });
+    const md = new MarkdownDocument();
+
+    md.lines(MarkdownDocument.bold(MarkdownDocument.pre(method.displayName)));
 
     if (method.usage) {
       md.code(this.language.toString(), method.usage);
@@ -637,27 +611,19 @@ export class MarkdownRenderer {
       md.docs(method.docs, this.language);
     }
 
-    for (const param of method.parameters) {
-      md.section(this.visitParameter(param));
+    if (method.parameters.length > 0) {
+      md.table(
+        this.createTableWithTypes("Parameter", method.parameters, false)
+      );
     }
 
     return md;
   }
 
-  public visitStaticFunction(method: MethodSchema) {
-    const md = new MarkdownDocument({
-      id: this.anchorFormatter({
-        id: method.id,
-        displayName: method.displayName,
-        fqn: method.fqn,
-        ...this.metadata,
-      }),
-      header: {
-        title: method.displayName,
-        pre: true,
-        strike: method.docs.deprecated,
-      },
-    });
+  public visitStaticFunction(method: MethodSchema): MarkdownDocument {
+    const md = new MarkdownDocument();
+
+    md.lines(MarkdownDocument.bold(MarkdownDocument.pre(method.displayName)));
 
     if (method.usage) {
       md.code(this.language.toString(), method.usage);
@@ -667,8 +633,10 @@ export class MarkdownRenderer {
       md.docs(method.docs, this.language);
     }
 
-    for (const param of method.parameters) {
-      md.section(this.visitParameter(param));
+    if (method.parameters.length > 0) {
+      md.table(
+        this.createTableWithTypes("Parameter", method.parameters, false)
+      );
     }
 
     return md;
@@ -678,21 +646,26 @@ export class MarkdownRenderer {
     return this.visitProperty(constant);
   }
 
-  private createTable(items: SimpleTableItem[]): string[][] {
+  private createTable(
+    items: SimpleTableItem[],
+    withLinks: boolean = true
+  ): string[][] {
     const tableRows: string[][] = [];
     tableRows.push(["Name", "Description"].map(MarkdownDocument.bold));
 
     for (const item of items) {
       const link = MarkdownDocument.pre(
-        this.linkFormatter(
-          {
-            fqn: item.fqn,
-            displayName: item.displayName,
-            id: item.id,
-            ...this.metadata,
-          },
-          this.metadata
-        )
+        withLinks
+          ? this.linkFormatter(
+              {
+                fqn: item.fqn,
+                displayName: item.displayName,
+                id: item.id,
+                ...this.metadata,
+              },
+              this.metadata
+            )
+          : item.displayName
       );
       const description =
         item.docs?.summary && item.docs?.summary.length > 0
@@ -704,22 +677,28 @@ export class MarkdownRenderer {
     return tableRows;
   }
 
-  private createTableWithTypes(items: TypeTableItem[]): string[][] {
+  private createTableWithTypes(
+    title: string,
+    items: TypeTableItem[],
+    withLinks: boolean = true
+  ): string[][] {
     const tableRows: string[][] = [];
-    tableRows.push(["Name", "Type", "Description"].map(MarkdownDocument.bold));
+    tableRows.push([title, "Type", "Description"].map(MarkdownDocument.bold));
 
     for (const item of items) {
-      const link = MarkdownDocument.pre(
-        this.linkFormatter(
-          {
-            fqn: item.fqn,
-            displayName: item.displayName,
-            id: item.id,
-            ...this.metadata,
-          },
-          this.metadata
-        )
-      );
+      const link = withLinks
+        ? MarkdownDocument.pre(
+            this.linkFormatter(
+              {
+                fqn: item.fqn,
+                displayName: item.displayName,
+                id: item.id,
+                ...this.metadata,
+              },
+              this.metadata
+            )
+          )
+        : MarkdownDocument.pre(item.displayName);
       const type = MarkdownDocument.pre(
         this.typeFormatter(item.type, this.metadata, this.linkFormatter)
       );

@@ -17,7 +17,7 @@ sidebar_position: 100
 
 Functionality shared between all `Api` implementations.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Api.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Api.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -25,15 +25,9 @@ bring cloud;
 new cloud.Api(props?: ApiProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Api.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a></code> | *No description.* |
 
 ---
 
@@ -41,315 +35,160 @@ new cloud.Api(props?: ApiProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given path. |
+| <code>connect</code> | Add a inflight handler to the api for CONNECT requests on the given path. |
+| <code>delete</code> | Add a inflight handler to the api for DELETE requests on the given path. |
+| <code>get</code> | Add a inflight handler to the api for GET requests on the given path. |
+| <code>head</code> | Add a inflight handler to the api for HEAD requests on the given path. |
+| <code>options</code> | Add a inflight handler to the api for OPTIONS requests on the given path. |
+| <code>patch</code> | Add a inflight handler to the api for PATCH requests on the given path. |
+| <code>post</code> | Add a inflight handler to the api for POST requests on the given path. |
+| <code>put</code> | Add a inflight handler to the api for PUT requests on the given path. |
 
 ---
 
-##### `connect` <a name="connect" id="@winglang/sdk.cloud.Api.connect"></a>
-
+**<code>connect</code>**
 ```wing
 connect(path: str, inflight: IApiEndpointHandler, props?: ApiConnectProps): void
 ```
 
 Add a inflight handler to the api for CONNECT requests on the given path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.connect.parameter.path"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | The path to handle CONNECT requests for. |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a></code> | The function to handle the request. |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiConnectProps">ApiConnectProps</a></code> | Options for the route. |
 
-- *Type:* str
-
-The path to handle CONNECT requests for.
-
----
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.connect.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
-
-The function to handle the request.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.connect.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiConnectProps">ApiConnectProps</a>
-
-Options for the route.
-
----
-
-##### `delete` <a name="delete" id="@winglang/sdk.cloud.Api.delete"></a>
-
+**<code>delete</code>**
 ```wing
 delete(path: str, inflight: IApiEndpointHandler, props?: ApiDeleteProps): void
 ```
 
 Add a inflight handler to the api for DELETE requests on the given path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.delete.parameter.path"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | The path to handle DELETE requests for. |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a></code> | The function to handle the request. |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiDeleteProps">ApiDeleteProps</a></code> | Options for the route. |
 
-- *Type:* str
-
-The path to handle DELETE requests for.
-
----
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.delete.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
-
-The function to handle the request.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.delete.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiDeleteProps">ApiDeleteProps</a>
-
-Options for the route.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.cloud.Api.get"></a>
-
+**<code>get</code>**
 ```wing
 get(path: str, inflight: IApiEndpointHandler, props?: ApiGetProps): void
 ```
 
 Add a inflight handler to the api for GET requests on the given path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.get.parameter.path"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | The path to handle GET requests for. |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a></code> | The function to handle the request. |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiGetProps">ApiGetProps</a></code> | Options for the route. |
 
-- *Type:* str
-
-The path to handle GET requests for.
-
----
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.get.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
-
-The function to handle the request.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.get.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiGetProps">ApiGetProps</a>
-
-Options for the route.
-
----
-
-##### `head` <a name="head" id="@winglang/sdk.cloud.Api.head"></a>
-
+**<code>head</code>**
 ```wing
 head(path: str, inflight: IApiEndpointHandler, props?: ApiHeadProps): void
 ```
 
 Add a inflight handler to the api for HEAD requests on the given path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.head.parameter.path"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | The path to handle HEAD requests for. |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a></code> | The function to handle the request. |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiHeadProps">ApiHeadProps</a></code> | Options for the route. |
 
-- *Type:* str
-
-The path to handle HEAD requests for.
-
----
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.head.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
-
-The function to handle the request.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.head.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiHeadProps">ApiHeadProps</a>
-
-Options for the route.
-
----
-
-##### `options` <a name="options" id="@winglang/sdk.cloud.Api.options"></a>
-
+**<code>options</code>**
 ```wing
 options(path: str, inflight: IApiEndpointHandler, props?: ApiOptionsProps): void
 ```
 
 Add a inflight handler to the api for OPTIONS requests on the given path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.options.parameter.path"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | The path to handle OPTIONS requests for. |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a></code> | The function to handle the request. |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiOptionsProps">ApiOptionsProps</a></code> | Options for the route. |
 
-- *Type:* str
-
-The path to handle OPTIONS requests for.
-
----
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.options.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
-
-The function to handle the request.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.options.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiOptionsProps">ApiOptionsProps</a>
-
-Options for the route.
-
----
-
-##### `patch` <a name="patch" id="@winglang/sdk.cloud.Api.patch"></a>
-
+**<code>patch</code>**
 ```wing
 patch(path: str, inflight: IApiEndpointHandler, props?: ApiPatchProps): void
 ```
 
 Add a inflight handler to the api for PATCH requests on the given path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.patch.parameter.path"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | The path to handle PATCH requests for. |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a></code> | The function to handle the request. |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiPatchProps">ApiPatchProps</a></code> | Options for the route. |
 
-- *Type:* str
-
-The path to handle PATCH requests for.
-
----
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.patch.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
-
-The function to handle the request.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.patch.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiPatchProps">ApiPatchProps</a>
-
-Options for the route.
-
----
-
-##### `post` <a name="post" id="@winglang/sdk.cloud.Api.post"></a>
-
+**<code>post</code>**
 ```wing
 post(path: str, inflight: IApiEndpointHandler, props?: ApiPostProps): void
 ```
 
 Add a inflight handler to the api for POST requests on the given path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.post.parameter.path"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | The path to handle POST requests for. |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a></code> | The function to handle the request. |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiPostProps">ApiPostProps</a></code> | Options for the route. |
 
-- *Type:* str
-
-The path to handle POST requests for.
-
----
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.post.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
-
-The function to handle the request.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.post.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiPostProps">ApiPostProps</a>
-
-Options for the route.
-
----
-
-##### `put` <a name="put" id="@winglang/sdk.cloud.Api.put"></a>
-
+**<code>put</code>**
 ```wing
 put(path: str, inflight: IApiEndpointHandler, props?: ApiPutProps): void
 ```
 
 Add a inflight handler to the api for PUT requests on the given path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.put.parameter.path"></a>
-
-- *Type:* str
-
-The path to handle PUT requests for.
-
----
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.put.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
-
-The function to handle the request.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.put.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiPutProps">ApiPutProps</a>
-
-Options for the route.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | The path to handle PUT requests for. |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a></code> | The function to handle the request. |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ApiPutProps">ApiPutProps</a></code> | Options for the route. |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Api.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Api.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Api.property.url">url</a></code> | <code>str</code> | The base URL of the API endpoint. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>url</code> | <code>str</code> | The base URL of the API endpoint. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Api.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Api.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
 ---
 
-##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.cloud.Api.property.url"></a>
-
+**<code>url</code>**
 ```wing
 url: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The base URL of the API endpoint.
 
@@ -362,7 +201,7 @@ The base URL of the API endpoint.
 
 Represents a cloud object store.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Bucket.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Bucket.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -370,15 +209,9 @@ bring cloud;
 new cloud.Bucket(props?: BucketProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Bucket.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a></code> | *No description.* |
 
 ---
 
@@ -386,16 +219,15 @@ new cloud.Bucket(props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.addObject">addObject</a></code> | Add a file to the bucket that is uploaded when the app is deployed. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.onCreate">onCreate</a></code> | Run an inflight whenever a file is uploaded to the bucket. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.onDelete">onDelete</a></code> | Run an inflight whenever a file is deleted from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.onEvent">onEvent</a></code> | Run an inflight whenever a file is uploaded, modified, or deleted from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.onUpdate">onUpdate</a></code> | Run an inflight whenever a file is updated in the bucket. |
+| <code>addObject</code> | Add a file to the bucket that is uploaded when the app is deployed. |
+| <code>onCreate</code> | Run an inflight whenever a file is uploaded to the bucket. |
+| <code>onDelete</code> | Run an inflight whenever a file is deleted from the bucket. |
+| <code>onEvent</code> | Run an inflight whenever a file is uploaded, modified, or deleted from the bucket. |
+| <code>onUpdate</code> | Run an inflight whenever a file is updated in the bucket. |
 
 ---
 
-##### `addObject` <a name="addObject" id="@winglang/sdk.cloud.Bucket.addObject"></a>
-
+**<code>addObject</code>**
 ```wing
 addObject(key: str, body: str): void
 ```
@@ -405,127 +237,86 @@ Add a file to the bucket that is uploaded when the app is deployed.
 TODO: In the future this will support uploading any `Blob` type or
 referencing a file from the local filesystem.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Bucket.addObject.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
+| <code>body</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.Bucket.addObject.parameter.body"></a>
-
-- *Type:* str
-
----
-
-##### `onCreate` <a name="onCreate" id="@winglang/sdk.cloud.Bucket.onCreate"></a>
-
+**<code>onCreate</code>**
 ```wing
 onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void
 ```
 
 Run an inflight whenever a file is uploaded to the bucket.
 
-###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.cloud.Bucket.onCreate.parameter.fn"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>fn</code> | <code><a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a></code> | *No description.* |
+| <code>opts</code> | <code><a href="#@winglang/sdk.cloud.BucketOnCreateProps">BucketOnCreateProps</a></code> | *No description.* |
 
-- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
-
----
-
-###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onCreate.parameter.opts"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketOnCreateProps">BucketOnCreateProps</a>
-
----
-
-##### `onDelete` <a name="onDelete" id="@winglang/sdk.cloud.Bucket.onDelete"></a>
-
+**<code>onDelete</code>**
 ```wing
 onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void
 ```
 
 Run an inflight whenever a file is deleted from the bucket.
 
-###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.cloud.Bucket.onDelete.parameter.fn"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>fn</code> | <code><a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a></code> | *No description.* |
+| <code>opts</code> | <code><a href="#@winglang/sdk.cloud.BucketOnDeleteProps">BucketOnDeleteProps</a></code> | *No description.* |
 
-- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
-
----
-
-###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onDelete.parameter.opts"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketOnDeleteProps">BucketOnDeleteProps</a>
-
----
-
-##### `onEvent` <a name="onEvent" id="@winglang/sdk.cloud.Bucket.onEvent"></a>
-
+**<code>onEvent</code>**
 ```wing
 onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void
 ```
 
 Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
 
-###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.cloud.Bucket.onEvent.parameter.fn"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>fn</code> | <code><a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a></code> | *No description.* |
+| <code>opts</code> | <code><a href="#@winglang/sdk.cloud.BucketOnEventProps">BucketOnEventProps</a></code> | *No description.* |
 
-- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
-
----
-
-###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onEvent.parameter.opts"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketOnEventProps">BucketOnEventProps</a>
-
----
-
-##### `onUpdate` <a name="onUpdate" id="@winglang/sdk.cloud.Bucket.onUpdate"></a>
-
+**<code>onUpdate</code>**
 ```wing
 onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void
 ```
 
 Run an inflight whenever a file is updated in the bucket.
 
-###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.cloud.Bucket.onUpdate.parameter.fn"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
-
----
-
-###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onUpdate.parameter.opts"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketOnUpdateProps">BucketOnUpdateProps</a>
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>fn</code> | <code><a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a></code> | *No description.* |
+| <code>opts</code> | <code><a href="#@winglang/sdk.cloud.BucketOnUpdateProps">BucketOnUpdateProps</a></code> | *No description.* |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Bucket.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Bucket.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -538,7 +329,7 @@ Information on how to display a resource in the UI.
 
 Represents a distributed atomic counter.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Counter.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Counter.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -546,15 +337,9 @@ bring cloud;
 new cloud.Counter(props?: CounterProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Counter.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Counter.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a></code> | *No description.* |
 
 ---
 
@@ -562,45 +347,42 @@ new cloud.Counter(props?: CounterProps)
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>initial</code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Counter.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Counter.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
 ---
 
-##### `initial`<sup>Required</sup> <a name="initial" id="@winglang/sdk.cloud.Counter.property.initial"></a>
-
+**<code>initial</code>**
 ```wing
 initial: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 The initial value of the counter.
 
@@ -615,7 +397,7 @@ The initial value of the counter.
 
 Represents a function.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Function.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Function.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -623,22 +405,10 @@ bring cloud;
 new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a></code> | *No description.* |
-
----
-
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Function.Initializer.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Function.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a>
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a></code> | *No description.* |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a></code> | *No description.* |
 
 ---
 
@@ -646,72 +416,61 @@ new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+| <code>addEnvironment</code> | Add an environment variable to the function. |
 
 ---
 
-##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.cloud.Function.addEnvironment"></a>
-
+**<code>addEnvironment</code>**
 ```wing
 addEnvironment(name: str, value: str): void
 ```
 
 Add an environment variable to the function.
 
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.cloud.Function.addEnvironment.parameter.name"></a>
-
-- *Type:* str
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.Function.addEnvironment.parameter.value"></a>
-
-- *Type:* str
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>name</code> | <code>str</code> | *No description.* |
+| <code>value</code> | <code>str</code> | *No description.* |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>env</code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Function.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Function.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
 ---
 
-##### `env`<sup>Required</sup> <a name="env" id="@winglang/sdk.cloud.Function.property.env"></a>
-
+**<code>env</code>**
 ```wing
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 
 Returns the set of environment variables for this function.
 
@@ -724,7 +483,7 @@ Returns the set of environment variables for this function.
 
 Represents a queue.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Queue.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Queue.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -732,15 +491,9 @@ bring cloud;
 new cloud.Queue(props?: QueueProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a></code> | *No description.* |
 
 ---
 
@@ -748,59 +501,49 @@ new cloud.Queue(props?: QueueProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.setConsumer">setConsumer</a></code> | Create a function to consume messages from this queue. |
+| <code>setConsumer</code> | Create a function to consume messages from this queue. |
 
 ---
 
-##### `setConsumer` <a name="setConsumer" id="@winglang/sdk.cloud.Queue.setConsumer"></a>
-
+**<code>setConsumer</code>**
 ```wing
 setConsumer(handler: IQueueSetConsumerHandler, props?: QueueSetConsumerProps): Function
 ```
 
 Create a function to consume messages from this queue.
 
-###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.handler"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.QueueSetConsumerProps">QueueSetConsumerProps</a>
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>handler</code> | <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a></code> | *No description.* |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps">QueueSetConsumerProps</a></code> | *No description.* |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Queue.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Queue.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -813,7 +556,7 @@ Information on how to display a resource in the UI.
 
 Represents a schedule.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Schedule.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Schedule.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -821,15 +564,9 @@ bring cloud;
 new cloud.Schedule(props?: ScheduleProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Schedule.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ScheduleProps">ScheduleProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ScheduleProps">ScheduleProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ScheduleProps">ScheduleProps</a></code> | *No description.* |
 
 ---
 
@@ -837,59 +574,49 @@ new cloud.Schedule(props?: ScheduleProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Schedule.onTick">onTick</a></code> | Create a function that runs when receiving the scheduled event. |
+| <code>onTick</code> | Create a function that runs when receiving the scheduled event. |
 
 ---
 
-##### `onTick` <a name="onTick" id="@winglang/sdk.cloud.Schedule.onTick"></a>
-
+**<code>onTick</code>**
 ```wing
 onTick(inflight: IScheduleOnTickHandler, props?: ScheduleOnTickProps): Function
 ```
 
 Create a function that runs when receiving the scheduled event.
 
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Schedule.onTick.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.onTick.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ScheduleOnTickProps">ScheduleOnTickProps</a>
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a></code> | *No description.* |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps">ScheduleOnTickProps</a></code> | *No description.* |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Schedule.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Schedule.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Schedule.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Schedule.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -902,7 +629,7 @@ Information on how to display a resource in the UI.
 
 Represents a cloud secret.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Secret.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Secret.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -910,15 +637,9 @@ bring cloud;
 new cloud.Secret(props?: SecretProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Secret.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.SecretProps">SecretProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Secret.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.SecretProps">SecretProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.SecretProps">SecretProps</a></code> | *No description.* |
 
 ---
 
@@ -926,32 +647,30 @@ new cloud.Secret(props?: SecretProps)
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Secret.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Secret.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Secret.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Secret.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -964,7 +683,7 @@ Information on how to display a resource in the UI.
 
 Represents a service.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Service.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Service.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -972,15 +691,9 @@ bring cloud;
 new cloud.Service(props: ServiceProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Service.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ServiceProps">ServiceProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Service.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ServiceProps">ServiceProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.ServiceProps">ServiceProps</a></code> | *No description.* |
 
 ---
 
@@ -988,32 +701,30 @@ new cloud.Service(props: ServiceProps)
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Service.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Service.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Service.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Service.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -1026,7 +737,7 @@ Information on how to display a resource in the UI.
 
 Represents a NoSQL database table that can be used to store and query data.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Table.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Table.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -1034,15 +745,9 @@ bring cloud;
 new cloud.Table(props: TableProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Table.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TableProps">TableProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Table.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.TableProps">TableProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.TableProps">TableProps</a></code> | *No description.* |
 
 ---
 
@@ -1050,98 +755,85 @@ new cloud.Table(props: TableProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Table.addRow">addRow</a></code> | Add a row to the table that is created when the app is deployed. |
+| <code>addRow</code> | Add a row to the table that is created when the app is deployed. |
 
 ---
 
-##### `addRow` <a name="addRow" id="@winglang/sdk.cloud.Table.addRow"></a>
-
+**<code>addRow</code>**
 ```wing
 addRow(key: str, row: Json): void
 ```
 
 Add a row to the table that is created when the app is deployed.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Table.addRow.parameter.key"></a>
-
-- *Type:* str
-
----
-
-###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.Table.addRow.parameter.row"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
+| <code>row</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | *No description.* |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Table.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Table.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Table.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | Table columns. |
-| <code><a href="#@winglang/sdk.cloud.Table.property.name">name</a></code> | <code>str</code> | Table name. |
-| <code><a href="#@winglang/sdk.cloud.Table.property.primaryKey">primaryKey</a></code> | <code>str</code> | Table primary key name. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>columns</code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | Table columns. |
+| <code>name</code> | <code>str</code> | Table name. |
+| <code>primaryKey</code> | <code>str</code> | Table primary key name. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Table.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Table.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
 ---
 
-##### `columns`<sup>Required</sup> <a name="columns" id="@winglang/sdk.cloud.Table.property.columns"></a>
-
+**<code>columns</code>**
 ```wing
 columns: MutMap<ColumnType>;
 ```
 
-- *Type:* MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;
+- *Type:* <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code>
 
 Table columns.
 
 ---
 
-##### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.cloud.Table.property.name"></a>
-
+**<code>name</code>**
 ```wing
 name: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 Table name.
 
 ---
 
-##### `primaryKey`<sup>Required</sup> <a name="primaryKey" id="@winglang/sdk.cloud.Table.property.primaryKey"></a>
-
+**<code>primaryKey</code>**
 ```wing
 primaryKey: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 Table primary key name.
 
@@ -1154,7 +846,7 @@ Table primary key name.
 
 Represents a test engine.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.TestRunner.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TestRunner.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -1162,15 +854,9 @@ bring cloud;
 new cloud.TestRunner(props?: TestRunnerProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TestRunner.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TestRunnerProps">TestRunnerProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.TestRunner.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.TestRunnerProps">TestRunnerProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.TestRunnerProps">TestRunnerProps</a></code> | *No description.* |
 
 ---
 
@@ -1178,12 +864,11 @@ new cloud.TestRunner(props?: TestRunnerProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TestRunner.findTests">findTests</a></code> | Find all tests in the construct tree. |
+| <code>findTests</code> | Find all tests in the construct tree. |
 
 ---
 
-##### `findTests` <a name="findTests" id="@winglang/sdk.cloud.TestRunner.findTests"></a>
-
+**<code>findTests</code>**
 ```wing
 findTests(): MutArray<Test>
 ```
@@ -1193,32 +878,30 @@ Find all tests in the construct tree.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TestRunner.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.TestRunner.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.TestRunner.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.TestRunner.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -1231,7 +914,7 @@ Information on how to display a resource in the UI.
 
 Represents a topic.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Topic.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Topic.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -1239,15 +922,9 @@ bring cloud;
 new cloud.Topic(props?: TopicProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Topic.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TopicProps">TopicProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.TopicProps">TopicProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.TopicProps">TopicProps</a></code> | *No description.* |
 
 ---
 
@@ -1255,59 +932,49 @@ new cloud.Topic(props?: TopicProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Topic.onMessage">onMessage</a></code> | Run an inflight whenever an message is published to the topic. |
+| <code>onMessage</code> | Run an inflight whenever an message is published to the topic. |
 
 ---
 
-##### `onMessage` <a name="onMessage" id="@winglang/sdk.cloud.Topic.onMessage"></a>
-
+**<code>onMessage</code>**
 ```wing
 onMessage(inflight: ITopicOnMessageHandler, props?: TopicOnMessageProps): Function
 ```
 
 Run an inflight whenever an message is published to the topic.
 
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Topic.onMessage.parameter.inflight"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.onMessage.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageProps">TopicOnMessageProps</a>
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>inflight</code> | <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a></code> | *No description.* |
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps">TopicOnMessageProps</a></code> | *No description.* |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Topic.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Topic.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Topic.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -1320,7 +987,7 @@ Information on how to display a resource in the UI.
 
 Represents a cloud static website.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Website.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Website.Initializer"></a>
 
 ```wing
 bring cloud;
@@ -1328,15 +995,9 @@ bring cloud;
 new cloud.Website(props: WebsiteProps)
 ```
 
-| **Name** | **Type** | **Description** |
+| **Parameter** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Website.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a></code> | *No description.* |
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Website.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a>
+| <code>props</code> | <code><a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a></code> | *No description.* |
 
 ---
 
@@ -1344,12 +1005,11 @@ new cloud.Website(props: WebsiteProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Website.addJson">addJson</a></code> | Add a JSON file with custom values during the website's deployment. |
+| <code>addJson</code> | Add a JSON file with custom values during the website's deployment. |
 
 ---
 
-##### `addJson` <a name="addJson" id="@winglang/sdk.cloud.Website.addJson"></a>
-
+**<code>addJson</code>**
 ```wing
 addJson(path: str, data: Json): str
 ```
@@ -1358,77 +1018,62 @@ Add a JSON file with custom values during the website's deployment.
 
 If the path conflicts with file path from the website's static assets, an error will be thrown.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.addJson.parameter.path"></a>
-
-- *Type:* str
-
-the file path it will be uploaded as.
-
----
-
-###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.cloud.Website.addJson.parameter.data"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-the data to write to the file.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | the file path it will be uploaded as. |
+| <code>data</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | the data to write to the file. |
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Website.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Absolute local path to the website's static files. |
-| <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>path</code> | <code>str</code> | Absolute local path to the website's static files. |
+| <code>url</code> | <code>str</code> | The website's url. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Website.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Website.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
 ---
 
-##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Website.property.path"></a>
-
+**<code>path</code>**
 ```wing
 path: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 Absolute local path to the website's static files.
 
 ---
 
-##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.cloud.Website.property.url"></a>
-
+**<code>url</code>**
 ```wing
 url: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The website's url.
 
@@ -1446,7 +1091,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiConnectProps = cloud.ApiConnectProps{ ... }
+let apiconnectprops = cloud.ApiConnectProps { ... }
 ```
 
 
@@ -1459,7 +1104,7 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let ApiDeleteProps = cloud.ApiDeleteProps{ ... }
+let apideleteprops = cloud.ApiDeleteProps { ... }
 ```
 
 
@@ -1472,7 +1117,7 @@ Options for Api get endpoint.
 ```wing
 bring cloud;
 
-let ApiGetProps = cloud.ApiGetProps{ ... }
+let apigetprops = cloud.ApiGetProps { ... }
 ```
 
 
@@ -1485,7 +1130,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiHeadProps = cloud.ApiHeadProps{ ... }
+let apiheadprops = cloud.ApiHeadProps { ... }
 ```
 
 
@@ -1498,7 +1143,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiOptionsProps = cloud.ApiOptionsProps{ ... }
+let apioptionsprops = cloud.ApiOptionsProps { ... }
 ```
 
 
@@ -1511,7 +1156,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiPatchProps = cloud.ApiPatchProps{ ... }
+let apipatchprops = cloud.ApiPatchProps { ... }
 ```
 
 
@@ -1524,7 +1169,7 @@ Options for Api post endpoint.
 ```wing
 bring cloud;
 
-let ApiPostProps = cloud.ApiPostProps{ ... }
+let apipostprops = cloud.ApiPostProps { ... }
 ```
 
 
@@ -1537,7 +1182,7 @@ Properties for `Api`.
 ```wing
 bring cloud;
 
-let ApiProps = cloud.ApiProps{ ... }
+let apiprops = cloud.ApiProps { ... }
 ```
 
 
@@ -1550,7 +1195,7 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let ApiPutProps = cloud.ApiPutProps{ ... }
+let apiputprops = cloud.ApiPutProps { ... }
 ```
 
 
@@ -1563,89 +1208,83 @@ Shape of a request to an inflight handler.
 ```wing
 bring cloud;
 
-let ApiRequest = cloud.ApiRequest{ ... }
+let apirequest = cloud.ApiRequest { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>str</code> | The request's body. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
+| <code>method</code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
+| <code>path</code> | <code>str</code> | The request's path. |
+| <code>query</code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
+| <code>vars</code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
+| <code>body</code> | <code>str</code> | The request's body. |
+| <code>headers</code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
 
 ---
 
-##### `method`<sup>Required</sup> <a name="method" id="@winglang/sdk.cloud.ApiRequest.property.method"></a>
-
+**<code>method</code>**
 ```wing
 method: HttpMethod;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>
+- *Type:* <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code>
 
 The request's HTTP method.
 
 ---
 
-##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.ApiRequest.property.path"></a>
-
+**<code>path</code>**
 ```wing
 path: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The request's path.
 
 ---
 
-##### `query`<sup>Required</sup> <a name="query" id="@winglang/sdk.cloud.ApiRequest.property.query"></a>
-
+**<code>query</code>**
 ```wing
 query: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 
 The request's query string values.
 
 ---
 
-##### `vars`<sup>Required</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
-
+**<code>vars</code>**
 ```wing
 vars: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 
 The path variables.
 
 ---
 
-##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
-
+**<code>body</code>**
 ```wing
 body: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The request's body.
 
 ---
 
-##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiRequest.property.headers"></a>
-
+**<code>headers</code>**
 ```wing
 headers: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 
 The request's headers.
 
@@ -1660,50 +1299,47 @@ Shape of a response from a inflight handler.
 ```wing
 bring cloud;
 
-let ApiResponse = cloud.ApiResponse{ ... }
+let apiresponse = cloud.ApiResponse { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>str</code> | The response's body. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers. |
+| <code>status</code> | <code>num</code> | The response's status code. |
+| <code>body</code> | <code>str</code> | The response's body. |
+| <code>headers</code> | <code>MutMap&lt;str&gt;</code> | The response's headers. |
 
 ---
 
-##### `status`<sup>Required</sup> <a name="status" id="@winglang/sdk.cloud.ApiResponse.property.status"></a>
-
+**<code>status</code>**
 ```wing
 status: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 
 The response's status code.
 
 ---
 
-##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiResponse.property.body"></a>
-
+**<code>body</code>**
 ```wing
 body: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The response's body.
 
 ---
 
-##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiResponse.property.headers"></a>
-
+**<code>headers</code>**
 ```wing
 headers: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 
 The response's headers.
 
@@ -1718,24 +1354,23 @@ Interface for delete method inside `Bucket`.
 ```wing
 bring cloud;
 
-let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... }
+let bucketdeleteoptions = cloud.BucketDeleteOptions { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketDeleteOptions.property.mustExist">mustExist</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
+| <code>mustExist</code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
 
 ---
 
-##### `mustExist`<sup>Optional</sup> <a name="mustExist" id="@winglang/sdk.cloud.BucketDeleteOptions.property.mustExist"></a>
-
+**<code>mustExist</code>**
 ```wing
 mustExist: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 - *Default:* false
 
 Check failures on the method and retrieve errors if any.
@@ -1751,37 +1386,35 @@ on_event notification payload- will be in use after solving issue: https://githu
 ```wing
 bring cloud;
 
-let BucketEvent = cloud.BucketEvent{ ... }
+let bucketevent = cloud.BucketEvent { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.key">key</a></code> | <code>str</code> | the bucket key that triggered the event. |
-| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.type">type</a></code> | <code><a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a></code> | type of event. |
+| <code>key</code> | <code>str</code> | the bucket key that triggered the event. |
+| <code>type</code> | <code><a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a></code> | type of event. |
 
 ---
 
-##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.BucketEvent.property.key"></a>
-
+**<code>key</code>**
 ```wing
 key: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 the bucket key that triggered the event.
 
 ---
 
-##### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.cloud.BucketEvent.property.type"></a>
-
+**<code>type</code>**
 ```wing
 type: BucketEventType;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
+- *Type:* <code><a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a></code>
 
 type of event.
 
@@ -1796,7 +1429,7 @@ on create event options.
 ```wing
 bring cloud;
 
-let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... }
+let bucketoncreateprops = cloud.BucketOnCreateProps { ... }
 ```
 
 
@@ -1809,7 +1442,7 @@ on delete event options.
 ```wing
 bring cloud;
 
-let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... }
+let bucketondeleteprops = cloud.BucketOnDeleteProps { ... }
 ```
 
 
@@ -1822,7 +1455,7 @@ on any event options.
 ```wing
 bring cloud;
 
-let BucketOnEventProps = cloud.BucketOnEventProps{ ... }
+let bucketoneventprops = cloud.BucketOnEventProps { ... }
 ```
 
 
@@ -1835,7 +1468,7 @@ on update event options.
 ```wing
 bring cloud;
 
-let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... }
+let bucketonupdateprops = cloud.BucketOnUpdateProps { ... }
 ```
 
 
@@ -1848,24 +1481,23 @@ Properties for `Bucket`.
 ```wing
 bring cloud;
 
-let BucketProps = cloud.BucketProps{ ... }
+let bucketprops = cloud.BucketProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketProps.property.public">public</a></code> | <code>bool</code> | Whether the bucket's objects should be publicly accessible. |
+| <code>public</code> | <code>bool</code> | Whether the bucket's objects should be publicly accessible. |
 
 ---
 
-##### `public`<sup>Optional</sup> <a name="public" id="@winglang/sdk.cloud.BucketProps.property.public"></a>
-
+**<code>public</code>**
 ```wing
 public: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 - *Default:* false
 
 Whether the bucket's objects should be publicly accessible.
@@ -1881,24 +1513,23 @@ Properties for `Counter`.
 ```wing
 bring cloud;
 
-let CounterProps = cloud.CounterProps{ ... }
+let counterprops = cloud.CounterProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.CounterProps.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
+| <code>initial</code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
-##### `initial`<sup>Optional</sup> <a name="initial" id="@winglang/sdk.cloud.CounterProps.property.initial"></a>
-
+**<code>initial</code>**
 ```wing
 initial: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 - *Default:* 0
 
 The initial value of the counter.
@@ -1916,52 +1547,49 @@ This is the type users see when constructing a cloud.Function instance.
 ```wing
 bring cloud;
 
-let FunctionProps = cloud.FunctionProps{ ... }
+let functionprops = cloud.FunctionProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code>env</code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code>memory</code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code>timeout</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.FunctionProps.property.env"></a>
-
+**<code>env</code>**
 ```wing
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.FunctionProps.property.memory"></a>
-
+**<code>memory</code>**
 ```wing
 memory: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 - *Default:* 128
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.FunctionProps.property.timeout"></a>
-
+**<code>timeout</code>**
 ```wing
 timeout: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -1977,24 +1605,23 @@ Options when getting a secret value.
 ```wing
 bring cloud;
 
-let GetSecretValueOptions = cloud.GetSecretValueOptions{ ... }
+let getsecretvalueoptions = cloud.GetSecretValueOptions { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.GetSecretValueOptions.property.cache">cache</a></code> | <code>bool</code> | Whether to cache the value. |
+| <code>cache</code> | <code>bool</code> | Whether to cache the value. |
 
 ---
 
-##### `cache`<sup>Optional</sup> <a name="cache" id="@winglang/sdk.cloud.GetSecretValueOptions.property.cache"></a>
-
+**<code>cache</code>**
 ```wing
 cache: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 - *Default:* true
 
 Whether to cache the value.
@@ -2010,52 +1637,49 @@ Properties for `Queue`.
 ```wing
 bring cloud;
 
-let QueueProps = cloud.QueueProps{ ... }
+let queueprops = cloud.QueueProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue retains a message. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
+| <code>initialMessages</code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
+| <code>retentionPeriod</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue retains a message. |
+| <code>timeout</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
 
 ---
 
-##### `initialMessages`<sup>Optional</sup> <a name="initialMessages" id="@winglang/sdk.cloud.QueueProps.property.initialMessages"></a>
-
+**<code>initialMessages</code>**
 ```wing
 initialMessages: MutArray<str>;
 ```
 
-- *Type:* MutArray&lt;str&gt;
+- *Type:* <code>MutArray&lt;str&gt;</code>
 - *Default:* []
 
 Initialize the queue with a set of messages.
 
 ---
 
-##### `retentionPeriod`<sup>Optional</sup> <a name="retentionPeriod" id="@winglang/sdk.cloud.QueueProps.property.retentionPeriod"></a>
-
+**<code>retentionPeriod</code>**
 ```wing
 retentionPeriod: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* undefined
 
 How long a queue retains a message.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueProps.property.timeout"></a>
-
+**<code>timeout</code>**
 ```wing
 timeout: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* undefined
 
 How long a queue's consumers have to process a message.
@@ -2071,66 +1695,62 @@ Options for Queue.setConsumer.
 ```wing
 bring cloud;
 
-let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... }
+let queuesetconsumerprops = cloud.QueueSetConsumerProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
+| <code>env</code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code>memory</code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code>timeout</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code>batchSize</code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.env"></a>
-
+**<code>env</code>**
 ```wing
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.memory"></a>
-
+**<code>memory</code>**
 ```wing
 memory: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 - *Default:* 128
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout"></a>
-
+**<code>timeout</code>**
 ```wing
 timeout: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
 
 ---
 
-##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize"></a>
-
+**<code>batchSize</code>**
 ```wing
 batchSize: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 - *Default:* 1
 
 The maximum number of messages to send to subscribers at once.
@@ -2146,52 +1766,49 @@ Options for Schedule.onTick.
 ```wing
 bring cloud;
 
-let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... }
+let scheduleontickprops = cloud.ScheduleOnTickProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code>env</code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code>memory</code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code>timeout</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.env"></a>
-
+**<code>env</code>**
 ```wing
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.memory"></a>
-
+**<code>memory</code>**
 ```wing
 memory: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 - *Default:* 128
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout"></a>
-
+**<code>timeout</code>**
 ```wing
 timeout: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2207,25 +1824,24 @@ Properties for `Schedule`.
 ```wing
 bring cloud;
 
-let ScheduleProps = cloud.ScheduleProps{ ... }
+let scheduleprops = cloud.ScheduleProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code> | Trigger events according to a cron schedule using the UNIX cron format. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Trigger events at a periodic rate. |
+| <code>cron</code> | <code>str</code> | Trigger events according to a cron schedule using the UNIX cron format. |
+| <code>rate</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Trigger events at a periodic rate. |
 
 ---
 
-##### `cron`<sup>Optional</sup> <a name="cron" id="@winglang/sdk.cloud.ScheduleProps.property.cron"></a>
-
+**<code>cron</code>**
 ```wing
 cron: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 - *Default:* undefined
 
 Trigger events according to a cron schedule using the UNIX cron format.
@@ -2241,13 +1857,12 @@ Trigger events according to a cron schedule using the UNIX cron format.
 ```
 
 
-##### `rate`<sup>Optional</sup> <a name="rate" id="@winglang/sdk.cloud.ScheduleProps.property.rate"></a>
-
+**<code>rate</code>**
 ```wing
 rate: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* undefined
 
 Trigger events at a periodic rate.
@@ -2270,24 +1885,23 @@ Properties for `Secret`.
 ```wing
 bring cloud;
 
-let SecretProps = cloud.SecretProps{ ... }
+let secretprops = cloud.SecretProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.SecretProps.property.name">name</a></code> | <code>str</code> | The secret's name. |
+| <code>name</code> | <code>str</code> | The secret's name. |
 
 ---
 
-##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.cloud.SecretProps.property.name"></a>
-
+**<code>name</code>**
 ```wing
 name: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 - *Default:* a new secret is provisioned with a generated name
 
 The secret's name.
@@ -2307,52 +1921,49 @@ Options for Service.onStart.
 ```wing
 bring cloud;
 
-let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... }
+let serviceonstartprops = cloud.ServiceOnStartProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code>env</code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code>memory</code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code>timeout</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ServiceOnStartProps.property.env"></a>
-
+**<code>env</code>**
 ```wing
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ServiceOnStartProps.property.memory"></a>
-
+**<code>memory</code>**
 ```wing
 memory: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 - *Default:* 128
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ServiceOnStartProps.property.timeout"></a>
-
+**<code>timeout</code>**
 ```wing
 timeout: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2368,51 +1979,48 @@ Properties for `Service`.
 ```wing
 bring cloud;
 
-let ServiceProps = cloud.ServiceProps{ ... }
+let serviceprops = cloud.ServiceProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.onStart">onStart</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code> | Handler to run with the service starts. |
-| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.autoStart">autoStart</a></code> | <code>bool</code> | Whether the service should start automatically. |
-| <code><a href="#@winglang/sdk.cloud.ServiceProps.property.onStop">onStop</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code> | Handler to run with the service stops. |
+| <code>onStart</code> | <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code> | Handler to run with the service starts. |
+| <code>autoStart</code> | <code>bool</code> | Whether the service should start automatically. |
+| <code>onStop</code> | <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code> | Handler to run with the service stops. |
 
 ---
 
-##### `onStart`<sup>Required</sup> <a name="onStart" id="@winglang/sdk.cloud.ServiceProps.property.onStart"></a>
-
+**<code>onStart</code>**
 ```wing
 onStart: IServiceOnEventHandler;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
+- *Type:* <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code>
 
 Handler to run with the service starts.
 
 ---
 
-##### `autoStart`<sup>Optional</sup> <a name="autoStart" id="@winglang/sdk.cloud.ServiceProps.property.autoStart"></a>
-
+**<code>autoStart</code>**
 ```wing
 autoStart: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 - *Default:* true
 
 Whether the service should start automatically.
 
 ---
 
-##### `onStop`<sup>Optional</sup> <a name="onStop" id="@winglang/sdk.cloud.ServiceProps.property.onStop"></a>
-
+**<code>onStop</code>**
 ```wing
 onStop: IServiceOnEventHandler;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
+- *Type:* <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a></code>
 - *Default:* no special activity at shutdown
 
 Handler to run with the service stops.
@@ -2428,66 +2036,62 @@ Properties for `Table`.
 ```wing
 bring cloud;
 
-let TableProps = cloud.TableProps{ ... }
+let tableprops = cloud.TableProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TableProps.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
-| <code><a href="#@winglang/sdk.cloud.TableProps.property.initialRows">initialRows</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | The table's initial rows. |
-| <code><a href="#@winglang/sdk.cloud.TableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
-| <code><a href="#@winglang/sdk.cloud.TableProps.property.primaryKey">primaryKey</a></code> | <code>str</code> | The table's primary key. |
+| <code>columns</code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
+| <code>initialRows</code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | The table's initial rows. |
+| <code>name</code> | <code>str</code> | The table's name. |
+| <code>primaryKey</code> | <code>str</code> | The table's primary key. |
 
 ---
 
-##### `columns`<sup>Optional</sup> <a name="columns" id="@winglang/sdk.cloud.TableProps.property.columns"></a>
-
+**<code>columns</code>**
 ```wing
 columns: MutMap<ColumnType>;
 ```
 
-- *Type:* MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;
+- *Type:* <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code>
 - *Default:* undefined
 
 The table's columns.
 
 ---
 
-##### `initialRows`<sup>Optional</sup> <a name="initialRows" id="@winglang/sdk.cloud.TableProps.property.initialRows"></a>
-
+**<code>initialRows</code>**
 ```wing
 initialRows: MutMap<Json>;
 ```
 
-- *Type:* MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
+- *Type:* <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code>
 - *Default:* undefined
 
 The table's initial rows.
 
 ---
 
-##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.cloud.TableProps.property.name"></a>
-
+**<code>name</code>**
 ```wing
 name: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 - *Default:* undefined
 
 The table's name.
 
 ---
 
-##### `primaryKey`<sup>Optional</sup> <a name="primaryKey" id="@winglang/sdk.cloud.TableProps.property.primaryKey"></a>
-
+**<code>primaryKey</code>**
 ```wing
 primaryKey: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 - *Default:* undefined
 
 The table's primary key.
@@ -2506,63 +2110,59 @@ A result of a single test.
 ```wing
 bring cloud;
 
-let TestResult = cloud.TestResult{ ... }
+let testresult = cloud.TestResult { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TestResult.property.pass">pass</a></code> | <code>bool</code> | Whether the test passed. |
-| <code><a href="#@winglang/sdk.cloud.TestResult.property.path">path</a></code> | <code>str</code> | The path of the test. |
-| <code><a href="#@winglang/sdk.cloud.TestResult.property.traces">traces</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.Trace">Trace</a>&gt;</code> | List of traces emitted during the test. |
-| <code><a href="#@winglang/sdk.cloud.TestResult.property.error">error</a></code> | <code>str</code> | The error message if the test failed. |
+| <code>pass</code> | <code>bool</code> | Whether the test passed. |
+| <code>path</code> | <code>str</code> | The path of the test. |
+| <code>traces</code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.Trace">Trace</a>&gt;</code> | List of traces emitted during the test. |
+| <code>error</code> | <code>str</code> | The error message if the test failed. |
 
 ---
 
-##### `pass`<sup>Required</sup> <a name="pass" id="@winglang/sdk.cloud.TestResult.property.pass"></a>
-
+**<code>pass</code>**
 ```wing
 pass: bool;
 ```
 
-- *Type:* bool
+- *Type:* <code>bool</code>
 
 Whether the test passed.
 
 ---
 
-##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.TestResult.property.path"></a>
-
+**<code>path</code>**
 ```wing
 path: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The path of the test.
 
 ---
 
-##### `traces`<sup>Required</sup> <a name="traces" id="@winglang/sdk.cloud.TestResult.property.traces"></a>
-
+**<code>traces</code>**
 ```wing
 traces: MutArray<Trace>;
 ```
 
-- *Type:* MutArray&lt;<a href="#@winglang/sdk.cloud.Trace">Trace</a>&gt;
+- *Type:* <code>MutArray&lt;<a href="#@winglang/sdk.cloud.Trace">Trace</a>&gt;</code>
 
 List of traces emitted during the test.
 
 ---
 
-##### `error`<sup>Optional</sup> <a name="error" id="@winglang/sdk.cloud.TestResult.property.error"></a>
-
+**<code>error</code>**
 ```wing
 error: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The error message if the test failed.
 
@@ -2577,7 +2177,7 @@ Properties for `TestRunner`.
 ```wing
 bring cloud;
 
-let TestRunnerProps = cloud.TestRunnerProps{ ... }
+let testrunnerprops = cloud.TestRunnerProps { ... }
 ```
 
 
@@ -2590,52 +2190,49 @@ Options for `Topic.onMessage`.
 ```wing
 bring cloud;
 
-let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... }
+let topiconmessageprops = cloud.TopicOnMessageProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code>env</code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code>memory</code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code>timeout</code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.TopicOnMessageProps.property.env"></a>
-
+**<code>env</code>**
 ```wing
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap&lt;str&gt;
+- *Type:* <code>MutMap&lt;str&gt;</code>
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.TopicOnMessageProps.property.memory"></a>
-
+**<code>memory</code>**
 ```wing
 memory: num;
 ```
 
-- *Type:* num
+- *Type:* <code>num</code>
 - *Default:* 128
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicOnMessageProps.property.timeout"></a>
-
+**<code>timeout</code>**
 ```wing
 timeout: Duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Duration">Duration</a></code>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2651,7 +2248,7 @@ Properties for `Topic`.
 ```wing
 bring cloud;
 
-let TopicProps = cloud.TopicProps{ ... }
+let topicprops = cloud.TopicProps { ... }
 ```
 
 
@@ -2664,64 +2261,60 @@ Represents an trace emitted during simulation.
 ```wing
 bring cloud;
 
-let Trace = cloud.Trace{ ... }
+let trace = cloud.Trace { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Trace.property.data">data</a></code> | <code>any</code> | A JSON blob with structured data. |
-| <code><a href="#@winglang/sdk.cloud.Trace.property.sourcePath">sourcePath</a></code> | <code>str</code> | The path of the resource that emitted the trace. |
-| <code><a href="#@winglang/sdk.cloud.Trace.property.sourceType">sourceType</a></code> | <code>str</code> | The type of the source that emitted the trace. |
-| <code><a href="#@winglang/sdk.cloud.Trace.property.timestamp">timestamp</a></code> | <code>str</code> | The timestamp of the event, in ISO 8601 format. |
-| <code><a href="#@winglang/sdk.cloud.Trace.property.type">type</a></code> | <code><a href="#@winglang/sdk.cloud.TraceType">TraceType</a></code> | The type of a trace. |
+| <code>data</code> | <code>any</code> | A JSON blob with structured data. |
+| <code>sourcePath</code> | <code>str</code> | The path of the resource that emitted the trace. |
+| <code>sourceType</code> | <code>str</code> | The type of the source that emitted the trace. |
+| <code>timestamp</code> | <code>str</code> | The timestamp of the event, in ISO 8601 format. |
+| <code>type</code> | <code><a href="#@winglang/sdk.cloud.TraceType">TraceType</a></code> | The type of a trace. |
 
 ---
 
-##### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.cloud.Trace.property.data"></a>
-
+**<code>data</code>**
 ```wing
 data: any;
 ```
 
-- *Type:* any
+- *Type:* <code>any</code>
 
 A JSON blob with structured data.
 
 ---
 
-##### `sourcePath`<sup>Required</sup> <a name="sourcePath" id="@winglang/sdk.cloud.Trace.property.sourcePath"></a>
-
+**<code>sourcePath</code>**
 ```wing
 sourcePath: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The path of the resource that emitted the trace.
 
 ---
 
-##### `sourceType`<sup>Required</sup> <a name="sourceType" id="@winglang/sdk.cloud.Trace.property.sourceType"></a>
-
+**<code>sourceType</code>**
 ```wing
 sourceType: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The type of the source that emitted the trace.
 
 ---
 
-##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@winglang/sdk.cloud.Trace.property.timestamp"></a>
-
+**<code>timestamp</code>**
 ```wing
 timestamp: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 The timestamp of the event, in ISO 8601 format.
 
@@ -2734,13 +2327,12 @@ The timestamp of the event, in ISO 8601 format.
 ```
 
 
-##### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.cloud.Trace.property.type"></a>
-
+**<code>type</code>**
 ```wing
 type: TraceType;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.TraceType">TraceType</a>
+- *Type:* <code><a href="#@winglang/sdk.cloud.TraceType">TraceType</a></code>
 
 The type of a trace.
 
@@ -2755,25 +2347,24 @@ website props.
 ```wing
 bring cloud;
 
-let WebsiteProps = cloud.WebsiteProps{ ... }
+let websiteprops = cloud.WebsiteProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
-| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code>str</code> | The website's custom domain name. |
+| <code>path</code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| <code>domain</code> | <code>str</code> | The website's custom domain name. |
 
 ---
 
-##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.WebsiteProps.property.path"></a>
-
+**<code>path</code>**
 ```wing
 path: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 Local path to the website's static files, relative to the Wing source file or absolute.
 
@@ -2786,13 +2377,12 @@ Local path to the website's static files, relative to the Wing source file or ab
 ```
 
 
-##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.WebsiteProps.property.domain"></a>
-
+**<code>domain</code>**
 ```wing
 domain: str;
 ```
 
-- *Type:* str
+- *Type:* <code>str</code>
 - *Default:* a domain is generated by the cloud provider
 
 The website's custom domain name.
@@ -2830,32 +2420,30 @@ Represents a resource with an inflight "handle" method that can be passed to one
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IApiEndpointHandler.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IApiEndpointHandler.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -2871,12 +2459,11 @@ Inflight client for `IApiEndpointHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandlerClient.handle">handle</a></code> | Inflight that will be called when a request is made to the endpoint. |
+| <code>handle</code> | Inflight that will be called when a request is made to the endpoint. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle"></a>
-
+**<code>handle</code>**
 ```wing
 handle(request: ApiRequest): ApiResponse
 ```
@@ -2885,11 +2472,9 @@ handle(request: ApiRequest): ApiResponse
 
 Inflight that will be called when a request is made to the endpoint.
 
-###### `request`<sup>Required</sup> <a name="request" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle.parameter.request"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.ApiRequest">ApiRequest</a>
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>request</code> | <code><a href="#@winglang/sdk.cloud.ApiRequest">ApiRequest</a></code> | *No description.* |
 
 
 ### IBucketClient <a name="IBucketClient" id="@winglang/sdk.cloud.IBucketClient"></a>
@@ -2902,22 +2487,21 @@ Inflight interface for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
+| <code>delete</code> | Delete an existing object using a key from the bucket. |
+| <code>exists</code> | Check if an object exists in the bucket. |
+| <code>get</code> | Retrieve an object from the bucket. |
+| <code>getJson</code> | Retrieve a Json object from the bucket. |
+| <code>list</code> | Retrieve existing objects keys from the bucket. |
+| <code>publicUrl</code> | Returns a url to the given file. |
+| <code>put</code> | Put an object in the bucket. |
+| <code>putJson</code> | Put a Json object in the bucket. |
+| <code>tryDelete</code> | Delete an object from the bucket if it exists. |
+| <code>tryGet</code> | Get an object from the bucket if it exists. |
+| <code>tryGetJson</code> | Gets an object from the bucket if it exists, parsing it as Json. |
 
 ---
 
-##### `delete` <a name="delete" id="@winglang/sdk.cloud.IBucketClient.delete"></a>
-
+**<code>delete</code>**
 ```wing
 delete(key: str, opts?: BucketDeleteOptions): void
 ```
@@ -2926,24 +2510,12 @@ delete(key: str, opts?: BucketDeleteOptions): void
 
 Delete an existing object using a key from the bucket.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
+| <code>opts</code> | <code><a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a></code> | Options available for delete an item from a bucket. |
 
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.opts"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a>
-
-Options available for delete an item from a bucket.
-
----
-
-##### `exists` <a name="exists" id="@winglang/sdk.cloud.IBucketClient.exists"></a>
-
+**<code>exists</code>**
 ```wing
 exists(key: str): bool
 ```
@@ -2952,16 +2524,11 @@ exists(key: str): bool
 
 Check if an object exists in the bucket.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.exists.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
 
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.cloud.IBucketClient.get"></a>
-
+**<code>get</code>**
 ```wing
 get(key: str): str
 ```
@@ -2970,16 +2537,11 @@ get(key: str): str
 
 Retrieve an object from the bucket.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.get.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
 
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `getJson` <a name="getJson" id="@winglang/sdk.cloud.IBucketClient.getJson"></a>
-
+**<code>getJson</code>**
 ```wing
 getJson(key: str): Json
 ```
@@ -2988,16 +2550,11 @@ getJson(key: str): Json
 
 Retrieve a Json object from the bucket.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.getJson.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
 
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
-
+**<code>list</code>**
 ```wing
 list(prefix?: str): MutArray<str>
 ```
@@ -3006,16 +2563,11 @@ list(prefix?: str): MutArray<str>
 
 Retrieve existing objects keys from the bucket.
 
-###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/sdk.cloud.IBucketClient.list.parameter.prefix"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>prefix</code> | <code>str</code> | Limits the response to keys that begin with the specified prefix. |
 
-- *Type:* str
-
-Limits the response to keys that begin with the specified prefix.
-
----
-
-##### `publicUrl` <a name="publicUrl" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
-
+**<code>publicUrl</code>**
 ```wing
 publicUrl(key: str): str
 ```
@@ -3024,14 +2576,11 @@ publicUrl(key: str): str
 
 Returns a url to the given file.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.publicUrl.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
 
-- *Type:* str
-
----
-
-##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
-
+**<code>put</code>**
 ```wing
 put(key: str, body: str): void
 ```
@@ -3040,24 +2589,12 @@ put(key: str, body: str): void
 
 Put an object in the bucket.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.put.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
+| <code>body</code> | <code>str</code> | Content of the object we want to store into the bucket. |
 
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.put.parameter.body"></a>
-
-- *Type:* str
-
-Content of the object we want to store into the bucket.
-
----
-
-##### `putJson` <a name="putJson" id="@winglang/sdk.cloud.IBucketClient.putJson"></a>
-
+**<code>putJson</code>**
 ```wing
 putJson(key: str, body: Json): void
 ```
@@ -3066,24 +2603,12 @@ putJson(key: str, body: Json): void
 
 Put a Json object in the bucket.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
+| <code>body</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Json object that we want to store into the bucket. |
 
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.body"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-Json object that we want to store into the bucket.
-
----
-
-##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
-
+**<code>tryDelete</code>**
 ```wing
 tryDelete(key: str): bool
 ```
@@ -3092,16 +2617,11 @@ tryDelete(key: str): bool
 
 Delete an object from the bucket if it exists.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryDelete.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
 
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
-
+**<code>tryGet</code>**
 ```wing
 tryGet(key: str): str
 ```
@@ -3110,16 +2630,11 @@ tryGet(key: str): str
 
 Get an object from the bucket if it exists.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
 
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
-
+**<code>tryGetJson</code>**
 ```wing
 tryGetJson(key: str): Json
 ```
@@ -3128,13 +2643,9 @@ tryGetJson(key: str): Json
 
 Gets an object from the bucket if it exists, parsing it as Json.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGetJson.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | Key of the object. |
 
 
 ### IBucketEventHandler <a name="IBucketEventHandler" id="@winglang/sdk.cloud.IBucketEventHandler"></a>
@@ -3150,32 +2661,30 @@ Represents a resource with an inflight "handle" method that can be passed to the
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IBucketEventHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IBucketEventHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IBucketEventHandler.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IBucketEventHandler.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -3191,12 +2700,11 @@ Represents a resource with an inflight "handle" method that can be passed to the
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IBucketEventHandlerClient.handle">handle</a></code> | Function that will be called when an event notification is fired. |
+| <code>handle</code> | Function that will be called when an event notification is fired. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IBucketEventHandlerClient.handle"></a>
-
+**<code>handle</code>**
 ```wing
 handle(key: str, type: BucketEventType): void
 ```
@@ -3205,17 +2713,10 @@ handle(key: str, type: BucketEventType): void
 
 Function that will be called when an event notification is fired.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketEventHandlerClient.handle.parameter.key"></a>
-
-- *Type:* str
-
----
-
-###### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.cloud.IBucketEventHandlerClient.handle.parameter.type"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | *No description.* |
+| <code>type</code> | <code><a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a></code> | *No description.* |
 
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
@@ -3228,15 +2729,14 @@ Inflight interface for `Counter`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ICounterClient.dec">dec</a></code> | Decrement the counter, returning the previous value. |
-| <code><a href="#@winglang/sdk.cloud.ICounterClient.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
-| <code><a href="#@winglang/sdk.cloud.ICounterClient.peek">peek</a></code> | Get the current value of the counter. |
-| <code><a href="#@winglang/sdk.cloud.ICounterClient.set">set</a></code> | Set a counter to a given value. |
+| <code>dec</code> | Decrement the counter, returning the previous value. |
+| <code>inc</code> | Increments the counter atomically by a certain amount and returns the previous value. |
+| <code>peek</code> | Get the current value of the counter. |
+| <code>set</code> | Set a counter to a given value. |
 
 ---
 
-##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
-
+**<code>dec</code>**
 ```wing
 dec(amount?: num, key?: str): num
 ```
@@ -3245,24 +2745,12 @@ dec(amount?: num, key?: str): num
 
 Decrement the counter, returning the previous value.
 
-###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.amount"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | amount to decrement (default is 1). |
+| <code>key</code> | <code>str</code> | specify the key to be decremented. |
 
-- *Type:* num
-
-amount to decrement (default is 1).
-
----
-
-###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.key"></a>
-
-- *Type:* str
-
-specify the key to be decremented.
-
----
-
-##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
-
+**<code>inc</code>**
 ```wing
 inc(amount?: num, key?: str): num
 ```
@@ -3271,24 +2759,12 @@ inc(amount?: num, key?: str): num
 
 Increments the counter atomically by a certain amount and returns the previous value.
 
-###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/sdk.cloud.ICounterClient.inc.parameter.amount"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>amount</code> | <code>num</code> | amount to increment (default is 1). |
+| <code>key</code> | <code>str</code> | specify the key to be incremented. |
 
-- *Type:* num
-
-amount to increment (default is 1).
-
----
-
-###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.inc.parameter.key"></a>
-
-- *Type:* str
-
-specify the key to be incremented.
-
----
-
-##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
-
+**<code>peek</code>**
 ```wing
 peek(key?: str): num
 ```
@@ -3300,16 +2776,11 @@ Get the current value of the counter.
 Using this API may introduce race conditions since the value can change between
 the time it is read and the time it is used in your code.
 
-###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.peek.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | specify the key to be retrieved. |
 
-- *Type:* str
-
-specify the key to be retrieved.
-
----
-
-##### `set` <a name="set" id="@winglang/sdk.cloud.ICounterClient.set"></a>
-
+**<code>set</code>**
 ```wing
 set(value: num, key?: str): void
 ```
@@ -3318,21 +2789,10 @@ set(value: num, key?: str): void
 
 Set a counter to a given value.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.ICounterClient.set.parameter.value"></a>
-
-- *Type:* num
-
-new value.
-
----
-
-###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.set.parameter.key"></a>
-
-- *Type:* str
-
-specify the key to be set.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>value</code> | <code>num</code> | new value. |
+| <code>key</code> | <code>str</code> | specify the key to be set. |
 
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/sdk.cloud.IFunctionClient"></a>
@@ -3345,12 +2805,11 @@ Inflight interface for `Function`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invoke the function asynchronously with a given payload. |
+| <code>invoke</code> | Invoke the function asynchronously with a given payload. |
 
 ---
 
-##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
-
+**<code>invoke</code>**
 ```wing
 invoke(payload: str): str
 ```
@@ -3359,11 +2818,9 @@ invoke(payload: str): str
 
 Invoke the function asynchronously with a given payload.
 
-###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
-
-- *Type:* str
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>payload</code> | <code>str</code> | *No description.* |
 
 
 ### IFunctionHandler <a name="IFunctionHandler" id="@winglang/sdk.cloud.IFunctionHandler"></a>
@@ -3379,32 +2836,30 @@ Represents a resource with an inflight "handle" method that can be used to creat
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IFunctionHandler.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IFunctionHandler.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -3420,12 +2875,11 @@ Inflight client for `IFunctionHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IFunctionHandlerClient.handle">handle</a></code> | Entrypoint function that will be called when the cloud function is invoked. |
+| <code>handle</code> | Entrypoint function that will be called when the cloud function is invoked. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle"></a>
-
+**<code>handle</code>**
 ```wing
 handle(event: str): void
 ```
@@ -3434,11 +2888,9 @@ handle(event: str): void
 
 Entrypoint function that will be called when the cloud function is invoked.
 
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle.parameter.event"></a>
-
-- *Type:* str
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>event</code> | <code>str</code> | *No description.* |
 
 
 ### IQueueClient <a name="IQueueClient" id="@winglang/sdk.cloud.IQueueClient"></a>
@@ -3451,15 +2903,14 @@ Inflight interface for `Queue`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
+| <code>approxSize</code> | Retrieve the approximate number of messages in the queue. |
+| <code>pop</code> | Pop a message from the queue. |
+| <code>purge</code> | Purge all of the messages in the queue. |
+| <code>push</code> | Push a message to the queue. |
 
 ---
 
-##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
-
+**<code>approxSize</code>**
 ```wing
 approxSize(): num
 ```
@@ -3468,8 +2919,7 @@ approxSize(): num
 
 Retrieve the approximate number of messages in the queue.
 
-##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
-
+**<code>pop</code>**
 ```wing
 pop(): str
 ```
@@ -3478,8 +2928,7 @@ pop(): str
 
 Pop a message from the queue.
 
-##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
-
+**<code>purge</code>**
 ```wing
 purge(): void
 ```
@@ -3488,8 +2937,7 @@ purge(): void
 
 Purge all of the messages in the queue.
 
-##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
-
+**<code>push</code>**
 ```wing
 push(message: str): void
 ```
@@ -3498,13 +2946,9 @@ push(message: str): void
 
 Push a message to the queue.
 
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueClient.push.parameter.message"></a>
-
-- *Type:* str
-
-Payload to send to the queue.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>message</code> | <code>str</code> | Payload to send to the queue. |
 
 
 ### IQueueSetConsumerHandler <a name="IQueueSetConsumerHandler" id="@winglang/sdk.cloud.IQueueSetConsumerHandler"></a>
@@ -3520,32 +2964,30 @@ Represents a resource with an inflight "handle" method that can be passed to `Qu
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IQueueSetConsumerHandler.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -3561,12 +3003,11 @@ Inflight client for `IQueueSetConsumerHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the queue. |
+| <code>handle</code> | Function that will be called when a message is received from the queue. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle"></a>
-
+**<code>handle</code>**
 ```wing
 handle(message: str): void
 ```
@@ -3575,11 +3016,9 @@ handle(message: str): void
 
 Function that will be called when a message is received from the queue.
 
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle.parameter.message"></a>
-
-- *Type:* str
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>message</code> | <code>str</code> | *No description.* |
 
 
 ### IScheduleClient <a name="IScheduleClient" id="@winglang/sdk.cloud.IScheduleClient"></a>
@@ -3603,32 +3042,30 @@ Represents a resource with an inflight "handle" method that can be passed to `Sc
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IScheduleOnTickHandler.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IScheduleOnTickHandler.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -3644,12 +3081,11 @@ Inflight client for `IScheduleOnTickHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the schedule. |
+| <code>handle</code> | Function that will be called when a message is received from the schedule. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IScheduleOnTickHandlerClient.handle"></a>
-
+**<code>handle</code>**
 ```wing
 handle(): void
 ```
@@ -3669,13 +3105,12 @@ Inflight interface for `Secret`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ISecretClient.value">value</a></code> | Retrieve the value of the secret. |
-| <code><a href="#@winglang/sdk.cloud.ISecretClient.valueJson">valueJson</a></code> | Retrieve the Json value of the secret. |
+| <code>value</code> | Retrieve the value of the secret. |
+| <code>valueJson</code> | Retrieve the Json value of the secret. |
 
 ---
 
-##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
-
+**<code>value</code>**
 ```wing
 value(options?: GetSecretValueOptions): str
 ```
@@ -3684,14 +3119,11 @@ value(options?: GetSecretValueOptions): str
 
 Retrieve the value of the secret.
 
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.value.parameter.options"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>options</code> | <code><a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a></code> | *No description.* |
 
-- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
-
----
-
-##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
-
+**<code>valueJson</code>**
 ```wing
 valueJson(options?: GetSecretValueOptions): Json
 ```
@@ -3700,11 +3132,9 @@ valueJson(options?: GetSecretValueOptions): Json
 
 Retrieve the Json value of the secret.
 
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.valueJson.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>options</code> | <code><a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a></code> | *No description.* |
 
 
 ### IServiceClient <a name="IServiceClient" id="@winglang/sdk.cloud.IServiceClient"></a>
@@ -3717,13 +3147,12 @@ Inflight interface for `Service`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceClient.start">start</a></code> | Start the service. |
-| <code><a href="#@winglang/sdk.cloud.IServiceClient.stop">stop</a></code> | Stop the service. |
+| <code>start</code> | Start the service. |
+| <code>stop</code> | Stop the service. |
 
 ---
 
-##### `start` <a name="start" id="@winglang/sdk.cloud.IServiceClient.start"></a>
-
+**<code>start</code>**
 ```wing
 start(): void
 ```
@@ -3732,8 +3161,7 @@ start(): void
 
 Start the service.
 
-##### `stop` <a name="stop" id="@winglang/sdk.cloud.IServiceClient.stop"></a>
-
+**<code>stop</code>**
 ```wing
 stop(): void
 ```
@@ -3753,12 +3181,11 @@ Inflight client for `IServiceOnEventHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceOnEventClient.handle">handle</a></code> | Function that will be called for service events. |
+| <code>handle</code> | Function that will be called for service events. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceOnEventClient.handle"></a>
-
+**<code>handle</code>**
 ```wing
 handle(): void
 ```
@@ -3781,32 +3208,30 @@ Represents a resource with an inflight "handle" method that can be passed to `Se
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IServiceOnEventHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceOnEventHandler.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IServiceOnEventHandler.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -3822,16 +3247,15 @@ Inflight interface for `Table`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITableClient.delete">delete</a></code> | Delete a row from the table, by primary key. |
-| <code><a href="#@winglang/sdk.cloud.ITableClient.get">get</a></code> | Get a row from the table, by primary key. |
-| <code><a href="#@winglang/sdk.cloud.ITableClient.insert">insert</a></code> | Insert a row into the table. |
-| <code><a href="#@winglang/sdk.cloud.ITableClient.list">list</a></code> | List all rows in the table. |
-| <code><a href="#@winglang/sdk.cloud.ITableClient.update">update</a></code> | Update a row in the table. |
+| <code>delete</code> | Delete a row from the table, by primary key. |
+| <code>get</code> | Get a row from the table, by primary key. |
+| <code>insert</code> | Insert a row into the table. |
+| <code>list</code> | List all rows in the table. |
+| <code>update</code> | Update a row in the table. |
 
 ---
 
-##### `delete` <a name="delete" id="@winglang/sdk.cloud.ITableClient.delete"></a>
-
+**<code>delete</code>**
 ```wing
 delete(key: str): void
 ```
@@ -3840,16 +3264,11 @@ delete(key: str): void
 
 Delete a row from the table, by primary key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.delete.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | primary key to delete the row. |
 
-- *Type:* str
-
-primary key to delete the row.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.cloud.ITableClient.get"></a>
-
+**<code>get</code>**
 ```wing
 get(key: str): Json
 ```
@@ -3858,16 +3277,11 @@ get(key: str): Json
 
 Get a row from the table, by primary key.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.get.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | primary key to search. |
 
-- *Type:* str
-
-primary key to search.
-
----
-
-##### `insert` <a name="insert" id="@winglang/sdk.cloud.ITableClient.insert"></a>
-
+**<code>insert</code>**
 ```wing
 insert(key: str, row: Json): void
 ```
@@ -3876,24 +3290,12 @@ insert(key: str, row: Json): void
 
 Insert a row into the table.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.insert.parameter.key"></a>
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | primary key to insert the row. |
+| <code>row</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | data to be inserted. |
 
-- *Type:* str
-
-primary key to insert the row.
-
----
-
-###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.ITableClient.insert.parameter.row"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-data to be inserted.
-
----
-
-##### `list` <a name="list" id="@winglang/sdk.cloud.ITableClient.list"></a>
-
+**<code>list</code>**
 ```wing
 list(): MutArray<Json>
 ```
@@ -3902,8 +3304,7 @@ list(): MutArray<Json>
 
 List all rows in the table.
 
-##### `update` <a name="update" id="@winglang/sdk.cloud.ITableClient.update"></a>
-
+**<code>update</code>**
 ```wing
 update(key: str, row: Json): void
 ```
@@ -3912,21 +3313,10 @@ update(key: str, row: Json): void
 
 Update a row in the table.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.update.parameter.key"></a>
-
-- *Type:* str
-
-primary key to update the row.
-
----
-
-###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.ITableClient.update.parameter.row"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-data to be updated.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>key</code> | <code>str</code> | primary key to update the row. |
+| <code>row</code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | data to be updated. |
 
 
 ### ITestRunnerClient <a name="ITestRunnerClient" id="@winglang/sdk.cloud.ITestRunnerClient"></a>
@@ -3939,13 +3329,12 @@ Inflight interface for `TestRunner`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITestRunnerClient.listTests">listTests</a></code> | List all tests available for this test engine. |
-| <code><a href="#@winglang/sdk.cloud.ITestRunnerClient.runTest">runTest</a></code> | Run a test with a given path and return the result. |
+| <code>listTests</code> | List all tests available for this test engine. |
+| <code>runTest</code> | Run a test with a given path and return the result. |
 
 ---
 
-##### `listTests` <a name="listTests" id="@winglang/sdk.cloud.ITestRunnerClient.listTests"></a>
-
+**<code>listTests</code>**
 ```wing
 listTests(): MutArray<str>
 ```
@@ -3954,8 +3343,7 @@ listTests(): MutArray<str>
 
 List all tests available for this test engine.
 
-##### `runTest` <a name="runTest" id="@winglang/sdk.cloud.ITestRunnerClient.runTest"></a>
-
+**<code>runTest</code>**
 ```wing
 runTest(path: str): TestResult
 ```
@@ -3964,11 +3352,9 @@ runTest(path: str): TestResult
 
 Run a test with a given path and return the result.
 
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.ITestRunnerClient.runTest.parameter.path"></a>
-
-- *Type:* str
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>path</code> | <code>str</code> | *No description.* |
 
 
 ### ITopicClient <a name="ITopicClient" id="@winglang/sdk.cloud.ITopicClient"></a>
@@ -3981,12 +3367,11 @@ Inflight interface for `Topic`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish message to topic. |
+| <code>publish</code> | Publish message to topic. |
 
 ---
 
-##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
-
+**<code>publish</code>**
 ```wing
 publish(message: str): void
 ```
@@ -3995,13 +3380,9 @@ publish(message: str): void
 
 Publish message to topic.
 
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.message"></a>
-
-- *Type:* str
-
-Payload to publish to Topic.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>message</code> | <code>str</code> | Payload to publish to Topic. |
 
 
 ### ITopicOnMessageHandler <a name="ITopicOnMessageHandler" id="@winglang/sdk.cloud.ITopicOnMessageHandler"></a>
@@ -4017,32 +3398,30 @@ Represents a resource with an inflight "handle" method that can be passed to `To
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code>node</code> | <code>constructs.Node</code> | The tree node. |
+| <code>display</code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.ITopicOnMessageHandler.property.node"></a>
-
+**<code>node</code>**
 ```wing
 node: Node;
 ```
 
-- *Type:* constructs.Node
+- *Type:* <code>constructs.Node</code>
 
 The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.ITopicOnMessageHandler.property.display"></a>
-
+**<code>display</code>**
 ```wing
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <code><a href="#@winglang/sdk.std.Display">Display</a></code>
 
 Information on how to display a resource in the UI.
 
@@ -4058,12 +3437,11 @@ Inflight client for `ITopicOnMessageHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the topic. |
+| <code>handle</code> | Function that will be called when a message is received from the topic. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient.handle"></a>
-
+**<code>handle</code>**
 ```wing
 handle(event: str): void
 ```
@@ -4072,11 +3450,9 @@ handle(event: str): void
 
 Function that will be called when a message is received from the topic.
 
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient.handle.parameter.event"></a>
-
-- *Type:* str
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>event</code> | <code>str</code> | *No description.* |
 
 
 ### IWebsiteClient <a name="IWebsiteClient" id="@winglang/sdk.cloud.IWebsiteClient"></a>
@@ -4097,32 +3473,9 @@ bucket events to subscribe to.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.CREATE">CREATE</a></code> | create. |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.DELETE">DELETE</a></code> | delete. |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.UPDATE">UPDATE</a></code> | update. |
-
----
-
-##### `CREATE` <a name="CREATE" id="@winglang/sdk.cloud.BucketEventType.CREATE"></a>
-
-create.
-
----
-
-
-##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.BucketEventType.DELETE"></a>
-
-delete.
-
----
-
-
-##### `UPDATE` <a name="UPDATE" id="@winglang/sdk.cloud.BucketEventType.UPDATE"></a>
-
-update.
-
----
-
+| <code>CREATE</code> | create. |
+| <code>DELETE</code> | delete. |
+| <code>UPDATE</code> | update. |
 
 ### ColumnType <a name="ColumnType" id="@winglang/sdk.cloud.ColumnType"></a>
 
@@ -4132,48 +3485,11 @@ Table column types.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ColumnType.STRING">STRING</a></code> | string type. |
-| <code><a href="#@winglang/sdk.cloud.ColumnType.NUMBER">NUMBER</a></code> | number type. |
-| <code><a href="#@winglang/sdk.cloud.ColumnType.BOOLEAN">BOOLEAN</a></code> | bool type. |
-| <code><a href="#@winglang/sdk.cloud.ColumnType.DATE">DATE</a></code> | date type. |
-| <code><a href="#@winglang/sdk.cloud.ColumnType.JSON">JSON</a></code> | json type. |
-
----
-
-##### `STRING` <a name="STRING" id="@winglang/sdk.cloud.ColumnType.STRING"></a>
-
-string type.
-
----
-
-
-##### `NUMBER` <a name="NUMBER" id="@winglang/sdk.cloud.ColumnType.NUMBER"></a>
-
-number type.
-
----
-
-
-##### `BOOLEAN` <a name="BOOLEAN" id="@winglang/sdk.cloud.ColumnType.BOOLEAN"></a>
-
-bool type.
-
----
-
-
-##### `DATE` <a name="DATE" id="@winglang/sdk.cloud.ColumnType.DATE"></a>
-
-date type.
-
----
-
-
-##### `JSON` <a name="JSON" id="@winglang/sdk.cloud.ColumnType.JSON"></a>
-
-json type.
-
----
-
+| <code>STRING</code> | string type. |
+| <code>NUMBER</code> | number type. |
+| <code>BOOLEAN</code> | bool type. |
+| <code>DATE</code> | date type. |
+| <code>JSON</code> | json type. |
 
 ### HttpMethod <a name="HttpMethod" id="@winglang/sdk.cloud.HttpMethod"></a>
 
@@ -4183,72 +3499,14 @@ Allowed HTTP methods for a endpoint.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.GET">GET</a></code> | Get. |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.HEAD">HEAD</a></code> | Head. |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.POST">POST</a></code> | Post. |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.PUT">PUT</a></code> | Put. |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.DELETE">DELETE</a></code> | Delete. |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.CONNECT">CONNECT</a></code> | Connect. |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.OPTIONS">OPTIONS</a></code> | Options. |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.PATCH">PATCH</a></code> | Patch. |
-
----
-
-##### `GET` <a name="GET" id="@winglang/sdk.cloud.HttpMethod.GET"></a>
-
-Get.
-
----
-
-
-##### `HEAD` <a name="HEAD" id="@winglang/sdk.cloud.HttpMethod.HEAD"></a>
-
-Head.
-
----
-
-
-##### `POST` <a name="POST" id="@winglang/sdk.cloud.HttpMethod.POST"></a>
-
-Post.
-
----
-
-
-##### `PUT` <a name="PUT" id="@winglang/sdk.cloud.HttpMethod.PUT"></a>
-
-Put.
-
----
-
-
-##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.HttpMethod.DELETE"></a>
-
-Delete.
-
----
-
-
-##### `CONNECT` <a name="CONNECT" id="@winglang/sdk.cloud.HttpMethod.CONNECT"></a>
-
-Connect.
-
----
-
-
-##### `OPTIONS` <a name="OPTIONS" id="@winglang/sdk.cloud.HttpMethod.OPTIONS"></a>
-
-Options.
-
----
-
-
-##### `PATCH` <a name="PATCH" id="@winglang/sdk.cloud.HttpMethod.PATCH"></a>
-
-Patch.
-
----
-
+| <code>GET</code> | Get. |
+| <code>HEAD</code> | Head. |
+| <code>POST</code> | Post. |
+| <code>PUT</code> | Put. |
+| <code>DELETE</code> | Delete. |
+| <code>CONNECT</code> | Connect. |
+| <code>OPTIONS</code> | Options. |
+| <code>PATCH</code> | Patch. |
 
 ### TraceType <a name="TraceType" id="@winglang/sdk.cloud.TraceType"></a>
 
@@ -4258,21 +3516,5 @@ The type of a trace.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TraceType.RESOURCE">RESOURCE</a></code> | A trace representing a resource activity. |
-| <code><a href="#@winglang/sdk.cloud.TraceType.LOG">LOG</a></code> | A trace representing a message emitted by the logger. |
-
----
-
-##### `RESOURCE` <a name="RESOURCE" id="@winglang/sdk.cloud.TraceType.RESOURCE"></a>
-
-A trace representing a resource activity.
-
----
-
-
-##### `LOG` <a name="LOG" id="@winglang/sdk.cloud.TraceType.LOG"></a>
-
-A trace representing a message emitted by the logger.
-
----
-
+| <code>RESOURCE</code> | A trace representing a resource activity. |
+| <code>LOG</code> | A trace representing a message emitted by the logger. |
