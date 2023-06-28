@@ -1,5 +1,5 @@
 import { load, invoke } from "winglang";
-import wingcURL from "winglang/wingc.wasm?url";
+import wingcURL from "@winglang/compiler/wingc.wasm?url";
 import { Volume, createFsFromVolume } from "@cowasm/memfs";
 
 const wingsdkJSIIContent = await import("@winglang/sdk/.jsii?raw").then(

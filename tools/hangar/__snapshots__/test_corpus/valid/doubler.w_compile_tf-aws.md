@@ -12,7 +12,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(m)  {
-      return `Hello ${m}!`;
+      return String.raw({ raw: ["Hello ", "!"] }, m);
     }
   }
   return $Closure1;
@@ -76,7 +76,7 @@ module.exports = function({ f }) {
     }
     async handle()  {
       const result = (await f.invoke("2"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(result === "8")'`)})((result === "8"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((result === "8"))};
     }
   }
   return $Closure4;
@@ -92,10 +92,8 @@ module.exports = function({  }) {
       this.func = func;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async invoke(message)  {
-      const __parent_this = this;
       (await this.func.handle(message));
       (await this.func.handle(message));
     }
@@ -112,7 +110,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return Doubler2;
@@ -323,7 +320,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, func) {
         super(scope, id);
         this._addInflightOps("invoke");
-        const __parent_this = this;
         this.func = func;
       }
       static _toInflightType(context) {
@@ -391,10 +387,9 @@ class $Root extends $stdlib.std.Resource {
     class Doubler2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
       }
        makeFunc(handler)  {
-        const __parent_this = this;
+        const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);

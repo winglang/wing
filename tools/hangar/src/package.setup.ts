@@ -5,7 +5,11 @@ import {
   npmBin,
   npmCacheDir,
   targetWingSDKSpec,
+  targetWingCompilerSpec,
   targetWingSpec,
+  targetWingConsoleAppSpec,
+  targetWingConsoleServerSpec,
+  targetWingConsoleUiSpec,
   tmpDir,
   wingBin,
 } from "./paths";
@@ -41,7 +45,11 @@ export default async function () {
     "--no-package-lock",
     "--install-links=false",
     targetWingSDKSpec,
+    targetWingCompilerSpec,
     targetWingSpec,
+    targetWingConsoleAppSpec,
+    targetWingConsoleServerSpec,
+    targetWingConsoleUiSpec,
   ];
   const installResult = await execa(npmBin, installArgs, {
     cwd: tmpDir,

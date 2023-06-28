@@ -15,7 +15,6 @@ import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-publi
 import { S3BucketServerSideEncryptionConfigurationA } from "../.gen/providers/aws/s3-bucket-server-side-encryption-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
-import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
 import {
   CaseConventions,
@@ -26,9 +25,9 @@ import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
 const EVENTS = {
-  [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
-  [BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
-  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
+  [cloud.BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
+  [cloud.BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
+  [cloud.BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
 };
 
 /**
@@ -78,7 +77,7 @@ export class Bucket extends cloud.Bucket {
     return join(__dirname, "bucket.onevent.inflight.js");
   }
 
-  protected createTopic(actionType: BucketEventType): Topic {
+  protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {
     const handler = super.createTopic(actionType);
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function

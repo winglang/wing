@@ -14,8 +14,8 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
     async handle(s)  {
       {console.log(myStr)};
       const n = myNum;
-      {console.log(`${n}`)};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
+      {console.log(String.raw({ raw: ["", ""] }, n))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})((mySecondBool === false))};
       if (myBool) {
         {console.log("bool=true")};
       }
@@ -25,8 +25,8 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
       const min = myDur.minutes;
       const sec = myDur.seconds;
       const hr = myDur.hours;
-      const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+      const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
+      {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((split.length === 3))};
     }
   }
   return $Closure1;
@@ -222,7 +222,7 @@ class $Root extends $stdlib.std.Resource {
     const myNum = 1234;
     const myBool = true;
     const mySecondBool = false;
-    const myDur = $stdlib.std.Duration.fromSeconds(600);
+    const myDur = (std.Duration.fromSeconds(600));
     const handler = new $Closure1(this,"$Closure1");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler);
   }

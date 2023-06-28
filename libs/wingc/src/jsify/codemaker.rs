@@ -29,6 +29,11 @@ impl CodeMaker {
 		}
 	}
 
+	/// Emits an empty line.
+	pub fn empty_line(&mut self) {
+		self.line("");
+	}
+
 	/// Emits multiple lines of code starting with the current indent.
 	pub fn add_code(&mut self, code: CodeMaker) {
 		assert_eq!(code.indent, 0, "Cannot add code with indent");

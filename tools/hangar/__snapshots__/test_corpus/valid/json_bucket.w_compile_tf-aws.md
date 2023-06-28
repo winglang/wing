@@ -13,7 +13,7 @@ module.exports = function({ b, fileName }) {
     }
     async handle(msg)  {
       const x = (await b.getJson(fileName));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"")})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
     }
   }
   return $Closure1;

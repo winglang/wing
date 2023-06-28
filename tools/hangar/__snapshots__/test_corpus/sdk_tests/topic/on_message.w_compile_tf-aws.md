@@ -59,12 +59,12 @@ module.exports = function({ t, predicate, TestHelper }) {
       while ((i < 600)) {
         i = (i + 1);
         if ((await predicate.test())) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+          {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await predicate.test()))};
           return;
         }
         (await TestHelper.sleep(100));
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await predicate.test()))};
     }
   }
   return $Closure3;
@@ -80,10 +80,8 @@ module.exports = function({  }) {
       this.c = c;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async test()  {
-      const __parent_this = this;
       return ((await this.c.peek()) === 10);
     }
   }
@@ -99,7 +97,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     static async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
@@ -462,7 +459,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, c) {
         super(scope, id);
         this._addInflightOps("test");
-        const __parent_this = this;
         this.c = c;
       }
       static _toInflightType(context) {
@@ -499,7 +495,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("sleep");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.TestHelper.js";

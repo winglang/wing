@@ -18,16 +18,16 @@ module.exports = function({ b }) {
       (await b.putJson("test2.txt",jsonObj2));
       const testJson1 = (await b.getJson("test1.txt"));
       const testJson2 = (await b.getJson("test2.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson1)["test"] === (jsonObj1)["test"])'`)})(((testJson1)["test"] === (jsonObj1)["test"]))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson2)["test"] === (jsonObj2)["test"])'`)})(((testJson2)["test"] === (jsonObj2)["test"]))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson1.get(\"test\") == jsonObj1.get(\"test\")")})(((testJson1)["test"] === (jsonObj1)["test"]))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson2.get(\"test\") == jsonObj2.get(\"test\")")})(((testJson2)["test"] === (jsonObj2)["test"]))};
       const jsonObj3 = Object.freeze({"test":"test3"});
       (await b.putJson("test3.txt",jsonObj3));
       const testJson3 = (await b.getJson("test3.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((testJson3)["test"] === (jsonObj3)["test"])'`)})(((testJson3)["test"] === (jsonObj3)["test"]))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson3.get(\"test\") == jsonObj3.get(\"test\")")})(((testJson3)["test"] === (jsonObj3)["test"]))};
       (await b.delete("test1.txt"));
       const files = (await b.list());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((files.includes("test1.txt") === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((files.includes("test2.txt") === true))};
     }
   }
   return $Closure1;

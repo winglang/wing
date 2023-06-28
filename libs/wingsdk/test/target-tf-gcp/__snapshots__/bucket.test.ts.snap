@@ -75,7 +75,7 @@ exports[`bucket is public 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -95,7 +95,7 @@ exports[`bucket is public 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "id": "Default",
             "path": "root/Default",
@@ -216,7 +216,7 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -236,7 +236,7 @@ exports[`bucket with two preflight objects 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "id": "Default",
             "path": "root/Default",
@@ -329,7 +329,7 @@ exports[`create a bucket 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -349,7 +349,7 @@ exports[`create a bucket 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "id": "Default",
             "path": "root/Default",
@@ -451,7 +451,7 @@ exports[`two buckets 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -484,7 +484,7 @@ exports[`two buckets 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.1.314",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -504,7 +504,7 @@ exports[`two buckets 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.1.314",
             },
             "id": "Default",
             "path": "root/Default",

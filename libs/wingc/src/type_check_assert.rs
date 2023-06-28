@@ -1,17 +1,38 @@
 use crate::{
-	ast::Expr,
+	ast::{Expr, Scope},
+	type_check::Types,
 	visit::{self, Visit},
 };
 
-pub struct TypeCheckAssert;
+/// This visitor validates:
+/// 1. All expressions in the AST were resolved to some type.
+/// 2. If any were resolved to `Unresolved` then we should have generated some error diagnostics.
+pub struct TypeCheckAssert<'a> {
+	types: &'a Types,
+	tc_found_errors: bool,
+}
 
-impl Visit<'_> for TypeCheckAssert {
+impl<'a> TypeCheckAssert<'a> {
+	pub fn new(types: &'a Types, tc_found_errors: bool) -> Self {
+		Self { types, tc_found_errors }
+	}
+
+	pub fn check(&mut self, scope: &Scope) {
+		self.visit_scope(scope);
+	}
+}
+
+impl<'a> Visit<'_> for TypeCheckAssert<'a> {
 	fn visit_expr(&mut self, expr: &Expr) {
-		assert!(
-			expr.evaluated_type.borrow().is_some(),
-			"Expr was not type checked: {:?}",
-			expr
-		);
+		if let Some(t) = self.types.get_expr_type(expr) {
+			assert!(
+				self.tc_found_errors || !t.is_unresolved(),
+				"Expr's type was not resolved: {:?}",
+				expr
+			);
+		} else {
+			panic!("Expr was not type checked: {:?}", expr)
+		}
 		visit::visit_expr(self, expr);
 	}
 }

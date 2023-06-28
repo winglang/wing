@@ -1,7 +1,10 @@
-use crate::ast::{
-	ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UserDefinedType,
+use crate::{
+	ast::{
+		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
+		InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
+		UserDefinedType,
+	},
+	dbg_panic,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -49,7 +52,7 @@ pub trait Visit<'ast> {
 		&mut self,
 		node: &'ast Expr,
 		class: &'ast TypeAnnotation,
-		obj_id: &'ast Option<String>,
+		obj_id: &'ast Option<Box<Expr>>,
 		obj_scope: &'ast Option<Box<Expr>>,
 		arg_list: &'ast ArgList,
 	) {
@@ -79,7 +82,9 @@ pub trait Visit<'ast> {
 	fn visit_type_annotation(&mut self, node: &'ast TypeAnnotation) {
 		visit_type_annotation(self, node)
 	}
-	fn visit_symbol(&mut self, _node: &'ast Symbol) {}
+	fn visit_symbol(&mut self, node: &'ast Symbol) {
+		visit_symbol(self, node);
+	}
 }
 
 pub fn visit_scope<'ast, V>(v: &mut V, node: &'ast Scope)
@@ -96,6 +101,7 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
+		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Bring {
 			module_name,
 			identifier,
@@ -217,6 +223,7 @@ where
 				v.visit_scope(finally_statements);
 			}
 		}
+		StmtKind::CompilerDebugEnv => {}
 	}
 }
 
@@ -268,7 +275,7 @@ pub fn visit_expr_new<'ast, V>(
 	v: &mut V,
 	_node: &'ast Expr,
 	class: &'ast TypeAnnotation,
-	_obj_id: &'ast Option<String>,
+	obj_id: &'ast Option<Box<Expr>>,
 	obj_scope: &'ast Option<Box<Expr>>,
 	arg_list: &'ast ArgList,
 ) where
@@ -276,6 +283,9 @@ pub fn visit_expr_new<'ast, V>(
 {
 	v.visit_type_annotation(class);
 	v.visit_args(arg_list);
+	if let Some(id) = obj_id {
+		v.visit_expr(&id);
+	}
 	if let Some(scope) = obj_scope {
 		v.visit_expr(&scope);
 	}
@@ -356,6 +366,10 @@ where
 		ExprKind::FunctionClosure(def) => {
 			v.visit_function_definition(def);
 		}
+		ExprKind::CompilerDebugPanic => {
+			// Handle the debug panic expression (during visiting)
+			dbg_panic!();
+		}
 	}
 }
 
@@ -374,7 +388,6 @@ where
 		Literal::Nil => {}
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
-		Literal::Duration(_) => {}
 		Literal::String(_) => {}
 	}
 }
@@ -419,9 +432,8 @@ where
 	for param in &node.parameters {
 		v.visit_function_parameter(param);
 	}
-	if let Some(return_type) = &node.return_type {
-		v.visit_type_annotation(return_type);
-	}
+
+	v.visit_type_annotation(&node.return_type);
 }
 
 pub fn visit_function_parameter<'ast, V>(v: &mut V, node: &'ast FunctionParameter)
@@ -465,8 +477,9 @@ where
 		TypeAnnotationKind::Set(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::MutSet(t) => v.visit_type_annotation(t),
 		TypeAnnotationKind::Function(f) => {
-			for param in &f.param_types {
-				v.visit_type_annotation(&param);
+			for param in &f.parameters {
+				v.visit_symbol(&param.name);
+				v.visit_type_annotation(&param.type_annotation);
 			}
 			v.visit_type_annotation(&f.return_type);
 		}
@@ -487,4 +500,10 @@ where
 	for field in &node.fields {
 		v.visit_symbol(field);
 	}
+}
+
+pub fn visit_symbol<'ast, V>(_v: &mut V, _node: &'ast Symbol)
+where
+	V: Visit<'ast> + ?Sized,
+{
 }

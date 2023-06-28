@@ -33,6 +33,13 @@ export interface MetaComment {
    * @default - Will not be skipped
    */
   skip?: boolean;
+
+  /**
+   * Environment variables to set for this test
+   * 
+   * @default - No environment variables will be set
+   */
+  env?: Record<string, string>;
 }
 
 export function parseMetaCommentFromPath(testPath: string) {

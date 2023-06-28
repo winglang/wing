@@ -4,6 +4,7 @@ node_modules/
 *.tfstate
 *.tfstate.*
 .history
+*.vsix
 
 # WASI SDK (insalled by "npm install")
 .cargo/wasi-sdk-*/
@@ -34,10 +35,6 @@ libs/tree-sitter-wing/src/tree_sitter/
 
 # wing
 apps/wing/dist
-apps/wing/*.wsim
-apps/wing/.wing
-apps/wing/*.wasm
-apps/wing/cdktf.out
 
 # wing-playground
 apps/wing-playground/*.wasm

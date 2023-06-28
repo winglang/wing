@@ -35,7 +35,7 @@ module.exports = function({ getBar }) {
     }
     async handle()  {
       const bar = (await getBar());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bar.foo.get()) === 42)'`)})(((await bar.foo.get()) === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bar.foo.get() == 42")})(((await bar.foo.get()) === 42))};
     }
   }
   return $Closure2;
@@ -48,10 +48,8 @@ module.exports = function({ getBar }) {
 module.exports = function({  }) {
   class Foo {
      constructor()  {
-      const __parent_this = this;
     }
     async get()  {
-      const __parent_this = this;
       return 42;
     }
   }
@@ -195,7 +193,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("get");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Foo.js";

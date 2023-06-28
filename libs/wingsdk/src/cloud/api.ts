@@ -315,7 +315,7 @@ export interface ApiRequest {
   /** The path variables. */
   readonly vars: Record<string, string>;
   /** The request's body. */
-  readonly body?: object; // JSII sees this as "json" type
+  readonly body?: string;
   /** The request's headers. */
   readonly headers?: Record<string, string>;
 }
@@ -327,7 +327,7 @@ export interface ApiResponse {
   /** The response's status code. */
   readonly status: number;
   /** The response's body. */
-  readonly body?: object; // JSII sees this as "json" type
+  readonly body?: string;
   /** The response's headers. */
   readonly headers?: Record<string, string>;
 }

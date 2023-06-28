@@ -49,8 +49,9 @@ async function main() {
   program
     .command("run")
     .alias("it")
-    .description("Runs a Wing simulator file in the Wing Console")
-    .argument("[simfile]", ".wsim simulator file")
+    .description("Runs a Wing program in the Wing Console")
+    .argument("[entrypoint]", "program .w entrypoint")
+    .option("-p, --port <port>", "specify port")
     .action(run);
 
   program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
@@ -75,7 +76,7 @@ async function main() {
     .argument("<entrypoint...>", "all entrypoints to test")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "sim"])
+        .choices(["tf-aws", "sim", "awscdk"])
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")

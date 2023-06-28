@@ -27,18 +27,12 @@ module.exports = function({ q, js }) {
         return false;
       }
       ;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await q.approxSize()) === 3);
-      }
-      ))'`)})((await wait(async () =>  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => { \n    return q.approxSize() == 3;\n  })")})((await wait(async () =>  {
         return ((await q.approxSize()) === 3);
       }
       )))};
       (await q.purge());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await q.approxSize()) === 0);
-      }
-      ))'`)})((await wait(async () =>  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => {\n    return q.approxSize() == 0;\n  })")})((await wait(async () =>  {
         return ((await q.approxSize()) === 0);
       }
       )))};
@@ -56,7 +50,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
@@ -215,7 +208,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("sleep");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.TestHelper.js";

@@ -1,16 +1,27 @@
+import { join } from "path";
 import { RemovalPolicy } from "aws-cdk-lib";
 import {
   BlockPublicAccess,
   BucketEncryption,
+  EventType,
   Bucket as S3Bucket,
 } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
+import { LambdaDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
+import { IInflightHost, Resource } from "../std";
+
+const EVENTS = {
+  [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
+  [cloud.BucketEventType.CREATE]: EventType.OBJECT_CREATED_PUT,
+  [cloud.BucketEventType.UPDATE]: EventType.OBJECT_CREATED_POST,
+};
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -26,11 +37,14 @@ export class Bucket extends cloud.Bucket {
 
     this.public = props.public ?? false;
 
+    const isTestEnvironment = App.of(scope).isTestEnvironment;
+
     this.bucket = new S3Bucket(this, "Default", {
       encryption: BucketEncryption.S3_MANAGED,
       blockPublicAccess: this.public ? undefined : BlockPublicAccess.BLOCK_ALL,
       publicReadAccess: this.public ? true : false,
       removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: isTestEnvironment ? true : false,
     });
   }
 
@@ -39,6 +53,131 @@ export class Bucket extends cloud.Bucket {
       destinationBucket: this.bucket,
       sources: [Source.data(key, body)],
     });
+  }
+
+  protected eventHandlerLocation(): string {
+    return join(__dirname, "bucket.onevent.inflight.js");
+  }
+
+  private onEventFunction(
+    event: string,
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnCreateProps
+  ): Function {
+    const hash = inflight.node.addr.slice(-8);
+    const functionHandler = convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-${event}-Handler-${hash}`,
+      inflight,
+      this.eventHandlerLocation(),
+      `BucketEventHandlerClient`
+    );
+
+    const fn = Function._newFunction(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-${event}-${hash}`,
+      functionHandler,
+      opts
+    );
+
+    if (!(fn instanceof Function)) {
+      throw new Error(
+        "Bucket only supports creating awscdk.Function right now"
+      );
+    }
+
+    return fn;
+  }
+
+  public onCreate(
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnCreateProps
+  ): void {
+    const fn = this.onEventFunction("OnCreate", inflight, opts);
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.CREATE,
+    });
+
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.CREATE],
+      new LambdaDestination(fn._function)
+    );
+  }
+
+  public onDelete(
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnDeleteProps
+  ): void {
+    const fn = this.onEventFunction("OnDelete", inflight, opts);
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.DELETE,
+    });
+
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.DELETE],
+      new LambdaDestination(fn._function)
+    );
+  }
+
+  public onUpdate(
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnUpdateProps
+  ): void {
+    const fn = this.onEventFunction("OnUpdate", inflight, opts);
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.UPDATE,
+    });
+
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.UPDATE],
+      new LambdaDestination(fn._function)
+    );
+  }
+
+  public onEvent(
+    inflight: cloud.IBucketEventHandler,
+    opts?: cloud.BucketOnEventProps
+  ) {
+    const fn = this.onEventFunction("OnEvent", inflight, opts);
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.CREATE,
+    });
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.CREATE],
+      new LambdaDestination(fn._function)
+    );
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.DELETE,
+    });
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.DELETE],
+      new LambdaDestination(fn._function)
+    );
+
+    Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: cloud.BucketEventType.UPDATE,
+    });
+    this.bucket.addEventNotification(
+      EVENTS[cloud.BucketEventType.UPDATE],
+      new LambdaDestination(fn._function)
+    );
   }
 
   /** @internal */
@@ -64,8 +203,15 @@ export class Bucket extends cloud.Bucket {
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "BucketClient",
-      [`process.env["${this.envName()}"]`]
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.isPublicEnvName()}"]`,
+      ]
     );
+  }
+
+  private isPublicEnvName(): string {
+    return `${this.envName()}_IS_PUBLIC`;
   }
 
   private envName(): string {

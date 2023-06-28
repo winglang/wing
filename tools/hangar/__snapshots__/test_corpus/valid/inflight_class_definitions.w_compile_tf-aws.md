@@ -14,7 +14,7 @@ module.exports = function({  }) {
     async handle()  {
       const C = require("./inflight.C.js")({});
       const c = new C();
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.foo()) === "c1")'`)})(((await c.foo()) === "c1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})(((await c.foo()) === "c1"))};
     }
   }
   return $Closure1;
@@ -54,12 +54,12 @@ module.exports = function({ a, fn, d, innerD, B }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await a.goo()) === "a2")'`)})(((await a.goo()) === "a2"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})(((await a.goo()) === "a2"))};
       const b = new B();
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.foo()) === "b1")'`)})(((await b.foo()) === "b1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})(((await b.foo()) === "b1"))};
       (await fn());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await d.callInner()) === "f1")'`)})(((await d.callInner()) === "f1"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await innerD()) === "f1")'`)})(((await innerD()) === "f1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})(((await d.callInner()) === "f1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await innerD()) === "f1"))};
     }
   }
   return $Closure3;
@@ -74,10 +74,8 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async goo()  {
-      const __parent_this = this;
       return "a2";
     }
   }
@@ -91,10 +89,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class B {
      constructor()  {
-      const __parent_this = this;
     }
     async foo()  {
-      const __parent_this = this;
       return "b1";
     }
   }
@@ -126,10 +122,8 @@ module.exports = function({  }) {
       this.inner = inner;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async callInner()  {
-      const __parent_this = this;
       return (await this.inner());
     }
   }
@@ -145,7 +139,6 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return E;
@@ -158,10 +151,8 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class F {
      constructor()  {
-      const __parent_this = this;
     }
     async foo()  {
-      const __parent_this = this;
       return "f1";
     }
   }
@@ -305,10 +296,8 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("goo");
-        const __parent_this = this;
       }
        foo()  {
-        const __parent_this = this;
         return "a1";
       }
       static _toInflightType(context) {
@@ -341,7 +330,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("foo");
-        const __parent_this = this;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.B.js";
@@ -405,14 +393,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("callInner");
-        const __parent_this = this;
         class E extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            const __parent_this = this;
           }
            foo()  {
-            const __parent_this = this;
             return "e1";
           }
           static _toInflightType(context) {
@@ -440,12 +425,11 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const pb = new E(this,"E");
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((pb.foo()) === "e1")'`)})(((pb.foo()) === "e1"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: pb.foo() == \"e1\"")})(((pb.foo()) === "e1"))};
         class F extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("foo");
-            const __parent_this = this;
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.F.js";
@@ -473,6 +457,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
+        const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -510,7 +495,6 @@ class $Root extends $stdlib.std.Resource {
         this.inner = new $Closure2(this,"$Closure2");
       }
        getInner()  {
-        const __parent_this = this;
         return this.inner;
       }
       static _toInflightType(context) {
@@ -594,7 +578,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const a = new A(this,"A");
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((a.foo()) === "a1")'`)})(((a.foo()) === "a1"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: a.foo() == \"a1\"")})(((a.foo()) === "a1"))};
     const fn = new $Closure1(this,"$Closure1");
     const d = new D(this,"D");
     const innerD = (d.getInner());

@@ -1,3 +1,4 @@
+use colored::Colorize;
 use derivative::Derivative;
 use duplicate::duplicate_item;
 
@@ -6,8 +7,11 @@ use crate::{
 	diagnostic::TypeError,
 	type_check::{SymbolKind, Type, TypeRef},
 };
-use std::collections::{btree_map, BTreeMap, HashSet};
 use std::fmt::Debug;
+use std::{
+	collections::{btree_map, BTreeMap, HashSet},
+	fmt::Display,
+};
 
 use super::{UnsafeRef, VariableInfo};
 
@@ -23,8 +27,40 @@ pub struct SymbolEnv {
 	pub return_type: TypeRef,
 
 	pub is_init: bool,
+	// Whether this scope is inside of a function
+	pub is_function: bool,
 	pub phase: Phase,
 	statement_idx: usize,
+}
+
+impl Display for SymbolEnv {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut level = 0;
+		let mut env = self;
+		loop {
+			write!(f, "level {}: {{ ", level)?;
+			let mut items = vec![];
+			for (name, (_, kind)) in &env.symbol_map {
+				let repr = match kind {
+					SymbolKind::Type(t) => format!("{} [type]", t).red(),
+					SymbolKind::Variable(v) => format!("{}", v.type_).blue(),
+					SymbolKind::Namespace(ns) => format!("{} [namespace]", ns.name).green(),
+				};
+				items.push(format!("{} => {}", name, repr));
+			}
+			write!(f, "{} }}", items.join(", "))?;
+
+			if let Some(parent) = &env.parent {
+				env = parent;
+				level += 1;
+				writeln!(f)?; // new line
+			} else {
+				break;
+			}
+		}
+
+		Ok(())
+	}
 }
 
 impl Debug for SymbolEnv {
@@ -121,6 +157,7 @@ impl SymbolEnv {
 		parent: Option<SymbolEnvRef>,
 		return_type: TypeRef,
 		is_init: bool,
+		is_function: bool,
 		phase: Phase,
 		statement_idx: usize,
 	) -> Self {
@@ -132,6 +169,7 @@ impl SymbolEnv {
 			parent,
 			return_type,
 			is_init,
+			is_function,
 			phase,
 			statement_idx,
 		}
@@ -238,6 +276,8 @@ impl SymbolEnv {
 			);
 		}
 
+		// we couldn't find the symbol in the current environment, let's look up in the parent
+		// environment.
 		if let Some(ref_annotation([parent_env])) = self.parent {
 			return parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx));
 		}
@@ -252,7 +292,7 @@ impl SymbolEnv {
 		[lookup_nested_mut] [LookupResultMut] [lookup_ext_mut] [as_namespace_mut] [&mut type] [SymbolLookupInfoMut];
 	)]
 	/// Lookup a symbol in the environment, returning a `LookupResult`. The symbol name may be a
-	/// nested symbol (e.g. `foo.bar`) if `nested_ver` is larger than 1.
+	/// nested symbol (e.g. `foo.bar`) if `nested_vec` is larger than 1.
 	pub fn lookup_nested(self: reference([Self]), nested_vec: &[&Symbol], statement_idx: Option<usize>) -> LookupResult {
 		let mut it = nested_vec.iter();
 
@@ -313,6 +353,14 @@ impl SymbolEnv {
 
 	pub fn iter(&self, with_ancestry: bool) -> SymbolEnvIter {
 		SymbolEnvIter::new(self, with_ancestry)
+	}
+
+	pub fn is_in_function(&self) -> bool {
+		let mut curr_env = self.get_ref();
+		while !curr_env.is_function && !curr_env.is_root() {
+			curr_env = curr_env.parent.unwrap();
+		}
+		curr_env.is_function
 	}
 }
 
@@ -383,31 +431,34 @@ mod tests {
 	#[test]
 	fn test_statement_idx_lookups() {
 		let types = setup_types();
-		let mut parent_env = SymbolEnv::new(None, types.void(), false, Phase::Independent, 0);
+		let mut parent_env = SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0);
 		let child_scope_idx = 10;
 		let mut child_env = SymbolEnv::new(
 			Some(parent_env.get_ref()),
 			types.void(),
+			false,
 			false,
 			crate::ast::Phase::Independent,
 			child_scope_idx,
 		);
 
 		// Define a globally visible variable in the parent env
+		let sym = Symbol::global("parent_global_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_global_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
 		));
 
 		// Define a positionally visible variable in the parent env before the child scope
+		let sym = Symbol::global("parent_low_pos_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_low_pos_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Index(child_scope_idx - 1),
 			),
 			Ok(())
@@ -415,20 +466,22 @@ mod tests {
 
 		// Define a positionally visible variable in the parent env after the child scope
 		let parent_high_pos_var_idx = child_scope_idx + 1;
+		let sym = Symbol::global("parent_high_pos_var");
 		assert!(matches!(
 			parent_env.define(
-				&Symbol::global("parent_high_pos_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Index(parent_high_pos_var_idx),
 			),
 			Ok(())
 		));
 
 		// Define a globally visible variable in the child env
+		let sym = Symbol::global("child_global_var");
 		assert!(matches!(
 			child_env.define(
-				&Symbol::global("child_global_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
@@ -498,10 +551,11 @@ mod tests {
 	#[test]
 	fn test_nested_lookups() {
 		let mut types = setup_types();
-		let mut parent_env = SymbolEnv::new(None, types.void(), false, Phase::Independent, 0);
+		let mut parent_env = SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0);
 		let child_env = SymbolEnv::new(
 			Some(parent_env.get_ref()),
 			types.void(),
+			false,
 			false,
 			crate::ast::Phase::Independent,
 			0,
@@ -510,11 +564,20 @@ mod tests {
 		// Create namespaces
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
-			env: SymbolEnv::new(None, types.void(), false, Phase::Independent, 0),
+			env: SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0),
+			loaded: false,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
-			env: SymbolEnv::new(Some(ns1.env.get_ref()), types.void(), false, Phase::Independent, 0),
+			env: SymbolEnv::new(
+				Some(ns1.env.get_ref()),
+				types.void(),
+				false,
+				false,
+				Phase::Independent,
+				0,
+			),
+			loaded: false,
 		});
 
 		// Define ns2 in n1's env
@@ -527,20 +590,22 @@ mod tests {
 		));
 
 		// Define a variable in n2's env
+		let sym = Symbol::global("ns2_var");
 		assert!(matches!(
 			ns2.env.get_ref().define(
-				&Symbol::global("ns2_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())
 		));
 
 		// Define a variable in n1's env
+		let sym = Symbol::global("ns1_var");
 		assert!(matches!(
 			ns1.env.get_ref().define(
-				&Symbol::global("ns1_var"),
-				SymbolKind::make_variable(types.number(), false, true, Phase::Independent),
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
 				StatementIdx::Top,
 			),
 			Ok(())

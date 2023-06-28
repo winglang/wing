@@ -1,52 +1,67 @@
 # [api_path_vars.w](../../../../../examples/tests/valid/api_path_vars.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
+
 ```js
-module.exports = function({  }) {
+module.exports = function ({ std_Json }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
+    async $inflight_init() {}
+    async handle(req) {
       return {
-      "body": Object.freeze({"user":(req.vars)["name"]}),
-      "status": 200,}
-      ;
+        body: ((args) => {
+          return JSON.stringify(args[0], null, args[1]);
+        })([Object.freeze({ user: req.vars["name"] })]),
+        headers: Object.freeze({ "content-type": "application/json" }),
+        status: 200,
+      };
     }
   }
   return $Closure1;
-}
-
+};
 ```
 
 ## inflight.$Closure2.js
+
 ```js
-module.exports = function({ api, util_Http, std_Json }) {
+module.exports = function ({ api, http_Util, std_Json }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async $inflight_init() {}
+    async handle() {
       const username = "tsuf";
-      const res = (await util_Http.get(`${api.url}/users/${username}`));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.status === 200)'`)})((res.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((JSON.parse(res.body)))["user"] === username)'`)})((((JSON.parse(res.body)))["user"] === username))};
+      const res = await http_Util.get(
+        String.raw({ raw: ["", "/users/", ""] }, api.url, username)
+      );
+      {
+        ((cond) => {
+          if (!cond) throw new Error("assertion failed: res.status == 200");
+        })(res.status === 200);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: Json.parse(res.body ?? "").get("user") == username'
+            );
+        })(JSON.parse(res.body ?? "")["user"] === username);
+      }
     }
   }
   return $Closure2;
-}
-
+};
 ```
 
 ## main.tf.json
+
 ```json
 {
   "//": {
@@ -83,9 +98,7 @@ module.exports = function({ api, util_Http, std_Json }) {
     }
   },
   "provider": {
-    "aws": [
-      {}
-    ]
+    "aws": [{}]
   },
   "resource": {
     "aws_api_gateway_deployment": {
@@ -232,7 +245,8 @@ module.exports = function({ api, util_Http, std_Json }) {
           "variables": {
             "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
-            "WING_TARGET": "tf-aws"
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
           }
         },
         "function_name": "Handler-c8f4f2a1",
@@ -304,27 +318,30 @@ module.exports = function({ api, util_Http, std_Json }) {
 ```
 
 ## preflight.js
+
 ```js
-const $stdlib = require('@winglang/sdk');
+const $stdlib = require("@winglang/sdk");
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
-const util = require('@winglang/sdk').util;
+const cloud = require("@winglang/sdk").cloud;
+const http = require("@winglang/sdk").http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }
@@ -348,7 +365,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this._addInflightOps("handle");
         this.display.hidden = true;
@@ -356,12 +373,12 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
         const api_client = context._lift(api);
-        const util_HttpClient = util.Http._toInflightType(context);
+        const http_UtilClient = http.Util._toInflightType(context);
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
             api: ${api_client},
-            util_Http: ${util_HttpClient.text},
+            http_Util: ${http_UtilClient.text},
             std_Json: ${std_JsonClient.text},
           })
         `);
@@ -387,15 +404,30 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const handler = new $Closure1(this,"$Closure1");
-    (api.get("/users/{name}",handler));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure2(this,"$Closure2"));
+    const api = this.node.root.newAbstract(
+      "@winglang/sdk.cloud.Api",
+      this,
+      "cloud.Api"
+    );
+    const handler = new $Closure1(this, "$Closure1");
+    api.get("/users/{name}", handler);
+    this.node.root.new(
+      "@winglang/sdk.std.Test",
+      std.Test,
+      this,
+      "test:test",
+      new $Closure2(this, "$Closure2")
+    );
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "api_path_vars", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({
+      outdir: $outdir,
+      name: "api_path_vars",
+      plugins: $plugins,
+      isTestEnvironment: $wing_is_test,
+    });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -409,6 +441,4 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
 ```
-

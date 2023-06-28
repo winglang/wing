@@ -32,7 +32,7 @@ module.exports = function({ Another }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) === 0)'`)})(((await Another.myStaticMethod()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
     }
   }
   return $Closure2;
@@ -49,11 +49,9 @@ module.exports = function({ globalCounter }) {
       this.myField = myField;
     }
     async $inflight_init()  {
-      const __parent_this = this;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalCounter.peek()) === 0)'`)})(((await globalCounter.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await globalCounter.peek()) === 0))};
     }
     async myMethod()  {
-      const __parent_this = this;
       (await globalCounter.inc());
       return (await globalCounter.peek());
     }
@@ -74,7 +72,6 @@ module.exports = function({  }) {
       this.myResource = myResource;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
   }
   return First;
@@ -91,22 +88,20 @@ module.exports = function({ globalBucket, globalStr, globalBool, globalNum, glob
       this.localTopic = localTopic;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async myPut()  {
-      const __parent_this = this;
       (await this.localTopic.publish("hello"));
       (await globalBucket.put("key","value"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalStr === "hello")'`)})((globalStr === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalBool === true)'`)})((globalBool === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalNum === 42)'`)})((globalNum === 42))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalArrayOfStr.at(0)) === "hello")'`)})(((await globalArrayOfStr.at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((globalMapOfNum)["a"] === (-5))'`)})(((globalMapOfNum)["a"] === (-5)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await globalSetOfStr.has("a"))'`)})((await globalSetOfStr.has("a")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalAnother.myField === "hello!")'`)})((globalAnother.myField === "hello!"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((globalStr === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((globalBool === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((globalNum === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})(((await globalArrayOfStr.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})(((globalMapOfNum)["a"] === (-5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})((await globalSetOfStr.has("a")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((globalAnother.myField === "hello!"))};
       (await globalAnother.first.myResource.put("key","value"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalAnother.myMethod()) > 0)'`)})(((await globalAnother.myMethod()) > 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) > 0)'`)})(((await Another.myStaticMethod()) > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await globalAnother.myMethod()) > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await Another.myStaticMethod()) > 0))};
     }
   }
   return MyResource;
@@ -124,10 +119,8 @@ module.exports = function({ globalCounter, $parentThis }) {
       return $obj;
     }
     async $inflight_init()  {
-      const __parent_this = this;
     }
     async handle()  {
-      const __parent_this = this;
       (await globalCounter.inc());
       (await $parentThis.localCounter.inc());
     }
@@ -571,7 +564,6 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        const __parent_this = this;
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
@@ -605,7 +597,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("myMethod", "myStaticMethod");
-        const __parent_this = this;
         this.myField = "hello!";
         this.first = new First(this,"First");
       }
@@ -655,7 +646,6 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("myPut");
-        const __parent_this = this;
         this.localTopic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
         this.localCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
         const $parentThis = this;
@@ -663,7 +653,6 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
-            const __parent_this = this;
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.R.js";
