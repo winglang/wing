@@ -9,7 +9,7 @@ use crate::ast::{Expr, ExprKind, Phase, Scope, Symbol, TypeAnnotation, TypeAnnot
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
-use crate::lsp::sync::FILES;
+use crate::lsp::sync::{FILES, JSII_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx, SymbolEnv};
 use crate::type_check::{
 	import_udt_from_jsii, resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef,
@@ -18,8 +18,6 @@ use crate::type_check::{
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use crate::{WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE};
-
-use super::sync::JSII_TYPES;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
