@@ -45,7 +45,7 @@ export class Util {
       return Math.min(...arrAsArray);
     }
 
-    throw new Error('The argument is not a Set');
+    throw new Error("The argument is not a Set");
   }
 
   /**
@@ -60,8 +60,8 @@ export class Util {
       return Math.max(...arrAsArray);
     }
 
-    throw new Error('The argument is not a Set');
+    throw new Error("The argument is not a Set");
   }
 
-  private constructor() { }
+  private constructor() {}
 }
