@@ -4,8 +4,19 @@ id: using-javascript-code
 keywords: [Wing example]
 ---
 
-### Use extern 
-#### Preflight static function
+### `url_utils.js`
+```js
+exports.isValidUrl = function(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+```
+
+### Preflight static function
 ```ts 
 class JsExample {  
   // preflight static 
@@ -15,7 +26,7 @@ class JsExample {
 assert(JsExample.isValidUrl("http://www.google.com"));
 assert(!JsExample.isValidUrl("X?Y"));
 ```
-#### Preflight method
+### Preflight method
 ```ts 
 class JsExample {  
   // preflight method
@@ -27,7 +38,7 @@ assert(j.isValidUrl("http://www.google.com"));
 assert(!j.isValidUrl("X?Y"));
 ```
 
-#### Inflight static
+### Inflight static
 ```ts
 class JsExample {  
   // inflight static method
@@ -39,7 +50,7 @@ test "main" {
   assert(!JsExample.isValidUrl("X?Y"));
 }
 ```
-#### Inflight method
+### Inflight method
 ```ts
 class JsExample {  
   // inflight method
@@ -51,15 +62,4 @@ test "main" {
   assert(j.isValidUrl("http://www.google.com"));
   assert(!j.isValidUrl("X?Y"));
 }
-```
-#### `url_utils.js`
-```js
-exports.isValidUrl = function(url) {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-};
 ```
