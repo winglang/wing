@@ -36,13 +36,20 @@ export class Util {
   }
 
   /**
+   * Rounds the given number to the nearest integer.
+   * @param value - The number to be rounded.
+   */
+  public static round(value: number): number {
+    return Math.round(value);
+  }
+
+  /**
    * Returns the minimum value from an set of numbers.
    * @param arr The set of numbers.
    */
   public static min(arr: any): number {
     if (arr instanceof Set) {
-      const arrAsArray = Array.from(arr);
-      return Math.min(...arrAsArray);
+      return Math.min(...arr);
     }
 
     throw new Error('The argument is not a Set');
@@ -54,10 +61,7 @@ export class Util {
    */
   public static max(arr: any): number {
     if (arr instanceof Set) {
-      // Convert the Set to an array
-      const arrAsArray = Array.from(arr);
-      // Find the maximum value in the array
-      return Math.max(...arrAsArray);
+      return Math.max(...arr);
     }
 
     throw new Error('The argument is not a Set');
