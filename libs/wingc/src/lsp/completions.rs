@@ -10,7 +10,7 @@ use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
-use crate::type_check::symbol_env::{LookupResult, StatementIdx};
+use crate::type_check::symbol_env::{LookupResult, StatementIdx, SymbolEnv};
 use crate::type_check::{
 	import_udt_from_jsii, resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef,
 	CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
@@ -97,50 +97,32 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 
 			if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
-				if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
-					let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap());
-
-					if let Ok(type_lookup) = type_lookup {
-						return get_completions_from_type(&type_lookup, types, Some(found_env.phase), false);
+				if let Some(value) = get_completions_from_found_type_annotation(
+					nearest_type_annotation,
+					found_env,
+					scope_visitor.found_stmt_index,
+					types,
+					root_env,
+				) {
+					if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
+						return value
+							.iter()
+							.filter(|c| {
+								matches!(
+									c.kind,
+									Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
+								)
+							})
+							.cloned()
+							.map(|mut c| {
+								if c.kind == Some(CompletionItemKind::CLASS) {
+									convert_to_call_completion(&mut c);
+								}
+								c
+							})
+							.collect();
 					} else {
-						// this is probably a namespace, let's look it up
-						if let Some(namespace) = root_env
-							.lookup_nested_str(&udt.full_path_str(), scope_visitor.found_stmt_index)
-							.ok()
-							.and_then(|n| n.0.as_namespace_ref())
-						{
-							let completions = get_completions_from_namespace(&namespace, Some(found_env.phase));
-							//for namespaces - return only classes and namespaces
-							if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
-								return completions
-									.iter()
-									.filter(|c| {
-										matches!(
-											c.kind,
-											Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
-										)
-									})
-									.map(|c| {
-										let mut c = c.clone();
-										if c.kind == Some(CompletionItemKind::CLASS) {
-											c.insert_text = Some(format!("{}($0)", c.label));
-											c.insert_text_format = Some(InsertTextFormat::SNIPPET);
-											c.command = Some(Command {
-												title: "triggerParameterHints".to_string(),
-												command: "editor.action.triggerParameterHints".to_string(),
-												arguments: None,
-											});
-										}
-										c
-									})
-									.collect();
-							} else {
-								return completions;
-							}
-						}
-
-						// This is not a known type or namespace
-						return vec![];
+						return value;
 					}
 				}
 			}
@@ -290,6 +272,50 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		.collect();
 
 	CompletionResponse::Array(final_completions)
+}
+
+fn get_completions_from_found_type_annotation(
+	nearest_type_annotation: &TypeAnnotation,
+	found_env: &SymbolEnv,
+	found_stmt_index: Option<usize>,
+	types: &Types,
+	root_env: &SymbolEnv,
+) -> Option<Vec<CompletionItem>> {
+	if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
+		let type_lookup = resolve_user_defined_type(udt, found_env, found_stmt_index.unwrap_or(0));
+
+		if let Ok(type_lookup) = type_lookup {
+			return Some(get_completions_from_type(
+				&type_lookup,
+				types,
+				Some(found_env.phase),
+				false,
+			));
+		} else {
+			// this is probably a namespace, let's look it up
+			if let Some(namespace) = root_env
+				.lookup_nested_str(&udt.full_path_str(), found_stmt_index)
+				.ok()
+				.and_then(|n| n.0.as_namespace_ref())
+			{
+				return Some(get_completions_from_namespace(&namespace, Some(found_env.phase)));
+			}
+
+			// This is not a known type or namespace
+			return Some(vec![]);
+		}
+	}
+	None
+}
+
+fn convert_to_call_completion(completion_item: &mut CompletionItem) {
+	completion_item.insert_text = Some(format!("{}($0)", completion_item.label));
+	completion_item.insert_text_format = Some(InsertTextFormat::SNIPPET);
+	completion_item.command = Some(Command {
+		title: "triggerParameterHints".to_string(),
+		command: "editor.action.triggerParameterHints".to_string(),
+		arguments: None,
+	});
 }
 
 /// LSP sorts completions items alphabetically
@@ -481,30 +507,21 @@ fn get_completions_from_class(
 			};
 			let is_method = kind == Some(CompletionItemKind::METHOD);
 
-			Some(CompletionItem {
-				insert_text: if is_method {
-					Some(format!("{}($0)", symbol_data.0))
-				} else {
-					Some(symbol_data.0.to_string())
-				},
+			let mut completion_item = CompletionItem {
 				label: symbol_data.0,
 				documentation: Some(Documentation::MarkupContent(MarkupContent {
 					kind: MarkupKind::Markdown,
 					value: symbol_data.1.render_docs(),
 				})),
 				kind,
-				insert_text_format: Some(InsertTextFormat::SNIPPET),
-				command: if is_method {
-					Some(Command {
-						title: "triggerParameterHints".to_string(),
-						command: "editor.action.triggerParameterHints".to_string(),
-						arguments: None,
-					})
-				} else {
-					None
-				},
 				..Default::default()
-			})
+			};
+
+			if is_method {
+				convert_to_call_completion(&mut completion_item);
+			}
+
+			Some(completion_item)
 		})
 		.collect()
 }
@@ -558,27 +575,18 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 			};
 			let is_method = kind == Some(CompletionItemKind::FUNCTION);
 
-			CompletionItem {
+			let mut completion_item = CompletionItem {
 				label: name.to_string(),
 				documentation,
-				insert_text: if is_method {
-					Some(format!("{name}($0)"))
-				} else {
-					Some(name.to_string())
-				},
-				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
-				command: if is_method {
-					Some(Command {
-						title: "triggerParameterHints".to_string(),
-						command: "editor.action.triggerParameterHints".to_string(),
-						arguments: None,
-					})
-				} else {
-					None
-				},
 				..Default::default()
+			};
+
+			if is_method {
+				convert_to_call_completion(&mut completion_item);
 			}
+
+			completion_item
 		}
 		SymbolKind::Namespace(..) => CompletionItem {
 			label: name.to_string(),
