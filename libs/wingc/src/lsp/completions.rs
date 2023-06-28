@@ -54,13 +54,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		);
 		let node_to_complete_kind = node_to_complete.kind();
 
-		let mut previous_node = None;
-		let mut previous_point = node_to_complete.start_position();
-		if previous_point.column > 0 {
-			previous_point.column -= 1;
-			previous_node = nearest_interesting_node(previous_point, &root_ts_node).into();
-		}
-
 		let mut scope_visitor = ScopeVisitor::new(
 			WingSpan {
 				start: node_to_complete.start_position().into(),
@@ -83,7 +76,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
 				if !nearest_expr_type.is_unresolved() {
 					// We need to double-check for an invalid nested reference (e.g. If there are multiple dots in a row)
-					if let Some(previous_node) = previous_node {
+					let mut previous_point = node_to_complete.start_position();
+					if previous_point.column > 0 {
+						previous_point.column -= 1;
+						let previous_node = nearest_interesting_node(previous_point, &root_ts_node);
+
 						if previous_node.kind() == "." || previous_node.kind() == "?." {
 							return vec![];
 						}
@@ -206,14 +203,15 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		if let Some(parent) = node_to_complete.parent() {
 			match parent.kind() {
 				"ERROR" => {
-					// TODO Due to struct expansion, this is not totally accurate, but it's a pretty decent guess
 					if in_type || node_to_complete_kind == ":" {
 						in_type = true;
 					} else {
 						return vec![];
 					}
 				}
+				// we are inside a class definition, so for now let's show nothing at all
 				"resource_definition" | "class_definition" => return vec![],
+
 				"custom_type" => in_type = true,
 				_ => {}
 			}
