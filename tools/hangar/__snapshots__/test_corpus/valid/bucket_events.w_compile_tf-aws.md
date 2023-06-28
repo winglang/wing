@@ -7,7 +7,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(key)  {
-      {console.log(`deleted ${key}`)};
+      {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -27,7 +27,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(key)  {
-      {console.log(`updated ${key}`)};
+      {console.log(String.raw({ raw: ["updated ", ""] }, key))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -47,7 +47,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(key)  {
-      {console.log(`created ${key}`)};
+      {console.log(String.raw({ raw: ["created ", ""] }, key))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -73,6 +73,11 @@ module.exports = function({ $other }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle(key, event)  {
+      (await other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
     }
   }
   return $Closure4;

@@ -14,6 +14,11 @@ module.exports = function({ $fn }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn.invoke(\"test\") == \"hello world!\"")})(((await fn.invoke("test")) === "hello world!"))};
+    }
   }
   return $Closure1;
 }

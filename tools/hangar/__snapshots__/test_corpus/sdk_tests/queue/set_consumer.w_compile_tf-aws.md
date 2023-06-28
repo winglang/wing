@@ -45,6 +45,22 @@ module.exports = function({ $js, $predicate, $q }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await q.push("hello"));
+      (await q.push("world"));
+      let i = 0;
+      while ((i < 600)) {
+        i = (i + 1);
+        if ((await predicate.test())) {
+          {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await predicate.test()))};
+          return;
+        }
+        (await js.sleep(100));
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await predicate.test()))};
+    }
   }
   return $Closure2;
 }

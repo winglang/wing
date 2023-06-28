@@ -20,6 +20,17 @@ module.exports = function({ $b }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await b.put("test1.txt","Foo"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"test1.txt\")")})((await b.exists("test1.txt")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"test2.txt\")")})((!(await b.exists("test2.txt"))))};
+      (await b.put("test2.txt","Bar"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"test2.txt\")")})((await b.exists("test2.txt")))};
+      (await b.delete("test1.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"test1.txt\")")})((!(await b.exists("test1.txt"))))};
+    }
   }
   return $Closure1;
 }

@@ -22,6 +22,19 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})(((await arr.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})(((await arr.at(1)) === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((arr.length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})((await mySet.has("my")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})((mySet.size === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})(("world" in (myMap)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((Object.keys(myMap).length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})(("bang" in ((await arrOfMap.at(0)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})(((j)["b"] === "world"))};
+    }
   }
   return $Closure1;
 }

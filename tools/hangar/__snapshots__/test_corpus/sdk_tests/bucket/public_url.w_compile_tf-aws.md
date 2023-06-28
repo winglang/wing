@@ -8,9 +8,9 @@ module.exports = function({ $privateBucket, $publicBucket }) {
     }
     async handle()  {
       let error = "";
-      (await $publicBucket.put("file1.txt","Foo"));
-      (await $privateBucket.put("file2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $publicBucket.publicUrl("file1.txt")) !== "")'`)})(((await $publicBucket.publicUrl("file1.txt")) !== ""))};
+      (await publicBucket.put("file1.txt","Foo"));
+      (await privateBucket.put("file2.txt","Bar"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: publicBucket.publicUrl(\"file1.txt\") != \"\"")})(((await publicBucket.publicUrl("file1.txt")) !== ""))};
       try {
         (await $privateBucket.publicUrl("file2.txt"));
       }
@@ -18,7 +18,7 @@ module.exports = function({ $privateBucket, $publicBucket }) {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Cannot provide public url for a non-public bucket")'`)})((error === "Cannot provide public url for a non-public bucket"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((error === "Cannot provide public url for a non-public bucket"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);

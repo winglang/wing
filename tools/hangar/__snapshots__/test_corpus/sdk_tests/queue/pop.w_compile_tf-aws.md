@@ -11,17 +11,12 @@ module.exports = function({ $NIL, $q }) {
       for (const msg of msgs) {
         (await $q.push(msg));
       }
-      const first = ((await $q.pop()) ?? $NIL);
-      const second = ((await $q.pop()) ?? $NIL);
-      const third = ((await $q.pop()) ?? $NIL);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === $NIL)'`)})((third === $NIL))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
+      const first = ((await q.pop()) ?? NIL);
+      const second = ((await q.pop()) ?? NIL);
+      const third = ((await q.pop()) ?? NIL);
+      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(first)")})(msgs.includes(first))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(second)")})(msgs.includes(second))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((third === NIL))};
     }
   }
   return $Closure1;

@@ -14,6 +14,11 @@ module.exports = function({ $bucket }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle(message)  {
+      (await bucket.put("wing.txt",String.raw({ raw: ["Hello, ", ""] }, message)));
+    }
   }
   return $Closure1;
 }

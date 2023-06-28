@@ -30,15 +30,15 @@ module.exports = function({ std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ $api_url, $f }) {
+module.exports = function({ api, http_Util, std_Json }) {
   class $Closure2 {
     async $inflight_init()  {
     }
     async handle()  {
       const username = "tsuf";
-      const res = (await $f.get(`${$api_url}/users/${username}`));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((res)["status"] === 200)'`)})(((res)["status"] === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((res)["body"])["user"] === username)'`)})((((res)["body"])["user"] === username))};
+      const res = (await http_Util.get(String.raw({ raw: ["", "/users/", ""] }, api.url, username)));
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((res.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((JSON.parse((res.body ?? ""))))["user"] === username))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -47,23 +47,6 @@ module.exports = function({ $api_url, $f }) {
     }
   }
   return $Closure2;
-}
-
-```
-
-## inflight.Fetch.js
-```js
-module.exports = function({  }) {
-  class Fetch {
-    async $inflight_init()  {
-    }
-    async get(url)  {
-      return (require("<ABSOLUTE_PATH>/api_path_vars.js")["get"])(url)
-    }
-    constructor({  }) {
-    }
-  }
-  return Fetch;
 }
 
 ```
@@ -333,31 +316,10 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const http = require('@winglang/sdk').http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Fetch extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this._addInflightOps("get");
-      }
-      static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Fetch.js")({ 
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const client = new (${Fetch._toInflightType(this).text})({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-    }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -390,12 +352,15 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $api_url = context._lift(api.url, []);
-        const $f = context._lift(f, ["get"]);
+        const self_client_path = "././inflight.$Closure2.js";
+        const api_client = context._lift(api);
+        const http_UtilClient = http.Util._toInflightType(context);
+        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({ 
-            $api_url: ${$api_url},
-            $f: ${$f},
+          require("${self_client_path}")({
+            api: ${api_client},
+            http_Util: ${http_UtilClient.text},
+            std_Json: ${std_JsonClient.text},
           })
         `);
       }
@@ -410,9 +375,11 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          $Closure2._registerBindObject(api, host, []);
+        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
-          $Closure2._registerBindObject(f, host, ["get"]);
         }
         super._registerBind(host, ops);
       }
@@ -420,7 +387,6 @@ class $Root extends $stdlib.std.Resource {
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const handler = new $Closure1(this,"$Closure1");
     (api.get("/users/{name}",handler));
-    const f = new Fetch(this,"Fetch");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure2(this,"$Closure2"));
   }
 }

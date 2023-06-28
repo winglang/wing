@@ -102,12 +102,9 @@ for x in (z*2)..0 { ... } <=> x = 2
 1
 pass ─ for_loop.wsim (no tests)
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

@@ -7,7 +7,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(m)  {
-      return `Hello ${m}!`;
+      return String.raw({ raw: ["Hello ", "!"] }, m);
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -82,6 +82,12 @@ module.exports = function({ $f }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const result = (await f.invoke("2"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((result === "8"))};
     }
   }
   return $Closure4;

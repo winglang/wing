@@ -54,7 +54,7 @@ module.exports = function({  }) {
       const Foo = require("./inflight.Foo.js")({x});
       const foo = new Foo();
       const y = (await foo.getX());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 12)'`)})((y === 12))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((y === 12))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -90,7 +90,7 @@ module.exports = function({  }) {
       this.field = "value";
     }
     async method()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.field === "value")'`)})((this.field === "value"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((this.field === "value"))};
     }
   }
   return InflightClass;

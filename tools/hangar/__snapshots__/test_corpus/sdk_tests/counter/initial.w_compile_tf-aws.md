@@ -14,6 +14,11 @@ module.exports = function({ $counterA }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterA.peek() == 0")})(((await counterA.peek()) === 0))};
+    }
   }
   return $Closure1;
 }
@@ -34,6 +39,11 @@ module.exports = function({ $counterB }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterB.peek() == 500")})(((await counterB.peek()) === 500))};
+    }
   }
   return $Closure2;
 }
@@ -53,6 +63,11 @@ module.exports = function({ $counterC }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterC.peek() == -198")})(((await counterC.peek()) === (-198)))};
     }
   }
   return $Closure3;

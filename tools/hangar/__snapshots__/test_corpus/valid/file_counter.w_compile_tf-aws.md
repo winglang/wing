@@ -16,6 +16,13 @@ module.exports = function({ $bucket, $counter }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle(body)  {
+      const next = (await counter.inc());
+      const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
+      (await bucket.put(key,body));
+    }
   }
   return $Closure1;
 }

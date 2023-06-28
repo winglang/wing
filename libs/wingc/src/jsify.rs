@@ -1,6 +1,5 @@
 mod captures;
 pub mod codemaker;
-mod files;
 mod lifts;
 mod mangling;
 
@@ -19,19 +18,20 @@ use crate::{
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
-	diagnostic::{report_diagnostic, Diagnostic},
+	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	files::Files,
 	type_check::{
 		resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
 		CLASS_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
+	WINGSDK_STD_MODULE,
 };
 
 use self::{
 	captures::ClassCaptures,
 	codemaker::CodeMaker,
-	files::Files,
 	lifts::Lifts,
 	mangling::{mangle, mangle_captures},
 };
@@ -68,8 +68,8 @@ pub struct JSifyContext<'a> {
 
 pub struct JSifier<'a> {
 	pub types: &'a Types,
-	/// Stores all generated JS files in memory.
-	files: Files,
+	source_files: &'a Files,
+	emitted_files: Files,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
 	shim: bool,
@@ -85,10 +85,17 @@ enum BindMethod {
 }
 
 impl<'a> JSifier<'a> {
-	pub fn new(types: &'a Types, app_name: &'a str, absolute_project_root: &'a Path, shim: bool) -> Self {
+	pub fn new(
+		types: &'a Types,
+		source_files: &'a Files,
+		app_name: &'a str,
+		absolute_project_root: &'a Path,
+		shim: bool,
+	) -> Self {
 		Self {
 			types,
-			files: Files::new(),
+			source_files,
+			emitted_files: Files::new(),
 			shim,
 			app_name,
 			absolute_project_root,
@@ -188,7 +195,7 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		match self.files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
+		match self.emitted_files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
@@ -196,7 +203,7 @@ impl<'a> JSifier<'a> {
 
 	/// Write all files to the output directory
 	pub fn emit_files(&mut self, out_dir: &Path) {
-		match self.files.emit_files(out_dir) {
+		match self.emitted_files.emit_files(out_dir) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
@@ -361,17 +368,17 @@ impl<'a> JSifier<'a> {
 
 				let ctor = udt.full_path_str();
 
-				let scope = if is_preflight_class {
+				let scope = if is_preflight_class && class_type.std_construct_args {
 					if let Some(scope) = obj_scope {
 						Some(self.jsify_expression(scope, None, ctx))
 					} else {
 						Some("this".to_string()) 
 					}
 				} else {
-					 None
-					 };
+					None
+			 	};
 
-				let id = if is_preflight_class {
+				let id = if is_preflight_class && class_type.std_construct_args {
 					Some(if let Some(id_exp) = obj_id {
 						self.jsify_expression(id_exp, None, ctx)
 					} else {
@@ -395,26 +402,34 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
-        Literal::Nil => "undefined".to_string(),
+				Literal::Nil => "undefined".to_string(),
 				Literal::String(s) => s.to_string(),
-				Literal::InterpolatedString(s) => format!(
-					"`{}`",
-					s.parts
+				Literal::InterpolatedString(s) => {
+					let comma_separated_statics = s
+						.parts
 						.iter()
-						.map(|p| match p {
-							InterpolatedStringPart::Static(l) => l.to_string(),
-							InterpolatedStringPart::Expr(e) => {
-								match *self.get_expr_type(e) {
-									Type::Json | Type::MutJson => {
-										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, None, ctx))
-									}
-									_ => format!("${{{}}}", self.jsify_expression(e, None, ctx)),
-								}
-							}
+						.filter_map(|p| match p {
+							InterpolatedStringPart::Static(l) => Some(format!("\"{}\"", l.to_string())),
+							InterpolatedStringPart::Expr(_) => None,
 						})
 						.collect::<Vec<String>>()
-						.join("")
-				),
+						.join(", ");
+					let comma_separated_exprs = s
+						.parts
+						.iter()
+						.filter_map(|p| match p {
+							InterpolatedStringPart::Static(_) => None,
+							InterpolatedStringPart::Expr(e) => Some(match *self.get_expr_type(e) {
+								Type::Json | Type::MutJson => {
+									format!("((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))({})", self.jsify_expression(e, None, ctx))
+								}
+								_ => self.jsify_expression(e, None, ctx),
+							})
+						})
+						.collect::<Vec<String>>()
+						.join(", ");
+					format!("String.raw({{ raw: [{}] }}, {})", comma_separated_statics, comma_separated_exprs)
+				},
 				Literal::Number(n) => format!("{}", n),
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
@@ -444,7 +459,13 @@ impl<'a> JSifier<'a> {
 					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
 					_ => format!("({})", self.jsify_expression(callee, None, ctx)),
 				};
-				let arg_string = self.jsify_arg_list(&arg_list, None, None, ctx);
+				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
+				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
+				if args_text_string.len() > 0 {
+					// remove the parens
+					args_text_string = args_text_string[1..args_text_string.len() - 1].to_string();
+				}
+				let args_text_string = escape_javascript_string(&args_text_string);
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
@@ -457,8 +478,8 @@ impl<'a> JSifier<'a> {
 
 							_ => expr_string,
 						};
-						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS];
-						let replace_with = &[self_string, &arg_string];
+						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
+						let replace_with = &[self_string, &args_string, &args_text_string];
 						let ac = AhoCorasick::new(patterns);
 						return ac.replace_all(js_override, replace_with);
 					}
@@ -466,7 +487,7 @@ impl<'a> JSifier<'a> {
 
 				// NOTE: if the expression is a "handle" class, the object itself is callable (see
 				// `jsify_class_inflight` below), so we can just call it as-is.
-				format!("({auto_await}{expr_string}({arg_string}))")
+				format!("({auto_await}{expr_string}({args_string}))")
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, None, ctx);
@@ -1338,7 +1359,7 @@ impl<'a> JSifier<'a> {
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		match self.files.add_file(inflight_filename(class), code.to_string()) {
+		match self.emitted_files.add_file(inflight_filename(class), code.to_string()) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		};
@@ -1428,4 +1449,73 @@ impl<'a> JSifier<'a> {
 
 fn inflight_filename(class: &AstClass) -> String {
 	format!("inflight.{}.js", class.name.name)
+}
+
+fn lookup_span(span: &WingSpan, files: &Files) -> String {
+	let source = files
+		.get_file(&span.file_id)
+		.expect(&format!("failed to find source file with id {}", span.file_id));
+	let lines = source.lines().collect_vec();
+
+	let start_line = span.start.line as usize;
+	let end_line = span.end.line as usize;
+
+	let start_col = span.start.col as usize;
+	let end_col = span.end.col as usize;
+
+	let mut result = String::new();
+
+	if start_line == end_line {
+		result.push_str(&lines[start_line][start_col..end_col]);
+	} else {
+		result.push_str(&lines[start_line][start_col..]);
+		result.push('\n');
+
+		for line in lines[start_line + 1..end_line].iter() {
+			result.push_str(line);
+			result.push('\n');
+		}
+
+		result.push_str(&lines[end_line][..end_col]);
+	}
+
+	result
+}
+
+fn escape_javascript_string(s: &str) -> String {
+	let mut result = String::new();
+
+	// escape all escapable characters -- see the section "Escape sequences" in
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#literals
+	for c in s.chars() {
+		match c {
+			'\0' => result.push_str("\\0"),
+			'\'' => result.push_str("\\'"),
+			'"' => result.push_str("\\\""),
+			'\\' => result.push_str("\\\\"),
+			'\n' => result.push_str("\\n"),
+			'\r' => result.push_str("\\r"),
+			'\t' => result.push_str("\\t"),
+			_ => result.push(c),
+		}
+	}
+
+	result
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn test_escape_javascript_string() {
+		assert_eq!(escape_javascript_string("hello"), String::from("hello"));
+		assert_eq!(escape_javascript_string("hello\nworld"), String::from("hello\\nworld"));
+		assert_eq!(escape_javascript_string("hello\rworld"), String::from("hello\\rworld"));
+		assert_eq!(escape_javascript_string("hello\tworld"), String::from("hello\\tworld"));
+		assert_eq!(escape_javascript_string("hello\\world"), String::from("hello\\\\world"));
+		assert_eq!(escape_javascript_string("hello'world"), String::from("hello\\'world"));
+		assert_eq!(escape_javascript_string("hello\"world"), String::from("hello\\\"world"));
+		assert_eq!(escape_javascript_string("hello\0world"), String::from("hello\\0world"));
+	}
 }

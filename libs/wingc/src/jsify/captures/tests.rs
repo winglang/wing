@@ -1152,7 +1152,7 @@ fn capture_report(code: &str) -> String {
 	f.write_all(code.as_bytes()).unwrap();
 
 	let source_path = path.as_path();
-	let (scope, types) = partial_compile(source_path);
+	let (scope, types, files) = partial_compile(source_path);
 
 	let mut snap = vec![];
 
@@ -1178,7 +1178,7 @@ fn capture_report(code: &str) -> String {
 		}
 	}
 
-	let mut jsify = JSifier::new(&types, "default", &workdir.path(), false);
+	let mut jsify = JSifier::new(&types, &files, "default", &workdir.path(), false);
 	jsify.jsify(&scope);
 	jsify.emit_files(workdir.path());
 

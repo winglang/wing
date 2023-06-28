@@ -20,12 +20,9 @@ ReferenceError: getBar is not defined
     at async testOne (/Users/eladb/code/wing2/apps/wing/dist/commands/test.js:114:20)
     at async test (/Users/eladb/code/wing2/apps/wing/dist/commands/test.js:55:29)
  
-
-
-
-
-Tests 1 failed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

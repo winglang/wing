@@ -4,6 +4,10 @@
 ```js
 module.exports = function({  }) {
   class R {
+    constructor({ f, f1 }) {
+      this.f = f;
+      this.f1 = f1;
+    }
     async $inflight_init()  {
     }
     constructor({  }) {
@@ -74,31 +78,43 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
+        const f_client = this._lift(this.f);
+        const f1_client = this._lift(this.f1);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const client = new (${R._toInflightType(this).text})({
+            const RClient = ${R._toInflightType(this).text};
+            const client = new RClient({
+              f: ${f_client},
+              f1: ${f1_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          R._registerBindObject(this.f, host, []);
+          R._registerBindObject(this.f1, host, []);
+        }
+        super._registerBind(host, ops);
+      }
     }
     let x = 5;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 5)'`)})((x === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})((x === 5))};
     x = (x + 1);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 6)'`)})((x === 6))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == 6")})((x === 6))};
     const r = new R(this,"R");
     (r.inc());
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(r.f === 2)'`)})((r.f === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: r.f == 2")})((r.f === 2))};
     const f =  (arg) =>  {
       arg = 0;
       return arg;
     }
     ;
     const y = 1;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((f(y)) === 0)'`)})(((f(y)) === 0))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 1)'`)})((y === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f(y) == 0")})(((f(y)) === 0))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y == 1")})((y === 1))};
   }
 }
 class $App extends $AppBase {

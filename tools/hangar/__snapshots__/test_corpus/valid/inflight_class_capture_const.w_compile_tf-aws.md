@@ -8,12 +8,7 @@ module.exports = function({ $myConst, Foo }) {
     }
     async handle()  {
       const x = new Foo();
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await x.getValue()) === $myConst)'`)})(((await x.getValue()) === $myConst))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === myConst))};
     }
   }
   return $Closure1;

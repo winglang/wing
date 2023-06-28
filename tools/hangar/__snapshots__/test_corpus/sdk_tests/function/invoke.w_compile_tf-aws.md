@@ -20,6 +20,13 @@ module.exports = function({ util_Util }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle(input)  {
+      const target = (await util_Util.tryEnv("WING_TARGET"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
+      return String.raw({ raw: ["", "-response"] }, input);
+    }
   }
   return $Closure1;
 }
@@ -40,6 +47,12 @@ module.exports = function({ $f }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const x = (await f.invoke("hello"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
     }
   }
   return $Closure2;

@@ -13,7 +13,7 @@ module.exports = function({  }) {
       }
       ;
       while (((await iterator(i)) < 3)) {
-        {console.log(`${i}`)};
+        {console.log(String.raw({ raw: ["", ""] }, i))};
       }
     }
     constructor({  }) {

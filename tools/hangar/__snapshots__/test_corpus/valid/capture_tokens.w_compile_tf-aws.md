@@ -35,6 +35,12 @@ module.exports = function({ $api_url, $url, MyResource }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(url)")})((await MyResource.isValidUrl(url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(api.url)")})((await MyResource.isValidUrl(api.url)))};
+    }
   }
   return $Closure2;
 }
@@ -51,12 +57,8 @@ module.exports = function({  }) {
       return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
     }
     async foo()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.$this_url))'`)})((await MyResource.isValidUrl(this.$this_url)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl(this.$this_api_url))'`)})((await MyResource.isValidUrl(this.$this_api_url)))};
-    }
-    constructor({ $this_api_url, $this_url }) {
-      this.$this_api_url = $this_api_url;
-      this.$this_url = $this_url;
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.url)")})((await MyResource.isValidUrl(this.url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.api.url)")})((await MyResource.isValidUrl(this.api.url)))};
     }
   }
   return MyResource;

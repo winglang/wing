@@ -22,19 +22,13 @@ module.exports = function({ $js, $q }) {
         return false;
       }
       ;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await $q.approxSize()) === 3);
-      }
-      ))'`)})((await wait(async () =>  {
-        return ((await $q.approxSize()) === 3);
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => { \n    return q.approxSize() == 3;\n  })")})((await wait(async () =>  {
+        return ((await q.approxSize()) === 3);
       }
       )))};
-      (await $q.purge());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await $q.approxSize()) === 0);
-      }
-      ))'`)})((await wait(async () =>  {
-        return ((await $q.approxSize()) === 0);
+      (await q.purge());
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => {\n    return q.approxSize() == 0;\n  })")})((await wait(async () =>  {
+        return ((await q.approxSize()) === 0);
       }
       )))};
     }

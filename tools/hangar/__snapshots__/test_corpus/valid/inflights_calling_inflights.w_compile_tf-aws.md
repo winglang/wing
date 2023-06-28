@@ -55,6 +55,12 @@ module.exports = function({ $func1, $globalBucket }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await func1.invoke("hi1"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})(((await globalBucket.get("file1")) === "hi1"))};
+    }
   }
   return $Closure3;
 }
@@ -96,6 +102,12 @@ module.exports = function({ $x }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const val = (await x.foo());
+      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
     }
   }
   return $Closure5;

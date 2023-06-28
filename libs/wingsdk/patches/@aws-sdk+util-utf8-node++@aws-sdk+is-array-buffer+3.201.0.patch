@@ -1,0 +1,13 @@
+diff --git a/node_modules/@aws-sdk/util-utf8-node/node_modules/@aws-sdk/is-array-buffer/package.json b/node_modules/@aws-sdk/util-utf8-node/node_modules/@aws-sdk/is-array-buffer/package.json
+index 97e05bc..3ff0894 100644
+--- a/node_modules/@aws-sdk/util-utf8-node/node_modules/@aws-sdk/is-array-buffer/package.json
++++ b/node_modules/@aws-sdk/util-utf8-node/node_modules/@aws-sdk/is-array-buffer/package.json
+@@ -34,7 +34,7 @@
+     }
+   },
+   "files": [
+-    "dist-*"
++    "dist-*/**"
+   ],
+   "homepage": "https://github.com/aws/aws-sdk-js-v3/tree/main/packages/is-array-buffer",
+   "repository": {

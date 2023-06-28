@@ -61,8 +61,16 @@ export class PluginManager {
 
     const pluginDir = dirname(pluginAbsolutePath);
 
+    const modulePaths = module.paths ?? [__dirname];
+
+    const requireResolve = (path: string) =>
+      require.resolve(path, { paths: [...modulePaths, pluginDir] });
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const pluginRequire = (path: string) => require(requireResolve(path));
+    pluginRequire.resolve = requireResolve;
+
     const context = vm.createContext({
-      require,
+      require: pluginRequire,
       console,
       exports: hooks,
       process,

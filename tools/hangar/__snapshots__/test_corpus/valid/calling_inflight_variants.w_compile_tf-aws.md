@@ -36,6 +36,13 @@ module.exports = function({ $foo }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(true) == 1")})(((await foo.callFn(true)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(false) == 2")})(((await foo.callFn(false)) === 2))};
+      (await foo.callFn2());
+    }
   }
   return $Closure2;
 }
@@ -52,7 +59,7 @@ module.exports = function({  }) {
       }
       ;
       const ret = (await this.inflight2());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(ret === 2)'`)})((ret === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: ret == 2")})((ret === 2))};
     }
     async makeFn(x)  {
       if ((x === true)) {
@@ -69,8 +76,8 @@ module.exports = function({  }) {
     async callFn2()  {
       const one = (await this.inflight1());
       const two = (await this.inflight2());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(one === 1)'`)})((one === 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(two === 2)'`)})((two === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: one == 1")})((one === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: two == 2")})((two === 2))};
     }
     constructor({ $this_inflight1 }) {
       this.$this_inflight1 = $this_inflight1;

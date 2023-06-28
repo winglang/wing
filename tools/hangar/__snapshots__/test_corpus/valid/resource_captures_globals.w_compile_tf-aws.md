@@ -27,7 +27,7 @@ module.exports = function({ Another }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) === 0)'`)})(((await Another.myStaticMethod()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -45,7 +45,7 @@ module.exports = function({ Another }) {
 module.exports = function({ $globalCounter }) {
   class Another {
     async $inflight_init()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $globalCounter.peek()) === 0)'`)})(((await $globalCounter.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await globalCounter.peek()) === 0))};
     }
     async myMethod()  {
       (await $globalCounter.inc());
@@ -83,18 +83,18 @@ module.exports = function({ $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $
     async $inflight_init()  {
     }
     async myPut()  {
-      (await this.$this_localTopic.publish("hello"));
-      (await $globalBucket.put("key","value"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($globalStr === "hello")'`)})(($globalStr === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($globalBool === true)'`)})(($globalBool === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($globalNum === 42)'`)})(($globalNum === 42))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($_globalArrayOfStr_at_0__ === "hello")'`)})(($_globalArrayOfStr_at_0__ === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($_globalMapOfNum___a__ === (-5))'`)})(($_globalMapOfNum___a__ === (-5)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '$_globalSetOfStr_has__a___'`)})($_globalSetOfStr_has__a___)};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($globalAnother_myField === "hello!")'`)})(($globalAnother_myField === "hello!"))};
-      (await $globalAnother_first_myResource.put("key","value"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $globalAnother.myMethod()) > 0)'`)})(((await $globalAnother.myMethod()) > 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) > 0)'`)})(((await Another.myStaticMethod()) > 0))};
+      (await this.localTopic.publish("hello"));
+      (await globalBucket.put("key","value"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((globalStr === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((globalBool === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((globalNum === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})(((await globalArrayOfStr.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})(((globalMapOfNum)["a"] === (-5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})((await globalSetOfStr.has("a")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((globalAnother.myField === "hello!"))};
+      (await globalAnother.first.myResource.put("key","value"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await globalAnother.myMethod()) > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await Another.myStaticMethod()) > 0))};
     }
     constructor({ $this_localTopic }) {
       this.$this_localTopic = $this_localTopic;

@@ -58,6 +58,15 @@ module.exports = function({ $c1, $c2, Utils }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await c1.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await c2.peek()) === 0))};
+      (await Utils.sleep(((60 * 1000) * 1.1)));
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await c1.peek()) >= 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await c2.peek()) >= 1))};
+    }
   }
   return $Closure3;
 }

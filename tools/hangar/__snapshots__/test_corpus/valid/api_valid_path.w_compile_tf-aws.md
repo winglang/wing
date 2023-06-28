@@ -303,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
     const handler = new $Closure1(this,"$Closure1");
     const testInvalidPath =  (path) =>  {
       let error = "";
-      const expected = `Invalid path ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".`;
+      const expected = String.raw({ raw: ["Invalid path ", ". Url cannot contain \":\", params contains only alpha-numeric chars or \"_\"."] }, path);
       try {
         (api.get(path,handler));
       }
@@ -311,7 +311,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === expected)'`)})((error === expected))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((error === expected))};
     }
     ;
     const testValidPath =  (path) =>  {
@@ -323,7 +323,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "")'`)})((error === ""))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((error === ""))};
     }
     ;
     (testInvalidPath("/test/{sup:er/:annoying//path}"));

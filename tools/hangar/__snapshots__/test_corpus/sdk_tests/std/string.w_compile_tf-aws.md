@@ -11,13 +11,13 @@ module.exports = function({ $PARSE_ERROR, std_String }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("World") === "World")'`)})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("World") === "World"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(Json \"World\") == \"World\"")})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("World") === "World"))};
       try {
         ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })(123);
       }
       catch ($error_s) {
         const s = $error_s.message;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === $PARSE_ERROR)'`)})((s === $PARSE_ERROR))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: s == PARSE_ERROR")})((s === PARSE_ERROR))};
       }
     }
     constructor({  }) {
@@ -38,8 +38,8 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("hello".length === 5)'`)})(("hello".length === 5))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("".length === 0)'`)})(("".length === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\".length == 5")})(("hello".length === 5))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"\".length == 0")})(("".length === 0))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -59,7 +59,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await "boom".at(0)) === "b")'`)})(((await "boom".at(0)) === "b"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(0) == \"b\"")})(((await "boom".at(0)) === "b"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -421,23 +421,23 @@ class $Root extends $stdlib.std.Resource {
       }
       catch ($error_actual) {
         const actual = $error_actual.message;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(actual === expected)'`)})((actual === expected))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((actual === expected))};
         error = true;
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'error'`)})(error)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     }
     ;
     const PARSE_ERROR = "unable to parse number 123 as a string";
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("Hello") === "Hello")'`)})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("Hello") === "Hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: str.fromJson(Json \"Hello\") == \"Hello\"")})((((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("Hello") === "Hello"))};
     (assertThrows(PARSE_ERROR, () =>  {
       ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })(123);
     }
     ));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:fromJson",new $Closure1(this,"$Closure1"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '("hello".length === 5)'`)})(("hello".length === 5))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '("".length === 0)'`)})(("".length === 0))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\".length == 5")})(("hello".length === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\".length == 0")})(("".length === 0))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Closure2(this,"$Closure2"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(("boom".at(2)) === "o")'`)})((("boom".at(2)) === "o"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(2) == \"o\"")})((("boom".at(2)) === "o"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:at()",new $Closure3(this,"$Closure3"));
   }
 }

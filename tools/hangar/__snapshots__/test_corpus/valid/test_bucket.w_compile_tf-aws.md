@@ -16,6 +16,13 @@ module.exports = function({ $b }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 0")})(((await b.list()).length === 0))};
+      (await b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await b.list()).length === 1))};
+    }
   }
   return $Closure1;
 }
@@ -36,6 +43,12 @@ module.exports = function({ $b }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"hello.txt\") == \"world\"")})(((await b.get("hello.txt")) === "world"))};
     }
   }
   return $Closure2;

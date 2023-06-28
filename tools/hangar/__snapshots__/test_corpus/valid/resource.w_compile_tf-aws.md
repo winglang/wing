@@ -18,6 +18,15 @@ module.exports = function({ $bucket, $res, $res_foo_inflightField }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const s = (await res.myMethod());
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 101\"")})((s === "counter is: 101"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})(((await bucket.list()).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})((res.foo.inflightField === 123))};
+      (await res.testTypeAccess());
+    }
   }
   return $Closure1;
 }
@@ -117,14 +126,14 @@ module.exports = function({ Foo, MyEnum }) {
     async myMethod()  {
       (await this.$this_foo.fooInc());
       const s = (await Foo.fooStatic());
-      (await this.$this_b.put("foo",`counter is: ${(await this.$this_foo.fooGet())}`));
-      return (await this.$this_b.get("foo"));
+      (await this.b.put("foo",String.raw({ raw: ["counter is: ", ""] }, (await this.foo.fooGet()))));
+      return (await this.b.get("foo"));
     }
     async testTypeAccess()  {
       if (true) {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.$this_e === MyEnum.B)'`)})((this.$this_e === MyEnum.B))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: Bar.barStatic() == \"bar static\"")})(((await Bar.barStatic()) === "bar static"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fooStatic() == \"foo static\"")})(((await Foo.fooStatic()) === "foo static"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: this.e == MyEnum.B")})((this.e === MyEnum.B))};
       }
     }
     constructor({ $this_b, $this_e, $this_foo }) {
@@ -1220,13 +1229,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         const d1 = new Dummy(this,"Dummy");
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'd1.node.path.endsWith("/ScopeAndIdTestClass/Dummy")'`)})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: d1.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy\")")})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
         const d2 = new Dummy(d1,"Dummy");
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'd2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy")'`)})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: d2.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")")})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
         for (const i of $stdlib.std.Range.of(0, 3, false)) {
-          const x = new Dummy(this,`tc${i}`);
-          const expected_path = `/ScopeAndIdTestClass/tc${i}`;
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'x.node.path.endsWith(expected_path)'`)})(x.node.path.endsWith(expected_path))};
+          const x = new Dummy(this,String.raw({ raw: ["tc", ""] }, i));
+          const expected_path = String.raw({ raw: ["/ScopeAndIdTestClass/tc", ""] }, i);
+          {((cond) => {if (!cond) throw new Error("assertion failed: x.node.path.endsWith(expected_path)")})(x.node.path.endsWith(expected_path))};
         }
       }
       static _toInflightType(context) {

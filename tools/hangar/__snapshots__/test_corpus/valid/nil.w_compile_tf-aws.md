@@ -15,6 +15,12 @@ module.exports = function({ $foo }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await foo.returnNil(true))) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await foo.returnNil(false))) != null) === false))};
+    }
   }
   return $Closure1;
 }
@@ -40,6 +46,17 @@ module.exports = function({ $foo }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await foo.getOptionalValue())) != null) === false))};
+      (await foo.setOptionalValue("hello"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == true")})(((((await foo.getOptionalValue())) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})(((await foo.getOptionalValue()) !== undefined))};
+      (await foo.setOptionalValue(undefined));
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await foo.getOptionalValue())) != null) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})(((await foo.getOptionalValue()) === undefined))};
     }
   }
   return $Closure2;

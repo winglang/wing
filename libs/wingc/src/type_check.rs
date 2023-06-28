@@ -12,9 +12,9 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::{
-	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
+	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_HTTP_MODULE,
+	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_REDIS_MODULE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_UTIL_MODULE,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -216,6 +216,12 @@ pub struct Class {
 	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
 	pub docs: Docs,
+
+	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
+	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
+	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
+	// and instead the user will need to pass the relevant args to the class's init method.
+	pub std_construct_args: bool,
 }
 
 #[derive(Derivative)]
@@ -634,6 +640,7 @@ pub struct FunctionSignature {
 	/// This string may contain special tokens:
 	/// - `$self$`: The expression on which this function was called
 	/// - `$args$`: the arguments passed to this function call
+	/// - `$args_text$`: the original source text of the arguments passed to this function call, escaped
 	pub js_override: Option<String>,
 	pub docs: Docs,
 }
@@ -740,7 +747,7 @@ impl TypeRef {
 		None
 	}
 
-	pub fn as_mut_class(&mut self) -> Option<&mut Class> {
+	pub fn as_class_mut(&mut self) -> Option<&mut Class> {
 		match **self {
 			Type::Class(ref mut class) => Some(class),
 			_ => None,
@@ -828,6 +835,10 @@ impl TypeRef {
 		false
 	}
 
+	pub fn is_string(&self) -> bool {
+		matches!(**self, Type::String)
+	}
+
 	pub fn is_struct(&self) -> bool {
 		matches!(**self, Type::Struct(_))
 	}
@@ -895,9 +906,9 @@ impl TypeRef {
 			Type::Unresolved => false,
 			Type::Void => false,
 			Type::MutJson => true,
-			Type::MutArray(_) => true,
-			Type::MutMap(_) => true,
-			Type::MutSet(_) => true,
+			Type::MutArray(v) => v.is_capturable(),
+			Type::MutMap(v) => v.is_capturable(),
+			Type::MutSet(v) => v.is_capturable(),
 			Type::Function(sig) => sig.phase == Phase::Inflight,
 
 			// only preflight classes can be captured
@@ -1020,7 +1031,7 @@ impl Types {
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
 		let void_ref = UnsafeRef::<Type>(&*types[void_idx] as *const Type);
-		let libraries = SymbolEnv::new(None, void_ref, false, Phase::Preflight, 0);
+		let libraries = SymbolEnv::new(None, void_ref, false, false, Phase::Preflight, 0);
 
 		Self {
 			types,
@@ -1454,6 +1465,8 @@ impl<'a> TypeChecker<'a> {
 				let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env).0);
 				let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env).0);
 
+				let non_std_args = !type_.as_class().unwrap().std_construct_args;
+
 				// If this is a preflight class make sure the object's scope and id are of correct type
 				if type_.is_preflight_class() {
 					// Get reference to resource object's scope
@@ -1463,6 +1476,17 @@ impl<'a> TypeChecker<'a> {
 							.lookup(&"this".into(), Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
 					} else {
+						// If this is a non-standard preflight class, make sure the object's scope isn't explicitly set (using the `in` keywords)
+						if non_std_args {
+							self.spanned_error(
+								obj_scope.as_ref().unwrap(),
+								format!(
+									"Cannot set scope of non-standard preflight class \"{}\" using `in`",
+									type_
+								),
+							);
+						}
+
 						obj_scope_type
 					};
 
@@ -1482,6 +1506,13 @@ impl<'a> TypeChecker<'a> {
 					// Verify the object id is a string
 					if let Some(obj_id_type) = obj_id_type {
 						self.validate_type(obj_id_type, self.types.string(), obj_id.as_ref().unwrap());
+						// If this is a non-standard preflight class, make sure the object's id isn't explicitly set (using the `as` keywords)
+						if non_std_args {
+							self.spanned_error(
+								obj_id.as_ref().unwrap(),
+								format!("Cannot set id of non-standard preflight class \"{}\" using `as`", type_),
+							);
+						}
 					}
 				} else {
 					// This is an inflight class, make sure the object scope and id are not set
@@ -1827,6 +1858,7 @@ impl<'a> TypeChecker<'a> {
 			Some(env.get_ref()),
 			sig.return_type,
 			false,
+			true,
 			func_def.signature.phase,
 			self.statement_idx,
 		);
@@ -2166,7 +2198,7 @@ impl<'a> TypeChecker<'a> {
 					_t => self.types.error(),
 				};
 
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				match scope_env.define(
 					&iterator,
 					SymbolKind::make_free_variable(iterator.clone(), iterator_type, false, env.phase),
@@ -2188,6 +2220,7 @@ impl<'a> TypeChecker<'a> {
 				statements.set_env(SymbolEnv::new(
 					Some(env.get_ref()),
 					env.return_type,
+					false,
 					false,
 					env.phase,
 					stmt.idx,
@@ -2217,7 +2250,7 @@ impl<'a> TypeChecker<'a> {
 				// and complete the type checking process for additional errors.
 				let var_type = cond_type.maybe_unwrap_option();
 
-				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 
 				// Add the variable to if block scope
 				match stmt_env.define(
@@ -2239,6 +2272,7 @@ impl<'a> TypeChecker<'a> {
 						Some(env.get_ref()),
 						env.return_type,
 						false,
+						false,
 						env.phase,
 						stmt.idx,
 					));
@@ -2258,6 +2292,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
+					false,
 					env.phase,
 					stmt.idx,
 				));
@@ -2271,6 +2306,7 @@ impl<'a> TypeChecker<'a> {
 						Some(env.get_ref()),
 						env.return_type,
 						false,
+						false,
 						env.phase,
 						stmt.idx,
 					));
@@ -2281,6 +2317,7 @@ impl<'a> TypeChecker<'a> {
 					else_scope.set_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
+						false,
 						false,
 						env.phase,
 						stmt.idx,
@@ -2338,7 +2375,7 @@ impl<'a> TypeChecker<'a> {
 						// we use the module name as the identifier.
 						// For example, `bring cloud` will import the `cloud` namespace from @winglang/sdk and assign it
 						// to an identifier named `cloud`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE => {
+						WINGSDK_CLOUD_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE | WINGSDK_HTTP_MODULE => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
 							alias = identifier.as_ref().unwrap_or(&module_name);
@@ -2361,6 +2398,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
+					false,
 					env.phase,
 					stmt.idx,
 				));
@@ -2371,6 +2409,8 @@ impl<'a> TypeChecker<'a> {
 					let (return_type, _) = self.type_check_exp(return_expression, env);
 					if !env.return_type.is_void() {
 						self.validate_type(return_type, env.return_type, return_expression);
+					} else if env.is_in_function() {
+						self.spanned_error(stmt, "Unexpected return value from void function");
 					} else {
 						self.spanned_error(stmt, "Return statement outside of function cannot return a value");
 					}
@@ -2402,7 +2442,7 @@ impl<'a> TypeChecker<'a> {
 				let (parent_class, parent_class_env) = self.extract_parent_class(parent.as_ref(), *phase, name, env, stmt);
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
 				let impl_interfaces = implements
 					.iter()
@@ -2430,6 +2470,7 @@ impl<'a> TypeChecker<'a> {
 					phase: *phase,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 					docs: Docs::default(),
+					std_construct_args: *phase == Phase::Preflight,
 				};
 				let mut class_type = self.types.add_type(Type::Class(class_spec));
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
@@ -2440,7 +2481,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), false, env.phase, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), false, false, env.phase, stmt.idx);
 
 				// Add fields to the class env
 				for field in fields.iter() {
@@ -2497,7 +2538,7 @@ impl<'a> TypeChecker<'a> {
 				);
 
 				// Replace the dummy class environment with the real one before type checking the methods
-				class_type.as_mut_class().unwrap().env = class_env;
+				class_type.as_class_mut().unwrap().env = class_env;
 				let class_env = &class_type.as_class().unwrap().env;
 
 				if let FunctionBody::Statements(scope) = &inflight_initializer.body {
@@ -2591,7 +2632,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Interface(AstInterface { name, methods, extends }) => {
 				// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
 				let extend_interfaces = extends
 					.iter()
@@ -2627,7 +2668,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create the real interface environment to be filled with the interface AST types
-				let mut interface_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let mut interface_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
 				// Add methods to the interface env
 				for (method_name, sig) in methods.iter() {
@@ -2665,7 +2706,7 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
 				// Add fields to the struct env
 				for field in fields.iter() {
@@ -2739,13 +2780,13 @@ impl<'a> TypeChecker<'a> {
 				finally_statements,
 			} => {
 				// Create a new environment for the try block
-				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				try_statements.set_env(try_env);
 				self.inner_scopes.push(try_statements);
 
 				// Create a new environment for the catch block
 				if let Some(catch_block) = catch_block {
-					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 
 					// Add the exception variable to the catch block
 					if let Some(exception_var) = &catch_block.exception_var {
@@ -2766,7 +2807,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create a new environment for the finally block
 				if let Some(finally_statements) = finally_statements {
-					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
@@ -2812,6 +2853,7 @@ impl<'a> TypeChecker<'a> {
 						let mut init_env = SymbolEnv::new(
 							Some(class_env.get_ref()),
 							self.types.void(),
+							true,
 							true,
 							class_env.phase,
 							scope.statements[0].idx,
@@ -2925,6 +2967,7 @@ impl<'a> TypeChecker<'a> {
 			Some(parent_env.get_ref()),
 			method_sig.return_type,
 			is_init,
+			true,
 			method_sig.phase,
 			statement_idx,
 		);
@@ -3146,7 +3189,14 @@ impl<'a> TypeChecker<'a> {
 			types_map.insert(format!("{o}"), (*o, *n));
 		}
 
-		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, false, Phase::Independent, 0);
+		let new_env = SymbolEnv::new(
+			None,
+			original_type_class.env.return_type,
+			false,
+			false,
+			Phase::Independent,
+			0,
+		);
 		let tt = Type::Class(Class {
 			name: original_type_class.name.clone(),
 			env: new_env,
@@ -3157,11 +3207,12 @@ impl<'a> TypeChecker<'a> {
 			type_parameters: Some(type_params),
 			phase: original_type_class.phase,
 			docs: original_type_class.docs.clone(),
+			std_construct_args: original_type_class.std_construct_args,
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
-		let new_type_class = new_type.as_mut_class().unwrap();
+		let new_type_class = new_type.as_class_mut().unwrap();
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields

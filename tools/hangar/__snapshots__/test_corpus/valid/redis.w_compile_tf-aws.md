@@ -20,6 +20,17 @@ module.exports = function({ $r, $r2 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const connection = (await r.rawClient());
+      (await connection.set("wing","does redis"));
+      const value = (await connection.get("wing"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((value === "does redis"))};
+      (await r2.set("wing","does redis again"));
+      const value2 = (await r2.get("wing"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((value2 === "does redis again"))};
+    }
   }
   return $Closure1;
 }

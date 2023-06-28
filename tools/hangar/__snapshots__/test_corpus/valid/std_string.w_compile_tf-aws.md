@@ -16,6 +16,13 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, s1.indexOf("s")))};
+      {console.log((await (await s1.split(" ")).at(1)))};
+      {console.log((await s1.concat(s2)))};
+    }
   }
   return $Closure1;
 }
@@ -192,21 +199,21 @@ class $Root extends $stdlib.std.Resource {
     }
     const s1 = "some string";
     const s2 = "s are immutable";
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s1.length === 11)'`)})((s1.length === 11))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((s1.at(7)) === "r")'`)})(((s1.at(7)) === "r"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((s1.concat(s2)) === "some strings are immutable")'`)})(((s1.concat(s2)) === "some strings are immutable"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 's1.includes("some")'`)})(s1.includes("some"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(!"some".includes(s1))'`)})((!"some".includes(s1)))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 's1.endsWith("string")'`)})(s1.endsWith("string"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s1.indexOf("s") === 0)'`)})((s1.indexOf("s") === 0))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '("Some String".toLocaleLowerCase() === "some string")'`)})(("Some String".toLocaleLowerCase() === "some string"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((s1.split(" ")).at(0)) === "some")'`)})((((s1.split(" ")).at(0)) === "some"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 's1.startsWith("some")'`)})(s1.startsWith("some"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((s1.substring(5)) === "string")'`)})(((s1.substring(5)) === "string"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((s1.substring(5,7)) === "st")'`)})(((s1.substring(5,7)) === "st"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(("   some string   ".trim()) === "some string")'`)})((("   some string   ".trim()) === "some string"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '("Some String".toLocaleUpperCase() === "SOME STRING")'`)})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(("hello" + " world") === "hello world")'`)})((("hello" + " world") === "hello world"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.length == 11")})((s1.length === 11))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.at(7) == \"r\"")})(((s1.at(7)) === "r"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.concat(s2) == \"some strings are immutable\"")})(((s1.concat(s2)) === "some strings are immutable"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.contains(\"some\")")})(s1.includes("some"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: !\"some\".contains(s1)")})((!"some".includes(s1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.endsWith(\"string\")")})(s1.endsWith("string"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.indexOf(\"s\") == 0")})((s1.indexOf("s") === 0))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".lowercase() == \"some string\"")})(("Some String".toLocaleLowerCase() === "some string"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.split(\" \").at(0) == \"some\"")})((((s1.split(" ")).at(0)) === "some"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.startsWith(\"some\")")})(s1.startsWith("some"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5) == \"string\"")})(((s1.substring(5)) === "string"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5, 7) == \"st\"")})(((s1.substring(5,7)) === "st"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"   some string   \".trim() == \"some string\"")})((("   some string   ".trim()) === "some string"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".uppercase() == \"SOME STRING\"")})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\" + \" world\" == \"hello world\"")})((("hello" + " world") === "hello world"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:string",new $Closure1(this,"$Closure1"));
   }
 }

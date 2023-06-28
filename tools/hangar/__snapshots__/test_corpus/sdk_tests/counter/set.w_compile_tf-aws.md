@@ -22,6 +22,19 @@ module.exports = function({ $counter }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})(((await counter.peek()) === 0))};
+      (await counter.inc());
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await counter.peek()) === 1))};
+      (await counter.inc());
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 2")})(((await counter.peek()) === 2))};
+      (await counter.inc(10));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 12")})(((await counter.peek()) === 12))};
+      (await counter.set(88));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 88")})(((await counter.peek()) === 88))};
+    }
   }
   return $Closure1;
 }
@@ -36,20 +49,15 @@ module.exports = function({ $counter }) {
     }
     async handle()  {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 0)'`)})(((await $counter.peek(key)) === 0))};
-      (await $counter.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 1)'`)})(((await $counter.peek(key)) === 1))};
-      (await $counter.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 2)'`)})(((await $counter.peek(key)) === 2))};
-      (await $counter.inc(10,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 12)'`)})(((await $counter.peek(key)) === 12))};
-      (await $counter.set(88,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counter.peek(key)) === 88)'`)})(((await $counter.peek(key)) === 88))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await counter.peek(key)) === 0))};
+      (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})(((await counter.peek(key)) === 1))};
+      (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 2")})(((await counter.peek(key)) === 2))};
+      (await counter.inc(10,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 12")})(((await counter.peek(key)) === 12))};
+      (await counter.set(88,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 88")})(((await counter.peek(key)) === 88))};
     }
   }
   return $Closure2;

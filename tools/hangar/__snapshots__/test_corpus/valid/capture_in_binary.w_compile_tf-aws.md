@@ -16,6 +16,13 @@ module.exports = function({ $b, $x }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await b.put("file","foo"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file\") == \"foo\"")})(((await b.get("file")) === "foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: 12 == x")})((12 === x))};
+    }
   }
   return $Closure1;
 }
